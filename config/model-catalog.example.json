@@ -1,0 +1,38 @@
+{
+  "status": "inventory-only; no native Linux deployment or validation",
+  "enabled": false,
+  "models": [
+    {
+      "id": "Ornith-1.5-35B-A3B-IQ2_S",
+      "file": "Ornith-1.5-35B-A3B-IQ2_S.gguf",
+      "windows_context_tokens": 131072,
+      "linux_context_tokens": null,
+      "linux_validation": "not_run",
+      "enabled": false
+    },
+    {
+      "id": "LFM2.5-24B-A2B-UD-IQ3_XXS",
+      "file": "LFM2.5-24B-A2B-UD-IQ3_XXS.gguf",
+      "windows_context_tokens": 131072,
+      "linux_context_tokens": null,
+      "linux_validation": "not_run",
+      "enabled": false
+    },
+    {
+      "id": "Qwen3.8-27B-UD-IQ3_XXS",
+      "file": "Qwen3.8-27B-UD-IQ3_XXS.gguf",
+      "windows_context_tokens": 65536,
+      "linux_context_tokens": null,
+      "linux_validation": "not_run",
+      "enabled": false
+    },
+    {
+      "id": "Qwen3.8-35B-A3B-IQ2_M",
+      "file": "Qwen3.8-35B-A3B-IQ2_M.gguf",
+      "windows_context_tokens": 65536,
+      "linux_context_tokens": null,
+      "linux_validation": "not_run",
+      "enabled": false
+    }
+  ]
+}
