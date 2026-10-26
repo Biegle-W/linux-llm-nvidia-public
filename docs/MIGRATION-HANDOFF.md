@@ -1,5 +1,11 @@
 # NVIDIA Windows-to-Linux handoff — October 25, 2026
 
+> October 26 update: native installation, two-GPU correctness and authenticated
+> inference are now verified. See [native validation](VALIDATION-20261026.md) and
+> [bounded speed results](BENCHMARK-20261026.md). Unlock and P2P remain unverified.
+> The October 25 preparation details below are historical.
+
+
 ## Objective and current evidence
 
 The user is switching the NVIDIA workstation to **native Linux**. Maintain its

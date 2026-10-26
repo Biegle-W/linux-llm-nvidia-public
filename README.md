@@ -1,15 +1,26 @@
 # Linux LLM NVIDIA — public reference
 
-Sanitized native Linux preparation for the **i5-13600KF / 64 GB DDR5 / RTX 3080 Ti 12 GB**
+Native Linux preparation for the **i5-13600KF / 64 GB DDR5 / RTX 3080 Ti 12 GB**
 workstation. The user is migrating this NVIDIA machine from Windows to Linux.
 The next hardware stage adds **RTX 3080 10 GB**; a later PEX88096 switch installation
 adds **RTX 3060 12 GB**. The separate dual-RX-7900-XTX Linux machine has its own
 repositories and must not be modified as part of this migration.
 
-**Status: prepared, not deployed.** No native NVIDIA Linux installation, driver,
-unlock boot, P2P transfer or Linux inference benchmark has been verified by this
-Windows-side preparation. Do not promote inherited Windows profiles to validated
-Linux settings. Follow [the Linux-agent migration handoff](docs/MIGRATION-HANDOFF.md).
+The initial Windows-side preparation did not validate native Linux operation.
+Do not promote inherited Windows profiles to validated Linux settings. Follow
+[the Linux-agent migration handoff](docs/MIGRATION-HANDOFF.md).
+
+**Native setup, October 26, 2026:** Ubuntu 26.04, the RTX 3080 Ti / RTX 3080 pair
+and distribution NVIDIA driver 595.99.02 are now verified. Native llama.cpp CUDA
+build and a short two-GPU inference smoke test passed; 31 focused matrix tests
+passed on each GPU. This does not establish unlock, P2P or sustained thermals.
+[A bounded native speed benchmark](docs/BENCHMARK-20261026.md) now covers all three
+downloaded models and compares DeepSeek's two engines on shared Maya-S weights.
+API smoke checks passed for Strata Qwen3.8-Flash-Next,
+Maya GLM-5.3-Flash and DeepSeek on both engines. Strata also passed arithmetic,
+JSON and conversation tests using Maya-S's shared DeepSeek weights; the separate
+IST-DAS weight files were removed. See [native validation](docs/VALIDATION-20261026.md) and
+[local setup](docs/LOCAL-SETUP.md); raw machine details remain ignored.
 
 ## Repository ownership
 
