@@ -14,6 +14,8 @@ Do not promote inherited Windows profiles to validated Linux settings. Follow
 and distribution NVIDIA driver 595.99.02 are now verified. Native llama.cpp CUDA
 build and a short two-GPU inference smoke test passed; 31 focused matrix tests
 passed on each GPU. This does not establish unlock, P2P or sustained thermals.
+[The two-card unlock is installed and prepared for the next boot](docs/UNLOCK-SETUP-20261026.md);
+post-boot activation and performance verification are still pending.
 [A bounded native speed benchmark](docs/BENCHMARK-20261026.md) now covers all three
 downloaded models and compares DeepSeek's two engines on shared Maya-S weights.
 API smoke checks passed for Strata Qwen3.8-Flash-Next,

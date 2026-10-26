@@ -2,7 +2,7 @@
 """Pinned native-Linux preparation for this host's RTX 3060 / 3080 / 3080 Ti.
 
 No action reboots, partitions disks, flashes VBIOS or installs an NVIDIA driver.
-Ubuntu/Debian + GRUB + initramfs-tools only. Run check first; see the handoff.
+Ubuntu/Debian + GRUB + initramfs-tools or dracut only. Run check first; see the handoff.
 """
 import argparse
 import json
@@ -24,6 +24,7 @@ MARKER = "# Managed by Local-LLM native_linux_gpu_unlock.py\n"
 GRUB = Path("/etc/default/grub.d/99-local-llm-gpu-unlock.cfg")
 HOOK = Path("/etc/initramfs-tools/hooks/local-llm-gpu-unlock")
 EARLY = Path("/etc/initramfs-tools/scripts/init-top/00-local-llm-gpu-unlock")
+DRACUT = Path("/etc/dracut.conf.d/99-local-llm-gpu-unlock.conf")
 BDF = re.compile(r"[0-9a-f]{4}:[0-9a-f]{2}:[0-9a-f]{2}\.[0-7]\Z")
 
 
@@ -109,6 +110,17 @@ def prerequisites():
     run("nvidia-smi", "--query-gpu=name,pci.bus_id,driver_version", "--format=csv", capture=True)
 
 
+def initramfs_backend():
+    wrapper = read(shutil.which("update-initramfs") or "/usr/sbin/update-initramfs")
+    if re.search(r"^\s*if dracut\s", wrapper, re.M):
+        if not shutil.which("lsinitrd"):
+            raise RuntimeError("dracut image verification requires lsinitrd.")
+        return "dracut"
+    if "mkinitramfs" in wrapper:
+        return "initramfs-tools"
+    raise RuntimeError("Unknown update-initramfs implementation; refusing boot changes.")
+
+
 def mutation_gate():
     prerequisites()
     if secure_boot() not in ("disabled", "not-applicable-legacy-boot"):
@@ -176,13 +188,20 @@ def transactional_update(files, verify_image=False):
             else:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(content, newline="\n")
-                path.chmod(0o644 if path == GRUB else 0o755)
+                path.chmod(0o644 if path in (GRUB, DRACUT) else 0o755)
         run("update-initramfs", "-u", "-k", "all")
         if verify_image:
             listing = run("lsinitramfs", f"/boot/initrd.img-{platform.release()}", capture=True)
             if not re.search(r"(?:^|/)gpu_unlock\.ko(?:\.(?:xz|gz|zst))?$", listing, re.M):
                 raise RuntimeError("The current boot image does not contain the gpu_unlock module.")
-            if "scripts/init-top/00-local-llm-gpu-unlock" not in listing.splitlines():
+            if files.get(DRACUT) is not None:
+                early = run("lsinitrd", "-f", "etc/cmdline.d/20-force_drivers.conf",
+                            f"/boot/initrd.img-{platform.release()}", capture=True)
+                if "rd.driver.pre=gpu_unlock" not in early.splitlines():
+                    raise RuntimeError("The dracut image does not request early gpu_unlock loading.")
+                if not any(line.endswith("/dracut-pre-udev.service") for line in listing.splitlines()):
+                    raise RuntimeError("The dracut image lacks its pre-udev service.")
+            elif "scripts/init-top/00-local-llm-gpu-unlock" not in listing.splitlines():
                 raise RuntimeError("The current boot image does not contain the early loader.")
             for firmware in run("modinfo", "-F", "firmware", "gpu_unlock", capture=True).splitlines():
                 if not any(re.fullmatch(r"(?:usr/)?lib/firmware/" + re.escape(firmware) +
@@ -206,7 +225,7 @@ def transactional_update(files, verify_image=False):
         raise
 
 
-def boot_files(selection):
+def boot_files(selection, backend="initramfs-tools"):
     # Explicit early load, including on initramfs-tools versions without modules.d.
     hook = ("#!/bin/sh\n" + MARKER + 'set -e\nPREREQ=""\n'
             'case "$1" in prereqs) echo "$PREREQ"; exit 0 ;; esac\n'
@@ -218,7 +237,13 @@ def boot_files(selection):
              'esac\nexit 0\n')
     grub = (MARKER + 'GRUB_CMDLINE_LINUX_DEFAULT="${GRUB_CMDLINE_LINUX_DEFAULT}'
             f' gpu_unlock.targets={selection}"\n')
-    return {GRUB: grub, HOOK: hook, EARLY: early}
+    if backend == "dracut":
+        # force_drivers creates rd.driver.pre, consumed before systemd-udevd.
+        return {GRUB: grub, HOOK: None, EARLY: None,
+                DRACUT: MARKER + 'force_drivers+=" gpu_unlock "\n'}
+    if backend != "initramfs-tools":
+        raise RuntimeError("Unknown initramfs backend.")
+    return {GRUB: grub, HOOK: hook, EARLY: early, DRACUT: None}
 
 
 def enable(value):
@@ -234,7 +259,7 @@ def enable(value):
     for path in (Path("/etc/default/grub"), *Path("/etc/default/grub.d").glob("*.cfg")):
         if path != GRUB and "gpu_unlock.targets=" in path.read_text():
             raise RuntimeError(f"An unlock argument already exists; reconcile it manually first: {path}")
-    transactional_update(boot_files(selection), verify_image=True)
+    transactional_update(boot_files(selection, initramfs_backend()), verify_image=True)
     print("Next-boot configuration generated for the selected PCI addresses. Fully power off and start again yourself; current runtime state is unchanged.")
 
 
@@ -243,7 +268,7 @@ def disable():
     native_only()
     if os.geteuid() != 0:
         raise RuntimeError("disable requires sudo.")
-    transactional_update({GRUB: None, HOOK: None, EARLY: None})
+    transactional_update({GRUB: None, HOOK: None, EARLY: None, DRACUT: None})
     print("Removed this helper's unlock configuration. Fully power off and start again to restore state; packages remain installed.")
 
 

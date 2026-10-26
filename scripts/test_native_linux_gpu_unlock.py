@@ -23,6 +23,8 @@ class Guards(unittest.TestCase):
         if not shell:
             self.skipTest("bash not installed")
         for content in unlock.boot_files("0000:01:00.0").values():
+            if content is None:
+                continue
             subprocess.run([shell, "-n"], input=content, text=True, check=True)
 
     def test_grub_retains_existing_arguments(self):
@@ -115,6 +117,48 @@ class Guards(unittest.TestCase):
                     unlock.transactional_update({path: unlock.MARKER}, verify_image=True)
                 self.assertFalse(path.exists())
                 self.assertEqual(run.call_args_list[2].args, ("update-initramfs", "-u", "-k", "all"))
+
+    def test_dracut_wrapper_detection_and_fail_closed(self):
+        for wrapper, expected in (("if dracut ${OPTS}; then", "dracut"),
+                                  ("mkinitramfs -o image", "initramfs-tools")):
+            with patch.object(unlock, "read", return_value=wrapper), \
+                 patch.object(unlock.shutil, "which", return_value="/usr/bin/tool"):
+                self.assertEqual(unlock.initramfs_backend(), expected)
+        with patch.object(unlock, "read", return_value="unknown generator"):
+            with self.assertRaises(RuntimeError):
+                unlock.initramfs_backend()
+
+    def test_dracut_uses_force_load_and_removes_inactive_hooks(self):
+        files = unlock.boot_files("0000:01:00.0", "dracut")
+        self.assertIn('force_drivers+=" gpu_unlock "', files[unlock.DRACUT])
+        self.assertIsNone(files[unlock.HOOK])
+        self.assertIsNone(files[unlock.EARLY])
+        self.assertIn("gpu_unlock.targets=0000:01:00.0", files[unlock.GRUB])
+        self.assertIsNone(unlock.boot_files("0000:01:00.0")[unlock.DRACUT])
+
+    def test_dracut_missing_early_load_rolls_back(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "dracut.conf"
+            listing = "usr/lib/modules/test/gpu_unlock.ko.zst\nusr/lib/systemd/system/dracut-pre-udev.service"
+            with patch.object(unlock, "DRACUT", path), \
+                 patch.object(unlock, "run", side_effect=["", listing, "", "", ""]) as run:
+                with self.assertRaisesRegex(RuntimeError, "early gpu_unlock"):
+                    unlock.transactional_update({path: unlock.MARKER}, verify_image=True)
+                self.assertFalse(path.exists())
+                self.assertEqual(run.call_count, 5)
+
+    def test_dracut_image_and_firmware_verified_before_grub(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "dracut.conf"
+            listing = ("usr/lib/modules/test/gpu_unlock.ko.zst\n"
+                       "usr/lib/systemd/system/dracut-pre-udev.service\n"
+                       "usr/lib/firmware/gpu-unlock/test.bin")
+            with patch.object(unlock, "DRACUT", path), \
+                 patch.object(unlock, "run", side_effect=["", listing, "rd.driver.pre=gpu_unlock",
+                                                         "gpu-unlock/test.bin", ""]) as run:
+                unlock.transactional_update({path: unlock.MARKER}, verify_image=True)
+                self.assertEqual(run.call_args_list[-1].args, ("update-grub",))
+                self.assertEqual(path.stat().st_mode & 0o777, 0o644)
 
     def test_disable_needs_no_gpu_or_secure_boot_checks(self):
         with patch.object(unlock, "native_only"), patch.object(unlock.os, "geteuid", return_value=0, create=True), \

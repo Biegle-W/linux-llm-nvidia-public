@@ -89,7 +89,9 @@ python3 scripts/native_linux_gpu_unlock.py source
 python3 scripts/native_linux_gpu_unlock.py install
 ```
 
-Installation automation covers Ubuntu/Debian, GRUB and initramfs-tools. It refuses
+Installation automation covers Ubuntu/Debian and GRUB with either initramfs-tools
+or a dracut-backed update-initramfs. See the [validated preparation and pending
+post-boot checks](UNLOCK-SETUP-20261026.md). It refuses
 mutations with enabled/unknown Secure Boot; signing/MOK support is not implemented.
 Do not disable Secure Boot automatically. Review current upstream changes and
 distribution compatibility before updating the pin; preserve the tested helper's

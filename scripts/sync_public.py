@@ -9,7 +9,8 @@ FILES = (
     'README.md', '.gitignore', 'docs/MIGRATION-HANDOFF.md', 'docs/REPOSITORY-MAP.md', 'docs/LOCAL-SETUP.md',
     'docs/VALIDATION-20261026.md', 'docs/BENCHMARK-20261026.md',
     'scripts/build_native_llama.sh', 'scripts/check_local_api.py',
-    'scripts/start_model.sh', 'scripts/sync_public.py', 'docs/PUBLIC-SYNC.md',
+    'scripts/start_model.sh', 'scripts/native_linux_gpu_unlock.py',
+    'scripts/test_native_linux_gpu_unlock.py', 'docs/UNLOCK-SETUP-20261026.md', 'scripts/sync_public.py', 'docs/PUBLIC-SYNC.md',
 )
 BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
                    r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|'
