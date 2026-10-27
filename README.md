@@ -65,6 +65,13 @@ Record allocated context separately from tested input lengths. Keep numerical,
 quality, memory, thermal and owned-process protections. Stop only owned inference
 workers; preserve unrelated applications. Do not relax guards merely to load a model.
 
+Dense models must keep model execution weights in GPU memory by default. Do not
+use generic host-RAM weight offload to make them fit. An exception requires a
+community fork with documented offload performance optimizations relevant to the
+installed hardware; evaluate its evidence before testing, then validate locally
+inside the bounded worker service. This restriction concerns dense-model weight
+offload, not ordinary loading buffers or the existing MoE expert-streaming paths.
+
 The user chooses when to reboot and switch OS. Do not repartition, flash VBIOS,
 change firmware security, restore the removed Windows NVMe unlock or install a
 blanket `targets=all` unlock through a documentation migration. Record fresh native

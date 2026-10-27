@@ -92,3 +92,9 @@ repeated protocol after successful per-card unlock and correctness checks.
 compatibility failures, HyperQwen CPU-offload timings, and the memory-pressure
 incident. Run future experimental workers through `scripts/run_bounded_test.sh`
 to give them a separate process group and a hard host-memory limit.
+
+Dense-model deployments default to GPU-resident weights. Generic RAM weight
+offload is excluded; only a community fork with documented performance
+optimizations relevant to this hardware is eligible for an offload evaluation.
+The historical HyperQwen CPU-offload measurement is not an approved deployment
+profile under this policy. Existing MoE expert streaming is a separate case.
