@@ -22,3 +22,12 @@ rates, with methodology and limitations. Keep raw evidence privately.
 Launch helpers in the public tree are reference source: they require locally
 installed engines, profiles and a private API key. Those assets are not exported.
 This is a maintenance workflow, not a scheduled background publisher.
+
+Benchmark preservation and synchronization are standing requirements. Save dated
+raw results privately after every run; retain prior results even when a setting or
+model is retired. Update the benchmark reports and maintained-profile registry
+after tests or setting changes, including failed trials and context-validation
+limits. Export the sanitized summaries, review the diffs, commit and push both
+repositories independently, and verify each branch matches its upstream. Do not
+rerun completed benchmarks just to refresh the repositories. If synchronization
+fails, preserve the results locally and report the outstanding publication step.

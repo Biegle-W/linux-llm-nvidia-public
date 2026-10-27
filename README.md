@@ -77,6 +77,18 @@ code comments, messages and commits in English. Keep private/public repositories
 current after validated changes, with nonpersonal commits and no force pushes.
 Export selected sanitized files only; never export private history or state.
 
+Always preserve benchmark results and keep both Linux NVIDIA repositories updated.
+After each benchmark, qualification, or maintained-setting change, save dated raw
+results privately and update the relevant benchmark report and profile registry.
+Record exact settings, engine versions, hardware, input/output lengths, repetitions,
+prefill/TTFT and decode measurements, allocated context, tested input lengths, and
+failures or limitations. Preserve historical measurements when replacing settings
+or removing a model; recover saved evidence before repeating completed tests.
+Publish sanitized results and settings to the public reference using
+`scripts/sync_public.py`, review both diffs, commit and push both repositories,
+and verify both branches match their upstreams. If publication is blocked, retain
+the local results and report exactly what remains unsynchronized.
+
 Use one maintained profile per model, weight quantization and engine. Select the
 largest locally validated safe context with competitive prefill and decode;
 record tradeoffs rather than claim one setting maximizes every metric. Keep
