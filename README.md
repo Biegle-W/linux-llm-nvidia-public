@@ -31,11 +31,11 @@ The SGLang choice uses GPU-only PP2, CUDA graphs and 16K context at **47 / 47 to
 [Engine settings, comparisons and validation](docs/DENSE-ENGINE-OPTIMIZATION-20261027.md)
 include the old 4070 + 3060 reference and guarded DFlash/SGLang TP failures.
 Start the default with `./scripts/start_model.sh qwen27b`, or explicitly select
-`./scripts/start_model.sh qwen27b sglang`. The prior
+`./scripts/start_model.sh qwen27b sglang`. The retired
 [IQ4_XS/MTP2 measurements](docs/QWEN27B-GPU-ONLY-20261026.md) remain preserved.
 
 The [maintained-profile registry](docs/MAINTAINED-PROFILES.md) now keeps exactly
-one selected setting per model, weight quantization and engine: seven profiles.
+one selected setting per model, weight quantization and engine: six profiles.
 Superseded launchers and the duplicate Strata alias are retired; completed
 measurements remain available as dated evidence.
 

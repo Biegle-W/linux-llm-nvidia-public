@@ -28,7 +28,7 @@ Raw local inventory, hashes, build logs and smoke-test results belong in ignored
 
 ## Requested large-model setup
 
-The current [seven-profile registry](MAINTAINED-PROFILES.md) selects one setting per model, weight quantization and engine. `config/maintained-profiles.json` is the maintained registry; old benchmark snapshots are evidence rather than extra deployment presets.
+The current [six-profile registry](MAINTAINED-PROFILES.md) selects one setting per model, weight quantization and engine. `config/maintained-profiles.json` is the maintained registry; old benchmark snapshots are evidence rather than extra deployment presets.
 
 The October 26 setup queue completed all four initial API checks and left Qwen
 as the default. DeepSeek now uses one shared Maya-S weight set with separate
@@ -106,6 +106,6 @@ HyperQwen/patched vLLM TP2 with MTP3, INT4 KV, BF16 recurrent state and a 32K
 allocation. It passed 29,496-token retrieval and measured 155 code / 108 prose tok/s.
 Start it with `./scripts/start_model.sh qwen27b`; stop it with
 `systemctl --user stop llm-test-qwen27b`. Use `./scripts/start_model.sh qwen27b sglang`
-for the qualified SGLang PP2/graphs 16K alternative, or select `llama` explicitly
-for the prior GGUF profile. Only one engine runs at a time. All use authenticated
+for the qualified SGLang PP2/graphs 16K alternative. The slower IQ4_XS llama.cpp
+profile and its dedicated weights have been removed. Only one engine runs at a time. All use authenticated
 port 10000; all model weights and active MTP weights remain in VRAM.

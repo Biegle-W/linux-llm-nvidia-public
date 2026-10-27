@@ -1,6 +1,6 @@
 # Dense Qwen3.8-27B entirely in VRAM
 
-**October 27 update:** the default is now the faster [32K HyperQwen/MTP3 profile](DENSE-ENGINE-OPTIMIZATION-20261027.md). This dated report preserves the October 26 measurements; select `qwen27b llama` to launch its GGUF configuration.
+**October 27 update:** this slower IQ4_XS deployment, dedicated launcher and weights have been removed. The default is the faster [32K HyperQwen/MTP3 profile](DENSE-ENGINE-OPTIMIZATION-20261027.md). This dated report preserves historical measurements and is not a current launch guide.
 
 Qwen3.8-27B now runs successfully across the RTX 3080 Ti 12 GB and RTX 3080
 10 GB with **no host-RAM model-weight offload**. The maintained profile uses
@@ -110,22 +110,18 @@ checks were removed. The final PP2 result uses the larger valid KV reservation
 and higher cache/state precision. Older 4070/3060 speculative speeds are not
 claimed for this different pair or workload.
 
-## Start, stop and memory isolation
+## Former deployment and memory isolation
 
-```bash
-./scripts/start_model.sh qwen27b llama
-systemctl --user stop llm-test-qwen27b
-```
+This IQ4_XS deployment was removed on October 27. Its launcher and model
+provenance are retained in the private retirement repository; see the
+[current profile registry](MAINTAINED-PROFILES.md). The benchmark evidence above
+remains unchanged.
 
-The API is authenticated at `http://127.0.0.1:10000/v1`, model ID
-`qwen3.8-27b`, using the existing local API-key file. Stop another model before
-starting it. The default `qwen` launcher still selects Flash-Next.
-
-`serve_qwen27b.py` requires the bounded service's cgroup, checks the artifact
-size and private key-file permissions, and refuses startup unless both expected
-cards have sufficient free VRAM. The service has a 30 GiB soft host-memory limit,
-a 36 GiB hard limit and a 1 GiB swap limit; it does not start automatically at
-login. Model weights are installed under ignored `models/qwen3.8-27b-iq4-xs/`.
-Runtime/build files and private raw evidence remain excluded from public export.
-The normal port-10000 profile was started and passed a fresh authenticated
-streaming check after the benchmark profile was retired.
+The former authenticated API used port 10000 and model ID `qwen3.8-27b`.
+Its dedicated launcher required the bounded service's cgroup, checked the artifact
+size and private key-file permissions, and required free VRAM on both expected
+cards. The service used a 30 GiB soft host-memory limit, 36 GiB hard limit and
+1 GiB swap limit, with no login autostart. The installed GGUF was subsequently
+removed from `models/qwen3.8-27b-iq4-xs/`. Runtime/build files and private raw
+evidence remain excluded from public export. The original port-10000 profile
+passed an authenticated streaming check after its benchmark worker was retired.

@@ -23,9 +23,9 @@ systemctl --user stop llm-test-qwen27b
 
 Both choices use authenticated `http://127.0.0.1:10000/v1`, model ID
 `qwen3.8-27b`, and the same bounded service. Stop that owned service before
-changing engines. The previous GGUF configuration remains available explicitly
-with `./scripts/start_model.sh qwen27b llama`; its dated measurements are preserved
-in [the October 26 report](QWEN27B-GPU-ONLY-20261026.md). The default `qwen`
+changing engines. The slower IQ4_XS llama.cpp deployment and its dedicated weights
+were removed at the user's request. Its dated measurements are preserved in
+[the October 26 report](QWEN27B-GPU-ONLY-20261026.md). The default `qwen`
 Flash-Next/MoE launcher is unchanged.
 
 | Setting | Default HyperQwen/vLLM | SGLang choice |

@@ -1,6 +1,6 @@
 # Maintained model, quantization and engine settings
 
-`config/maintained-profiles.json` is the current registry: **seven selected
+`config/maintained-profiles.json` is the current registry: **six selected
 profiles**, with one entry for each `(model, weight quantization, engine)`.
 The dense launchers read their arguments directly from this file. Strata and
 Maya entries identify their single canonical private runtime setting; credentials
@@ -21,13 +21,12 @@ quality, thermal and owned-process safeguards. This is a best-known balanced
 selection from saved tests, not a claim that one setting maximizes every metric
 or that untested larger contexts work.
 
-## The seven retained profiles
+## The six retained profiles
 
 | Model / weight quant | Engine | Selected setting | Allocated context | Retrieval-tested input |
 | --- | --- | --- | ---: | ---: |
 | Qwen3.8-27B / AutoRound INT4 body and heads, INT8 embedding | HyperQwen/vLLM | TP2, MTP3, MLP W4A8, BF16 state, INT4 KV, 128-token chunks, graphs | 32,768 | 29,496 |
 | Same prepared Qwen3.8-27B quant | SGLang | PP2, packed embedding lookup, FP32 state, BF16 KV, 512-token chunks, decode graphs | 16,384 | 14,758 |
-| Qwen3.8-27B / GGUF IQ4_XS | llama.cpp | MTP2, 61/39 layer split, GPU embedding, Q8_0 KV | 32,768 | 29,496 |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | Existing `qwen-flash-next` preset, MTP, INT8 KV, automatic expert cache | 32,768 | Not established |
 | GLM-5.3-Flash / Maya-S24 | Maya | Existing S24 setting, drafting, automatic expert cache/prefill | 32,768 | Not established |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | Shared weights, `deepseek-maya-s`, drafting/vision off, 2 GiB GPU reserve | 8,192 | Not established |
@@ -45,7 +44,6 @@ this consolidation.
 | --- | ---: | ---: | ---: | ---: |
 | Qwen3.8-27B / HyperQwen | 32K | 97.8 tok/s | 1.643 s | 155.2 / 107.7 tok/s |
 | Qwen3.8-27B / SGLang | 16K | 46.7 tok/s | 0.865 s | 47.2 / 47.2 tok/s |
-| Qwen3.8-27B / llama.cpp | 32K | 66.4 tok/s | 1.902 s | 88.0 / 58.6 tok/s |
 | Flash-Next / Strata | 8K | 101.7 tok/s | 3.47 s | Not measured |
 | GLM / Maya | 8K | 7.5 tok/s | 26.09 s | Not measured |
 | DeepSeek / Strata | 8K | 2.7 tok/s | 62.58 s | Not measured |
@@ -74,7 +72,6 @@ not additional maintained presets.
 python3 scripts/profile_catalog.py
 ./scripts/start_model.sh qwen27b             # default: HyperQwen, 32K
 ./scripts/start_model.sh qwen27b sglang      # SGLang, 16K
-./scripts/start_model.sh qwen27b llama       # IQ4_XS, 32K; original VRAM gates apply
 ./scripts/start_model.sh qwen                # Flash-Next / Strata
 ./scripts/start_model.sh glm                 # GLM / Maya
 ./scripts/start_model.sh strata-deepseek
@@ -106,7 +103,7 @@ identified as local state rather than falsely assigned a Git blob revision.
 
 The batch contains eight obsolete trial launchers, the duplicate Strata alias,
 the disabled Windows-origin inventory, and the two pre-consolidation dense
-launcher sources. The two maintained launchers now consume the selected catalog;
+launcher sources. At consolidation, both dense launchers were changed to consume the selected catalog;
 the old inventory is a disabled retirement pointer. Old trial launchers and the
 duplicate alias have been removed from their operational locations.
 
@@ -114,5 +111,20 @@ Completed requests, raw settings snapshots, qualifications, regressions, failure
 logs, benchmark summaries and required patch/kernel fixtures remain as dated
 evidence. They are not registered as runnable presets. No weights, runtime
 environments, credentials, chats or raw logs were uploaded to the archive. No
-model weights were removed. Future result lists should show these seven retained
+model weights were removed during that consolidation. Future result lists should show these six retained
 profiles first and label all other trials historical or unqualified.
+
+
+## Removed IQ4_XS deployment
+
+The slower Qwen3.8-27B IQ4_XS llama.cpp profile was subsequently removed at the
+user's request. Its catalog entry, launch selection and dedicated launcher were
+removed, along with the 15,475,951,328-byte GGUF and its local download metadata.
+HyperQwen and SGLang retain the shared AutoRound checkpoint. The shared llama.cpp
+runtime and numerical-test tools remain installed.
+
+The retired launcher, pre-removal catalog and publisher-verified model provenance
+are hash-verified in the private retirement repository, batch
+`linux-nvidia/2026-10-27-qwen27b-iq4xs-removal`, commit `e46d38c`.
+The model weights were not uploaded to that archive. Historical benchmark and
+retrieval results remain preserved; they no longer describe an installed model.

@@ -12,7 +12,7 @@ FILES = (
     'scripts/start_model.sh', 'scripts/native_linux_gpu_unlock.py',
     'scripts/test_native_linux_gpu_unlock.py', 'docs/UNLOCK-SETUP-20261026.md',
     'docs/BENCHMARK-UNLOCK-20261026.md', 'docs/ENGINE-TESTS-20261026.md',
-    'scripts/run_bounded_test.sh', 'scripts/serve_qwen27b.py',
+    'scripts/run_bounded_test.sh',
     'docs/QWEN27B-GPU-ONLY-20261026.md', 'scripts/sync_public.py', 'docs/PUBLIC-SYNC.md',
     'docs/DENSE-ENGINE-OPTIMIZATION-20261027.md', 'scripts/serve_qwen27b_engines.py',
     'scripts/test_sglang_quantized_embedding.py',
