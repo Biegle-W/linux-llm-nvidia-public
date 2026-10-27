@@ -62,8 +62,14 @@ None currently kept.
 
 | Model / quant | Engine / trial | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya / `deepseek-maya-32768-control` | 41.5 | 52.963 | 2.48 | 32,768 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya / `deepseek-maya-65536-screen` | 46.3 | 47.434 | 3.10 | 65,536 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata / `deepseek-strata-131072-screen` | 32.1 | 68.434 | 2.94 | 131,072 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata / `deepseek-strata-65536-control` | 33.9 | 64.592 | 2.80 | 65,536 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata / `flash-next-strata-32768-screen` | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | NVME: `models/strata/models/IQ3_XXS` |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata / `flash-next-strata-65536-screen` | 589.7 | 3.789 | 94.43 | 65,536 | 75.84 | NVME: `models/strata/models/IQ3_XXS` |
+| GLM-5.3-Flash / Maya-S24 | Maya / `glm-maya-32768-control` | 65.2 | 33.901 | 4.22 | 32,768 | 94.70 | NVME: `models/maya/Maya-S24` |
+| GLM-5.3-Flash / Maya-S24 | Maya / `glm-maya-65536-screen` | 65.4 | 33.765 | 4.03 | 65,536 | 94.70 | NVME: `models/maya/Maya-S24` |
 
 ## Status and preserved evidence
 
