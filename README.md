@@ -46,6 +46,9 @@ remain preserved as historical measurements.
 OpenAI model/engine selection on port 10100 over loopback and Tailscale. DSH is a
 separate client on port 3080; Strata and Maya shortcuts open their native web apps.
 
+**Latest matched benchmark:** [all six kept profiles, fresh TTFT/prefill/decode and storage](docs/BENCHMARK-20261027-101219.md).
+The test uses each installed context; historical benchmark evidence stays preserved.
+
 ## Repository ownership
 
 | Build | Private operational repository | Public reference |

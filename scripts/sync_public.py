@@ -29,6 +29,8 @@ FILES = (
     'tests/test_router.py', 'docs/ROUTER-DEPLOYMENT-20261027.md',
     'assets/icons/README.md', 'assets/icons/strata.svg', 'assets/icons/maya.svg',
     'assets/icons/sglang.svg', 'assets/icons/dsh.svg', 'assets/icons/hyperqwen.png',
+    'scripts/benchmark_models.py', 'tests/test_benchmark_metrics.py',
+    'docs/BENCHMARK-20261027-101219.md', 'docs/benchmark-results/20261027-101219.json',
 )
 BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
                    r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|'

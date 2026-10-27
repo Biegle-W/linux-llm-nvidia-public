@@ -95,6 +95,24 @@
         "VLLM_MARLIN_INPUT_DTYPE": "int8",
         "VLLM_MARLIN_INT8_INCLUDE_RE": "mlp",
         "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp"
+      },
+      "latest_benchmark": {
+        "run": "20261027-101219",
+        "date": "2026-10-27",
+        "context": 32768,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2212,
+          2222
+        ],
+        "output_tokens": 128,
+        "ttft_s": 1.6129653680000047,
+        "prefill_tps": 1385.5075975448417,
+        "decode_tps": 89.0073252285688,
+        "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-20261027-101219.md",
+        "numeric_results": "docs/benchmark-results/20261027-101219.json"
       }
     },
     {
@@ -140,7 +158,26 @@
         "default_chat_template_kwargs": {
           "enable_thinking": false
         },
-        "tool_call_parser": "qwen3_coder"
+        "tool_call_parser": "qwen3_coder",
+        "enable_metrics": true
+      },
+      "latest_benchmark": {
+        "run": "20261027-101219",
+        "date": "2026-10-27",
+        "context": 16384,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2212,
+          2222
+        ],
+        "output_tokens": 128,
+        "ttft_s": 0.8524989010002173,
+        "prefill_tps": 2606.293122856385,
+        "decode_tps": 46.71094139831222,
+        "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-20261027-101219.md",
+        "numeric_results": "docs/benchmark-results/20261027-101219.json"
       }
     },
     {
@@ -165,7 +202,25 @@
         "kind": "strata-launch-preset",
         "name": "qwen-flash-next"
       },
-      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md"
+      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
+      "latest_benchmark": {
+        "run": "20261027-101219",
+        "date": "2026-10-27",
+        "context": 32768,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2212,
+          2222
+        ],
+        "output_tokens": 128,
+        "ttft_s": 3.647962864000874,
+        "prefill_tps": 609.6,
+        "decode_tps": 105.64336780690053,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-20261027-101219.md",
+        "numeric_results": "docs/benchmark-results/20261027-101219.json"
+      }
     },
     {
       "id": "glm-maya",
@@ -198,7 +253,25 @@
         "reason": "Bound the native expert RAM tier inside the managed worker budget; historical standard benchmark predates this cap."
       },
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
-      "benchmark_configuration_note": "Historical standard benchmark used automatic RAM allocation before the managed 32 GiB expert-RAM cap. No new throughput claim for the capped profile."
+      "benchmark_configuration_note": "Historical standard benchmark used automatic RAM allocation before the managed 32 GiB expert-RAM cap. Current capped-profile measurements are recorded separately under latest_benchmark.",
+      "latest_benchmark": {
+        "run": "20261027-101219",
+        "date": "2026-10-27",
+        "context": 32768,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2199,
+          2209
+        ],
+        "output_tokens": 128,
+        "ttft_s": 39.46869795800012,
+        "prefill_tps": 56.0,
+        "decode_tps": 3.048613366180654,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-20261027-101219.md",
+        "numeric_results": "docs/benchmark-results/20261027-101219.json"
+      }
     },
     {
       "id": "deepseek-strata",
@@ -250,6 +323,24 @@
         "reserve_mib_per_gpu": 2048,
         "parallel": 1,
         "reasoning_effort": "none"
+      },
+      "latest_benchmark": {
+        "run": "20261027-101219",
+        "date": "2026-10-27",
+        "context": 65536,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2179,
+          2198
+        ],
+        "output_tokens": 128,
+        "ttft_s": 69.19491248999839,
+        "prefill_tps": 31.5,
+        "decode_tps": 1.7056418191605587,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-20261027-101219.md",
+        "numeric_results": "docs/benchmark-results/20261027-101219.json"
       }
     },
     {
@@ -274,7 +365,25 @@
         "kind": "private-maya-config",
         "path": "runtimes/project-maya/maya-ds4.json"
       },
-      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md"
+      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
+      "latest_benchmark": {
+        "run": "20261027-101219",
+        "date": "2026-10-27",
+        "context": 32768,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2179,
+          2198
+        ],
+        "output_tokens": 128,
+        "ttft_s": 60.60193419500138,
+        "prefill_tps": 36.1,
+        "decode_tps": 1.2219164343194755,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-20261027-101219.md",
+        "numeric_results": "docs/benchmark-results/20261027-101219.json"
+      }
     }
   ]
 }

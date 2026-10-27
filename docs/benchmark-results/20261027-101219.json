@@ -1,0 +1,612 @@
+{
+  "schema": 1,
+  "run": "20261027-101219",
+  "protocol": {
+    "created": "2026-10-27T10:12:19-0400",
+    "repetitions": 3,
+    "output_tokens": 128,
+    "reference_words": 2000,
+    "warmup": {
+      "reference_words": 512,
+      "output_tokens": 64
+    },
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 261026,
+    "thinking": false,
+    "concurrency": 1,
+    "context": "Each kept profile retains its installed allocation.",
+    "ttft": "HTTP request to first nonempty content SSE delta, worker loopback API; load/warmup excluded.",
+    "decode": "(completion_tokens - 1)/(last-content timestamp - first-content timestamp), same formula across engines.",
+    "prefill": "Native prompt timings for Strata/Maya; per-request native prefill-phase metric deltas for dense engines.",
+    "cache": "Unique early system tags; prefix reuse off in dense profiles; native cached counts checked; OS page cache not flushed.",
+    "reservation": "Router and DSH stay running. GPU reservation blocks other router generation/switching during measurements.",
+    "safety": "Existing worker cgroups, model guards and selected RAM budgets remain; monitor aborts below 8 GiB host available or at 82 C."
+  },
+  "versions": {
+    "hyperqwen": {
+      "metadata": {
+        "torch": "2.13.0",
+        "vllm": "0.31.0"
+      }
+    },
+    "sglang": {
+      "metadata": {
+        "torch": "2.13.0",
+        "sglang": "0.5.22"
+      }
+    },
+    "Maya": {
+      "git_head": "8b4b39f84e35393833b31b80e82bee92e69bb646",
+      "version_file": "1.1.29"
+    },
+    "HyperQwen-source": {
+      "git_head": "ce9615c4f2309be727407918a6c979bd67968069"
+    },
+    "Strata-control": {
+      "version": "0.1.51",
+      "commit": "562a0c2ed7169ff6373f893b162106d55a828297"
+    }
+  },
+  "hardware": {
+    "cpu": "i5-13600KF",
+    "ram_gb": 64,
+    "gpus": [
+      "RTX 3080 Ti 12 GB",
+      "RTX 3080 10 GB"
+    ]
+  },
+  "resource_observations": {
+    "gpu_peak_c": {
+      "0": 59.0,
+      "1": 46.0
+    },
+    "minimum_host_available_gib": 10.08114242553711,
+    "maximum_host_swap_used_gib": 1.192291259765625,
+    "cached_tokens_max": 0
+  },
+  "profiles": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "engine": "HyperQwen-vLLM",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "context": 32768,
+      "tested_retrieval_input": 29496,
+      "repetitions": 3,
+      "ttft_s": 1.6129653680000047,
+      "ttft_s_range": [
+        1.6061796949979907,
+        1.6132797360005497
+      ],
+      "prefill_tps": 1385.5075975448417,
+      "prefill_tps_range": [
+        1382.190974064212,
+        1388.0800977962956
+      ],
+      "client_decode_tps": 89.0073252285688,
+      "client_decode_tps_range": [
+        86.24396693924693,
+        97.93690783150343
+      ],
+      "prompt_tokens": 2212,
+      "prompt_tokens_range": [
+        2212,
+        2222
+      ],
+      "output_tokens": 128,
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "wall_s": 3.040121594000084,
+      "wall_s_range": [
+        2.903262146999623,
+        3.086191548998613
+      ],
+      "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
+      "storage_relative": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+      "weight_bytes": 15791777864,
+      "storage_device": "/dev/nvme0n1p2",
+      "storage_drive_model": "CT1000P3PSSD8 NVMe",
+      "shared_weight_group": "qwen27b",
+      "load_select_s": 34.3084465039974,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 1.6132797360005497,
+          "prefill_tps": 1388.0800977962956,
+          "client_decode_tps": 86.24396693924693,
+          "native_decode_tps": null,
+          "prefill_s": 1.6007721770001808,
+          "prefill_metric_count": 1.0,
+          "cached_tokens": 0,
+          "wall_s": 3.086191548998613
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 1.6129653680000047,
+          "prefill_tps": 1385.5075975448417,
+          "client_decode_tps": 89.0073252285688,
+          "native_decode_tps": null,
+          "prefill_s": 1.596526792000077,
+          "prefill_metric_count": 1.0,
+          "cached_tokens": 0,
+          "wall_s": 3.040121594000084
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 1.6061796949979907,
+          "prefill_tps": 1382.190974064212,
+          "client_decode_tps": 97.93690783150343,
+          "native_decode_tps": null,
+          "prefill_s": 1.600357722996705,
+          "prefill_metric_count": 1.0,
+          "cached_tokens": 0,
+          "wall_s": 2.903262146999623
+        }
+      ]
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "engine": "SGLang",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "context": 16384,
+      "tested_retrieval_input": 14758,
+      "repetitions": 3,
+      "ttft_s": 0.8524989010002173,
+      "ttft_s_range": [
+        0.8481880470026226,
+        0.8666269000023021
+      ],
+      "prefill_tps": 2606.293122856385,
+      "prefill_tps_range": [
+        2573.264723359176,
+        2619.5374427132087
+      ],
+      "client_decode_tps": 46.71094139831222,
+      "client_decode_tps_range": [
+        46.38406761013453,
+        46.74155568790624
+      ],
+      "prompt_tokens": 2212,
+      "prompt_tokens_range": [
+        2212,
+        2222
+      ],
+      "output_tokens": 128,
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "wall_s": 3.57144665099986,
+      "wall_s_range": [
+        3.565377929000533,
+        3.6047287300025346
+      ],
+      "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+      "storage_relative": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+      "weight_bytes": 15791777864,
+      "storage_device": "/dev/nvme0n1p2",
+      "storage_drive_model": "CT1000P3PSSD8 NVMe",
+      "shared_weight_group": "qwen27b",
+      "load_select_s": 23.675923924998642,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 0.8666269000023021,
+          "prefill_tps": 2573.264723359176,
+          "client_decode_tps": 46.38406761013453,
+          "native_decode_tps": null,
+          "prefill_s": 0.8634945250014425,
+          "prefill_metric_count": 1.0,
+          "cached_tokens": 0,
+          "wall_s": 3.6047287300025346
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.8524989010002173,
+          "prefill_tps": 2606.293122856385,
+          "client_decode_tps": 46.71094139831222,
+          "native_decode_tps": null,
+          "prefill_s": 0.8487149739994493,
+          "prefill_metric_count": 1.0,
+          "cached_tokens": 0,
+          "wall_s": 3.57144665099986
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.8481880470026226,
+          "prefill_tps": 2619.5374427132087,
+          "client_decode_tps": 46.74155568790624,
+          "native_decode_tps": null,
+          "prefill_s": 0.8444238910014974,
+          "prefill_metric_count": 1.0,
+          "cached_tokens": 0,
+          "wall_s": 3.565377929000533
+        }
+      ]
+    },
+    {
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "engine": "Strata",
+      "quant": "IQ3_XXS",
+      "context": 32768,
+      "tested_retrieval_input": null,
+      "repetitions": 3,
+      "ttft_s": 3.647962864000874,
+      "ttft_s_range": [
+        3.6456388229998993,
+        3.660713671997655
+      ],
+      "prefill_tps": 609.6,
+      "prefill_tps_range": [
+        609.3,
+        610.2
+      ],
+      "client_decode_tps": 105.64336780690053,
+      "client_decode_tps_range": [
+        98.95471562592354,
+        114.6847197896559
+      ],
+      "native_decode_tps": 105.2,
+      "native_decode_tps_range": [
+        98.7,
+        114.2
+      ],
+      "prompt_tokens": 2212,
+      "prompt_tokens_range": [
+        2212,
+        2222
+      ],
+      "output_tokens": 128,
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "wall_s": 4.850311713998963,
+      "wall_s_range": [
+        4.753293166999356,
+        4.944318914000178
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "storage_relative": "models/strata/models/IQ3_XXS",
+      "weight_bytes": 75839998528,
+      "storage_device": "/dev/nvme0n1p2",
+      "storage_drive_model": "CT1000P3PSSD8 NVMe",
+      "shared_weight_group": "flash-next-strata",
+      "load_select_s": 117.31171792499663,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 3.660713671997655,
+          "prefill_tps": 610.2,
+          "client_decode_tps": 98.95471562592354,
+          "native_decode_tps": 98.7,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 4.944318914000178
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 3.6456388229998993,
+          "prefill_tps": 609.6,
+          "client_decode_tps": 114.6847197896559,
+          "native_decode_tps": 114.2,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 4.753293166999356
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 3.647962864000874,
+          "prefill_tps": 609.3,
+          "client_decode_tps": 105.64336780690053,
+          "native_decode_tps": 105.2,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 4.850311713998963
+        }
+      ]
+    },
+    {
+      "profile": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "engine": "Maya",
+      "quant": "Maya-S24",
+      "context": 32768,
+      "tested_retrieval_input": null,
+      "repetitions": 3,
+      "ttft_s": 39.46869795800012,
+      "ttft_s_range": [
+        39.35977809000178,
+        39.74788187499507
+      ],
+      "prefill_tps": 56.0,
+      "prefill_tps_range": [
+        55.5,
+        56.0
+      ],
+      "client_decode_tps": 3.048613366180654,
+      "client_decode_tps_range": [
+        2.9972350296807133,
+        3.182100965940168
+      ],
+      "native_decode_tps": 3.1,
+      "native_decode_tps_range": [
+        3.0,
+        3.2
+      ],
+      "prompt_tokens": 2199,
+      "prompt_tokens_range": [
+        2199,
+        2209
+      ],
+      "output_tokens": 128,
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "wall_s": 81.0983125910061,
+      "wall_s_range": [
+        79.70128129799559,
+        81.98532963600155
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "storage_relative": "models/maya/Maya-S24",
+      "weight_bytes": 94701676224,
+      "storage_device": "/dev/nvme0n1p2",
+      "storage_drive_model": "CT1000P3PSSD8 NVMe",
+      "shared_weight_group": "glm-maya",
+      "load_select_s": 68.75617227200564,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2209,
+          "output_tokens": 128,
+          "ttft_s": 39.46869795800012,
+          "prefill_tps": 56.0,
+          "client_decode_tps": 2.9972350296807133,
+          "native_decode_tps": 3.0,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 81.98532963600155
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2199,
+          "output_tokens": 128,
+          "ttft_s": 39.35977809000178,
+          "prefill_tps": 56.0,
+          "client_decode_tps": 3.048613366180654,
+          "native_decode_tps": 3.1,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 81.0983125910061
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2199,
+          "output_tokens": 128,
+          "ttft_s": 39.74788187499507,
+          "prefill_tps": 55.5,
+          "client_decode_tps": 3.182100965940168,
+          "native_decode_tps": 3.2,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 79.70128129799559
+        }
+      ]
+    },
+    {
+      "profile": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engine": "Strata",
+      "quant": "Maya-S",
+      "context": 65536,
+      "tested_retrieval_input": 58969,
+      "repetitions": 3,
+      "ttft_s": 69.19491248999839,
+      "ttft_s_range": [
+        68.54404170699854,
+        71.28373619299964
+      ],
+      "prefill_tps": 31.5,
+      "prefill_tps_range": [
+        30.8,
+        31.9
+      ],
+      "client_decode_tps": 1.7056418191605587,
+      "client_decode_tps_range": [
+        1.6709871825288973,
+        1.8184296429111988
+      ],
+      "native_decode_tps": 1.7,
+      "native_decode_tps_range": [
+        1.7,
+        1.8
+      ],
+      "prompt_tokens": 2188,
+      "prompt_tokens_range": [
+        2179,
+        2198
+      ],
+      "output_tokens": 128,
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "wall_s": 144.5471779369982,
+      "wall_s_range": [
+        139.03555403000064,
+        145.7426715239999
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "storage_relative": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S",
+      "weight_bytes": 339477953988,
+      "storage_device": "/dev/nvme0n1p2",
+      "storage_drive_model": "CT1000P3PSSD8 NVMe",
+      "shared_weight_group": "deepseek-maya-s",
+      "load_select_s": 50.408981381006015,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "output_tokens": 128,
+          "ttft_s": 71.28373619299964,
+          "prefill_tps": 30.8,
+          "client_decode_tps": 1.7056418191605587,
+          "native_decode_tps": 1.7,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 145.7426715239999
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2188,
+          "output_tokens": 128,
+          "ttft_s": 68.54404170699854,
+          "prefill_tps": 31.9,
+          "client_decode_tps": 1.6709871825288973,
+          "native_decode_tps": 1.7,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 144.5471779369982
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2179,
+          "output_tokens": 128,
+          "ttft_s": 69.19491248999839,
+          "prefill_tps": 31.5,
+          "client_decode_tps": 1.8184296429111988,
+          "native_decode_tps": 1.8,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 139.03555403000064
+        }
+      ]
+    },
+    {
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engine": "Maya",
+      "quant": "Maya-S",
+      "context": 32768,
+      "tested_retrieval_input": null,
+      "repetitions": 3,
+      "ttft_s": 60.60193419500138,
+      "ttft_s_range": [
+        59.759291107002355,
+        61.023379500999
+      ],
+      "prefill_tps": 36.1,
+      "prefill_tps_range": [
+        36.0,
+        36.5
+      ],
+      "client_decode_tps": 1.2219164343194755,
+      "client_decode_tps_range": [
+        1.2014775077317126,
+        1.2885245909472545
+      ],
+      "native_decode_tps": 1.2,
+      "native_decode_tps_range": [
+        1.2,
+        1.3
+      ],
+      "prompt_tokens": 2188,
+      "prompt_tokens_range": [
+        2179,
+        2198
+      ],
+      "output_tokens": 128,
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "wall_s": 163.70358947099885,
+      "wall_s_range": [
+        159.17242810800235,
+        166.7376265050043
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "storage_relative": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S",
+      "weight_bytes": 339477953988,
+      "storage_device": "/dev/nvme0n1p2",
+      "storage_drive_model": "CT1000P3PSSD8 NVMe",
+      "shared_weight_group": "deepseek-maya-s",
+      "load_select_s": 58.11670727100136,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "output_tokens": 128,
+          "ttft_s": 61.023379500999,
+          "prefill_tps": 36.0,
+          "client_decode_tps": 1.2014775077317126,
+          "native_decode_tps": 1.2,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 166.7376265050043
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2188,
+          "output_tokens": 128,
+          "ttft_s": 60.60193419500138,
+          "prefill_tps": 36.1,
+          "client_decode_tps": 1.2885245909472545,
+          "native_decode_tps": 1.3,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 159.17242810800235
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2179,
+          "output_tokens": 128,
+          "ttft_s": 59.759291107002355,
+          "prefill_tps": 36.5,
+          "client_decode_tps": 1.2219164343194755,
+          "native_decode_tps": 1.2,
+          "prefill_s": null,
+          "prefill_metric_count": null,
+          "cached_tokens": 0,
+          "wall_s": 163.70358947099885
+        }
+      ]
+    }
+  ]
+}

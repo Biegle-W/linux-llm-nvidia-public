@@ -37,36 +37,38 @@ with three-marker retrieval passed at 58,969 input tokens. Its new context-test
 rates are recorded separately from the preserved 8K standard speed benchmark.
 
 The other streamed-model 32K allocations passed installation/startup and short API
-checks. Their full windows have not been retrieval-validated. Their measured
-speed tests used an **8K benchmark allocation**, so the rates below are not new
-32K throughput claims. No model tests or context qualification were repeated for
-the profile consolidation. The subsequent Strata DeepSeek context expansion used
+checks. Their full windows have not been retrieval-validated. Earlier speed
+tests used an **8K benchmark allocation** and remain historical.
+The latest table measures the current allocations with roughly 2.2K input tokens;
+it does not qualify full-window quality. No model tests or context qualification
+were repeated for the profile consolidation. The subsequent Strata DeepSeek context expansion used
 new 32K/64K configurations and preserved the completed 8K measurements.
 
 The [router deployment](ROUTER-DEPLOYMENT-20261027.md) adds Qwen tool-call parsers
-and caps GLM expert RAM at 32 GiB for safe managed loading. The GLM speed baseline
-below predates that cap and is historical, rather than measured capped-profile
-throughput.
+and a 32 GiB GLM expert-RAM cap; the latest matched benchmark includes those
+settings.
 
-## Saved speed evidence for the retained choices
+## Latest matched speed evidence
 
-| Model / engine | Benchmark allocation | Longer-input decode | Longer-input TTFT | Code / prose decode |
+[Fresh benchmark — October 27](BENCHMARK-20261027-101219.md) uses each kept context allocation, roughly
+2.2K input tokens and 128 output tokens, with three measured requests after warm-up.
+Prefill is native phase timing; decode is observed client SSE throughput.
+
+| Model / engine | Context | TTFT s | Prefill tok/s | Decode tok/s |
 | --- | ---: | ---: | ---: | ---: |
-| Qwen3.8-27B / HyperQwen | 32K | 97.8 tok/s | 1.643 s | 155.2 / 107.7 tok/s |
-| Qwen3.8-27B / SGLang | 16K | 46.7 tok/s | 0.865 s | 47.2 / 47.2 tok/s |
-| Flash-Next / Strata | 8K | 101.7 tok/s | 3.47 s | Not measured |
-| GLM / Maya | 8K | 7.5 tok/s | 26.09 s | Not measured |
-| DeepSeek / Strata | 8K | 2.7 tok/s | 62.58 s | Not measured |
-| DeepSeek / Maya | 8K | 4.4 tok/s | 40.66 s | Not measured |
+| Qwen3.8-27B / HyperQwen-vLLM | 32,768 | 1.613 | 1385.5 | 89.01 |
+| Qwen3.8-27B / SGLang | 16,384 | 0.852 | 2606.3 | 46.71 |
+| Qwen3.8-Flash-Next / Strata | 32,768 | 3.648 | 609.6 | 105.64 |
+| GLM-5.3-Flash / Maya | 32,768 | 39.469 | 56.0 | 3.05 |
+| DeepSeek-V4.1-Flash-1017 / Strata | 65,536 | 69.195 | 31.5 | 1.71 |
+| DeepSeek-V4.1-Flash-1017 / Maya | 32,768 | 60.602 | 36.1 | 1.22 |
 
-Strata/Maya native longer-input prompt rates were respectively 637.6, 84.0,
-34.8 and 53.5 tokens/s for those four rows. Dense-engine TTFT includes the
-frontend and first output step; it is not an isolated prefill rate. Different
-models, formats and speculation cannot establish isolated engine or GPU rankings.
-The dated reports retain input/output counts, repetitions and limitations:
-[optimized dense engines](DENSE-ENGINE-OPTIMIZATION-20261027.md),
-[GGUF measurements](QWEN27B-GPU-ONLY-20261026.md), and
-[streamed-model/unlock measurements](BENCHMARK-UNLOCK-20261026.md).
+The registry retains older `benchmark` fields as historical measurements and
+records this run under `latest_benchmark`. Earlier code/prose and short-input
+fixtures have different workloads. Historical reports remain available:
+[dense optimization](DENSE-ENGINE-OPTIMIZATION-20261027.md),
+[stock/unlock comparison](BENCHMARK-UNLOCK-20261026.md), and
+[64K DeepSeek retrieval](DEEPSEEK-STRATA-CONTEXT-20261027.md).
 
 The 4K HyperQwen MTP trial had faster code decode (173.9 tok/s), while the
 selected 32K trial measured 155.2 tok/s and faster prose (107.7 versus 102.5).
