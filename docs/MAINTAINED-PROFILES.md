@@ -82,7 +82,7 @@ None currently kept. RAM tiers in streamed profiles are caches, not full-model R
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | 609.6 | 3.648 | 105.64 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: `models/strata/models/IQ3_XXS` |
-| GLM-5.3-Flash / Maya-S24 | Maya | 64.5 | 36.247 | 4.73 | 32,768 | 94.70 | 10,908 |
+| GLM-5.3-Flash / Maya-S24 | Maya | 64.5 | 36.247 | 4.73 | 32,768 | 94.70 | CT1000P3PSSD8 NVMe: `models/maya/Maya-S24` |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 32.4 | 67.527 | 2.87 | 65,536 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 

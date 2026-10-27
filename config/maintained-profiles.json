@@ -118,6 +118,11 @@
         "access": "gpu-resident",
         "required_transport": "sata",
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      },
+      "worker_memory_gib": {
+        "high": 30,
+        "max": 36,
+        "swap": null
       }
     },
     {
@@ -188,6 +193,11 @@
         "access": "gpu-resident",
         "required_transport": "sata",
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      },
+      "worker_memory_gib": {
+        "high": 30,
+        "max": 36,
+        "swap": null
       }
     },
     {
@@ -235,6 +245,11 @@
         "access": "ssd-streaming",
         "required_transport": "nvme",
         "checkpoint_directory": "models/strata/models/IQ3_XXS"
+      },
+      "worker_memory_gib": {
+        "high": 44,
+        "max": 48,
+        "swap": null
       }
     },
     {
@@ -301,7 +316,7 @@
       "worker_memory_gib": {
         "high": 46,
         "max": 48,
-        "swap": 1
+        "swap": null
       },
       "latest_qualification": {
         "run": "20261027-moe-optimized",
@@ -399,7 +414,7 @@
       "worker_memory_gib": {
         "high": 44,
         "max": 48,
-        "swap": 1
+        "swap": null
       },
       "latest_qualification": {
         "run": "20261027-moe-optimized",
@@ -460,7 +475,7 @@
       "worker_memory_gib": {
         "high": 46,
         "max": 48,
-        "swap": 1
+        "swap": null
       },
       "selected_settings": {
         "environment": {

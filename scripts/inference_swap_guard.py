@@ -96,6 +96,7 @@ class WorkerWatch:
         self.evidence = Path(evidence) if evidence else ROOT / 'data/router' / (profile + '-swap-guard.jsonl')
         self.phase_file = Path(phase_file) if phase_file else None
         self.latch = latch
+        self.last_phase = 'loading'
         self.opener = urllib.request.build_opener(urllib.request.ProxyHandler({}), NoRedirect())
 
     def get(self, path):
@@ -127,6 +128,8 @@ class WorkerWatch:
                 if type(status.get('busy')) is not bool:
                     raise TelemetryError('Native busy status missing')
                 busy = status['busy']
+                if status.get('loading'):
+                    return 'loading'
                 stage = str(status.get('phase') or '').lower()
                 if busy and any(word in stage for word in ('loading', 'encoding image', 'vision encoder')):
                     return 'loading'
@@ -142,6 +145,7 @@ class WorkerWatch:
         row = {'time': time.time(), 'profile': self.profile}
         try:
             phase = self.phase()
+            self.last_phase = phase
             counters = read_cgroup(self.group)
             reason = self.guard.sample(now, phase, counters['swap_in_pages'],
                                        counters['swap_out_pages'], counters['pressure_pct'])

@@ -10,6 +10,7 @@ import time
 from profile_catalog import get_profile, worker_budget
 from storage_policy import verify_storage
 from inference_swap_guard import WorkerWatch
+from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -21,11 +22,11 @@ def main():
     limit = (Path('/sys/fs/cgroup') / group.lstrip('/') / 'memory.max').read_text().strip()
     profile = get_profile(sys.argv[1])
     budget = worker_budget(profile)
-    base = Path('/sys/fs/cgroup') / group.lstrip('/')
+    cgroup_base = Path('/sys/fs/cgroup') / group.lstrip('/')
     if (not group.endswith('/llm-router-worker.service') or limit == 'max'
             or int(limit) != budget['max'] * 1024 ** 3
-            or (base / 'memory.high').read_text().strip() != str(budget['high'] * 1024 ** 3)
-            or (base / 'memory.swap.max').read_text().strip() != str(budget['swap'] * 1024 ** 3)):
+            or (cgroup_base / 'memory.high').read_text().strip() != str(budget['high'] * 1024 ** 3)
+            or (cgroup_base / 'memory.swap.max').read_text().strip() != 'max'):
         sys.exit('Start MoE workers through the model router with the selected bounded budget.')
     verify_storage(profile)
     if profile['id'] == 'flash-next-strata':
@@ -52,6 +53,11 @@ def main():
     config.update(host='127.0.0.1', port=10000, api_key=key.read_text().strip(),
                   parallel=1, reasoning_effort='none', open_browser=False,
                   log=str(ROOT / 'data/router' / (profile['id'] + '-engine.log')))
+    policy = json.loads((ROOT / 'data/router/access.json').read_text())
+    if policy.get('idle_timeout_s'):
+        config.update(idle_unload_s=policy['idle_timeout_s'],
+                      idle_lock_path=str(ROOT / 'data/GPU-LOCK'),
+                      idle_activity_path=str(ROOT / 'data/router/activity' / (profile['id'] + '.txt')))
     config.pop('args_written', None)
     target = ROOT / 'data/router' / (profile['id'] + '-runtime.json')
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -62,20 +68,26 @@ def main():
         binary = ROOT / 'runtimes/bin/strata'
         command = [str(binary), 'serve', '--profile', str(target), '--offline']
     else:
-        base = ROOT / 'runtimes/project-maya'
-        python = base / '.venv/bin/python'
-        command = [str(python), str(base / 'serve/server.py'), '--engine', 'strata', '--port', '10000', '--config', str(target)]
+        maya_base = ROOT / 'runtimes/project-maya'
+        python = maya_base / '.venv/bin/python'
+        command = [str(python), str(maya_base / 'serve/server.py'), '--engine', 'strata', '--port', '10000', '--config', str(target)]
+    lifecycle = LifecycleLog(profile['id']) if telemetry_enabled() else None
+    if lifecycle:
+        lifecycle.start()
     child = subprocess.Popen(command, start_new_session=True)
-    watch = WorkerWatch(base, profile['id'], key.read_text().strip())
+    watch = WorkerWatch(cgroup_base, profile['id'], key.read_text().strip())
     def stop(*_):
         if child.poll() is None:
             os.killpg(child.pid, signal.SIGTERM)
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
     bad = 0
+    reason = None
     try:
         while child.poll() is None:
             reason = watch.step()
+            if lifecycle:
+                lifecycle.set_phase(watch.last_phase)
             if reason:
                 print(reason, flush=True)
                 stop()
@@ -85,6 +97,7 @@ def main():
             temps = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu', '--format=csv,noheader,nounits'], text=True)
             bad = bad + 1 if available < 8 * 1024 ** 2 or any(float(t) >= 82 for t in temps.splitlines()) else 0
             if bad >= 3:
+                reason = 'Worker stopped by host-memory/temperature guard.'
                 print('Worker stopped by host-memory/temperature guard.', flush=True)
                 stop()
                 child.wait(timeout=20)
@@ -95,6 +108,8 @@ def main():
         if child.poll() is None:
             stop()
             child.wait(timeout=20)
+        if lifecycle:
+            lifecycle.stop(child.returncode, reason)
 
 
 if __name__ == '__main__':

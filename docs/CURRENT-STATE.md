@@ -1,6 +1,6 @@
 # Current takeover state
 
-Updated October 27, 2026, 17:24 EDT, during the context-expansion task. This document is the
+Updated October 27, 2026, 18:01 EDT, during the context-expansion task. This document is the
 current handoff; dated reports preserve history. Read it with the root README
 and maintained registry. Do not reconstruct state from chat alone.
 
@@ -55,9 +55,12 @@ Earlier numeric files have saved SHA-256 preservation checks.
 
 ## Exact work ownership and remaining steps
 
-`llm-context-resume-moe.service` is the active serial coordinator. It continues
-GLM64K and StrataDeepSeek128K accepted confirmations, guarded Maya cache/context
-variants and Flash resident-cache variants. `llm-context-combined-queue.service`
+`llm-context-resume-moe.service` has only its main process held (SIGSTOP); its
+already-running StrataDeepSeek128K child continues normally. Do not stop or resume
+that parent manually. `llm-context-policy-v2-queue.service` waits for this child to
+finish and restore the default, then closes the held parent and continues Maya/Flash
+under the explicitly approved loading-swap policy. It tries full-cache settings
+first; old fixed-cap failures do not establish failure under the new policy. `llm-context-combined-queue.service`
 waits for its completion, then tests promising SGLang chunk/pool combinations.
 The old `llm-context-final-queue.service` was stopped only after its active
 HyperQwen child completed and restored the default. Do not restart it.
@@ -67,12 +70,15 @@ Workers are exclusively `llm-context-test-worker.service` for MoE trials and
 sets. GPU-LOCK must be released only by its matching owner. Wait for both the
 final-queue and post-queue completion records before promotion.
 
-The swap-rate guard and 49 CPU tests are complete; the router has loaded its
+The swap-rate guard, 50 CPU tests and real CPU-only systemd readback are complete;
+the user explicitly approved unlimited worker swap occupancy with active churn
+protection. RAM/GPU limits are unchanged. The current Strata trial retains its
+original 1 GiB cap; subsequent launches use infinity and counters/pressure guards. The router has loaded its
 ownership/latch handling, and GLM long retrieval was observed through completion. Normal
 launch verification remains. The user selected operational gaps only: after context
 rollout, implement guarded ten-minute idle unload, full lifecycle telemetry and
 manual engine-candidate staging. Keep current model coverage. Keep the existing RAM,
-swap occupancy, GPU placement, quality, host-floor and thermal protections.
+active swap-I/O, GPU placement, quality, host-floor and thermal protections.
 Loading/parked swap and active swap churn are different; do not set global
 swapoff or change VM knobs blindly. Saved Maya telemetry contains active write
 churn that needs cache tuning before it can qualify under the new guard.
@@ -88,3 +94,9 @@ The initial-matrix checkpoint was pushed as private `6ddb09a` / public `c267927`
 These are dated checkpoint IDs, not a claim about current HEAD. Inspect Git
 HEAD/upstream and private `publication-checkpoint.json` for the latest exact
 publication state. Replace pending statements as each remaining step finishes.
+
+Operational implementation checkpoint: guarded idle unload and lifecycle telemetry
+pass the expanded 66-test CPU suite, but their access flags remain disabled.
+The native idle adapter is prepared and has not been applied. Candidate source
+staging/evidence review passes CPU tests and is available as a manual tool; no
+candidate has been built, benchmarked or promoted by it. No timer or model was added.

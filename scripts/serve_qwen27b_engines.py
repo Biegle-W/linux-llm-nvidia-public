@@ -35,6 +35,8 @@ class RedactedKey(str):
 
 
 def preflight(profile):
+    if os.environ.get('LOCAL_LLM_GUARDED_WORKER') != '1':
+        sys.exit('Use the maintained guarded launcher; direct unmonitored worker startup is disabled.')
     group = next(line.split('::', 1)[1] for line in
                  Path('/proc/self/cgroup').read_text().splitlines() if line.startswith('0::'))
     limit = (Path('/sys/fs/cgroup') / group.lstrip('/') / 'memory.max').read_text().strip()

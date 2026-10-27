@@ -5,8 +5,8 @@
 The user requested [notes for NVIDIA-server agents](docs/AMD-PARITY-HANDOFF-20261027.md)
 to address AMD/NVIDIA gaps. Start with loading-swap policy, request-aware idle
 unload, documentation repair and reporting consistency; the handoff distinguishes
-AMD-owned items and optional model/schedule choices. This publication changes
-notes only, with no runtime or benchmark changes. Root `AGENTS.md` points here
+AMD-owned items and optional model/schedule choices. The original notes are dated background;
+[CURRENT-STATE.md](docs/CURRENT-STATE.md) records current implementation. Root `AGENTS.md` points here
 and to the current handoff/results; this README remains canonical policy.
 
 Native Linux inference on the **i5-13600KF / 64 GB DDR5 / RTX 3080 Ti 12 GB +
@@ -57,6 +57,7 @@ separate client on port 3080; Strata and Maya shortcuts open their native web ap
 
 [Current takeover state](docs/CURRENT-STATE.md), [benchmark ledger](docs/BENCHMARK-HISTORY.md),
 [inference swap policy](docs/INFERENCE-SWAP-POLICY.md),
+[operational lifecycle controls](docs/OPERATIONAL-LIFECYCLE.md),
 [saved-evidence unlock assessment](docs/UNLOCK-IMPACT-20261027.md), and
 [AMD/NVIDIA gap audit](docs/AMD-NVIDIA-GAP-AUDIT-20261027.md) are maintained with this task.
 

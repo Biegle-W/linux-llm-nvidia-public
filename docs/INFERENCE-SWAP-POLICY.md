@@ -1,11 +1,13 @@
 # Inference swap and memory-pressure policy
 
-Loading and parked swap pages are allowed inside the existing worker limits.
-NVIDIA workers retain their selected RAM soft/hard limits, **1 GiB swap occupancy
-cap**, 8 GiB host-available floor, temperature guards and GPU placement/reserves.
-No global swapoff, swappiness change or RAM-cap expansion is part of this policy.
-The observed host swappiness is the Linux default 60; occupancy alone does not
-measure active swap I/O.
+The user explicitly approved unlimited worker swap occupancy with active churn
+protection on October 27. Loading and parked pages are allowed; normal workers
+use `MemorySwapMax=infinity`, whose kernel readback is `memory.swap.max=max`.
+The host swap file is not enlarged. Selected RAM soft/hard limits, the 8 GiB
+host-available floor, temperature guards and GPU placement/reserves remain.
+No global swapoff or swappiness change is part of this policy. The observed host
+swappiness is the Linux default 60; occupancy alone does not measure swap I/O.
+The former 1 GiB cap remains historical benchmark attribution, not current policy.
 
 `scripts/inference_swap_guard.py` reads the owned cgroup's cumulative `pswpin` and
 `pswpout` page counters and full-memory pressure. It distinguishes loading,
@@ -32,10 +34,12 @@ Lowering a global knob blindly is not a substitute for measuring the worker.
 
 ## Rollout and evidence — October 27
 
-49 CPU tests passed, including loading/parked swap, active rate windows, pressure,
+66 CPU checks (including idle, telemetry and candidate-staging drafts) passed; 50 policy/router/storage checks passed under the approved policy. A real CPU-only systemd scope
+confirmed 64/128 MiB RAM limits with `memory.swap.max=max` without allocating
+swap or running GPU work. Checks include loading/parked swap, active rate windows, pressure,
 missing counters, latching, explicit reload and GPU-lock containment. The router
 has loaded the new wrapper ownership/reload code. Dense and MoE supervisors use
-the new monitor on subsequent launches; the already-running GLM long-context
+the new monitor on subsequent launches; the completed GLM long-context
 qualification received an owned-invocation observer without repeating its speed
 tests. Final normal-launch verification remains part of the context rollout.
 
@@ -44,7 +48,7 @@ reclaimed heavily at the 44 GiB soft limit with full bounded swap. Their evidenc
 is retained; no throughput is invented. Maya DeepSeek's current-control telemetry
 also contains active swap-write windows above the new threshold, so bounded
 warming/cache alternatives must qualify before a new setting is promoted.
-GLM's ongoing long-input observation has parked swap near 1 GiB with zero measured
+GLM's long-input observation has parked swap near 1 GiB with zero measured
 active swap writes and negligible full-memory pressure. Parked pages alone do not
 invalidate it. Old reports retain their original guard policy and are not
 retroactively labeled as fully monitored by the new implementation.

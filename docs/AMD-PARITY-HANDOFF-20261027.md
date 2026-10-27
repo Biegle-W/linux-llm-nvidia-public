@@ -2,8 +2,8 @@
 
 The user requested notes in this repository so agents on the NVIDIA server can
 address the gaps identified in the [AMD/native Linux NVIDIA audit](https://github.com/Biegle-W/linux-llm-amd-public/blob/main/linux/hardware/AMD-NVIDIA-GAP-AUDIT-2026-10-27.md).
-This publication adds handoff documentation and an agent entry point only.
-No NVIDIA runtime, benchmark, model, guard, service or schedule was changed.
+The original publication added notes only. The implementation status below was
+updated by the NVIDIA agent on October 27; CURRENT-STATE.md remains authoritative.
 
 Read the current README, [maintained registry](../config/maintained-profiles.json),
 [maintained results](MAINTAINED-PROFILES.md), [network handoff](../network/README.md)
@@ -24,9 +24,9 @@ driver, reboot, storage relocation or unrelated application changes.
 
 | Gap | NVIDIA-server action | Status at publication |
 |---|---|---|
-| G1: loading swap | Adapt phase-aware loading/idle/inference policy below | Pending local implementation and validation |
-| G2: idle unload | Add request-aware 600-second unload of owned inference only | Pending local implementation and validation |
-| G3: documentation | Repair GLM storage-location cell; maintain README/AGENTS/results | Agent entry point added; GLM cell repair pending |
+| G1: loading swap | Adapt phase-aware loading/idle/inference policy below | Applied to subsequent guarded launches; CPU tests/readback passed; normal GPU-path verification pending |
+| G2: idle unload | Add request-aware 600-second unload of owned inference only | Implemented and CPU-tested; not enabled until context rollout |
+| G3: documentation | Repair GLM storage-location cell; maintain README/AGENTS/results | Agent entry point and GLM storage cell repaired |
 | G4: reporting | Add a portable matched protocol and explicit storage scopes | Pending; existing measurements preserved |
 | G5: Maya vision lifecycle | Keep lazy CPU-vision patch evidence available to AMD agents | NVIDIA already has the candidate patch; AMD qualification remains separate |
 | G6: model coverage | Evaluate user-selected additional models against actual NVIDIA fit | Await model choice and hardware qualification |
@@ -38,8 +38,9 @@ driver, reboot, storage relocation or unrelated application changes.
 The standing user correction allows swap during model loading and parked swap
 pages afterward. Prohibit sustained aggressive churn during inference that
 creates excessive writes or slows inference; nonzero swap occupancy alone is
-not failure. NVIDIA's reviewed bounded wrapper uses a fixed 1 GiB swap cap and
-selected MoE workers also verify that cap. Recheck all entry points, not just one
+not failure. The user explicitly approved removing the former 1 GiB occupancy cap. All six
+maintained guarded workers now request `MemorySwapMax=infinity`; the phase-aware
+owned-cgroup monitor protects active inference. All entry points were updated, including
 launcher: `scripts/run_bounded_test.sh`, `network/worker_manager.py`,
 `scripts/serve_router_moe.py`, dense workers and their tests.
 
@@ -147,5 +148,9 @@ identifiers and logs private. Update both NVIDIA repositories via the reviewed
 public allowlist, review diffs and verify remote commits. Do not overwrite
 concurrent NVIDIA-agent changes or claim deployment from this documentation commit.
 
-Current handoff state: no NVIDIA GPU job or lock is owned by this notes task;
-no runtime gap is marked completed. Incoming agents must inspect live state.
+Current implementation: G1 code, registry, CPU checks and real bounded CPU cgroup
+readback are complete. Normal-launch GPU verification remains part of context
+rollout. The already-running Strata 128K qualification retains its earlier 1 GiB
+cap for honest attribution; subsequent launches use the approved policy. G2 and
+lifecycle logging are CPU-tested drafts, not yet enabled. Manual candidate
+staging is implemented and CPU-tested; no candidate was built or activated. Inspect CURRENT-STATE.md for live ownership.

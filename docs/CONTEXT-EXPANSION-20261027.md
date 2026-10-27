@@ -22,8 +22,10 @@ work: near-window retrieval and its latency are recorded separately, not called
 speed-neutral against a 2.2K prompt. Three runs are not a population guarantee.
 
 All model weights, quantizations, dense GPU-only placement and owned worker guards
-remain. Dense workers use 30/36 GiB soft/hard RAM and 1 GiB swap; selected MoE
-budgets remain capped at 48 GiB hard/1 GiB swap. Host available RAM below 8 GiB or
+remain. Dense workers use 30/36 GiB soft/hard RAM; selected MoE budgets remain capped
+at 48 GiB hard. Initial trials used a 1 GiB swap occupancy cap. After explicit
+user approval, subsequent trials permit loading/parked swap without that fixed cap
+and enforce active swap-I/O/pressure limits; each trial records its actual policy. Host available RAM below 8 GiB or
 GPU temperature at 82 C for three two-second samples stops the owned test.
 New dense allocations must retain at least 1 GiB GPU headroom after loading.
 The Flash streaming/headroom variant applies the same floor. These bounds are
@@ -72,6 +74,7 @@ None currently kept.
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Maya / `deepseek-maya-32768-control` | 41.5 | 52.963 | 2.48 | 32,768 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Maya / `deepseek-maya-65536-screen` | 46.3 | 47.434 | 3.10 | 65,536 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata / `deepseek-strata-131072-accepted-confirmed` | 33.3 | 65.796 | 2.95 | 131,072 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Strata / `deepseek-strata-131072-screen` | 32.1 | 68.434 | 2.94 | 131,072 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Strata / `deepseek-strata-65536-control` | 33.9 | 64.592 | 2.80 | 65,536 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata / `flash-next-strata-32768-screen` | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | NVME: `models/strata/models/IQ3_XXS` |

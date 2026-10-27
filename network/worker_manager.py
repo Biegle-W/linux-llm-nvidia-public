@@ -12,6 +12,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from profile_catalog import load_catalog, worker_budget
+from inference_swap_guard import WorkerWatch
+from idle_control import claim as claim_idle, release as release_idle, owned_native_idle
 
 DENSE_UNIT = 'llm-test-qwen27b.service'
 MOE_UNIT = 'llm-router-worker.service'
@@ -35,12 +37,16 @@ def unit_property(unit, prop):
 
 
 class Workers:
-    def __init__(self, key, timeout=1200):
+    def __init__(self, key, timeout=1200, idle_timeout=0):
         self.key, self.timeout = key, timeout
         self.lock = threading.Lock()
         self.active = self.detect()
         self.loading = None
         self.busy = False
+        self.idle_timeout = idle_timeout
+        self.last_activity = time.monotonic()
+        self.idle_unloading = None
+        self._idle_probe = None
 
     def backend_models(self):
         req = urllib.request.Request('http://127.0.0.1:10000/v1/models',
@@ -77,12 +83,20 @@ class Workers:
             pass
         return None
 
-    def stop_owned(self):
-        if (ROOT / 'data/GPU-LOCK').exists():
-            raise RouterError('GPUs are reserved; managed unloading is blocked.', 'gpu_reserved')
+    def stop_owned(self, allowed_lock=None, only_unit=None):
+        reservation = ROOT / 'data/GPU-LOCK'
+        if reservation.exists():
+            try:
+                allowed = allowed_lock is not None and json.loads(reservation.read_text()) == allowed_lock
+            except (OSError, ValueError):
+                allowed = False
+            if not allowed:
+                raise RouterError('GPUs are reserved; managed unloading is blocked.', 'gpu_reserved')
         # Exact unit and executable checks; never search for/kill all Python or GPU jobs.
         owned_pids = set()
         for unit in [DENSE_UNIT, MOE_UNIT]:
+            if only_unit is not None and unit != only_unit:
+                continue
             if unit_property(unit, 'ActiveState') not in ('active', 'activating'):
                 continue
             command = unit_property(unit, 'ExecStart')
@@ -116,7 +130,17 @@ class Workers:
         raise RouterError('Port 10000 or GPU compute resources are still occupied. Unrecognized work was preserved.',
                           'resources_busy')
 
+    def wait_native_idle(self, progress=lambda: None):
+        reservation = ROOT / 'data/GPU-LOCK'
+        deadline = time.monotonic() + 120
+        while reservation.exists() and owned_native_idle(reservation):
+            if time.monotonic() >= deadline:
+                raise RouterError('Native idle teardown is still running; retry after it finishes.', 'idle_teardown_busy')
+            progress()
+            time.sleep(.25)
+
     def start(self, profile_id, progress=lambda: None):
+        self.wait_native_idle(progress)
         if (ROOT / 'data/GPU-LOCK').exists():
             raise RouterError('GPUs are reserved; remove the reservation after its owner finishes.', 'gpu_reserved')
         latch = ROOT / 'data/router/guard-stops' / (profile_id + '.json')
@@ -137,7 +161,7 @@ class Workers:
                         status = json.load(response)
                 except (OSError, ValueError):
                     break
-                if not status.get('busy') and not status.get('queued'):
+                if not status.get('busy') and not status.get('queued') and not status.get('loading'):
                     break
                 progress()
                 if time.monotonic() >= deadline:
@@ -156,7 +180,7 @@ class Workers:
                        '--unit=' + MOE_UNIT,
                        '--property=MemoryHigh=' + str(budget['high']) + 'G',
                        '--property=MemoryMax=' + str(budget['max']) + 'G',
-                       '--property=MemorySwapMax=' + str(budget['swap']) + 'G', '--property=OOMPolicy=kill',
+                       '--property=MemorySwapMax=infinity', '--property=OOMPolicy=kill',
                        '--property=LimitRTTIME=infinity', '--working-directory=' + str(ROOT),
                        '/usr/bin/python3', str(ROOT / 'scripts/serve_router_moe.py'), profile_id]
                 unit = MOE_UNIT
@@ -177,6 +201,7 @@ class Workers:
                 models = self.backend_models()
                 if models:
                     self.active = profile_id
+                    self.touch_activity()
                     return
                 time.sleep(1)
             raise RouterError('Worker startup timed out; no second model was launched.', 'load_timeout', 504)
@@ -193,6 +218,7 @@ class Workers:
         self.busy = True
         try:
             if clear_guard:
+                self.wait_native_idle(progress)
                 if (ROOT / 'data/GPU-LOCK').exists():
                     raise RouterError('GPUs are reserved; explicit reload is blocked.', 'gpu_reserved')
                 (ROOT / 'data/router/guard-stops' / (profile_id + '.json')).unlink(missing_ok=True)
@@ -202,5 +228,67 @@ class Workers:
             raise
 
     def release(self):
+        self.touch_activity()
         self.busy = False
         self.lock.release()
+
+    def touch_activity(self):
+        self.last_activity = time.monotonic()
+        active = getattr(self, 'active', None)
+        if not active:
+            return
+        try:
+            path = ROOT / 'data/router/activity' / (active + '.txt')
+            path.parent.mkdir(parents=True, exist_ok=True)
+            temporary = path.with_suffix('.tmp')
+            temporary.write_text(str(time.time()))
+            temporary.chmod(0o600)
+            temporary.replace(path)
+        except OSError:
+            # Activity-log failure must not strand the request/switch lock.
+            pass
+
+    def idle_tick(self, now=None):
+        """Dense engines use the router lock; native engines use their FIFO adapter."""
+        now = time.monotonic() if now is None else now
+        if (not getattr(self, 'idle_timeout', 0) or not self.active
+                or not self.active.startswith('qwen27b-')):
+            return False
+        if not self.lock.acquire(blocking=False):
+            return False
+        owner = None
+        reservation = ROOT / 'data/GPU-LOCK'
+        try:
+            if self.busy or self.loading or reservation.exists():
+                return False
+            if self._idle_probe is None or self._idle_probe.profile != self.active:
+                self._idle_probe = WorkerWatch('/unused', self.active, self.key, latch=False)
+            if self._idle_probe.phase() != 'idle':
+                self.last_activity = now
+                return False
+            if now - self.last_activity < self.idle_timeout:
+                return False
+            profile = self.active
+            owner = claim_idle(reservation, profile)
+            if owner is None:
+                return False
+            if self._idle_probe.phase() != 'idle':
+                self.last_activity = now
+                return False
+            self.idle_unloading = profile
+            self.stop_owned(allowed_lock=owner, only_unit=DENSE_UNIT)
+            record = ROOT / 'data/router/idle-events.jsonl'
+            record.parent.mkdir(parents=True, exist_ok=True)
+            with record.open('a') as stream:
+                stream.write(json.dumps({'time': time.time(), 'profile': profile,
+                                         'event': 'idle-unloaded', 'timeout_s': self.idle_timeout}) + '\n')
+            record.chmod(0o600)
+            return True
+        except Exception:
+            # Missing state never justifies stopping a possibly active worker.
+            self.last_activity = now
+            return False
+        finally:
+            self.idle_unloading = None
+            release_idle(reservation, owner)
+            self.lock.release()

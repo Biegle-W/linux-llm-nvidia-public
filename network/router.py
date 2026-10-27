@@ -55,7 +55,8 @@ class Handler(BaseHTTPRequestHandler):
 
     def catalog(self):
         w = self.server.workers
-        ready = bool(w.backend_models()) if w.active and w.loading is None else False
+        backend = w.backend_models() if w.active and w.loading is None else []
+        ready = any(model.get('status', {}).get('value') != 'unloaded' for model in backend)
         return {p['id']: {'id': p['id'], 'object': 'model', 'created': 0, 'owned_by': 'local-nvidia',
                          'name': p['model'] + ' / ' + p['engine'], 'engine': p['engine'],
                          'quant': p['weight_quant'], 'context_window': p['allocated_context'],
@@ -70,7 +71,8 @@ class Handler(BaseHTTPRequestHandler):
         if path == '/health':
             w = self.server.workers
             return self.reply(200, {'status': 'ok', 'active_model': w.active, 'loading_model': w.loading,
-                                    'busy': w.busy, 'models': len(profiles())})
+                                    'busy': w.busy, 'models': len(profiles()),
+                                    'idle_unloading_model': getattr(w, 'idle_unloading', None)})
         models = self.catalog()
         if path == '/v1/models':
             return self.reply(200, {'object': 'list', 'data': list(models.values())})
@@ -251,7 +253,7 @@ def main():
         ip = ipaddress.ip_address(value)
         if ip.version != 4 or not any(ip in n for n in allowed):
             raise SystemExit('Explicit loopback or Tailscale IPv4 listeners are required.')
-    workers = Workers(key)
+    workers = Workers(key, idle_timeout=cfg.get('idle_timeout_s', 0))
     servers = {}
     stop = threading.Event()
     for sig in [signal.SIGTERM, signal.SIGINT]:
@@ -269,6 +271,7 @@ def main():
                 server.workers, server.key, server.allowed = workers, key, allowed
                 servers[address] = server
                 threading.Thread(target=server.serve_forever, daemon=True).start()
+            workers.idle_tick()
             stop.wait(5)
     finally:
         for server in servers.values():

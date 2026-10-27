@@ -2,7 +2,7 @@
   "schema": 1,
   "run": "20261027-context-expansion",
   "status": "in_progress",
-  "updated": "2026-10-27T17:23:14-0400",
+  "updated": "2026-10-27T18:00:53-0400",
   "production_promotion": false,
   "deployed_contexts": {
     "qwen27b-hyperqwen": 32768,
@@ -38,6 +38,7 @@
       "category": "MoE models with SSD streaming",
       "context": 32768,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "prefill_tps": 41.5,
         "ttft_s": 52.96314398999675,
@@ -112,6 +113,7 @@
       "category": "MoE models with SSD streaming",
       "context": 65536,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "prefill_tps": 46.3,
         "ttft_s": 47.43367654999747,
@@ -154,6 +156,94 @@
       }
     },
     {
+      "variant": "deepseek-strata-131072-accepted-confirmed",
+      "profile": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "context": 131072,
+      "state": "qualification-start",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "summary": {
+        "prefill_tps": 33.3,
+        "ttft_s": 65.79570539899578,
+        "client_decode_tps": 2.954827446086253,
+        "decode_tps": 3.0,
+        "prompt_tokens": 2188,
+        "generated_tokens": 128,
+        "profile": "deepseek-strata",
+        "variant": "deepseek-strata-131072-accepted-confirmed",
+        "context": 131072,
+        "repetitions": 3,
+        "memory_high_gib": 44,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 32.1,
+          "ttft_s": 68.53712351300055,
+          "client_decode_tps": 2.954827446086253,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 111.5178124860031
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2188,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 33.3,
+          "ttft_s": 65.79570539899578,
+          "client_decode_tps": 2.8082080259401883,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 111.02043057199626
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2179,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 34.3,
+          "ttft_s": 63.57580775600218,
+          "client_decode_tps": 3.0754245134231617,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 104.871114571004
+        }
+      ],
+      "changes": {
+        "context": 131072,
+        "args": {},
+        "env": {}
+      },
+      "qualification": [
+        {
+          "check": "json",
+          "passed": true,
+          "input_tokens": 29,
+          "output_tokens": 13
+        },
+        {
+          "check": "arithmetic",
+          "passed": true,
+          "input_tokens": 36,
+          "output_tokens": 14
+        }
+      ],
+      "storage_size_bytes": 339477953988,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      }
+    },
+    {
       "variant": "deepseek-strata-131072-screen",
       "profile": "deepseek-strata",
       "model": "DeepSeek-V4.1-Flash-1017",
@@ -162,6 +252,7 @@
       "category": "MoE models with SSD streaming",
       "context": 131072,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "prefill_tps": 32.1,
         "ttft_s": 68.43427351699938,
@@ -212,6 +303,7 @@
       "category": "MoE models with SSD streaming",
       "context": 65536,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "prefill_tps": 33.9,
         "ttft_s": 64.5918076290036,
@@ -286,6 +378,7 @@
       "category": "MoE models with SSD streaming",
       "context": 131072,
       "state": "incomplete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": null,
       "samples": [],
       "changes": {
@@ -316,6 +409,7 @@
       "category": "MoE models with SSD streaming",
       "context": 32768,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "prefill_tps": 593.2,
         "ttft_s": 3.752891517004173,
@@ -390,6 +484,7 @@
       "category": "MoE models with SSD streaming",
       "context": 65536,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "prefill_tps": 589.7,
         "ttft_s": 3.788800613001513,
@@ -440,6 +535,7 @@
       "category": "MoE models with SSD streaming",
       "context": 65536,
       "state": "incomplete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": null,
       "samples": [],
       "changes": {
@@ -469,6 +565,7 @@
       "category": "MoE models with SSD streaming",
       "context": 32768,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "prefill_tps": 65.2,
         "ttft_s": 33.90114290799829,
@@ -542,7 +639,8 @@
       "engine": "Maya",
       "category": "MoE models with SSD streaming",
       "context": 65536,
-      "state": "qualification-start",
+      "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "prefill_tps": 65.5,
         "ttft_s": 33.73995778399694,
@@ -642,6 +740,7 @@
       "category": "MoE models with SSD streaming",
       "context": 65536,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "prefill_tps": 65.4,
         "ttft_s": 33.765163088995905,
@@ -692,6 +791,7 @@
       "category": "VRAM-only models",
       "context": 32768,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 32768,
@@ -761,6 +861,7 @@
       "category": "VRAM-only models",
       "context": 40000,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 40000,
@@ -806,6 +907,7 @@
       "category": "VRAM-only models",
       "context": 49152,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 49152,
@@ -896,6 +998,7 @@
       "category": "VRAM-only models",
       "context": 49152,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 49152,
@@ -943,6 +1046,7 @@
       "category": "VRAM-only models",
       "context": 49152,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 49152,
@@ -989,6 +1093,7 @@
       "category": "VRAM-only models",
       "context": 56320,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 56320,
@@ -1079,6 +1184,7 @@
       "category": "VRAM-only models",
       "context": 56320,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 56320,
@@ -1126,6 +1232,7 @@
       "category": "VRAM-only models",
       "context": 16384,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 16384,
@@ -1195,6 +1302,7 @@
       "category": "VRAM-only models",
       "context": 16384,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 16384,
@@ -1264,6 +1372,7 @@
       "category": "VRAM-only models",
       "context": 21504,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1352,6 +1461,7 @@
       "category": "VRAM-only models",
       "context": 21504,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1398,6 +1508,7 @@
       "category": "VRAM-only models",
       "context": 21504,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1487,6 +1598,7 @@
       "category": "VRAM-only models",
       "context": 21504,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1533,6 +1645,7 @@
       "category": "VRAM-only models",
       "context": 21504,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1579,6 +1692,7 @@
       "category": "VRAM-only models",
       "context": 21504,
       "state": "complete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1624,6 +1738,7 @@
       "category": "VRAM-only models",
       "context": 32768,
       "state": "incomplete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": null,
       "samples": [],
       "changes": {
@@ -1647,6 +1762,7 @@
       "category": "VRAM-only models",
       "context": 36864,
       "state": "incomplete",
+      "swap_policy": "bounded-1GiB legacy; see raw observer scope",
       "summary": null,
       "samples": [],
       "changes": {

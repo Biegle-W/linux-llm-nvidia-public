@@ -10,13 +10,13 @@ CATALOG = ROOT / 'config/maintained-profiles.json'
 def worker_budget(profile):
     dense = profile['id'].startswith('qwen27b-')
     large = profile['id'] in ('flash-next-strata', 'glm-maya')
-    default = {'high': 44 if large else 30, 'max': 48 if large else 36, 'swap': 1}
+    default = {'high': 44 if large else 30, 'max': 48 if large else 36, 'swap': None}
     budget = profile.get('worker_memory_gib', default)
     if (set(budget) != {'high', 'max', 'swap'}
-            or any(type(v) is not int for v in budget.values())
+            or any(type(budget[k]) is not int for k in ('high', 'max'))
             or not (0 < budget['high'] <= budget['max'] - 2
                     and budget['max'] <= (36 if dense else 48))
-            or budget['swap'] != 1):
+            or budget['swap'] is not None):
         raise ValueError(f"Invalid bounded worker budget: {profile['id']}")
     return dict(budget)
 

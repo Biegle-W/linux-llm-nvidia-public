@@ -8,6 +8,7 @@ import sys
 import time
 from inference_swap_guard import WorkerWatch, ROOT
 from profile_catalog import get_profile, worker_budget
+from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 
 
 def main():
@@ -23,21 +24,28 @@ def main():
     if (not group.endswith('/llm-test-qwen27b.service')
             or (base / 'memory.max').read_text().strip() != str(budget['max'] * 1024 ** 3)
             or (base / 'memory.high').read_text().strip() != str(budget['high'] * 1024 ** 3)
-            or (base / 'memory.swap.max').read_text().strip() != str(budget['swap'] * 1024 ** 3)):
+            or (base / 'memory.swap.max').read_text().strip() != 'max'):
         raise SystemExit('Start the dense worker through the bounded launcher.')
     key = (ROOT / 'data/local-api-key').read_text().strip()
     watch = WorkerWatch(base, profile['id'], key)
+    lifecycle = LifecycleLog(profile['id']) if telemetry_enabled() else None
+    if lifecycle:
+        lifecycle.start()
+    env = dict(os.environ, LOCAL_LLM_GUARDED_WORKER='1')
     child = subprocess.Popen(['/usr/bin/python3', str(ROOT / 'scripts/serve_qwen27b_engines.py'), engine],
-                             start_new_session=True)
+                             start_new_session=True, env=env)
     def stop(*_):
         if child.poll() is None:
             os.killpg(child.pid, signal.SIGTERM)
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
     bad = 0
+    reason = None
     try:
         while child.poll() is None:
             reason = watch.step()
+            if lifecycle:
+                lifecycle.set_phase(watch.last_phase)
             available = next(int(line.split()[1]) for line in Path('/proc/meminfo').read_text().splitlines()
                              if line.startswith('MemAvailable:'))
             raw = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu,memory.free',
@@ -46,7 +54,8 @@ def main():
             bad = bad + 1 if (available < 8 * 1024 ** 2 or any(card[0] >= 82 for card in cards)
                              or (watch.ready and any(card[1] < 1024 for card in cards))) else 0
             if reason or bad >= 3:
-                print(reason or 'Dense host/temperature/GPU-headroom guard reached.', flush=True)
+                reason = reason or 'Dense host/temperature/GPU-headroom guard reached.'
+                print(reason, flush=True)
                 stop()
                 raise SystemExit(1)
             time.sleep(2)
@@ -58,6 +67,8 @@ def main():
         except subprocess.TimeoutExpired:
             os.killpg(child.pid, signal.SIGKILL)
             child.wait(timeout=10)
+        if lifecycle:
+            lifecycle.stop(child.returncode, reason)
 
 
 if __name__ == '__main__':

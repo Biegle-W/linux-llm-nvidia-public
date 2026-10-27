@@ -41,6 +41,10 @@ FILES = (
     'docs/MOE-OPTIMIZATION-20261027.md', 'docs/benchmark-results/20261027-moe-optimized.json',
     'scripts/patches/maya-lazy-cpu-vision.patch', 'tests/test_maya_lazy_vision.py',
     'tests/test_worker_budgets.py',
+    'network/idle_control.py', 'scripts/native_idle_policy.py',
+    'scripts/lifecycle_telemetry.py', 'scripts/stage_engine_candidate.py',
+    'tests/test_idle_policy.py', 'tests/test_lifecycle_telemetry.py',
+    'tests/test_engine_staging.py', 'docs/OPERATIONAL-LIFECYCLE.md',
 )
 BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
                    r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|'
