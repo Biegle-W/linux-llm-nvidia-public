@@ -53,3 +53,10 @@ review. No unexamined table from that thread is treated as validated evidence.
 Source pins, exact local configurations, frozen routing-profile hashes and native
 logs are kept with private trial evidence. The source trail records proposals;
 only the context-test report can identify locally qualified settings.
+
+Maya's pinned [post-prompt read-ahead implementation](https://github.com/mw00/project-maya/blob/8b4b39f84e35393833b31b80e82bee92e69bb646/src/ds4/ds4_model.cu#L11920)
+starts `DS4_WARM_GB` prefetch on a separate thread during early decode. The
+load-time `DS4_WARM_CAP_GB` is a different budget; lowering it does not cap this
+background activity. New local trials bound or disable post-prompt read-ahead
+after active swap-write threshold crossings. This is a source-supported
+candidate, not a completed speed/quality result until its trial qualifies.

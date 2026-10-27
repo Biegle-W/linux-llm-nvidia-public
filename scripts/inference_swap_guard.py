@@ -127,7 +127,7 @@ class WorkerWatch:
                 status = json.loads(self.get('/status'))
                 if type(status.get('busy')) is not bool:
                     raise TelemetryError('Native busy status missing')
-                busy = status['busy']
+                busy = status['busy'] or bool(status.get('compute_active'))
                 if status.get('loading'):
                     return 'loading'
                 if status.get('loaded') is False and not busy:

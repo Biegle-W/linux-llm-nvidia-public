@@ -9,6 +9,27 @@ from pathlib import Path
 MARKER = '# Managed NVIDIA idle reservation'
 
 
+def vision_phases(source):
+    """Observe encoder loading separately from image computation, including errors."""
+    tree = ast.parse(source)
+    vision = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'Vision')
+    lines = source.splitlines(keepends=True)
+    methods = [n for n in vision.body if isinstance(n, ast.FunctionDef) and n.name in ('_start', 'encode')]
+    assert len(methods) == 2
+    for method in sorted(methods, key=lambda n: n.lineno, reverse=True):
+        name = method.name
+        field = '_managed_loading_depth' if name == '_start' else '_managed_encoding_depth'
+        helper = '_managed_original_' + name.lstrip('_')
+        original = ''.join(lines[method.lineno - 1:method.end_lineno])
+        original = original.replace('def ' + name + '(', 'def ' + helper + '(', 1)
+        wrapper = (f'    def {name}(self, *args, **kwargs):\n'
+                   f'        self.{field} = getattr(self, "{field}", 0) + 1\n'
+                   f'        try:\n            return self.{helper}(*args, **kwargs)\n'
+                   f'        finally:\n            self.{field} -= 1\n\n')
+        lines[method.lineno - 1:method.end_lineno] = [wrapper + original]
+    return ''.join(lines)
+
+
 def transform(text, family):
     newline = '\r\n' if '\r\n' in text else '\n'
     source = text.replace('\r\n', '\n')
@@ -72,12 +93,16 @@ def transform(text, family):
     source = source.replace(sleep, 'time.sleep(max(1.0, min(5.0 if getattr(self, "idle_lock_path", None) else 30.0, self.idle_unload_s / 4)))', 1)
     status_anchor = '                now = time.time()\n                if s.get("busy"):'
     assert source.count(status_anchor) == 1
-    loading = ('svc._engine_start.locked() or svc.reloading()' if family == 'maya'
-               else 'svc.fifo.locked() and not s.get("busy")')
+    loading = ('svc._engine_start.locked() or svc.reloading() or vision_loading or (svc.fifo.locked() and not s.get("busy") and not vision_compute)' if family == 'maya'
+               else 'vision_loading or (svc.fifo.locked() and not s.get("busy") and not vision_compute)')
     loaded = ('not hasattr(svc.engine, "alive") or svc.engine.alive()' if family == 'maya'
               else 'svc.loaded()')
-    source = source.replace(status_anchor, '                s["loading"] = bool(' + loading + ')\n'
+    source = source.replace(status_anchor, '                vision_loading = bool(getattr(svc.vision, "_managed_loading_depth", 0))\n'
+                            + '                vision_compute = bool(getattr(svc.vision, "_managed_encoding_depth", 0)) and not vision_loading\n'
+                            + '                s["compute_active"] = vision_compute\n'
+                            + '                s["loading"] = bool(' + loading + ')\n'
                             + '                s["loaded"] = bool(' + loaded + ')\n' + status_anchor, 1)
+    source = vision_phases(source)
     compile(source, '<native-idle-adapter>', 'exec')
     return source.replace('\n', newline)
 

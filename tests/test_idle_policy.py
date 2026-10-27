@@ -13,7 +13,31 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/'network'),str(ROOT/'scripts')]
 from worker_manager import Workers
 from idle_control import claim,release,owned_native_idle
-from native_idle_policy import transform
+from native_idle_policy import transform, vision_phases
+
+
+class VisionPhaseTest(unittest.TestCase):
+    def test_loading_compute_and_error_depths_are_distinct(self):
+        source = '''class Vision:
+    def _start(self):
+        self.observed.append(('load', self._managed_loading_depth, self._managed_encoding_depth))
+    def encode(self, fail=False):
+        self._start()
+        self.observed.append(('compute', self._managed_loading_depth, self._managed_encoding_depth))
+        if fail:
+            raise ValueError('fixture')
+        return 'encoded'
+'''
+        namespace = {}
+        exec(vision_phases(source), namespace)
+        vision = namespace['Vision']()
+        vision.observed = []
+        self.assertEqual(vision.encode(), 'encoded')
+        self.assertEqual(vision.observed, [('load', 1, 1), ('compute', 0, 1)])
+        with self.assertRaises(ValueError):
+            vision.encode(fail=True)
+        self.assertEqual(vision._managed_loading_depth, 0)
+        self.assertEqual(vision._managed_encoding_depth, 0)
 
 
 class DenseIdleTest(unittest.TestCase):

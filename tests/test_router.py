@@ -158,14 +158,17 @@ class SwitchTest(unittest.TestCase):
             w.stop_owned()
             run.assert_not_called()
     def test_native_reply_is_observed_before_switch(self):
-        w=self.worker();w.active='flash-next-strata';w.key=KEY
-        w.stop_owned=unittest.mock.Mock(side_effect=RouterError('stop marker'))
-        responses=[io.BytesIO(b'{"busy":true}'),io.BytesIO(b'{"busy":false}')]
-        progress=unittest.mock.Mock()
-        with patch('worker_manager.OPENER.open',side_effect=responses),patch('worker_manager.time.sleep'):
-            with self.assertRaisesRegex(RouterError,'stop marker'):
-                Workers.start(w,'qwen27b-hyperqwen',progress)
-        progress.assert_called_once();w.stop_owned.assert_called_once()
+        for field in ['busy', 'loading', 'compute_active']:
+            with self.subTest(field=field):
+                w=self.worker();w.active='flash-next-strata';w.key=KEY
+                w.stop_owned=unittest.mock.Mock(side_effect=RouterError('stop marker'))
+                responses=[io.BytesIO(json.dumps({'busy':False,field:True}).encode()),
+                           io.BytesIO(b'{"busy":false}')]
+                progress=unittest.mock.Mock()
+                with patch('worker_manager.OPENER.open',side_effect=responses),patch('worker_manager.time.sleep'):
+                    with self.assertRaisesRegex(RouterError,'stop marker'):
+                        Workers.start(w,'qwen27b-hyperqwen',progress)
+                progress.assert_called_once();w.stop_owned.assert_called_once()
     def test_gpu_reservation_blocks_unload(self):
         w=self.worker()
         with tempfile.TemporaryDirectory() as directory:

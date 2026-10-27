@@ -34,7 +34,7 @@ Lowering a global knob blindly is not a substitute for measuring the worker.
 
 ## Rollout and evidence — October 27
 
-67 CPU checks (including idle, telemetry and candidate-staging drafts) passed; 50 policy/router/storage checks passed under the approved policy. A real CPU-only systemd scope
+68 CPU checks (including idle, telemetry and candidate-staging drafts) passed; 50 policy/router/storage checks passed under the approved policy. A real CPU-only systemd scope
 confirmed 64/128 MiB RAM limits with `memory.swap.max=max` without allocating
 swap or running GPU work. Checks include loading/parked swap, active rate windows, pressure,
 missing counters, latching, explicit reload and GPU-lock containment. The router
@@ -59,3 +59,9 @@ Only the owned test worker was stopped. These are threshold crossings, not proof
 of physical SSD wear or a prediction that the rate would have persisted. Smaller
 cache budgets remain under test; unlimited occupancy does not disable active
 inference protection.
+
+A normal HyperQwen restore has also read back its actual 30/36 GiB RAM limits
+with `memory.swap.max=max`; the observer made no additional inference request.
+The prepared native adapter separates lazy encoder loading from active image
+computation, rather than excluding the entire image request from protection.
+Full normal-profile rollout verification remains pending.

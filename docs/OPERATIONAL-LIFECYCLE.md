@@ -12,7 +12,8 @@ the router's request/switch lock, an exclusive GPU reservation and a final direc
 request-gauge check. Unknown backend state defers unload. Native Maya and Strata
 use their existing request FIFO, with the narrow `native_idle_policy.py` adapter
 adding a matching GPU reservation around teardown. Native busy/loading state and
-router activity both defer expiry. Catalog and health polling do not reset it.
+router activity both defer expiry. Encoder loading and active image computation
+are distinguished, and both defer switching; active encoding uses the swap guard. Catalog and health polling do not reset it.
 
 The adapter is hash-reviewed and preserves a before/after source snapshot.
 It also stops Maya's lazy CPU vision process before releasing its text engine;

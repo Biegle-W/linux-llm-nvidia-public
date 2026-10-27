@@ -97,6 +97,8 @@ class SwapPolicyTest(unittest.TestCase):
         self.assertEqual(w.phase(), 'unloaded')
         w.get = lambda _path: json.dumps({'busy': False, 'loaded': False, 'loading': True})
         self.assertEqual(w.phase(), 'loading')
+        w.get = lambda _path: json.dumps({'busy': False, 'compute_active': True, 'loading': False})
+        self.assertEqual(w.phase(), 'inference')
         s = WorkerWatch('/unused', 'qwen27b-sglang', 'not-a-real-key')
         s.get = lambda _path: 'sglang:num_running_reqs{pp_rank="0"} 0\nsglang:num_running_reqs{pp_rank="1"} 1\n'
         self.assertEqual(s.phase(), 'inference')

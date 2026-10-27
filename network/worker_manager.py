@@ -163,7 +163,8 @@ class Workers:
                         status = json.load(response)
                 except (OSError, ValueError):
                     break
-                if not status.get('busy') and not status.get('queued') and not status.get('loading'):
+                if (not status.get('busy') and not status.get('queued')
+                        and not status.get('loading') and not status.get('compute_active')):
                     break
                 progress()
                 if time.monotonic() >= deadline:

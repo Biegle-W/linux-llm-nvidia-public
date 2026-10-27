@@ -1,6 +1,6 @@
 # Current takeover state
 
-Updated October 27, 2026, 18:11 EDT, during the context-expansion task. This document is the
+Updated October 27, 2026, 18:16 EDT, during the context-expansion task. This document is the
 current handoff; dated reports preserve history. Read it with the root README
 and maintained registry. Do not reconstruct state from chat alone.
 
@@ -56,14 +56,17 @@ Earlier numeric files have saved SHA-256 preservation checks.
 
 ## Exact work ownership and remaining steps
 
-StrataDeepSeek128K completed at 18:02 EDT. The waiting coordinator safely stopped
-the held old parent after its child left and restored the default.
-`llm-context-policy-v2-queue.service` now runs Maya DeepSeek 64K cache-budget
-confirmation under the explicitly approved loading-swap policy. It tries full-cache settings
-first. The full-cache and 36 GB warm-cap variants hit the active-write guard
-(5.99 and 7.73 MiB/s over 30-second windows) and were preserved as failed
-trials; 32 GB is next. Old fixed-cap failures do not establish failure under the new policy. `llm-context-combined-queue.service`
-waits for its completion, then tests promising SGLang chunk/pool combinations.
+StrataDeepSeek128K completed at 18:02 EDT. The v2 queue's Maya 49,152 /
+warm-cap 32 GB child also crossed the active-write threshold, preserved its
+failure and restored the default. The waiting v3 coordinator then safely closed
+the held v2 parent; neither old parent should be restarted.
+`llm-context-policy-v3-queue.service` now runs Maya 65,536 / load cap 28 GB /
+post-prompt read-ahead 2 GB. Pinned Maya source shows `DS4_WARM_GB` reads ahead
+while decoding, independently of the load-time cap. V3 bounds/disables this
+separate budget without weakening the swap guard. It preserves any qualified
+fallback, then continues the existing Flash plan.
+`llm-context-combined-queue.service` waits for final-queue completion, then tests
+promising SGLang chunk/pool combinations. No competing GPU work is authorized.
 The old `llm-context-final-queue.service` was stopped only after its active
 HyperQwen child completed and restored the default. Do not restart it.
 
@@ -98,7 +101,7 @@ HEAD/upstream and private `publication-checkpoint.json` for the latest exact
 publication state. Replace pending statements as each remaining step finishes.
 
 Operational implementation checkpoint: guarded idle unload and lifecycle telemetry
-pass the expanded 67-test CPU suite, but their access flags remain disabled.
+pass the expanded 68-test CPU suite, but their access flags remain disabled.
 The native idle adapter is prepared and has not been applied. Candidate source
 staging/evidence review passes CPU tests and is available as a manual tool; no
 candidate has been built, benchmarked or promoted by it. No timer or model was added.
@@ -116,3 +119,10 @@ requests; stop it via `stop-normal-launch-observer` after rollout verification.
 Private `verify-normal-deployment.py` is prepared, not executed; it performs one
 functional JSON request per normal profile and images where enabled, not a speed
 benchmark. It requires both queue completion and applied promotion records.
+
+The prepared native adapter now distinguishes lazy encoder startup from active
+image encoding, including exception cleanup. Both loading and active image work
+defer model switching. It remains unapplied; CPU tests pass, and normal real
+image/idle/reload verification still follows rollout. Native preview v3 captures
+exact before/after hashes. Normal Hyper restore independently confirmed the
+30/36 GiB RAM limits and kernel swap maximum `max`.
