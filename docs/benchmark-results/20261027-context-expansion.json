@@ -2,7 +2,7 @@
   "schema": 1,
   "run": "20261027-context-expansion",
   "status": "in_progress",
-  "updated": "2026-10-27T19:07:08-0400",
+  "updated": "2026-10-27T19:22:49-0400",
   "production_promotion": false,
   "deployed_contexts": {
     "qwen27b-hyperqwen": 32768,
@@ -820,12 +820,38 @@
       "engine": "Strata",
       "category": "MoE models with SSD streaming",
       "context": 131072,
-      "state": "loading",
+      "state": "complete",
       "swap_policy": "loading-swap-active-churn-v2",
       "host_vm_swappiness": 60,
       "host_policy_source": "launch readback",
-      "summary": null,
-      "samples": [],
+      "summary": {
+        "prefill_tps": 536.3,
+        "ttft_s": 4.208095775000402,
+        "client_decode_tps": 68.04048255042457,
+        "decode_tps": 68.0,
+        "prompt_tokens": 2222,
+        "generated_tokens": 128,
+        "profile": "flash-next-strata",
+        "variant": "flash-next-strata-131072-resident36-v2-screen",
+        "context": 131072,
+        "repetitions": 1,
+        "memory_high_gib": 44,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 536.3,
+          "ttft_s": 4.208095775000402,
+          "client_decode_tps": 68.04048255042457,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 6.074888584000291
+        }
+      ],
       "changes": {
         "context": 131072,
         "args": {
@@ -1003,6 +1029,66 @@
           "--vram-reserve-later-mib": 1536,
           "--vram-reserve-mib": 1536,
           "--prefill": 4096
+        },
+        "env": {},
+        "require_gpu_headroom_mib": 1024
+      },
+      "qualification": [],
+      "storage_size_bytes": 75839998528,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/IQ3_XXS"
+      }
+    },
+    {
+      "variant": "flash-next-strata-65536-resident36-v2-screen",
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "weight_quant": "IQ3_XXS",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "context": 65536,
+      "state": "complete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": {
+        "prefill_tps": 587.8,
+        "ttft_s": 3.8432158020004863,
+        "client_decode_tps": 65.20745549410023,
+        "decode_tps": 65.0,
+        "prompt_tokens": 2222,
+        "generated_tokens": 128,
+        "profile": "flash-next-strata",
+        "variant": "flash-next-strata-65536-resident36-v2-screen",
+        "context": 65536,
+        "repetitions": 1,
+        "memory_high_gib": 44,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 587.8,
+          "ttft_s": 3.8432158020004863,
+          "client_decode_tps": 65.20745549410023,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 5.797215732003679
+        }
+      ],
+      "changes": {
+        "context": 65536,
+        "args": {
+          "--kv-resident": 32768,
+          "--vram-reserve-later-mib": 1536,
+          "--vram-reserve-mib": 1536,
+          "--prefill": 4096,
+          "--resident-budget-gib": 36
         },
         "env": {},
         "require_gpu_headroom_mib": 1024
@@ -2310,6 +2396,149 @@
       }
     },
     {
+      "variant": "sglang-32768-mem92-pf384-combined-confirmed",
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "context": 32768,
+      "state": "complete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 32768,
+        "variant": "sglang-32768-mem92-pf384-combined-confirmed",
+        "repetitions": 3,
+        "prefill_tps": 2613.8213596405735,
+        "ttft_s": 0.8532419199982542,
+        "client_decode_tps": 46.59367292334076,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2613.8213596405735,
+          "ttft_s": 0.8533228180021979,
+          "client_decode_tps": 46.68137587023653,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.574094306000916
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2602.868609241238,
+          "ttft_s": 0.8532419199982542,
+          "client_decode_tps": 46.59367292334076,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.579093609994743
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2621.3253011308866,
+          "ttft_s": 0.8471140869951341,
+          "client_decode_tps": 46.559212905960464,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.574995170994953
+        }
+      ],
+      "changes": {
+        "context": 32768,
+        "mem_fraction_static": 0.92,
+        "prefill_chunk": 384
+      },
+      "qualification": [
+        {
+          "check": "json",
+          "passed": true,
+          "input_tokens": 39,
+          "output_tokens": 21
+        },
+        {
+          "check": "arithmetic",
+          "passed": true,
+          "input_tokens": 49,
+          "output_tokens": 23
+        },
+        {
+          "check": "retrieval",
+          "passed": true,
+          "input_tokens": 29434,
+          "output_tokens": 57
+        }
+      ],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "sglang-32768-mem92-pf384-screen",
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "context": 32768,
+      "state": "complete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 32768,
+        "variant": "sglang-32768-mem92-pf384-screen",
+        "repetitions": 1,
+        "prefill_tps": 2662.8845684396847,
+        "ttft_s": 0.8377615329955006,
+        "client_decode_tps": 46.41557003052268,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2662.8845684396847,
+          "ttft_s": 0.8377615329955006,
+          "client_decode_tps": 46.41557003052268,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.574032066993823
+        }
+      ],
+      "changes": {
+        "context": 32768,
+        "mem_fraction_static": 0.92,
+        "prefill_chunk": 384
+      },
+      "qualification": [],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
       "variant": "sglang-32768-mem92-screen",
       "profile": "qwen27b-sglang",
       "model": "Qwen3.8-27B",
@@ -2326,6 +2555,33 @@
       "changes": {
         "context": 32768,
         "mem_fraction_static": 0.92
+      },
+      "qualification": [],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "sglang-36864-mem93-pf384-screen",
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "context": 36864,
+      "state": "incomplete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": null,
+      "samples": [],
+      "changes": {
+        "context": 36864,
+        "mem_fraction_static": 0.93,
+        "prefill_chunk": 384
       },
       "qualification": [],
       "storage_size_bytes": 15791777864,

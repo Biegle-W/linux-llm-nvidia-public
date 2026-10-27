@@ -16,3 +16,8 @@ only to refresh documentation or publication.
 The context task also adds phase-aware swap-churn checks. Old benchmark records
 retain their original policy; do not relabel them as full qualification under a
 later guard. The unlock assessment uses existing evidence and adds no GPU test.
+
+VM60 queue checkpoint, 19:23 EDT: SGLang32K (.92 pool, chunks384) qualified at
+2,613.82 prefill / .8532 s TTFT /46.59 decode. All four larger Flash screens
+missed speed; Maya cache trials remain unsafe under active-write guards. The
+approved VM10 experiment still awaits OS authentication; no VM10 results exist.

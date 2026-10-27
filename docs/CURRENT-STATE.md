@@ -1,6 +1,6 @@
 # Current takeover state
 
-Updated October 27, 2026, 19:01 EDT. Read this with README.md and AGENTS.md.
+Updated October 27, 2026, 19:23 EDT. Read this with README.md and AGENTS.md.
 The private raw task directory is `data/context-expansion-20261027/`; its
 HANDOFF.md, ROLLOUT-CHECKLIST.md, immutable trial folders and JSON states provide
 local details. Recover results before running anything. Do not repeat completed
@@ -40,8 +40,9 @@ normal Maya compatibility is not yet qualified. Router/DSH stay running.
 
 - HyperQwen 56,320, KV 704 MiB/rank, chunks 256: median 1,491.65 prefill /
   1.4985 s TTFT / 89.10 decode; three requests and near-window retrieval passed.
-- SGLang 21,504, chunks 384, original .88 pool: 2,621.01 / .8521 s / 46.17;
-  three requests and near-window retrieval passed. Larger combined pools pending.
+- SGLang 32,768, chunks 384, .92 static pool: 2,613.82 / .8532 s / 46.59;
+  three matched requests and near-window retrieval passed. The larger 36,864
+  candidate failed the GPU-headroom guard; its partial request is not throughput.
 - GLM 65,536: 65.5 / 33.740 s / 4.809, all better than its fresh 32K control;
   JSON/arithmetic/image and 58,986-input retrieval passed.
 - Strata DeepSeek 131,072: 33.3 / 65.796 s / 2.955; JSON/arithmetic and
@@ -49,7 +50,8 @@ normal Maya compatibility is not yet qualified. Router/DSH stay running.
   decode +5.44%, within the user's accepted tradeoff. Long retrieval TTFT was
   1,722.88 s; this is additional work, not comparable to the 2.2K speed fixture.
 - Flash's initial host-KV/reserve trials hit reclaim pressure with the old 1 GiB
-  cap. New-policy full-arena/resident-budget variants remain pending.
+  cap. All four new-policy full-arena/resident-budget screens are complete and
+  missed the speed rule. Retain 32,768 pending the separately approved VM10 check.
 - Maya smaller load caches, bounded/disabled post-prompt read-ahead and bounded/
   disabled Engram row caches still crossed active-write limits. A first passing
   request or zero-I/O window was followed by failure and is not qualification.
@@ -61,11 +63,11 @@ normal Maya compatibility is not yet qualified. Router/DSH stay running.
 ## Exact live pipeline
 
 Old v1-v4 parents were stopped only after their children finished and restored
-normal state. Do not restart them. `llm-context-independent-tail.service` now
-runs the remaining Maya32/cache variant and original Flash plan under VM60.
-`llm-context-combined-queue.service` waits for final-queue completion, then runs
-promising SGLang chunk/pool combinations. An unresolved Maya state is recorded;
-promotion refuses a known-churning setting as newly policy-qualified.
+normal state. Do not restart them. The independent VM60 tail and combined
+SGLang queue have both completed successfully; final-queue-complete.json and
+post-queue-complete.json are saved privately. Their tests must not be repeated.
+Maya remains unresolved; promotion refuses a known-churning setting as newly
+policy-qualified.
 
 The administrator-gated launcher is pending in the local exec session. Once
 Ubuntu authenticates it, it first tests failure/restoration on a root-owned fake
@@ -75,9 +77,13 @@ services: `llm-swappiness10-context-trial.service` and
 user. The first waits for the independent VM60 tail and SGLang to finish before
 setting 10 and testing a new Maya64 candidate. Its privileged stop hook restores
 60 and preserves other admin changes. If Maya qualifies, the second rechecks the
-other five selected configurations under 10, restores 60, and only conditionally
+other five selected configurations under 10 against those identical settings'
+saved VM60 medians (not an earlier smaller-context allowance), restores 60, and only conditionally
 persists 10 after all stated checks pass. No existing result is overwritten.
 Prior long retrievals keep their original policy/date; they are not relabeled.
+The pending authentication request was replaced after correcting newline escaping
+in the conditional sysctl-file writer. Generated persistence code compiles and
+its sysctl text was checked for proper newlines without changing the host.
 
 Private worker units are `llm-context-test-worker.service` and the dense
 `llm-test-qwen27b.service`. GPU-LOCK is removed only by its matching owner.
@@ -94,7 +100,8 @@ switching and manual unload during native busy/loading/compute. Lifecycle sensor
 read both GPUs and six board/CPU devices; owned memory/I/O counters support write
 attribution. No candidate engine was built or promoted by the staging tool.
 
-Wait for the serial queues and approved host-policy experiment. Review all six
+The serial VM60 queues are complete. Wait for administrator authentication and
+the approved host-policy experiment. Review all six
 choices and actual qualification/policy attribution. Then prepare hash-verified
 preimages, apply qualified contexts under an owned reservation, refresh DSH
 metadata, deploy the approved operational features, run normal JSON/image and
