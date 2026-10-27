@@ -29,14 +29,19 @@ or that untested larger contexts work.
 | Same prepared Qwen3.8-27B quant | SGLang | PP2, packed embedding lookup, FP32 state, BF16 KV, 512-token chunks, decode graphs | 16,384 | 14,758 |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | Existing `qwen-flash-next` preset, MTP, INT8 KV, automatic expert cache | 32,768 | Not established |
 | GLM-5.3-Flash / Maya-S24 | Maya | Existing S24 setting, drafting, automatic expert cache/prefill | 32,768 | Not established |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | Shared weights, `deepseek-maya-s`, drafting/vision off, 2 GiB GPU reserve | 8,192 | Not established |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | Shared weights, `deepseek-maya-s`, drafting/vision off, prefill 4096, 2 GiB GPU reserve | 65,536 | 58,969 |
 | Same DeepSeek Maya-S weights | Maya | Shared weights, `maya-ds4.json`, drafting off, 2 GiB GPU reserve | 32,768 | Not established |
 
-The streamed-model 32K allocations passed installation/startup and short API
+[Strata DeepSeek now has a 64K allocation](DEEPSEEK-STRATA-CONTEXT-20261027.md),
+with three-marker retrieval passed at 58,969 input tokens. Its new context-test
+rates are recorded separately from the preserved 8K standard speed benchmark.
+
+The other streamed-model 32K allocations passed installation/startup and short API
 checks. Their full windows have not been retrieval-validated. Their measured
 speed tests used an **8K benchmark allocation**, so the rates below are not new
 32K throughput claims. No model tests or context qualification were repeated for
-this consolidation.
+the profile consolidation. The subsequent Strata DeepSeek context expansion used
+new 32K/64K configurations and preserved the completed 8K measurements.
 
 ## Saved speed evidence for the retained choices
 

@@ -38,6 +38,9 @@ The [maintained-profile registry](docs/MAINTAINED-PROFILES.md) now keeps exactly
 one selected setting per model, weight quantization and engine: six profiles.
 Superseded launchers and the duplicate Strata alias are retired; completed
 measurements remain available as dated evidence.
+[Strata DeepSeek Maya-S now uses 64K context](docs/DEEPSEEK-STRATA-CONTEXT-20261027.md),
+with 58,969-token three-marker retrieval passed; its previous 8K speed results
+remain preserved as historical measurements.
 
 ## Repository ownership
 

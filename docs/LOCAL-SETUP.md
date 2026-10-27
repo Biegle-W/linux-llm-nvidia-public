@@ -72,8 +72,10 @@ occupied or while the setup queue is active. Stop Qwen with
 `runtimes/bin/strata launch --stop --preset qwen-flash-next`. Stop Strata DeepSeek
 with `runtimes/bin/strata runtime stop --profile deepseek-maya-s`.
 Stop a foreground Maya server with Ctrl+C.
-The initial allocated contexts are 32K for Qwen and Maya, and 8K for Strata
-DeepSeek. Short API smoke checks do not validate those full input lengths or
+Strata DeepSeek now allocates 64K and passed 58,969-token retrieval; see the
+[context expansion](DEEPSEEK-STRATA-CONTEXT-20261027.md). Flash-Next/Strata, GLM/Maya
+and DeepSeek/Maya retain their 32K allocations. Short API smoke checks do not
+validate those full input lengths or
 establish sustained performance, output quality, image handling or tool use.
 The shared Strata DeepSeek profile currently disables drafting and vision;
 their file formats being recognized does not establish those features work.

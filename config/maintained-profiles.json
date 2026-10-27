@@ -196,8 +196,8 @@
       "launch": [
         "strata-deepseek"
       ],
-      "allocated_context": 8192,
-      "context_validation": "startup and short/long benchmark inputs passed; no full-window retrieval test",
+      "allocated_context": 65536,
+      "context_validation": "64K allocation and long-input three-marker retrieval passed; tested input length recorded separately",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 2.7,
@@ -209,7 +209,35 @@
         "kind": "strata-runtime-profile",
         "name": "deepseek-maya-s"
       },
-      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md"
+      "evidence": "docs/DEEPSEEK-STRATA-CONTEXT-20261027.md",
+      "tested_retrieval_input": 58969,
+      "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
+      "context_qualification": {
+        "date": "2026-10-27",
+        "configured_context": 65536,
+        "input_tokens": 58969,
+        "output_tokens": 43,
+        "retrieval_passed": true,
+        "repetitions": 1,
+        "prefill_tps": 60.6,
+        "decode_tps": 1.5,
+        "ttft_s": 972.5352302909996,
+        "wall_s": 1000.682838015,
+        "cached_tokens": 0
+      },
+      "selected_settings": {
+        "tp_requested": 2,
+        "actual_gpu_route": "layer groups",
+        "experts": 6,
+        "drafting": "none",
+        "vision": false,
+        "cpu_threads": 14,
+        "prefill_chunk": 4096,
+        "mmap_experts": true,
+        "reserve_mib_per_gpu": 2048,
+        "parallel": 1,
+        "reasoning_effort": "none"
+      }
     },
     {
       "id": "deepseek-maya",
