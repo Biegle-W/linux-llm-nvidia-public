@@ -61,14 +61,32 @@ settings.
 2.2K input tokens and 128 output tokens, with three measured requests after warm-up.
 Prefill is native phase timing; decode is observed client SSE throughput.
 
-| Model / engine | Context | TTFT s | Prefill tok/s | Decode tok/s |
-| --- | ---: | ---: | ---: | ---: |
-| Qwen3.8-27B / HyperQwen-vLLM | 32,768 | 1.613 | 1385.5 | 89.01 |
-| Qwen3.8-27B / SGLang | 16,384 | 0.852 | 2606.3 | 46.71 |
-| Qwen3.8-Flash-Next / Strata | 32,768 | 3.648 | 609.6 | 105.64 |
-| GLM-5.3-Flash / Maya | 32,768 | 39.469 | 56.0 | 3.05 |
-| DeepSeek-V4.1-Flash-1017 / Strata | 65,536 | 69.195 | 31.5 | 1.71 |
-| DeepSeek-V4.1-Flash-1017 / Maya | 32,768 | 60.602 | 36.1 | 1.22 |
+[Reporting conventions](BENCHMARK-REPORTING.md) apply the three categories below.
+Speeds are the dated benchmark measurements from before relocation; storage shows
+the current placement. Size counts base checkpoint weights in decimal GB and
+excludes separate packs/caches. Shared weights are listed per engine but occupy
+one physical checkpoint per shared group.
+
+### VRAM-only models
+
+| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | HyperQwen-vLLM | 1,385.5 | 1.613 | 89.01 | 32,768 | 15.79 | SATA SSD: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | SGLang | 2,606.3 | 0.852 | 46.71 | 16,384 | 15.79 | SATA SSD: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+
+### MoE models with CPU RAM offload
+
+None currently kept. The RAM tiers in the SSD-streaming profiles below
+are caches; their full weights remain backed by SSD during inference.
+
+### MoE models with SSD streaming
+
+| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 609.6 | 3.648 | 105.64 | 32,768 | 75.84 | NVMe: `models/strata/models/IQ3_XXS` |
+| GLM-5.3-Flash / Maya-S24 | Maya | 56.0 | 39.469 | 3.05 | 32,768 | 94.70 | NVMe: `models/maya/Maya-S24` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 31.5 | 69.195 | 1.71 | 65,536 | 339.48 | NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 36.1 | 60.602 | 1.22 | 32,768 | 339.48 | NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 
 The registry retains older `benchmark` fields as historical measurements and
 records this run under `latest_benchmark`. Earlier code/prose and short-input

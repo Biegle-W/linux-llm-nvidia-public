@@ -102,6 +102,17 @@ Publish sanitized results and settings to the public reference using
 and verify both branches match their upstreams. If publication is blocked, retain
 the local results and report exactly what remains unsynchronized.
 
+For every future benchmark result list, group all model/quant/engine entries in
+this order: **VRAM-only models**, **MoE models with CPU RAM offload**, and
+**MoE models with SSD streaming**. Keep empty categories visible and state that
+none are currently kept. After model, quantization and engine, list these columns
+in order: **prefill (tokens/s), time to first token (seconds), decode (tokens/s),
+context limit (tokens), storage size (GB), storage location**. Include the physical
+drive and checkpoint folder. Classify the selected runtime's actual weight access;
+an SSD-streaming MoE with RAM/GPU caches remains in the SSD-streaming category.
+See [benchmark reporting conventions](docs/BENCHMARK-REPORTING.md). Preserve
+measurement dates, protocol, context qualifications and shared-weight accounting.
+
 Create model and DSH shortcuts on the Desktop only; do not add application-menu
 entries. Preserve unrelated application launchers.
 
