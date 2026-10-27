@@ -54,7 +54,7 @@ desktop programs can appear in NVIDIA's compute-app query and are preserved.
 
 ## Native apps and desktop shortcuts
 
-Desktop and application-menu entries are installed for:
+Desktop shortcuts are installed for:
 
 - **LLM HyperQwen vLLM** and **LLM SGLang**: start their selected dense profile.
 - **LLM Strata**: select Flash-Next or DeepSeek, then open Strata's own Chat/Monitor
@@ -73,11 +73,18 @@ The web page on port 10000 follows whichever single worker is currently running.
 Official project icons and their sources are recorded in
 [artwork attribution](../assets/icons/README.md). HyperQwen uses vLLM's mark.
 
+Application-menu entries are not installed. The installer removes only its own
+older menu entries and preserves unrelated applications.
+
 PATH commands: `llm-hyperqwen`, `llm-sglang`, `llm-strata`, `llm-maya`, and `dsh`.
 The engine commands accept `--model <id>`; Strata/Maya accept `--web`. Running
 `dsh` alone opens its current UI; arguments invoke the pinned DSH CLI.
 DSH defaults to HyperQwen and stores sessions privately under `data/dsh/`.
 Refresh providers with `python3 dsh/configure.py`; saved selections are preserved.
+
+[Model storage policy](../docs/STORAGE-POLICY.md): GPU-resident Qwen checkpoints
+load from SATA; the Strata/Maya SSD-streaming models remain on NVMe. Launchers
+check the physical drive through the stable model aliases before starting.
 
 ## Install and service management
 

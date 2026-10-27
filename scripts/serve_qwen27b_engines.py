@@ -8,6 +8,7 @@ import socket
 import subprocess
 import sys
 from profile_catalog import get_profile
+from storage_policy import verify_storage
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = ROOT / 'models/engine-tests/qwen38-27b-hyperqwen-fast'
@@ -33,13 +34,14 @@ class RedactedKey(str):
         return repr('[REDACTED]')
 
 
-def preflight():
+def preflight(profile):
     group = next(line.split('::', 1)[1] for line in
                  Path('/proc/self/cgroup').read_text().splitlines() if line.startswith('0::'))
     limit = (Path('/sys/fs/cgroup') / group.lstrip('/') / 'memory.max').read_text().strip()
     if (not group.endswith('/llm-test-qwen27b.service')
             or limit == 'max' or int(limit) > 36 * 1024 ** 3):
         sys.exit('Use scripts/start_model.sh qwen27b [hyperqwen|sglang].')
+    verify_storage(profile)
     if not KEY.is_file() or KEY.stat().st_mode & 0o077:
         sys.exit('The local API-key file must exist and be readable only by its owner.')
     if not KEY.read_text().strip():
@@ -74,7 +76,7 @@ def main():
     if engine not in ('hyperqwen', 'sglang') or len(sys.argv) > 2:
         sys.exit('Usage: serve_qwen27b_engines.py hyperqwen|sglang')
     profile = get_profile('qwen27b-' + engine)
-    preflight()
+    preflight(profile)
     cuda = ROOT / 'runtimes/engine-tools/lib/python3.12/site-packages/nvidia/cu13'
     env = dict(os.environ, CUDA_HOME=str(cuda), CUDA_DEVICE_ORDER='PCI_BUS_ID',
                CUDA_VISIBLE_DEVICES='0,1', NCCL_P2P_DISABLE='1', OMP_NUM_THREADS='1',

@@ -22,6 +22,13 @@ def validate_catalog(catalog):
         identifiers.add(identifier)
         groups.add(group)
         launches.add(launch)
+        storage = profile['storage']
+        location = Path(storage['checkpoint_directory'])
+        expected = {'gpu-resident': 'sata', 'ram-resident': 'sata', 'ssd-streaming': 'nvme'}
+        if (storage.get('access') not in expected
+                or storage.get('required_transport') != expected[storage['access']]
+                or location.is_absolute() or '..' in location.parts):
+            raise ValueError(f'Invalid model storage policy: {identifier}')
         args = profile.get('cli_args', [])
         for flag in ('--max-model-len', '--ctx-size'):
             if flag in args and int(args[args.index(flag) + 1]) != profile['allocated_context']:

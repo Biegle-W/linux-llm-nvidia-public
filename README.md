@@ -49,6 +49,9 @@ separate client on port 3080; Strata and Maya shortcuts open their native web ap
 **Latest matched benchmark:** [all six kept profiles, fresh TTFT/prefill/decode and storage](docs/BENCHMARK-20261027-101219.md).
 The test uses each installed context; historical benchmark evidence stays preserved.
 
+**Model storage policy:** [NVMe for SSD-streaming models; SATA for GPU/RAM-resident weights](docs/STORAGE-POLICY.md).
+Dense Qwen uses the SATA SSD through its existing checkpoint alias.
+
 ## Repository ownership
 
 | Build | Private operational repository | Public reference |
@@ -74,7 +77,7 @@ tree. Previously published Git history is preserved, not rewritten.
 - `config/model-catalog.example.json`: pointer for the retired preparation-only inventory.
 - `docs/REPOSITORY-MAP.md`: the seven-repository ownership and retirement policy.
 
-Models go under ignored `models/`; native builds/environments under `runtimes/`;
+Model aliases go under ignored `models/`; native builds/environments under `runtimes/`;
 private inventories, mount mappings, credentials, captures and validation under
 `data/`. Build native executables on Linux filesystems. Existing Windows model
 weights can be reused after locating and verifying their files; never copy Windows
@@ -98,6 +101,15 @@ Publish sanitized results and settings to the public reference using
 `scripts/sync_public.py`, review both diffs, commit and push both repositories,
 and verify both branches match their upstreams. If publication is blocked, retain
 the local results and report exactly what remains unsynchronized.
+
+Create model and DSH shortcuts on the Desktop only; do not add application-menu
+entries. Preserve unrelated application launchers.
+
+Store only SSD-streaming models on NVMe. Put GPU/RAM-resident model weights and
+dense trial checkpoints on the SATA SSD, using stable aliases under `models/`.
+Check actual resolved weight files before launch or downloading new checkpoints;
+see [the model storage policy](docs/STORAGE-POLICY.md). Keep engines and builds on
+the Linux filesystem.
 
 Use one maintained profile per model, weight quantization and engine. Select the
 largest locally validated safe context with competitive prefill and decode;

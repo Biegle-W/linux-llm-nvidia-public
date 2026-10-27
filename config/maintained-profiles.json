@@ -113,6 +113,11 @@
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
         "evidence": "docs/BENCHMARK-20261027-101219.md",
         "numeric_results": "docs/benchmark-results/20261027-101219.json"
+      },
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       }
     },
     {
@@ -178,6 +183,11 @@
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
         "evidence": "docs/BENCHMARK-20261027-101219.md",
         "numeric_results": "docs/benchmark-results/20261027-101219.json"
+      },
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       }
     },
     {
@@ -220,6 +230,11 @@
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
         "evidence": "docs/BENCHMARK-20261027-101219.md",
         "numeric_results": "docs/benchmark-results/20261027-101219.json"
+      },
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/IQ3_XXS"
       }
     },
     {
@@ -271,6 +286,11 @@
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
         "evidence": "docs/BENCHMARK-20261027-101219.md",
         "numeric_results": "docs/benchmark-results/20261027-101219.json"
+      },
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/Maya-S24"
       }
     },
     {
@@ -341,6 +361,11 @@
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
         "evidence": "docs/BENCHMARK-20261027-101219.md",
         "numeric_results": "docs/benchmark-results/20261027-101219.json"
+      },
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
       }
     },
     {
@@ -383,6 +408,11 @@
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
         "evidence": "docs/BENCHMARK-20261027-101219.md",
         "numeric_results": "docs/benchmark-results/20261027-101219.json"
+      },
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
       }
     }
   ]

@@ -17,6 +17,13 @@ def write_managed(path, text, mode=0o644):
     path.chmod(mode)
 
 
+def remove_managed_menu(path):
+    if path.is_file() and not path.is_symlink():
+        text = path.read_text()
+        if MARKER in text and str(ROOT) in text:
+            path.unlink()
+
+
 def main():
     os.umask(0o077)
     tail = json.loads(subprocess.check_output(['tailscale', 'status', '--json'], text=True))
@@ -55,16 +62,17 @@ def main():
                    'Comment=Select and load a qualified NVIDIA model through the router\n'
                    f'Exec=/usr/bin/python3 "{ROOT}/scripts/router_client.py" --engine {engine} --desktop{web}\n'
                    f'Icon={icon}\nTerminal=true\nCategories=Development;\n')
-        for directory in [Path.home() / 'Desktop', Path.home() / '.local/share/applications']:
-            write_managed(directory / ('LLM-' + engine + '.desktop'), desktop, 0o755)
+        name = 'LLM-' + engine + '.desktop'
+        write_managed(Path.home() / 'Desktop' / name, desktop, 0o755)
+        remove_managed_menu(Path.home() / '.local/share/applications' / name)
         command = '#!/bin/sh\n' + MARKER + '\nexec /usr/bin/python3 ' + shlex.quote(str(ROOT / 'scripts/router_client.py')) + ' --engine ' + engine + ' "$@"\n'
         write_managed(Path.home() / '.local/bin' / ('llm-' + engine), command, 0o755)
     desktop = (MARKER + '\n[Desktop Entry]\nVersion=1.0\nType=Application\nName=DeepSeek Harness (DSH)\n'
                'Comment=Open the local multi-engine DeepSeek Harness\n'
                f'Exec=/usr/bin/python3 "{ROOT}/scripts/open_dsh.py"\n'
                f'Icon={ROOT}/assets/icons/dsh.svg\nTerminal=false\nCategories=Development;\n')
-    for directory in [Path.home() / 'Desktop', Path.home() / '.local/share/applications']:
-        write_managed(directory / 'DSH.desktop', desktop, 0o755)
+    write_managed(Path.home() / 'Desktop/DSH.desktop', desktop, 0o755)
+    remove_managed_menu(Path.home() / '.local/share/applications/DSH.desktop')
     write_managed(Path.home() / '.local/bin/dsh', '#!/bin/sh\n' + MARKER + '\nif [ "$#" -eq 0 ]; then\n  exec /usr/bin/python3 ' + shlex.quote(str(ROOT / 'scripts/open_dsh.py')) + '\nfi\nexec ' + shlex.quote(str(ROOT / 'dsh/run')) + ' "$@"\n', 0o755)
     subprocess.run(['systemctl', '--user', 'daemon-reload'], check=True)
     subprocess.run(['systemctl', '--user', 'enable', '--now', 'nvidia-model-router.service', 'nvidia-dsh.service'], check=True)

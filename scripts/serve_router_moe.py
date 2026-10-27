@@ -8,6 +8,7 @@ import subprocess
 import signal
 import time
 from profile_catalog import get_profile
+from storage_policy import verify_storage
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -21,6 +22,7 @@ def main():
     cap = 48 if profile['id'] in ('flash-next-strata', 'glm-maya') else 36
     if not group.endswith('/llm-router-worker.service') or limit == 'max' or int(limit) > cap * 1024 ** 3:
         sys.exit('Start MoE workers through the model router.')
+    verify_storage(profile)
     if profile['id'] == 'flash-next-strata':
         source = Path.home() / '.local/state/strata/launch/qwen-flash-next.json'
     elif profile['id'] == 'deepseek-strata':

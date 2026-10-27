@@ -121,3 +121,9 @@ Strata/Maya open their own native web pages and DSH remains separate. GLM expert
 RAM is now capped at 32 GiB inside its managed production budget; earlier GLM
 speeds retain their original uncapped allocation. See the
 [connection and service handoff](../network/README.md).
+
+## Current model storage policy
+
+[Reserve NVMe for SSD-streaming models](STORAGE-POLICY.md). Dense Qwen27B and
+preserved dense trial checkpoints now live on SATA through the existing
+`models/engine-tests` alias. Engines and virtual environments stay on Linux ext4.

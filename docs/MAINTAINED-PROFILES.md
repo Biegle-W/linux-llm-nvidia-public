@@ -11,6 +11,13 @@ precision, speculative-token count, prompt chunk size and context allocation are
 tuning choices within that group. They do not justify parallel speed/long-context
 presets for the same weight quant and engine.
 
+## Storage
+
+[The storage policy](STORAGE-POLICY.md) puts GPU-resident Qwen27B and all dense
+trial weights on SATA. Flash-Next, GLM and DeepSeek keep their SSD-streaming
+weights on NVMe. The registry records the required transport; stable aliases
+keep both shared-checkpoint engine pairs working.
+
 ## Selection rule
 
 Keep a qualified configuration that is not dominated on prefill/first-token

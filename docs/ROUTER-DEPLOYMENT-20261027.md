@@ -113,3 +113,10 @@ under `data/router-deployment-20261027/`. Generated keyed configs and worker sta
 are in `data/router/`; DSH sessions and its private startup URL remain in ignored
 `data/dsh/` and `data/dsh-web.log`. Sanitized source, lockfiles, official artwork
 and this report are exported to the matching public repository.
+
+## Later shortcut preference
+
+The user subsequently requested Desktop shortcuts only. The five managed
+application-menu entries were removed; Desktop launchers and their official
+artwork remain. The installer preserves this preference and removes only its
+own older menu entries.
