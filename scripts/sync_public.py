@@ -11,7 +11,8 @@ FILES = (
     'scripts/build_native_llama.sh', 'scripts/check_local_api.py',
     'scripts/start_model.sh', 'scripts/native_linux_gpu_unlock.py',
     'scripts/test_native_linux_gpu_unlock.py', 'docs/UNLOCK-SETUP-20261026.md',
-    'docs/BENCHMARK-UNLOCK-20261026.md', 'scripts/sync_public.py', 'docs/PUBLIC-SYNC.md',
+    'docs/BENCHMARK-UNLOCK-20261026.md', 'docs/ENGINE-TESTS-20261026.md',
+    'scripts/run_bounded_test.sh', 'scripts/sync_public.py', 'docs/PUBLIC-SYNC.md',
 )
 BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
                    r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|'

@@ -87,3 +87,8 @@ are retained under ignored `data/benchmarks/`.
 
 [The unlocked-versus-stock comparison](BENCHMARK-UNLOCK-20261026.md) records the
 repeated protocol after successful per-card unlock and correctness checks.
+
+[CUDA engine qualification](ENGINE-TESTS-20261026.md) records mixed-card
+compatibility failures, HyperQwen CPU-offload timings, and the memory-pressure
+incident. Run future experimental workers through `scripts/run_bounded_test.sh`
+to give them a separate process group and a hard host-memory limit.
