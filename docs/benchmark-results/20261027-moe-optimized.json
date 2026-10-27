@@ -1,0 +1,816 @@
+{
+  "schema": 1,
+  "run": "20261027-moe-optimized",
+  "hardware": {
+    "cpu": "i5-13600KF",
+    "ram_gb": 64,
+    "gpus": [
+      "RTX 3080 Ti 12 GB",
+      "RTX 3080 10 GB"
+    ]
+  },
+  "compute_unlock": "active on both qualified cards",
+  "protocol": {
+    "repetitions": 3,
+    "warmup_output_tokens": 64,
+    "output_tokens": 128,
+    "input_tokens": "approximately 2.2K; identical fixtures from 20261027-101219",
+    "temperature": 0,
+    "seed": 261026,
+    "thinking": false,
+    "model_loading": "excluded",
+    "prefill": "engine-native prompt timings",
+    "decode": "(output tokens - 1) / first-to-last nonempty client SSE content interval",
+    "cache": "frozen per-engine profile seeds for comparisons; zero/low reused prompt tokens checked; OS page cache not flushed",
+    "affected_profiles": [
+      "glm-maya",
+      "deepseek-strata",
+      "deepseek-maya"
+    ],
+    "unchanged_profiles_reused": [
+      "qwen27b-hyperqwen",
+      "qwen27b-sglang",
+      "flash-next-strata"
+    ]
+  },
+  "profiles": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound INT4 / INT8 embedding",
+      "engine": "HyperQwen-vLLM",
+      "category": "VRAM-only models",
+      "prefill_tps": 1385.5075975448417,
+      "ttft_s": 1.6129653680000047,
+      "decode_tps": 89.0073252285688,
+      "context_limit_tokens": 32768,
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "transport": "sata",
+        "checkpoint_alias": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "drive": "Samsung SSD 870 QVO SATA",
+        "shared_group": "qwen27b"
+      },
+      "source_measurement_run": "20261027-101219",
+      "repetitions": 3,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "prefill_tps": 1388.0800977962956,
+          "ttft_s": 1.6132797360005497,
+          "decode_tps": 86.24396693924693,
+          "native_decode_tps": null,
+          "cached_tokens": 0,
+          "wall_s": 3.086191548998613
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "prefill_tps": 1385.5075975448417,
+          "ttft_s": 1.6129653680000047,
+          "decode_tps": 89.0073252285688,
+          "native_decode_tps": null,
+          "cached_tokens": 0,
+          "wall_s": 3.040121594000084
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "prefill_tps": 1382.190974064212,
+          "ttft_s": 1.6061796949979907,
+          "decode_tps": 97.93690783150343,
+          "native_decode_tps": null,
+          "cached_tokens": 0,
+          "wall_s": 2.903262146999623
+        }
+      ],
+      "selected_settings": null,
+      "worker_memory_gib": null,
+      "qualification": [],
+      "resources": null
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound INT4 / INT8 embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "prefill_tps": 2606.293122856385,
+      "ttft_s": 0.8524989010002173,
+      "decode_tps": 46.71094139831222,
+      "context_limit_tokens": 16384,
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "transport": "sata",
+        "checkpoint_alias": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "drive": "Samsung SSD 870 QVO SATA",
+        "shared_group": "qwen27b"
+      },
+      "source_measurement_run": "20261027-101219",
+      "repetitions": 3,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "prefill_tps": 2573.264723359176,
+          "ttft_s": 0.8666269000023021,
+          "decode_tps": 46.38406761013453,
+          "native_decode_tps": null,
+          "cached_tokens": 0,
+          "wall_s": 3.6047287300025346
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "prefill_tps": 2606.293122856385,
+          "ttft_s": 0.8524989010002173,
+          "decode_tps": 46.71094139831222,
+          "native_decode_tps": null,
+          "cached_tokens": 0,
+          "wall_s": 3.57144665099986
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "prefill_tps": 2619.5374427132087,
+          "ttft_s": 0.8481880470026226,
+          "decode_tps": 46.74155568790624,
+          "native_decode_tps": null,
+          "cached_tokens": 0,
+          "wall_s": 3.565377929000533
+        }
+      ],
+      "selected_settings": null,
+      "worker_memory_gib": null,
+      "qualification": [],
+      "resources": null
+    },
+    {
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "IQ3_XXS",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "prefill_tps": 609.6,
+      "ttft_s": 3.647962864000874,
+      "decode_tps": 105.64336780690053,
+      "context_limit_tokens": 32768,
+      "storage_size_bytes": 75839998528,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/strata/models/IQ3_XXS",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "flash-next-strata"
+      },
+      "source_measurement_run": "20261027-101219",
+      "repetitions": 3,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "prefill_tps": 610.2,
+          "ttft_s": 3.660713671997655,
+          "decode_tps": 98.95471562592354,
+          "native_decode_tps": 98.7,
+          "cached_tokens": 0,
+          "wall_s": 4.944318914000178
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "prefill_tps": 609.6,
+          "ttft_s": 3.6456388229998993,
+          "decode_tps": 114.6847197896559,
+          "native_decode_tps": 114.2,
+          "cached_tokens": 0,
+          "wall_s": 4.753293166999356
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "prefill_tps": 609.3,
+          "ttft_s": 3.647962864000874,
+          "decode_tps": 105.64336780690053,
+          "native_decode_tps": 105.2,
+          "cached_tokens": 0,
+          "wall_s": 4.850311713998963
+        }
+      ],
+      "selected_settings": null,
+      "worker_memory_gib": null,
+      "qualification": [],
+      "resources": null
+    },
+    {
+      "profile": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "quant": "Maya-S24",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "prefill_tps": 64.5,
+      "ttft_s": 36.24735511900508,
+      "decode_tps": 4.733838877720536,
+      "context_limit_tokens": 32768,
+      "storage_size_bytes": 94701676224,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/maya/Maya-S24",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "glm-maya"
+      },
+      "source_measurement_run": "20261027-moe-optimized",
+      "repetitions": 3,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2209,
+          "output_tokens": 128,
+          "prefill_tps": 65.0,
+          "ttft_s": 34.013232254998,
+          "decode_tps": 4.08930251034213,
+          "native_decode_tps": 4.1,
+          "cached_tokens": 0,
+          "wall_s": 65.17365908999636
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2199,
+          "output_tokens": 128,
+          "prefill_tps": 64.5,
+          "ttft_s": 36.24735511900508,
+          "decode_tps": 4.733838877720536,
+          "native_decode_tps": 4.7,
+          "cached_tokens": 0,
+          "wall_s": 63.21971927200502
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2199,
+          "output_tokens": 128,
+          "prefill_tps": 64.2,
+          "ttft_s": 36.499573173998215,
+          "decode_tps": 5.2365502094678344,
+          "native_decode_tps": 5.3,
+          "cached_tokens": 0,
+          "wall_s": 60.84066024599451
+        }
+      ],
+      "selected_settings": {
+        "expert_ram_gib": 40,
+        "environment": {
+          "MAYA_GLM_RAM_GB": "40"
+        },
+        "reason": "Larger bounded expert tier and on-demand CPU vision retain 32K while improving prompt and decode throughput.",
+        "expert_profile": "data/glm-maya-expert-profile.bin",
+        "prefill": "auto",
+        "kv_streaming": true,
+        "mtp": true,
+        "cpu_vision": "on-demand fallback; released after image encoding",
+        "reserve_mib_per_gpu": 2048
+      },
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": 1
+      },
+      "qualification": [
+        {
+          "check": "json",
+          "passed": true,
+          "input_tokens": 38,
+          "output_tokens": 13,
+          "wall_s": 18.56395462799992
+        },
+        {
+          "check": "retrieval",
+          "passed": true,
+          "input_tokens": 10908,
+          "output_tokens": 28,
+          "wall_s": 76.55175498300378
+        },
+        {
+          "check": "image",
+          "passed": true,
+          "input_tokens": 1053,
+          "output_tokens": 2,
+          "wall_s": 56.99038769899926
+        }
+      ],
+      "resources": {
+        "worker_high_gib": 46,
+        "worker_max_gib": 48,
+        "worker_swap_cap_gib": 1,
+        "peak_worker_gib": 45.98359680175781,
+        "peak_worker_swap_gib": 0.9999961853027344,
+        "minimum_host_available_gib": 10.254131317138672,
+        "gpu_peak_c": [
+          60.0,
+          46.0
+        ],
+        "oom_events": 0
+      }
+    },
+    {
+      "profile": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "prefill_tps": 32.4,
+      "ttft_s": 67.52695925899752,
+      "decode_tps": 2.8720856429465904,
+      "context_limit_tokens": 65536,
+      "storage_size_bytes": 339477953988,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "deepseek-maya-s"
+      },
+      "source_measurement_run": "20261027-moe-optimized",
+      "repetitions": 3,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "output_tokens": 128,
+          "prefill_tps": 30.0,
+          "ttft_s": 73.18019004999951,
+          "decode_tps": 2.7603390413752704,
+          "native_decode_tps": 2.8,
+          "cached_tokens": 0,
+          "wall_s": 119.18919891199766
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2188,
+          "output_tokens": 128,
+          "prefill_tps": 32.4,
+          "ttft_s": 67.52695925899752,
+          "decode_tps": 2.8720856429465904,
+          "native_decode_tps": 2.9,
+          "cached_tokens": 0,
+          "wall_s": 111.74585323900101
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2179,
+          "output_tokens": 128,
+          "prefill_tps": 32.8,
+          "ttft_s": 66.35570569399715,
+          "decode_tps": 2.8997115644507483,
+          "native_decode_tps": 2.9,
+          "cached_tokens": 0,
+          "wall_s": 110.15334681900276
+        }
+      ],
+      "selected_settings": {
+        "tp_requested": 2,
+        "actual_gpu_route": "layer groups",
+        "experts": 6,
+        "drafting": "none",
+        "vision": false,
+        "cpu_threads": 14,
+        "prefill_chunk": 4096,
+        "mmap_experts": true,
+        "reserve_mib_per_gpu": 2048,
+        "parallel": 1,
+        "reasoning_effort": "none",
+        "environment": {
+          "DS4_STORE_GB": "42",
+          "DS4_STORE_POLICY": "1"
+        },
+        "expert_profile": "data/deepseek-strata-expert-profile.bin",
+        "expert_ram_store_gb": 42.0,
+        "expert_cache_policy": "LFU",
+        "reason": "Bounded 48 GiB worker and 42 GB frequency-based expert store retain the 64K allocation."
+      },
+      "worker_memory_gib": {
+        "high": 44,
+        "max": 48,
+        "swap": 1
+      },
+      "qualification": [
+        {
+          "check": "json",
+          "passed": true,
+          "input_tokens": 29,
+          "output_tokens": 13,
+          "wall_s": 39.66981811200094
+        },
+        {
+          "check": "retrieval",
+          "passed": true,
+          "input_tokens": 9673,
+          "output_tokens": 23,
+          "wall_s": 242.20030952800153
+        }
+      ],
+      "resources": {
+        "worker_high_gib": 44,
+        "worker_max_gib": 48,
+        "worker_swap_cap_gib": 1,
+        "peak_worker_gib": 44.00007629394531,
+        "peak_worker_swap_gib": 0.0,
+        "minimum_host_available_gib": 14.847267150878906,
+        "gpu_peak_c": [
+          59.0,
+          48.0
+        ],
+        "oom_events": 0
+      }
+    },
+    {
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "prefill_tps": 49.6,
+      "ttft_s": 44.016855533001944,
+      "decode_tps": 4.083400544889873,
+      "context_limit_tokens": 32768,
+      "storage_size_bytes": 339477953988,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "deepseek-maya-s"
+      },
+      "source_measurement_run": "20261027-moe-optimized",
+      "repetitions": 3,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "output_tokens": 128,
+          "prefill_tps": 49.6,
+          "ttft_s": 44.27389850800682,
+          "decode_tps": 3.9639468929823245,
+          "native_decode_tps": 4.0,
+          "cached_tokens": 0,
+          "wall_s": 76.31393842200487
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2188,
+          "output_tokens": 128,
+          "prefill_tps": 50.3,
+          "ttft_s": 43.484796730997914,
+          "decode_tps": 4.083400544889873,
+          "native_decode_tps": 4.1,
+          "cached_tokens": 0,
+          "wall_s": 74.59739667399845
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2179,
+          "output_tokens": 128,
+          "prefill_tps": 49.6,
+          "ttft_s": 44.016855533001944,
+          "decode_tps": 4.26401581557032,
+          "native_decode_tps": 4.3,
+          "cached_tokens": 0,
+          "wall_s": 73.80213197600096
+        }
+      ],
+      "selected_settings": {
+        "environment": {
+          "DS4_WARM_GB": "8"
+        },
+        "expert_profile": "data/deepseek-maya-expert-profile.bin",
+        "tp_requested": 2,
+        "actual_gpu_route": "layer groups",
+        "drafting": "none",
+        "vision": true,
+        "cpu_threads": 14,
+        "prefill_chunk": 4096,
+        "mmap_experts": true,
+        "reserve_mib_per_gpu": 2048,
+        "parallel": 1,
+        "reasoning_effort": "none",
+        "reason": "Restore explicit execution/profile controls, larger bounded mmap cache and 8 GB post-prompt expert warming; retain 32K and image support.",
+        "decode_expert_warm_gb": 8.0
+      },
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": 1
+      },
+      "qualification": [
+        {
+          "check": "json",
+          "passed": true,
+          "input_tokens": 29,
+          "output_tokens": 13,
+          "wall_s": 32.604890308000904
+        },
+        {
+          "check": "retrieval",
+          "passed": true,
+          "input_tokens": 9674,
+          "output_tokens": 23,
+          "wall_s": 139.67663391999668
+        },
+        {
+          "check": "image",
+          "passed": true,
+          "input_tokens": 670,
+          "output_tokens": 2,
+          "wall_s": 35.50743972700002
+        }
+      ],
+      "resources": {
+        "worker_high_gib": 46,
+        "worker_max_gib": 48,
+        "worker_swap_cap_gib": 1,
+        "peak_worker_gib": 45.065975189208984,
+        "peak_worker_swap_gib": 0.6434440612792969,
+        "minimum_host_available_gib": 51.1846923828125,
+        "gpu_peak_c": [
+          58.0,
+          46.0
+        ],
+        "oom_events": 0
+      }
+    }
+  ],
+  "screening": [
+    {
+      "variant": "deepseek-strata-42lfu-64k",
+      "profile": "deepseek-strata",
+      "prefill_tps": 30.3,
+      "ttft_s": 72.66338130999793,
+      "decode_tps": 2.7733465051385853,
+      "context": 65536,
+      "repetitions": 1,
+      "memory_high_gib": 44,
+      "memory_max_gib": 48,
+      "environment": {
+        "DS4_STORE_GB": "42",
+        "DS4_STORE_POLICY": "1"
+      },
+      "args_overrides": {},
+      "state": "complete"
+    },
+    {
+      "variant": "deepseek-strata-cache48-64k",
+      "profile": "deepseek-strata",
+      "prefill_tps": 29.9,
+      "ttft_s": 73.52652893299819,
+      "decode_tps": 2.035603574420926,
+      "context": 65536,
+      "repetitions": 1,
+      "memory_high_gib": 44,
+      "memory_max_gib": 48,
+      "environment": {},
+      "args_overrides": {},
+      "state": "complete"
+    },
+    {
+      "variant": "deepseek-maya-final-warm8",
+      "profile": "deepseek-maya",
+      "prefill_tps": 49.6,
+      "ttft_s": 44.016855533001944,
+      "decode_tps": 4.083400544889873,
+      "context": 32768,
+      "repetitions": 3,
+      "memory_high_gib": 46,
+      "memory_max_gib": 48,
+      "environment": {
+        "DS4_WARM_GB": "8"
+      },
+      "args_overrides": {
+        "--vision": "on",
+        "--cpu-threads": 14,
+        "--prefill-chunk": 4096,
+        "--mmap-experts": "on"
+      },
+      "state": "complete"
+    },
+    {
+      "variant": "deepseek-maya-restored32k",
+      "profile": "deepseek-maya",
+      "prefill_tps": 34.8,
+      "ttft_s": 63.0992817869992,
+      "decode_tps": 1.4101989478950705,
+      "context": 32768,
+      "repetitions": 1,
+      "memory_high_gib": 30,
+      "memory_max_gib": 36,
+      "environment": {
+        "STRATA_DS4_AUTO_PIN": "0"
+      },
+      "args_overrides": {
+        "--vision": "off",
+        "--cpu-threads": 14,
+        "--prefill-chunk": 4096,
+        "--mmap-experts": "on"
+      },
+      "state": "complete"
+    },
+    {
+      "variant": "glm-ram38-pf2048",
+      "profile": "glm-maya",
+      "prefill_tps": 33.9,
+      "ttft_s": 65.07967953500338,
+      "decode_tps": 3.6208519950590947,
+      "context": 32768,
+      "repetitions": 1,
+      "memory_high_gib": 44,
+      "memory_max_gib": 48,
+      "environment": {
+        "MAYA_GLM_RAM_GB": "38"
+      },
+      "args_overrides": {
+        "--prefill": 2048
+      },
+      "state": "complete"
+    },
+    {
+      "variant": "glm-ram38-lazy-auto",
+      "profile": "glm-maya",
+      "prefill_tps": 61.6,
+      "ttft_s": 35.843051241994544,
+      "decode_tps": 3.6505013967389788,
+      "context": 32768,
+      "repetitions": 1,
+      "memory_high_gib": 44,
+      "memory_max_gib": 48,
+      "environment": {
+        "MAYA_GLM_RAM_GB": "38"
+      },
+      "args_overrides": {},
+      "state": "complete"
+    },
+    {
+      "variant": "deepseek-strata-final64k",
+      "profile": "deepseek-strata",
+      "prefill_tps": 32.4,
+      "ttft_s": 67.52695925899752,
+      "decode_tps": 2.8720856429465904,
+      "context": 65536,
+      "repetitions": 3,
+      "memory_high_gib": 44,
+      "memory_max_gib": 48,
+      "environment": {
+        "DS4_STORE_GB": "42",
+        "DS4_STORE_POLICY": "1"
+      },
+      "args_overrides": {},
+      "state": "complete"
+    },
+    {
+      "variant": "deepseek-maya-cache48-32k",
+      "profile": "deepseek-maya",
+      "prefill_tps": 43.1,
+      "ttft_s": 50.98916657800146,
+      "decode_tps": 2.342622430557705,
+      "context": 32768,
+      "repetitions": 1,
+      "memory_high_gib": 44,
+      "memory_max_gib": 48,
+      "environment": {
+        "STRATA_DS4_AUTO_PIN": "0"
+      },
+      "args_overrides": {
+        "--vision": "off",
+        "--cpu-threads": 14,
+        "--prefill-chunk": 4096,
+        "--mmap-experts": "on"
+      },
+      "state": "complete"
+    },
+    {
+      "variant": "glm-ram36",
+      "profile": "glm-maya",
+      "prefill_tps": 58.8,
+      "ttft_s": 37.60237269299978,
+      "decode_tps": 3.4016734969949987,
+      "context": 32768,
+      "repetitions": 1,
+      "memory_high_gib": 44,
+      "memory_max_gib": 48,
+      "environment": {
+        "MAYA_GLM_RAM_GB": "36"
+      },
+      "args_overrides": {},
+      "state": "complete"
+    },
+    {
+      "variant": "glm-final40",
+      "profile": "glm-maya",
+      "prefill_tps": 64.5,
+      "ttft_s": 36.24735511900508,
+      "decode_tps": 4.733838877720536,
+      "context": 32768,
+      "repetitions": 3,
+      "memory_high_gib": 46,
+      "memory_max_gib": 48,
+      "environment": {
+        "MAYA_GLM_RAM_GB": "40"
+      },
+      "args_overrides": {},
+      "state": "complete"
+    },
+    {
+      "variant": "deepseek-maya-warm8-screen",
+      "profile": "deepseek-maya",
+      "prefill_tps": 43.1,
+      "ttft_s": 50.98299534499529,
+      "decode_tps": 3.5012095725195915,
+      "context": 32768,
+      "repetitions": 1,
+      "memory_high_gib": 46,
+      "memory_max_gib": 48,
+      "environment": {
+        "DS4_WARM_GB": "8"
+      },
+      "args_overrides": {
+        "--vision": "on",
+        "--cpu-threads": 14,
+        "--prefill-chunk": 4096,
+        "--mmap-experts": "on"
+      },
+      "state": "complete"
+    },
+    {
+      "variant": "deepseek-maya-final32k",
+      "profile": "deepseek-maya",
+      "prefill_tps": 42.0,
+      "ttft_s": 51.95091628600494,
+      "decode_tps": 2.6359739949672787,
+      "context": 32768,
+      "repetitions": 3,
+      "memory_high_gib": 46,
+      "memory_max_gib": 48,
+      "environment": {},
+      "args_overrides": {
+        "--vision": "on",
+        "--cpu-threads": 14,
+        "--prefill-chunk": 4096,
+        "--mmap-experts": "on"
+      },
+      "state": "complete"
+    }
+  ],
+  "private_settings_archive": {
+    "commit": "b2c865d06cdddfe9af49d38a2dd41799ae5b9d4d",
+    "batch": "linux-nvidia/2026-10-27-moe-cache-optimization",
+    "files": 6,
+    "credentials_omitted": true,
+    "hashes_verified": true
+  },
+  "deployment_validation": {
+    "passed": true,
+    "profiles": [
+      {
+        "profile": "glm-maya",
+        "context": 32768,
+        "budget_bytes": {
+          "MemoryHigh": 49392123904,
+          "MemoryMax": 51539607552,
+          "MemorySwapMax": 1073741824
+        },
+        "json_arithmetic_passed": true,
+        "managed_cli_tested": true
+      },
+      {
+        "profile": "deepseek-strata",
+        "context": 65536,
+        "budget_bytes": {
+          "MemoryHigh": 47244640256,
+          "MemoryMax": 51539607552,
+          "MemorySwapMax": 1073741824
+        },
+        "json_arithmetic_passed": true,
+        "managed_cli_tested": false
+      },
+      {
+        "profile": "deepseek-maya",
+        "context": 32768,
+        "budget_bytes": {
+          "MemoryHigh": 49392123904,
+          "MemoryMax": 51539607552,
+          "MemorySwapMax": 1073741824
+        },
+        "json_arithmetic_passed": true,
+        "managed_cli_tested": false
+      }
+    ],
+    "default_restored": "qwen27b-hyperqwen",
+    "router_and_dsh_active": true,
+    "reservation_removed": true,
+    "cpu_regression_tests_passed": 34
+  }
+}

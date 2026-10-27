@@ -35,58 +35,56 @@ or that untested larger contexts work.
 | Qwen3.8-27B / AutoRound INT4 body and heads, INT8 embedding | HyperQwen/vLLM | TP2, MTP3, MLP W4A8, BF16 state, INT4 KV, 128-token chunks, graphs | 32,768 | 29,496 |
 | Same prepared Qwen3.8-27B quant | SGLang | PP2, packed embedding lookup, FP32 state, BF16 KV, 512-token chunks, decode graphs | 16,384 | 14,758 |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | Existing `qwen-flash-next` preset, MTP, INT8 KV, automatic expert cache | 32,768 | Not established |
-| GLM-5.3-Flash / Maya-S24 | Maya | S24, drafting, automatic GPU cache/prefill, 32 GiB expert RAM | 32,768 | Not established |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | Shared weights, `deepseek-maya-s`, drafting/vision off, prefill 4096, 2 GiB GPU reserve | 65,536 | 58,969 |
-| Same DeepSeek Maya-S weights | Maya | Shared weights, `maya-ds4.json`, drafting off, 2 GiB GPU reserve | 32,768 | Not established |
+| GLM-5.3-Flash / Maya-S24 | Maya | S24, drafting, automatic GPU cache/prefill, 40 GiB expert RAM, on-demand CPU vision | 32,768 | 10,908 |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | Shared weights, `deepseek-maya-s`, drafting/vision off, prefill 4096, 42 GB LFU cache, 2 GiB GPU reserve | 65,536 | 58,969 |
+| Same DeepSeek Maya-S weights | Maya | Shared weights, `maya-ds4.json`, drafting off, 4096-token chunks, 8 GB expert warming, 2 GiB GPU reserve | 32,768 | 9,674 |
 
 [Strata DeepSeek now has a 64K allocation](DEEPSEEK-STRATA-CONTEXT-20261027.md),
-with three-marker retrieval passed at 58,969 input tokens. Its new context-test
-rates are recorded separately from the preserved 8K standard speed benchmark.
+with three-marker retrieval passed at 58,969 input tokens under the earlier
+setting. The optimized cache also passed 9,673-input retrieval; its current speed
+measurements and the earlier full-window evidence remain separately dated.
 
 The other streamed-model 32K allocations passed installation/startup and short API
-checks. Their full windows have not been retrieval-validated. Earlier speed
+checks. GLM and Maya DeepSeek now pass recorded multi-chunk retrieval near 10K
+input. Their full windows have not been retrieval-validated. Earlier speed
 tests used an **8K benchmark allocation** and remain historical.
 The latest table measures the current allocations with roughly 2.2K input tokens;
 it does not qualify full-window quality. No model tests or context qualification
 were repeated for the profile consolidation. The subsequent Strata DeepSeek context expansion used
 new 32K/64K configurations and preserved the completed 8K measurements.
 
-The [router deployment](ROUTER-DEPLOYMENT-20261027.md) adds Qwen tool-call parsers
-and a 32 GiB GLM expert-RAM cap; the latest matched benchmark includes those
-settings.
+The router keeps Qwen tool-call parsers. The latest MoE optimization uses the
+selected bounded cache budgets, including 40 GiB GLM expert RAM and on-demand
+CPU vision; the previous 32 GiB cap remains dated evidence.
 
 ## Latest matched speed evidence
 
-[Fresh benchmark — October 27](BENCHMARK-20261027-101219.md) uses each kept context allocation, roughly
-2.2K input tokens and 128 output tokens, with three measured requests after warm-up.
-Prefill is native phase timing; decode is observed client SSE throughput.
-
-[Reporting conventions](BENCHMARK-REPORTING.md) apply the three categories below.
-Speeds are the dated benchmark measurements from before relocation; storage shows
-the current placement. Size counts base checkpoint weights in decimal GB and
-excludes separate packs/caches. Shared weights are listed per engine but occupy
-one physical checkpoint per shared group.
+[GLM/DeepSeek optimization](MOE-OPTIMIZATION-20261027.md) retested those three
+profiles at unchanged context limits with the same approximately 2.2K-token,
+128-output-token fixture and three measured requests. Dense/Flash rows retain
+their unchanged [October 27 measurements](BENCHMARK-20261027-101219.md).
+Sizes count base checkpoint weights; locations are current; shared rows use one
+physical checkpoint. See [reporting conventions](BENCHMARK-REPORTING.md).
 
 ### VRAM-only models
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | HyperQwen-vLLM | 1,385.5 | 1.613 | 89.01 | 32,768 | 15.79 | SATA SSD: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
-| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | SGLang | 2,606.3 | 0.852 | 46.71 | 16,384 | 15.79 | SATA SSD: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | HyperQwen-vLLM | 1,385.5 | 1.613 | 89.01 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | SGLang | 2,606.3 | 0.852 | 46.71 | 16,384 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 
 ### MoE models with CPU RAM offload
 
-None currently kept. The RAM tiers in the SSD-streaming profiles below
-are caches; their full weights remain backed by SSD during inference.
+None currently kept. RAM tiers in streamed profiles are caches, not full-model RAM residency.
 
 ### MoE models with SSD streaming
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 609.6 | 3.648 | 105.64 | 32,768 | 75.84 | NVMe: `models/strata/models/IQ3_XXS` |
-| GLM-5.3-Flash / Maya-S24 | Maya | 56.0 | 39.469 | 3.05 | 32,768 | 94.70 | NVMe: `models/maya/Maya-S24` |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 31.5 | 69.195 | 1.71 | 65,536 | 339.48 | NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 36.1 | 60.602 | 1.22 | 32,768 | 339.48 | NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 609.6 | 3.648 | 105.64 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: `models/strata/models/IQ3_XXS` |
+| GLM-5.3-Flash / Maya-S24 | Maya | 64.5 | 36.247 | 4.73 | 32,768 | 94.70 | 10,908 |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 32.4 | 67.527 | 2.87 | 65,536 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 
 The registry retains older `benchmark` fields as historical measurements and
 records this run under `latest_benchmark`. Earlier code/prose and short-input
@@ -116,7 +114,8 @@ python3 scripts/profile_catalog.py
 ```
 
 These commands are alternatives, not a sequence to run concurrently. Only one
-worker may occupy authenticated port 10000. Existing stop commands, memory
+worker may occupy authenticated port 10000. MoE commands require the installed
+router service. Existing stop commands, memory
 boundaries, credential permissions and GPU checks remain in force. The registry
 rejects duplicate model/weight-quant/engine groups and launch selections. Dense
 context metadata must match engine arguments, and unqualified CPU weight offload

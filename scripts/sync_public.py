@@ -33,6 +33,9 @@ FILES = (
     'docs/BENCHMARK-20261027-101219.md', 'docs/benchmark-results/20261027-101219.json',
     'docs/STORAGE-POLICY.md', 'scripts/storage_policy.py', 'tests/test_storage_policy.py',
     'docs/BENCHMARK-REPORTING.md',
+    'docs/MOE-OPTIMIZATION-20261027.md', 'docs/benchmark-results/20261027-moe-optimized.json',
+    'scripts/patches/maya-lazy-cpu-vision.patch', 'tests/test_maya_lazy_vision.py',
+    'tests/test_worker_budgets.py',
 )
 BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
                    r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|'

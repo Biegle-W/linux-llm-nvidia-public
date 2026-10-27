@@ -7,7 +7,7 @@ import sys
 import subprocess
 import signal
 import time
-from profile_catalog import get_profile
+from profile_catalog import get_profile, worker_budget
 from storage_policy import verify_storage
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,9 +19,13 @@ def main():
                  if line.startswith('0::'))
     limit = (Path('/sys/fs/cgroup') / group.lstrip('/') / 'memory.max').read_text().strip()
     profile = get_profile(sys.argv[1])
-    cap = 48 if profile['id'] in ('flash-next-strata', 'glm-maya') else 36
-    if not group.endswith('/llm-router-worker.service') or limit == 'max' or int(limit) > cap * 1024 ** 3:
-        sys.exit('Start MoE workers through the model router.')
+    budget = worker_budget(profile)
+    base = Path('/sys/fs/cgroup') / group.lstrip('/')
+    if (not group.endswith('/llm-router-worker.service') or limit == 'max'
+            or int(limit) != budget['max'] * 1024 ** 3
+            or (base / 'memory.high').read_text().strip() != str(budget['high'] * 1024 ** 3)
+            or (base / 'memory.swap.max').read_text().strip() != str(budget['swap'] * 1024 ** 3)):
+        sys.exit('Start MoE workers through the model router with the selected bounded budget.')
     verify_storage(profile)
     if profile['id'] == 'flash-next-strata':
         source = Path.home() / '.local/state/strata/launch/qwen-flash-next.json'

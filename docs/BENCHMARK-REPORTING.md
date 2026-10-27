@@ -56,7 +56,7 @@ and the shared-weight relationship; keep live user/mount details private.
   configuration.
 - MoE with SSD streaming: Qwen3.8-Flash-Next IQ3_XXS on Strata, GLM-5.3-Flash
   Maya-S24 on Maya, and shared DeepSeek-V4.1-Flash-1017 Maya-S on Strata and Maya;
-  streaming weights on NVMe. GLM's 32 GiB RAM tier is a cache within its streaming
+  streaming weights on NVMe. GLM's 40 GiB RAM tier is a cache within its streaming
   profile, not evidence that all experts are RAM-resident.
 
 The [maintained result tables](MAINTAINED-PROFILES.md#latest-matched-speed-evidence)

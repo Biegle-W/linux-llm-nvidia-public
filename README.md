@@ -46,8 +46,10 @@ remain preserved as historical measurements.
 OpenAI model/engine selection on port 10100 over loopback and Tailscale. DSH is a
 separate client on port 3080; Strata and Maya shortcuts open their native web apps.
 
-**Latest matched benchmark:** [all six kept profiles, fresh TTFT/prefill/decode and storage](docs/BENCHMARK-20261027-101219.md).
-The test uses each installed context; historical benchmark evidence stays preserved.
+**Latest results:** [GLM/DeepSeek cache optimization at unchanged contexts](docs/MOE-OPTIMIZATION-20261027.md).
+The [previous full six-profile benchmark](docs/BENCHMARK-20261027-101219.md) and all
+historical evidence remain preserved; current grouped tables combine the new MoE
+results with unchanged dense/Flash measurements.
 
 **Model storage policy:** [NVMe for SSD-streaming models; SATA for GPU/RAM-resident weights](docs/STORAGE-POLICY.md).
 Dense Qwen uses the SATA SSD through its existing checkpoint alias.

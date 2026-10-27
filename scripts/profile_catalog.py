@@ -7,6 +7,20 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / 'config/maintained-profiles.json'
 
 
+def worker_budget(profile):
+    dense = profile['id'].startswith('qwen27b-')
+    large = profile['id'] in ('flash-next-strata', 'glm-maya')
+    default = {'high': 44 if large else 30, 'max': 48 if large else 36, 'swap': 1}
+    budget = profile.get('worker_memory_gib', default)
+    if (set(budget) != {'high', 'max', 'swap'}
+            or any(type(v) is not int for v in budget.values())
+            or not (0 < budget['high'] <= budget['max'] - 2
+                    and budget['max'] <= (36 if dense else 48))
+            or budget['swap'] != 1):
+        raise ValueError(f"Invalid bounded worker budget: {profile['id']}")
+    return dict(budget)
+
+
 def validate_catalog(catalog):
     if catalog.get('schema') != 1:
         raise ValueError('Unsupported maintained-profile catalog schema.')
@@ -29,6 +43,7 @@ def validate_catalog(catalog):
                 or storage.get('required_transport') != expected[storage['access']]
                 or location.is_absolute() or '..' in location.parts):
             raise ValueError(f'Invalid model storage policy: {identifier}')
+        worker_budget(profile)
         args = profile.get('cli_args', [])
         for flag in ('--max-model-len', '--ctx-size'):
             if flag in args and int(args[args.index(flag) + 1]) != profile['allocated_context']:

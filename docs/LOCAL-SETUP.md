@@ -127,3 +127,15 @@ speeds retain their original uncapped allocation. See the
 [Reserve NVMe for SSD-streaming models](STORAGE-POLICY.md). Dense Qwen27B and
 preserved dense trial checkpoints now live on SATA through the existing
 `models/engine-tests` alias. Engines and virtual environments stay on Linux ext4.
+
+Current MoE cache budgets and vision lifecycle are described in the
+[October 27 optimization](MOE-OPTIMIZATION-20261027.md); earlier cache caps above
+remain historical. All maintained MoE start commands now select through the
+router for the qualified bounded worker budget.
+
+The installed Maya 1.1.29 Python server includes
+[`maya-lazy-cpu-vision.patch`](../scripts/patches/maya-lazy-cpu-vision.patch).
+When recreating that pinned runtime, apply the patch once from the repository
+root with `patch -p1 -d runtimes/project-maya < scripts/patches/maya-lazy-cpu-vision.patch`.
+The two vision regression tests require the local runtime; the public reference
+checkout skips them until that runtime is installed.

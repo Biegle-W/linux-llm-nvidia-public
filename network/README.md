@@ -108,16 +108,15 @@ nor changes Tailscale ACLs, SSH access, firewall rules or another computer.
 The native worker UIs and DSH UI remain local; the authenticated model API is
 available across Tailscale. Existing Tailscale network ACLs still apply.
 
-Dense and DeepSeek workers retain the 30 GiB soft / 36 GiB hard RAM and 1 GiB swap
-bounds. Flash-Next and GLM's already-selected automatic RAM arenas need a separate
-44/48 GiB production limit. GLM additionally uses the documented
-`MAYA_GLM_RAM_GB=32` total expert-RAM cap, since its automatic allocator reads host
-RAM rather than the worker cgroup budget. Applying the dense 36 GiB cap to those arenas was
-rejected during deployment. MoE workers monitor host available RAM and GPU
-temperatures every two seconds and stop after three samples below 8 GiB available
-or at/above 82 C. GPU reserves, both-GPU selection, dense checkpoint/placement
-preflights and numerical engine settings remain in force. Qwen's tool-call
-parsers are enabled for DSH; prior speed measurements remain dated evidence.
+Dense workers retain the 30 GiB soft / 36 GiB hard RAM and 1 GiB swap bounds.
+Selected MoE worker budgets are recorded in `worker_memory_gib` in the registry,
+with a maximum 48 GiB hard RAM, 1 GiB swap and at least 2 GiB soft/hard headroom.
+The wrapper verifies exact limits; CLI, Desktop and API launches all use them.
+GLM uses its selected expert-RAM cap and an on-demand CPU vision fallback.
+DeepSeek's larger bounded caches retain their 32K/64K contexts and full expert
+counts. Host available RAM below 8 GiB or GPU temperature at/above 82 C for three
+two-second samples stops the owned worker. GPU reserves, storage and numerical
+checks remain. [Measurements and settings](../docs/MOE-OPTIMIZATION-20261027.md).
 
 The router adopts an owned running worker after restart. It leaves worker units
 running when the router/DSH restarts. An unmanaged listener on worker port 10000

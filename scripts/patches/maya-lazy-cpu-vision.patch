@@ -1,0 +1,30 @@
+--- a/serve/server.py
++++ b/serve/server.py
+@@ -1234,6 +1234,7 @@
+         self.dir = Path(tempfile.mkdtemp(prefix="maya-vision-"))
+         self.proc = None
+         self.lend = self.reclaim = None   # on demand: callables (the engine's VLEND / VRECLAIM), wired by main()
++        self.on_demand = not start        # CPU fallback also releases its encoder between image requests
+         self.owed = False                 # the engine's memory is not back yet (a reclaim that kept failing)
+         self.lock = threading.RLock()
+         self.cache: dict[str, tuple[Path, int]] = {}
+@@ -1294,7 +1295,7 @@
+             try:
+                 yield self
+             finally:
+-                if self.lend is not None and self.proc is not None:
++                if self.on_demand and self.proc is not None:
+                     self._stop()
+ 
+     @staticmethod
+@@ -4520,8 +4521,8 @@
+                       "the model lends it", flush=True)
+             else:   # the model's GPU memory is too small to lend that much (or an engine without lending)
+                 print("[maya] images: the model cannot lend the vision encoder its GPU memory here - the encoder "
+-                      "runs on the CPU", flush=True)
+-                vision = Vision(dict(vcfg, gpu=False), log=vlog, env=venv)
++                      "starts on the CPU when a picture arrives", flush=True)
++                vision = Vision(dict(vcfg, gpu=False), log=vlog, env=venv, start=False)
+     else:
+         engine, vision, sampling_defaults = MockEngine(tok, a.script or [
+             "Thinking about it.</think>\n\nHello from the mock engine."]), None, {}

@@ -247,7 +247,7 @@
         "glm"
       ],
       "allocated_context": 32768,
-      "context_validation": "installed 32K allocation passed startup and short API smoke; no full-window retrieval test",
+      "context_validation": "32K allocation retained; three-marker retrieval passed at 10908 input tokens with the optimized setting; full window not tested.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 7.2,
@@ -259,18 +259,24 @@
         "kind": "private-maya-config",
         "path": "runtimes/project-maya/maya-maya-s24.json"
       },
-      "evidence": "docs/ROUTER-DEPLOYMENT-20261027.md",
+      "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
       "selected_settings": {
-        "expert_ram_gib": 32,
+        "expert_ram_gib": 40,
         "environment": {
-          "MAYA_GLM_RAM_GB": "32"
+          "MAYA_GLM_RAM_GB": "40"
         },
-        "reason": "Bound the native expert RAM tier inside the managed worker budget; historical standard benchmark predates this cap."
+        "reason": "Larger bounded expert tier and on-demand CPU vision retain 32K while improving prompt and decode throughput.",
+        "expert_profile": "data/glm-maya-expert-profile.bin",
+        "prefill": "auto",
+        "kv_streaming": true,
+        "mtp": true,
+        "cpu_vision": "on-demand fallback; released after image encoding",
+        "reserve_mib_per_gpu": 2048
       },
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
-      "benchmark_configuration_note": "Historical standard benchmark used automatic RAM allocation before the managed 32 GiB expert-RAM cap. Current capped-profile measurements are recorded separately under latest_benchmark.",
+      "benchmark_configuration_note": "Historical 8K automatic-RAM benchmark remains under benchmark; latest_benchmark records the current bounded tier and on-demand CPU vision.",
       "latest_benchmark": {
-        "run": "20261027-101219",
+        "run": "20261027-moe-optimized",
         "date": "2026-10-27",
         "context": 32768,
         "repetitions": 3,
@@ -279,19 +285,34 @@
           2209
         ],
         "output_tokens": 128,
-        "ttft_s": 39.46869795800012,
-        "prefill_tps": 56.0,
-        "decode_tps": 3.048613366180654,
+        "ttft_s": 36.24735511900508,
+        "prefill_tps": 64.5,
+        "decode_tps": 4.733838877720536,
         "prefill_method": "native prompt_n / native prompt time",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-20261027-101219.md",
-        "numeric_results": "docs/benchmark-results/20261027-101219.json"
+        "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
       },
       "storage": {
         "access": "ssd-streaming",
         "required_transport": "nvme",
         "checkpoint_directory": "models/maya/Maya-S24"
-      }
+      },
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": 1
+      },
+      "latest_qualification": {
+        "run": "20261027-moe-optimized",
+        "context": 32768,
+        "retrieval_input_tokens": 10908,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": true,
+        "full_window_retested": false
+      },
+      "tested_retrieval_input": 10908
     },
     {
       "id": "deepseek-strata",
@@ -303,7 +324,7 @@
         "strata-deepseek"
       ],
       "allocated_context": 65536,
-      "context_validation": "64K allocation and long-input three-marker retrieval passed; tested input length recorded separately",
+      "context_validation": "64K allocation retained; optimized setting passed 9673-input three-marker retrieval; earlier 58969-input qualification remains separately dated.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 2.7,
@@ -315,7 +336,7 @@
         "kind": "strata-runtime-profile",
         "name": "deepseek-maya-s"
       },
-      "evidence": "docs/DEEPSEEK-STRATA-CONTEXT-20261027.md",
+      "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
       "tested_retrieval_input": 58969,
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "context_qualification": {
@@ -342,10 +363,18 @@
         "mmap_experts": true,
         "reserve_mib_per_gpu": 2048,
         "parallel": 1,
-        "reasoning_effort": "none"
+        "reasoning_effort": "none",
+        "environment": {
+          "DS4_STORE_GB": "42",
+          "DS4_STORE_POLICY": "1"
+        },
+        "expert_profile": "data/deepseek-strata-expert-profile.bin",
+        "expert_ram_store_gb": 42.0,
+        "expert_cache_policy": "LFU",
+        "reason": "Bounded 48 GiB worker and 42 GB frequency-based expert store retain the 64K allocation."
       },
       "latest_benchmark": {
-        "run": "20261027-101219",
+        "run": "20261027-moe-optimized",
         "date": "2026-10-27",
         "context": 65536,
         "repetitions": 3,
@@ -354,18 +383,32 @@
           2198
         ],
         "output_tokens": 128,
-        "ttft_s": 69.19491248999839,
-        "prefill_tps": 31.5,
-        "decode_tps": 1.7056418191605587,
+        "ttft_s": 67.52695925899752,
+        "prefill_tps": 32.4,
+        "decode_tps": 2.8720856429465904,
         "prefill_method": "native prompt_n / native prompt time",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-20261027-101219.md",
-        "numeric_results": "docs/benchmark-results/20261027-101219.json"
+        "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
       },
       "storage": {
         "access": "ssd-streaming",
         "required_transport": "nvme",
         "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      },
+      "worker_memory_gib": {
+        "high": 44,
+        "max": 48,
+        "swap": 1
+      },
+      "latest_qualification": {
+        "run": "20261027-moe-optimized",
+        "context": 65536,
+        "retrieval_input_tokens": 9673,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": false,
+        "full_window_retested": false
       }
     },
     {
@@ -378,7 +421,7 @@
         "maya-deepseek"
       ],
       "allocated_context": 32768,
-      "context_validation": "installed 32K allocation passed startup and short API smoke; no full-window retrieval test",
+      "context_validation": "32K allocation retained; three-marker retrieval passed at 9674 input tokens with the optimized setting; full window not tested.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 3.4,
@@ -390,9 +433,9 @@
         "kind": "private-maya-config",
         "path": "runtimes/project-maya/maya-ds4.json"
       },
-      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
+      "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
       "latest_benchmark": {
-        "run": "20261027-101219",
+        "run": "20261027-moe-optimized",
         "date": "2026-10-27",
         "context": 32768,
         "repetitions": 3,
@@ -401,19 +444,52 @@
           2198
         ],
         "output_tokens": 128,
-        "ttft_s": 60.60193419500138,
-        "prefill_tps": 36.1,
-        "decode_tps": 1.2219164343194755,
+        "ttft_s": 44.016855533001944,
+        "prefill_tps": 49.6,
+        "decode_tps": 4.083400544889873,
         "prefill_method": "native prompt_n / native prompt time",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-20261027-101219.md",
-        "numeric_results": "docs/benchmark-results/20261027-101219.json"
+        "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
       },
       "storage": {
         "access": "ssd-streaming",
         "required_transport": "nvme",
         "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
-      }
+      },
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": 1
+      },
+      "selected_settings": {
+        "environment": {
+          "DS4_WARM_GB": "8"
+        },
+        "expert_profile": "data/deepseek-maya-expert-profile.bin",
+        "tp_requested": 2,
+        "actual_gpu_route": "layer groups",
+        "drafting": "none",
+        "vision": true,
+        "cpu_threads": 14,
+        "prefill_chunk": 4096,
+        "mmap_experts": true,
+        "reserve_mib_per_gpu": 2048,
+        "parallel": 1,
+        "reasoning_effort": "none",
+        "reason": "Restore explicit execution/profile controls, larger bounded mmap cache and 8 GB post-prompt expert warming; retain 32K and image support.",
+        "decode_expert_warm_gb": 8.0
+      },
+      "latest_qualification": {
+        "run": "20261027-moe-optimized",
+        "context": 32768,
+        "retrieval_input_tokens": 9674,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": true,
+        "full_window_retested": false
+      },
+      "tested_retrieval_input": 9674
     }
   ]
 }

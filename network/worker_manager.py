@@ -11,7 +11,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from profile_catalog import load_catalog
+from profile_catalog import load_catalog, worker_budget
 
 DENSE_UNIT = 'llm-test-qwen27b.service'
 MOE_UNIT = 'llm-router-worker.service'
@@ -140,11 +140,12 @@ class Workers:
                 cmd = [str(ROOT / 'scripts/start_model.sh'), *profile['launch']]
                 unit = DENSE_UNIT
             else:
+                budget = worker_budget(profile)
                 cmd = ['systemd-run', '--user', '--collect', '--service-type=exec',
                        '--unit=' + MOE_UNIT,
-                       '--property=MemoryHigh=' + ('44G' if profile_id in ('flash-next-strata', 'glm-maya') else '30G'),
-                       '--property=MemoryMax=' + ('48G' if profile_id in ('flash-next-strata', 'glm-maya') else '36G'),
-                       '--property=MemorySwapMax=1G', '--property=OOMPolicy=kill',
+                       '--property=MemoryHigh=' + str(budget['high']) + 'G',
+                       '--property=MemoryMax=' + str(budget['max']) + 'G',
+                       '--property=MemorySwapMax=' + str(budget['swap']) + 'G', '--property=OOMPolicy=kill',
                        '--property=LimitRTTIME=infinity', '--working-directory=' + str(ROOT),
                        '/usr/bin/python3', str(ROOT / 'scripts/serve_router_moe.py'), profile_id]
                 unit = MOE_UNIT

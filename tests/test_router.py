@@ -91,6 +91,14 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(self.request('/v1/completions',{'model':'deepseek-strata','prompt':'x'})[0],400)
 
 class SwitchTest(unittest.TestCase):
+    def setUp(self):
+        # Switching tests must not inspect the live worker's GPU reservation or state.
+        directory=tempfile.TemporaryDirectory()
+        self.addCleanup(directory.cleanup)
+        root=Path(directory.name)
+        for name,value in [('ROOT',root),('STATE',root/'data/router/worker.json')]:
+            mock=patch('worker_manager.'+name,value)
+            mock.start();self.addCleanup(mock.stop)
     def worker(self):
         w=Workers.__new__(Workers);w.lock=threading.Lock();w.busy=False;w.started=[]
         w.start=lambda name,progress=lambda:None:w.started.append(name)

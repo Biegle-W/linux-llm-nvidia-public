@@ -15,6 +15,17 @@ case "$model" in
     qwen|qwen27b|strata-deepseek|glm|maya-deepseek) ;;
     *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek' >&2; exit 2 ;;
 esac
+# MoE launches use the same bounded worker and selected cache budget as Desktop/API launches.
+case "$model" in
+    qwen) route_model="flash-next-strata" ;;
+    glm) route_model="glm-maya" ;;
+    strata-deepseek) route_model="deepseek-strata" ;;
+    maya-deepseek) route_model="deepseek-maya" ;;
+    qwen27b) route_model="" ;;
+esac
+if [[ -n "$route_model" ]]; then
+    exec /usr/bin/python3 "$project_dir/scripts/router_client.py" --model "$route_model"
+fi
 python3 - "$project_dir" "$model" "$engine" <<'PY'
 import json, os, socket, sys
 from pathlib import Path
@@ -44,18 +55,5 @@ try:
 except OSError:
     pass
 PY
-case "$model" in
-    qwen)
-        exec "$project_dir/runtimes/bin/strata" launch --preset qwen-flash-next --yes --no-tui ;;
-    qwen27b)
-        exec "$project_dir/scripts/run_bounded_test.sh" qwen27b /usr/bin/python3 \
-            "$project_dir/scripts/serve_qwen27b_engines.py" "$engine" ;;
-    strata-deepseek)
-        exec "$project_dir/runtimes/bin/strata" runtime start --profile deepseek-maya-s --wait 600 ;;
-    glm)
-        exec "$project_dir/runtimes/project-maya/setup.sh" --config \
-            "$project_dir/runtimes/project-maya/maya-maya-s24.json" ;;
-    maya-deepseek)
-        exec "$project_dir/runtimes/project-maya/setup.sh" --config \
-            "$project_dir/runtimes/project-maya/maya-ds4.json" ;;
-esac
+exec "$project_dir/scripts/run_bounded_test.sh" qwen27b /usr/bin/python3 \
+    "$project_dir/scripts/serve_qwen27b_engines.py" "$engine"
