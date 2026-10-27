@@ -181,5 +181,28 @@ class SwitchTest(unittest.TestCase):
         with patch('worker_manager.unit_property',side_effect=lambda unit,prop:'active' if prop=='ActiveState' else '/unrelated/app'),patch('worker_manager.subprocess.run') as run:
             with self.assertRaises(RouterError):w.stop_owned()
             run.assert_not_called()
+    def test_native_loading_and_compute_block_manual_unload(self):
+        from worker_manager import ROOT as active_root
+        w=self.worker();w.key=KEY
+        def properties(unit,prop):
+            if unit != 'llm-router-worker.service':return 'inactive'
+            return 'active' if prop=='ActiveState' else str(active_root/'scripts/serve_router_moe.py')
+        for field in ['busy','queued','loading','compute_active']:
+            with self.subTest(field=field),patch('worker_manager.unit_property',side_effect=properties), \
+                 patch('worker_manager.OPENER.open',return_value=io.BytesIO(json.dumps({'busy':False,field:True}).encode())), \
+                 patch('worker_manager.subprocess.run') as run:
+                with self.assertRaises(RouterError) as result:w.stop_owned()
+                self.assertEqual(result.exception.code,'backend_busy');run.assert_not_called()
+    def test_unknown_native_state_preserves_worker(self):
+        from worker_manager import ROOT as active_root
+        w=self.worker();w.key=KEY
+        def properties(unit,prop):
+            if unit != 'llm-router-worker.service':return 'inactive'
+            return 'active' if prop=='ActiveState' else str(active_root/'scripts/serve_router_moe.py')
+        with patch('worker_manager.unit_property',side_effect=properties), \
+             patch('worker_manager.OPENER.open',side_effect=OSError('unavailable')), \
+             patch('worker_manager.subprocess.run') as run:
+            with self.assertRaises(RouterError):w.stop_owned()
+            run.assert_not_called()
 
 if __name__=='__main__':unittest.main()

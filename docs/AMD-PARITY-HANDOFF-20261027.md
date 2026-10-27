@@ -24,14 +24,14 @@ driver, reboot, storage relocation or unrelated application changes.
 
 | Gap | NVIDIA-server action | Status at publication |
 |---|---|---|
-| G1: loading swap | Adapt phase-aware loading/idle/inference policy below | Applied to subsequent guarded launches; CPU tests/readback passed; normal GPU-path verification pending |
+| G1: loading swap | Adapt phase-aware loading/idle/inference policy below | Guarded paths updated; CPU/readback and normal dense path verified. Maya still crosses active-write limits; separately approved host-policy trial pending OS authentication. |
 | G2: idle unload | Add request-aware 600-second unload of owned inference only | Implemented and CPU-tested; not enabled until context rollout |
 | G3: documentation | Repair GLM storage-location cell; maintain README/AGENTS/results | Agent entry point and GLM storage cell repaired |
 | G4: reporting | Add a portable matched protocol and explicit storage scopes | Pending; existing measurements preserved |
 | G5: Maya vision lifecycle | Keep lazy CPU-vision patch evidence available to AMD agents | NVIDIA already has the candidate patch; AMD qualification remains separate |
-| G6: model coverage | Evaluate user-selected additional models against actual NVIDIA fit | Await model choice and hardware qualification |
+| G6: model coverage | Evaluate user-selected additional models against actual NVIDIA fit | Coverage expansion not selected; preserve the six profiles |
 | G7: preload/unload controls | Share existing NVIDIA endpoints/tests with AMD agents | Already present on NVIDIA; AMD implementation is separate |
-| G8: gated updater | Design opt-in candidate validation/rollback/publication if requested | Optional; no schedule authorized by these notes |
+| G8: gated updater | Design opt-in candidate validation/rollback/publication if requested | Manual staging implemented/CPU-tested; no recurring updater or schedule selected |
 
 ## G1 — corrected swap policy
 

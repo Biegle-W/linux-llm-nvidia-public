@@ -2,7 +2,7 @@
   "schema": 1,
   "run": "20261027-context-expansion",
   "status": "in_progress",
-  "updated": "2026-10-27T18:22:34-0400",
+  "updated": "2026-10-27T19:07:08-0400",
   "production_promotion": false,
   "deployed_contexts": {
     "qwen27b-hyperqwen": 32768,
@@ -39,6 +39,8 @@
       "context": 32768,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 41.5,
         "ttft_s": 52.96314398999675,
@@ -105,6 +107,81 @@
       }
     },
     {
+      "variant": "deepseek-maya-32768-warmcap24-postwarm0-engram0-v4-confirmed",
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "context": 32768,
+      "state": "incomplete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": null,
+      "samples": [],
+      "changes": {
+        "context": 32768,
+        "args": {},
+        "env": {
+          "DS4_WARM_CAP_GB": "24",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "0"
+        }
+      },
+      "qualification": [],
+      "storage_size_bytes": 339477953988,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      }
+    },
+    {
+      "variant": "deepseek-maya-49152-warmcap24-postwarm0-engram0-v4-confirmed",
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "context": 49152,
+      "state": "incomplete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
+      "summary": null,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 47.3,
+          "ttft_s": 46.482612511994375,
+          "client_decode_tps": 4.595089954228827,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 74.12105584799428
+        }
+      ],
+      "changes": {
+        "context": 49152,
+        "args": {},
+        "env": {
+          "DS4_WARM_CAP_GB": "24",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "0"
+        }
+      },
+      "qualification": [],
+      "storage_size_bytes": 339477953988,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      }
+    },
+    {
       "variant": "deepseek-maya-49152-warmcap32-v2-confirmed",
       "profile": "deepseek-maya",
       "model": "DeepSeek-V4.1-Flash-1017",
@@ -114,6 +191,8 @@
       "context": 49152,
       "state": "incomplete",
       "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": null,
       "samples": [],
       "changes": {
@@ -141,6 +220,8 @@
       "context": 65536,
       "state": "incomplete",
       "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": null,
       "samples": [],
       "changes": {
@@ -166,6 +247,8 @@
       "context": 65536,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 46.3,
         "ttft_s": 47.43367654999747,
@@ -208,6 +291,125 @@
       }
     },
     {
+      "variant": "deepseek-maya-65536-warmcap24-postwarm0-engram16-v4-confirmed",
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "context": 65536,
+      "state": "incomplete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
+      "summary": null,
+      "samples": [],
+      "changes": {
+        "context": 65536,
+        "args": {},
+        "env": {
+          "DS4_WARM_CAP_GB": "24",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "16"
+        }
+      },
+      "qualification": [],
+      "storage_size_bytes": 339477953988,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      }
+    },
+    {
+      "variant": "deepseek-maya-65536-warmcap24-postwarm0-engram64-v4-confirmed",
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "context": 65536,
+      "state": "incomplete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
+      "summary": null,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 48.2,
+          "ttft_s": 45.57924899300269,
+          "client_decode_tps": 3.359651346896313,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 83.39861065999867
+        }
+      ],
+      "changes": {
+        "context": 65536,
+        "args": {},
+        "env": {
+          "DS4_WARM_CAP_GB": "24",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "64"
+        }
+      },
+      "qualification": [],
+      "storage_size_bytes": 339477953988,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      }
+    },
+    {
+      "variant": "deepseek-maya-65536-warmcap28-postwarm0-engram0-v4-confirmed",
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "context": 65536,
+      "state": "incomplete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
+      "summary": null,
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 49.5,
+          "ttft_s": 44.37066315499396,
+          "client_decode_tps": 3.2525155731692674,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 83.41836706599861
+        }
+      ],
+      "changes": {
+        "context": 65536,
+        "args": {},
+        "env": {
+          "DS4_WARM_CAP_GB": "28",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "0"
+        }
+      },
+      "qualification": [],
+      "storage_size_bytes": 339477953988,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      }
+    },
+    {
       "variant": "deepseek-maya-65536-warmcap28-postwarm2-v3-confirmed",
       "profile": "deepseek-maya",
       "model": "DeepSeek-V4.1-Flash-1017",
@@ -215,8 +417,10 @@
       "engine": "Maya",
       "category": "MoE models with SSD streaming",
       "context": 65536,
-      "state": "request-finished",
+      "state": "incomplete",
       "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": null,
       "samples": [],
       "changes": {
@@ -225,6 +429,36 @@
         "env": {
           "DS4_WARM_CAP_GB": "28",
           "DS4_WARM_GB": "2"
+        }
+      },
+      "qualification": [],
+      "storage_size_bytes": 339477953988,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      }
+    },
+    {
+      "variant": "deepseek-maya-65536-warmcap32-postwarm0-v3-confirmed",
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "context": 65536,
+      "state": "incomplete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
+      "summary": null,
+      "samples": [],
+      "changes": {
+        "context": 65536,
+        "args": {},
+        "env": {
+          "DS4_WARM_CAP_GB": "32",
+          "DS4_WARM_GB": "0"
         }
       },
       "qualification": [],
@@ -245,6 +479,8 @@
       "context": 65536,
       "state": "incomplete",
       "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": null,
       "samples": [],
       "changes": {
@@ -272,6 +508,8 @@
       "context": 65536,
       "state": "incomplete",
       "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": null,
       "samples": [],
       "changes": {
@@ -299,6 +537,8 @@
       "context": 131072,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 33.3,
         "ttft_s": 65.79570539899578,
@@ -393,6 +633,8 @@
       "context": 131072,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 32.1,
         "ttft_s": 68.43427351699938,
@@ -444,6 +686,8 @@
       "context": 65536,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 33.9,
         "ttft_s": 64.5918076290036,
@@ -510,6 +754,99 @@
       }
     },
     {
+      "variant": "flash-next-strata-131072-fullarena-v2-screen",
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "weight_quant": "IQ3_XXS",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "context": 131072,
+      "state": "complete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": {
+        "prefill_tps": 555.3,
+        "ttft_s": 4.024177849998523,
+        "client_decode_tps": 75.60857567302082,
+        "decode_tps": 75.5,
+        "prompt_tokens": 2222,
+        "generated_tokens": 128,
+        "profile": "flash-next-strata",
+        "variant": "flash-next-strata-131072-fullarena-v2-screen",
+        "context": 131072,
+        "repetitions": 1,
+        "memory_high_gib": 44,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 555.3,
+          "ttft_s": 4.024177849998523,
+          "client_decode_tps": 75.60857567302082,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 5.704075428999204
+        }
+      ],
+      "changes": {
+        "context": 131072,
+        "args": {
+          "--kv-resident": 32768,
+          "--vram-reserve-later-mib": 1536,
+          "--vram-reserve-mib": 1536,
+          "--prefill": 4096
+        },
+        "env": {},
+        "require_gpu_headroom_mib": 1024
+      },
+      "qualification": [],
+      "storage_size_bytes": 75839998528,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/IQ3_XXS"
+      }
+    },
+    {
+      "variant": "flash-next-strata-131072-resident36-v2-screen",
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "weight_quant": "IQ3_XXS",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "context": 131072,
+      "state": "loading",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": null,
+      "samples": [],
+      "changes": {
+        "context": 131072,
+        "args": {
+          "--kv-resident": 32768,
+          "--vram-reserve-later-mib": 1536,
+          "--vram-reserve-mib": 1536,
+          "--prefill": 4096,
+          "--resident-budget-gib": 36
+        },
+        "env": {},
+        "require_gpu_headroom_mib": 1024
+      },
+      "qualification": [],
+      "storage_size_bytes": 75839998528,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/IQ3_XXS"
+      }
+    },
+    {
       "variant": "flash-next-strata-131072-stream-headroom",
       "profile": "flash-next-strata",
       "model": "Qwen3.8-Flash-Next",
@@ -519,6 +856,8 @@
       "context": 131072,
       "state": "incomplete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": null,
       "samples": [],
       "changes": {
@@ -550,6 +889,8 @@
       "context": 32768,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 593.2,
         "ttft_s": 3.752891517004173,
@@ -616,6 +957,65 @@
       }
     },
     {
+      "variant": "flash-next-strata-65536-fullarena-v2-screen",
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "weight_quant": "IQ3_XXS",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "context": 65536,
+      "state": "complete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": {
+        "prefill_tps": 562.3,
+        "ttft_s": 3.9713111669989303,
+        "client_decode_tps": 86.48882835134975,
+        "decode_tps": 86.3,
+        "prompt_tokens": 2222,
+        "generated_tokens": 128,
+        "profile": "flash-next-strata",
+        "variant": "flash-next-strata-65536-fullarena-v2-screen",
+        "context": 65536,
+        "repetitions": 1,
+        "memory_high_gib": 44,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 562.3,
+          "ttft_s": 3.9713111669989303,
+          "client_decode_tps": 86.48882835134975,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 5.439837117999559
+        }
+      ],
+      "changes": {
+        "context": 65536,
+        "args": {
+          "--kv-resident": 32768,
+          "--vram-reserve-later-mib": 1536,
+          "--vram-reserve-mib": 1536,
+          "--prefill": 4096
+        },
+        "env": {},
+        "require_gpu_headroom_mib": 1024
+      },
+      "qualification": [],
+      "storage_size_bytes": 75839998528,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/IQ3_XXS"
+      }
+    },
+    {
       "variant": "flash-next-strata-65536-screen",
       "profile": "flash-next-strata",
       "model": "Qwen3.8-Flash-Next",
@@ -625,6 +1025,8 @@
       "context": 65536,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 589.7,
         "ttft_s": 3.788800613001513,
@@ -676,6 +1078,8 @@
       "context": 65536,
       "state": "incomplete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": null,
       "samples": [],
       "changes": {
@@ -706,6 +1110,8 @@
       "context": 32768,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 65.2,
         "ttft_s": 33.90114290799829,
@@ -781,6 +1187,8 @@
       "context": 65536,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 65.5,
         "ttft_s": 33.73995778399694,
@@ -881,6 +1289,8 @@
       "context": 65536,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "prefill_tps": 65.4,
         "ttft_s": 33.765163088995905,
@@ -932,6 +1342,8 @@
       "context": 32768,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 32768,
@@ -1002,6 +1414,8 @@
       "context": 40000,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 40000,
@@ -1048,6 +1462,8 @@
       "context": 49152,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 49152,
@@ -1139,6 +1555,8 @@
       "context": 49152,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 49152,
@@ -1187,6 +1605,8 @@
       "context": 49152,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 49152,
@@ -1234,6 +1654,8 @@
       "context": 56320,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 56320,
@@ -1325,6 +1747,8 @@
       "context": 56320,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-hyperqwen",
         "context": 56320,
@@ -1373,6 +1797,8 @@
       "context": 16384,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 16384,
@@ -1443,6 +1869,8 @@
       "context": 16384,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 16384,
@@ -1513,6 +1941,8 @@
       "context": 21504,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1602,6 +2032,8 @@
       "context": 21504,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1649,6 +2081,8 @@
       "context": 21504,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1739,6 +2173,8 @@
       "context": 21504,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1786,6 +2222,8 @@
       "context": 21504,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1833,6 +2271,8 @@
       "context": 21504,
       "state": "complete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": {
         "profile": "qwen27b-sglang",
         "context": 21504,
@@ -1879,6 +2319,8 @@
       "context": 32768,
       "state": "incomplete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": null,
       "samples": [],
       "changes": {
@@ -1903,6 +2345,8 @@
       "context": 36864,
       "state": "incomplete",
       "swap_policy": "bounded-1GiB legacy; see raw observer scope",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "saved unchanged-host baseline",
       "summary": null,
       "samples": [],
       "changes": {

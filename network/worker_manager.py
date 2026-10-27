@@ -106,6 +106,20 @@ class Workers:
                 recognized = recognized or str(ROOT / 'scripts/supervise_dense.py') in command
             if not recognized:
                 raise RouterError('An unexpected process owns the inference unit; nothing was stopped.', 'ownership_conflict')
+            if unit == MOE_UNIT:
+                request = urllib.request.Request('http://127.0.0.1:10000/status',
+                          headers={'Authorization': 'Bearer ' + self.key})
+                try:
+                    with OPENER.open(request, timeout=3) as response:
+                        status = json.load(response)
+                    if type(status.get('busy')) is not bool:
+                        raise ValueError('Native busy state missing')
+                except (OSError, ValueError) as error:
+                    raise RouterError('Native worker state is unavailable; active work was preserved.',
+                                      'backend_state_unknown', 409) from error
+                if any(status.get(k) for k in ('busy', 'queued', 'loading', 'compute_active')):
+                    raise RouterError('The native web app is active; unloading was deferred.',
+                                      'backend_busy', 409)
             group = unit_property(unit, 'ControlGroup')
             if group.startswith('/'):
                 base = Path('/sys/fs/cgroup') / group.lstrip('/')

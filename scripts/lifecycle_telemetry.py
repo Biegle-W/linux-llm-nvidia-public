@@ -82,6 +82,20 @@ def cpu_and_board_sample():
             'cpu_mhz_max': max(mhz) if mhz else None, 'cpu_throttle_counts': throttle}
 
 
+def owned_cgroup_sample():
+    group = next(line.split('::', 1)[1] for line in Path('/proc/self/cgroup').read_text().splitlines()
+                 if line.startswith('0::'))
+    base = Path('/sys/fs/cgroup') / group.lstrip('/')
+    values = {}
+    for name in ['memory.current', 'memory.swap.current', 'memory.high', 'memory.max',
+                 'memory.swap.max', 'memory.events', 'io.stat']:
+        try:
+            values[name] = (base / name).read_text().strip()
+        except OSError:
+            values[name] = None
+    return values
+
+
 class LifecycleLog:
     def __init__(self, profile, *, path=None, interval=5, limit_bytes=10 * 1024 ** 2):
         self.profile, self.interval, self.limit_bytes = profile, interval, limit_bytes
@@ -149,6 +163,10 @@ class LifecycleLog:
                 if name in ('MemTotal', 'MemAvailable', 'SwapTotal', 'SwapFree')}
         except (OSError, ValueError) as error:
             row['host_sensor_error'] = type(error).__name__
+        try:
+            row['owned_cgroup'] = owned_cgroup_sample()
+        except (OSError, ValueError, StopIteration) as error:
+            row.update(owned_cgroup=None, owned_cgroup_error=type(error).__name__)
         self.event('sample', **row)
 
     def stop(self, returncode, reason=None):

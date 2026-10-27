@@ -27,3 +27,7 @@ as a dated backlog. CURRENT-STATE.md is authoritative for live jobs and completi
 The user approved unlimited worker swap occupancy with active churn protection.
 The maintained guarded paths implement this; preserve RAM/GPU limits and consult
 [the policy and rollout evidence](docs/INFERENCE-SWAP-POLICY.md).
+
+A separate bounded swappiness60-to10 trial and conditional persistence were
+approved. Do not change a running benchmark's policy or treat pending OS
+authentication as completed execution; consult CURRENT-STATE.md.

@@ -34,7 +34,7 @@ Lowering a global knob blindly is not a substitute for measuring the worker.
 
 ## Rollout and evidence — October 27
 
-68 CPU checks (including idle, telemetry and candidate-staging drafts) passed; 50 policy/router/storage checks passed under the approved policy. A real CPU-only systemd scope
+70 CPU checks (including idle, telemetry and candidate-staging drafts) passed; 50 policy/router/storage checks passed under the approved policy. A real CPU-only systemd scope
 confirmed 64/128 MiB RAM limits with `memory.swap.max=max` without allocating
 swap or running GPU work. Checks include loading/parked swap, active rate windows, pressure,
 missing counters, latching, explicit reload and GPU-lock containment. The router
@@ -65,3 +65,12 @@ with `memory.swap.max=max`; the observer made no additional inference request.
 The prepared native adapter separates lazy encoder loading from active image
 computation, rather than excluding the entire image request from protection.
 Full normal-profile rollout verification remains pending.
+
+## Separately approved host-policy trial
+
+The user approved testing swappiness 10 instead of 60, with automatic restoration
+and keeping 10 only after matched checks pass. Administrator authentication is
+pending; no host VM setting has changed. Existing RAM/GPU/active-I/O guards remain.
+The trial waits for current VM60 tests, preserves their results and records the
+new host-policy configurations separately. Earlier long retrievals retain their
+actual policy/date. See CURRENT-STATE.md and the private concrete proposal.

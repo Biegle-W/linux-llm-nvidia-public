@@ -161,8 +161,9 @@ workers; preserve unrelated applications. Do not relax guards merely to load a m
 Normal inference workers allow loading and parked swap pages without a fixed
 occupancy cap. Scope `MemorySwapMax=infinity` to the maintained guarded workers;
 keep their selected RAM limits. Monitor owned active swap I/O/pressure, latch
-unsafe stops and require explicit selection for reload. Keep global VM settings
-and the host swap-file size unchanged; see the inference swap policy.
+unsafe stops and require explicit selection for reload. Keep the host swap-file size unchanged; global VM changes require separately
+recorded approval and validation. The user approved a bounded swappiness-10 trial
+with automatic restoration and conditional persistence; see CURRENT-STATE.md.
 
 Dense models must keep model execution weights in GPU memory by default. Do not
 use generic host-RAM weight offload to make them fit. An exception requires a

@@ -60,3 +60,10 @@ load-time `DS4_WARM_CAP_GB` is a different budget; lowering it does not cap this
 background activity. New local trials bound or disable post-prompt read-ahead
 after active swap-write threshold crossings. This is a source-supported
 candidate, not a completed speed/quality result until its trial qualifies.
+
+Maya's pinned [Engram cache allocation](https://github.com/mw00/project-maya/blob/8b4b39f84e35393833b31b80e82bee92e69bb646/src/ds4/ds4_model.cu#L3081)
+accepts `DS4_ENGRAM_CACHE_MB`, with zero disabling the row cache. The
+[cache implementation](https://github.com/mw00/project-maya/blob/8b4b39f84e35393833b31b80e82bee92e69bb646/src/ds4/ds4_engram_io.hpp#L41)
+falls back to reading the same rows; this does not skip embeddings or lower
+precision. These are new memory-cache candidates after post-prompt read-ahead
+tuning alone still crossed the active-write limit. Local results decide fit.
