@@ -6,7 +6,7 @@ import re
 import subprocess
 
 FILES = (
-    'README.md', '.gitignore', '.gitattributes', 'docs/MIGRATION-HANDOFF.md', 'docs/REPOSITORY-MAP.md', 'docs/LOCAL-SETUP.md',
+    'README.md', 'AGENTS.md', 'docs/CURRENT-STATE.md', 'docs/BENCHMARK-HISTORY.md', 'docs/AMD-NVIDIA-GAP-AUDIT-20261027.md', '.gitignore', '.gitattributes', 'docs/MIGRATION-HANDOFF.md', 'docs/REPOSITORY-MAP.md', 'docs/LOCAL-SETUP.md',
     'docs/VALIDATION-20261026.md', 'docs/BENCHMARK-20261026.md',
     'scripts/build_native_llama.sh', 'scripts/check_local_api.py',
     'scripts/start_model.sh', 'scripts/native_linux_gpu_unlock.py',
@@ -35,6 +35,8 @@ FILES = (
     'docs/BENCHMARK-REPORTING.md',
     'docs/CONTEXT-EXPANSION-20261027.md', 'docs/benchmark-results/20261027-context-expansion.json',
     'docs/FORUM-OPTIMIZATION-SOURCES.md',
+    'docs/INFERENCE-SWAP-POLICY.md', 'docs/UNLOCK-IMPACT-20261027.md',
+    'scripts/inference_swap_guard.py', 'scripts/supervise_dense.py', 'tests/test_inference_swap_guard.py',
     'docs/UNUSED-MODEL-CLEANUP-20261027.md', 'docs/benchmark-results/20261027-dspark-screening.json',
     'docs/MOE-OPTIMIZATION-20261027.md', 'docs/benchmark-results/20261027-moe-optimized.json',
     'scripts/patches/maya-lazy-cpu-vision.patch', 'tests/test_maya_lazy_vision.py',

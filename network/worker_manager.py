@@ -59,6 +59,10 @@ class Workers:
                 cmd = (Path('/proc') / pid / 'cmdline').read_bytes().split(b'\0')
                 if any(b'env-hyperqwen/bin/vllm' in x for x in cmd):
                     return 'qwen27b-hyperqwen'
+                if any(b'supervise_dense.py' in x for x in cmd) and b'hyperqwen' in cmd:
+                    return 'qwen27b-hyperqwen'
+                if any(b'supervise_dense.py' in x for x in cmd) and b'sglang' in cmd:
+                    return 'qwen27b-sglang'
                 if any(b'serve_qwen27b_engines.py' in x for x in cmd) and b'sglang' in cmd:
                     return 'qwen27b-sglang'
             except OSError:
@@ -83,7 +87,10 @@ class Workers:
                 continue
             command = unit_property(unit, 'ExecStart')
             expected = 'serve_qwen27b_engines.py' if unit == DENSE_UNIT else 'serve_router_moe.py'
-            if str(ROOT / 'scripts' / expected) not in command:
+            recognized = str(ROOT / 'scripts' / expected) in command
+            if unit == DENSE_UNIT:
+                recognized = recognized or str(ROOT / 'scripts/supervise_dense.py') in command
+            if not recognized:
                 raise RouterError('An unexpected process owns the inference unit; nothing was stopped.', 'ownership_conflict')
             group = unit_property(unit, 'ControlGroup')
             if group.startswith('/'):
@@ -112,6 +119,10 @@ class Workers:
     def start(self, profile_id, progress=lambda: None):
         if (ROOT / 'data/GPU-LOCK').exists():
             raise RouterError('GPUs are reserved; remove the reservation after its owner finishes.', 'gpu_reserved')
+        latch = ROOT / 'data/router/guard-stops' / (profile_id + '.json')
+        if latch.exists():
+            raise RouterError('This worker was stopped by a safety guard. Explicitly select the model to reload after reviewing its guard log.',
+                              'safety_guard_latched')
         if self.active == profile_id and self.backend_models():
             return
         # Native Strata/Maya pages call their worker directly, outside this router lock.
@@ -172,7 +183,7 @@ class Workers:
         finally:
             self.loading = None
 
-    def acquire(self, profile_id, progress=lambda: None):
+    def acquire(self, profile_id, progress=lambda: None, clear_guard=False):
         # One active request; selection and inference share the same switch lock.
         deadline = time.monotonic() + 3600
         while not self.lock.acquire(timeout=1):
@@ -181,6 +192,10 @@ class Workers:
                 raise RouterError('A prior inference request is still running.', 'backend_busy')
         self.busy = True
         try:
+            if clear_guard:
+                if (ROOT / 'data/GPU-LOCK').exists():
+                    raise RouterError('GPUs are reserved; explicit reload is blocked.', 'gpu_reserved')
+                (ROOT / 'data/router/guard-stops' / (profile_id + '.json')).unlink(missing_ok=True)
             self.start(profile_id, progress)
         except BaseException:
             self.release()

@@ -14,8 +14,10 @@ candidates; they do not establish performance on this machine.
 Fresh controls account for current cache and run variation; older dated results
 remain preserved. Controls use three requests after 64-token warm-up, initial
 screens one, and confirmations three. A close screen may be rechecked, but final
-selection requires median prefill and decode at least as high as the matched
-control, and TTFT no higher, plus resource and quality checks. Longer inputs add
+selection normally requires median prefill and decode at least as high as the matched
+control, and TTFT no higher, plus resource and quality checks. The user explicitly
+accepted GLM64K and StrataDeepSeek128K screen tradeoffs; these still require
+confirmation and resource/near-window quality checks. Longer inputs add
 work: near-window retrieval and its latency are recorded separately, not called
 speed-neutral against a 2.2K prompt. Three runs are not a population guarantee.
 
@@ -49,9 +51,15 @@ and both DeepSeek engines respectively share their checkpoints. SATA is Samsung
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM / `hyperqwen-49152-kv704-pf256-confirmed` | 1,497.2 | 1.494 | 89.35 | 49,152 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM / `hyperqwen-49152-kv704-pf256-screen` | 1,489.3 | 1.500 | 85.45 | 49,152 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM / `hyperqwen-49152-kv704-screen` | 1,377.5 | 1.622 | 92.36 | 49,152 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM / `hyperqwen-56320-kv704-pf256-final-confirmed` | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM / `hyperqwen-56320-kv704-pf256-screen` | 1,488.8 | 1.500 | 85.45 | 56,320 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / `sglang-16384-control` | 2,556.6 | 0.869 | 45.85 | 16,384 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / `sglang-16384-paired-control` | 2,571.1 | 0.864 | 46.00 | 16,384 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / `sglang-21504-confirmed` | 2,535.0 | 0.877 | 46.32 | 21,504 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / `sglang-21504-pf1024-screen` | 2,250.2 | 0.991 | 46.27 | 21,504 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / `sglang-21504-pf384-final-confirmed` | 2,621.0 | 0.852 | 46.17 | 21,504 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / `sglang-21504-pf384-screen` | 2,632.1 | 0.848 | 46.26 | 21,504 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / `sglang-21504-pf768-screen` | 2,441.2 | 0.914 | 46.17 | 21,504 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / `sglang-21504-screen` | 2,569.8 | 0.868 | 46.27 | 21,504 | 15.79 | SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 
 ### MoE models with CPU RAM offload
@@ -69,6 +77,7 @@ None currently kept.
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata / `flash-next-strata-32768-screen` | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | NVME: `models/strata/models/IQ3_XXS` |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata / `flash-next-strata-65536-screen` | 589.7 | 3.789 | 94.43 | 65,536 | 75.84 | NVME: `models/strata/models/IQ3_XXS` |
 | GLM-5.3-Flash / Maya-S24 | Maya / `glm-maya-32768-control` | 65.2 | 33.901 | 4.22 | 32,768 | 94.70 | NVME: `models/maya/Maya-S24` |
+| GLM-5.3-Flash / Maya-S24 | Maya / `glm-maya-65536-accepted-confirmed` | 65.5 | 33.740 | 4.81 | 65,536 | 94.70 | NVME: `models/maya/Maya-S24` |
 | GLM-5.3-Flash / Maya-S24 | Maya / `glm-maya-65536-screen` | 65.4 | 33.765 | 4.03 | 65,536 | 94.70 | NVME: `models/maya/Maya-S24` |
 
 ## Status and preserved evidence

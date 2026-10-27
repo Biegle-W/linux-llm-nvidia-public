@@ -9,6 +9,7 @@ import signal
 import time
 from profile_catalog import get_profile, worker_budget
 from storage_policy import verify_storage
+from inference_swap_guard import WorkerWatch
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -65,6 +66,7 @@ def main():
         python = base / '.venv/bin/python'
         command = [str(python), str(base / 'serve/server.py'), '--engine', 'strata', '--port', '10000', '--config', str(target)]
     child = subprocess.Popen(command, start_new_session=True)
+    watch = WorkerWatch(base, profile['id'], key.read_text().strip())
     def stop(*_):
         if child.poll() is None:
             os.killpg(child.pid, signal.SIGTERM)
@@ -73,6 +75,12 @@ def main():
     bad = 0
     try:
         while child.poll() is None:
+            reason = watch.step()
+            if reason:
+                print(reason, flush=True)
+                stop()
+                child.wait(timeout=20)
+                raise SystemExit(1)
             available = next(int(line.split()[1]) for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:'))
             temps = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu', '--format=csv,noheader,nounits'], text=True)
             bad = bad + 1 if available < 8 * 1024 ** 2 or any(float(t) >= 82 for t in temps.splitlines()) else 0

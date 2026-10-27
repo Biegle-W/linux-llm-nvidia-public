@@ -39,6 +39,11 @@ review. No unexamined table from that thread is treated as validated evidence.
   0.1.51. Local trials verify which flags its binary actually accepts.
   The documentation records reduced long-document precision for Q4 KV, so a
   precision downgrade is not presented as a free context increase.
+  Its low-RAM section also documents a resident expert budget: a bounded hot
+  subset stays in RAM and the remaining weights are read from existing files.
+  That is a host-memory tuning candidate after measured reclaim thrashing,
+  without removing experts or changing their quantization. Native 0.1.50 contains
+  the option; only completed local trials establish whether it works well here.
 - [Strata DeepSeek guide](https://github.com/Niko1221/Strata/blob/main/docs/DEEPSEEK41.md)
   and [Maya context/KV settings](https://github.com/mw00/project-maya/blob/8b4b39f84e35393833b31b80e82bee92e69bb646/docs/SETTINGS.md)
   describe context allocation and expert/KV memory sharing. The installed Maya

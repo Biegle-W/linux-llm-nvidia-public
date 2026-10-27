@@ -56,4 +56,4 @@ except OSError:
     pass
 PY
 exec "$project_dir/scripts/run_bounded_test.sh" qwen27b /usr/bin/python3 \
-    "$project_dir/scripts/serve_qwen27b_engines.py" "$engine"
+    "$project_dir/scripts/supervise_dense.py" "$engine"

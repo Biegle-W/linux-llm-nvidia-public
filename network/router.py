@@ -128,7 +128,10 @@ class Handler(BaseHTTPRequestHandler):
                 raise RouterError('stream must be a boolean.', 'bad_request', 400)
             if data.get('stream') and path != '/router/select':
                 return self.stream(name, path, data)
-            self.server.workers.acquire(name)
+            if path == '/router/select':
+                self.server.workers.acquire(name, clear_guard=True)
+            else:
+                self.server.workers.acquire(name)
             try:
                 if path == '/router/select':
                     return self.reply(200, {'status': 'ready', 'model': name,

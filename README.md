@@ -46,6 +46,11 @@ remain preserved as historical measurements.
 OpenAI model/engine selection on port 10100 over loopback and Tailscale. DSH is a
 separate client on port 3080; Strata and Maya shortcuts open their native web apps.
 
+[Current takeover state](docs/CURRENT-STATE.md), [benchmark ledger](docs/BENCHMARK-HISTORY.md),
+[inference swap policy](docs/INFERENCE-SWAP-POLICY.md),
+[saved-evidence unlock assessment](docs/UNLOCK-IMPACT-20261027.md), and
+[AMD/NVIDIA gap audit](docs/AMD-NVIDIA-GAP-AUDIT-20261027.md) are maintained with this task.
+
 **Context tests in progress:** [larger windows with matched speed and quality checks](docs/CONTEXT-EXPANSION-20261027.md). Production settings remain unchanged until qualification.
 
 **Latest results:** [GLM/DeepSeek cache optimization at unchanged contexts](docs/MOE-OPTIMIZATION-20261027.md).
@@ -92,7 +97,11 @@ CUDA DLLs, UEFI payloads, AMD runtime configurations or old disk identifiers.
 
 ## Maintenance instructions
 
-This README is the sole root agent-instruction file. Keep all GitHub-facing prose,
+This README holds standing maintenance policy; [AGENTS.md](AGENTS.md) is the root
+agent entry point and [CURRENT-STATE.md](docs/CURRENT-STATE.md) is the live takeover
+handoff. Keep them, the benchmark ledger and both repositories current after
+meaningful changes; another agent must be able to resume without chat history.
+Keep all GitHub-facing prose,
 code comments, messages and commits in English. Keep private/public repositories
 current after validated changes, with nonpersonal commits and no force pushes.
 Export selected sanitized files only; never export private history or state.

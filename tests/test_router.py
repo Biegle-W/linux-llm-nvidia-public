@@ -33,7 +33,7 @@ class Backend(BaseHTTPRequestHandler):
 
 class FakeWorkers:
     active=None;loading=None;busy=False
-    def acquire(self,name,progress=lambda:None):self.active=name;self.busy=True
+    def acquire(self,name,progress=lambda:None,clear_guard=False):self.active=name;self.busy=True;self.clear_guard=clear_guard
     def release(self):self.busy=False
     def backend_models(self):return [{'id':'worker-name'}]
 
@@ -66,7 +66,11 @@ class RouterTest(unittest.TestCase):
     def test_catalog(self):
         status,data=self.request('/v1/models');self.assertEqual(status,200)
         models=json.loads(data)['data'];self.assertEqual(len(models),6)
-        self.assertEqual(next(m for m in models if m['id']=='deepseek-strata')['context_window'],65536)
+        self.assertEqual(next(m for m in models if m['id']=='deepseek-strata')['context_window'],router.profiles()['deepseek-strata']['allocated_context'])
+    def test_explicit_selection_requests_guard_reload(self):
+        status,_=self.request('/router/select',{'model':'qwen27b-hyperqwen'})
+        self.assertEqual(status,200)
+        self.assertTrue(self.server.workers.clear_guard)
     def test_unknown_model_never_loads(self):
         before=self.server.workers.active
         self.assertEqual(self.request('/v1/chat/completions',{'model':'qwen27b-llama'})[0],404)
@@ -91,6 +95,38 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(self.request('/v1/completions',{'model':'deepseek-strata','prompt':'x'})[0],400)
 
 class SwitchTest(unittest.TestCase):
+    def test_latched_worker_does_not_auto_restart(self):
+        from worker_manager import ROOT as active_root
+        latch=active_root/'data/router/guard-stops/qwen27b-hyperqwen.json'
+        latch.parent.mkdir(parents=True,exist_ok=True)
+        latch.write_text('{}')
+        worker=Workers.__new__(Workers)
+        with self.assertRaises(RouterError) as error:
+            worker.start('qwen27b-hyperqwen')
+        self.assertEqual(error.exception.code,'safety_guard_latched')
+    def test_explicit_reload_clears_only_its_latch(self):
+        from worker_manager import ROOT as active_root
+        latch=active_root/'data/router/guard-stops/qwen27b-hyperqwen.json'
+        other=active_root/'data/router/guard-stops/glm-maya.json'
+        latch.parent.mkdir(parents=True,exist_ok=True)
+        latch.write_text('{}');other.write_text('{}')
+        worker=Workers.__new__(Workers)
+        worker.lock=threading.Lock();worker.busy=False
+        worker.start=lambda _name,_progress: self.assertFalse(latch.exists())
+        worker.acquire('qwen27b-hyperqwen',clear_guard=True)
+        worker.release()
+        self.assertTrue(other.exists())
+    def test_gpu_lock_preserves_latch_during_explicit_reload(self):
+        from worker_manager import ROOT as active_root
+        latch=active_root/'data/router/guard-stops/qwen27b-hyperqwen.json'
+        latch.parent.mkdir(parents=True,exist_ok=True)
+        latch.write_text('{}');(active_root/'data/GPU-LOCK').write_text('{}')
+        worker=Workers.__new__(Workers)
+        worker.lock=threading.Lock();worker.busy=False
+        with self.assertRaises(RouterError):
+            worker.acquire('qwen27b-hyperqwen',clear_guard=True)
+        self.assertTrue(latch.exists())
+        self.assertFalse(worker.busy)
     def setUp(self):
         # Switching tests must not inspect the live worker's GPU reservation or state.
         directory=tempfile.TemporaryDirectory()
