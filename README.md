@@ -1,9 +1,8 @@
 # Linux LLM NVIDIA — public reference
 
-Native Linux preparation for the **i5-13600KF / 64 GB DDR5 / RTX 3080 Ti 12 GB**
-workstation. The user is migrating this NVIDIA machine from Windows to Linux.
-The next hardware stage adds **RTX 3080 10 GB**; a later PEX88096 switch installation
-adds **RTX 3060 12 GB**. The separate dual-RX-7900-XTX Linux machine has its own
+Native Linux inference on the **i5-13600KF / 64 GB DDR5 / RTX 3080 Ti 12 GB +
+RTX 3080 10 GB** workstation. A later PEX88096 switch installation adds
+**RTX 3060 12 GB**. The separate dual-RX-7900-XTX Linux machine has its own
 repositories and must not be modified as part of this migration.
 
 The initial Windows-side preparation did not validate native Linux operation.
@@ -13,9 +12,10 @@ Do not promote inherited Windows profiles to validated Linux settings. Follow
 **Native setup, October 26, 2026:** Ubuntu 26.04, the RTX 3080 Ti / RTX 3080 pair
 and distribution NVIDIA driver 595.99.02 are now verified. Native llama.cpp CUDA
 build and a short two-GPU inference smoke test passed; 31 focused matrix tests
-passed on each GPU. This does not establish unlock, P2P or sustained thermals.
-[The two-card unlock is installed and prepared for the next boot](docs/UNLOCK-SETUP-20261026.md);
-post-boot activation and performance verification are still pending.
+passed on each GPU. Those initial checks did not establish unlock, P2P or sustained thermals.
+[The two-card unlock is installed and verified](docs/UNLOCK-SETUP-20261026.md);
+759 matrix tests per GPU passed after activation. See the
+[unlocked-versus-stock comparison](docs/BENCHMARK-UNLOCK-20261026.md).
 [A bounded native speed benchmark](docs/BENCHMARK-20261026.md) now covers all three
 downloaded models and compares DeepSeek's two engines on shared Maya-S weights.
 API smoke checks passed for Strata Qwen3.8-Flash-Next,

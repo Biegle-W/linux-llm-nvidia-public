@@ -39,4 +39,6 @@ settings were retained in ignored private data. Strata then passed a fresh
 restart and authenticated streamed generation with the separate files absent;
 Maya independently passed its authenticated streamed generation check afterward.
 Raw output remains in `data/`
-and `logs/`. Compute unlock, P2P-driver changes and reboots were not performed.
+and `logs/`. These initial checks preceded compute unlock. After the later user-controlled
+restart, both cards unlocked and passed repeated matrix correctness tests; see
+the [unlock comparison](BENCHMARK-UNLOCK-20261026.md). P2P remains unverified.

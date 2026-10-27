@@ -51,7 +51,9 @@ in `data/retired-strata-ista-20261026/`.
 
 Both DeepSeek configurations stream experts from NVMe because the full expert
 banks exceed this machine's RAM.
-The stock driver remains installed. Unlock and P2P are not enabled.
+The distribution driver remains installed. Compute unlock is now verified on
+both cards; P2P is not enabled. See the
+[unlock setup](UNLOCK-SETUP-20261026.md).
 
 After setup finishes, start a configured model with one of:
 
@@ -82,3 +84,6 @@ allocation. DeepSeek used the same Maya-S weights and matched requested settings
 on Strata and Maya. Temporary benchmark configs left the installed profiles
 unchanged, and Qwen was restored afterward. Raw timing events and resource samples
 are retained under ignored `data/benchmarks/`.
+
+[The unlocked-versus-stock comparison](BENCHMARK-UNLOCK-20261026.md) records the
+repeated protocol after successful per-card unlock and correctness checks.
