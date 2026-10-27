@@ -23,3 +23,7 @@ Do not ask again for those additions. Model coverage stays unchanged.
 
 Read the [additional AMD parity task background](docs/AMD-PARITY-HANDOFF-20261027.md)
 as a dated backlog. CURRENT-STATE.md is authoritative for live jobs and completion.
+
+The user approved unlimited worker swap occupancy with active churn protection.
+The maintained guarded paths implement this; preserve RAM/GPU limits and consult
+[the policy and rollout evidence](docs/INFERENCE-SWAP-POLICY.md).

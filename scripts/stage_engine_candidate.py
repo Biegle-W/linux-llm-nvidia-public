@@ -49,6 +49,8 @@ def stage(source, revision, profile_id, name, fixtures, root=ROOT):
     # An explicit immutable commit is required, rather than a moving branch name.
     if not re.fullmatch('[0-9a-f]{40}', revision):
         raise ValueError('Supply the reviewed full 40-character source commit')
+    if Path(git(source, 'rev-parse', '--show-toplevel').decode().strip()).resolve() != Path(source).resolve():
+        raise ValueError('Source must be the actual Git root, not a nested runtime directory')
     commit = git(source, 'rev-parse', '--verify', revision + '^{commit}').decode().strip()
     if commit != revision:
         raise ValueError('Commit resolution mismatch')

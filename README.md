@@ -158,6 +158,12 @@ Record allocated context separately from tested input lengths. Keep numerical,
 quality, memory, thermal and owned-process protections. Stop only owned inference
 workers; preserve unrelated applications. Do not relax guards merely to load a model.
 
+Normal inference workers allow loading and parked swap pages without a fixed
+occupancy cap. Scope `MemorySwapMax=infinity` to the maintained guarded workers;
+keep their selected RAM limits. Monitor owned active swap I/O/pressure, latch
+unsafe stops and require explicit selection for reload. Keep global VM settings
+and the host swap-file size unchanged; see the inference swap policy.
+
 Dense models must keep model execution weights in GPU memory by default. Do not
 use generic host-RAM weight offload to make them fit. An exception requires a
 community fork with documented offload performance optimizations relevant to the

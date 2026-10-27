@@ -34,7 +34,7 @@ Lowering a global knob blindly is not a substitute for measuring the worker.
 
 ## Rollout and evidence — October 27
 
-66 CPU checks (including idle, telemetry and candidate-staging drafts) passed; 50 policy/router/storage checks passed under the approved policy. A real CPU-only systemd scope
+67 CPU checks (including idle, telemetry and candidate-staging drafts) passed; 50 policy/router/storage checks passed under the approved policy. A real CPU-only systemd scope
 confirmed 64/128 MiB RAM limits with `memory.swap.max=max` without allocating
 swap or running GPU work. Checks include loading/parked swap, active rate windows, pressure,
 missing counters, latching, explicit reload and GPU-lock containment. The router
@@ -52,3 +52,10 @@ GLM's long-input observation has parked swap near 1 GiB with zero measured
 active swap writes and negligible full-memory pressure. Parked pages alone do not
 invalidate it. Old reports retain their original guard policy and are not
 retroactively labeled as fully monitored by the new implementation.
+
+The first new-policy Maya 64K full-cache and 36 GB warm-cap trials exercised the
+active guard on the GPUs: 30-second write rates reached 5.99 and 7.73 MiB/s.
+Only the owned test worker was stopped. These are threshold crossings, not proof
+of physical SSD wear or a prediction that the rate would have persisted. Smaller
+cache budgets remain under test; unlimited occupancy does not disable active
+inference protection.

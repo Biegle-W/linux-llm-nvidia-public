@@ -147,8 +147,10 @@ class Workers:
         if latch.exists():
             raise RouterError('This worker was stopped by a safety guard. Explicitly select the model to reload after reviewing its guard log.',
                               'safety_guard_latched')
-        if self.active == profile_id and self.backend_models():
-            return
+        if self.active == profile_id:
+            models = self.backend_models()
+            if any(model.get('status', {}).get('value') != 'unloaded' for model in models):
+                return
         # Native Strata/Maya pages call their worker directly, outside this router lock.
         # Observe their status as well before starting a switch.
         if self.active and profiles().get(self.active, {}).get('engine') in ('Strata', 'Maya'):

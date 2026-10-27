@@ -1,6 +1,6 @@
 # Current takeover state
 
-Updated October 27, 2026, 18:01 EDT, during the context-expansion task. This document is the
+Updated October 27, 2026, 18:11 EDT, during the context-expansion task. This document is the
 current handoff; dated reports preserve history. Read it with the root README
 and maintained registry. Do not reconstruct state from chat alone.
 
@@ -22,7 +22,8 @@ October 27. Their screens versus fresh controls were:
 These are one-request screens, not deployed full-window results. GLM64K subsequently
 confirmed 65.5 prefill / 33.740 s TTFT / 4.809 decode across three requests, all
 better than its fresh 32K control; its 58,986-input retrieval passed, alongside JSON/arithmetic/image checks. It is
-qualified for deployment; StrataDeepSeek128K confirmation is running. Confirmation,
+qualified for deployment; StrataDeepSeek128K subsequently confirmed 33.3 / 65.796 s / 2.955 and passed
+117,866-input three-marker retrieval plus JSON/arithmetic. Both are qualified. Confirmation,
 JSON/arithmetic, vision where enabled, resource checks and near-window retrieval
 remain required. The other four profiles retain the matched no-loss rule.
 
@@ -55,12 +56,13 @@ Earlier numeric files have saved SHA-256 preservation checks.
 
 ## Exact work ownership and remaining steps
 
-`llm-context-resume-moe.service` has only its main process held (SIGSTOP); its
-already-running StrataDeepSeek128K child continues normally. Do not stop or resume
-that parent manually. `llm-context-policy-v2-queue.service` waits for this child to
-finish and restore the default, then closes the held parent and continues Maya/Flash
-under the explicitly approved loading-swap policy. It tries full-cache settings
-first; old fixed-cap failures do not establish failure under the new policy. `llm-context-combined-queue.service`
+StrataDeepSeek128K completed at 18:02 EDT. The waiting coordinator safely stopped
+the held old parent after its child left and restored the default.
+`llm-context-policy-v2-queue.service` now runs Maya DeepSeek 64K cache-budget
+confirmation under the explicitly approved loading-swap policy. It tries full-cache settings
+first. The full-cache and 36 GB warm-cap variants hit the active-write guard
+(5.99 and 7.73 MiB/s over 30-second windows) and were preserved as failed
+trials; 32 GB is next. Old fixed-cap failures do not establish failure under the new policy. `llm-context-combined-queue.service`
 waits for its completion, then tests promising SGLang chunk/pool combinations.
 The old `llm-context-final-queue.service` was stopped only after its active
 HyperQwen child completed and restored the default. Do not restart it.
@@ -72,7 +74,7 @@ final-queue and post-queue completion records before promotion.
 
 The swap-rate guard, 50 CPU tests and real CPU-only systemd readback are complete;
 the user explicitly approved unlimited worker swap occupancy with active churn
-protection. RAM/GPU limits are unchanged. The current Strata trial retains its
+protection. RAM/GPU limits are unchanged. The completed Strata trial retained its
 original 1 GiB cap; subsequent launches use infinity and counters/pressure guards. The router has loaded its
 ownership/latch handling, and GLM long retrieval was observed through completion. Normal
 launch verification remains. The user selected operational gaps only: after context
@@ -96,7 +98,21 @@ HEAD/upstream and private `publication-checkpoint.json` for the latest exact
 publication state. Replace pending statements as each remaining step finishes.
 
 Operational implementation checkpoint: guarded idle unload and lifecycle telemetry
-pass the expanded 66-test CPU suite, but their access flags remain disabled.
+pass the expanded 67-test CPU suite, but their access flags remain disabled.
 The native idle adapter is prepared and has not been applied. Candidate source
 staging/evidence review passes CPU tests and is available as a manual tool; no
 candidate has been built, benchmarked or promoted by it. No timer or model was added.
+
+Publication checkpoint: private `33a3aa0`, public `df7e053`, both clean and
+synchronized when published. Subsequent refinements distinguish native unloaded
+state, verify source staging uses an actual Git root, reload an idled selected
+worker, and test the normal Maya monitor receives the cgroup path. These CPU
+changes are not new GPU performance tests. Lifecycle sensor readback found both
+GPUs and six board/CPU sensor devices, with private mode-600 output.
+
+A CPU-only `llm-context-normal-launch-observer.service` records each recognized
+normal dense/MoE invocation's cgroup RAM/swap readback. It makes no inference
+requests; stop it via `stop-normal-launch-observer` after rollout verification.
+Private `verify-normal-deployment.py` is prepared, not executed; it performs one
+functional JSON request per normal profile and images where enabled, not a speed
+benchmark. It requires both queue completion and applied promotion records.

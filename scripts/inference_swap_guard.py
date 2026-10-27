@@ -130,6 +130,8 @@ class WorkerWatch:
                 busy = status['busy']
                 if status.get('loading'):
                     return 'loading'
+                if status.get('loaded') is False and not busy:
+                    return 'unloaded'
                 stage = str(status.get('phase') or '').lower()
                 if busy and any(word in stage for word in ('loading', 'encoding image', 'vision encoder')):
                     return 'loading'

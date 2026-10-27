@@ -74,7 +74,10 @@ def transform(text, family):
     assert source.count(status_anchor) == 1
     loading = ('svc._engine_start.locked() or svc.reloading()' if family == 'maya'
                else 'svc.fifo.locked() and not s.get("busy")')
-    source = source.replace(status_anchor, '                s["loading"] = bool(' + loading + ')\n' + status_anchor, 1)
+    loaded = ('not hasattr(svc.engine, "alive") or svc.engine.alive()' if family == 'maya'
+              else 'svc.loaded()')
+    source = source.replace(status_anchor, '                s["loading"] = bool(' + loading + ')\n'
+                            + '                s["loaded"] = bool(' + loaded + ')\n' + status_anchor, 1)
     compile(source, '<native-idle-adapter>', 'exec')
     return source.replace('\n', newline)
 
