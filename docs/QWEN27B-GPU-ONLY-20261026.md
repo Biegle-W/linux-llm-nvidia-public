@@ -1,5 +1,7 @@
 # Dense Qwen3.8-27B entirely in VRAM
 
+**October 27 update:** the default is now the faster [32K HyperQwen/MTP3 profile](DENSE-ENGINE-OPTIMIZATION-20261027.md). This dated report preserves the October 26 measurements; select `qwen27b llama` to launch its GGUF configuration.
+
 Qwen3.8-27B now runs successfully across the RTX 3080 Ti 12 GB and RTX 3080
 10 GB with **no host-RAM model-weight offload**. The maintained profile uses
 llama.cpp, IQ4_XS weights, two-token MTP drafting and a 32,768-token allocation.
@@ -111,7 +113,7 @@ claimed for this different pair or workload.
 ## Start, stop and memory isolation
 
 ```bash
-./scripts/start_model.sh qwen27b
+./scripts/start_model.sh qwen27b llama
 systemctl --user stop llm-test-qwen27b
 ```
 

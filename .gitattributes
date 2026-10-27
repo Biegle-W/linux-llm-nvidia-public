@@ -1,0 +1,2 @@
+# Unified diff context lines contain a required space, including at EOF.
+scripts/patches/*.patch whitespace=-blank-at-eol,-blank-at-eof

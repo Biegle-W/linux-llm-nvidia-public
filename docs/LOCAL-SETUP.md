@@ -99,8 +99,11 @@ optimizations relevant to this hardware is eligible for an offload evaluation.
 The historical HyperQwen CPU-offload measurement is not an approved deployment
 profile under this policy. Existing MoE expert streaming is a separate case.
 
-[The dense Qwen3.8-27B GPU-only profile](QWEN27B-GPU-ONLY-20261026.md) is now
-validated with IQ4_XS and MTP2, a 32K allocation, and 29,496-token retrieval.
+[The dense Qwen3.8-27B profile](DENSE-ENGINE-OPTIMIZATION-20261027.md) defaults to
+HyperQwen/patched vLLM TP2 with MTP3, INT4 KV, BF16 recurrent state and a 32K
+allocation. It passed 29,496-token retrieval and measured 155 code / 108 prose tok/s.
 Start it with `./scripts/start_model.sh qwen27b`; stop it with
-`systemctl --user stop llm-test-qwen27b`. It shares authenticated port 10000
-with the other models. All weights, including embeddings and MTP, reside in VRAM.
+`systemctl --user stop llm-test-qwen27b`. Use `./scripts/start_model.sh qwen27b sglang`
+for the qualified SGLang PP2/graphs 16K alternative, or select `llama` explicitly
+for the prior GGUF profile. Only one engine runs at a time. All use authenticated
+port 10000; all model weights and active MTP weights remain in VRAM.

@@ -1,0 +1,40 @@
+--- a/v1/worker/gpu_worker.py
++++ b/v1/worker/gpu_worker.py
+@@ -544,6 +544,37 @@
+         ):
+             self.model_runner.load_model(load_dummy_weights=load_dummy_weights)
+ 
++        # Local read-only placement audit; enabled only for this qualification.
++        import os as _audit_os
++        if _audit_os.environ.get("LOCAL_GPU_WEIGHT_AUDIT_DIR"):
++            import json as _audit_json
++            from pathlib import Path as _AuditPath
++            _counts = {}
++            _non_gpu = []
++            for _name, _param in self.model_runner.get_model().named_parameters():
++                _dev = str(_param.device)
++                _entry = _counts.setdefault(_dev, {"tensors": 0, "bytes": 0})
++                _entry["tensors"] += 1
++                _entry["bytes"] += _param.numel() * _param.element_size()
++                if _param.numel() and _param.device.type != "cuda":
++                    _non_gpu.append({"name": _name, "device": _dev, "numel": _param.numel()})
++            _drafter = getattr(self.model_runner, "drafter", None)
++            _draft_model = self.model_runner.get_draft_model() if hasattr(self.model_runner, "get_draft_model") else getattr(_drafter, "model", None)
++            _draft_counts = {}
++            if _draft_model is not None:
++                for _name, _param in _draft_model.named_parameters():
++                    _dev = str(_param.device)
++                    _entry = _draft_counts.setdefault(_dev, {"tensors": 0, "bytes": 0})
++                    _entry["tensors"] += 1
++                    _entry["bytes"] += _param.numel() * _param.element_size()
++                    if _param.numel() and _param.device.type != "cuda":
++                        _non_gpu.append({"name": "drafter." + _name, "device": _dev})
++            _path = _AuditPath(_audit_os.environ["LOCAL_GPU_WEIGHT_AUDIT_DIR"])
++            _path.mkdir(parents=True, exist_ok=True)
++            (_path / f"rank-{self.rank}.json").write_text(_audit_json.dumps({"devices": _counts, "draft_devices": _draft_counts, "non_cuda_parameters": _non_gpu}, indent=2))
++            if _non_gpu:
++                raise RuntimeError("GPU-only qualification found non-CUDA model parameters")
++
+         if has_ec_transfer():
+             get_ec_transfer().start_worker_services()
+ 

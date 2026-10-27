@@ -24,11 +24,15 @@ JSON and conversation tests using Maya-S's shared DeepSeek weights; the separate
 IST-DAS weight files were removed. See [native validation](docs/VALIDATION-20261026.md) and
 [local setup](docs/LOCAL-SETUP.md); raw machine details remain ignored.
 
-**Dense Qwen3.8-27B is now validated entirely in VRAM:** IQ4_XS with MTP2
-across both cards, 32K allocation and 29,496-token retrieval checked.
-[GPU-only setup and benchmarks](docs/QWEN27B-GPU-ONLY-20261026.md) record
-69/66 tok/s short/longer-input decode and the adapted archived HyperQwen comparison.
-Start it with `./scripts/start_model.sh qwen27b`.
+**Dense Qwen3.8-27B now defaults to HyperQwen/patched vLLM:** GPU-only TP2,
+MTP3, BF16 recurrent state, INT4 KV and a 32K allocation. The selected profile
+measured **155 code / 108 prose tok/s** and passed 29,496-token retrieval.
+The SGLang choice uses GPU-only PP2, CUDA graphs and 16K context at **47 / 47 tok/s**.
+[Engine settings, comparisons and validation](docs/DENSE-ENGINE-OPTIMIZATION-20261027.md)
+include the old 4070 + 3060 reference and guarded DFlash/SGLang TP failures.
+Start the default with `./scripts/start_model.sh qwen27b`, or explicitly select
+`./scripts/start_model.sh qwen27b sglang`. The prior
+[IQ4_XS/MTP2 measurements](docs/QWEN27B-GPU-ONLY-20261026.md) remain preserved.
 
 ## Repository ownership
 

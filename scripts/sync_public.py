@@ -6,7 +6,7 @@ import re
 import subprocess
 
 FILES = (
-    'README.md', '.gitignore', 'docs/MIGRATION-HANDOFF.md', 'docs/REPOSITORY-MAP.md', 'docs/LOCAL-SETUP.md',
+    'README.md', '.gitignore', '.gitattributes', 'docs/MIGRATION-HANDOFF.md', 'docs/REPOSITORY-MAP.md', 'docs/LOCAL-SETUP.md',
     'docs/VALIDATION-20261026.md', 'docs/BENCHMARK-20261026.md',
     'scripts/build_native_llama.sh', 'scripts/check_local_api.py',
     'scripts/start_model.sh', 'scripts/native_linux_gpu_unlock.py',
@@ -14,11 +14,27 @@ FILES = (
     'docs/BENCHMARK-UNLOCK-20261026.md', 'docs/ENGINE-TESTS-20261026.md',
     'scripts/run_bounded_test.sh', 'scripts/serve_qwen27b.py',
     'docs/QWEN27B-GPU-ONLY-20261026.md', 'scripts/sync_public.py', 'docs/PUBLIC-SYNC.md',
+    'docs/DENSE-ENGINE-OPTIMIZATION-20261027.md', 'scripts/serve_qwen27b_engines.py',
+    'scripts/test_sglang_quantized_embedding.py',
+    'scripts/patches/sglang-int8-embedding-sm86.patch',
+    'scripts/patches/sglang-gpu-placement-audit.patch',
+    'scripts/patches/vllm-dflash-meta-share.patch',
+    'scripts/patches/vllm-draft-placement-audit.patch',
 )
 BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
                    r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|'
                    r'-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----|'
                    r'[A-Za-z0-9._%+-]+@(?!example\.)[A-Za-z0-9.-]+\.[A-Za-z]{2,}')
+
+
+def privacy_scan_text(relative, content):
+    text = content.replace('git@github.com:', '')
+    if relative.endswith('.patch'):
+        # Scan the source text, without mistaking diff markers for email characters.
+        text = '\n'.join(line[1:] if line[:1] in ('+', '-')
+                         and not line.startswith(('+++', '---')) else line
+                         for line in text.splitlines())
+    return text
 
 
 def main():
@@ -38,7 +54,7 @@ def main():
         content = (source / relative).read_text()
         if relative == 'README.md':
             content = content.replace('# Linux LLM NVIDIA\n', '# Linux LLM NVIDIA — public reference\n', 1)
-        if BLOCK.search(content.replace('git@github.com:', '')):
+        if BLOCK.search(privacy_scan_text(relative, content)):
             raise SystemExit(f'Privacy check failed for {relative}; review locally.')
         exports[relative] = content
     for relative, content in exports.items():

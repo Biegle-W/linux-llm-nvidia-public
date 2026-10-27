@@ -2,6 +2,15 @@
 set -euo pipefail
 project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 model="${1:-qwen}"
+engine="${2:-hyperqwen}"
+if [[ $# -gt 2 || ( $# -gt 1 && "$model" != qwen27b ) ]]; then
+    echo 'Usage: start_model.sh qwen|qwen27b [hyperqwen|sglang|llama]|strata-deepseek|glm|maya-deepseek' >&2
+    exit 2
+fi
+if [[ "$model" == qwen27b && "$engine" != hyperqwen && "$engine" != sglang && "$engine" != llama ]]; then
+    echo 'Dense Qwen engine must be hyperqwen, sglang or llama.' >&2
+    exit 2
+fi
 case "$model" in
     qwen|qwen27b|strata-deepseek|glm|maya-deepseek) ;;
     *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek' >&2; exit 2 ;;
@@ -31,6 +40,10 @@ case "$model" in
     qwen)
         exec "$project_dir/runtimes/bin/strata" launch --preset qwen-flash-next --yes --no-tui ;;
     qwen27b)
+        if [[ "$engine" != llama ]]; then
+            exec "$project_dir/scripts/run_bounded_test.sh" qwen27b /usr/bin/python3 \
+                "$project_dir/scripts/serve_qwen27b_engines.py" "$engine"
+        fi
         exec "$project_dir/scripts/run_bounded_test.sh" qwen27b /usr/bin/python3 \
             "$project_dir/scripts/serve_qwen27b.py" ;;
     strata-deepseek)

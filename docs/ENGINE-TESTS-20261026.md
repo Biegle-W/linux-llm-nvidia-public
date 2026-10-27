@@ -1,5 +1,7 @@
 # CUDA engine qualification on mixed Ampere cards
 
+**October 27 follow-up:** [GPU-only TP2 HyperQwen/MTP and PP2 SGLang now pass](DENSE-ENGINE-OPTIMIZATION-20261027.md). The failures below remain the original dated results.
+
 **Follow-up:** [dense Qwen now runs entirely in VRAM](QWEN27B-GPU-ONLY-20261026.md)
 with a smaller IQ4_XS/MTP profile. An adapted archived HyperQwen fast-head
 configuration also passed GPU-only PP2 tests. The initial results below remain

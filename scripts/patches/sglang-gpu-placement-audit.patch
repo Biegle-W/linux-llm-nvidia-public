@@ -1,0 +1,29 @@
+--- a/python/sglang/srt/model_executor/model_runner.py
++++ b/python/sglang/srt/model_executor/model_runner.py
+@@ -1130,6 +1130,26 @@
+             )
+         self.loader = loaded.loader
+         self.model = loaded.model
++        # Read-only audit for the local GPU-only qualification run.
++        import os
++        if os.environ.get("LOCAL_GPU_WEIGHT_AUDIT_DIR"):
++            import json as audit_json
++            from pathlib import Path as AuditPath
++            counts = {}
++            non_cuda = []
++            for name, param in self.model.named_parameters():
++                dev = str(param.device)
++                entry = counts.setdefault(dev, {"tensors": 0, "bytes": 0})
++                entry["tensors"] += 1
++                entry["bytes"] += param.numel() * param.element_size()
++                if param.device.type != "cuda":
++                    non_cuda.append(name)
++            audit_dir = AuditPath(os.environ["LOCAL_GPU_WEIGHT_AUDIT_DIR"])
++            audit_dir.mkdir(parents=True, exist_ok=True)
++            (audit_dir / f"rank-{self.gpu_id}.json").write_text(audit_json.dumps(
++                {"devices": counts, "non_cuda_parameters": non_cuda}, indent=2))
++            if non_cuda:
++                raise RuntimeError("GPU-only qualification found non-CUDA parameters")
+         self.startup_weight_load = loaded.startup_weight_load
+         if loaded.remote_instance_weight_info is not None:
+             self.remote_instance_weight_transporter.weight_info = (
