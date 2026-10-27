@@ -15,10 +15,15 @@ case "$model" in
     qwen|qwen27b|strata-deepseek|glm|maya-deepseek) ;;
     *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek' >&2; exit 2 ;;
 esac
-python3 - "$project_dir" <<'PY'
+python3 - "$project_dir" "$model" "$engine" <<'PY'
 import json, os, socket, sys
 from pathlib import Path
 root = Path(sys.argv[1])
+sys.path.insert(0, str(root / 'scripts'))
+from profile_catalog import load_catalog
+selection = [sys.argv[2], sys.argv[3]] if sys.argv[2] == 'qwen27b' else [sys.argv[2]]
+if selection not in [profile['launch'] for profile in load_catalog()['profiles']]:
+    sys.exit('That model/engine has no maintained, qualified quantization profile.')
 pid_file = root / 'data/setup-coordinator.pid'
 state_file = root / 'data/model-setup-state.json'
 if pid_file.exists() and state_file.exists():

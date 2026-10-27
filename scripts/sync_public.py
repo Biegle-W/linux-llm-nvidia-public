@@ -20,6 +20,8 @@ FILES = (
     'scripts/patches/sglang-gpu-placement-audit.patch',
     'scripts/patches/vllm-dflash-meta-share.patch',
     'scripts/patches/vllm-draft-placement-audit.patch',
+    'config/maintained-profiles.json', 'config/model-catalog.example.json',
+    'scripts/profile_catalog.py', 'docs/MAINTAINED-PROFILES.md',
 )
 BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
                    r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|'

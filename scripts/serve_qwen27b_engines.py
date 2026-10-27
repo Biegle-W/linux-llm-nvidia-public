@@ -2,12 +2,12 @@
 """Serve one qualified GPU-only Qwen profile in the bounded model service."""
 import csv
 import hashlib
-import json
 import os
 from pathlib import Path
 import socket
 import subprocess
 import sys
+from profile_catalog import get_profile
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = ROOT / 'models/engine-tests/qwen38-27b-hyperqwen-fast'
@@ -73,6 +73,7 @@ def main():
     engine = sys.argv[1] if len(sys.argv) == 2 else 'hyperqwen'
     if engine not in ('hyperqwen', 'sglang') or len(sys.argv) > 2:
         sys.exit('Usage: serve_qwen27b_engines.py hyperqwen|sglang')
+    profile = get_profile('qwen27b-' + engine)
     preflight()
     cuda = ROOT / 'runtimes/engine-tools/lib/python3.12/site-packages/nvidia/cu13'
     env = dict(os.environ, CUDA_HOME=str(cuda), CUDA_DEVICE_ORDER='PCI_BUS_ID',
@@ -104,35 +105,12 @@ def main():
         launch_server(ServerArgs(
             model_path=str(MODEL), host='127.0.0.1', port=10000,
             api_key=RedactedKey(KEY.read_text().strip()), served_model_name='qwen3.8-27b',
-            tp_size=1, pp_size=2, disable_custom_all_reduce=True,
-            mem_fraction_static=0.88, context_length=16384, max_running_requests=1,
-            chunked_prefill_size=512, disable_cuda_graph=False, cuda_graph_max_bs_decode=1,
-            enable_multimodal=False, json_model_override_args='{"language_model_only":true}',
-            max_mamba_cache_size=2, mamba_ssm_dtype='float32', cpu_offload_gb=0,
-            attention_backend='triton', disable_radix_cache=True,
-            default_chat_template_kwargs={'enable_thinking': False},
+            **profile['server_args'],
         ))
         return
-    env.update(VLLM_API_KEY=KEY.read_text().strip(), VLLM_USE_V2_MODEL_RUNNER='1',
-               VLLM_USE_FLASHINFER_SAMPLER='0', VLLM_EMBED_UVA='0',
-               VLLM_LOCAL_DFLASH_META_SHARE='0', MTP_DRAFT_VOCAB='1',
-               VLLM_SPEC_DECODE_ATTN='1', VLLM_SPEC_DECODE_ATTN_QMAX='4',
-               VLLM_MARLIN_INPUT_DTYPE='int8', VLLM_MARLIN_INT8_INCLUDE_RE='mlp',
-               VLLM_MARLIN_INT8_EXCLUDE_RE='lm_head|mtp')
-    args = [str(binary), 'serve', str(MODEL), '--host', '127.0.0.1', '--port', '10000',
-            '--served-model-name', 'qwen3.8-27b', '--tensor-parallel-size', '2',
-            '--disable-custom-all-reduce', '--gpu-memory-utilization', '0.76',
-            '--kv-cache-memory-bytes', '603979776', '--max-model-len', '32768',
-            '--max-num-seqs', '1', '--max-num-batched-tokens', '128',
-            '--language-model-only', '--mamba-ssm-cache-dtype', 'bfloat16',
-            '--reasoning-parser', 'qwen3', '--attention-backend', 'TRITON_ATTN',
-            '--kv-cache-dtype', 'int4_per_token_head', '--cpu-offload-gb', '0',
-            '--no-enable-prefix-caching', '--default-chat-template-kwargs',
-            '{"enable_thinking":false}', '--speculative-config',
-            json.dumps({'method': 'mtp', 'num_speculative_tokens': 3,
-                        'draft_sample_method': 'probabilistic'}),
-            '--compilation-config', json.dumps({'max_cudagraph_capture_size': 4,
-                                               'custom_ops': ['+rms_norm', '+silu_and_mul']})]
+    env.update(profile['environment'])
+    env['VLLM_API_KEY'] = KEY.read_text().strip()
+    args = [str(binary), 'serve', str(MODEL)] + profile['cli_args']
     os.execve(binary, args, env)
 
 

@@ -1,0 +1,308 @@
+{
+  "schema": 1,
+  "updated": "2026-10-27",
+  "scope": "Current Linux NVIDIA workstation only",
+  "selection_policy": {
+    "group_by": [
+      "model",
+      "weight_quant",
+      "engine"
+    ],
+    "one_profile_per_group": true,
+    "objectives": [
+      "prompt processing and first-token latency",
+      "decode throughput",
+      "largest locally validated safe context"
+    ],
+    "tradeoff_rule": "Keep a qualified non-dominated setting, preferring the largest validated safe allocation with competitive speed. Use prefill/TTFT and decode as tie breakers. No claim that one setting maximizes all three metrics.",
+    "kv_precision_is_weight_quant": false,
+    "historical_measurements_are_profiles": false
+  },
+  "profiles": [
+    {
+      "id": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "status": "selected",
+      "launch": [
+        "qwen27b",
+        "hyperqwen"
+      ],
+      "allocated_context": 32768,
+      "tested_retrieval_input": 29496,
+      "context_validation": "long-input retrieval passed",
+      "benchmark_context": 32768,
+      "benchmark": {
+        "short_decode_tps": 112.06417287975118,
+        "long_decode_tps": 97.78563791567609,
+        "code_decode_tps": 155.18792852526298,
+        "prose_decode_tps": 107.70867757228767,
+        "short_ttft_s": 0.15569670100012445,
+        "long_ttft_s": 1.6426261639999211
+      },
+      "evidence": "docs/DENSE-ENGINE-OPTIMIZATION-20261027.md",
+      "cli_args": [
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "10000",
+        "--served-model-name",
+        "qwen3.8-27b",
+        "--tensor-parallel-size",
+        "2",
+        "--disable-custom-all-reduce",
+        "--gpu-memory-utilization",
+        "0.76",
+        "--kv-cache-memory-bytes",
+        "603979776",
+        "--max-model-len",
+        "32768",
+        "--max-num-seqs",
+        "1",
+        "--max-num-batched-tokens",
+        "128",
+        "--language-model-only",
+        "--mamba-ssm-cache-dtype",
+        "bfloat16",
+        "--reasoning-parser",
+        "qwen3",
+        "--attention-backend",
+        "TRITON_ATTN",
+        "--kv-cache-dtype",
+        "int4_per_token_head",
+        "--cpu-offload-gb",
+        "0",
+        "--no-enable-prefix-caching",
+        "--default-chat-template-kwargs",
+        "{\"enable_thinking\":false}",
+        "--speculative-config",
+        "{\"method\": \"mtp\", \"num_speculative_tokens\": 3, \"draft_sample_method\": \"probabilistic\"}",
+        "--compilation-config",
+        "{\"max_cudagraph_capture_size\": 4, \"custom_ops\": [\"+rms_norm\", \"+silu_and_mul\"]}"
+      ],
+      "environment": {
+        "VLLM_USE_V2_MODEL_RUNNER": "1",
+        "VLLM_USE_FLASHINFER_SAMPLER": "0",
+        "VLLM_EMBED_UVA": "0",
+        "VLLM_LOCAL_DFLASH_META_SHARE": "0",
+        "MTP_DRAFT_VOCAB": "1",
+        "VLLM_SPEC_DECODE_ATTN": "1",
+        "VLLM_SPEC_DECODE_ATTN_QMAX": "4",
+        "VLLM_MARLIN_INPUT_DTYPE": "int8",
+        "VLLM_MARLIN_INT8_INCLUDE_RE": "mlp",
+        "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp"
+      }
+    },
+    {
+      "id": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "status": "selected",
+      "launch": [
+        "qwen27b",
+        "sglang"
+      ],
+      "allocated_context": 16384,
+      "tested_retrieval_input": 14758,
+      "context_validation": "long-input retrieval passed",
+      "benchmark_context": 16384,
+      "benchmark": {
+        "short_decode_tps": 47.38183639784082,
+        "long_decode_tps": 46.67575363469744,
+        "code_decode_tps": 47.17362666887569,
+        "prose_decode_tps": 47.16088543836829,
+        "short_ttft_s": 0.10163222500023039,
+        "long_ttft_s": 0.8653268469997784
+      },
+      "evidence": "docs/DENSE-ENGINE-OPTIMIZATION-20261027.md",
+      "server_args": {
+        "tp_size": 1,
+        "pp_size": 2,
+        "disable_custom_all_reduce": true,
+        "mem_fraction_static": 0.88,
+        "context_length": 16384,
+        "max_running_requests": 1,
+        "chunked_prefill_size": 512,
+        "disable_cuda_graph": false,
+        "cuda_graph_max_bs_decode": 1,
+        "enable_multimodal": false,
+        "json_model_override_args": "{\"language_model_only\":true}",
+        "max_mamba_cache_size": 2,
+        "mamba_ssm_dtype": "float32",
+        "cpu_offload_gb": 0,
+        "attention_backend": "triton",
+        "disable_radix_cache": true,
+        "default_chat_template_kwargs": {
+          "enable_thinking": false
+        }
+      }
+    },
+    {
+      "id": "qwen27b-llama",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "GGUF-IQ4_XS",
+      "engine": "llama.cpp",
+      "status": "selected",
+      "launch": [
+        "qwen27b",
+        "llama"
+      ],
+      "allocated_context": 32768,
+      "tested_retrieval_input": 29496,
+      "context_validation": "long-input retrieval passed",
+      "benchmark_context": 32768,
+      "benchmark": {
+        "short_decode_tps": 68.6,
+        "long_decode_tps": 66.4,
+        "code_decode_tps": 88.0,
+        "prose_decode_tps": 58.6,
+        "short_ttft_s": 0.49,
+        "long_ttft_s": 1.902
+      },
+      "evidence": "docs/QWEN27B-GPU-ONLY-20261026.md",
+      "cli_args": [
+        "--n-gpu-layers",
+        "999",
+        "--override-tensor",
+        "^token_embd[.]weight$=CUDA0",
+        "--lazy-mode",
+        "off",
+        "--load-mode",
+        "none",
+        "--verbosity",
+        "4",
+        "--split-mode",
+        "layer",
+        "--tensor-split",
+        "0.61,0.39",
+        "--fit",
+        "off",
+        "--ctx-size",
+        "32768",
+        "--parallel",
+        "1",
+        "--batch-size",
+        "512",
+        "--ubatch-size",
+        "512",
+        "--threads",
+        "6",
+        "--threads-batch",
+        "6",
+        "--cache-type-k",
+        "q8_0",
+        "--cache-type-v",
+        "q8_0",
+        "--flash-attn",
+        "on",
+        "--jinja",
+        "--reasoning",
+        "off",
+        "--spec-type",
+        "draft-mtp",
+        "--spec-draft-n-max",
+        "2",
+        "--spec-draft-ngl",
+        "999"
+      ]
+    },
+    {
+      "id": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "weight_quant": "IQ3_XXS",
+      "engine": "Strata",
+      "status": "selected",
+      "launch": [
+        "qwen"
+      ],
+      "allocated_context": 32768,
+      "context_validation": "installed 32K allocation passed startup and short API smoke; no full-window retrieval test",
+      "benchmark_context": 8192,
+      "benchmark": {
+        "short_decode_tps": 98.8,
+        "long_decode_tps": 101.7,
+        "long_prompt_tps": 637.6,
+        "long_ttft_s": 3.47
+      },
+      "runtime_selector": {
+        "kind": "strata-launch-preset",
+        "name": "qwen-flash-next"
+      },
+      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md"
+    },
+    {
+      "id": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "weight_quant": "Maya-S24",
+      "engine": "Maya",
+      "status": "selected",
+      "launch": [
+        "glm"
+      ],
+      "allocated_context": 32768,
+      "context_validation": "installed 32K allocation passed startup and short API smoke; no full-window retrieval test",
+      "benchmark_context": 8192,
+      "benchmark": {
+        "short_decode_tps": 7.2,
+        "long_decode_tps": 7.5,
+        "long_prompt_tps": 84.0,
+        "long_ttft_s": 26.09
+      },
+      "runtime_selector": {
+        "kind": "private-maya-config",
+        "path": "runtimes/project-maya/maya-maya-s24.json"
+      },
+      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md"
+    },
+    {
+      "id": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Strata",
+      "status": "selected",
+      "launch": [
+        "strata-deepseek"
+      ],
+      "allocated_context": 8192,
+      "context_validation": "startup and short/long benchmark inputs passed; no full-window retrieval test",
+      "benchmark_context": 8192,
+      "benchmark": {
+        "short_decode_tps": 2.7,
+        "long_decode_tps": 2.7,
+        "long_prompt_tps": 34.8,
+        "long_ttft_s": 62.58
+      },
+      "runtime_selector": {
+        "kind": "strata-runtime-profile",
+        "name": "deepseek-maya-s"
+      },
+      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md"
+    },
+    {
+      "id": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Maya",
+      "status": "selected",
+      "launch": [
+        "maya-deepseek"
+      ],
+      "allocated_context": 32768,
+      "context_validation": "installed 32K allocation passed startup and short API smoke; no full-window retrieval test",
+      "benchmark_context": 8192,
+      "benchmark": {
+        "short_decode_tps": 3.4,
+        "long_decode_tps": 4.4,
+        "long_prompt_tps": 53.5,
+        "long_ttft_s": 40.66
+      },
+      "runtime_selector": {
+        "kind": "private-maya-config",
+        "path": "runtimes/project-maya/maya-ds4.json"
+      },
+      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md"
+    }
+  ]
+}

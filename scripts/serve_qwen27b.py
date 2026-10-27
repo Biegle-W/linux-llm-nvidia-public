@@ -6,6 +6,7 @@ from pathlib import Path
 import socket
 import subprocess
 import sys
+from profile_catalog import get_profile
 
 ROOT = Path(__file__).resolve().parents[1]
 MODEL = ROOT / 'models/qwen3.8-27b-iq4-xs/Qwen3.8-27B-IQ4_XS.gguf'
@@ -43,15 +44,8 @@ def main():
             sys.exit(f'GPU {index} needs {name} with at least {minimum} MiB free. '
                      'Preserve other applications; retry when sufficient VRAM is available.')
     args = [str(SERVER), '-m', str(MODEL), '--host', '127.0.0.1', '--port', '10000',
-            '--api-key-file', str(KEY), '--alias', 'qwen3.8-27b',
-            '--n-gpu-layers', '999', '--override-tensor', '^token_embd[.]weight$=CUDA0',
-            '--lazy-mode', 'off', '--load-mode', 'none', '--verbosity', '4',
-            '--split-mode', 'layer', '--tensor-split', '0.61,0.39', '--fit', 'off',
-            '--ctx-size', '32768', '--parallel', '1', '--batch-size', '512',
-            '--ubatch-size', '512', '--threads', '6', '--threads-batch', '6',
-            '--cache-type-k', 'q8_0', '--cache-type-v', 'q8_0', '--flash-attn', 'on',
-            '--jinja', '--reasoning', 'off', '--spec-type', 'draft-mtp',
-            '--spec-draft-n-max', '2', '--spec-draft-ngl', '999']
+            '--api-key-file', str(KEY), '--alias', 'qwen3.8-27b']
+    args += get_profile('qwen27b-llama')['cli_args']
     env = dict(os.environ, CUDA_DEVICE_ORDER='PCI_BUS_ID', CUDA_VISIBLE_DEVICES='0,1')
     log = ROOT / 'data/qwen27b-server.log'
     fd = os.open(log, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)

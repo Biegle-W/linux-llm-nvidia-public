@@ -1,5 +1,7 @@
 # Qwen3.8-27B: mixed-Ampere vLLM and SGLang optimization
 
+**Profile consolidation:** the current [maintained registry](MAINTAINED-PROFILES.md) keeps one setting per model, weight quant and engine. The intermediate rows below remain dated measurement evidence; their superseded launchers have been retired.
+
 The default dense Qwen launcher now uses **HyperQwen/patched vLLM, TP2, MTP3,
 32K context**, entirely in GPU memory. It measured **155.2 code / 107.7 prose
 tokens/s**, compared with the previous llama.cpp profile's **88.0 / 58.6**.

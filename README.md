@@ -34,6 +34,11 @@ Start the default with `./scripts/start_model.sh qwen27b`, or explicitly select
 `./scripts/start_model.sh qwen27b sglang`. The prior
 [IQ4_XS/MTP2 measurements](docs/QWEN27B-GPU-ONLY-20261026.md) remain preserved.
 
+The [maintained-profile registry](docs/MAINTAINED-PROFILES.md) now keeps exactly
+one selected setting per model, weight quantization and engine: seven profiles.
+Superseded launchers and the duplicate Strata alias are retired; completed
+measurements remain available as dated evidence.
+
 ## Repository ownership
 
 | Build | Private operational repository | Public reference |
@@ -54,7 +59,9 @@ tree. Previously published Git history is preserved, not rewritten.
 - `scripts/native_linux_gpu_unlock.py`: pinned Ubuntu/Debian/GRUB preparation for
   the three intended GPU product IDs; explicit current Linux PCI addresses only.
 - `scripts/test_native_linux_gpu_unlock.py`: host-only policy/rollback tests.
-- `config/model-catalog.example.json`: disabled model inventory; no deployed profiles.
+- `config/maintained-profiles.json`: one selected setting per model, weight quant and engine.
+- `docs/MAINTAINED-PROFILES.md`: selected settings, speed/context tradeoffs and retirement pointer.
+- `config/model-catalog.example.json`: pointer for the retired preparation-only inventory.
 - `docs/REPOSITORY-MAP.md`: the seven-repository ownership and retirement policy.
 
 Models go under ignored `models/`; native builds/environments under `runtimes/`;
@@ -70,7 +77,12 @@ code comments, messages and commits in English. Keep private/public repositories
 current after validated changes, with nonpersonal commits and no force pushes.
 Export selected sanitized files only; never export private history or state.
 
-Use one maintained profile per model at the largest locally validated configuration.
+Use one maintained profile per model, weight quantization and engine. Select the
+largest locally validated safe context with competitive prefill and decode;
+record tradeoffs rather than claim one setting maximizes every metric. Keep
+selected dense-engine arguments in `config/maintained-profiles.json` and private
+MoE engine settings in their single canonical runtime configuration. KV precision,
+draft count, chunk size and context variants do not create separate weight quants.
 Record allocated context separately from tested input lengths. Keep numerical,
 quality, memory, thermal and owned-process protections. Stop only owned inference
 workers; preserve unrelated applications. Do not relax guards merely to load a model.

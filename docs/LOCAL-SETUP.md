@@ -28,6 +28,8 @@ Raw local inventory, hashes, build logs and smoke-test results belong in ignored
 
 ## Requested large-model setup
 
+The current [seven-profile registry](MAINTAINED-PROFILES.md) selects one setting per model, weight quantization and engine. `config/maintained-profiles.json` is the maintained registry; old benchmark snapshots are evidence rather than extra deployment presets.
+
 The October 26 setup queue completed all four initial API checks and left Qwen
 as the default. DeepSeek now uses one shared Maya-S weight set with separate
 engine indexes. Read the actual stage and individual API-check results:

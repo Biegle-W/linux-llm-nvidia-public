@@ -1,38 +1,8 @@
 {
-  "status": "inventory-only; no native Linux deployment or validation",
+  "status": "retired preparation-only inventory",
   "enabled": false,
-  "models": [
-    {
-      "id": "Ornith-1.5-35B-A3B-IQ2_S",
-      "file": "Ornith-1.5-35B-A3B-IQ2_S.gguf",
-      "windows_context_tokens": 131072,
-      "linux_context_tokens": null,
-      "linux_validation": "not_run",
-      "enabled": false
-    },
-    {
-      "id": "LFM2.5-24B-A2B-UD-IQ3_XXS",
-      "file": "LFM2.5-24B-A2B-UD-IQ3_XXS.gguf",
-      "windows_context_tokens": 131072,
-      "linux_context_tokens": null,
-      "linux_validation": "not_run",
-      "enabled": false
-    },
-    {
-      "id": "Qwen3.8-27B-UD-IQ3_XXS",
-      "file": "Qwen3.8-27B-UD-IQ3_XXS.gguf",
-      "windows_context_tokens": 65536,
-      "linux_context_tokens": null,
-      "linux_validation": "not_run",
-      "enabled": false
-    },
-    {
-      "id": "Qwen3.8-35B-A3B-IQ2_M",
-      "file": "Qwen3.8-35B-A3B-IQ2_M.gguf",
-      "windows_context_tokens": 65536,
-      "linux_context_tokens": null,
-      "linux_validation": "not_run",
-      "enabled": false
-    }
-  ]
+  "replacement": "maintained-profiles.json",
+  "archive_repository": "Biegle-W/retired-llm-setting",
+  "archive_batch": "linux-nvidia/2026-10-27-profile-consolidation",
+  "archive_commit": "7c8d5438b9a406fe74b29a6e9c00826640743c2e"
 }
