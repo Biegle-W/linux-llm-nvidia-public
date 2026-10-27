@@ -164,3 +164,10 @@ are hash-verified in the private retirement repository, batch
 `linux-nvidia/2026-10-27-qwen27b-iq4xs-removal`, commit `e46d38c`.
 The model weights were not uploaded to that archive. Historical benchmark and
 retrieval results remain preserved; they no longer describe an installed model.
+
+## Unused model artifacts
+
+The [unused-model cleanup](UNUSED-MODEL-CLEANUP-20261027.md) removed superseded trial checkpoints and
+preparation payloads after reviewing saved results and screening DSpark in both
+DeepSeek engines. All six selected profiles, allocated contexts and kept benchmark
+values are unchanged; historical reports are evidence rather than download lists.

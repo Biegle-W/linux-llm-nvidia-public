@@ -53,6 +53,9 @@ results with unchanged dense/Flash measurements.
 
 **Model storage policy:** [NVMe for SSD-streaming models; SATA for GPU/RAM-resident weights](docs/STORAGE-POLICY.md).
 Dense Qwen uses the SATA SSD through its existing checkpoint alias.
+[Unused trial weights and preparation files were removed](docs/UNUSED-MODEL-CLEANUP-20261027.md)
+after saved-evidence review and bounded DSpark comparisons. All six active
+profiles and historical benchmark results remain preserved.
 
 ## Repository ownership
 

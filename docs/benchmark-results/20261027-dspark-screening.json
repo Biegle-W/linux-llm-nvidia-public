@@ -1,0 +1,371 @@
+{
+  "schema": 1,
+  "date": "2026-10-27",
+  "scope": "Unused-model removal with conditional bounded DSpark screening; maintained speed results reused, not rerun.",
+  "hardware": {
+    "cpu": "i5-13600KF",
+    "ram_gb": 64,
+    "gpus": [
+      "RTX 3080 Ti 12 GB",
+      "RTX 3080 10 GB"
+    ]
+  },
+  "protocol": {
+    "warmup_tokens": 64,
+    "screen_repetitions": 1,
+    "output_tokens": 128,
+    "input_tokens": "approximately 2.2K, same saved fixture as current results",
+    "thinking": false,
+    "temperature": 0,
+    "prefill": "native engine timing",
+    "decode": "client SSE (output tokens - 1) / first-to-last-content interval",
+    "comparison": "previous three-run kept medians; no new baseline rerun",
+    "keep_rule": "Screen: decode >=95%, prefill >=90%, TTFT <=110% of kept setting, then require three-run confirmation and JSON/retrieval/image qualification where supported.",
+    "safety": "Contexts, 48 GiB hard RAM, 1 GiB swap, GPU reserves, full expert count, 8 GiB host floor and 82 C guard retained; no engine/binary changes.",
+    "cache": "Frozen expert-profile copy per engine; OS page cache not flushed; order not randomized."
+  },
+  "candidates": [
+    {
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S + DSpark auxiliary drafter",
+      "engine": "Maya",
+      "context_limit": 32768,
+      "retained": false,
+      "reason": "No qualified similar-or-better result at retained context and guards",
+      "screen_state": "complete",
+      "screen_summary": {
+        "prefill_tps": 43.1,
+        "ttft_s": 51.03344488100265,
+        "client_decode_tps": 2.2787912352591815,
+        "decode_tps": 2.3,
+        "prompt_tokens": 2198,
+        "generated_tokens": 128,
+        "profile": "deepseek-maya",
+        "variant": "deepseek-maya-dspark-screen",
+        "context": 32768,
+        "repetitions": 1,
+        "memory_high_gib": 46,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "generated_tokens": 128,
+          "prefill_tps": 43.1,
+          "ttft_s": 51.03344488100265,
+          "client_decode_tps": 2.2787912352591815,
+          "decode_tps": 2.3,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 106.77687049499946
+        }
+      ],
+      "baseline": {
+        "run": "20261027-moe-optimized",
+        "date": "2026-10-27",
+        "context": 32768,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2179,
+          2198
+        ],
+        "output_tokens": 128,
+        "ttft_s": 44.016855533001944,
+        "prefill_tps": 49.6,
+        "decode_tps": 4.083400544889873,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
+      },
+      "confirm_summary": null,
+      "candidate_overrides": {
+        "--dspark": "on"
+      },
+      "cache_environment": {
+        "DS4_WARM_GB": "8"
+      },
+      "expert_profile_seed_sha256": "fbd516672c9856d5e54c97105139031e8ea738fffdc6d53c00f07c91d97af008"
+    },
+    {
+      "profile": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S + DSpark auxiliary drafter",
+      "engine": "Strata",
+      "context_limit": 65536,
+      "retained": false,
+      "reason": "No qualified similar-or-better result at retained context and guards",
+      "screen_state": "complete",
+      "screen_summary": {
+        "prefill_tps": 30.5,
+        "ttft_s": 72.05426182300289,
+        "client_decode_tps": 2.4369912778285756,
+        "decode_tps": 2.5,
+        "prompt_tokens": 2198,
+        "generated_tokens": 128,
+        "profile": "deepseek-strata",
+        "variant": "deepseek-strata-dspark-screen",
+        "context": 65536,
+        "repetitions": 1,
+        "memory_high_gib": 44,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "generated_tokens": 128,
+          "prefill_tps": 30.5,
+          "ttft_s": 72.05426182300289,
+          "client_decode_tps": 2.4369912778285756,
+          "decode_tps": 2.5,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 124.16787754300458
+        }
+      ],
+      "baseline": {
+        "run": "20261027-moe-optimized",
+        "date": "2026-10-27",
+        "context": 65536,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2179,
+          2198
+        ],
+        "output_tokens": 128,
+        "ttft_s": 67.52695925899752,
+        "prefill_tps": 32.4,
+        "decode_tps": 2.8720856429465904,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
+      },
+      "confirm_summary": null,
+      "candidate_overrides": {
+        "--dspark": "on"
+      },
+      "cache_environment": {
+        "DS4_STORE_GB": "42",
+        "DS4_STORE_POLICY": "1"
+      },
+      "expert_profile_seed_sha256": "0fd3d36a8750a2f2839fc1e516da43e7a17946be253ae4ba607d9e640dca92cb"
+    }
+  ],
+  "removed_artifacts": [
+    {
+      "path": "models/engine-tests/qwen38-27b-awq",
+      "transport": "sata",
+      "bytes": 21041262198,
+      "files": 57
+    },
+    {
+      "path": "models/engine-tests/qwen38-27b-nvfp4",
+      "transport": "sata",
+      "bytes": 21945300974,
+      "files": 69
+    },
+    {
+      "path": "models/engine-tests/qwen38-27b-w4a16-base",
+      "transport": "sata",
+      "bytes": 23132043421,
+      "files": 66
+    },
+    {
+      "path": "models/engine-tests/qwen38-27b-ninfer",
+      "transport": "sata",
+      "bytes": 20437548843,
+      "files": 21
+    },
+    {
+      "path": "models/engine-tests/qwen38-dflash2-w4a16",
+      "transport": "sata",
+      "bytes": 1280640001,
+      "files": 12
+    },
+    {
+      "path": "models/engine-tests/qwen38-fast-head-source",
+      "transport": "sata",
+      "bytes": 983357008,
+      "files": 21
+    },
+    {
+      "path": "models/strata/mtp/mtp-q2_0.gguf.report.json",
+      "transport": "nvme",
+      "bytes": 3589,
+      "files": 1
+    },
+    {
+      "path": "models/strata/mtp/tensors",
+      "transport": "nvme",
+      "bytes": 5214301696,
+      "files": 31
+    },
+    {
+      "path": "models/strata/mtp/mtp-manifest.json",
+      "transport": "nvme",
+      "bytes": 11643,
+      "files": 1
+    },
+    {
+      "path": "models/strata/mtp/mtp-inventory.md",
+      "transport": "nvme",
+      "bytes": 2437,
+      "files": 1
+    },
+    {
+      "path": "models/strata/mtp/.mtp_fetch.lock",
+      "transport": "nvme",
+      "bytes": 0,
+      "files": 1
+    },
+    {
+      "path": "models/strata/mtp/mtp-inventory.json",
+      "transport": "nvme",
+      "bytes": 7514,
+      "files": 1
+    },
+    {
+      "path": "models/strata/mtp/mtp-q2_0.gguf",
+      "transport": "nvme",
+      "bytes": 889017216,
+      "files": 1
+    },
+    {
+      "path": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/dspark",
+      "transport": "nvme",
+      "bytes": 7967713885,
+      "files": 3
+    }
+  ],
+  "cleanup": {
+    "stage": "complete",
+    "removed_groups": 14,
+    "removed_files": 286,
+    "logical_bytes_removed": 102891210425,
+    "logical_bytes_by_transport": {
+      "sata": 88820152445,
+      "nvme": 14071057980
+    },
+    "observed_available_bytes_increase": {
+      "sata": 88867864576,
+      "nvme": 14091116544
+    },
+    "historical_raw_files_unchanged": 1038,
+    "historical_reports_unchanged": 11,
+    "active_profiles_validated": 6,
+    "catalog_unchanged": true,
+    "quarantine_removed": true,
+    "time": "2026-10-27T15:04:59-0400"
+  },
+  "pack_indexes": [
+    {
+      "path": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S/maya-ds4/tensors.txt",
+      "before_sha256": "cded105d5d187f5c786a2862f63006672079da9e88fbf5b115536265e5f88f75",
+      "after_sha256": "0d1f96947f98cef3a7f4ea223d100efd1924b8d8c955772f6b0a21a548c3c46e",
+      "removed_draft_tensors": 1245,
+      "retained_tensor_count": 47550
+    },
+    {
+      "path": "models/strata/packs/deepseek-maya-s/tensors.txt",
+      "before_sha256": "cded105d5d187f5c786a2862f63006672079da9e88fbf5b115536265e5f88f75",
+      "after_sha256": "0d1f96947f98cef3a7f4ea223d100efd1924b8d8c955772f6b0a21a548c3c46e",
+      "removed_draft_tensors": 1245,
+      "retained_tensor_count": 47550
+    }
+  ],
+  "active_validation": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "context": 32768,
+      "passed": true,
+      "auth_rejection_passed": true,
+      "image_passed": false,
+      "budget_bytes": {
+        "MemoryHigh": 32212254720,
+        "MemoryMax": 38654705664,
+        "MemorySwapMax": 1073741824
+      },
+      "native_context_limit": 32768,
+      "accepted_draft_tokens": null
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "context": 16384,
+      "passed": true,
+      "auth_rejection_passed": true,
+      "image_passed": false,
+      "budget_bytes": {
+        "MemoryHigh": 32212254720,
+        "MemoryMax": 38654705664,
+        "MemorySwapMax": 1073741824
+      },
+      "native_context_limit": 16384,
+      "accepted_draft_tokens": null
+    },
+    {
+      "profile": "flash-next-strata",
+      "context": 32768,
+      "passed": true,
+      "auth_rejection_passed": true,
+      "image_passed": false,
+      "budget_bytes": {
+        "MemoryHigh": 47244640256,
+        "MemoryMax": 51539607552,
+        "MemorySwapMax": 1073741824
+      },
+      "native_context_limit": 32768,
+      "accepted_draft_tokens": 12
+    },
+    {
+      "profile": "glm-maya",
+      "context": 32768,
+      "passed": true,
+      "auth_rejection_passed": true,
+      "image_passed": false,
+      "budget_bytes": {
+        "MemoryHigh": 49392123904,
+        "MemoryMax": 51539607552,
+        "MemorySwapMax": 1073741824
+      },
+      "native_context_limit": 32768,
+      "accepted_draft_tokens": 11
+    },
+    {
+      "profile": "deepseek-strata",
+      "context": 65536,
+      "passed": true,
+      "auth_rejection_passed": true,
+      "image_passed": false,
+      "budget_bytes": {
+        "MemoryHigh": 47244640256,
+        "MemoryMax": 51539607552,
+        "MemorySwapMax": 1073741824
+      },
+      "native_context_limit": 65536,
+      "accepted_draft_tokens": 0
+    },
+    {
+      "profile": "deepseek-maya",
+      "context": 32768,
+      "passed": true,
+      "auth_rejection_passed": true,
+      "image_passed": true,
+      "budget_bytes": {
+        "MemoryHigh": 49392123904,
+        "MemoryMax": 51539607552,
+        "MemorySwapMax": 1073741824
+      },
+      "native_context_limit": 32768,
+      "accepted_draft_tokens": 0
+    }
+  ],
+  "default_restored": "qwen27b-hyperqwen",
+  "router_and_dsh_active": true,
+  "historical_benchmark_reports_unchanged": true,
+  "cpu_regression_tests_passed": 34,
+  "post_deletion_router_stream_passed": true
+}

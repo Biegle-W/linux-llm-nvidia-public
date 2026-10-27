@@ -17,7 +17,9 @@ remain on the Linux filesystem.
 
 The complete `models/engine-tests` directory is a link to
 `llm-models/linux-nvidia/engine-tests` on the mounted SATA SSD. It includes the
-kept dense checkpoint, its preparation sources and the preserved trial weights.
+kept dense checkpoint. Superseded trial weights and preparation inputs were
+removed in the [unused-model cleanup](UNUSED-MODEL-CLEANUP-20261027.md); their
+benchmark evidence and provenance remain preserved.
 The alias keeps existing engine, router, desktop and tooling paths stable. The
 actual mount mapping and the checksum migration manifest are private local state.
 
@@ -85,3 +87,10 @@ was deleted, releasing approximately 82.72 GiB of unique checkpoint content.
 The 27 local regression tests and launcher syntax/compile checks passed.
 All four streamed-engine profiles retain NVMe placement; benchmark values and
 long-context qualifications were preserved.
+
+## Unused-model cleanup
+
+The [October 27 cleanup](UNUSED-MODEL-CLEANUP-20261027.md) removed unused model
+and preparation payloads after dependency and performance review. The active
+checkpoint aliases and four unique base model packages remain. Do not recreate
+superseded downloads merely because a historical test references their old paths.
