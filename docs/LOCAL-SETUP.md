@@ -111,3 +111,13 @@ Start it with `./scripts/start_model.sh qwen27b`; stop it with
 for the qualified SGLang PP2/graphs 16K alternative. The slower IQ4_XS llama.cpp
 profile and its dedicated weights have been removed. Only one engine runs at a time. All use authenticated
 port 10000; all model weights and active MTP weights remain in VRAM.
+
+## Managed router and desktop clients
+
+The [router deployment](ROUTER-DEPLOYMENT-20261027.md) adds on-demand model/engine
+selection on authenticated port 10100 over loopback and Tailscale. Worker port
+10000 remains private. Use the new Desktop engine entries for safe switching;
+Strata/Maya open their own native web pages and DSH remains separate. GLM expert
+RAM is now capped at 32 GiB inside its managed production budget; earlier GLM
+speeds retain their original uncapped allocation. See the
+[connection and service handoff](../network/README.md).

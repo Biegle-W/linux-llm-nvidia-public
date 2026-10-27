@@ -79,7 +79,10 @@
         "--speculative-config",
         "{\"method\": \"mtp\", \"num_speculative_tokens\": 3, \"draft_sample_method\": \"probabilistic\"}",
         "--compilation-config",
-        "{\"max_cudagraph_capture_size\": 4, \"custom_ops\": [\"+rms_norm\", \"+silu_and_mul\"]}"
+        "{\"max_cudagraph_capture_size\": 4, \"custom_ops\": [\"+rms_norm\", \"+silu_and_mul\"]}",
+        "--enable-auto-tool-choice",
+        "--tool-call-parser",
+        "qwen3_coder"
       ],
       "environment": {
         "VLLM_USE_V2_MODEL_RUNNER": "1",
@@ -136,7 +139,8 @@
         "disable_radix_cache": true,
         "default_chat_template_kwargs": {
           "enable_thinking": false
-        }
+        },
+        "tool_call_parser": "qwen3_coder"
       }
     },
     {
@@ -185,7 +189,16 @@
         "kind": "private-maya-config",
         "path": "runtimes/project-maya/maya-maya-s24.json"
       },
-      "evidence": "docs/BENCHMARK-UNLOCK-20261026.md"
+      "evidence": "docs/ROUTER-DEPLOYMENT-20261027.md",
+      "selected_settings": {
+        "expert_ram_gib": 32,
+        "environment": {
+          "MAYA_GLM_RAM_GB": "32"
+        },
+        "reason": "Bound the native expert RAM tier inside the managed worker budget; historical standard benchmark predates this cap."
+      },
+      "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
+      "benchmark_configuration_note": "Historical standard benchmark used automatic RAM allocation before the managed 32 GiB expert-RAM cap. No new throughput claim for the capped profile."
     },
     {
       "id": "deepseek-strata",

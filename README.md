@@ -42,6 +42,10 @@ measurements remain available as dated evidence.
 with 58,969-token three-marker retrieval passed; its previous 8K speed results
 remain preserved as historical measurements.
 
+[The model router and desktop apps](network/README.md) provide authenticated
+OpenAI model/engine selection on port 10100 over loopback and Tailscale. DSH is a
+separate client on port 3080; Strata and Maya shortcuts open their native web apps.
+
 ## Repository ownership
 
 | Build | Private operational repository | Public reference |

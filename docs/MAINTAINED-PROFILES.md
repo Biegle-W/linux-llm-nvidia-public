@@ -28,7 +28,7 @@ or that untested larger contexts work.
 | Qwen3.8-27B / AutoRound INT4 body and heads, INT8 embedding | HyperQwen/vLLM | TP2, MTP3, MLP W4A8, BF16 state, INT4 KV, 128-token chunks, graphs | 32,768 | 29,496 |
 | Same prepared Qwen3.8-27B quant | SGLang | PP2, packed embedding lookup, FP32 state, BF16 KV, 512-token chunks, decode graphs | 16,384 | 14,758 |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | Existing `qwen-flash-next` preset, MTP, INT8 KV, automatic expert cache | 32,768 | Not established |
-| GLM-5.3-Flash / Maya-S24 | Maya | Existing S24 setting, drafting, automatic expert cache/prefill | 32,768 | Not established |
+| GLM-5.3-Flash / Maya-S24 | Maya | S24, drafting, automatic GPU cache/prefill, 32 GiB expert RAM | 32,768 | Not established |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | Shared weights, `deepseek-maya-s`, drafting/vision off, prefill 4096, 2 GiB GPU reserve | 65,536 | 58,969 |
 | Same DeepSeek Maya-S weights | Maya | Shared weights, `maya-ds4.json`, drafting off, 2 GiB GPU reserve | 32,768 | Not established |
 
@@ -42,6 +42,11 @@ speed tests used an **8K benchmark allocation**, so the rates below are not new
 32K throughput claims. No model tests or context qualification were repeated for
 the profile consolidation. The subsequent Strata DeepSeek context expansion used
 new 32K/64K configurations and preserved the completed 8K measurements.
+
+The [router deployment](ROUTER-DEPLOYMENT-20261027.md) adds Qwen tool-call parsers
+and caps GLM expert RAM at 32 GiB for safe managed loading. The GLM speed baseline
+below predates that cap and is historical, rather than measured capped-profile
+throughput.
 
 ## Saved speed evidence for the retained choices
 

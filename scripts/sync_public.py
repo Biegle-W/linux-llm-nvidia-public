@@ -23,6 +23,12 @@ FILES = (
     'config/maintained-profiles.json', 'config/model-catalog.example.json',
     'scripts/profile_catalog.py', 'docs/MAINTAINED-PROFILES.md',
     'docs/DEEPSEEK-STRATA-CONTEXT-20261027.md',
+    'network/router.py', 'network/worker_manager.py', 'network/install.py', 'network/README.md',
+    'scripts/serve_router_moe.py', 'scripts/router_client.py', 'scripts/open_dsh.py',
+    'dsh/configure.py', 'dsh/run', 'dsh/package.json', 'dsh/package-lock.json',
+    'tests/test_router.py', 'docs/ROUTER-DEPLOYMENT-20261027.md',
+    'assets/icons/README.md', 'assets/icons/strata.svg', 'assets/icons/maya.svg',
+    'assets/icons/sglang.svg', 'assets/icons/dsh.svg', 'assets/icons/hyperqwen.png',
 )
 BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
                    r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|'
@@ -54,10 +60,13 @@ def main():
         raise SystemExit('Public checkout must be clean before export.')
     exports = {}
     for relative in FILES:
-        content = (source / relative).read_text()
+        binary = relative == 'assets/icons/hyperqwen.png'
+        content = (source / relative).read_bytes() if binary else (source / relative).read_text()
+        if binary and not content.startswith(b'\x89PNG\r\n\x1a\n'):
+            raise SystemExit('Expected official PNG artwork.')
         if relative == 'README.md':
             content = content.replace('# Linux LLM NVIDIA\n', '# Linux LLM NVIDIA — public reference\n', 1)
-        if BLOCK.search(privacy_scan_text(relative, content)):
+        if not binary and BLOCK.search(privacy_scan_text(relative, content)):
             raise SystemExit(f'Privacy check failed for {relative}; review locally.')
         exports[relative] = content
     for relative, content in exports.items():
@@ -65,7 +74,10 @@ def main():
         if destination.is_symlink() or any(parent.is_symlink() for parent in destination.parents if parent != target.parent):
             raise SystemExit(f'Refusing symlink destination: {relative}')
         destination.parent.mkdir(parents=True, exist_ok=True)
-        destination.write_text(content)
+        if isinstance(content, bytes):
+            destination.write_bytes(content)
+        else:
+            destination.write_text(content)
         destination.chmod((source / relative).stat().st_mode & 0o777)
     print(f'Exported {len(exports)} reviewed files. Review git diff before committing and pushing.')
 

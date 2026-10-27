@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -euo pipefail
+root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+export DSH_HOME="$root/data/dsh"
+export LOCAL_LLM_API_KEY="$(cat "$root/data/local-api-key")"
+exec /usr/bin/node "$root/runtimes/deepseek-harness/node_modules/@deepseek-ai/dsh/lib/bin.js" "$@"
