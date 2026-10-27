@@ -33,6 +33,8 @@ FILES = (
     'docs/BENCHMARK-20261027-101219.md', 'docs/benchmark-results/20261027-101219.json',
     'docs/STORAGE-POLICY.md', 'scripts/storage_policy.py', 'tests/test_storage_policy.py',
     'docs/BENCHMARK-REPORTING.md',
+    'docs/CONTEXT-EXPANSION-20261027.md', 'docs/benchmark-results/20261027-context-expansion.json',
+    'docs/FORUM-OPTIMIZATION-SOURCES.md',
     'docs/UNUSED-MODEL-CLEANUP-20261027.md', 'docs/benchmark-results/20261027-dspark-screening.json',
     'docs/MOE-OPTIMIZATION-20261027.md', 'docs/benchmark-results/20261027-moe-optimized.json',
     'scripts/patches/maya-lazy-cpu-vision.patch', 'tests/test_maya_lazy_vision.py',

@@ -1,0 +1,728 @@
+{
+  "schema": 1,
+  "run": "20261027-context-expansion",
+  "status": "in_progress",
+  "updated": "2026-10-27T16:10:39-0400",
+  "production_promotion": false,
+  "deployed_contexts": {
+    "qwen27b-hyperqwen": 32768,
+    "qwen27b-sglang": 16384,
+    "flash-next-strata": 32768,
+    "glm-maya": 32768,
+    "deepseek-strata": 65536,
+    "deepseek-maya": 32768
+  },
+  "protocol": {
+    "fixed_input": "same saved approximately 2.2K-token fixture",
+    "output_tokens": 128,
+    "warmup_output_tokens": 64,
+    "control_repetitions": 3,
+    "screen_repetitions": 1,
+    "confirmation_repetitions": 3,
+    "temperature": 0,
+    "thinking": false,
+    "load_time_excluded": true,
+    "prefill": "native phase timings; per-request metric deltas for dense engines",
+    "decode": "client SSE (output tokens - 1) / first-to-last nonempty content interval",
+    "promotion_rule": "Larger context, all quality/headroom checks passed, median prefill and decode >= matched current control, median TTFT <= control. A screen within 3% may receive confirmation; this is not a relaxed final speed rule.",
+    "long_context": "Separately measured retrieval near 90% of allocation; not compared as equal work with the short fixture.",
+    "cache": "expert seed frozen per engine; prefix reuse checked; OS page cache not flushed; order not randomized"
+  },
+  "trials": [
+    {
+      "variant": "flash-next-strata-32768-screen",
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "weight_quant": "IQ3_XXS",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "context": 32768,
+      "state": "complete",
+      "summary": {
+        "prefill_tps": 593.2,
+        "ttft_s": 3.752891517004173,
+        "client_decode_tps": 97.08909285944816,
+        "decode_tps": 96.8,
+        "prompt_tokens": 2212,
+        "generated_tokens": 128,
+        "profile": "flash-next-strata",
+        "variant": "flash-next-strata-32768-screen",
+        "context": 32768,
+        "repetitions": 3,
+        "memory_high_gib": 44,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 593.9,
+          "ttft_s": 3.7611707579999347,
+          "client_decode_tps": 93.41344141528108,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 5.1208754620020045
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 593.2,
+          "ttft_s": 3.746260758001881,
+          "client_decode_tps": 97.08909285944816,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 5.054570583000896
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 592.4,
+          "ttft_s": 3.752891517004173,
+          "client_decode_tps": 105.19511161077864,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 4.960316242999397
+        }
+      ],
+      "changes": {
+        "context": 32768,
+        "args": {},
+        "env": {}
+      },
+      "qualification": [],
+      "storage_size_bytes": 75839998528,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/IQ3_XXS"
+      }
+    },
+    {
+      "variant": "flash-next-strata-65536-screen",
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "weight_quant": "IQ3_XXS",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "context": 65536,
+      "state": "complete",
+      "summary": {
+        "prefill_tps": 589.7,
+        "ttft_s": 3.788800613001513,
+        "client_decode_tps": 94.42974602078166,
+        "decode_tps": 94.2,
+        "prompt_tokens": 2222,
+        "generated_tokens": 128,
+        "profile": "flash-next-strata",
+        "variant": "flash-next-strata-65536-screen",
+        "context": 65536,
+        "repetitions": 1,
+        "memory_high_gib": 44,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 589.7,
+          "ttft_s": 3.788800613001513,
+          "client_decode_tps": 94.42974602078166,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 5.133941650004999
+        }
+      ],
+      "changes": {
+        "context": 65536,
+        "args": {},
+        "env": {}
+      },
+      "qualification": [],
+      "storage_size_bytes": 75839998528,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/IQ3_XXS"
+      }
+    },
+    {
+      "variant": "glm-maya-32768-control",
+      "profile": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "weight_quant": "Maya-S24",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "context": 32768,
+      "state": "ready",
+      "summary": null,
+      "samples": [],
+      "changes": {
+        "context": 32768,
+        "args": {},
+        "env": {}
+      },
+      "qualification": [],
+      "storage_size_bytes": 94701676224,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/Maya-S24"
+      }
+    },
+    {
+      "variant": "hyperqwen-32768-control",
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "category": "VRAM-only models",
+      "context": 32768,
+      "state": "complete",
+      "summary": {
+        "profile": "qwen27b-hyperqwen",
+        "context": 32768,
+        "variant": "hyperqwen-32768-control",
+        "repetitions": 3,
+        "prefill_tps": 1376.812572052838,
+        "ttft_s": 1.623148714999843,
+        "client_decode_tps": 87.5743096550346,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 1376.812572052838,
+          "ttft_s": 1.627200859998993,
+          "client_decode_tps": 85.7449680030309,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.108690282999305
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 1376.3773813487842,
+          "ttft_s": 1.623148714999843,
+          "client_decode_tps": 87.5743096550346,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.0736878690004232
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 1377.7252786365775,
+          "ttft_s": 1.6113461399945663,
+          "client_decode_tps": 96.07092010380478,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 2.933652539999457
+        }
+      ],
+      "changes": {
+        "context": 32768
+      },
+      "qualification": [],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "hyperqwen-40000-screen",
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "category": "VRAM-only models",
+      "context": 40000,
+      "state": "complete",
+      "summary": {
+        "profile": "qwen27b-hyperqwen",
+        "context": 40000,
+        "variant": "hyperqwen-40000-screen",
+        "repetitions": 1,
+        "prefill_tps": 1372.828067910399,
+        "ttft_s": 1.6250377530013793,
+        "client_decode_tps": 89.18835332250825,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 1372.828067910399,
+          "ttft_s": 1.6250377530013793,
+          "client_decode_tps": 89.18835332250825,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.049537943996256
+        }
+      ],
+      "changes": {
+        "context": 40000
+      },
+      "qualification": [],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "hyperqwen-49152-kv704-pf256-confirmed",
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "category": "VRAM-only models",
+      "context": 49152,
+      "state": "complete",
+      "summary": {
+        "profile": "qwen27b-hyperqwen",
+        "context": 49152,
+        "variant": "hyperqwen-49152-kv704-pf256-confirmed",
+        "repetitions": 3,
+        "prefill_tps": 1497.1559907678788,
+        "ttft_s": 1.4940058700012742,
+        "client_decode_tps": 89.34587784223407,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 1490.2630791242027,
+          "ttft_s": 1.4995897500048159,
+          "client_decode_tps": 86.09345270741036,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 2.9751064400043106
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 1498.1538680706583,
+          "ttft_s": 1.4920300860030693,
+          "client_decode_tps": 91.43686106761143,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 2.8812963079981273
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 1497.1559907678788,
+          "ttft_s": 1.4940058700012742,
+          "client_decode_tps": 89.34587784223407,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 2.9157697560003726
+        }
+      ],
+      "changes": {
+        "context": 49152,
+        "kv_mib": 704,
+        "batched_tokens": 256
+      },
+      "qualification": [
+        {
+          "check": "json",
+          "passed": true,
+          "input_tokens": 39,
+          "output_tokens": 14
+        },
+        {
+          "check": "arithmetic",
+          "passed": true,
+          "input_tokens": 49,
+          "output_tokens": 23
+        },
+        {
+          "check": "retrieval",
+          "passed": true,
+          "input_tokens": 44184,
+          "output_tokens": 54
+        }
+      ],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "hyperqwen-49152-kv704-pf256-screen",
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "category": "VRAM-only models",
+      "context": 49152,
+      "state": "complete",
+      "summary": {
+        "profile": "qwen27b-hyperqwen",
+        "context": 49152,
+        "variant": "hyperqwen-49152-kv704-pf256-screen",
+        "repetitions": 1,
+        "prefill_tps": 1489.2788434701476,
+        "ttft_s": 1.5004966080014128,
+        "client_decode_tps": 85.45416025121706,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 1489.2788434701476,
+          "ttft_s": 1.5004966080014128,
+          "client_decode_tps": 85.45416025121706,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 2.9871807760064257
+        }
+      ],
+      "changes": {
+        "context": 49152,
+        "kv_mib": 704,
+        "batched_tokens": 256
+      },
+      "qualification": [],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "hyperqwen-49152-kv704-screen",
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "category": "VRAM-only models",
+      "context": 49152,
+      "state": "complete",
+      "summary": {
+        "profile": "qwen27b-hyperqwen",
+        "context": 49152,
+        "variant": "hyperqwen-49152-kv704-screen",
+        "repetitions": 1,
+        "prefill_tps": 1377.5098775525275,
+        "ttft_s": 1.621758563000185,
+        "client_decode_tps": 92.36272986526798,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 1377.5098775525275,
+          "ttft_s": 1.621758563000185,
+          "client_decode_tps": 92.36272986526798,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 2.997317594003107
+        }
+      ],
+      "changes": {
+        "context": 49152,
+        "kv_mib": 704
+      },
+      "qualification": [],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "sglang-16384-control",
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "context": 16384,
+      "state": "complete",
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 16384,
+        "variant": "sglang-16384-control",
+        "repetitions": 3,
+        "prefill_tps": 2556.6424067501734,
+        "ttft_s": 0.8688889670011122,
+        "client_decode_tps": 45.85333818946273,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2572.3489494257087,
+          "ttft_s": 0.8672431399972993,
+          "client_decode_tps": 45.85333818946273,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.637140222999733
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2556.6424067501734,
+          "ttft_s": 0.8688889670011122,
+          "client_decode_tps": 45.95429662114125,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.63261557900114
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2532.1344053884773,
+          "ttft_s": 0.8769783910029219,
+          "client_decode_tps": 45.53133450650099,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.6663741400043364
+        }
+      ],
+      "changes": {
+        "context": 16384
+      },
+      "qualification": [],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "sglang-21504-confirmed",
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "context": 21504,
+      "state": "complete",
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 21504,
+        "variant": "sglang-21504-confirmed",
+        "repetitions": 3,
+        "prefill_tps": 2534.9866782340123,
+        "ttft_s": 0.8774269809946418,
+        "client_decode_tps": 46.321019076527804,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2582.1010911557632,
+          "ttft_s": 0.8641680700020515,
+          "client_decode_tps": 46.321019076527804,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.6060070099993027
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2534.9866782340123,
+          "ttft_s": 0.8774269809946418,
+          "client_decode_tps": 46.2704969014506,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.62232015599875
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2212,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2522.666549558655,
+          "ttft_s": 0.8805412859946955,
+          "client_decode_tps": 46.410260334752536,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.6171856969958753
+        }
+      ],
+      "changes": {
+        "context": 21504
+      },
+      "qualification": [
+        {
+          "check": "json",
+          "passed": true,
+          "input_tokens": 39,
+          "output_tokens": 21
+        },
+        {
+          "check": "arithmetic",
+          "passed": true,
+          "input_tokens": 49,
+          "output_tokens": 23
+        },
+        {
+          "check": "retrieval",
+          "passed": true,
+          "input_tokens": 19306,
+          "output_tokens": 57
+        }
+      ],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "sglang-21504-pf1024-screen",
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "context": 21504,
+      "state": "complete",
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 21504,
+        "variant": "sglang-21504-pf1024-screen",
+        "repetitions": 1,
+        "prefill_tps": 2250.194231661286,
+        "ttft_s": 0.9908881079973071,
+        "client_decode_tps": 46.272717536526876,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2250.194231661286,
+          "ttft_s": 0.9908881079973071,
+          "client_decode_tps": 46.272717536526876,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.735689524000918
+        }
+      ],
+      "changes": {
+        "context": 21504,
+        "prefill_chunk": 1024
+      },
+      "qualification": [],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "sglang-21504-screen",
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "context": 21504,
+      "state": "complete",
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 21504,
+        "variant": "sglang-21504-screen",
+        "repetitions": 1,
+        "prefill_tps": 2569.831234448016,
+        "ttft_s": 0.8681326720034122,
+        "client_decode_tps": 46.26874763569076,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2222,
+          "generated_tokens": null,
+          "output_tokens": 128,
+          "prefill_tps": 2569.831234448016,
+          "ttft_s": 0.8681326720034122,
+          "client_decode_tps": 46.26874763569076,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 3.6130907050028327
+        }
+      ],
+      "changes": {
+        "context": 21504
+      },
+      "qualification": [],
+      "storage_size_bytes": 15791777864,
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    }
+  ],
+  "source_trail": "docs/FORUM-OPTIMIZATION-SOURCES.md",
+  "historical_kept_results": "docs/benchmark-results/20261027-moe-optimized.json"
+}

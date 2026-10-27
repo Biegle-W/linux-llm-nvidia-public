@@ -46,6 +46,8 @@ remain preserved as historical measurements.
 OpenAI model/engine selection on port 10100 over loopback and Tailscale. DSH is a
 separate client on port 3080; Strata and Maya shortcuts open their native web apps.
 
+**Context tests in progress:** [larger windows with matched speed and quality checks](docs/CONTEXT-EXPANSION-20261027.md). Production settings remain unchanged until qualification.
+
 **Latest results:** [GLM/DeepSeek cache optimization at unchanged contexts](docs/MOE-OPTIMIZATION-20261027.md).
 The [previous full six-profile benchmark](docs/BENCHMARK-20261027-101219.md) and all
 historical evidence remain preserved; current grouped tables combine the new MoE
@@ -153,3 +155,8 @@ independently. Adding a GPU or switch requires rediscovering topology and addres
 Retire unused source/settings into the private archive with hashes, original path,
 source repository, source commit, date and reason. Keep only a pointer in active
 repositories. Preserve dated benchmark evidence and active regression fixtures.
+
+Consult the [forum and primary-source trail](docs/FORUM-OPTIMIZATION-SOURCES.md)
+when researching inference tuning. Distinguish community proposals and other
+hardware from locally validated results, and cite direct post/article and upstream
+implementation URLs beside source-derived claims.
