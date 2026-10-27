@@ -24,6 +24,12 @@ JSON and conversation tests using Maya-S's shared DeepSeek weights; the separate
 IST-DAS weight files were removed. See [native validation](docs/VALIDATION-20261026.md) and
 [local setup](docs/LOCAL-SETUP.md); raw machine details remain ignored.
 
+**Dense Qwen3.8-27B is now validated entirely in VRAM:** IQ4_XS with MTP2
+across both cards, 32K allocation and 29,496-token retrieval checked.
+[GPU-only setup and benchmarks](docs/QWEN27B-GPU-ONLY-20261026.md) record
+69/66 tok/s short/longer-input decode and the adapted archived HyperQwen comparison.
+Start it with `./scripts/start_model.sh qwen27b`.
+
 ## Repository ownership
 
 | Build | Private operational repository | Public reference |

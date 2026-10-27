@@ -1,5 +1,10 @@
 # CUDA engine qualification on mixed Ampere cards
 
+**Follow-up:** [dense Qwen now runs entirely in VRAM](QWEN27B-GPU-ONLY-20261026.md)
+with a smaller IQ4_XS/MTP profile. An adapted archived HyperQwen fast-head
+configuration also passed GPU-only PP2 tests. The initial results below remain
+as a dated record.
+
 Tested on an unlocked RTX 3080 Ti 12 GB and RTX 3080 10 GB, with 64 GB host RAM,
 Ubuntu 26.04 and NVIDIA 595.99.02. The display uses the smaller card. No P2P driver,
 power-limit changes, additional reboot, or memory-balance guard bypass was used.

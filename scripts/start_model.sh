@@ -3,8 +3,8 @@ set -euo pipefail
 project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 model="${1:-qwen}"
 case "$model" in
-    qwen|strata-deepseek|glm|maya-deepseek) ;;
-    *) echo 'Usage: start_model.sh qwen|strata-deepseek|glm|maya-deepseek' >&2; exit 2 ;;
+    qwen|qwen27b|strata-deepseek|glm|maya-deepseek) ;;
+    *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek' >&2; exit 2 ;;
 esac
 python3 - "$project_dir" <<'PY'
 import json, os, socket, sys
@@ -30,6 +30,9 @@ PY
 case "$model" in
     qwen)
         exec "$project_dir/runtimes/bin/strata" launch --preset qwen-flash-next --yes --no-tui ;;
+    qwen27b)
+        exec "$project_dir/scripts/run_bounded_test.sh" qwen27b /usr/bin/python3 \
+            "$project_dir/scripts/serve_qwen27b.py" ;;
     strata-deepseek)
         exec "$project_dir/runtimes/bin/strata" runtime start --profile deepseek-maya-s --wait 600 ;;
     glm)

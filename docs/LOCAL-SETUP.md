@@ -98,3 +98,9 @@ offload is excluded; only a community fork with documented performance
 optimizations relevant to this hardware is eligible for an offload evaluation.
 The historical HyperQwen CPU-offload measurement is not an approved deployment
 profile under this policy. Existing MoE expert streaming is a separate case.
+
+[The dense Qwen3.8-27B GPU-only profile](QWEN27B-GPU-ONLY-20261026.md) is now
+validated with IQ4_XS and MTP2, a 32K allocation, and 29,496-token retrieval.
+Start it with `./scripts/start_model.sh qwen27b`; stop it with
+`systemctl --user stop llm-test-qwen27b`. It shares authenticated port 10000
+with the other models. All weights, including embeddings and MTP, reside in VRAM.
