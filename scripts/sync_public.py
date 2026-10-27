@@ -6,7 +6,7 @@ import re
 import subprocess
 
 FILES = (
-    'README.md', 'AGENTS.md', 'docs/CURRENT-STATE.md', 'docs/BENCHMARK-HISTORY.md', 'docs/AMD-NVIDIA-GAP-AUDIT-20261027.md', '.gitignore', '.gitattributes', 'docs/MIGRATION-HANDOFF.md', 'docs/REPOSITORY-MAP.md', 'docs/LOCAL-SETUP.md',
+    'README.md', 'AGENTS.md', 'docs/CURRENT-STATE.md', 'docs/AMD-PARITY-HANDOFF-20261027.md', 'docs/BENCHMARK-HISTORY.md', 'docs/AMD-NVIDIA-GAP-AUDIT-20261027.md', '.gitignore', '.gitattributes', 'docs/MIGRATION-HANDOFF.md', 'docs/REPOSITORY-MAP.md', 'docs/LOCAL-SETUP.md',
     'docs/VALIDATION-20261026.md', 'docs/BENCHMARK-20261026.md',
     'scripts/build_native_llama.sh', 'scripts/check_local_api.py',
     'scripts/start_model.sh', 'scripts/native_linux_gpu_unlock.py',

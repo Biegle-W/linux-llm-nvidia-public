@@ -20,3 +20,6 @@ hardware changes are authorized by that audit.
 The user approved three operational additions after context rollout: guarded
 ten-minute idle unload, full lifecycle telemetry and manual candidate staging.
 Do not ask again for those additions. Model coverage stays unchanged.
+
+Read the [additional AMD parity task background](docs/AMD-PARITY-HANDOFF-20261027.md)
+as a dated backlog. CURRENT-STATE.md is authoritative for live jobs and completion.
