@@ -454,8 +454,39 @@
           "context_gain_pct": 18.75,
           "measured_generation_loss_pct": 1.7019752144914468,
           "qualification_pending": true,
-          "production_context_unchanged": 32768
+          "production_context_unchanged": 32768,
+          "quality_resource_qualification_passed": true,
+          "normal_reload_full_kv_passed": false,
+          "status": "38K not promoted: normal reload backed 37,501 of 38,912 advertised tokens",
+          "qualification_evidence": "docs/SGLANG-38K-QUALIFICATION-20261028.md"
         }
+      },
+      "latest_38k_qualification": {
+        "run": "20261028-sglang-38k-qualification",
+        "status": "not-promoted-normal-reload-kv-shortfall",
+        "candidate_context": 38912,
+        "production_context_retained": 32768,
+        "isolated_quality_resource_passed": true,
+        "retrieval_input_tokens": 34964,
+        "history_input_tokens": 35063,
+        "continuous_input_tokens": 34973,
+        "continuous_output_tokens": 3072,
+        "continuous_decode_interval_s": 135.8052652999977,
+        "minimum_sampled_gpu_free_mib": [
+          560,
+          795
+        ],
+        "normal_reload_kv_tokens_per_pool": [
+          37501,
+          37501,
+          37501,
+          37501
+        ],
+        "benchmark_repeated": false,
+        "runtime_source_or_guard_changes": false,
+        "evidence": "docs/SGLANG-38K-QUALIFICATION-20261028.md",
+        "numeric_results": "docs/benchmark-results/20261028-sglang-38k-qualification.json",
+        "archive_batch": "linux-nvidia/2026-10-28-sglang-38k"
       }
     },
     {

@@ -292,7 +292,8 @@ failed full-KV capacity proof. No larger profile was promoted; precision, the
 512 MiB reserve, swappiness 60 and all other guards remain unchanged.
 
 The user now accepts proportional context/speed tradeoffs. 38K adds 18.75% context
-for 1.70% measured slowdown, but still requires tool/near-window qualification before
+for 1.70% measured fixed-input slowdown. Tool/near-window and sustained-resource
+checks now pass, but normal reload backed only 37,501 KV tokens and blocked 38K
 promotion; 32K remains deployed. The 600-second idle rule is enabled. Saved automatic
 expiry proof covers HyperQwen; new SGLang was explicitly unloaded about 11 seconds
 before its deadline, so timed expiry was not yet verified at that checkpoint; the subsequent shared-policy setup verified it. See
@@ -313,3 +314,36 @@ internal worker path avoids recursion while retaining original preflight/guards.
 No contexts or model/cache settings changed. Preserve 512 MiB dense reserve,
 swappiness 60, all RAM/thermal/swap guards and the reduced-RAM MoE caveats.
 See docs/ALL-ENGINE-POLICY-20261028.md for coverage and actual idle/reload proof.
+
+
+## Latest: SGLang 38K qualification completed, 32K retained — October 28
+
+The user resumed 38,912 under the proportional context/speed policy. Isolated
+GPU-only placement, W4A8/MTP audits and all four 38,912-token KV pools passed.
+JSON/arithmetic, parsed tool call and tool-result roundtrip, 34,964-input retrieval
+and 35,063-input full-history checks passed. A 34,973-input/3,072-output stream ran
+for 163.28 s, including 135.81 s continuous generation. Sampled GPU free memory never
+fell below 560/795 MiB; worker swap and active-window I/O were zero. Keep the existing
+512 MiB reserve, swappiness 60, 600s idle policy and all other guards.
+
+Normal-router retrieval and automatic request reload worked, but the reloaded
+worker advertised 38,912 while all four KV pools backed only 37,501. The deployment
+check rejected that shortfall and restored 32,768 in the maintained profile and
+DSH web/headless providers. Saved DSH defaults were preserved. 39 CPU regressions
+passed after correcting an old visible-console test fixture; production launcher
+and guards were unchanged. A correct fenced tool answer was accepted using the
+existing JSON convention; passed quality checks were reused rather than rerun.
+
+The earlier 83.32 versus 84.76 decode medians remain saved fixed-input screens:
+18.75% more capacity for 1.70% slower generation. No speed measurements were
+repeated. Near 35K actual input, the long resource stream observed 22.61 decode tok/s, a different workload; this does not replace the fixed-input benchmark.
+The failure is normal-reload KV coverage, not speed, OOM or an isolated guard stop.
+
+Final router is idle, DSH active, no GPU-LOCK or test coordinator remains; visible
+review consoles may remain open. No fallback model was restored. No context,
+runtime, precision, budget or model coverage change remains deployed. Keep both
+repos and this canonical handoff current. The 38K quality/resource checks are now
+complete; the remaining blocker is reliable full-KV backing on normal reload.
+Next action: investigate startup memory/capacity variability without relaxing
+guards; do not repeat completed speed screens for luck. Reduced-RAM MoE/Maya
+sustained-swap caveats remain separate unresolved work. See [qualification](docs/SGLANG-38K-QUALIFICATION-20261028.md).

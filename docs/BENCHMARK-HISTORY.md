@@ -145,3 +145,18 @@ October 28 operational policy update: shared 600-second idle release now applies
 all six profiles and survives reinstall/normal CLI launch. Real SGLang automatic
 expiry and subsequent normal reload passed in visible terminals. No performance
 benchmark, context or numerical setting changed; see ALL-ENGINE-POLICY-20261028.md.
+
+
+## SGLang 38K qualification and rollback — October 28
+
+[Missing quality/resource checks completed](SGLANG-38K-QUALIFICATION-20261028.md).
+34,964-input retrieval, 35,063-input history, JSON/arithmetic and tool roundtrip passed.
+A 34,973-input/3,072-output stream completed in 163.28 s (135.81 s continuous generation),
+with zero worker swap/I/O and minimum sampled free VRAM 560/795 MiB. The original
+38K 83.3212 versus 32K 84.7639 fixed-input medians were carried, not rerun.
+Normal-router retrieval/reload worked, but the reload backed only 37,501 of 38,912
+advertised tokens. Promotion was rejected; 32K was restored in router/harness/DSH
+with defaults preserved. 39 CPU tests passed after an old visible-console fixture
+was corrected. Final state idle; reserve 512 MiB, swappiness 60 and all guards unchanged.
+The saved fenced-JSON answer was correctly parsed without retrying passed quality
+checks; an unfinished sustained test resumed. Raw failed/successful evidence remains.

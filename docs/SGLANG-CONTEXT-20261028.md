@@ -1,5 +1,7 @@
 # SGLang context study — October 28, 2026
 
+Later follow-up: under the accepted proportional policy, [38K passed isolated quality/resource checks but failed full KV coverage on normal reload](SGLANG-38K-QUALIFICATION-20261028.md). The 32K deployment remains. Original screening measurements and gate below are preserved.
+
 **Keep the deployed 32,768-token profile.** No screened larger setting passed the user’s no-generation-loss condition. The source/runtime, TP2/MTP3 W4A8, BF16 state/KV and production settings are unchanged. Dense reserve 512 MiB, swappiness 60 and all other guards remained enabled. All tests used visible terminals.
 
 [Numeric trials, exact settings, samples, resources and failures](benchmark-results/20261028-sglang-context.json). [Deployed runtime](SGLANG-DEPLOYMENT-20261028.md).

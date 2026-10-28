@@ -174,3 +174,11 @@ internal worker path avoids recursion while retaining original preflight/guards.
 No contexts or model/cache settings changed. Preserve 512 MiB dense reserve,
 swappiness 60, all RAM/thermal/swap guards and the reduced-RAM MoE caveats.
 See ../docs/ALL-ENGINE-POLICY-20261028.md for coverage and actual idle/reload proof.
+
+
+October 28 [38K qualification](../docs/SGLANG-38K-QUALIFICATION-20261028.md):
+normal long-input retrieval and automatic reload succeeded, but the reload
+allocated only 37,501 KV tokens per pool against 38,912 advertised. Full-capacity
+verification rejected promotion. The maintained router/harness and DSH web/headless
+profiles are restored to 32,768 with saved defaults preserved; final router is idle.
+512 MiB reserve, swappiness 60 and all other guards remain.

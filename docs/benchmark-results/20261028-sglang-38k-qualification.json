@@ -1,0 +1,271 @@
+{
+  "run": "20261028-sglang-38k-qualification",
+  "date": "2026-10-28",
+  "status": "not-promoted-normal-reload-kv-shortfall",
+  "configured_context": 38912,
+  "qualification_passed": false,
+  "isolated_quality_resource_passed": true,
+  "normal_reload_kv_capacity": [
+    37501,
+    37501,
+    37501,
+    37501
+  ],
+  "benchmark_repeated": false,
+  "initial_harness_completion": {
+    "exit_code": 1,
+    "completed_at": "2026-10-28T18:17:24.378811+00:00"
+  },
+  "harness_correction": {
+    "initial_error": "Tool roundtrip returned correct JSON inside a Markdown fence; added parser accepted it using existing qualification convention.",
+    "parsed_tool_result": {
+      "doubled": 84
+    },
+    "passed_quality_checks_reused": true,
+    "only_unfinished_sustained_workload_resumed": true,
+    "initial_terminal_capture": "Initial terminal log was overwritten by the resume wrapper; independent first-run events, engine log, requests and responses remain."
+  },
+  "carried_speed_screen": {
+    "candidate": {
+      "profile": "qwen27b-sglang",
+      "context": 38912,
+      "variant": "candidate-38912",
+      "repetitions": 3,
+      "prefill_tps": 1660.6774856178629,
+      "ttft_s": 1.3483884019997276,
+      "client_decode_tps": 83.32124306014909,
+      "memory_high_gib": 30,
+      "memory_max_gib": 36
+    },
+    "control": {
+      "profile": "qwen27b-sglang",
+      "context": 32768,
+      "variant": "control-32768",
+      "repetitions": 3,
+      "prefill_tps": 1667.8703781763365,
+      "ttft_s": 1.3455440140005521,
+      "client_decode_tps": 84.76390369181925,
+      "memory_high_gib": 30,
+      "memory_max_gib": 36
+    },
+    "context_gain_pct": 18.75,
+    "generation_loss_pct": 1.7019752144914468,
+    "evidence": "docs/benchmark-results/20261028-sglang-context.json",
+    "attribution": "Earlier same-day fixed-input three-request screen; not a new matched confirmation."
+  },
+  "guards": {
+    "dense_gpu_free_mib": 512,
+    "swappiness": 60,
+    "ram_high_gib": 30,
+    "ram_max_gib": 36,
+    "host_available_gib": 8,
+    "temperature_c": 82,
+    "active_swap_churn_guard": "unchanged loading-swap-active-churn-v2",
+    "swap_occupancy_cap": null
+  },
+  "tool_check": {
+    "passed": true,
+    "tool": "report_number",
+    "arguments": {
+      "value": 42
+    }
+  },
+  "quality_checks": [
+    {
+      "check": "json",
+      "context": 38912,
+      "passed": true,
+      "done": true,
+      "usage": {
+        "prompt_tokens": 39,
+        "total_tokens": 60,
+        "completion_tokens": 21,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "ttft_s": 0.08829175999562722,
+      "wall_s": 0.19650613099656766,
+      "client_decode_tps": 184.92043391154604
+    },
+    {
+      "check": "arithmetic",
+      "context": 38912,
+      "passed": true,
+      "done": true,
+      "usage": {
+        "prompt_tokens": 49,
+        "total_tokens": 72,
+        "completion_tokens": 23,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "ttft_s": 0.0819969369986211,
+      "wall_s": 0.24205821900250157,
+      "client_decode_tps": 161.48364360058363
+    },
+    {
+      "check": "retrieval",
+      "context": 38912,
+      "passed": true,
+      "done": true,
+      "usage": {
+        "prompt_tokens": 34964,
+        "total_tokens": 35021,
+        "completion_tokens": 57,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "ttft_s": 27.462002809996193,
+      "wall_s": 29.176806704999763,
+      "client_decode_tps": 32.65794129208736
+    },
+    {
+      "check": "long-history",
+      "passed": true,
+      "complete": true,
+      "usage": {
+        "prompt_tokens": 35063,
+        "total_tokens": 35120,
+        "completion_tokens": 57,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "ttft_s": 27.572092814996722,
+      "wall_s": 29.285099859000184,
+      "decode_interval_s": 1.7129353959971922,
+      "finish_reason": "stop"
+    },
+    {
+      "check": "tool-roundtrip",
+      "passed": true,
+      "complete": true,
+      "usage": {
+        "prompt_tokens": 106,
+        "total_tokens": 125,
+        "completion_tokens": 19,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "ttft_s": 0.2561670020004385,
+      "wall_s": 0.3719736190032563,
+      "decode_interval_s": 0.11570818800100824,
+      "finish_reason": "stop"
+    },
+    {
+      "check": "long-input-continuous-generation",
+      "passed": true,
+      "complete": true,
+      "usage": {
+        "prompt_tokens": 34973,
+        "total_tokens": 38045,
+        "completion_tokens": 3072,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "ttft_s": 27.474290967998968,
+      "wall_s": 163.27964939900266,
+      "decode_interval_s": 135.8052652999977,
+      "finish_reason": "length"
+    }
+  ],
+  "kv_capacity": {
+    "context": 38912,
+    "allocated_tokens_per_pool": [
+      38912,
+      38912,
+      38912,
+      38912
+    ]
+  },
+  "resources": {
+    "samples": 57,
+    "active_samples": 45,
+    "minimum_gpu_free_mib": [
+      560.0,
+      795.0
+    ],
+    "maximum_gpu_temperature_c": [
+      65.0,
+      51.0
+    ],
+    "minimum_host_available_gib": 31.420703887939453,
+    "peak_worker_ram_gib": 7.299915313720703,
+    "peak_worker_swap_gib": 0.0
+  },
+  "long_input_sustained_observed_decode_tps": 22.613261667108954,
+  "resource_check": {
+    "passed": true,
+    "mature_swap_window_samples": 51,
+    "max_swap_write_mib_s": 0.0,
+    "max_swap_combined_mib_s": 0.0
+  },
+  "safety_stop": null,
+  "error": null,
+  "normal_router_verification": {
+    "status": "failed-full-kv-capacity",
+    "error": "Normal reload advertised38912 tokens but all four KV pools backed only37501",
+    "final_router_health": {
+      "status": "ok",
+      "active_model": null,
+      "loading_model": null,
+      "busy": false,
+      "models": 6,
+      "idle_unloading_model": null
+    },
+    "gpu_reservation_present": false,
+    "dsh_active": true,
+    "configured_context": 38912,
+    "actual_kv_tokens_per_pool": [
+      37501,
+      37501,
+      37501,
+      37501
+    ],
+    "normal_retrieval_input_tokens": 34964,
+    "normal_retrieval_passed": true,
+    "automatic_request_reload_passed": true,
+    "cpu_tests": [
+      {
+        "pattern": "test_sglang_runtime.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_router.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_inference_policy.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_worker_budgets.py",
+        "exit_code": 0
+      }
+    ],
+    "cpu_test_count": 39,
+    "selected_context_after_rollback": 32768
+  },
+  "initial_normal_deployment_verification": {
+    "status": "failed",
+    "error": "test_worker_budgets.py",
+    "final_router_health": {
+      "status": "ok",
+      "active_model": null,
+      "loading_model": null,
+      "busy": false,
+      "models": 6,
+      "idle_unloading_model": null
+    },
+    "gpu_reservation_present": false,
+    "dsh_active": true
+  },
+  "deployment_test_fixture_fix": "Worker-budget test now stubs its visible-console boundary; the first normal attempt rolled back before GPU loading because the old fixture omitted this required helper. Runtime launcher and guards unchanged.",
+  "selected_context": 32768,
+  "limitations": [
+    "The saved 83.32/84.76 rates compare equal approximately2.2K-input prompts with128 output tokens; they do not establish equal speed at longer actual inputs.",
+    "Long-input sustained output is resource/continuity evidence, not a replacement performance benchmark or multi-hour reliability test.",
+    "GPU/host samples are periodic observations; supervised guards retain their existing debounce.",
+    "No larger contexts, new runtime code, precision or admission-budget changes were tested."
+  ],
+  "promotion_blocker": "Normal reload advertised38912 while all four KV pools backed37501"
+}

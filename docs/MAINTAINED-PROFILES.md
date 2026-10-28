@@ -156,3 +156,10 @@ The two supervisor sources immediately before the intentional-shutdown fix are
 archived separately in `linux-nvidia/2026-10-27-intentional-shutdown-fix`, commit
 `0840f24`, with original/stored hashes verified. The fix prevents false missing-
 telemetry latches during requested shutdown; unexpected failures remain guarded.
+
+
+The later [38K qualification](SGLANG-38K-QUALIFICATION-20261028.md) passed isolated
+quality/history/tools and sustained resources under the accepted proportional
+policy. Normal reload backed only 37,501 of 38,912 advertised tokens, so promotion
+was rejected and the selected 32K profile/speed table above remains current.
+No speed screens were repeated; source/precision/budgets/guards remain unchanged.

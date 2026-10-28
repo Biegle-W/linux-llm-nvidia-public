@@ -18,6 +18,11 @@ class WorkerBudget(unittest.TestCase):
             (temp/'scripts').mkdir()
             script=temp/'scripts/run_bounded_test.sh'
             script.write_text((root/'scripts/run_bounded_test.sh').read_text())
+            # The launcher requires a visible-console handshake before systemd.
+            # Stub that UI boundary in this isolated argument-construction test.
+            (temp/'scripts/visible_terminal.py').write_text(
+                'import sys\nassert sys.argv[1] == "open"\n'
+                'assert "--unit" in sys.argv\nprint("fixture-console-opened")\n')
             fake=temp/'systemd-run'
             fake.write_text('#!/usr/bin/python3\nimport sys\nprint("\\n".join(sys.argv[1:]))\n')
             fake.chmod(0o755)
@@ -29,6 +34,7 @@ class WorkerBudget(unittest.TestCase):
                    ('qwen27b','/unrecognized.py','hyperqwen','1G')]
             for name,command,engine,limit in cases:
                 result=subprocess.check_output(['bash',str(script),name,'/usr/bin/python3',command,engine],text=True,env=env)
+                self.assertIn('fixture-console-opened',result)
                 self.assertIn('--property=MemorySwapMax='+limit,result)
     def test_moe_shell_commands_use_managed_router_selection(self):
         root = Path(__file__).resolve().parents[1]
