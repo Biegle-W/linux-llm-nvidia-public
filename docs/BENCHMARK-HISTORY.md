@@ -108,3 +108,12 @@ The completed 16K retrieval checks used 14,686 input tokens.
 October 28 operational update: visible backend/harness terminals are required;
 future isolated tests finish idle rather than automatically restoring HyperQwen.
 Nineteen router regressions passed in a visible terminal. No benchmark values changed.
+
+## 32K SGLang MTP3 with user-approved 512 MiB floor — October 28
+
+[Visible retest](SGLANG-MTP3-512MIB-20261028.md): 1664.67 prefill / 1.34646 s TTFT /
+82.7856 decode, three requests at 32K. JSON, arithmetic and 29,434-input retrieval
+passed. Minimum sampled VRAM free 802/997 MiB; RAM and swap guards unchanged,
+swappiness 60. Prior 1 GiB failures remain historical. The previous 32K TP2 no-MTP
+control was not repeated; descriptive decode gain is about 29.0%. No sustained-load
+claim or production engine promotion. Visible cleanup finishes idle, not HyperQwen.

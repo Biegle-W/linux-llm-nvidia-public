@@ -259,3 +259,36 @@ approval remains. Continue reviewed, sanitized exports and independent pushes;
 do not ask for redundant routine publication approval. Keep private evidence,
 credentials, local paths, binaries and model weights out of the public repository.
 Final synchronization evidence is private under data/repository-sync-20261028/.
+
+## 32K SGLang TP2/MTP3 retest with 512 MiB floor — October 28
+
+The user explicitly approved lowering the dense VRAM-free floor from 1,024 to
+512 MiB. The normal dense supervisor and isolated retest share that constant;
+swappiness 60, RAM 30/36 GiB, host available 8 GiB, temperature 82°C, unlimited swap
+occupancy and active churn thresholds remain unchanged. This supersedes the
+current 1 GiB dense guard requirement, not the historical attribution of old runs.
+
+The corrected unchanged fork candidate completed three requests at 32,768 context:
+1664.67 prefill tok/s, 1.34646 s TTFT and 82.7856 decode tok/s. JSON, arithmetic
+and 29,434-input three-marker retrieval passed. All 256 W4A8 rank/projection
+entries, both draft weight-completeness/sharing checks, GPU-only target/draft
+placement and full 32K KV pools passed. Minimum sampled free VRAM 802/997 MiB
+(Ti/3080); maximum GPU temperatures 57/45°C. Minimum host available RAM 32.15 GiB,
+peak owned RAM 7.26 GiB and swap 0. No guard stop or OOM occurred. Fifteen swap and
+supervisor regressions passed in the visible foreground harness.
+
+The 82.79 decode median is about 29.0% above the prior 32K TP2 no-MTP control;
+that control was not rerun and the comparison is historical, not a fresh pairing.
+Long retrieval completed in about 24 seconds; no complete 30-second continuous
+inference swap-rate window was observed, so this is not sustained-load qualification.
+The previous 1 GiB-guard failures remain unchanged and valid for their policy.
+
+The foreground harness and backend logs were visible. Cleanup left the router
+idle with no selected worker, no port 10000 listener and no GPU-LOCK. HyperQwen
+was not restored; swappiness is 60. No production fork promotion or engine setting
+change was made. The selected normal SGLang remains PP2 W4A16/FP32/32K, while
+the normal dense GPU guard is now 512 MiB on future launches.
+
+See [the retest report](SGLANG-MTP3-512MIB-20261028.md) and matching numeric results.
+Raw evidence is private under data/sglang-mtp3-512mib-20261028/. Do not repeat
+completed control/kernel tests or silently promote this candidate.

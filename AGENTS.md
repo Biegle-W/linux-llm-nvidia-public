@@ -87,8 +87,8 @@ TP2/MTP study. The earlier decode regression is not a reason to reject that
 accepted tradeoff. This authorization does not silently promote the fork.
 The pinned fork, separate native runtime, reproducible local compatibility patch,
 all startup failures and completed controls are recorded in
-[the study report](docs/SGLANG-HETERO-MTP-20261028.md). Preserve the unchanged
-1 GiB GPU-free guard, 8 GiB host floor, 30/36 GiB worker limits, active swap-churn
+[the study report](docs/SGLANG-HETERO-MTP-20261028.md). That study used a
+1 GiB GPU-free guard (superseded by the user-approved 512 MiB floor below), 8 GiB host floor, 30/36 GiB worker limits, active swap-churn
 protection and swappiness60. No generic CPU weight offload is permitted.
 The benchmark metric reader now counts one canonical TP replica after the final
 PP stage; seven regression tests cover parallel-rank accounting. Do not recompute
@@ -133,3 +133,20 @@ Continue the existing export allowlist, privacy review, nonpersonal commits and
 independent pushes. A platform automatic-review rejection is an external tool
 restriction, not a user-requested approval policy. Describe it accurately and
 never attribute that restriction to the user or bypass a rejection.
+
+## Dense VRAM reserve update — October 28
+
+The user explicitly lowered the dense GPU free-memory guard from 1,024 MiB to
+512 MiB and authorized a visible-terminal TP2/MTP3 32K retest. The normal dense
+supervisor and isolated retest share DENSE_GPU_FREE_MIB=512. Normal workers stop
+after three low-headroom checks; isolated trials also require at least 512 MiB
+at readiness. Swappiness stays 60; host reserve 8 GiB, worker RAM 30/36 GiB,
+temperature 82°C, unlimited swap occupancy and active swap-churn guards are unchanged.
+Earlier 1 GiB failures remain historical evidence under their original guard.
+This approval does not promote the experimental fork or change the selected
+engine settings. Future tests still run visibly and finish idle after cleanup.
+
+The [512 MiB retest](docs/SGLANG-MTP3-512MIB-20261028.md) passed at 32K: 82.79
+decode tok/s, JSON/arithmetic and 29,434-input retrieval, minimum sampled free
+VRAM 802/997 MiB. No production fork promotion; prior 1 GiB failures are preserved.
+The visible test finished idle, with no automatic HyperQwen restoration.

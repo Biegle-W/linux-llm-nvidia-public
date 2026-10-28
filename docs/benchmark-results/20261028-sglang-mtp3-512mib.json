@@ -1,0 +1,695 @@
+{
+  "run": "20261028-sglang-mtp3-32k-512mib",
+  "date": "2026-10-28",
+  "user_authorized_guard_change_mib": {
+    "previous": 1024,
+    "current": 512
+  },
+  "hardware": {
+    "cpu": "Intel Core i5-13600KF",
+    "linux_usable_ram_gib": 45.551353454589844,
+    "gpus": [
+      "RTX 3080 Ti 12GB",
+      "RTX 3080 10GB"
+    ],
+    "second_gpu_link": "PCIe 4.0 x4",
+    "kernel": "7.0.0-38-generic",
+    "nvidia_driver": "595.99.02"
+  },
+  "source": {
+    "fork_commit": "62271fd7c8aa8fe9edebf04e00a414b7fbf64388",
+    "staged_manifest_sha256": "c7261ca3e44edd58e3bf84ce1e3c7b1ae3d80370f28900bd837707cacca67d34",
+    "changes": [
+      {
+        "path": "python/sglang/jit_kernel/csrc/gemm/marlin_w4a8/dequant.h",
+        "before_sha256": null,
+        "after_sha256": "361fc798c73612307e5694fe49dbdba57738651584f54249d8064c0a79ad7e00"
+      },
+      {
+        "path": "python/sglang/jit_kernel/csrc/gemm/marlin_w4a8/entry.cuh",
+        "before_sha256": null,
+        "after_sha256": "71a037b755f827a661c4e70977909a09bacd434b8c6e63e3e2e2a6c747ecc6dc"
+      },
+      {
+        "path": "python/sglang/jit_kernel/csrc/gemm/marlin_w4a8/marlin.cuh",
+        "before_sha256": null,
+        "after_sha256": "87d50a664878e641473289579243a211e3c3721601273423b81b0745f07c79d7"
+      },
+      {
+        "path": "python/sglang/jit_kernel/csrc/gemm/marlin_w4a8/marlin_dtypes.cuh",
+        "before_sha256": null,
+        "after_sha256": "44791a3f3878718fac89ce21ec5c921fc3b5871e986981f76a0f03a8d779b0b4"
+      },
+      {
+        "path": "python/sglang/jit_kernel/csrc/gemm/marlin_w4a8/marlin_mma.h",
+        "before_sha256": null,
+        "after_sha256": "9c52f2b1b85578f42bfae1288892856baaea2caaf09fff3f5a28246872cfdcd4"
+      },
+      {
+        "path": "python/sglang/jit_kernel/csrc/gemm/marlin_w4a8/marlin_template.h",
+        "before_sha256": null,
+        "after_sha256": "6e07ee470037f1659dbd8d9f4f44295a225902da4d2abcf3c85c6adee8b4210d"
+      },
+      {
+        "path": "python/sglang/jit_kernel/csrc/gemm/marlin_w4a8/repack.cuh",
+        "before_sha256": null,
+        "after_sha256": "ddfb8046872c534a1b5b26de72b1f3ec8160325ea96be5dbc34534b618d2dc41"
+      },
+      {
+        "path": "python/sglang/jit_kernel/gptq_marlin_w4a8.py",
+        "before_sha256": null,
+        "after_sha256": "e552b4f585dfa232a07da3df83b036fa35e653b819eb2f460c81ea2b6b7f22b2"
+      },
+      {
+        "path": "python/sglang/srt/layers/attention/triton_backend.py",
+        "before_sha256": "88d566b5611f184522ac78be025ed833cc08f1f910b8307d94c30d3c5984aabf",
+        "after_sha256": "8c74acb1b5492159575e314a02a263b7b2f0f926aa0b5d83bbda3ea572f25e0a"
+      },
+      {
+        "path": "python/sglang/srt/layers/quantization/compressed_tensors/compressed_tensors.py",
+        "before_sha256": "f09ff84ec0e0e3523c6eea8fb84d1300b5fd5d085a97439180dd11b48f36c331",
+        "after_sha256": "8c63f07ddce22fd41bec1a34d43841fe30080884ca02058576693198c9bc54f4"
+      },
+      {
+        "path": "python/sglang/srt/layers/quantization/compressed_tensors/compressed_tensors_embedding.py",
+        "before_sha256": null,
+        "after_sha256": "676dc7276bd4acc97277036d108b43db7012a09102c79155201a577c1069748b"
+      },
+      {
+        "path": "python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_wNa16.py",
+        "before_sha256": "b2ffbd41a6c46ecbe4efbbbfb94be9531dc7ffd01d8432870022a21766d3249b",
+        "after_sha256": "254285476afa16d87a064f4acd07028ae2109b5b10794d010487d486d0b99e8a"
+      },
+      {
+        "path": "python/sglang/srt/model_executor/model_runner.py",
+        "before_sha256": "07eee148d8f2e2aef059b21d0cedd388537eb9b52abd6a174581992790af0db3",
+        "after_sha256": "33ee6665e46b48d9c4426bd5358d3181146a3033de3f11fdc957f6acede893ae"
+      },
+      {
+        "path": "python/sglang/srt/models/qwen3_5.py",
+        "before_sha256": "435f48cca6d4d83f3aed799d1e16cb83eee55cff1ac765b55d2a694e6843b708",
+        "after_sha256": "439a1858145c399f553a573dba88384d29d86711aacb2b3191cdf72eec14c15e"
+      },
+      {
+        "path": "python/sglang/srt/models/qwen3_5_mtp.py",
+        "before_sha256": "bad6ef93b6b5dee5ced10ec93c6607971eaad30ee0c90b9b5a5d92b93a95389b",
+        "after_sha256": "cd2a3e1e59adb4a643725985540fb2124804cf88ffb27c0237a36e33d61e6f3b"
+      },
+      {
+        "path": "python/sglang/srt/models/qwen3_vl.py",
+        "before_sha256": "1b5911af021d51154d65e41dd6ef976603961536e1ddde0f189cdef25b8b48ad",
+        "after_sha256": "0969972e35f6b53aae7a940a5b9dca95d93580d4bbf059c3370932e2908f35ff"
+      },
+      {
+        "path": "python/sglang/srt/speculative/eagle_worker_v2.py",
+        "before_sha256": "683745a55f976780344d4be29eccef5e76105b4bdb1d3a07ac781a39a7a760ac",
+        "after_sha256": "7cb18f8910f4b3d2ed7b5ae0824a579b677550eac30adfd27c61aafd87f99a81"
+      }
+    ],
+    "status": "kernel-and-shard-checks-passed",
+    "production_unchanged": true,
+    "patch_sha256": "311a4ac9c572a52488651e1c993e36eae3d54b89b98cf0f53a420eafc953315d"
+  },
+  "runtime_versions": {
+    "torch": "2.11.0",
+    "torchvision": "0.26.0",
+    "torchaudio": "2.11.0",
+    "torchcodec": "0.11.1",
+    "torchao": "0.17.0",
+    "triton": "3.6.0",
+    "flashinfer-python": "0.6.14",
+    "sglang-kernel": "0.4.4",
+    "transformers": "5.12.1",
+    "apache-tvm-ffi": "0.1.11",
+    "nvidia-nccl-cu13": "2.28.9",
+    "compressed-tensors": "0.20.0",
+    "xgrammar": "0.2.1"
+  },
+  "production_engine_promoted": false,
+  "qualification_passed": true,
+  "state": {
+    "time": "2026-10-28T00:53:07-0400",
+    "stage": "complete",
+    "error": null,
+    "cleanup": "owned worker stopped; no automatic backend restoration"
+  },
+  "settings": {
+    "tp_size": 2,
+    "pp_size": 1,
+    "disable_custom_all_reduce": true,
+    "mem_fraction_static": null,
+    "context_length": 32768,
+    "max_running_requests": 1,
+    "chunked_prefill_size": 384,
+    "disable_cuda_graph": false,
+    "cuda_graph_max_bs_decode": 1,
+    "enable_multimodal": false,
+    "json_model_override_args": "{\"language_model_only\":true}",
+    "max_mamba_cache_size": 1,
+    "mamba_ssm_dtype": "bfloat16",
+    "cpu_offload_gb": 0,
+    "attention_backend": "triton",
+    "disable_radix_cache": true,
+    "tool_call_parser": "qwen3_coder",
+    "enable_metrics": true,
+    "rank_gpu_id": [
+      0,
+      1
+    ],
+    "rank_gpu_memory_mib": [
+      11008,
+      8960
+    ],
+    "rank_tp_ratio": [
+      9,
+      8
+    ],
+    "rank_mlp_ratio": [
+      10,
+      7
+    ],
+    "max_total_tokens": 32768,
+    "disable_overlap_schedule": false,
+    "speculative_algorithm": "NEXTN",
+    "speculative_draft_model_path": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+    "speculative_num_steps": 3,
+    "speculative_eagle_topk": 1,
+    "speculative_num_draft_tokens": 4,
+    "disable_prefill_cuda_graph": true
+  },
+  "protocol": {
+    "repetitions": 3,
+    "prompt_tokens_range": [
+      2212,
+      2222
+    ],
+    "output_tokens": 128,
+    "warmup_output_tokens": 64,
+    "temperature": 0,
+    "seed": 261026,
+    "thinking": false,
+    "prefix_cache": false,
+    "load_time_excluded": true,
+    "prefill": "per-request native prefill_forward metric deltas",
+    "decode": "client SSE (output tokens - 1) / first-to-last nonempty content interval",
+    "limits": {
+      "ram_high_gib": 30,
+      "ram_max_gib": 36,
+      "swap_occupancy_cap": null,
+      "active_swap_churn_guard": true,
+      "host_available_floor_gib": 8,
+      "gpu_free_floor_mib": 512,
+      "gpu_temp_limit_c": 82,
+      "host_swappiness": 60
+    },
+    "limitations": "Sequential fixed prompts and order, three requests per measured candidate; speculative streaming may deliver bursts, so SSE interval accounting is approximate. No full numerical-equivalence or sustained-load claim."
+  },
+  "visible_terminals": {
+    "harness": true,
+    "backend_console": true,
+    "foreground_receipt": {
+      "time": "2026-10-28T00:53:07-0400",
+      "exit_code": 0,
+      "visible_tty": "/dev/pts/0",
+      "restored_backend": false
+    }
+  },
+  "summary": {
+    "profile": "qwen27b-sglang",
+    "context": 32768,
+    "variant": "hetero-tp2-mtp3-32k-512mib-v16",
+    "repetitions": 3,
+    "prefill_tps": 1664.6716303885273,
+    "ttft_s": 1.3464565350004705,
+    "client_decode_tps": 82.78559477640556,
+    "memory_high_gib": 30,
+    "memory_max_gib": 36
+  },
+  "samples": [
+    {
+      "profile": "qwen27b-sglang",
+      "case": "warmup",
+      "rep": 0,
+      "context": 32768,
+      "prompt_tokens": 650,
+      "output_tokens": 64,
+      "ttft_s": 0.43729399099993316,
+      "last_content_s": 1.0257672580000872,
+      "wall_s": 1.025979353999901,
+      "usage": {
+        "prompt_tokens": 650,
+        "total_tokens": 714,
+        "completion_tokens": 64,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "native_timings": {},
+      "client_decode_tps": 107.05668979859286,
+      "native_decode_tps": null,
+      "prefill_tps": 1579.0632230753629,
+      "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+      "cached_tokens": 0,
+      "finish_reason": "length",
+      "done": true,
+      "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that fosters community connection, food security, and environmental stewardship. To successfully launch and",
+      "reasoning": "",
+      "prefill_metric_count": 1.0,
+      "prefill_metric_count_rows": [
+        [
+          {
+            "engine_type": "unified",
+            "model_name": "qwen3.8-27b",
+            "moe_ep_rank": "0",
+            "pp_rank": "0",
+            "stage": "prefill_forward",
+            "tp_rank": "0"
+          },
+          1.0
+        ]
+      ],
+      "prefill_metric_duration_rows": [
+        [
+          {
+            "engine_type": "unified",
+            "model_name": "qwen3.8-27b",
+            "moe_ep_rank": "0",
+            "pp_rank": "0",
+            "stage": "prefill_forward",
+            "tp_rank": "0"
+          },
+          0.4116364629999225
+        ]
+      ],
+      "prefill_s": 0.4116364629999225,
+      "valid": true
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "case": "measured",
+      "rep": 0,
+      "context": 32768,
+      "prompt_tokens": 2222,
+      "output_tokens": 128,
+      "ttft_s": 1.3462302059997455,
+      "last_content_s": 2.8803135250000196,
+      "wall_s": 2.8805292959996223,
+      "usage": {
+        "prompt_tokens": 2222,
+        "total_tokens": 2350,
+        "completion_tokens": 128,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "native_timings": {},
+      "client_decode_tps": 82.78559477640556,
+      "native_decode_tps": null,
+      "prefill_tps": 1664.6716303885273,
+      "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+      "cached_tokens": 0,
+      "finish_reason": "length",
+      "done": true,
+      "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about building a sustainable ecosystem that supports both the plants and the people who tend to them. The process begins long before the first shovel hits the soil, starting with a comprehensive planning phase that defines the garden\u2019s purpose, scope, and governance structure. This initial stage is critical because it sets the tone for the entire project. You must first identify the available land, ensuring it has adequate sunlight, access to water, and is free from significant",
+      "reasoning": "",
+      "prefill_metric_count": 1.0,
+      "prefill_metric_count_rows": [
+        [
+          {
+            "engine_type": "unified",
+            "model_name": "qwen3.8-27b",
+            "moe_ep_rank": "0",
+            "pp_rank": "0",
+            "stage": "prefill_forward",
+            "tp_rank": "0"
+          },
+          1.0
+        ]
+      ],
+      "prefill_metric_duration_rows": [
+        [
+          {
+            "engine_type": "unified",
+            "model_name": "qwen3.8-27b",
+            "moe_ep_rank": "0",
+            "pp_rank": "0",
+            "stage": "prefill_forward",
+            "tp_rank": "0"
+          },
+          1.3347977819994412
+        ]
+      ],
+      "prefill_s": 1.3347977819994412,
+      "valid": true
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "case": "measured",
+      "rep": 1,
+      "context": 32768,
+      "prompt_tokens": 2212,
+      "output_tokens": 128,
+      "ttft_s": 1.350023500000134,
+      "last_content_s": 2.8189062040000863,
+      "wall_s": 2.8190130080001836,
+      "usage": {
+        "prompt_tokens": 2212,
+        "total_tokens": 2340,
+        "completion_tokens": 128,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "native_timings": {},
+      "client_decode_tps": 86.46027327720793,
+      "native_decode_tps": null,
+      "prefill_tps": 1657.3705263344511,
+      "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+      "cached_tokens": 0,
+      "finish_reason": "length",
+      "done": true,
+      "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that serves the social, environmental, and nutritional needs of a neighborhood. The process begins with a robust planning phase, which is the foundation upon which all subsequent activities are built. Before a single shovel hits the soil, the organizing committee must define the garden\u2019s mission, scope, and legal standing. This involves securing a lease or deed for the land, ensuring it is free from contamination, and establishing a clear governance",
+      "reasoning": "",
+      "prefill_metric_count": 1.0,
+      "prefill_metric_count_rows": [
+        [
+          {
+            "engine_type": "unified",
+            "model_name": "qwen3.8-27b",
+            "moe_ep_rank": "0",
+            "pp_rank": "0",
+            "stage": "prefill_forward",
+            "tp_rank": "0"
+          },
+          1.0
+        ]
+      ],
+      "prefill_metric_duration_rows": [
+        [
+          {
+            "engine_type": "unified",
+            "model_name": "qwen3.8-27b",
+            "moe_ep_rank": "0",
+            "pp_rank": "0",
+            "stage": "prefill_forward",
+            "tp_rank": "0"
+          },
+          1.3346442239999305
+        ]
+      ],
+      "prefill_s": 1.3346442239999305,
+      "valid": true
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "case": "measured",
+      "rep": 2,
+      "context": 32768,
+      "prompt_tokens": 2212,
+      "output_tokens": 128,
+      "ttft_s": 1.3464565350004705,
+      "last_content_s": 2.9553219580002406,
+      "wall_s": 2.9554780270000265,
+      "usage": {
+        "prompt_tokens": 2212,
+        "total_tokens": 2340,
+        "completion_tokens": 128,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "native_timings": {},
+      "client_decode_tps": 78.93761540552305,
+      "native_decode_tps": null,
+      "prefill_tps": 1665.533384893661,
+      "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+      "cached_tokens": 0,
+      "finish_reason": "length",
+      "done": true,
+      "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the sustainable management of resources, the fair distribution of labor, and the creation of a welcoming environment for diverse participants. To begin, the planning phase is critical and must address both the physical layout and the social structure of the garden. Before breaking ground, organizers should conduct a thorough site assessment, evaluating sunlight exposure, soil quality, water access, and potential hazards such as traffic noise or pollution. The physical layout should be",
+      "reasoning": "",
+      "prefill_metric_count": 1.0,
+      "prefill_metric_count_rows": [
+        [
+          {
+            "engine_type": "unified",
+            "model_name": "qwen3.8-27b",
+            "moe_ep_rank": "0",
+            "pp_rank": "0",
+            "stage": "prefill_forward",
+            "tp_rank": "0"
+          },
+          1.0
+        ]
+      ],
+      "prefill_metric_duration_rows": [
+        [
+          {
+            "engine_type": "unified",
+            "model_name": "qwen3.8-27b",
+            "moe_ep_rank": "0",
+            "pp_rank": "0",
+            "stage": "prefill_forward",
+            "tp_rank": "0"
+          },
+          1.3281030690004627
+        ]
+      ],
+      "prefill_s": 1.3281030690004627,
+      "valid": true
+    }
+  ],
+  "qualifications": [
+    {
+      "check": "json",
+      "context": 32768,
+      "done": true,
+      "usage": {
+        "prompt_tokens": 39,
+        "total_tokens": 60,
+        "completion_tokens": 21,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "timings": {},
+      "ttft_s": 0.07493245500063495,
+      "wall_s": 0.18881598900043173,
+      "answer": "{\n  \"sum\": 42,\n  \"word\": \"ready\"\n}",
+      "reasoning": "",
+      "client_decode_tps": 175.8190689563629,
+      "passed": true
+    },
+    {
+      "check": "arithmetic",
+      "context": 32768,
+      "done": true,
+      "usage": {
+        "prompt_tokens": 49,
+        "total_tokens": 72,
+        "completion_tokens": 23,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "timings": {},
+      "ttft_s": 0.07077914000001329,
+      "wall_s": 0.23071479500049463,
+      "answer": "{\n  \"product\": 437,\n  \"smallest\": 12\n}",
+      "reasoning": "",
+      "client_decode_tps": 161.86754890541792,
+      "passed": true
+    },
+    {
+      "check": "retrieval",
+      "context": 32768,
+      "done": true,
+      "usage": {
+        "prompt_tokens": 29434,
+        "total_tokens": 29491,
+        "completion_tokens": 57,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "timings": {},
+      "ttft_s": 22.035170794000805,
+      "wall_s": 23.509036518000357,
+      "answer": "{\n  \"start\": \"COPPER-8271-ORBIT\",\n  \"middle\": \"VELVET-4936-HARBOR\",\n  \"end\": \"QUARTZ-6182-RIVER\"\n}",
+      "reasoning": "",
+      "client_decode_tps": 37.997191718501895,
+      "passed": true
+    }
+  ],
+  "resources": {
+    "minimum_sampled_gpu_free_mib": [
+      802.0,
+      997.0
+    ],
+    "maximum_sampled_gpu_temperature_c": [
+      57.0,
+      45.0
+    ],
+    "minimum_host_available_gib": 32.15018844604492,
+    "peak_worker_ram_gib": 7.2611541748046875,
+    "peak_worker_swap_gib": 0.0
+  },
+  "kv_capacity": {
+    "context": 32768,
+    "allocated_tokens_per_pool": [
+      32768,
+      32768,
+      32768,
+      32768
+    ]
+  },
+  "w4a8_audit": {
+    "rank_projection_count": 256,
+    "expected_count": 256,
+    "per_rank_counts": {
+      "rank:0": 128,
+      "rank:1": 128
+    },
+    "raw_audit_sha256": "2596359022be024c49dcb01ac182d37a8f2fc2770d4b3cddf645210850811882"
+  },
+  "mtp_completeness_audits": 2,
+  "mtp_module_sharing_audits": 2,
+  "placements": {
+    "draft-rank-0": {
+      "devices": {
+        "cuda:0": {
+          "tensors": 46,
+          "bytes": 1108634736
+        }
+      },
+      "non_cuda_parameters": [],
+      "tp_rank": 0,
+      "gpu_name": "NVIDIA GeForce RTX 3080 Ti",
+      "physical_gpu_index": 0,
+      "visual_parameters": []
+    },
+    "draft-rank-1": {
+      "devices": {
+        "cuda:0": {
+          "tensors": 46,
+          "bytes": 1084304496
+        }
+      },
+      "non_cuda_parameters": [],
+      "tp_rank": 1,
+      "gpu_name": "NVIDIA GeForce RTX 3080",
+      "physical_gpu_index": 1,
+      "visual_parameters": []
+    },
+    "target-rank-0": {
+      "devices": {
+        "cuda:0": {
+          "tensors": 1946,
+          "bytes": 8050696992
+        }
+      },
+      "non_cuda_parameters": [],
+      "tp_rank": 0,
+      "gpu_name": "NVIDIA GeForce RTX 3080 Ti",
+      "physical_gpu_index": 0,
+      "visual_parameters": []
+    },
+    "target-rank-1": {
+      "devices": {
+        "cuda:0": {
+          "tensors": 1946,
+          "bytes": 6493561632
+        }
+      },
+      "non_cuda_parameters": [],
+      "tp_rank": 1,
+      "gpu_name": "NVIDIA GeForce RTX 3080",
+      "physical_gpu_index": 1,
+      "visual_parameters": []
+    }
+  },
+  "speculative_last_window_gauges": {
+    "sglang:spec_accept_length": [
+      {
+        "labels": {
+          "engine_type": "unified",
+          "model_name": "qwen3.8-27b",
+          "moe_ep_rank": "0",
+          "pp_rank": "0",
+          "tp_rank": "0"
+        },
+        "value": 2.55
+      }
+    ],
+    "sglang:spec_accept_rate": [
+      {
+        "labels": {
+          "engine_type": "unified",
+          "model_name": "qwen3.8-27b",
+          "moe_ep_rank": "0",
+          "pp_rank": "0",
+          "tp_rank": "0"
+        },
+        "value": 0.5166666666666667
+      }
+    ]
+  },
+  "safety_stop": null,
+  "swap_guard_window_samples": 0,
+  "guard_tests": {
+    "swap_guard": 11,
+    "supervisor_shutdown": 4,
+    "results": [
+      {
+        "pattern": "test_inference_swap_guard.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_supervisor_shutdown.py",
+        "exit_code": 0
+      }
+    ]
+  },
+  "historical_no_mtp_control": {
+    "run": "20261028-sglang-heterogeneous-tp2-mtp",
+    "variant": "hetero-tp2-no-mtp-bf16-slot1-v11",
+    "summary": {
+      "profile": "qwen27b-sglang",
+      "context": 32768,
+      "variant": "hetero-tp2-no-mtp-bf16-slot1-v11",
+      "repetitions": 3,
+      "prefill_tps": 1716.447510087786,
+      "ttft_s": 1.2947167420002188,
+      "client_decode_tps": 64.17930550615061,
+      "memory_high_gib": 30,
+      "memory_max_gib": 36
+    },
+    "note": "Previous 1 GiB-guard run, not a fresh matched control. Only the external reserve threshold changed in this retest."
+  },
+  "prior_32k_mtp3_failure": {
+    "variant": "hetero-tp2-mtp3-32k-packedfc-v15",
+    "state": "incomplete",
+    "error": "Less than 1 GiB post-load GPU headroom; larger allocation rejected.",
+    "post_load_gpu_free_mib": [
+      904,
+      1039
+    ],
+    "original_guard_mib": 1024
+  },
+  "storage": {
+    "bytes": 15791777864,
+    "physical_drive": "Samsung SSD 870 QVO SATA",
+    "checkpoint_folder": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+  },
+  "final_health": {
+    "time": "2026-10-28T00:53:31-0400",
+    "active_model": null,
+    "busy": false,
+    "loading_model": null,
+    "worker_unit_state": "inactive",
+    "worker_port_free": true,
+    "gpu_lock_released": true,
+    "swappiness": 60,
+    "automatic_backend_restore": false
+  },
+  "limitations": [
+    "Three fixed sequential requests, 2212\u20132222 input/128 output; warmup excluded.",
+    "Long retrieval is a near-window quality check, not a general accuracy or sustained-load certification.",
+    "SSE speculative token bursts make client decode timing approximate.",
+    "No fresh no-MTP control; historical comparisons are descriptive.",
+    "MoE profiles unchanged and unqualified on temporarily reduced RAM."
+  ]
+}

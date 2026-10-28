@@ -42,6 +42,7 @@ FILES = (
     'scripts/patches/sglang-mlp-w4a8-sm86.patch',
     'docs/SGLANG-HETERO-MTP-20261028.md', 'docs/benchmark-results/20261028-sglang-hetero-mtp.json',
     'scripts/patches/sglang-hetero-ct-w4a8-mtp.patch',
+    'docs/SGLANG-MTP3-512MIB-20261028.md', 'docs/benchmark-results/20261028-sglang-mtp3-512mib.json',
     'docs/INFERENCE-SWAP-POLICY.md', 'docs/UNLOCK-IMPACT-20261027.md',
     'scripts/inference_swap_guard.py', 'scripts/supervise_dense.py', 'tests/test_inference_swap_guard.py',
     'docs/UNUSED-MODEL-CLEANUP-20261027.md', 'docs/benchmark-results/20261027-dspark-screening.json',

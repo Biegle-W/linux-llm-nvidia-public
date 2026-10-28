@@ -11,6 +11,8 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 PAGE_BYTES = os.sysconf('SC_PAGE_SIZE')
 MIB = 1024 ** 2
+# User-approved dense GPU free-memory floor; independent of swap thresholds.
+DENSE_GPU_FREE_MIB = 512
 
 
 class TelemetryError(RuntimeError):

@@ -6,7 +6,7 @@ import signal
 import subprocess
 import sys
 import time
-from inference_swap_guard import WorkerWatch, ROOT
+from inference_swap_guard import WorkerWatch, ROOT, DENSE_GPU_FREE_MIB
 from profile_catalog import get_profile, worker_budget
 from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 
@@ -59,7 +59,7 @@ def main():
                                            '--format=csv,noheader,nounits'], text=True)
             cards = [[float(value) for value in line.split(',')] for line in raw.splitlines()]
             bad = bad + 1 if (available < 8 * 1024 ** 2 or any(card[0] >= 82 for card in cards)
-                             or (watch.ready and any(card[1] < 1024 for card in cards))) else 0
+                             or (watch.ready and any(card[1] < DENSE_GPU_FREE_MIB for card in cards))) else 0
             if reason or bad >= 3:
                 reason = reason or 'Dense host/temperature/GPU-headroom guard reached.'
                 print(reason, flush=True)

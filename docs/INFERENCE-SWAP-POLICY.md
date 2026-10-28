@@ -79,3 +79,15 @@ pending; no host VM setting has changed. Existing RAM/GPU/active-I/O guards rema
 The trial waits for current VM60 tests, preserves their results and records the
 new host-policy configurations separately. Earlier long retrievals retain their
 actual policy/date. See CURRENT-STATE.md and the private concrete proposal.
+
+## Dense VRAM reserve update — October 28
+
+The user explicitly lowered the dense GPU free-memory guard from 1,024 MiB to
+512 MiB and authorized a visible-terminal TP2/MTP3 32K retest. The normal dense
+supervisor and isolated retest share DENSE_GPU_FREE_MIB=512. Normal workers stop
+after three low-headroom checks; isolated trials also require at least 512 MiB
+at readiness. Swappiness stays 60; host reserve 8 GiB, worker RAM 30/36 GiB,
+temperature 82°C, unlimited swap occupancy and active swap-churn guards are unchanged.
+Earlier 1 GiB failures remain historical evidence under their original guard.
+This approval does not promote the experimental fork or change the selected
+engine settings. Future tests still run visibly and finish idle after cleanup.
