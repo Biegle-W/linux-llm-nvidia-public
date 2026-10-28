@@ -62,3 +62,12 @@ new compute or LLM benchmark was run and no inference setting changed. This is
 configuration/boot-persistence evidence, not a new measured performance result.
 The initial module-visibility sandbox error was corrected and its preimages
 archived; live service results now pass. See GPU-UNLOCK-HEALTH.md.
+
+## SGLang pipeline and recurrent-state study — October 27
+
+[Four isolated trials](SGLANG-TUNING-20261027.md) used unchanged 32K context,
+.92 memory fraction, chunk384, CUDA graphs and swappiness60. Fresh 32/32 FP32
+control: 2672.75 prefill / .8320 s TTFT / 46.45 decode. BF16: 2656.12 / .8374 /
+46.87; both passed JSON, arithmetic and 29,434-input retrieval. 34/30 and 36/28
+failed the existing GPU-headroom checks. Preserve the failed/partial trials;
+no candidate was promoted and HyperQwen remains default.

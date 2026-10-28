@@ -77,6 +77,10 @@ Dense Qwen uses the SATA SSD through its existing checkpoint alias.
 after saved-evidence review and bounded DSpark comparisons. All six active
 profiles and historical benchmark results remain preserved.
 
+The [SGLang pipeline/BF16 experiments](docs/SGLANG-TUNING-20261027.md) retain the
+existing 32/32 FP32 setting: both uneven splits failed GPU-headroom checks, while
+BF16 changed decode by only +0.9% with slightly slower prefill. No candidate was promoted.
+
 ## Repository ownership
 
 | Build | Private operational repository | Public reference |

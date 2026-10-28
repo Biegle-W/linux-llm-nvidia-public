@@ -37,6 +37,7 @@ FILES = (
     'docs/BENCHMARK-REPORTING.md',
     'docs/CONTEXT-EXPANSION-20261027.md', 'docs/benchmark-results/20261027-context-expansion.json',
     'docs/FORUM-OPTIMIZATION-SOURCES.md',
+    'docs/SGLANG-TUNING-20261027.md', 'docs/benchmark-results/20261027-sglang-tuning.json',
     'docs/INFERENCE-SWAP-POLICY.md', 'docs/UNLOCK-IMPACT-20261027.md',
     'scripts/inference_swap_guard.py', 'scripts/supervise_dense.py', 'tests/test_inference_swap_guard.py',
     'docs/UNUSED-MODEL-CLEANUP-20261027.md', 'docs/benchmark-results/20261027-dspark-screening.json',

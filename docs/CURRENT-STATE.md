@@ -1,6 +1,6 @@
 # Current takeover state
 
-Updated October 27, 2026, 20:49 EDT. Read README.md and AGENTS.md first.
+Updated October 27, 2026, 23:16 EDT. Read README.md and AGENTS.md first.
 
 ## Standing direction
 
@@ -133,3 +133,22 @@ for settled package state. Changed software awaiting boot stays pending, not
 verified. A new successful boot resolves stale old-boot status. No real package
 update or reboot was performed for installation; future actual events must save
 fresh evidence automatically. See GPU-UNLOCK-HEALTH.md. Preserve these OS hooks.
+
+## SGLang tuning study — October 27, 23:15 EDT
+
+The user approved isolated pipeline split and BF16 recurrent-state tests, not
+W4A8 patches or a heterogeneous-TP fork. Fresh 32/32 FP32 control measured
+46.4499 decode tok/s. 34/30 briefly measured 46.648 on one request, then the
+GPU-headroom guard stopped it (sampled 975 MiB free on the 3080 Ti); this is not
+a qualified three-request median. 36/28 failed the immediate post-load 1 GiB
+headroom check (sampled 665 MiB on the Ti). BF16 on 32/32 measured 46.8734
+decode (+0.91%), with prefill 2656.12 versus 2672.75 and TTFT .8374 versus .8320.
+Both complete trials passed JSON, arithmetic and 29,434-input three-marker
+retrieval. Retain 32/32 FP32; no candidate was promoted. Host swappiness is 60,
+all guards remain intact, and no engine/checkpoint/driver/hardware changes occurred.
+
+Raw plans, candidate catalogs, requests, logs and telemetry are private under
+data/sglang-tuning-20261027/. The trial coordinator finished and restored the
+HyperQwen default through the normal router; GPU-LOCK was released. See
+[SGLANG-TUNING-20261027.md](SGLANG-TUNING-20261027.md) and the corresponding
+numeric results. Earlier measurements and source settings are preserved.

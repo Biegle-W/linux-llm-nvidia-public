@@ -55,3 +55,11 @@ update-hook audits passed. Inspect `gpu-unlock-health status --brief`, root-writ
 results and failed units rather than relying on this reminder. Preserve the
 root-owned installed copy and event hooks; agents must not silently substitute
 user-writable service code. Actual updates/reboots remain user-controlled.
+
+## SGLang pipeline and recurrent-state study
+
+The user-approved 34/30 and 36/28 pipeline splits failed the unchanged 1 GiB
+GPU-headroom requirement. BF16 on 32/32 passed the tested quality checks but
+showed only +0.9% decode with slightly slower prefill/TTFT. No candidate was
+promoted. Retain 32/32 FP32 and HyperQwen as default; do not repeat these
+completed settings or weaken the guard. See docs/SGLANG-TUNING-20261027.md.

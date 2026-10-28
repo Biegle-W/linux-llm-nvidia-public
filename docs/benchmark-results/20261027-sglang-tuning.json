@@ -1,0 +1,947 @@
+{
+  "run": "20261027-sglang-pipeline-state-tuning",
+  "date": "2026-10-27",
+  "hardware": {
+    "cpu": "Intel Core i5-13600KF",
+    "ram_gb": 64,
+    "gpus": [
+      "RTX 3080 Ti 12GB",
+      "RTX 3080 10GB"
+    ],
+    "second_gpu_link": "PCIe 4.0 x4",
+    "kernel": "7.0.0-38-generic",
+    "nvidia_driver": "595.99.02"
+  },
+  "engine_source_commit": "4cb5aebfe08fa0abbd5fbcf84b29ad3d541bd5d3",
+  "protocol": {
+    "context": 32768,
+    "repetitions": 3,
+    "input_tokens": [
+      2212,
+      2222
+    ],
+    "output_tokens": 128,
+    "warmup_output_tokens": 64,
+    "temperature": 0,
+    "seed": 261026,
+    "thinking": false,
+    "prefix_cache": false,
+    "load_time_excluded": true,
+    "prefill": "native per-request prefill_forward counter delta",
+    "decode": "client SSE (output tokens - 1) / first-to-last nonempty content interval",
+    "host_swappiness": 60,
+    "worker_memory_high_gib": 30,
+    "worker_memory_max_gib": 36,
+    "worker_swap_occupancy_limit": null,
+    "active_swap_churn_guard": true,
+    "minimum_gpu_headroom_mib": 1024,
+    "maximum_gpu_temperature_c": 82,
+    "quality": "JSON, arithmetic and three-marker retrieval near 90% of the 32K allocation",
+    "order": [
+      "control-32-32-fp32",
+      "split-34-30-fp32",
+      "split-36-28-fp32",
+      "state-32-32-bf16"
+    ],
+    "limitations": "Sequential order, three fixed measured prompts, no randomization; small differences may be noise. Quality probes are not a broad numerical equivalence evaluation."
+  },
+  "shared_settings": {
+    "tp_size": 1,
+    "pp_size": 2,
+    "disable_custom_all_reduce": true,
+    "mem_fraction_static": 0.92,
+    "context_length": 32768,
+    "max_running_requests": 1,
+    "chunked_prefill_size": 384,
+    "disable_cuda_graph": false,
+    "cuda_graph_max_bs_decode": 1,
+    "enable_multimodal": false,
+    "json_model_override_args": "{\"language_model_only\":true}",
+    "max_mamba_cache_size": 2,
+    "mamba_ssm_dtype": "float32",
+    "cpu_offload_gb": 0,
+    "attention_backend": "triton",
+    "disable_radix_cache": true,
+    "default_chat_template_kwargs": {
+      "enable_thinking": false
+    },
+    "tool_call_parser": "qwen3_coder",
+    "enable_metrics": true
+  },
+  "production_promoted": false,
+  "default_engine": "HyperQwen-vLLM",
+  "trials": [
+    {
+      "variant": "control-32-32-fp32",
+      "status": "complete",
+      "error": null,
+      "category": "VRAM-only models",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "partition_layers": [
+        32,
+        32
+      ],
+      "recurrent_state_dtype": "float32",
+      "context_limit_tokens": 32768,
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "drive": "Samsung SSD 870 QVO SATA",
+        "checkpoint_folder": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      },
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 32768,
+        "variant": "control-32-32-fp32",
+        "repetitions": 3,
+        "prefill_tps": 2672.7468742076876,
+        "ttft_s": 0.8320369989960454,
+        "client_decode_tps": 46.44988484197238,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "profile": "qwen27b-sglang",
+          "case": "warmup",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 650,
+          "output_tokens": 64,
+          "ttft_s": 0.3300075260049198,
+          "last_content_s": 1.655953869005316,
+          "wall_s": 1.6561561330017867,
+          "usage": {
+            "prompt_tokens": 650,
+            "total_tokens": 714,
+            "completion_tokens": 64,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 47.5132348549199,
+          "native_decode_tps": null,
+          "prefill_tps": 2173.7642678990337,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the cultivation of a sustainable, cooperative, and resilient community structure. To begin, the planning phase",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.29902046399365645
+            ]
+          ],
+          "prefill_s": 0.29902046399365645,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 0.8320369989960454,
+          "last_content_s": 3.5696990019932855,
+          "wall_s": 3.569856035988778,
+          "usage": {
+            "prompt_tokens": 2222,
+            "total_tokens": 2350,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.38994874493571,
+          "native_decode_tps": null,
+          "prefill_tps": 2683.1156225218565,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not only on the health of the plants but also on the health of the relationships between the participants. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying a suitable location that offers adequate sunlight, typically six to eight hours of direct sun per day, and is accessible to the community members who will be using it. Accessibility is a key consideration, ensuring that the site is reachable for individuals with",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.8281417249963852
+            ]
+          ],
+          "prefill_s": 0.8281417249963852,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 1,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.8313673810043838,
+          "last_content_s": 3.5587671719986247,
+          "wall_s": 3.558865159007837,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.56449722528712,
+          "native_decode_tps": null,
+          "prefill_tps": 2672.7468742076876,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not only on the health of the plants but also on the health of the community that tends to them. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying a suitable location that offers adequate sunlight, typically six to eight hours of direct sun per day, and is accessible to all members, including those with mobility challenges. The site should be free from heavy traffic noise and potential pollution sources,",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.8276129779987969
+            ]
+          ],
+          "prefill_s": 0.8276129779987969,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 2,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.8365907559928019,
+          "last_content_s": 3.5707202469930053,
+          "wall_s": 3.570822875990416,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.44988484197238,
+          "native_decode_tps": null,
+          "prefill_tps": 2655.139870636112,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the cultivation of a sustainable, cooperative, and resilient community structure. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying a suitable location that offers adequate sunlight, typically at least six to eight hours of direct sun per day, and is accessible to the intended participants. Accessibility is a key consideration, ensuring that the site is reachable by individuals with",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.8331011200061766
+            ]
+          ],
+          "prefill_s": 0.8331011200061766,
+          "valid": true
+        }
+      ],
+      "qualifications": [
+        {
+          "check": "json",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 39,
+            "total_tokens": 60,
+            "completion_tokens": 21,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.052777656994294375,
+          "wall_s": 0.47479616399505176,
+          "answer": "{\n  \"sum\": 42,\n  \"word\": \"ready\"\n}",
+          "reasoning": "",
+          "client_decode_tps": 49.97019277918772,
+          "passed": true
+        },
+        {
+          "check": "arithmetic",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 49,
+            "total_tokens": 72,
+            "completion_tokens": 23,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.048799263007822447,
+          "wall_s": 0.5129056919977302,
+          "answer": "{\n  \"product\": 437,\n  \"smallest\": 12\n}",
+          "reasoning": "",
+          "client_decode_tps": 49.76330930162482,
+          "passed": true
+        },
+        {
+          "check": "retrieval",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 29434,
+            "total_tokens": 29491,
+            "completion_tokens": 57,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 13.16574026500166,
+          "wall_s": 14.625596370009589,
+          "answer": "{\n  \"start\": \"COPPER-8271-ORBIT\",\n  \"middle\": \"VELVET-4936-HARBOR\",\n  \"end\": \"QUARTZ-6182-RIVER\"\n}",
+          "reasoning": "",
+          "client_decode_tps": 39.07724746325786,
+          "passed": true
+        }
+      ],
+      "resources": {
+        "minimum_gpu_free_mib": [
+          1702.0,
+          1045.0
+        ],
+        "maximum_gpu_temperature_c": [
+          56.0,
+          45.0
+        ],
+        "minimum_host_available_gib": 49.40770721435547,
+        "peak_owned_memory_gib": 6.819187164306641,
+        "peak_owned_swap_gib": 0.0
+      },
+      "failure_evidence": [],
+      "relative_to_fresh_control": {
+        "prefill_tps": 0.0,
+        "ttft_s": 0.0,
+        "client_decode_tps": 0.0
+      }
+    },
+    {
+      "variant": "split-34-30-fp32",
+      "status": "incomplete",
+      "error": "Remote end closed connection without response",
+      "category": "VRAM-only models",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "partition_layers": [
+        34,
+        30
+      ],
+      "recurrent_state_dtype": "float32",
+      "context_limit_tokens": 32768,
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "drive": "Samsung SSD 870 QVO SATA",
+        "checkpoint_folder": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      },
+      "summary": null,
+      "samples": [
+        {
+          "profile": "qwen27b-sglang",
+          "case": "warmup",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 650,
+          "output_tokens": 64,
+          "ttft_s": 0.33085295000637416,
+          "last_content_s": 1.6506737449963111,
+          "wall_s": 1.6507933910033898,
+          "usage": {
+            "prompt_tokens": 650,
+            "total_tokens": 714,
+            "completion_tokens": 64,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 47.73375312705264,
+          "native_decode_tps": null,
+          "prefill_tps": 2189.8936865028713,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not only on the health of the plants but also on the health of the relationships among the participants. To begin, the planning phase is the most",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.2968180619936902
+            ]
+          ],
+          "prefill_s": 0.2968180619936902,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 0.8505221300001722,
+          "last_content_s": 3.5730355090054218,
+          "wall_s": 3.573183735003113,
+          "usage": {
+            "prompt_tokens": 2222,
+            "total_tokens": 2350,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.64807195415994,
+          "native_decode_tps": null,
+          "prefill_tps": 2623.1351524815796,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the cultivation of a sustainable, cooperative, and resilient community structure. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying a suitable location that offers adequate sunlight, typically at least six to eight hours of direct sun per day, and is accessible to all potential members, including those with mobility challenges. The site should be free from heavy traffic noise",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.8470779700001003
+            ]
+          ],
+          "prefill_s": 0.8470779700001003,
+          "valid": true
+        }
+      ],
+      "qualifications": [],
+      "resources": {
+        "minimum_gpu_free_mib": [
+          975.0,
+          1103.0
+        ],
+        "maximum_gpu_temperature_c": [
+          55.0,
+          43.0
+        ],
+        "minimum_host_available_gib": 49.431556701660156,
+        "peak_owned_memory_gib": 6.165596008300781,
+        "peak_owned_swap_gib": 0.0
+      },
+      "failure_evidence": [
+        {
+          "file": "SAFETY-STOP",
+          "text": "Host/temperature or qualified dense GPU-headroom guard reached."
+        }
+      ]
+    },
+    {
+      "variant": "split-36-28-fp32",
+      "status": "incomplete",
+      "error": "Less than 1 GiB post-load GPU headroom; larger allocation rejected.",
+      "category": "VRAM-only models",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "partition_layers": [
+        36,
+        28
+      ],
+      "recurrent_state_dtype": "float32",
+      "context_limit_tokens": 32768,
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "drive": "Samsung SSD 870 QVO SATA",
+        "checkpoint_folder": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      },
+      "summary": null,
+      "samples": [],
+      "qualifications": [],
+      "resources": {
+        "minimum_gpu_free_mib": [
+          665.0,
+          1921.0
+        ],
+        "maximum_gpu_temperature_c": [
+          51.0,
+          38.0
+        ],
+        "minimum_host_available_gib": 50.40360641479492,
+        "peak_owned_memory_gib": 5.339729309082031,
+        "peak_owned_swap_gib": 0.0
+      },
+      "failure_evidence": []
+    },
+    {
+      "variant": "state-32-32-bf16",
+      "status": "complete",
+      "error": null,
+      "category": "VRAM-only models",
+      "model": "Qwen3.8-27B",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "partition_layers": [
+        32,
+        32
+      ],
+      "recurrent_state_dtype": "bfloat16",
+      "context_limit_tokens": 32768,
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "drive": "Samsung SSD 870 QVO SATA",
+        "checkpoint_folder": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      },
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 32768,
+        "variant": "state-32-32-bf16",
+        "repetitions": 3,
+        "prefill_tps": 2656.121282401977,
+        "ttft_s": 0.837391312001273,
+        "client_decode_tps": 46.87338944802287,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "profile": "qwen27b-sglang",
+          "case": "warmup",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 650,
+          "output_tokens": 64,
+          "ttft_s": 0.314633424000931,
+          "last_content_s": 1.6385471980029251,
+          "wall_s": 1.6387169090012321,
+          "usage": {
+            "prompt_tokens": 650,
+            "total_tokens": 714,
+            "completion_tokens": 64,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 47.58618063891003,
+          "native_decode_tps": null,
+          "prefill_tps": 2222.625866241123,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that fosters community engagement, food security, and environmental stewardship. The process begins long",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.29244688000471797
+            ]
+          ],
+          "prefill_s": 0.29244688000471797,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 0.8369780699867988,
+          "last_content_s": 3.540241177994176,
+          "wall_s": 3.5404283959942404,
+          "usage": {
+            "prompt_tokens": 2222,
+            "total_tokens": 2350,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.98025864512091,
+          "native_decode_tps": null,
+          "prefill_tps": 2665.342174712912,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the cultivation of a sustainable, cooperative, and resilient community structure. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying a suitable location that offers adequate sunlight, typically at least six to eight hours of direct sun per day, and is accessible to all potential members, including those with mobility challenges. The site should be free from heavy traffic noise",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.8336640680063283
+            ]
+          ],
+          "prefill_s": 0.8336640680063283,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 1,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.8425744050036883,
+          "last_content_s": 3.555023594002705,
+          "wall_s": 3.5552011960098753,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.82115355932886,
+          "native_decode_tps": null,
+          "prefill_tps": 2637.3682021535255,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the cultivation of a sustainable, cooperative, and resilient community structure. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves a thorough assessment of the available land, including its size, shape, orientation, and existing infrastructure. It is essential to conduct a soil test to determine the pH levels, nutrient content, and potential contaminants, as this data will",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.8387148969923146
+            ]
+          ],
+          "prefill_s": 0.8387148969923146,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 2,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.837391312001273,
+          "last_content_s": 3.5468177370057674,
+          "wall_s": 3.5469462530018063,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.87338944802287,
+          "native_decode_tps": null,
+          "prefill_tps": 2656.121282401977,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the cultivation of a sustainable, cooperative, and resilient community structure. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying a suitable location that offers adequate sunlight, typically at least six to eight hours of direct sun per day, and is accessible to the intended participants. Accessibility is a key consideration, ensuring that the site is reachable by individuals with",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.832793296998716
+            ]
+          ],
+          "prefill_s": 0.832793296998716,
+          "valid": true
+        }
+      ],
+      "qualifications": [
+        {
+          "check": "json",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 39,
+            "total_tokens": 60,
+            "completion_tokens": 21,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.0516682339948602,
+          "wall_s": 0.4709524159989087,
+          "answer": "{\n  \"sum\": 42,\n  \"word\": \"ready\"\n}",
+          "reasoning": "",
+          "client_decode_tps": 50.27234717314357,
+          "passed": true
+        },
+        {
+          "check": "arithmetic",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 49,
+            "total_tokens": 72,
+            "completion_tokens": 23,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.05062689499754924,
+          "wall_s": 0.5123199809895596,
+          "answer": "{\n  \"product\": 437,\n  \"smallest\": 12\n}",
+          "reasoning": "",
+          "client_decode_tps": 49.924776184166745,
+          "passed": true
+        },
+        {
+          "check": "retrieval",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 29434,
+            "total_tokens": 29491,
+            "completion_tokens": 57,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 13.196609710998018,
+          "wall_s": 14.64173658999789,
+          "answer": "{\n  \"start\": \"COPPER-8271-ORBIT\",\n  \"middle\": \"VELVET-4936-HARBOR\",\n  \"end\": \"QUARTZ-6182-RIVER\"\n}",
+          "reasoning": "",
+          "client_decode_tps": 39.4658990242429,
+          "passed": true
+        }
+      ],
+      "resources": {
+        "minimum_gpu_free_mib": [
+          1699.0,
+          1055.0
+        ],
+        "maximum_gpu_temperature_c": [
+          61.0,
+          52.0
+        ],
+        "minimum_host_available_gib": 49.633419036865234,
+        "peak_owned_memory_gib": 6.189731597900391,
+        "peak_owned_swap_gib": 0.0
+      },
+      "failure_evidence": [],
+      "relative_to_fresh_control": {
+        "prefill_tps": -0.006220413899329258,
+        "ttft_s": 0.006435186189662545,
+        "client_decode_tps": 0.009117452228165845
+      }
+    }
+  ]
+}

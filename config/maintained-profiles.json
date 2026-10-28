@@ -246,6 +246,17 @@
         "control": "sglang-16384-paired-control",
         "selected_variant": "sglang-32768-mem92-pf384-combined-confirmed",
         "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
+      },
+      "latest_tuning_study": {
+        "run": "20261027-sglang-pipeline-state-tuning",
+        "evidence": "docs/SGLANG-TUNING-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-sglang-tuning.json",
+        "production_promoted": false,
+        "maintained_partition_layers": [
+          32,
+          32
+        ],
+        "maintained_recurrent_state_dtype": "float32"
       }
     },
     {
