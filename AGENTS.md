@@ -123,8 +123,10 @@ catalog/default metadata is not permission to repeatedly reload it after tests.
 
 ## Standing repository publication authorization — October 28 clarification
 
-The user reaffirmed: always keep both repositories and Markdown documentation
-updated. Routine publication of reviewed, sanitized project reports, handoffs,
+The user explicitly authorized publication of all pending reports, handoffs,
+experimental patches and visible-terminal changes to
+`Biegle-W/linux-llm-nvidia-public`, and reaffirmed that both repositories and
+Markdown documentation must always stay updated. Routine publication of reviewed, sanitized project reports, handoffs,
 reference code and experimental patches is included in that standing direction;
 do not ask for a separate approval after every study or implementation change.
 Continue the existing export allowlist, privacy review, nonpersonal commits and

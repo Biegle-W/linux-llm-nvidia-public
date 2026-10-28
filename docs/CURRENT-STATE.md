@@ -236,11 +236,12 @@ Backend, router and DSH live consoles are now opened with visible_terminal.py.
 Dense bounded starts, router MoE starts, router startup and DSH web startup open
 visible consoles; foreground test coordinators must use the documented `run`
 wrapper. All resource guards remain intact. The existing HyperQwen worker was
-made visible without restarting or rebenchmarking it. The preceding public push was rejected by platform automatic review. This was
-not a user-requested approval policy. The user has now expressly reaffirmed
-that both repositories and Markdown files must always be kept updated; reviewed,
-sanitized reports, handoffs and experimental patches remain within that standing
-publication direction. Do not ask for redundant routine publication approval.
+made visible without restarting or rebenchmarking it. The user explicitly
+confirmed publication of all pending reports, handoffs, experimental patches and
+visible-terminal changes to Biegle-W/linux-llm-nvidia-public. The prior external
+public-push restriction is resolved; all four previously pending commits were
+published successfully. Continue keeping both repositories and Markdown files
+updated under that standing authorization.
 
 Visible foreground verification passed 19 router tests. The router was reloaded
 without restarting the inference worker or changing its selection. Console GUI
@@ -248,15 +249,13 @@ processes launch in separate user services, outside inference resource cgroups.
 Evidence is private under data/visible-backends-20261028/. No new GPU benchmark
 was run. Swappiness remains 60.
 
-## Repository publication clarification — October 28
+## Repository publication — October 28
 
-The user did not request a separate publication approval step. Continue routine
-sanitized synchronization and pushes under the standing instruction. An external
-automatic-review rejection must be identified as such, without inventing a user
-policy or bypassing the tool restriction. A public push was retried with this explicit clarification, but platform automatic
-review rejected it again, requiring authorization of the specific payload to the
-public destination. This remains an external restriction, not a user-requested
-approval policy. Do not bypass it. The public checkout contains the reviewed
-benchmark report/numeric evidence, handoff, experimental patch and visible-terminal
-changes, committed locally but not pushed. Private updates continue normally.
+The user explicitly authorized the pending reports, handoffs, experimental patch
+and visible-terminal changes for Biegle-W/linux-llm-nvidia-public, and reaffirmed
+continuous maintenance of both repositories and Markdown documentation. The four
+pending public commits through 8042ea1 were pushed successfully. No pending public
+approval remains. Continue reviewed, sanitized exports and independent pushes;
+do not ask for redundant routine publication approval. Keep private evidence,
+credentials, local paths, binaries and model weights out of the public repository.
 Final synchronization evidence is private under data/repository-sync-20261028/.
