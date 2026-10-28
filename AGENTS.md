@@ -63,3 +63,19 @@ GPU-headroom requirement. BF16 on 32/32 passed the tested quality checks but
 showed only +0.9% decode with slightly slower prefill/TTFT. No candidate was
 promoted. Retain 32/32 FP32 and HyperQwen as default; do not repeat these
 completed settings or weaken the guard. See docs/SGLANG-TUNING-20261027.md.
+
+## Isolated SGLang W4A8 study and temporary RAM maintenance
+
+The user subsequently approved an isolated MLP-only W4A8 patch test. The final
+compressed-tensors adapter activated exactly 128 decoder MLP projections and
+passed 18 standalone GPU kernel checks plus JSON, arithmetic and 29,434-input
+retrieval. Prefill improved 21.6% and TTFT 17.5%, but decode regressed 1.4%;
+no production promotion. The first AutoRound-loader attempt was rejected by its
+zero-activation audit before benchmarking; preserve that diagnostic evidence.
+Retain the existing W4A16 SGLang package and HyperQwen default. See
+docs/SGLANG-W4A8-20261027.md; candidate source/cache is private evidence.
+
+One RAM stick is temporarily removed; Linux currently sees 45.55 GiB usable.
+This dense study used fresh controls and retained all guards at swappiness60.
+MoE profiles have not been qualified on reduced RAM; check capacity and budgets
+before any future MoE work. GPU unlock health reports VERIFIED after reboot.

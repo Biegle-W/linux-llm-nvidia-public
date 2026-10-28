@@ -1,0 +1,1753 @@
+{
+  "run": "20261027-sglang-isolated-mlp-w4a8",
+  "date": "2026-10-27",
+  "model": "Qwen3.8-27B",
+  "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+  "engine": "SGLang",
+  "hardware": {
+    "cpu": "Intel Core i5-13600KF",
+    "kernel": "7.0.0-38-generic",
+    "nvidia_driver": "595.99.02",
+    "linux_usable_ram_gib": 45.551353454589844,
+    "maintenance": "One RAM stick temporarily removed; this study uses a fresh matched control after reboot. Earlier 64GB results are historical.",
+    "gpus": [
+      "RTX 3080 Ti 12GB",
+      "RTX 3080 10GB"
+    ],
+    "second_gpu_link": "PCIe 4.0 x4"
+  },
+  "source": {
+    "base_sglang_commit": "4cb5aebfe08fa0abbd5fbcf84b29ad3d541bd5d3",
+    "community_repository": "https://github.com/noonghunna/club-3090",
+    "community_commit": "55961e5c6bd03a4f8ef44fc220d2f3703a1f8b25",
+    "community_patch_sha256": "4cc25237c974d5416ad82ab0da63c1e5de4cde26587615f85ad8c9cabaf4786b",
+    "adapted_patch_sha256": "d1abc556312db55463f530a0782e7cc7252d9eb490be7e6c2771203d924d5a69",
+    "changed_candidate_files": [
+      {
+        "path": "python/sglang/kernels/jit/csrc/gemm/marlin_w4a8/dequant.h",
+        "before_sha256": null,
+        "after_sha256": "fb0b143376387b1ea8c2c51b54226e816ae93f1d32518786ccade31d05ad9528"
+      },
+      {
+        "path": "python/sglang/kernels/jit/csrc/gemm/marlin_w4a8/entry.cuh",
+        "before_sha256": null,
+        "after_sha256": "71a037b755f827a661c4e70977909a09bacd434b8c6e63e3e2e2a6c747ecc6dc"
+      },
+      {
+        "path": "python/sglang/kernels/jit/csrc/gemm/marlin_w4a8/marlin.cuh",
+        "before_sha256": null,
+        "after_sha256": "87d50a664878e641473289579243a211e3c3721601273423b81b0745f07c79d7"
+      },
+      {
+        "path": "python/sglang/kernels/jit/csrc/gemm/marlin_w4a8/marlin_dtypes.cuh",
+        "before_sha256": null,
+        "after_sha256": "cce9972a4779d9073082cd03cf1915ec04deae665dca2e1ecacf172730d5013d"
+      },
+      {
+        "path": "python/sglang/kernels/jit/csrc/gemm/marlin_w4a8/marlin_mma.h",
+        "before_sha256": null,
+        "after_sha256": "d630e4d4944e170a2dc640e1e4ff703c44fc44917963eada9f39f620d1b14f6a"
+      },
+      {
+        "path": "python/sglang/kernels/jit/csrc/gemm/marlin_w4a8/marlin_template.h",
+        "before_sha256": null,
+        "after_sha256": "22753e697f561108764ea4584cb9825d42e258ad893eeaf2a6e864e06d76c4c8"
+      },
+      {
+        "path": "python/sglang/kernels/jit/csrc/gemm/marlin_w4a8/repack.cuh",
+        "before_sha256": null,
+        "after_sha256": "ddfb8046872c534a1b5b26de72b1f3ec8160325ea96be5dbc34534b618d2dc41"
+      },
+      {
+        "path": "python/sglang/kernels/ops/quantization/gptq_marlin_w4a8.py",
+        "before_sha256": null,
+        "after_sha256": "1c7aa2a1fc38894e212439ba5b652fae28b7bfb48a0b2a07b0475af99b7d3b40"
+      },
+      {
+        "path": "python/sglang/srt/layers/quantization/compressed_tensors/compressed_tensors.py",
+        "before_sha256": "e52ac759f1b8ac690dce16007349264bfcfe3fcde65e854d4a330c885272114b",
+        "after_sha256": "28cb8c3864dc3195765a339400db35dfc118823a5a3121289ab780c660aaac5b"
+      },
+      {
+        "path": "python/sglang/srt/layers/quantization/compressed_tensors/schemes/compressed_tensors_wNa16.py",
+        "before_sha256": "a78990db02e703847316fa71f2b8891d034c6fbb6fcaafb104f5e1002a7f396c",
+        "after_sha256": "d090787f330d652c6388ff551c3cc17df5547c25350d5059da69ace8d193f958"
+      }
+    ]
+  },
+  "protocol": {
+    "context": 32768,
+    "pipeline_layers": [
+      32,
+      32
+    ],
+    "recurrent_state": "float32",
+    "kv_cache": "bfloat16",
+    "memory_fraction_static": 0.92,
+    "prefill_chunk": 384,
+    "cuda_graph_decode": true,
+    "max_running_requests": 1,
+    "speculative_decoding": false,
+    "repetitions": 3,
+    "input_tokens_range": [
+      2212,
+      2222
+    ],
+    "output_tokens": 128,
+    "warmup_output_tokens": 64,
+    "temperature": 0,
+    "seed": 261026,
+    "thinking": false,
+    "prefix_cache": false,
+    "load_time_excluded": true,
+    "prefill": "native prefill_forward metric deltas per request",
+    "decode": "client SSE (output tokens - 1) / first-to-last nonempty content interval",
+    "worker_memory_high_gib": 30,
+    "worker_memory_max_gib": 36,
+    "worker_swap_limit": null,
+    "active_churn_guard": true,
+    "host_swappiness": 60,
+    "minimum_gpu_headroom_mib": 1024,
+    "minimum_host_available_gib": 8,
+    "maximum_gpu_temp_c": 82,
+    "order": [
+      "control-ct-w4a16",
+      "candidate-ct-mlp-w4a8"
+    ],
+    "limitations": "Sequential order, three fixed short requests, no randomization; quality probes do not establish broad numerical equivalence."
+  },
+  "kernel_checks": [
+    {
+      "gpu": 0,
+      "K": 512,
+      "N": 1024,
+      "M": 1,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016381426248699427,
+      "activation_quantization_total_nrmse": 0.006796803325414658
+    },
+    {
+      "gpu": 0,
+      "K": 512,
+      "N": 1024,
+      "M": 128,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016588341677561402,
+      "activation_quantization_total_nrmse": 0.007651408668607473
+    },
+    {
+      "gpu": 0,
+      "K": 512,
+      "N": 1024,
+      "M": 384,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016590507002547383,
+      "activation_quantization_total_nrmse": 0.00754727004095912
+    },
+    {
+      "gpu": 0,
+      "K": 5120,
+      "N": 34816,
+      "M": 1,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016704399604350328,
+      "activation_quantization_total_nrmse": 0.009422817267477512
+    },
+    {
+      "gpu": 0,
+      "K": 5120,
+      "N": 34816,
+      "M": 128,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016564074903726578,
+      "activation_quantization_total_nrmse": 0.008981196209788322
+    },
+    {
+      "gpu": 0,
+      "K": 5120,
+      "N": 34816,
+      "M": 384,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016571407904848456,
+      "activation_quantization_total_nrmse": 0.008924627676606178
+    },
+    {
+      "gpu": 0,
+      "K": 17408,
+      "N": 5120,
+      "M": 1,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.001658907625824213,
+      "activation_quantization_total_nrmse": 0.009354792535305023
+    },
+    {
+      "gpu": 0,
+      "K": 17408,
+      "N": 5120,
+      "M": 128,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016555176116526127,
+      "activation_quantization_total_nrmse": 0.009643717668950558
+    },
+    {
+      "gpu": 0,
+      "K": 17408,
+      "N": 5120,
+      "M": 384,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016557062044739723,
+      "activation_quantization_total_nrmse": 0.009589574299752712
+    },
+    {
+      "gpu": 1,
+      "K": 512,
+      "N": 1024,
+      "M": 1,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.001753116026520729,
+      "activation_quantization_total_nrmse": 0.006935623940080404
+    },
+    {
+      "gpu": 1,
+      "K": 512,
+      "N": 1024,
+      "M": 128,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016568683786317706,
+      "activation_quantization_total_nrmse": 0.007624512072652578
+    },
+    {
+      "gpu": 1,
+      "K": 512,
+      "N": 1024,
+      "M": 384,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016555092297494411,
+      "activation_quantization_total_nrmse": 0.007530550006777048
+    },
+    {
+      "gpu": 1,
+      "K": 5120,
+      "N": 34816,
+      "M": 1,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016530605498701334,
+      "activation_quantization_total_nrmse": 0.008816581219434738
+    },
+    {
+      "gpu": 1,
+      "K": 5120,
+      "N": 34816,
+      "M": 128,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016571995802223682,
+      "activation_quantization_total_nrmse": 0.008969202637672424
+    },
+    {
+      "gpu": 1,
+      "K": 5120,
+      "N": 34816,
+      "M": 384,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016576804919168353,
+      "activation_quantization_total_nrmse": 0.00896003469824791
+    },
+    {
+      "gpu": 1,
+      "K": 17408,
+      "N": 5120,
+      "M": 1,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016894943546503782,
+      "activation_quantization_total_nrmse": 0.008936275728046894
+    },
+    {
+      "gpu": 1,
+      "K": 17408,
+      "N": 5120,
+      "M": 128,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.0016551677836105227,
+      "activation_quantization_total_nrmse": 0.009612878784537315
+    },
+    {
+      "gpu": 1,
+      "K": 17408,
+      "N": 5120,
+      "M": 384,
+      "finite": true,
+      "kernel_vs_quantized_reference_nrmse": 0.00165579526219517,
+      "activation_quantization_total_nrmse": 0.009586228057742119
+    }
+  ],
+  "initial_adapter_attempt": {
+    "time": 1793159129.6067762,
+    "results": [
+      {
+        "variant": "control-w4a16",
+        "exit_code": 0,
+        "summary": {
+          "profile": "qwen27b-sglang",
+          "context": 32768,
+          "variant": "control-w4a16",
+          "repetitions": 3,
+          "prefill_tps": 2641.0524201658354,
+          "ttft_s": 0.8451808789999404,
+          "client_decode_tps": 46.391053506809314,
+          "memory_high_gib": 30,
+          "memory_max_gib": 36
+        },
+        "state": {
+          "time": "2026-10-27T23:44:32-0400",
+          "stage": "complete",
+          "error": null
+        }
+      },
+      {
+        "variant": "candidate-mlp-w4a8",
+        "exit_code": 1,
+        "state": {
+          "time": "2026-10-27T23:44:56-0400",
+          "stage": "incomplete",
+          "error": "Missing, duplicate or unexpected W4A8 MLP layers"
+        }
+      }
+    ],
+    "default": "qwen27b-hyperqwen"
+  },
+  "initial_adapter_patch_sha256": "e1117af5ac98797d9dcfd55a460093811ce37a7536d5fe76e0478dff886b1836",
+  "checkpoint_config_sha256": "5a3e7312dee3a6c5909beb854b05ac818be836683730e4facba81f547b77fd62",
+  "production_promoted": false,
+  "maintained_sglang": "W4A16 / PP2 / FP32 recurrent state",
+  "default": "HyperQwen-vLLM",
+  "storage_size_bytes": 15791777864,
+  "storage": {
+    "drive": "Samsung SSD 870 QVO SATA",
+    "checkpoint_folder": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+  },
+  "trials": [
+    {
+      "variant": "control-ct-w4a16",
+      "status": "complete",
+      "error": null,
+      "mlp_w4a8_enabled": false,
+      "category": "VRAM-only models",
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 32768,
+        "variant": "control-ct-w4a16",
+        "repetitions": 3,
+        "prefill_tps": 2659.906575831895,
+        "ttft_s": 0.8339403339999762,
+        "client_decode_tps": 46.351252150153634,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "profile": "qwen27b-sglang",
+          "case": "warmup",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 650,
+          "output_tokens": 64,
+          "ttft_s": 0.3134070230000816,
+          "last_content_s": 1.642645698000024,
+          "wall_s": 1.6427415640000618,
+          "usage": {
+            "prompt_tokens": 650,
+            "total_tokens": 714,
+            "completion_tokens": 64,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 47.395551442259034,
+          "native_decode_tps": null,
+          "prefill_tps": 2221.898303633029,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the cultivation of a sustainable, cooperative, and resilient community structure. To begin, the planning phase",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.29254264199994395
+            ]
+          ],
+          "prefill_s": 0.29254264199994395,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 0.8395115140000371,
+          "last_content_s": 3.567626816000029,
+          "wall_s": 3.5677390959999684,
+          "usage": {
+            "prompt_tokens": 2222,
+            "total_tokens": 2350,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.552284614545364,
+          "native_decode_tps": null,
+          "prefill_tps": 2657.916572453377,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not only on the health of the plants but also on the health of the relationships between the participants. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying a suitable location that offers adequate sunlight, typically six to eight hours of direct sun per day, and is accessible to the community members who will be using it. Accessibility is a key consideration, ensuring that the site is reachable for individuals with",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.8359931319999987
+            ]
+          ],
+          "prefill_s": 0.8359931319999987,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 1,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.8339403339999762,
+          "last_content_s": 3.573887888999934,
+          "wall_s": 3.573984303999964,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.351252150153634,
+          "native_decode_tps": null,
+          "prefill_tps": 2659.906575831895,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not only on the health of the plants but also on the health of the community that tends to them. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying a suitable location that offers adequate sunlight, typically six to eight hours of direct sun per day, and is accessible to all members, including those with mobility challenges. The site should be free from heavy traffic noise and potential pollution sources,",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.8316081550000263
+            ]
+          ],
+          "prefill_s": 0.8316081550000263,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 2,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.8334688269999333,
+          "last_content_s": 3.5748838209999576,
+          "wall_s": 3.575027144999922,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.32644100873364,
+          "native_decode_tps": null,
+          "prefill_tps": 2665.4253143138408,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the cultivation of a sustainable, cooperative, and resilient community structure. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying a suitable location that offers adequate sunlight, typically at least six to eight hours of direct sun per day, and is accessible to the intended participants. Accessibility is a key consideration, ensuring that the site is reachable by individuals with",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.8298863180000353
+            ]
+          ],
+          "prefill_s": 0.8298863180000353,
+          "valid": true
+        }
+      ],
+      "qualifications": [
+        {
+          "check": "json",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 39,
+            "total_tokens": 60,
+            "completion_tokens": 21,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.05178791399998772,
+          "wall_s": 0.47426275800000894,
+          "answer": "{\n  \"sum\": 42,\n  \"word\": \"ready\"\n}",
+          "reasoning": "",
+          "client_decode_tps": 49.82680364987098,
+          "passed": true
+        },
+        {
+          "check": "arithmetic",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 49,
+            "total_tokens": 72,
+            "completion_tokens": 23,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.05125670400002491,
+          "wall_s": 0.517113409999979,
+          "answer": "{\n  \"product\": 437,\n  \"smallest\": 12\n}",
+          "reasoning": "",
+          "client_decode_tps": 49.45743363133667,
+          "passed": true
+        },
+        {
+          "check": "retrieval",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 29434,
+            "total_tokens": 29491,
+            "completion_tokens": 57,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 13.232317974000011,
+          "wall_s": 14.680187444000012,
+          "answer": "{\n  \"start\": \"COPPER-8271-ORBIT\",\n  \"middle\": \"VELVET-4936-HARBOR\",\n  \"end\": \"QUARTZ-6182-RIVER\"\n}",
+          "reasoning": "",
+          "client_decode_tps": 39.37597885299731,
+          "passed": true
+        }
+      ],
+      "layer_audit": [],
+      "resources": {
+        "minimum_sampled_gpu_free_mib": [
+          1929.0,
+          1048.0
+        ],
+        "maximum_sampled_gpu_temp_c": [
+          60.0,
+          50.0
+        ],
+        "minimum_host_available_gib": 33.87166976928711,
+        "peak_owned_memory_gib": 6.165744781494141,
+        "peak_owned_swap_gib": 0.0
+      },
+      "safety_stop": null,
+      "relative_to_control": {
+        "prefill_tps": 0.0,
+        "ttft_s": 0.0,
+        "client_decode_tps": 0.0
+      }
+    },
+    {
+      "variant": "candidate-ct-mlp-w4a8",
+      "status": "complete",
+      "error": null,
+      "mlp_w4a8_enabled": true,
+      "category": "VRAM-only models",
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 32768,
+        "variant": "candidate-ct-mlp-w4a8",
+        "repetitions": 3,
+        "prefill_tps": 3233.718895641012,
+        "ttft_s": 0.6877049999999372,
+        "client_decode_tps": 45.6911831665891,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "profile": "qwen27b-sglang",
+          "case": "warmup",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 650,
+          "output_tokens": 64,
+          "ttft_s": 0.26743901700001516,
+          "last_content_s": 1.6137118950000513,
+          "wall_s": 1.6138591459999816,
+          "usage": {
+            "prompt_tokens": 650,
+            "total_tokens": 714,
+            "completion_tokens": 64,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 46.795862138729284,
+          "native_decode_tps": null,
+          "prefill_tps": 2634.1478494018615,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about building a sustainable ecosystem that supports both the plants and the people who tend to them. The process begins long before",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.24675911799999994
+            ]
+          ],
+          "prefill_s": 0.24675911799999994,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 0.6855340330000672,
+          "last_content_s": 3.456621294999991,
+          "wall_s": 3.4568084009999893,
+          "usage": {
+            "prompt_tokens": 2222,
+            "total_tokens": 2350,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 45.83038641242309,
+          "native_decode_tps": null,
+          "prefill_tps": 3257.7640614343813,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that fosters community connection, food security, and environmental stewardship. To successfully establish and maintain such a garden, one must approach the process with a structured methodology that addresses every aspect from initial site selection to long-term record keeping. The following guide provides a comprehensive framework for organizing a community garden, ensuring that it remains productive, sustainable, and welcoming to all participants.\n\nThe first and most critical step in organizing",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.6820628990000159
+            ]
+          ],
+          "prefill_s": 0.6820628990000159,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 1,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.6877049999999372,
+          "last_content_s": 3.469080556999984,
+          "wall_s": 3.469226353999943,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 45.66086003034428,
+          "native_decode_tps": null,
+          "prefill_tps": 3233.718895641012,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that fosters community connection, food security, and environmental stewardship. To successfully establish and maintain such a garden, one must approach the process with a structured methodology that addresses every aspect of the operation, from the initial site assessment to the long-term record keeping that ensures sustainability. The first and most critical step is comprehensive planning. This phase involves identifying the specific goals of the garden. Is the primary objective to provide",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.684042141999953
+            ]
+          ],
+          "prefill_s": 0.684042141999953,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 2,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 0.6889323540000305,
+          "last_content_s": 3.4684620400000767,
+          "wall_s": 3.468634554999994,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 45.6911831665891,
+          "native_decode_tps": null,
+          "prefill_tps": 3227.683504054314,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the cultivation of a sustainable, cooperative, and resilient community structure. To begin, the planning phase is the most critical step, as it sets the foundation for all subsequent activities. This phase involves identifying the site, assessing its legal and physical constraints, and defining the garden\u2019s mission. A suitable site must have adequate sunlight, typically at least six to eight hours of direct sun per day, and access to water. It",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "1",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.685321220999981
+            ]
+          ],
+          "prefill_s": 0.685321220999981,
+          "valid": true
+        }
+      ],
+      "qualifications": [
+        {
+          "check": "json",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 39,
+            "total_tokens": 53,
+            "completion_tokens": 14,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.05435570200006623,
+          "wall_s": 0.3323825109999916,
+          "answer": "{\"sum\": 42, \"word\": \"ready\"}",
+          "reasoning": "",
+          "client_decode_tps": 50.921487378428395,
+          "passed": true
+        },
+        {
+          "check": "arithmetic",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 49,
+            "total_tokens": 72,
+            "completion_tokens": 23,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.05649417600000106,
+          "wall_s": 0.5280342099999871,
+          "answer": "{\n  \"product\": 437,\n  \"smallest\": 12\n}",
+          "reasoning": "",
+          "client_decode_tps": 48.901993536446334,
+          "passed": true
+        },
+        {
+          "check": "retrieval",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 29434,
+            "total_tokens": 29491,
+            "completion_tokens": 57,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 11.419943273000058,
+          "wall_s": 12.885387982999987,
+          "answer": "{\n  \"start\": \"COPPER-8271-ORBIT\",\n  \"middle\": \"VELVET-4936-HARBOR\",\n  \"end\": \"QUARTZ-6182-RIVER\"\n}",
+          "reasoning": "",
+          "client_decode_tps": 38.908663866041984,
+          "passed": true
+        }
+      ],
+      "layer_audit": [
+        [
+          "model.language_model.layers.0.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.0.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.1.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.1.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.2.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.2.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.3.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.3.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.4.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.4.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.5.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.5.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.6.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.6.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.7.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.7.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.8.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.8.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.9.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.9.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.10.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.10.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.11.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.11.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.12.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.12.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.13.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.13.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.14.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.14.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.15.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.15.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.16.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.16.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.17.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.17.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.18.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.18.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.19.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.19.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.20.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.20.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.21.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.21.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.22.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.22.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.23.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.23.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.24.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.24.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.25.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.25.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.26.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.26.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.27.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.27.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.28.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.28.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.29.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.29.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.30.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.30.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.31.mlp.gate_up_proj",
+          "cuda:0",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.31.mlp.down_proj",
+          "cuda:0",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.32.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.32.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.33.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.33.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.34.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.34.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.35.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.35.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.36.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.36.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.37.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.37.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.38.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.38.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.39.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.39.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.40.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.40.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.41.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.41.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.42.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.42.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.43.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.43.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.44.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.44.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.45.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.45.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.46.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.46.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.47.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.47.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.48.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.48.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.49.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.49.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.50.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.50.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.51.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.51.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.52.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.52.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.53.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.53.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.54.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.54.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.55.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.55.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.56.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.56.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.57.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.57.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.58.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.58.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.59.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.59.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.60.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.60.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.61.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.61.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.62.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.62.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ],
+        [
+          "model.language_model.layers.63.mlp.gate_up_proj",
+          "cuda:1",
+          "5120",
+          "34816"
+        ],
+        [
+          "model.language_model.layers.63.mlp.down_proj",
+          "cuda:1",
+          "17408",
+          "5120"
+        ]
+      ],
+      "resources": {
+        "minimum_sampled_gpu_free_mib": [
+          1935.0,
+          1048.0
+        ],
+        "maximum_sampled_gpu_temp_c": [
+          64.0,
+          55.0
+        ],
+        "minimum_host_available_gib": 33.70003128051758,
+        "peak_owned_memory_gib": 6.2461395263671875,
+        "peak_owned_swap_gib": 0.0
+      },
+      "safety_stop": null,
+      "relative_to_control": {
+        "prefill_tps": 0.21572649393885368,
+        "ttft_s": -0.17535467231645285,
+        "client_decode_tps": -0.014240585808259487
+      }
+    }
+  ]
+}

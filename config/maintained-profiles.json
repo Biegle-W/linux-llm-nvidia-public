@@ -257,6 +257,13 @@
           32
         ],
         "maintained_recurrent_state_dtype": "float32"
+      },
+      "latest_isolated_engine_test": {
+        "run": "20261027-sglang-isolated-mlp-w4a8",
+        "evidence": "docs/SGLANG-W4A8-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-sglang-w4a8.json",
+        "production_promoted": false,
+        "candidate_status": "complete"
       }
     },
     {

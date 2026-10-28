@@ -1,6 +1,6 @@
 # Current takeover state
 
-Updated October 27, 2026, 23:16 EDT. Read README.md and AGENTS.md first.
+Updated October 27, 2026, 23:48 EDT. Read README.md and AGENTS.md first.
 
 ## Standing direction
 
@@ -152,3 +152,33 @@ data/sglang-tuning-20261027/. The trial coordinator finished and restored the
 HyperQwen default through the normal router; GPU-LOCK was released. See
 [SGLANG-TUNING-20261027.md](SGLANG-TUNING-20261027.md) and the corresponding
 numeric results. Earlier measurements and source settings are preserved.
+
+## Isolated SGLang W4A8 — October 27, 23:48 EDT
+
+The user explicitly approved the isolated MLP-only patch test. One RAM stick is
+temporarily removed: Linux reports 45.55 GiB usable. SATA weights were mounted
+through the normal UUID-checked preflight after reboot. Both GPUs are available
+and automatic GPU-unlock health reports VERIFIED. No MoE test was run.
+
+A copied installed SGLang package preserved its embedding/placement fixes.
+The community AutoRound adapter did not match the checkpoint serialization
+(compressed-tensors); its zero-activation audit rejected that candidate before
+benchmarking. The corrected adapter targets only compressed-tensors decoder MLP
+gate/up and down projections. All 128 expected projections were audited on both
+GPUs. Eighteen standalone kernel cases passed on both SM86 GPUs. JSON, arithmetic
+and 29,434-input three-marker retrieval passed for the final control and candidate.
+
+Final matched medians: W4A16 2659.91 prefill / .83394 s TTFT / 46.3513 decode;
+MLP W4A8 3233.72 / .687705 / 45.6912. Prefill +21.57%, TTFT -17.54%, decode -1.42%.
+No candidate was promoted. Production SGLang remains W4A16, 32/32 PP2, FP32
+recurrent state, 32K context. HyperQwen is restored as default; GPU-LOCK is
+released and the coordinator has finished. Swappiness60 and all existing guards
+remain. Normal engine binaries, checkpoint metadata and weights are unchanged.
+
+Evidence is private under data/sglang-w4a8-20261027/ (initial and v2 studies,
+source/patch manifests, compiler cache, raw requests and guard telemetry). The
+reproducible experimental patch and sanitized results are linked in
+[SGLANG-W4A8-20261027.md](SGLANG-W4A8-20261027.md). Initial cold isolated compilation
+took about four minutes; loading/compilation are excluded from inference timing.
+Do not repeat completed measurements or enable the candidate in production
+without a separately reviewed selection. Reduced-RAM MoE capacity is unqualified.

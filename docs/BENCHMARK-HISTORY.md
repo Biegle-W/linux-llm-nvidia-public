@@ -71,3 +71,14 @@ control: 2672.75 prefill / .8320 s TTFT / 46.45 decode. BF16: 2656.12 / .8374 /
 46.87; both passed JSON, arithmetic and 29,434-input retrieval. 34/30 and 36/28
 failed the existing GPU-headroom checks. Preserve the failed/partial trials;
 no candidate was promoted and HyperQwen remains default.
+
+## Isolated SGLang MLP W4A8 — October 27
+
+[Final compressed-tensors candidate](SGLANG-W4A8-20261027.md), on temporarily
+reduced RAM (45.55 GiB usable), activated all 128 intended MLP projections.
+Fresh matched three-request medians: W4A16 2659.91 prefill / .83394 s TTFT /
+46.3513 decode; W4A8 3233.72 / .687705 / 45.6912. Prefill +21.57%, TTFT -17.54%,
+decode -1.42%. Both passed JSON, arithmetic and 29,434-input retrieval. Eighteen
+standalone kernel cases passed on both GPUs. The first adapter was rejected
+with zero activated layers before its benchmark; initial control/diagnostics
+remain preserved. No production setting changed; HyperQwen remains default.

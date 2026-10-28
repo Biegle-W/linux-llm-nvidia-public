@@ -81,6 +81,11 @@ The [SGLang pipeline/BF16 experiments](docs/SGLANG-TUNING-20261027.md) retain th
 existing 32/32 FP32 setting: both uneven splits failed GPU-headroom checks, while
 BF16 changed decode by only +0.9% with slightly slower prefill. No candidate was promoted.
 
+The [isolated SGLang MLP W4A8 test](docs/SGLANG-W4A8-20261027.md) improves
+prefill by 21.6% and first-token latency by 17.5%, with 1.4% slower decode; it
+remains experimental. Its fresh controls use 45.55 GiB usable RAM while one stick
+is temporarily removed for maintenance. No MoE profile was tested or changed.
+
 ## Repository ownership
 
 | Build | Private operational repository | Public reference |
