@@ -198,3 +198,16 @@ for promotion or confirmation. These small screens do not prove other tuning is
 impossible. Production settings/runtime are unchanged; router is idle after owned
 cleanup. See docs/SGLANG-CONTEXT-20261028.md. Do not rerun rejected measurements
 merely to refresh repositories or obtain a passing median.
+
+## Latest user clarification — proportional context tradeoffs
+
+The user accepts a proportional context/performance tradeoff; the prior strict
+zero-generation-loss gate is no longer the acceptance rule for future work.
+Assess percentage context gain against measured generation slowdown and report
+both. The 38K screen offers 18.75% more allocated context for 1.70% slower generation;
+36K offers 12.5% more for 1.49% slower. These screens remain unqualified for promotion:
+tool/near-window quality and full-workload resource checks were skipped under the
+old gate. 38K is the stronger next qualification candidate; no new speed result,
+quality pass or context deployment is implied by this reassessment. Keep 32K until
+qualification is complete. The 512 MiB reserve, swappiness 60 and visible terminals
+remain mandatory; no further guard relaxation was authorized.

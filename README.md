@@ -284,3 +284,10 @@ The [larger-context study](docs/SGLANG-CONTEXT-20261028.md) retains 32K: 38K and
 screens measured 1.7%/1.5% slower generation than a fresh 32K control, while 40K
 failed full-KV capacity proof. No larger profile was promoted; precision, the
 512 MiB reserve, swappiness 60 and all other guards remain unchanged.
+
+The user now accepts proportional context/speed tradeoffs. 38K adds 18.75% context
+for 1.70% measured slowdown, but still requires tool/near-window qualification before
+promotion; 32K remains deployed. The600-second idle rule is enabled. Saved automatic
+expiry proof covers HyperQwen; new SGLang was explicitly unloaded about 11 seconds
+before its deadline, so its timed automatic expiry is not yet verified. See
+[the lifecycle evidence clarification](docs/OPERATIONAL-LIFECYCLE.md).

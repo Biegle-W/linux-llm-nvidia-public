@@ -92,3 +92,21 @@ This prevents a false missing-telemetry safety latch on ordinary shutdown.
 Unexpected telemetry loss remains fail closed; four regression cases and 74 CPU
 checks pass. Dense 600-second expiry was measured before this fix; subsequent
 real normal stop and automatic API reload validated the corrected shutdown path.
+
+## SGLang idle evidence clarification — October 28
+
+The current router still uses idle_timeout_s=600, checks native request gauges
+under the switch lock and refuses to unload busy/loading/reserved workers.
+Health/catalog polling does not refresh the deadline. Saved idle-unloaded events
+verify automatic 600-second expiry for HyperQwen; they do not establish a timed
+expiry for the newly deployed heterogeneous SGLang fork.
+
+For that SGLang invocation, the last request was around 01:07:02 and owned phase
+telemetry remained idle through 01:16:51. The context-study coordinator then
+explicitly unloaded it after about 9 minutes 49 seconds, before the 600-second deadline.
+The study's own workers were also explicitly stopped. Therefore their GPU release
+must not be described as proof of automatic SGLang idle expiry. The rule is enabled
+and idle detection was observed; a full 600-second automatic-expiry observation for
+the new SGLang runtime remains unverified. The router is currently idle after
+explicit study cleanup. No new GPU load or timed idle test was launched for this
+read-only status check.

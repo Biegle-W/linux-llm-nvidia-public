@@ -446,7 +446,16 @@
           "actual_tokens_per_pool": 40760
         },
         "evidence": "docs/SGLANG-CONTEXT-20261028.md",
-        "numeric_results": "docs/benchmark-results/20261028-sglang-context.json"
+        "numeric_results": "docs/benchmark-results/20261028-sglang-context.json",
+        "tradeoff_reassessment": {
+          "user_accepts_proportional_context_speed_tradeoffs": true,
+          "zero_loss_gate_superseded_for_future_work": true,
+          "preferred_next_qualification_context": 38912,
+          "context_gain_pct": 18.75,
+          "measured_generation_loss_pct": 1.7019752144914468,
+          "qualification_pending": true,
+          "production_context_unchanged": 32768
+        }
       }
     },
     {
