@@ -12,6 +12,7 @@ from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/'network'),str(ROOT/'scripts')]
 from worker_manager import Workers
+from request_admission import RequestAdmission
 from idle_control import claim,release,owned_native_idle
 from native_idle_policy import transform, vision_phases
 
@@ -46,7 +47,7 @@ class DenseIdleTest(unittest.TestCase):
         self.root=Path(self.tmp.name);(self.root/'data').mkdir()
         mock=patch('worker_manager.ROOT',self.root);mock.start();self.addCleanup(mock.stop)
         w=Workers.__new__(Workers);w.key='fixture';w.idle_timeout=600;w.active='qwen27b-hyperqwen'
-        w.busy=False;w.loading=None;w.lock=threading.Lock();w.last_activity=0;w.idle_unloading=None
+        w.busy=False;w.loading=None;w.lock=RequestAdmission();w.last_activity=0;w.idle_unloading=None
         self.phase='idle';w._idle_probe=SimpleNamespace(profile=w.active,phase=lambda:self.phase)
         self.stops=[]
         def stop(**kw):self.stops.append(kw);w.active=None
@@ -69,6 +70,23 @@ class DenseIdleTest(unittest.TestCase):
         self.assertEqual(self.worker.last_activity,1000)
         self.phase='idle';self.worker.lock.acquire()
         self.assertFalse(self.worker.idle_tick(2000));self.worker.lock.release()
+    def test_idle_does_not_overtake_a_waiting_request(self):
+        self.worker.lock.acquire()
+        entered=threading.Event();finish=threading.Event()
+        def request():
+            self.worker.lock.acquire(timeout=2);entered.set();finish.wait(2);self.worker.lock.release()
+        thread=threading.Thread(target=request);thread.start()
+        try:
+            deadline=__import__('time').monotonic()+2
+            while self.worker.lock.snapshot()['queued']!=1:
+                if __import__('time').monotonic()>deadline:self.fail('request did not queue')
+                threading.Event().wait(.005)
+            self.assertFalse(self.worker.idle_tick(2000));self.assertFalse(self.stops)
+            self.worker.lock.release();self.assertTrue(entered.wait(2))
+            self.assertFalse(self.worker.idle_tick(2000));self.assertFalse(self.stops)
+        finally:
+            finish.set();thread.join(3)
+
     def test_request_start_on_final_recheck_preserves_worker(self):
         phases=iter(['idle','inference']);self.worker._idle_probe.phase=lambda:next(phases)
         self.assertFalse(self.worker.idle_tick(1000));self.assertFalse(self.stops)

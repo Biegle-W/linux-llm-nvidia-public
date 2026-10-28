@@ -1,0 +1,82 @@
+{
+  "schema": 1,
+  "date": "2026-10-28",
+  "cpu_regressions": {
+    "tests": 94,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": true
+  },
+  "admission": {
+    "max_inflight": 1,
+    "max_queued": 8,
+    "fifo": true,
+    "same_model_concurrency": false,
+    "queue_wait_timeout_s": 3600
+  },
+  "concurrency_audit": {
+    "profile_limits": {
+      "qwen27b-hyperqwen": {
+        "execution_slots": 1,
+        "evidence": "cli_args --max-num-seqs=1"
+      },
+      "qwen27b-sglang": {
+        "execution_slots": 1,
+        "evidence": "server_args max_running_requests=1, max_mamba_cache_size=1, cuda_graph_max_bs_decode=1"
+      },
+      "flash-next-strata": {
+        "execution_slots": 1,
+        "evidence": "serve_router_moe.py config parallel=1"
+      },
+      "glm-maya": {
+        "execution_slots": 1,
+        "evidence": "serve_router_moe.py config parallel=1"
+      },
+      "deepseek-strata": {
+        "execution_slots": 1,
+        "evidence": "serve_router_moe.py config parallel=1"
+      },
+      "deepseek-maya": {
+        "execution_slots": 1,
+        "evidence": "serve_router_moe.py config parallel=1"
+      }
+    },
+    "gpu_concurrency_test_run": false,
+    "qualification": "Single-slot maintained configurations; concurrency not enabled"
+  },
+  "unchanged_sources_sha256": {
+    "config/maintained-profiles.json": "27015c0b629c097a815cada56f70a81428bb263c618cc4c317d634143aadef82",
+    "config/inference-policy.json": "c9955b29c7bb4d10473ffaff526307afb768c688b80f7f05da142b677193124f",
+    "config/sglang-runtime.json": "13e90f91750e7710af06aea97e4d632d92b6183f4e809d83016c17c56df9dc5a",
+    "config/terminal-runtime.json": "25536275e7b8fcdd1fd6525eecf3e575352669f6d67ce247277fa95ca8f9fe8f",
+    "scripts/serve_qwen27b_engines.py": "61a765c3a3afb4a5d2cf68272fbf6cf30adeaedfe567e068eeac83c52b28c21f",
+    "scripts/serve_router_moe.py": "a98aa29ccd517508c970c6269cdc44f0e880b7ab7b0d9bfabf115af4781fc64f",
+    "scripts/supervise_dense.py": "24b7da702126d7ed6b17d90d2bc209f8427922684b55ba34826b0d2f5d127430",
+    "scripts/inference_swap_guard.py": "3501dc5ad1b139c313d2bf3d26749067ce02f2d820fc0375645286facfb91a0d",
+    "scripts/native_idle_policy.py": "1a372293e960cf4a0efdbc9aef7eb208881ecece1212488edd71803a18f7f626",
+    "scripts/profile_catalog.py": "3bb2f2fb2f865ee23be0cbc2b45c5364c40f580b98a94d1adf7b8d87881645c2",
+    "scripts/inference_policy.py": "f5f96c485409460456a39ae8cfac21056a4dfe9e06eb66516d3c33f77440d38f",
+    "scripts/visible_terminal.py": "e4bd49dae326c7974651b5136d0eb15c9e413caf8fe443c95876c455f1a4225e",
+    "scripts/start_model.sh": "248db5e9f95bfe3ad9d1aa2f878af967ab6c25e88f6a188b09c397dcf35b72ac",
+    "network/idle_control.py": "37fb8f845b1494b8c75aa32608efb3c1fe257e0222614cf57645933d0b12b6f7"
+  },
+  "live_checks": {
+    "auth_rejection": true,
+    "unknown_model_rejection": true,
+    "catalog_models": 6,
+    "nonstream_alias_and_content": true,
+    "stream_alias_content_and_done": true,
+    "sequential_requests": 2,
+    "max_output_tokens_per_request": 32,
+    "performance_benchmark": false,
+    "dsh_process_and_invocation_preserved": true,
+    "cleanup_check": "Initial immediate-health assertion raced SSE handler cleanup; read-only follow-up confirmed release. Harness corrected; successful inference requests not repeated."
+  },
+  "guards": {
+    "dense_reserve_mib": 512,
+    "swappiness": 60,
+    "idle_timeout_s": 600,
+    "settings_changed": false
+  }
+}

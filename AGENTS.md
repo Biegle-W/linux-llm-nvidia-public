@@ -11,6 +11,13 @@ completed verification, actual blockers, active jobs/locks, unfinished steps and
 one concrete next action in the canonical takeover handoff. Verify both pushes
 or record the exact outstanding sync step. Do not rerun completed GPU tests for docs.
 
+Latest router update: bounded FIFO admission and separate backend transport are
+deployed; one active operation/eight waiters. Same-model concurrency is NOT enabled:
+all maintained engines are configured for one execution slot. Preserve that limit
+until separate engine/resource/state-isolation qualification. 94 CPU regressions
+and normal nonstream/SSE smoke passed; see docs/ROUTER-IMPROVEMENTS-20261028.md.
+Desktop integration, all guards and DSH ownership remain unchanged.
+
 Four qualified context upgrades and the approved lifecycle controls are deployed.
 All six normal launch paths passed functional/limit checks. Actual GLM/dense idle
 expiry and normal reload, plus isolated Strata idle/reload, are verified. No test

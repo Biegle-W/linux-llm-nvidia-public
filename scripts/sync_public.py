@@ -25,6 +25,8 @@ FILES = (
     'config/maintained-profiles.json', 'config/model-catalog.example.json',
     'scripts/profile_catalog.py', 'docs/MAINTAINED-PROFILES.md',
     'docs/DEEPSEEK-STRATA-CONTEXT-20261027.md',
+    'network/backend_proxy.py', 'network/request_admission.py', 'tests/test_request_admission.py',
+    'docs/ROUTER-IMPROVEMENTS-20261028.md', 'docs/validation-results/20261028-router-improvements.json',
     'network/router.py', 'network/worker_manager.py', 'network/install.py', 'network/README.md',
     'scripts/serve_router_moe.py', 'scripts/router_client.py', 'scripts/open_dsh.py',
     'dsh/configure.py', 'dsh/run', 'dsh/package.json', 'dsh/package-lock.json',

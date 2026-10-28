@@ -14,6 +14,8 @@ from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'network'))
 import router
+import backend_proxy
+from request_admission import RequestAdmission
 from worker_manager import Workers, RouterError
 
 KEY='test-router-key-'+'x'*40
@@ -23,6 +25,12 @@ class Backend(BaseHTTPRequestHandler):
     def do_POST(self):
         body=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
         self.server.body=body
+        self.server.forwarded_headers=dict(self.headers)
+        if body.get('mock_error'):
+            payload=('backend overloaded '+KEY).encode()
+            self.send_response(503);self.send_header('Content-Type','text/plain')
+            self.send_header('Content-Length',str(len(payload)));self.end_headers()
+            self.wfile.write(payload);return
         if body.get('stream'):
             self.send_response(200);self.send_header('Content-Type','text/event-stream');self.end_headers()
             chunk={'model':'worker-name','choices':[{'delta':{'tool_calls':[{'index':0,'id':'call_1','type':'function','function':{'name':'read_file','arguments':'{"path":"check.txt"}'}}]}}]}
@@ -32,7 +40,8 @@ class Backend(BaseHTTPRequestHandler):
             self.send_response(200);self.send_header('Content-Length',str(len(payload)));self.end_headers();self.wfile.write(payload)
 
 class FakeWorkers:
-    active=None;loading=None;busy=False
+    active=None;loading=None;busy=False;idle_timeout=600
+    def request_status(self):return dict(queued=0,inflight=int(self.busy),max_inflight=1,max_queued=8,same_model_concurrency=False)
     def acquire(self,name,progress=lambda:None,clear_guard=False):self.active=name;self.busy=True;self.clear_guard=clear_guard
     def release(self):self.busy=False
     def backend_models(self):return [{'id':'worker-name'}]
@@ -46,8 +55,8 @@ class RouterTest(unittest.TestCase):
         cls.server.key=KEY;cls.server.workers=FakeWorkers()
         cls.server.allowed=[router.ipaddress.ip_network('127.0.0.0/8')]
         threading.Thread(target=cls.server.serve_forever,daemon=True).start()
-        cls.http=router.http.client.HTTPConnection
-        cls.redirect=patch.object(router.http.client,'HTTPConnection',side_effect=lambda host,port,**kw:cls.http(host,cls.backend.server_port if port==10000 else port,**kw))
+        cls.http=backend_proxy.http.client.HTTPConnection
+        cls.redirect=patch.object(backend_proxy.http.client,'HTTPConnection',side_effect=lambda host,port,**kw:cls.http(host,cls.backend.server_port if port==10000 else port,**kw))
         cls.redirect.start()
     @classmethod
     def tearDownClass(cls):
@@ -105,6 +114,42 @@ class RouterTest(unittest.TestCase):
     def test_bad_template_options_rejected_before_forwarding(self):
         self.assertEqual(self.request('/v1/chat/completions',{'model':'qwen27b-sglang','messages':[],'chat_template_kwargs':[]})[0],400)
 
+    def test_health_exposes_capacity_and_request_state(self):
+        status,data=self.request('/health');self.assertEqual(status,200)
+        state=json.loads(data)
+        self.assertEqual(state['max_inflight'],1)
+        self.assertEqual(state['max_queued'],8)
+        self.assertEqual(state['idle_timeout_seconds'],600)
+        self.assertFalse(state['same_model_concurrency'])
+
+    def test_plain_backend_error_preserves_status_and_redacts_key(self):
+        status,data=self.request('/v1/chat/completions',{'model':'qwen27b-sglang','mock_error':True})
+        self.assertEqual(status,503);self.assertIn(b'backend overloaded',data)
+        self.assertNotIn(KEY.encode(),data);self.assertIn(b'[redacted]',data)
+        self.assertFalse(self.server.workers.busy)
+
+    def test_stream_backend_error_carries_original_status(self):
+        status,data=self.request('/v1/chat/completions',{'model':'qwen27b-sglang','mock_error':True,'stream':True})
+        self.assertEqual(status,200)  # SSE headers precede loading and backend response
+        event=next(json.loads(line[5:]) for line in data.splitlines() if line.startswith(b'data:') and line[5:].strip()!=b'[DONE]')
+        self.assertEqual(event['error']['status'],503)
+        self.assertIn('backend overloaded',event['error']['message'])
+        self.assertNotIn(KEY.encode(),data);self.assertFalse(self.server.workers.busy)
+
+    def test_transport_does_not_forward_client_cookies_or_headers(self):
+        self.request('/v1/chat/completions',{'model':'qwen27b-sglang'},headers={'Cookie':'private-client-session','X-Client-Secret':'not-for-backend'})
+        headers=self.backend.forwarded_headers
+        self.assertEqual(headers['Authorization'],'Bearer '+KEY)
+        self.assertNotIn('Cookie',headers);self.assertNotIn('X-Client-Secret',headers)
+
+    def test_full_queue_returns_retryable_error_before_backend(self):
+        with patch.object(self.server.workers,'acquire',side_effect=RouterError('Queue full','router_queue_full',429)):
+            client=self.http('127.0.0.1',self.server.server_port,timeout=3)
+            client.request('POST','/v1/chat/completions',json.dumps({'model':'qwen27b-sglang'}),{'Authorization':'Bearer '+KEY})
+            response=client.getresponse()
+            self.assertEqual(response.status,429);self.assertEqual(response.getheader('Retry-After'),'5')
+            self.assertEqual(json.loads(response.read())['error']['code'],'router_queue_full');client.close()
+
 class SwitchTest(unittest.TestCase):
     def test_latched_worker_does_not_auto_restart(self):
         from worker_manager import ROOT as active_root
@@ -122,7 +167,7 @@ class SwitchTest(unittest.TestCase):
         latch.parent.mkdir(parents=True,exist_ok=True)
         latch.write_text('{}');other.write_text('{}')
         worker=Workers.__new__(Workers)
-        worker.lock=threading.Lock();worker.busy=False
+        worker.lock=RequestAdmission();worker.busy=False
         worker.start=lambda _name,_progress: self.assertFalse(latch.exists())
         worker.acquire('qwen27b-hyperqwen',clear_guard=True)
         worker.release()
@@ -133,7 +178,7 @@ class SwitchTest(unittest.TestCase):
         latch.parent.mkdir(parents=True,exist_ok=True)
         latch.write_text('{}');(active_root/'data/GPU-LOCK').write_text('{}')
         worker=Workers.__new__(Workers)
-        worker.lock=threading.Lock();worker.busy=False
+        worker.lock=RequestAdmission();worker.busy=False
         with self.assertRaises(RouterError):
             worker.acquire('qwen27b-hyperqwen',clear_guard=True)
         self.assertTrue(latch.exists())
@@ -147,7 +192,7 @@ class SwitchTest(unittest.TestCase):
             mock=patch('worker_manager.'+name,value)
             mock.start();self.addCleanup(mock.stop)
     def worker(self):
-        w=Workers.__new__(Workers);w.lock=threading.Lock();w.busy=False;w.started=[]
+        w=Workers.__new__(Workers);w.lock=RequestAdmission();w.busy=False;w.started=[]
         w.start=lambda name,progress=lambda:None:w.started.append(name)
         return w
     def test_switch_waits_for_reply(self):

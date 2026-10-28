@@ -5,7 +5,6 @@ from pathlib import Path
 import socket
 import subprocess
 import sys
-import threading
 import time
 import urllib.request
 
@@ -15,6 +14,7 @@ from profile_catalog import load_catalog, worker_budget
 from inference_policy import load_policy
 from visible_terminal import open_monitor, close_backend_monitor
 from inference_swap_guard import WorkerWatch
+from request_admission import RequestAdmission, QueueFull
 from idle_control import claim as claim_idle, release as release_idle, owned_native_idle
 
 DENSE_UNIT = 'llm-test-qwen27b.service'
@@ -41,7 +41,7 @@ def unit_property(unit, prop):
 class Workers:
     def __init__(self, key, timeout=1200, idle_timeout=None):
         self.key, self.timeout = key, timeout
-        self.lock = threading.Lock()
+        self.lock = RequestAdmission()
         self.active = self.detect()
         self.loading = None
         self.busy = False
@@ -238,12 +238,13 @@ class Workers:
             self.loading = None
 
     def acquire(self, profile_id, progress=lambda: None, clear_guard=False):
-        # One active request; selection and inference share the same switch lock.
-        deadline = time.monotonic() + 3600
-        while not self.lock.acquire(timeout=1):
-            progress()
-            if time.monotonic() >= deadline:
-                raise RouterError('A prior inference request is still running.', 'backend_busy')
+        # FIFO admission prevents a busy model from starving an earlier switch.
+        try:
+            acquired = self.lock.acquire(timeout=3600, progress=progress)
+        except QueueFull as error:
+            raise RouterError('Inference queue is full; retry later.', 'router_queue_full', 429) from error
+        if not acquired:
+            raise RouterError('Timed out waiting for prior requests.', 'request_queue_timeout', 504)
         self.busy = True
         try:
             if clear_guard:
@@ -255,6 +256,22 @@ class Workers:
         except BaseException:
             self.release()
             raise
+
+    def request_status(self):
+        return dict(self.lock.snapshot(), inflight=int(self.busy))
+
+    def unload(self):
+        """Explicit controls use the same admission and ownership rules as inference."""
+        try:
+            acquired = self.lock.acquire(timeout=1)
+        except QueueFull as error:
+            raise RouterError('Inference queue is full; retry later.', 'router_queue_full', 429) from error
+        if not acquired:
+            raise RouterError('A reply or switch is active; retry later.', 'backend_busy', 409)
+        try:
+            self.stop_owned()
+        finally:
+            self.lock.release()
 
     def release(self):
         self.touch_activity()

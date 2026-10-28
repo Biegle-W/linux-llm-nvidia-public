@@ -57,6 +57,10 @@ remain preserved as historical measurements.
 [The model router and desktop apps](network/README.md) provide authenticated
 OpenAI model/engine selection on port 10100 over loopback and Tailscale. DSH is a
 separate client on port 3080; Strata and Maya shortcuts open their native web apps.
+The [router admission update](docs/ROUTER-IMPROVEMENTS-20261028.md) adds bounded FIFO
+queuing, request-state reporting and faithful backend errors. Same-model execution
+remains serial after auditing the qualified one-slot configurations; desktop
+integration and all resource/ownership guards are preserved.
 
 [Current takeover state](docs/CURRENT-STATE.md), [benchmark ledger](docs/BENCHMARK-HISTORY.md),
 [inference swap policy](docs/INFERENCE-SWAP-POLICY.md),

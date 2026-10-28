@@ -2,7 +2,6 @@
 """Authenticated OpenAI model/engine router for the qualified NVIDIA catalog."""
 import argparse
 import hmac
-import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import ipaddress
 import json
@@ -13,6 +12,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 from worker_manager import Workers, RouterError, profiles, ROOT
 from inference_policy import load_policy
+from backend_proxy import BackendProxy
 
 MAX_BODY = 32 * 1024 * 1024
 
@@ -46,6 +46,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header('Content-Type', 'application/json')
         self.send_header('Content-Length', str(len(payload)))
         self.send_header('Cache-Control', 'no-store')
+        if status == 429:
+            self.send_header('Retry-After', '5')
         if status == 401:
             self.send_header('WWW-Authenticate', 'Bearer realm="local-llm"')
         self.end_headers()
@@ -89,7 +91,9 @@ class Handler(BaseHTTPRequestHandler):
             w = self.server.workers
             return self.reply(200, {'status': 'ok', 'active_model': w.active, 'loading_model': w.loading,
                                     'busy': w.busy, 'models': len(profiles()),
-                                    'idle_unloading_model': getattr(w, 'idle_unloading', None)})
+                                    'idle_unloading_model': getattr(w, 'idle_unloading', None),
+                                    'idle_timeout_seconds': w.idle_timeout,
+                                    **w.request_status()})
         models = self.catalog()
         if path == '/v1/models':
             return self.reply(200, {'object': 'list', 'data': list(models.values())})
@@ -130,12 +134,7 @@ class Handler(BaseHTTPRequestHandler):
             data = self.read_body()
             if path == '/router/unload':
                 w = self.server.workers
-                if not w.lock.acquire(timeout=1):
-                    raise RouterError('A reply or switch is active; retry later.', 'backend_busy', 409)
-                try:
-                    w.stop_owned()
-                finally:
-                    w.lock.release()
+                w.unload()
                 return self.reply(200, {'status': 'unloaded'})
             name = data.get('model')
             if not isinstance(name, str) or name not in profiles():
@@ -169,28 +168,23 @@ class Handler(BaseHTTPRequestHandler):
         except OSError:
             self.error(503, 'Worker connection failed; inspect the local service journal.', 'backend_unavailable')
 
-    def backend_body(self, data):
-        models = self.server.workers.backend_models()
-        if not models:
-            raise RouterError('Worker is not ready.', 'backend_unavailable')
-        body = dict(data)
-        body['model'] = models[0]['id']
-        return json.dumps(body).encode()
+    def proxy(self):
+        return BackendProxy(self.server.key, self.server.workers.backend_models)
 
     def open_backend(self, path, data):
-        connection = http.client.HTTPConnection('127.0.0.1', 10000, timeout=7200)
-        connection.request('POST', path, self.backend_body(data),
-                           {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + self.server.key})
-        return connection
+        return self.proxy().open(path, data)
 
     def forward(self, name, path, data):
         conn = self.open_backend(path, data)
         try:
             response = conn.getresponse()
-            value = json.loads(response.read())
-            if isinstance(value, dict) and 'model' in value:
-                value['model'] = name
-            self.reply(response.status, value)
+            payload, kind = self.proxy().response(response, name)
+            self.send_response(response.status)
+            self.send_header('Content-Type', kind)
+            self.send_header('Content-Length', str(len(payload)))
+            self.send_header('Cache-Control', 'no-store')
+            self.end_headers()
+            self.wfile.write(payload)
         finally:
             conn.close()
 
@@ -229,7 +223,7 @@ class Handler(BaseHTTPRequestHandler):
             conn = self.open_backend(path, data)
             response = conn.getresponse()
             if response.status != 200:
-                raise RouterError('Worker rejected the request; check its endpoint parameters.', 'backend_error', response.status)
+                raise self.proxy().stream_error(response)
             while line := response.readline():
                 if line.startswith(b'data:') and line[5:].strip() != b'[DONE]':
                     try:
@@ -245,7 +239,8 @@ class Handler(BaseHTTPRequestHandler):
         except (RouterError, OSError) as e:
             try:
                 write(b'data: ' + json.dumps({'error': {'message': str(e).replace(self.server.key, '[redacted]'),
-                      'code': getattr(e, 'code', 'backend_unavailable')}}).encode() + b'\n\ndata: [DONE]\n\n')
+                      'code': getattr(e, 'code', 'backend_unavailable'),
+                      'status': getattr(e, 'status', 503)}}).encode() + b'\n\ndata: [DONE]\n\n')
             except OSError:
                 pass
         finally:

@@ -52,6 +52,20 @@ The router stops only its exact owned systemd units, never unrelated GPU jobs,
 DSH, the gateway, browsers or terminals. GPU-resource release tracks owned PIDs;
 desktop programs can appear in NVIDIA's compute-app query and are preserved.
 
+## Fair admission and backend transport
+
+The API retains one active request/selection and now accepts up to eight waiting
+operations in FIFO order. A waiting switch cannot be overtaken by later same-model
+API calls. A full queue returns HTTP429 with Retry-After:5; streaming requests report
+the error's status/code in SSE because their HTTP headers have already been sent.
+`/health` exposes inflight/queued counts, capacity and the600-second idle policy.
+Backend status and error messages are preserved, with local credentials redacted.
+
+Same-model concurrency remains disabled after auditing actual engine limits:
+HyperQwen max-num-seqs1, SGLang one running request/Mamba slot, native parallel1.
+No qualified engine setting or guard was raised. Native UIs retain their own FIFO
+and activity protection. See [the design, safety decision and validation](../docs/ROUTER-IMPROVEMENTS-20261028.md).
+
 ## Native apps and desktop shortcuts
 
 Desktop shortcuts are installed for:

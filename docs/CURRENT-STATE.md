@@ -531,3 +531,28 @@ once while idle to load the launcher change. 53 engine/ownership regressions pas
 no benchmark, driver, precision, budget or context change. Final router idle, DSH active,
 no GPU-LOCK. Dense 512 MiB, swappiness 60, 600s idle and other guards remain unchanged.
 See [switching and minimized-window evidence](ENGINE-SWITCHING-20261028.md).
+
+
+## Latest: router admission and transport improved — October 28
+
+The AMD-inspired separation of HTTP, backend transport and lifecycle is deployed
+in the existing router service. FIFO admission permits one active operation and
+eight waiters; overload is reported explicitly, failed waiters release their place,
+and queued requests take priority over automatic idle teardown. Backend error
+status/messages are preserved and credentials redacted. Health exposes admission
+state. All six model IDs, desktop/native paths and DSH defaults remain.
+
+Same-model concurrency is deliberately disabled: actual HyperQwen, SGLang and
+native configurations all have one execution slot. Enabling it would require
+new engine/state/memory qualification, not merely removing the router lock.
+94 CPU regressions and two sequential 32-token normal SGLang transport requests
+passed. This was not a new speed benchmark or a concurrent GPU test. The router
+was restarted only while idle under an owned temporary reservation; DSH ownership
+was preserved. SGLang was left ready for normal600-second idle release; no fallback.
+
+Keep512MiB dense reserve,swappiness60,600s idle,all other guards and SGLang32K.
+Registry/runtime/guard/desktop-launcher source hashes are unchanged. The38K
+normal-reload KV blocker and reduced-RAM MoE caveats remain unresolved. No existing
+job/reservation was stopped or removed; no completed GPU qualification was repeated.
+Next action: follow the next user task; do not enable concurrency without separate
+qualification. See [router validation](ROUTER-IMPROVEMENTS-20261028.md).

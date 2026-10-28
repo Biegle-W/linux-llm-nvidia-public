@@ -171,3 +171,9 @@ checks passed; see ENGINE-SWITCHING-20261028.md. Final state idle, all guards un
 October 28 terminal correction: engine/router/harness/test consoles now start visible
 but minimized. Live initial-iconic/non-activation checks and a normal SGLang Desktop
 API smoke passed. This is presentation/ownership verification, not a new speed result.
+
+
+October28 router update:94 CPU lifecycle/admission/guard checks and two sequential
+32-token SGLang transport smoke requests passed. No speed, near-window or GPU
+concurrency benchmark was run. One-slot engine limits and all qualified settings
+remain; the router now fairly queues API clients. See ROUTER-IMPROVEMENTS-20261028.md.
