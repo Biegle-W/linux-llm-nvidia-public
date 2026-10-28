@@ -34,9 +34,12 @@ IST-DAS weight files were removed. See [native validation](docs/VALIDATION-20261
 [local setup](docs/LOCAL-SETUP.md); raw machine details remain ignored.
 
 **Dense Qwen3.8-27B now defaults to HyperQwen/patched vLLM:** GPU-only TP2,
-MTP3, BF16 recurrent state, INT4 KV and a 32K allocation. The selected profile
-measured **155 code / 108 prose tok/s** and passed 29,496-token retrieval.
-The SGLang choice uses GPU-only PP2, CUDA graphs and 16K context at **47 / 47 tok/s**.
+MTP3, BF16 recurrent state, INT4 KV and a 56,320-token allocation. The earlier 32K profile
+measured **155 code / 108 prose tok/s** and passed 29,496-token retrieval; the
+current 56,320 setting passed 50,627-input retrieval and uses the dated context
+study metrics linked below.
+The SGLang choice uses GPU-only PP2, CUDA graphs and 32K context; earlier 16K
+code/prose checks measured **47 / 47 tok/s**.
 [Engine settings, comparisons and validation](docs/DENSE-ENGINE-OPTIMIZATION-20261027.md)
 include the old 4070 + 3060 reference and guarded DFlash/SGLang TP failures.
 Start the default with `./scripts/start_model.sh qwen27b`, or explicitly select
@@ -47,8 +50,8 @@ The [maintained-profile registry](docs/MAINTAINED-PROFILES.md) now keeps exactly
 one selected setting per model, weight quantization and engine: six profiles.
 Superseded launchers and the duplicate Strata alias are retired; completed
 measurements remain available as dated evidence.
-[Strata DeepSeek Maya-S now uses 64K context](docs/DEEPSEEK-STRATA-CONTEXT-20261027.md),
-with 58,969-token three-marker retrieval passed; its previous 8K speed results
+[Strata DeepSeek Maya-S earlier qualified 64K context](docs/DEEPSEEK-STRATA-CONTEXT-20261027.md),
+with 58,969-token three-marker retrieval passed; the current context rollout uses 131,072 with 117,866-input retrieval. Its previous 8K speed results
 remain preserved as historical measurements.
 
 [The model router and desktop apps](network/README.md) provide authenticated
@@ -61,7 +64,7 @@ separate client on port 3080; Strata and Maya shortcuts open their native web ap
 [saved-evidence unlock assessment](docs/UNLOCK-IMPACT-20261027.md), and
 [AMD/NVIDIA gap audit](docs/AMD-NVIDIA-GAP-AUDIT-20261027.md) are maintained with this task.
 
-**Context tests in progress:** [larger windows with matched speed and quality checks](docs/CONTEXT-EXPANSION-20261027.md). Production settings remain unchanged until qualification.
+**Context rollout:** [four qualified context upgrades deployed at swappiness 60](docs/CONTEXT-EXPANSION-20261027.md). Flash remains 32K; Maya DeepSeek remains 32K with unresolved sustained-swap qualification. All six normal functional paths passed; actual idle/reload verification is in progress.
 
 **Latest results:** [GLM/DeepSeek cache optimization at unchanged contexts](docs/MOE-OPTIMIZATION-20261027.md).
 The [previous full six-profile benchmark](docs/BENCHMARK-20261027-101219.md) and all

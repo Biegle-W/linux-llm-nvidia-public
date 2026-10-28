@@ -1,13 +1,16 @@
 # Inference lifecycle controls
 
-Implementation checkpoint, October 27: the swap policy is applied to subsequent
-guarded launches. Idle unload and lifecycle logging are implemented and CPU-tested,
-but their private access flags remain disabled until the context rollout finishes.
-The native adapter has not yet been applied. See CURRENT-STATE.md for live status.
+Deployment checkpoint, October 27: guarded 600-second idle release and bounded
+private lifecycle logging are enabled; both native adapters are applied with
+hash-verified preimages. Manual candidate staging is available without activation.
+All six normal launch paths passed JSON, supported images, context metadata and
+actual RAM/swap readbacks. Actual idle/reload verification is in progress. Context rollout
+is partial: four qualified upgrades deployed; Maya sustained-swap qualification
+remains unresolved. See CURRENT-STATE.md.
 
 ## Ten-minute idle release
 
-The intended private router setting is `idle_timeout_s: 600`. Dense engines use
+The deployed private router setting is `idle_timeout_s: 600`. Dense engines use
 the router's request/switch lock, an exclusive GPU reservation and a final direct
 request-gauge check. Unknown backend state defers unload. Native Maya and Strata
 use their existing request FIFO, with the narrow `native_idle_policy.py` adapter
@@ -27,7 +30,7 @@ No measured power saving is claimed.
 
 ## Private lifecycle telemetry
 
-The intended private flag is `lifecycle_telemetry: true`. Normal guarded dense
+The deployed private flag is `lifecycle_telemetry: true`. Normal guarded dense
 and MoE supervisors record start, loading/idle/inference samples and stop. A
 background collector avoids putting optional sensor queries in the safety loop.
 Records include GPU temperatures, clocks, utilization, memory, power, fan duty,
@@ -41,8 +44,9 @@ Logs stay under ignored `data/telemetry/<profile>/`, mode 600. Each profile keep
 one 10 MiB log plus two rotated files. This bounded logging does not change GPU
 clocks, fan settings, power limits or thermal guards. A raw limiter mask alone
 does not establish a performance cause. Swap monitoring is independently required;
-see INFERENCE-SWAP-POLICY.md. Hardware coverage and normal-launch lifecycle
-verification remain pending at this checkpoint.
+see INFERENCE-SWAP-POLICY.md. Normal-launch sensor coverage is verified for all six profiles: two GPUs, six
+hwmon devices and owned cgroup counters in owner-only logs. Actual automatic
+unload/reload remains under verification.
 
 ## Manual candidate staging
 

@@ -1,15 +1,15 @@
 {
   "schema": 1,
   "run": "20261027-context-expansion",
-  "status": "in_progress",
-  "updated": "2026-10-27T20:05:45-0400",
-  "production_promotion": false,
+  "status": "partial_deployment_maya_unresolved",
+  "updated": "2026-10-27T20:11:33-0400",
+  "production_promotion": true,
   "deployed_contexts": {
-    "qwen27b-hyperqwen": 32768,
-    "qwen27b-sglang": 16384,
+    "qwen27b-hyperqwen": 56320,
+    "qwen27b-sglang": 32768,
     "flash-next-strata": 32768,
-    "glm-maya": 32768,
-    "deepseek-strata": 65536,
+    "glm-maya": 65536,
+    "deepseek-strata": 131072,
     "deepseek-maya": 32768
   },
   "protocol": {
@@ -2618,6 +2618,38 @@
       }
     },
     {
+      "variant": "vm60-deepseek-maya-65536-ahead0-warm24-engram0-confirmed",
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "context": 65536,
+      "state": "incomplete",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": null,
+      "samples": [],
+      "changes": {
+        "context": 65536,
+        "args": {},
+        "env": {
+          "DS4_WARM_CAP_GB": "24",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "0",
+          "DS4_AHEAD": "0"
+        }
+      },
+      "qualification": [],
+      "storage_size_bytes": 339477953988,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+      }
+    },
+    {
       "variant": "vm60-deepseek-maya-65536-ahead0-warm24-engram0-screen",
       "profile": "deepseek-maya",
       "model": "DeepSeek-V4.1-Flash-1017",
@@ -2625,7 +2657,7 @@
       "engine": "Maya",
       "category": "MoE models with SSD streaming",
       "context": 65536,
-      "state": "measured",
+      "state": "complete",
       "swap_policy": "loading-swap-active-churn-v2",
       "host_vm_swappiness": 60,
       "host_policy_source": "launch readback",
@@ -2677,5 +2709,434 @@
     }
   ],
   "source_trail": "docs/FORUM-OPTIMIZATION-SOURCES.md",
-  "historical_kept_results": "docs/benchmark-results/20261027-moe-optimized.json"
+  "historical_kept_results": "docs/benchmark-results/20261027-moe-optimized.json",
+  "host_reclaim_policy": {
+    "vm_swappiness": 60,
+    "scope": "User-directed unchanged host swappiness60; worker unlimited swap occupancy with active churn protection."
+  },
+  "unresolved_profiles": [
+    "deepseek-maya"
+  ],
+  "deployed_profiles": [
+    {
+      "id": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "engine": "HyperQwen-vLLM",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "allocated_context": 56320,
+      "latest_benchmark": {
+        "run": "20261027-context-expansion",
+        "variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
+        "date": "2026-10-27",
+        "context": 56320,
+        "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "bounded-1GiB legacy",
+        "input_tokens_range": [
+          2212,
+          2222
+        ],
+        "output_tokens": 128,
+        "ttft_s": 1.4985212169995066,
+        "prefill_tps": 1491.6519342069585,
+        "decode_tps": 89.10066847129683,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+      },
+      "latest_qualification": {
+        "run": "20261027-context-expansion",
+        "variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
+        "host_vm_swappiness": 60,
+        "context": 56320,
+        "retrieval_input_tokens": 50627,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": null,
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "retrieval_ttft_s": 54.669897703999595,
+        "retrieval_decode_tps": 29.288618632184615
+      },
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "increased",
+        "control": "hyperqwen-32768-control",
+        "selected_variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
+      }
+    },
+    {
+      "id": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "engine": "SGLang",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "allocated_context": 32768,
+      "latest_benchmark": {
+        "run": "20261027-context-expansion",
+        "variant": "sglang-32768-mem92-pf384-combined-confirmed",
+        "date": "2026-10-27",
+        "context": 32768,
+        "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "loading-swap-active-churn-v2",
+        "input_tokens_range": [
+          2212,
+          2222
+        ],
+        "output_tokens": 128,
+        "ttft_s": 0.8532419199982542,
+        "prefill_tps": 2613.8213596405735,
+        "decode_tps": 46.59367292334076,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+      },
+      "latest_qualification": {
+        "run": "20261027-context-expansion",
+        "variant": "sglang-32768-mem92-pf384-combined-confirmed",
+        "host_vm_swappiness": 60,
+        "context": 32768,
+        "retrieval_input_tokens": 29434,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": null,
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "retrieval_ttft_s": 13.267313208001724,
+        "retrieval_decode_tps": 39.45472246194629
+      },
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "increased",
+        "control": "sglang-16384-paired-control",
+        "selected_variant": "sglang-32768-mem92-pf384-combined-confirmed",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
+      }
+    },
+    {
+      "id": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "engine": "Strata",
+      "weight_quant": "IQ3_XXS",
+      "allocated_context": 32768,
+      "latest_benchmark": {
+        "run": "20261027-context-expansion",
+        "variant": "flash-next-strata-32768-screen",
+        "date": "2026-10-27",
+        "context": 32768,
+        "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "bounded-1GiB legacy",
+        "input_tokens_range": [
+          2212,
+          2222
+        ],
+        "output_tokens": 128,
+        "ttft_s": 3.752891517004173,
+        "prefill_tps": 593.2,
+        "decode_tps": 97.08909285944816,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+      },
+      "latest_qualification": null,
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "retained",
+        "control": "flash-next-strata-32768-screen",
+        "selected_variant": "flash-next-strata-32768-screen",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
+      }
+    },
+    {
+      "id": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "engine": "Maya",
+      "weight_quant": "Maya-S24",
+      "allocated_context": 65536,
+      "latest_benchmark": {
+        "run": "20261027-context-expansion",
+        "variant": "glm-maya-65536-accepted-confirmed",
+        "date": "2026-10-27",
+        "context": 65536,
+        "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "bounded-1GiB legacy",
+        "input_tokens_range": [
+          2199,
+          2209
+        ],
+        "output_tokens": 128,
+        "ttft_s": 33.73995778399694,
+        "prefill_tps": 65.5,
+        "decode_tps": 4.809461400594785,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+      },
+      "latest_qualification": {
+        "run": "20261027-context-expansion",
+        "variant": "glm-maya-65536-accepted-confirmed",
+        "host_vm_swappiness": 60,
+        "context": 65536,
+        "retrieval_input_tokens": 58986,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": true,
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "retrieval_ttft_s": 258.2844657979949,
+        "retrieval_decode_tps": 3.1232323378830413
+      },
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "increased",
+        "control": "glm-maya-32768-control",
+        "selected_variant": "glm-maya-65536-accepted-confirmed",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
+      }
+    },
+    {
+      "id": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engine": "Strata",
+      "weight_quant": "Maya-S",
+      "allocated_context": 131072,
+      "latest_benchmark": {
+        "run": "20261027-context-expansion",
+        "variant": "deepseek-strata-131072-accepted-confirmed",
+        "date": "2026-10-27",
+        "context": 131072,
+        "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "bounded-1GiB legacy",
+        "input_tokens_range": [
+          2179,
+          2198
+        ],
+        "output_tokens": 128,
+        "ttft_s": 65.79570539899578,
+        "prefill_tps": 33.3,
+        "decode_tps": 2.954827446086253,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+      },
+      "latest_qualification": {
+        "run": "20261027-context-expansion",
+        "variant": "deepseek-strata-131072-accepted-confirmed",
+        "host_vm_swappiness": 60,
+        "context": 131072,
+        "retrieval_input_tokens": 117866,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": null,
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "retrieval_ttft_s": 1722.8755479999963,
+        "retrieval_decode_tps": 2.0890711468552707
+      },
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "increased",
+        "control": "deepseek-strata-65536-control",
+        "selected_variant": "deepseek-strata-131072-accepted-confirmed",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
+      }
+    },
+    {
+      "id": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engine": "Maya",
+      "weight_quant": "Maya-S",
+      "allocated_context": 32768,
+      "latest_benchmark": {
+        "run": "20261027-moe-optimized",
+        "date": "2026-10-27",
+        "context": 32768,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2179,
+          2198
+        ],
+        "output_tokens": 128,
+        "ttft_s": 44.016855533001944,
+        "prefill_tps": 49.6,
+        "decode_tps": 4.083400544889873,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
+      },
+      "latest_qualification": {
+        "run": "20261027-moe-optimized",
+        "context": 32768,
+        "retrieval_input_tokens": 9674,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": true,
+        "full_window_retested": false
+      },
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "unresolved-active-swap-guard",
+        "control": "deepseek-maya-32768-control",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "production_context_unchanged": true
+      }
+    }
+  ],
+  "normal_functional_verification": {
+    "stage": "complete",
+    "scope": "normal guarded CLI/API functional checks; no repeated speed measurements",
+    "profiles": [
+      {
+        "profile": "flash-next-strata",
+        "context": 32768,
+        "limits": {
+          "memory.high": "47244640256",
+          "memory.max": "51539607552",
+          "memory.swap.max": "max"
+        },
+        "json_passed": true,
+        "image_passed": true
+      },
+      {
+        "profile": "deepseek-strata",
+        "context": 131072,
+        "limits": {
+          "memory.high": "47244640256",
+          "memory.max": "51539607552",
+          "memory.swap.max": "max"
+        },
+        "json_passed": true,
+        "image_passed": null
+      },
+      {
+        "profile": "deepseek-maya",
+        "context": 32768,
+        "limits": {
+          "memory.high": "49392123904",
+          "memory.max": "51539607552",
+          "memory.swap.max": "max"
+        },
+        "json_passed": true,
+        "image_passed": true
+      },
+      {
+        "profile": "qwen27b-sglang",
+        "context": 32768,
+        "limits": {
+          "memory.high": "32212254720",
+          "memory.max": "38654705664",
+          "memory.swap.max": "max"
+        },
+        "json_passed": true,
+        "image_passed": null
+      },
+      {
+        "profile": "qwen27b-hyperqwen",
+        "context": 56320,
+        "limits": {
+          "memory.high": "32212254720",
+          "memory.max": "38654705664",
+          "memory.swap.max": "max"
+        },
+        "json_passed": true,
+        "image_passed": null
+      },
+      {
+        "profile": "glm-maya",
+        "context": 65536,
+        "limits": {
+          "memory.high": "49392123904",
+          "memory.max": "51539607552",
+          "memory.swap.max": "max"
+        },
+        "json_passed": true,
+        "image_passed": true
+      }
+    ]
+  },
+  "lifecycle_sensor_coverage": [
+    {
+      "profile": "flash-next-strata",
+      "samples": 17,
+      "gpu_indices": [
+        0,
+        1
+      ],
+      "peak_gpu_temperature_c": 52.0,
+      "owned_cgroup_counters_present": true,
+      "log_mode": "0o600",
+      "hwmon_devices_count": 6
+    },
+    {
+      "profile": "deepseek-strata",
+      "samples": 18,
+      "gpu_indices": [
+        0,
+        1
+      ],
+      "peak_gpu_temperature_c": 54.0,
+      "owned_cgroup_counters_present": true,
+      "log_mode": "0o600",
+      "hwmon_devices_count": 6
+    },
+    {
+      "profile": "deepseek-maya",
+      "samples": 22,
+      "gpu_indices": [
+        0,
+        1
+      ],
+      "peak_gpu_temperature_c": 55.0,
+      "owned_cgroup_counters_present": true,
+      "log_mode": "0o600",
+      "hwmon_devices_count": 6
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "samples": 15,
+      "gpu_indices": [
+        0,
+        1
+      ],
+      "peak_gpu_temperature_c": 54.0,
+      "owned_cgroup_counters_present": true,
+      "log_mode": "0o600",
+      "hwmon_devices_count": 6
+    },
+    {
+      "profile": "qwen27b-hyperqwen",
+      "samples": 9,
+      "gpu_indices": [
+        0,
+        1
+      ],
+      "peak_gpu_temperature_c": 52.0,
+      "owned_cgroup_counters_present": true,
+      "log_mode": "0o600",
+      "hwmon_devices_count": 6
+    },
+    {
+      "profile": "glm-maya",
+      "samples": 31,
+      "gpu_indices": [
+        0,
+        1
+      ],
+      "peak_gpu_temperature_c": 55.0,
+      "owned_cgroup_counters_present": true,
+      "log_mode": "0o600",
+      "hwmon_devices_count": 6
+    }
+  ],
+  "actual_idle_verification": "in progress; no automatic release/reload success claimed yet"
 }

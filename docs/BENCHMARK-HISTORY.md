@@ -17,7 +17,7 @@ The context task also adds phase-aware swap-churn checks. Old benchmark records
 retain their original policy; do not relabel them as full qualification under a
 later guard. The unlock assessment uses existing evidence and adds no GPU test.
 
-VM60 queue checkpoint, 19:23 EDT: SGLang32K (.92 pool, chunks384) qualified at
+VM60 queue checkpoint, 19:23 EDT: SGLang 32K (.92 pool, chunks384) qualified at
 2,613.82 prefill / .8532 s TTFT /46.59 decode. All four larger Flash screens
 missed speed; Maya cache trials remain unsafe under active-write guards. The
 approved VM10 experiment still awaits OS authentication; no VM10 results exist.
@@ -31,3 +31,12 @@ measured 2,198-input/128-output request passed the active swap guard at
 44.7 prefill tok/s, 49.1786 s TTFT and 3.80265 decode tok/s. Full confirmation and
 near-window quality qualification remain pending; no production promotion.
 Historical numeric hashes remain unchanged. See CURRENT-STATE.md.
+
+## Partial context deployment at swappiness 60
+
+Four qualified settings were applied: HyperQwen 56,320; SGLang 32,768; GLM 65,536;
+Strata DeepSeek 131,072. Flash remains 32,768. Maya remains 32,768 and is explicitly
+unresolved under the active-swap policy. Its lookahead-off 64K confirmation stopped
+at 7.68287 MiB/s writes; the passing screen was not promoted. Native idle adapters,
+600-second release and bounded lifecycle logging are deployed. Normal functional
+and actual idle/reload verification are in progress; see CURRENT-STATE.md.

@@ -43,7 +43,8 @@ missing counters, latching, explicit reload and GPU-lock containment. The router
 has loaded the new wrapper ownership/reload code. Dense and MoE supervisors use
 the new monitor on subsequent launches; the completed GLM long-context
 qualification received an owned-invocation observer without repeating its speed
-tests. Final normal-launch verification remains part of the context rollout.
+tests. Normal functional verification has now passed all six launch paths with actual
+RAM/swap readbacks; sustained Maya qualification remains unresolved.
 
 Saved measurements identify why this is needed: the failed Flash host-KV trials
 reclaimed heavily at the 44 GiB soft limit with full bounded swap. Their evidence
@@ -66,7 +67,9 @@ A normal HyperQwen restore has also read back its actual 30/36 GiB RAM limits
 with `memory.swap.max=max`; the observer made no additional inference request.
 The prepared native adapter separates lazy encoder loading from active image
 computation, rather than excluding the entire image request from protection.
-Full normal-profile rollout verification remains pending.
+All six normal-profile launch paths now passed short functional checks and
+actual limit readbacks. That does not supersede the failed sustained Maya
+measurements; its active guard remains enabled and may stop longer requests.
 
 ## Separately approved host-policy trial
 

@@ -67,3 +67,9 @@ accepts `DS4_ENGRAM_CACHE_MB`, with zero disabling the row cache. The
 falls back to reading the same rows; this does not skip embeddings or lower
 precision. These are new memory-cache candidates after post-prompt read-ahead
 tuning alone still crossed the active-write limit. Local results decide fit.
+
+The installed Maya source also exposes [speculative expert lookahead](https://github.com/mw00/project-maya/blob/8b4b39f84e35393833b31b80e82bee92e69bb646/src/ds4/ds4_model.cu#L1241)
+through `DS4_AHEAD`. A distinct local swappiness 60 trial disabled it without
+changing expert selection or model arithmetic. One 64K screen passed, but its
+confirmation crossed the active-write guard. It was not promoted; this source
+option is not evidence of a safe local configuration.

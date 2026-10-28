@@ -29,9 +29,9 @@
         "qwen27b",
         "hyperqwen"
       ],
-      "allocated_context": 32768,
-      "tested_retrieval_input": 29496,
-      "context_validation": "long-input retrieval passed",
+      "allocated_context": 56320,
+      "tested_retrieval_input": 50627,
+      "context_validation": "Context expansion passed three-marker retrieval at 50627 input tokens plus JSON/arithmetic and resource checks; see dated context report.",
       "benchmark_context": 32768,
       "benchmark": {
         "short_decode_tps": 112.06417287975118,
@@ -41,7 +41,7 @@
         "short_ttft_s": 0.15569670100012445,
         "long_ttft_s": 1.6426261639999211
       },
-      "evidence": "docs/DENSE-ENGINE-OPTIMIZATION-20261027.md",
+      "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
       "cli_args": [
         "--host",
         "127.0.0.1",
@@ -55,13 +55,13 @@
         "--gpu-memory-utilization",
         "0.76",
         "--kv-cache-memory-bytes",
-        "603979776",
+        "738197504",
         "--max-model-len",
-        "32768",
+        "56320",
         "--max-num-seqs",
         "1",
         "--max-num-batched-tokens",
-        "128",
+        "256",
         "--language-model-only",
         "--mamba-ssm-cache-dtype",
         "bfloat16",
@@ -97,22 +97,25 @@
         "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp"
       },
       "latest_benchmark": {
-        "run": "20261027-101219",
+        "run": "20261027-context-expansion",
+        "variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
         "date": "2026-10-27",
-        "context": 32768,
+        "context": 56320,
         "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "bounded-1GiB legacy",
         "input_tokens_range": [
           2212,
           2222
         ],
         "output_tokens": 128,
-        "ttft_s": 1.6129653680000047,
-        "prefill_tps": 1385.5075975448417,
-        "decode_tps": 89.0073252285688,
-        "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
+        "ttft_s": 1.4985212169995066,
+        "prefill_tps": 1491.6519342069585,
+        "decode_tps": 89.10066847129683,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-20261027-101219.md",
-        "numeric_results": "docs/benchmark-results/20261027-101219.json"
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
       },
       "storage": {
         "access": "gpu-resident",
@@ -123,6 +126,27 @@
         "high": 30,
         "max": 36,
         "swap": null
+      },
+      "latest_qualification": {
+        "run": "20261027-context-expansion",
+        "variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
+        "host_vm_swappiness": 60,
+        "context": 56320,
+        "retrieval_input_tokens": 50627,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": null,
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "retrieval_ttft_s": 54.669897703999595,
+        "retrieval_decode_tps": 29.288618632184615
+      },
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "increased",
+        "control": "hyperqwen-32768-control",
+        "selected_variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
       }
     },
     {
@@ -135,9 +159,9 @@
         "qwen27b",
         "sglang"
       ],
-      "allocated_context": 16384,
-      "tested_retrieval_input": 14758,
-      "context_validation": "long-input retrieval passed",
+      "allocated_context": 32768,
+      "tested_retrieval_input": 29434,
+      "context_validation": "Context expansion passed three-marker retrieval at 29434 input tokens plus JSON/arithmetic and resource checks; see dated context report.",
       "benchmark_context": 16384,
       "benchmark": {
         "short_decode_tps": 47.38183639784082,
@@ -147,15 +171,15 @@
         "short_ttft_s": 0.10163222500023039,
         "long_ttft_s": 0.8653268469997784
       },
-      "evidence": "docs/DENSE-ENGINE-OPTIMIZATION-20261027.md",
+      "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
       "server_args": {
         "tp_size": 1,
         "pp_size": 2,
         "disable_custom_all_reduce": true,
-        "mem_fraction_static": 0.88,
-        "context_length": 16384,
+        "mem_fraction_static": 0.92,
+        "context_length": 32768,
         "max_running_requests": 1,
-        "chunked_prefill_size": 512,
+        "chunked_prefill_size": 384,
         "disable_cuda_graph": false,
         "cuda_graph_max_bs_decode": 1,
         "enable_multimodal": false,
@@ -172,22 +196,25 @@
         "enable_metrics": true
       },
       "latest_benchmark": {
-        "run": "20261027-101219",
+        "run": "20261027-context-expansion",
+        "variant": "sglang-32768-mem92-pf384-combined-confirmed",
         "date": "2026-10-27",
-        "context": 16384,
+        "context": 32768,
         "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "loading-swap-active-churn-v2",
         "input_tokens_range": [
           2212,
           2222
         ],
         "output_tokens": 128,
-        "ttft_s": 0.8524989010002173,
-        "prefill_tps": 2606.293122856385,
-        "decode_tps": 46.71094139831222,
-        "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+        "ttft_s": 0.8532419199982542,
+        "prefill_tps": 2613.8213596405735,
+        "decode_tps": 46.59367292334076,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-20261027-101219.md",
-        "numeric_results": "docs/benchmark-results/20261027-101219.json"
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
       },
       "storage": {
         "access": "gpu-resident",
@@ -198,6 +225,27 @@
         "high": 30,
         "max": 36,
         "swap": null
+      },
+      "latest_qualification": {
+        "run": "20261027-context-expansion",
+        "variant": "sglang-32768-mem92-pf384-combined-confirmed",
+        "host_vm_swappiness": 60,
+        "context": 32768,
+        "retrieval_input_tokens": 29434,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": null,
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "retrieval_ttft_s": 13.267313208001724,
+        "retrieval_decode_tps": 39.45472246194629
+      },
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "increased",
+        "control": "sglang-16384-paired-control",
+        "selected_variant": "sglang-32768-mem92-pf384-combined-confirmed",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
       }
     },
     {
@@ -224,22 +272,25 @@
       },
       "evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "latest_benchmark": {
-        "run": "20261027-101219",
+        "run": "20261027-context-expansion",
+        "variant": "flash-next-strata-32768-screen",
         "date": "2026-10-27",
         "context": 32768,
         "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "bounded-1GiB legacy",
         "input_tokens_range": [
           2212,
           2222
         ],
         "output_tokens": 128,
-        "ttft_s": 3.647962864000874,
-        "prefill_tps": 609.6,
-        "decode_tps": 105.64336780690053,
-        "prefill_method": "native prompt_n / native prompt time",
+        "ttft_s": 3.752891517004173,
+        "prefill_tps": 593.2,
+        "decode_tps": 97.08909285944816,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-20261027-101219.md",
-        "numeric_results": "docs/benchmark-results/20261027-101219.json"
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -250,6 +301,13 @@
         "high": 44,
         "max": 48,
         "swap": null
+      },
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "retained",
+        "control": "flash-next-strata-32768-screen",
+        "selected_variant": "flash-next-strata-32768-screen",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
       }
     },
     {
@@ -261,8 +319,8 @@
       "launch": [
         "glm"
       ],
-      "allocated_context": 32768,
-      "context_validation": "32K allocation retained; three-marker retrieval passed at 10908 input tokens with the optimized setting; full window not tested.",
+      "allocated_context": 65536,
+      "context_validation": "Context expansion passed three-marker retrieval at 58986 input tokens plus JSON/arithmetic and resource checks; see dated context report.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 7.2,
@@ -274,7 +332,7 @@
         "kind": "private-maya-config",
         "path": "runtimes/project-maya/maya-maya-s24.json"
       },
-      "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
+      "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
       "selected_settings": {
         "expert_ram_gib": 40,
         "environment": {
@@ -286,27 +344,31 @@
         "kv_streaming": true,
         "mtp": true,
         "cpu_vision": "on-demand fallback; released after image encoding",
-        "reserve_mib_per_gpu": 2048
+        "reserve_mib_per_gpu": 2048,
+        "context_trial_args": {}
       },
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "benchmark_configuration_note": "Historical 8K automatic-RAM benchmark remains under benchmark; latest_benchmark records the current bounded tier and on-demand CPU vision.",
       "latest_benchmark": {
-        "run": "20261027-moe-optimized",
+        "run": "20261027-context-expansion",
+        "variant": "glm-maya-65536-accepted-confirmed",
         "date": "2026-10-27",
-        "context": 32768,
+        "context": 65536,
         "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "bounded-1GiB legacy",
         "input_tokens_range": [
           2199,
           2209
         ],
         "output_tokens": 128,
-        "ttft_s": 36.24735511900508,
-        "prefill_tps": 64.5,
-        "decode_tps": 4.733838877720536,
-        "prefill_method": "native prompt_n / native prompt time",
+        "ttft_s": 33.73995778399694,
+        "prefill_tps": 65.5,
+        "decode_tps": 4.809461400594785,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
-        "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -319,15 +381,27 @@
         "swap": null
       },
       "latest_qualification": {
-        "run": "20261027-moe-optimized",
-        "context": 32768,
-        "retrieval_input_tokens": 10908,
+        "run": "20261027-context-expansion",
+        "variant": "glm-maya-65536-accepted-confirmed",
+        "host_vm_swappiness": 60,
+        "context": 65536,
+        "retrieval_input_tokens": 58986,
         "three_markers_passed": true,
         "json_arithmetic_passed": true,
         "image_passed": true,
-        "full_window_retested": false
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "retrieval_ttft_s": 258.2844657979949,
+        "retrieval_decode_tps": 3.1232323378830413
       },
-      "tested_retrieval_input": 10908
+      "tested_retrieval_input": 58986,
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "increased",
+        "control": "glm-maya-32768-control",
+        "selected_variant": "glm-maya-65536-accepted-confirmed",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
+      }
     },
     {
       "id": "deepseek-strata",
@@ -338,8 +412,8 @@
       "launch": [
         "strata-deepseek"
       ],
-      "allocated_context": 65536,
-      "context_validation": "64K allocation retained; optimized setting passed 9673-input three-marker retrieval; earlier 58969-input qualification remains separately dated.",
+      "allocated_context": 131072,
+      "context_validation": "Context expansion passed three-marker retrieval at 117866 input tokens plus JSON/arithmetic and resource checks; see dated context report.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 2.7,
@@ -351,8 +425,8 @@
         "kind": "strata-runtime-profile",
         "name": "deepseek-maya-s"
       },
-      "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
-      "tested_retrieval_input": 58969,
+      "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+      "tested_retrieval_input": 117866,
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "context_qualification": {
         "date": "2026-10-27",
@@ -386,25 +460,29 @@
         "expert_profile": "data/deepseek-strata-expert-profile.bin",
         "expert_ram_store_gb": 42.0,
         "expert_cache_policy": "LFU",
-        "reason": "Bounded 48 GiB worker and 42 GB frequency-based expert store retain the 64K allocation."
+        "reason": "Bounded 48 GiB worker and 42 GB frequency-based expert store retain the 64K allocation.",
+        "context_trial_args": {}
       },
       "latest_benchmark": {
-        "run": "20261027-moe-optimized",
+        "run": "20261027-context-expansion",
+        "variant": "deepseek-strata-131072-accepted-confirmed",
         "date": "2026-10-27",
-        "context": 65536,
+        "context": 131072,
         "repetitions": 3,
+        "host_vm_swappiness": 60,
+        "swap_policy": "bounded-1GiB legacy",
         "input_tokens_range": [
           2179,
           2198
         ],
         "output_tokens": 128,
-        "ttft_s": 67.52695925899752,
-        "prefill_tps": 32.4,
-        "decode_tps": 2.8720856429465904,
-        "prefill_method": "native prompt_n / native prompt time",
+        "ttft_s": 65.79570539899578,
+        "prefill_tps": 33.3,
+        "decode_tps": 2.954827446086253,
+        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
-        "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -417,13 +495,25 @@
         "swap": null
       },
       "latest_qualification": {
-        "run": "20261027-moe-optimized",
-        "context": 65536,
-        "retrieval_input_tokens": 9673,
+        "run": "20261027-context-expansion",
+        "variant": "deepseek-strata-131072-accepted-confirmed",
+        "host_vm_swappiness": 60,
+        "context": 131072,
+        "retrieval_input_tokens": 117866,
         "three_markers_passed": true,
         "json_arithmetic_passed": true,
-        "image_passed": false,
-        "full_window_retested": false
+        "image_passed": null,
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "retrieval_ttft_s": 1722.8755479999963,
+        "retrieval_decode_tps": 2.0890711468552707
+      },
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "increased",
+        "control": "deepseek-strata-65536-control",
+        "selected_variant": "deepseek-strata-131072-accepted-confirmed",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
       }
     },
     {
@@ -504,7 +594,18 @@
         "image_passed": true,
         "full_window_retested": false
       },
-      "tested_retrieval_input": 9674
+      "tested_retrieval_input": 9674,
+      "context_expansion_assessment": {
+        "run": "20261027-context-expansion",
+        "status": "unresolved-active-swap-guard",
+        "control": "deepseek-maya-32768-control",
+        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+        "production_context_unchanged": true
+      }
     }
-  ]
+  ],
+  "host_reclaim_policy": {
+    "vm_swappiness": 60,
+    "scope": "User-directed unchanged host swappiness60; worker unlimited swap occupancy with active churn protection."
+  }
 }

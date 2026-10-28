@@ -1,7 +1,48 @@
 # Context-expansion tests — October 27, 2026
 
-**In progress. No production context setting has been changed.**
-The six current profiles are being tested for larger allocations without lower
+**Four qualified context upgrades are deployed at unchanged host swappiness 60.**
+HyperQwen is 56,320; SGLang 32,768; GLM 65,536; Strata DeepSeek 131,072.
+Flash remains 32,768. Maya DeepSeek remains 32,768 and is **not newly qualified**
+under the active swap policy. Normal-launch and actual idle/reload verification
+are recorded separately in CURRENT-STATE.md.
+
+The Maya64 lookahead-off screen completed once, but its distinct confirmation
+was stopped by the active guard at 7.68 MiB/s writes over 30 seconds. That failure
+is retained; its passing screen is not promoted. All guards remain unchanged.
+The earlier proposed swappiness 10 trial was cancelled by the user and never ran.
+
+## Deployed settings and dated speed evidence
+
+Three-request medians use approximately 2.2K input and 128 output tokens, loading
+excluded. The Maya row retains the earlier MOE optimization measurements; it is
+historical speed evidence, not proof that current sustained-swap qualification
+passed. All other rows use their selected context-study runs. Initial runs retain
+their original 1 GiB swap-cap attribution; they are not relabeled as new-policy runs.
+Shared checkpoint sizes count once physically, despite two engine rows.
+
+### VRAM-only models
+
+| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 2,613.8 | 0.853 | 46.59 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+
+### MoE models with CPU RAM offload
+
+None currently kept. RAM tiers are caches of SSD-streamed weights.
+
+### MoE models with SSD streaming
+
+| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: `models/strata/models/IQ3_XXS` |
+| GLM-5.3-Flash / Maya-S24 | Maya | 65.5 | 33.740 | 4.81 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: `models/maya/Maya-S24` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 33.3 | 65.796 | 2.95 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+
+## Study background
+
+The six profiles were assessed for larger allocations without lower
 prefill/decode throughput or higher TTFT on the same approximately 2.2K input /
 128-output fixture. [Numeric samples and current progress](benchmark-results/20261027-context-expansion.json).
 
@@ -94,9 +135,8 @@ None currently kept.
 
 The numeric file records every measured trial, its repetition count and progress.
 Unmeasured failures have no invented zero-token throughput. The first dense and
-Flash control/screen phase is followed by confirmation and MoE tests. Existing
-kept results remain the [previous matched measurements](MOE-OPTIMIZATION-20261027.md)
-until a qualified new setting is explicitly promoted.
+Flash control/screen phase is followed by confirmation and MoE tests. The [previous matched measurements](MOE-OPTIMIZATION-20261027.md) remain dated
+history. Only the four qualified settings listed above were promoted.
 
 Private exact configurations, source snapshots, frozen profiles, requests, SSE,
 metrics, telemetry, admission failures and qualification responses remain under

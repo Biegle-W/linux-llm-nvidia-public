@@ -26,3 +26,12 @@ AMD's swap monitor documents system-wide counter attribution limits. The NVIDIA
 kernel exposes owned-cgroup `pswpin`/`pswpout`, allowing the new guard to observe
 its worker specifically. Porting that improvement back to AMD would first require
 checking its actual kernel counters and existing concurrent agent changes.
+
+## Continuation deployment
+
+The user directs unchanged swappiness 60; the earlier VM10 proposal was cancelled
+before execution. Guarded 600-second idle release, native adapters and bounded
+lifecycle logging are deployed; normal functional and actual idle/reload checks
+are pending. Four qualified contexts were promoted independently. Maya DeepSeek
+sustained-swap qualification remains unresolved, with guards and 32K unchanged.
+Manual candidate staging remains manual. CURRENT-STATE.md is authoritative.

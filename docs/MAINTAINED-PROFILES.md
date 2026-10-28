@@ -30,83 +30,48 @@ or that untested larger contexts work.
 
 ## The six retained profiles
 
-| Model / weight quant | Engine | Selected setting | Allocated context | Retrieval-tested input |
-| --- | --- | --- | ---: | ---: |
-| Qwen3.8-27B / AutoRound INT4 body and heads, INT8 embedding | HyperQwen/vLLM | TP2, MTP3, MLP W4A8, BF16 state, INT4 KV, 128-token chunks, graphs | 32,768 | 29,496 |
-| Same prepared Qwen3.8-27B quant | SGLang | PP2, packed embedding lookup, FP32 state, BF16 KV, 512-token chunks, decode graphs | 16,384 | 14,758 |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | Existing `qwen-flash-next` preset, MTP, INT8 KV, automatic expert cache | 32,768 | Not established |
-| GLM-5.3-Flash / Maya-S24 | Maya | S24, drafting, automatic GPU cache/prefill, 40 GiB expert RAM, on-demand CPU vision | 32,768 | 10,908 |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | Shared weights, `deepseek-maya-s`, drafting/vision off, prefill 4096, 42 GB LFU cache, 2 GiB GPU reserve | 65,536 | 58,969 |
-| Same DeepSeek Maya-S weights | Maya | Shared weights, `maya-ds4.json`, drafting off, 4096-token chunks, 8 GB expert warming, 2 GiB GPU reserve | 32,768 | 9,674 |
+Current contexts and dated speed evidence appear below. Four new contexts passed
+matched confirmation and near-window retrieval: HyperQwen 50,627 input tokens,
+SGLang 29,434, GLM 58,986 and Strata DeepSeek 117,866. Flash is retained at 32K.
+Maya DeepSeek stays at 32K with earlier 9,674-input retrieval evidence; sustained
+active-swap qualification remains unresolved. It keeps all guards and may stop on
+longer requests. A passing short request does not resolve that limitation.
 
-[Strata DeepSeek now has a 64K allocation](DEEPSEEK-STRATA-CONTEXT-20261027.md),
-with three-marker retrieval passed at 58,969 input tokens under the earlier
-setting. The optimized cache also passed 9,673-input retrieval; its current speed
-measurements and the earlier full-window evidence remain separately dated.
-
-The other streamed-model 32K allocations passed installation/startup and short API
-checks. GLM and Maya DeepSeek now pass recorded multi-chunk retrieval near 10K
-input. Their full windows have not been retrieval-validated. Earlier speed
-tests used an **8K benchmark allocation** and remain historical.
-The latest table measures the current allocations with roughly 2.2K input tokens;
-it does not qualify full-window quality. No model tests or context qualification
-were repeated for the profile consolidation. The subsequent Strata DeepSeek context expansion used
-new 32K/64K configurations and preserved the completed 8K measurements.
-
-The router keeps Qwen tool-call parsers. The latest MoE optimization uses the
-selected bounded cache budgets, including 40 GiB GLM expert RAM and on-demand
-CPU vision; the previous 32 GiB cap remains dated evidence.
-
-## Latest matched speed evidence
-
-[GLM/DeepSeek optimization](MOE-OPTIMIZATION-20261027.md) retested those three
-profiles at unchanged context limits with the same approximately 2.2K-token,
-128-output-token fixture and three measured requests. Dense/Flash rows retain
-their unchanged [October 27 measurements](BENCHMARK-20261027-101219.md).
-Sizes count base checkpoint weights; locations are current; shared rows use one
-physical checkpoint. See [reporting conventions](BENCHMARK-REPORTING.md).
+HyperQwen uses 704 MiB KV/rank and 256-token chunks. SGLang uses a .92 static pool
+and 384-token chunks. Other numerical/weight settings and RAM/GPU limits remain.
+See [context decisions and trials](CONTEXT-EXPANSION-20261027.md). Initial benchmark
+and retrieval runs keep their actual legacy/new swap-policy attribution.
 
 ### VRAM-only models
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | HyperQwen-vLLM | 1,385.5 | 1.613 | 89.01 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
-| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | SGLang | 2,606.3 | 0.852 | 46.71 | 16,384 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 2,613.8 | 0.853 | 46.59 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 
 ### MoE models with CPU RAM offload
 
-None currently kept. RAM tiers in streamed profiles are caches, not full-model RAM residency.
+None currently kept. RAM tiers are caches of SSD-streamed weights.
 
 ### MoE models with SSD streaming
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 609.6 | 3.648 | 105.64 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: `models/strata/models/IQ3_XXS` |
-| GLM-5.3-Flash / Maya-S24 | Maya | 64.5 | 36.247 | 4.73 | 32,768 | 94.70 | CT1000P3PSSD8 NVMe: `models/maya/Maya-S24` |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 32.4 | 67.527 | 2.87 | 65,536 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: `models/strata/models/IQ3_XXS` |
+| GLM-5.3-Flash / Maya-S24 | Maya | 65.5 | 33.740 | 4.81 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: `models/maya/Maya-S24` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 33.3 | 65.796 | 2.95 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 
-The registry retains older `benchmark` fields as historical measurements and
-records this run under `latest_benchmark`. Earlier code/prose and short-input
-fixtures have different workloads. Historical reports remain available:
-[dense optimization](DENSE-ENGINE-OPTIMIZATION-20261027.md),
-[stock/unlock comparison](BENCHMARK-UNLOCK-20261026.md), and
-[64K DeepSeek retrieval](DEEPSEEK-STRATA-CONTEXT-20261027.md).
 
-The 4K HyperQwen MTP trial had faster code decode (173.9 tok/s), while the
-selected 32K trial measured 155.2 tok/s and faster prose (107.7 versus 102.5).
-The retained choice preserves the larger validated window. SGLang's 8K and 16K
-graph trials had essentially identical decode; the retained 16K setting doubles
-the allocation, with observed longer-input TTFT of 0.865 versus 0.791 seconds.
-These explicit tradeoffs are why the shorter trials are historical evidence,
-not additional maintained presets.
+Historical speed/qualification reports remain preserved. Maya speed values come
+from the previous MoE study; its settings were not relabeled newly qualified.
 
 ## Launching
 
 ```bash
 python3 scripts/profile_catalog.py
-./scripts/start_model.sh qwen27b             # default: HyperQwen, 32K
-./scripts/start_model.sh qwen27b sglang      # SGLang, 16K
+./scripts/start_model.sh qwen27b             # default: HyperQwen, 56,320 tokens
+./scripts/start_model.sh qwen27b sglang      # SGLang, 32K
 ./scripts/start_model.sh qwen                # Flash-Next / Strata
 ./scripts/start_model.sh glm                 # GLM / Maya
 ./scripts/start_model.sh strata-deepseek
@@ -171,3 +136,13 @@ The [unused-model cleanup](UNUSED-MODEL-CLEANUP-20261027.md) removed superseded 
 preparation payloads after reviewing saved results and screening DSpark in both
 DeepSeek engines. All six selected profiles, allocated contexts and kept benchmark
 values are unchanged; historical reports are evidence rather than download lists.
+
+## Context/lifecycle retirement checkpoint
+
+The later 12-file replacement batch is archived privately at
+`linux-nvidia/2026-10-27-context-swap-lifecycle`, commit `15e6f2e`. All 12 committed
+snapshot hashes match the manifest; JSON credential fields are omitted. It holds
+replaced guards, the pre-upgrade registry and two changed native settings, plus
+the before-idle source adapters. The four qualified upgrades are independent of
+Maya's unchanged/unresolved setting. DSH chats/settings, weights, full runtime
+distributions and raw logs are excluded.

@@ -16,11 +16,11 @@ catalog. Requesting its ID selects the model, quantization and engine together:
 
 | API model ID | Engine | Context allocation |
 | --- | --- | ---: |
-| `qwen27b-hyperqwen` | HyperQwen/vLLM | 32,768 |
-| `qwen27b-sglang` | SGLang | 16,384 |
+| `qwen27b-hyperqwen` | HyperQwen/vLLM | 56,320 |
+| `qwen27b-sglang` | SGLang | 32,768 |
 | `flash-next-strata` | Strata | 32,768 |
-| `glm-maya` | Maya | 32,768 |
-| `deepseek-strata` | Strata | 65,536 |
+| `glm-maya` | Maya | 65,536 |
+| `deepseek-strata` | Strata | 131,072 |
 | `deepseek-maya` | Maya | 32,768 |
 
 ```python
@@ -123,3 +123,8 @@ running when the router/DSH restarts. An unmanaged listener on worker port 10000
 blocks new loading rather than being killed. Optional `data/GPU-LOCK` reserves
 the GPUs against new launches. Runtime settings, keys, logs, session data and live
 addresses are ignored; only sanitized source, reports and artwork are exported.
+
+Ten-minute guarded idle release and bounded private lifecycle telemetry are now
+enabled. Actual idle/reload verification is recorded in CURRENT-STATE.md. Host
+swappiness remains 60. Maya DeepSeek 32K has unresolved sustained-swap qualification;
+its active guard remains enabled.
