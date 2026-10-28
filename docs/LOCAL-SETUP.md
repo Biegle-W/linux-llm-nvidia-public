@@ -108,7 +108,8 @@ HyperQwen/patched vLLM TP2 with MTP3, INT4 KV, BF16 recurrent state and a 32K
 allocation. It passed 29,496-token retrieval and measured 155 code / 108 prose tok/s.
 Start it with `./scripts/start_model.sh qwen27b`; stop it with
 `systemctl --user stop llm-test-qwen27b`. Use `./scripts/start_model.sh qwen27b sglang`
-for the qualified SGLang PP2/graphs 16K alternative. The slower IQ4_XS llama.cpp
+for the deployed pinned SGLang TP2/MTP3 W4A8 32K profile. Its runtime and
+version pins are in config/sglang-runtime.json; see SGLANG-DEPLOYMENT-20261028.md. The slower IQ4_XS llama.cpp
 profile and its dedicated weights have been removed. Only one engine runs at a time. All use authenticated
 port 10000; all model weights and active MTP weights remain in VRAM.
 

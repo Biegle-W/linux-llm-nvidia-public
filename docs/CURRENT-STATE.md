@@ -18,7 +18,7 @@ benchmarks. The old thread handed off and will not initiate work.
 ## Deployed settings and unresolved Maya
 
 Four independently qualified upgrades are deployed: HyperQwen 56,320 (50,627-input
-retrieval); SGLang 32,768 (.92 pool/chunk 384; 29,434-input retrieval); GLM 65,536
+retrieval); SGLang 32,768 (now TP2/MTP3 W4A8, chunk 384; 29,434-input retrieval); GLM 65,536
 (58,986-input retrieval); Strata DeepSeek 131,072 (117,866-input retrieval). Flash
 remains 32,768. Exact dated medians, source variants and actual legacy/new swap
 policy attribution are preserved in the registry and context report. The user's
@@ -213,7 +213,7 @@ native counters/durations; historical results remain unchanged.
 Raw evidence: data/sglang-hetero-mtp-20261027/; the study crossed midnight.
 Eighteen standalone W4A8 kernel cases and eight bit-exact packed-shard checks
 passed. Kernel math and maintained runtime/checkpoint files are unchanged by the
-heterogeneous patch. Preserve swappiness60, all resource guards and the automatic
+heterogeneous patch. Preserve swappiness 60, all resource guards and the automatic
 unlock checker. Reduced-RAM MoE capacity is still unqualified. Do not repeat these
 completed variants or mistake a 16K candidate for a qualified 32K replacement.
 
@@ -312,3 +312,47 @@ All are executable/trusted, with unchanged launch commands, icons and terminal
 behavior. DSH and unrelated RGB shortcuts are preserved. The installer now writes
 these names and removes only its own legacy LLM-* Desktop/menu entries. No service
 reinstallation/restart, provider reconfiguration or backend selection was needed.
+
+## Latest deployment: SGLang TP2 + MTP3 W4A8 — October 28, 01:07 EDT
+
+The user explicitly deployed the fastest tested SGLang generation architecture.
+The normal `qwen27b-sglang` router ID, SGLang shortcut and DSH `nvidia-sglang`
+provider now load the pinned htsglang 62271fd plus qualified local patch, TP2/PP1,
+MLP-only W4A8, BF16 state/KV, one Mamba slot and 32K context. Earlier PP2 FP32 /
+“not deployed” statements describe superseded stages. The carried qualification
+median is 1664.67 prefill / 1.34646 s TTFT / 82.79 decode. This was fastest tested at
+qualified 32K for generation; PP2 W4A8 had faster prefill and the same MTP3 setup
+at 16K reached 84.63. The user selected the larger qualified window and generation
+tradeoff. No completed speed benchmark or kernel matrix was repeated.
+
+Stable source: runtimes/sglang-hetero-62271fd/python/sglang; native interpreter:
+runtimes/env-htsglang-62271fd; copied caches: runtimes/cache-sglang-hetero-62271fd.
+config/sglang-runtime.json pins the full source tree, patch hash and dependency
+versions. The normal launcher verifies all of them, checks the import location,
+clears stale PP partition overrides and writes per-invocation GPU placement and
+runtime receipts. Retain env-sglang as an active general-Python dependency fallback.
+The router now supplies non-thinking chat defaults while allowing explicit overrides.
+
+All 50 CPU regressions passed in a visible foreground harness. Normal router/API
+streamed JSON, parsed tool call and 29,434-input retrieval passed. A 4,096-output
+request ran 39.62 s and exercised four complete 30-second active swap windows, with
+zero owned swap I/O and no pressure/guard violation. All 256 decoder MLP rank/
+projection checks, both draft completeness/sharing checks, four GPU-only placements
+and four full 32K KV pools passed. Minimum sampled GPU free 759/997 MiB (Ti/3080),
+peak temperatures 62/49°C, minimum host available 32.26 GiB, peak worker RAM 7.36 GiB,
+swap 0. Normal unload/reload produced a new owned invocation, the same verified
+source and a passing JSON response. This is a short deployment check, not a
+multi-hour reliability claim.
+
+Keep the 512 MiB dense reserve, swappiness 60, RAM 30/36 GiB, host 8 GiB, temperature 82°C,
+unlimited swap occupancy and active swap/pressure/telemetry guards. All launches
+and harnesses remain visible. SGLang is intentionally selected after this deployment;
+normal ten-minute idle release applies. HyperQwen was not restored. DSH provider
+mapping was verified and its saved UI default was preserved; no new profile ID.
+
+Four exact launcher/router/config/test preimages were archived privately in
+Biegle-W/retired-llm-setting at 733820f, with hashes and original paths/commits.
+The active registry retains a pointer and numeric history, not a second runnable
+PP2 profile. Raw evidence and private rollback snapshots are under
+data/sglang-deployment-20261028/. See SGLANG-DEPLOYMENT-20261028.md and its numeric
+verification. Historical numeric reports are unchanged.

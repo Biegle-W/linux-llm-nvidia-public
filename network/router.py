@@ -16,6 +16,22 @@ from worker_manager import Workers, RouterError, profiles, ROOT
 MAX_BODY = 32 * 1024 * 1024
 
 
+def apply_request_defaults(data, profile):
+    """Apply profile defaults while preserving explicit per-request overrides."""
+    body = dict(data)
+    for key, default in profile.get('request_defaults', {}).items():
+        if isinstance(default, dict):
+            actual = body.get(key)
+            if actual is None:
+                actual = {}
+            if not isinstance(actual, dict):
+                raise RouterError('Invalid request options: ' + key, 'bad_request', 400)
+            body[key] = dict(default, **actual)
+        elif key not in body:
+            body[key] = default
+    return body
+
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'
 
@@ -124,6 +140,8 @@ class Handler(BaseHTTPRequestHandler):
             if not isinstance(name, str) or name not in profiles():
                 raise RouterError('Choose an ID from GET /v1/models.', 'model_not_found', 404)
             profile = profiles()[name]
+            if path == '/v1/chat/completions':
+                data = apply_request_defaults(data, profile)
             if path == '/v1/completions' and profile['engine'] in ('Strata', 'Maya'):
                 raise RouterError('This engine supports chat completions.', 'unsupported_endpoint', 400)
             if 'stream' in data and not isinstance(data['stream'], bool):

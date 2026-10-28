@@ -76,7 +76,7 @@ Retain the existing W4A16 SGLang package and HyperQwen default. See
 docs/SGLANG-W4A8-20261027.md; candidate source/cache is private evidence.
 
 One RAM stick is temporarily removed; Linux currently sees 45.55 GiB usable.
-This dense study used fresh controls and retained all guards at swappiness60.
+This dense study used fresh controls and retained all guards at swappiness 60.
 MoE profiles have not been qualified on reduced RAM; check capacity and budgets
 before any future MoE work. GPU unlock health reports VERIFIED after reboot.
 
@@ -89,7 +89,7 @@ The pinned fork, separate native runtime, reproducible local compatibility patch
 all startup failures and completed controls are recorded in
 [the study report](docs/SGLANG-HETERO-MTP-20261028.md). That study used a
 1 GiB GPU-free guard (superseded by the user-approved 512 MiB floor below), 8 GiB host floor, 30/36 GiB worker limits, active swap-churn
-protection and swappiness60. No generic CPU weight offload is permitted.
+protection and swappiness 60. No generic CPU weight offload is permitted.
 The benchmark metric reader now counts one canonical TP replica after the final
 PP stage; seven regression tests cover parallel-rank accounting. Do not recompute
 historical measurements or repeat completed variants because the reader changed.
@@ -158,4 +158,26 @@ without an LLM prefix. Their filenames omit that prefix too; the installer migra
 only project-owned legacy entries. Preserve DSH and unrelated shortcuts. CLI
 llm-* command names remain unchanged. See network/README.md for current routing:
 DSH/API model IDs select fixed engine profiles; the experimental TP2/MTP3 fork
-has not replaced the maintained qwen27b-sglang profile.
+now backs the maintained qwen27b-sglang profile after verified deployment.
+
+## Latest: SGLang production deployment — October 28
+
+The user explicitly deployed the fastest tested SGLang generation architecture:
+TP2 + MTP3, decoder MLP W4A8, BF16 state/KV, one Mamba slot, 32K. It now backs
+the existing qwen27b-sglang ID, shortcut and DSH provider. Earlier PP2/FP32 and
+“no promotion” statements describe historical stages; do not restore PP2 as the
+normal profile. Source/dependency pins are in config/sglang-runtime.json; the
+normal launcher verifies hashes, import location and versions. env-sglang is still
+an active general-dependency fallback; do not delete it. Source/caches are in
+stable `runtimes/` paths, not dated trial folders. Previous source/settings were
+archived privately at 733820f; keep only the retirement pointer in the active registry.
+
+Fifty CPU regressions, normal-router streaming JSON/tool call, 29,434-input
+retrieval, a 4,096-output, 39.62 s continuous check and a normal unload/reload check
+passed. Four complete active swap windows had zero owned swap I/O. Keep the
+512 MiB dense reserve, swappiness 60, all other guards and visible terminals.
+The router supplies non-thinking defaults while preserving explicit overrides.
+The original 82.79 tok/s qualification median is carried forward, not remeasured.
+SGLang is intentionally selected after deployment; the ordinary 10-minute idle
+unload still applies. HyperQwen was not restored and saved DSH defaults were not
+changed. See docs/SGLANG-DEPLOYMENT-20261028.md and CURRENT-STATE.md.

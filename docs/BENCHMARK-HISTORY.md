@@ -117,3 +117,14 @@ passed. Minimum sampled VRAM free 802/997 MiB; RAM and swap guards unchanged,
 swappiness 60. Prior 1 GiB failures remain historical. The previous 32K TP2 no-MTP
 control was not repeated; descriptive decode gain is about 29.0%. No sustained-load
 claim or production engine promotion. Visible cleanup finishes idle, not HyperQwen.
+
+## SGLang production promotion — October 28
+
+[Deployed TP2/MTP3 W4A8 at 32K](SGLANG-DEPLOYMENT-20261028.md) under explicit user
+authorization. The earlier 512 MiB retest median 1664.67 prefill / 1.34646 s TTFT /
+82.79 decode is carried forward, not remeasured. PP2 W4A8 remains faster for
+prefill, but the user selected generation speed and the larger qualified window.
+Normal-router streamed JSON/tool call, 29,434-input retrieval, a 4,096-output, 39.62 s
+continuous request and normal unload/reload passed. Four active swap windows had
+zero I/O; all 50 CPU regressions passed. Runtime/source pins, rollback pointer and
+current grouped measurements are updated. No other model profile changed.

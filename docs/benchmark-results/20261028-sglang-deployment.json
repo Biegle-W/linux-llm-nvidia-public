@@ -1,0 +1,339 @@
+{
+  "run": "20261028-sglang-deployment",
+  "date": "2026-10-28",
+  "status": "deployed-and-verified",
+  "model_id": "qwen27b-sglang",
+  "engine": "SGLang / pinned htsglang + local compatibility patch",
+  "source_manifest": {
+    "schema": 1,
+    "source_repository": "https://github.com/efschu/htsglang",
+    "source_commit": "62271fd7c8aa8fe9edebf04e00a414b7fbf64388",
+    "python": "runtimes/env-htsglang-62271fd/bin/python",
+    "package_directory": "runtimes/sglang-hetero-62271fd/python",
+    "package_tree_sha256": "817b6ef1c693510a96b3708a86733eb7ea2f4f5fa68166d63b1e45f087c5984d",
+    "patch": "scripts/patches/sglang-hetero-ct-w4a8-mtp.patch",
+    "patch_sha256": "311a4ac9c572a52488651e1c993e36eae3d54b89b98cf0f53a420eafc953315d",
+    "cache_directory": "runtimes/cache-sglang-hetero-62271fd",
+    "runtime_versions": {
+      "torch": "2.11.0",
+      "torchvision": "0.26.0",
+      "torchaudio": "2.11.0",
+      "torchcodec": "0.11.1",
+      "torchao": "0.17.0",
+      "triton": "3.6.0",
+      "flashinfer-python": "0.6.14",
+      "sglang-kernel": "0.4.4",
+      "transformers": "5.12.1",
+      "apache-tvm-ffi": "0.1.11",
+      "nvidia-nccl-cu13": "2.28.9",
+      "compressed-tensors": "0.20.0",
+      "xgrammar": "0.2.1"
+    },
+    "fallback_dependencies": "The pinned env uses the retained env-sglang site-packages for general Python dependencies only; native versions above take precedence.",
+    "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md"
+  },
+  "settings": {
+    "tp_size": 2,
+    "pp_size": 1,
+    "disable_custom_all_reduce": true,
+    "mem_fraction_static": null,
+    "context_length": 32768,
+    "max_running_requests": 1,
+    "chunked_prefill_size": 384,
+    "disable_cuda_graph": false,
+    "cuda_graph_max_bs_decode": 1,
+    "enable_multimodal": false,
+    "json_model_override_args": "{\"language_model_only\":true}",
+    "max_mamba_cache_size": 1,
+    "mamba_ssm_dtype": "bfloat16",
+    "cpu_offload_gb": 0,
+    "attention_backend": "triton",
+    "disable_radix_cache": true,
+    "tool_call_parser": "qwen3_coder",
+    "enable_metrics": true,
+    "rank_gpu_id": [
+      0,
+      1
+    ],
+    "rank_gpu_memory_mib": [
+      11008,
+      8960
+    ],
+    "rank_tp_ratio": [
+      9,
+      8
+    ],
+    "rank_mlp_ratio": [
+      10,
+      7
+    ],
+    "max_total_tokens": 32768,
+    "disable_overlap_schedule": false,
+    "speculative_algorithm": "NEXTN",
+    "speculative_draft_model_path": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+    "speculative_num_steps": 3,
+    "speculative_eagle_topk": 1,
+    "speculative_num_draft_tokens": 4,
+    "disable_prefill_cuda_graph": true
+  },
+  "request_defaults": {
+    "chat_template_kwargs": {
+      "enable_thinking": false
+    }
+  },
+  "qualification_source": "docs/benchmark-results/20261028-sglang-mtp3-512mib.json",
+  "carried_benchmark": {
+    "run": "20261028-sglang-mtp3-32k-512mib",
+    "variant": "hetero-tp2-mtp3-32k-512mib-v16",
+    "date": "2026-10-28",
+    "context": 32768,
+    "repetitions": 3,
+    "host_vm_swappiness": 60,
+    "swap_policy": "loading-swap-active-churn-v2",
+    "input_tokens_range": [
+      2212,
+      2222
+    ],
+    "output_tokens": 128,
+    "ttft_s": 1.3464565350004705,
+    "prefill_tps": 1664.6716303885273,
+    "decode_tps": 82.78559477640556,
+    "prefill_method": "SGLang per-request native prefill_forward delta, canonical TP rank",
+    "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+    "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md",
+    "numeric_results": "docs/benchmark-results/20261028-sglang-mtp3-512mib.json",
+    "dense_gpu_free_floor_mib": 512
+  },
+  "benchmark_repeated": false,
+  "verification": {
+    "status": "complete",
+    "router_health": {
+      "status": "ok",
+      "active_model": "qwen27b-sglang",
+      "loading_model": null,
+      "busy": false,
+      "models": 6,
+      "idle_unloading_model": null
+    },
+    "kv_capacity": [
+      32768,
+      32768,
+      32768,
+      32768
+    ],
+    "continuous_generation_wall_s": 39.61851904899959,
+    "continuous_output_tokens": 4096,
+    "mature_swap_window_samples": 4,
+    "max_swap_write_mib_s": 0.0,
+    "max_swap_combined_mib_s": 0.0,
+    "worker_selected": "qwen27b-sglang",
+    "swappiness": 60,
+    "gpu_free_floor_mib": 512,
+    "cpu_checks": [
+      {
+        "pattern": "test_sglang_runtime.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_router.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_benchmark_metrics.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_supervisor_shutdown.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_inference_swap_guard.py",
+        "exit_code": 0
+      }
+    ],
+    "monitor_errors": []
+  },
+  "normal_unload_reload": {
+    "status": "complete",
+    "new_invocation_verified": true,
+    "source_commit": "62271fd7c8aa8fe9edebf04e00a414b7fbf64388",
+    "json_passed": true
+  },
+  "api_checks": {
+    "json": {
+      "wall_s": 0.3337434459999713,
+      "usage": {
+        "prompt_tokens": 35,
+        "total_tokens": 46,
+        "completion_tokens": 11,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "complete": true,
+      "non_thinking_default_verified": true
+    },
+    "tool-call": {
+      "wall_s": 0.7203954469996461,
+      "usage": {
+        "prompt_tokens": 295,
+        "total_tokens": 322,
+        "completion_tokens": 27,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "complete": true,
+      "non_thinking_default_verified": true,
+      "parsed_calls": [
+        {
+          "name": "report_number",
+          "arguments": "{\"value\": 42}"
+        }
+      ]
+    },
+    "retrieval": {
+      "wall_s": 23.691807827999583,
+      "usage": {
+        "prompt_tokens": 29434,
+        "total_tokens": 29491,
+        "completion_tokens": 57,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "complete": true,
+      "non_thinking_default_verified": true,
+      "three_markers_passed": true
+    },
+    "continuous-generation": {
+      "wall_s": 39.61851904899959,
+      "usage": {
+        "prompt_tokens": 44,
+        "total_tokens": 4140,
+        "completion_tokens": 4096,
+        "prompt_tokens_details": null,
+        "reasoning_tokens": 0
+      },
+      "complete": true,
+      "non_thinking_default_verified": true
+    }
+  },
+  "resources": {
+    "minimum_sampled_gpu_free_mib": [
+      759.0,
+      997.0
+    ],
+    "maximum_sampled_gpu_temperature_c": [
+      62.0,
+      49.0
+    ],
+    "minimum_host_available_gib": 32.2633171081543,
+    "peak_worker_ram_gib": 7.360477447509766,
+    "peak_worker_swap_gib": 0.0
+  },
+  "runtime_and_placement": {
+    "runtime": {
+      "source_commit": "62271fd7c8aa8fe9edebf04e00a414b7fbf64388",
+      "package_tree_sha256": "817b6ef1c693510a96b3708a86733eb7ea2f4f5fa68166d63b1e45f087c5984d",
+      "versions": {
+        "torch": "2.11.0",
+        "torchvision": "0.26.0",
+        "torchaudio": "2.11.0",
+        "torchcodec": "0.11.1",
+        "torchao": "0.17.0",
+        "triton": "3.6.0",
+        "flashinfer-python": "0.6.14",
+        "sglang-kernel": "0.4.4",
+        "transformers": "5.12.1",
+        "apache-tvm-ffi": "0.1.11",
+        "nvidia-nccl-cu13": "2.28.9",
+        "compressed-tensors": "0.20.0",
+        "xgrammar": "0.2.1"
+      }
+    },
+    "target-rank-1": {
+      "devices": {
+        "cuda:0": {
+          "tensors": 1946,
+          "bytes": 6493561632
+        }
+      },
+      "non_cuda_parameters": [],
+      "tp_rank": 1,
+      "gpu_name": "NVIDIA GeForce RTX 3080",
+      "physical_gpu_index": 1,
+      "visual_parameters": []
+    },
+    "draft-rank-1": {
+      "devices": {
+        "cuda:0": {
+          "tensors": 46,
+          "bytes": 1084304496
+        }
+      },
+      "non_cuda_parameters": [],
+      "tp_rank": 1,
+      "gpu_name": "NVIDIA GeForce RTX 3080",
+      "physical_gpu_index": 1,
+      "visual_parameters": []
+    },
+    "target-rank-0": {
+      "devices": {
+        "cuda:0": {
+          "tensors": 1946,
+          "bytes": 8050696992
+        }
+      },
+      "non_cuda_parameters": [],
+      "tp_rank": 0,
+      "gpu_name": "NVIDIA GeForce RTX 3080 Ti",
+      "physical_gpu_index": 0,
+      "visual_parameters": []
+    },
+    "draft-rank-0": {
+      "devices": {
+        "cuda:0": {
+          "tensors": 46,
+          "bytes": 1108634736
+        }
+      },
+      "non_cuda_parameters": [],
+      "tp_rank": 0,
+      "gpu_name": "NVIDIA GeForce RTX 3080 Ti",
+      "physical_gpu_index": 0,
+      "visual_parameters": []
+    }
+  },
+  "dsh_provider": {
+    "provider": "nvidia-sglang",
+    "base_url": "http://127.0.0.1:10100/v1",
+    "model_ids": [
+      "qwen27b-sglang"
+    ],
+    "context_window": 32768,
+    "saved_UI_selection_preserved": true,
+    "provider_rewrite_required": false
+  },
+  "retired_preimages": {
+    "date": "2026-10-28",
+    "repository": "Biegle-W/retired-llm-setting",
+    "commit": "733820f",
+    "manifest": "linux-nvidia/2026-10-28-sglang-tp2-mtp3-deployment/MANIFEST.json",
+    "reason": "User selected fastest tested SGLang generation architecture at qualified 32K; old benchmark evidence remains unchanged."
+  },
+  "limits": {
+    "dense_gpu_free_floor_mib": 512,
+    "host_available_floor_gib": 8,
+    "worker_ram_high_gib": 30,
+    "worker_ram_max_gib": 36,
+    "swap_occupancy_cap": null,
+    "swappiness": 60,
+    "temperature_stop_c": 82,
+    "swap_guard": "unchanged30s active inference: writes>1MiB/s or total>8MiB/s; pressure and telemetry guards retained"
+  },
+  "limitations": [
+    "Fastest tested SGLang generation architecture, not a claim of fastest possible configuration.",
+    "32K qualification median82.79tok/s versus same architecture16K84.63; retain larger qualified context.",
+    "PP2 W4A8 has faster prefill; generation preference authorized by user.",
+    "39.62s continuous generation exercises active swap windows, not multi-hour reliability.",
+    "DSH provider mapping verified; router streaming/tool path exercised, no new DSH UI session created."
+  ]
+}

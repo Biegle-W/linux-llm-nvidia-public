@@ -161,22 +161,19 @@
       ],
       "allocated_context": 32768,
       "tested_retrieval_input": 29434,
-      "context_validation": "Context expansion passed three-marker retrieval at 29434 input tokens plus JSON/arithmetic and resource checks; see dated context report.",
-      "benchmark_context": 16384,
+      "context_validation": "Deployed TP2 MTP3 W4A8 at 32K passed router streaming JSON, parsed tool call and 29434-input retrieval; a 4096-output, 39.62-second check exercised four active 30-second swap windows with zero swap I/O.",
+      "benchmark_context": 32768,
       "benchmark": {
-        "short_decode_tps": 47.38183639784082,
-        "long_decode_tps": 46.67575363469744,
-        "code_decode_tps": 47.17362666887569,
-        "prose_decode_tps": 47.16088543836829,
-        "short_ttft_s": 0.10163222500023039,
-        "long_ttft_s": 0.8653268469997784
+        "prefill_tps": 1664.6716303885273,
+        "ttft_s": 1.3464565350004705,
+        "decode_tps": 82.78559477640556
       },
-      "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+      "evidence": "docs/SGLANG-DEPLOYMENT-20261028.md",
       "server_args": {
-        "tp_size": 1,
-        "pp_size": 2,
+        "tp_size": 2,
+        "pp_size": 1,
         "disable_custom_all_reduce": true,
-        "mem_fraction_static": 0.92,
+        "mem_fraction_static": null,
         "context_length": 32768,
         "max_running_requests": 1,
         "chunked_prefill_size": 384,
@@ -184,21 +181,42 @@
         "cuda_graph_max_bs_decode": 1,
         "enable_multimodal": false,
         "json_model_override_args": "{\"language_model_only\":true}",
-        "max_mamba_cache_size": 2,
-        "mamba_ssm_dtype": "float32",
+        "max_mamba_cache_size": 1,
+        "mamba_ssm_dtype": "bfloat16",
         "cpu_offload_gb": 0,
         "attention_backend": "triton",
         "disable_radix_cache": true,
-        "default_chat_template_kwargs": {
-          "enable_thinking": false
-        },
         "tool_call_parser": "qwen3_coder",
-        "enable_metrics": true
+        "enable_metrics": true,
+        "rank_gpu_id": [
+          0,
+          1
+        ],
+        "rank_gpu_memory_mib": [
+          11008,
+          8960
+        ],
+        "rank_tp_ratio": [
+          9,
+          8
+        ],
+        "rank_mlp_ratio": [
+          10,
+          7
+        ],
+        "max_total_tokens": 32768,
+        "disable_overlap_schedule": false,
+        "speculative_algorithm": "NEXTN",
+        "speculative_draft_model_path": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "speculative_num_steps": 3,
+        "speculative_eagle_topk": 1,
+        "speculative_num_draft_tokens": 4,
+        "disable_prefill_cuda_graph": true
       },
       "latest_benchmark": {
-        "run": "20261027-context-expansion",
-        "variant": "sglang-32768-mem92-pf384-combined-confirmed",
-        "date": "2026-10-27",
+        "run": "20261028-sglang-mtp3-32k-512mib",
+        "variant": "hetero-tp2-mtp3-32k-512mib-v16",
+        "date": "2026-10-28",
         "context": 32768,
         "repetitions": 3,
         "host_vm_swappiness": 60,
@@ -208,13 +226,14 @@
           2222
         ],
         "output_tokens": 128,
-        "ttft_s": 0.8532419199982542,
-        "prefill_tps": 2613.8213596405735,
-        "decode_tps": 46.59367292334076,
-        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+        "ttft_s": 1.3464565350004705,
+        "prefill_tps": 1664.6716303885273,
+        "decode_tps": 82.78559477640556,
+        "prefill_method": "SGLang per-request native prefill_forward delta, canonical TP rank",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
-        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md",
+        "numeric_results": "docs/benchmark-results/20261028-sglang-mtp3-512mib.json",
+        "dense_gpu_free_floor_mib": 512
       },
       "storage": {
         "access": "gpu-resident",
@@ -227,8 +246,8 @@
         "swap": null
       },
       "latest_qualification": {
-        "run": "20261027-context-expansion",
-        "variant": "sglang-32768-mem92-pf384-combined-confirmed",
+        "run": "20261028-sglang-mtp3-32k-512mib",
+        "variant": "hetero-tp2-mtp3-32k-512mib-v16",
         "host_vm_swappiness": 60,
         "context": 32768,
         "retrieval_input_tokens": 29434,
@@ -237,8 +256,10 @@
         "image_passed": null,
         "full_window_retested": false,
         "near_window_retested": true,
-        "retrieval_ttft_s": 13.267313208001724,
-        "retrieval_decode_tps": 39.45472246194629
+        "retrieval_ttft_s": 22.035170794000805,
+        "retrieval_decode_tps": 37.997191718501895,
+        "dense_gpu_free_floor_mib": 512,
+        "deployment_verified": true
       },
       "context_expansion_assessment": {
         "run": "20261027-context-expansion",
@@ -256,13 +277,14 @@
           32,
           32
         ],
-        "maintained_recurrent_state_dtype": "float32"
+        "maintained_recurrent_state_dtype": "float32",
+        "superseded_by_deployment": "docs/SGLANG-DEPLOYMENT-20261028.md"
       },
       "latest_isolated_engine_test": {
         "run": "20261028-sglang-mtp3-32k-512mib",
         "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md",
         "numeric_results": "docs/benchmark-results/20261028-sglang-mtp3-512mib.json",
-        "production_promoted": false,
+        "production_promoted": true,
         "candidate_status": "32K TP2 MTP3 passes short benchmark, JSON/arithmetic and 29434-input retrieval under user-approved 512 MiB floor; no sustained-load claim",
         "dense_gpu_free_floor_mib": 512,
         "qualified_candidate": {
@@ -293,8 +315,9 @@
           "prefill_tps": 1664.6716303885273,
           "ttft_s": 1.3464565350004705,
           "client_decode_tps": 82.78559477640556,
-          "runtime_scope": "isolated only"
-        }
+          "runtime_scope": "maintained router SGLang profile after verified deployment"
+        },
+        "promotion_evidence": "docs/SGLANG-DEPLOYMENT-20261028.md"
       },
       "isolated_engine_test_history": [
         {
@@ -343,7 +366,55 @@
             "runtime_scope": "isolated only"
           }
         }
-      ]
+      ],
+      "runtime_selector": {
+        "kind": "pinned-htsglang",
+        "manifest": "config/sglang-runtime.json"
+      },
+      "benchmark_history": [
+        {
+          "context": 16384,
+          "source": "pre-deployment legacy benchmark fields",
+          "values": {
+            "short_decode_tps": 47.38183639784082,
+            "long_decode_tps": 46.67575363469744,
+            "code_decode_tps": 47.17362666887569,
+            "prose_decode_tps": 47.16088543836829,
+            "short_ttft_s": 0.10163222500023039,
+            "long_ttft_s": 0.8653268469997784
+          }
+        }
+      ],
+      "deployment": {
+        "status": "deployed-and-router-verified",
+        "source_commit": "62271fd7c8aa8fe9edebf04e00a414b7fbf64388",
+        "selection_reason": "Fastest tested SGLang generation architecture at qualified 32K; prefill slower than PP2 W4A8",
+        "evidence": "docs/SGLANG-DEPLOYMENT-20261028.md",
+        "verification": {
+          "streamed_json": true,
+          "streamed_tool_call": true,
+          "retrieval_input_tokens": 29434,
+          "continuous_output_tokens": 4096,
+          "continuous_wall_s": 39.61851904899959,
+          "active_swap_windows": 4,
+          "swap_io_mib_s": 0,
+          "cpu_tests": 50,
+          "evidence": "docs/benchmark-results/20261028-sglang-deployment.json",
+          "normal_unload_reload": true
+        }
+      },
+      "request_defaults": {
+        "chat_template_kwargs": {
+          "enable_thinking": false
+        }
+      },
+      "retired_previous_configuration": {
+        "date": "2026-10-28",
+        "repository": "Biegle-W/retired-llm-setting",
+        "commit": "733820f",
+        "manifest": "linux-nvidia/2026-10-28-sglang-tp2-mtp3-deployment/MANIFEST.json",
+        "reason": "User selected fastest tested SGLang generation architecture at qualified 32K; old benchmark evidence remains unchanged."
+      }
     },
     {
       "id": "flash-next-strata",

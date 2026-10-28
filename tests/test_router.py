@@ -94,6 +94,17 @@ class RouterTest(unittest.TestCase):
     def test_unsupported_completion(self):
         self.assertEqual(self.request('/v1/completions',{'model':'deepseek-strata','prompt':'x'})[0],400)
 
+    def test_sglang_profile_applies_non_thinking_default(self):
+        status,_=self.request('/v1/chat/completions',{'model':'qwen27b-sglang','messages':[]})
+        self.assertEqual(status,200)
+        self.assertEqual(self.backend.body['chat_template_kwargs']['enable_thinking'],False)
+    def test_explicit_thinking_override_survives_streaming(self):
+        status,_=self.request('/v1/chat/completions',{'model':'qwen27b-sglang','messages':[],'stream':True,'chat_template_kwargs':{'enable_thinking':True,'custom':'preserved'}})
+        self.assertEqual(status,200)
+        self.assertEqual(self.backend.body['chat_template_kwargs'],{'enable_thinking':True,'custom':'preserved'})
+    def test_bad_template_options_rejected_before_forwarding(self):
+        self.assertEqual(self.request('/v1/chat/completions',{'model':'qwen27b-sglang','messages':[],'chat_template_kwargs':[]})[0],400)
+
 class SwitchTest(unittest.TestCase):
     def test_latched_worker_does_not_auto_restart(self):
         from worker_manager import ROOT as active_root

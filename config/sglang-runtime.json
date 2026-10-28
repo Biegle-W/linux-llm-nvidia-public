@@ -1,0 +1,28 @@
+{
+  "schema": 1,
+  "source_repository": "https://github.com/efschu/htsglang",
+  "source_commit": "62271fd7c8aa8fe9edebf04e00a414b7fbf64388",
+  "python": "runtimes/env-htsglang-62271fd/bin/python",
+  "package_directory": "runtimes/sglang-hetero-62271fd/python",
+  "package_tree_sha256": "817b6ef1c693510a96b3708a86733eb7ea2f4f5fa68166d63b1e45f087c5984d",
+  "patch": "scripts/patches/sglang-hetero-ct-w4a8-mtp.patch",
+  "patch_sha256": "311a4ac9c572a52488651e1c993e36eae3d54b89b98cf0f53a420eafc953315d",
+  "cache_directory": "runtimes/cache-sglang-hetero-62271fd",
+  "runtime_versions": {
+    "torch": "2.11.0",
+    "torchvision": "0.26.0",
+    "torchaudio": "2.11.0",
+    "torchcodec": "0.11.1",
+    "torchao": "0.17.0",
+    "triton": "3.6.0",
+    "flashinfer-python": "0.6.14",
+    "sglang-kernel": "0.4.4",
+    "transformers": "5.12.1",
+    "apache-tvm-ffi": "0.1.11",
+    "nvidia-nccl-cu13": "2.28.9",
+    "compressed-tensors": "0.20.0",
+    "xgrammar": "0.2.1"
+  },
+  "fallback_dependencies": "The pinned env uses the retained env-sglang site-packages for general Python dependencies only; native versions above take precedence.",
+  "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md"
+}

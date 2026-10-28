@@ -37,8 +37,10 @@ Maya DeepSeek stays at 32K with earlier 9,674-input retrieval evidence; sustaine
 active-swap qualification remains unresolved. It keeps all guards and may stop on
 longer requests. A passing short request does not resolve that limitation.
 
-HyperQwen uses 704 MiB KV/rank and 256-token chunks. SGLang uses a .92 static pool
-and 384-token chunks. Other numerical/weight settings and RAM/GPU limits remain.
+HyperQwen uses 704 MiB KV/rank and 256-token chunks. SGLang now uses the
+[deployed TP2/MTP3 W4A8 runtime](SGLANG-DEPLOYMENT-20261028.md), BF16 state/KV,
+one Mamba slot and 384-token chunks at 32K, with a 512 MiB free-VRAM floor.
+This generation-first selection supersedes PP2 FP32; other profiles are unchanged.
 See [context decisions and trials](CONTEXT-EXPANSION-20261027.md). Initial benchmark
 and retrieval runs keep their actual legacy/new swap-policy attribution.
 
@@ -47,7 +49,7 @@ and retrieval runs keep their actual legacy/new swap-policy attribution.
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 2,613.8 | 0.853 | 46.59 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / heterogeneous TP2 + MTP3 W4A8 | 1,664.7 | 1.346 | 82.79 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 
 ### MoE models with CPU RAM offload
 
@@ -63,6 +65,8 @@ None currently kept. RAM tiers are caches of SSD-streamed weights.
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 
 
+The selected SGLang median comes from the October 28 three-request 512 MiB retest;
+normal-path deployment verification did not repeat its benchmark.
 Historical speed/qualification reports remain preserved. Maya speed values come
 from the previous MoE study; its settings were not relabeled newly qualified.
 

@@ -140,12 +140,19 @@ with a visible console. Repeated requests for the same loaded profile reuse it.
 There is one active inference worker; this is serialized switching, not concurrent
 multi-engine serving or automatic selection of the fastest engine.
 
-The isolated TP2/MTP3 W4A8 fork is not registered as a selectable provider/profile.
-`qwen27b-sglang` still selects maintained PP2 W4A16/FP32 at 32K. Its normal dense
-free-VRAM guard is now 512 MiB; swappiness stays 60. An explicit deployment change
-would be required to replace that maintained implementation with the tested fork.
-The router remains idle after isolated tests; it does not restore HyperQwen.
-DSH's saved default provider is a UI setting, not an instruction to preload it.
+`qwen27b-sglang` now selects the deployed pinned heterogeneous TP2/MTP3 fork,
+with decoder MLP W4A8, BF16 state/KV and a 32K window. The existing DSH
+`nvidia-sglang` provider and SGLang shortcut use the same ID; no new provider or
+model alias was added. Runtime/patch/version pins and startup verification are in
+[the deployment report](../docs/SGLANG-DEPLOYMENT-20261028.md). The normal dense
+free-VRAM guard is 512 MiB and swappiness remains 60.
+
+Chat Completions for this profile default to `enable_thinking=false` when omitted;
+explicit `chat_template_kwargs` overrides remain available. Streaming, parsed
+tool calls, near-window retrieval and a normal unload/reload were verified through
+the router. DSH's saved default provider remains a UI choice, not an instruction
+to preload HyperQwen. Isolated tests still finish idle; the requested SGLang
+deployment was left selected and uses ordinary ten-minute idle release.
 
 Desktop display names and filenames now omit the LLM prefix: HyperQwen vLLM,
 SGLang, Strata and Maya. CLI commands retain their existing llm-* names. Re-running

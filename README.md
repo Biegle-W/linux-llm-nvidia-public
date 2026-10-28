@@ -68,8 +68,8 @@ separate client on port 3080; Strata and Maya shortcuts open their native web ap
 
 **Latest results:** [GLM/DeepSeek cache optimization at unchanged contexts](docs/MOE-OPTIMIZATION-20261027.md).
 The [previous full six-profile benchmark](docs/BENCHMARK-20261027-101219.md) and all
-historical evidence remain preserved; current grouped tables combine the new MoE
-results with unchanged dense/Flash measurements.
+historical evidence remain preserved; the current [grouped maintained table](docs/MAINTAINED-PROFILES.md) includes the
+new SGLang deployment alongside preserved measurements for other profiles.
 
 **Model storage policy:** [NVMe for SSD-streaming models; SATA for GPU/RAM-resident weights](docs/STORAGE-POLICY.md).
 Dense Qwen uses the SATA SSD through its existing checkpoint alias.
@@ -77,19 +77,21 @@ Dense Qwen uses the SATA SSD through its existing checkpoint alias.
 after saved-evidence review and bounded DSpark comparisons. All six active
 profiles and historical benchmark results remain preserved.
 
-The [SGLang pipeline/BF16 experiments](docs/SGLANG-TUNING-20261027.md) retain the
-existing 32/32 FP32 setting: both uneven splits failed GPU-headroom checks, while
-BF16 changed decode by only +0.9% with slightly slower prefill. No candidate was promoted.
+**SGLang deployed:** [TP2 + MTP3 with decoder MLP W4A8 at 32K](docs/SGLANG-DEPLOYMENT-20261028.md)
+now backs `qwen27b-sglang`, the SGLang shortcut and the DSH SGLang provider. It is
+the fastest tested SGLang generation architecture at this qualified context:
+82.79 decode tok/s, 1664.67 prefill tok/s and 1.34646 s TTFT. The user selected faster
+generation despite slower prefill than PP2 W4A8. The normal route passed streaming,
+tool calls, 29,434-input retrieval and a 39.62 s continuous-generation guard check.
+The dense free-VRAM floor remains 512 MiB; swappiness 60 and visible terminals remain.
 
-The [isolated SGLang MLP W4A8 test](docs/SGLANG-W4A8-20261027.md) improves
-prefill by 21.6% and first-token latency by 17.5%, with 1.4% slower decode; it
-remains experimental; the user subsequently accepted that tradeoff. Its fresh controls use 45.55 GiB usable RAM while one stick
-is temporarily removed for maintenance. No MoE profile was tested or changed.
-
-The [heterogeneous TP2/MTP follow-up](docs/SGLANG-HETERO-MTP-20261028.md) tests a
-pinned fork in a separate runtime with a reproducible compatibility patch.
-Its generation gains, prefill tradeoffs, capacity failures and quality checks are
-reported separately. HyperQwen remains the default; normal SGLang is unchanged.
+Earlier [PP/BF16 tuning](docs/SGLANG-TUNING-20261027.md),
+[isolated W4A8](docs/SGLANG-W4A8-20261027.md),
+[heterogeneous TP/MTP](docs/SGLANG-HETERO-MTP-20261028.md) and
+[512 MiB retest](docs/SGLANG-MTP3-512MIB-20261028.md) evidence is preserved.
+The machine still has 45.55 GiB usable RAM while one stick is temporarily removed;
+MoE profiles have not been newly qualified on reduced RAM. HyperQwen's default
+catalog selection and the user's saved DSH UI selection were not changed.
 
 ## Repository ownership
 
@@ -275,4 +277,4 @@ without an LLM prefix. Their filenames omit that prefix too; the installer migra
 only project-owned legacy entries. Preserve DSH and unrelated shortcuts. CLI
 llm-* command names remain unchanged. See network/README.md for current routing:
 DSH/API model IDs select fixed engine profiles; the experimental TP2/MTP3 fork
-has not replaced the maintained qwen27b-sglang profile.
+now backs the maintained qwen27b-sglang profile after the authorized deployment.

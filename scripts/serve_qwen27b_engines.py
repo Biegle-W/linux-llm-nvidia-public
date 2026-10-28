@@ -87,7 +87,8 @@ def main():
                CC='gcc-13', CXX='g++-13')
     env['PATH'] = str(cuda / 'bin') + ':' + env['PATH']
     if engine == 'sglang':
-        python = ROOT / 'runtimes/env-sglang/bin/python'
+        from sglang_runtime import prepare_environment
+        python, env, sglang_runtime = prepare_environment(env)
         if Path(sys.prefix).resolve() != python.parent.parent.resolve():
             if not python.is_file():
                 sys.exit('Missing qualified SGLang environment.')
@@ -104,12 +105,20 @@ def main():
     os.close(fd)
     if engine == 'sglang':
         os.environ.update(env)
+        import json
+        import sglang
+        from sglang_runtime import verify_loaded_runtime
+        verify_loaded_runtime(sglang_runtime, sglang.__file__)
+        print('[SGLANG-RUNTIME] source=' + sglang_runtime['source_commit'] + ' W4A8=True TP2 MTP3', flush=True)
+        audit = Path(env['LOCAL_GPU_WEIGHT_AUDIT_DIR'])
+        audit.mkdir(parents=True, exist_ok=True)
+        (audit / 'runtime.json').write_text(json.dumps({'source_commit': sglang_runtime['source_commit'], 'package_tree_sha256': sglang_runtime['package_tree_sha256'], 'package_file': sglang.__file__, 'versions': sglang_runtime['runtime_versions']}, indent=2))
         from sglang.srt.entrypoints.http_server import launch_server
         from sglang.srt.server_args import ServerArgs
         launch_server(ServerArgs(
             model_path=str(MODEL), host='127.0.0.1', port=10000,
             api_key=RedactedKey(KEY.read_text().strip()), served_model_name='qwen3.8-27b',
-            **profile['server_args'],
+            **dict(profile['server_args'], speculative_draft_model_path=str(MODEL)),
         ))
         return
     env.update(profile['environment'])
