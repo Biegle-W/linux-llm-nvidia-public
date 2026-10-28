@@ -54,11 +54,11 @@ images; the installed packages remain. Let the user control the next power cycle
 
 ## Required checks after kernel or NVIDIA driver updates
 
-The user requires future agents to perform these checks automatically as part of
-an otherwise authorized kernel/driver update, and when resuming after either
-version changed. This is an update-workflow requirement, not a recurring scheduled
-job or permission to initiate updates/reboots. Retain the reviewed unlock source
-unless the user separately authorizes a source/version change.
+These checks are now implemented by the installed [OS health services](GPU-UNLOCK-HEALTH.md),
+triggered by package updates and system boot independently of agents. Future agents
+inspect their saved results and failed/pending status after authorized updates or
+changed versions. This does not initiate updates/reboots. Retain the reviewed
+unlock source unless the user separately authorizes a source/version change.
 
 1. Record the running kernel, installed/loaded NVIDIA driver versions, selected
    GPU identities and PCI addresses, and the last verified boot. Distinguish the

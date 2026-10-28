@@ -102,3 +102,34 @@ the target boot image before reboot; verify both per-card unlock results and
 NVIDIA availability after the user's reboot. Record versions and evidence, and
 leave post-boot status pending until actually verified. No update, reboot, new
 unlock benchmark or unlock-source change is authorized by this reminder.
+
+## Automatic unlock health checks — installed and verified
+
+The user explicitly requested OS checks independent of agent memory. Ten fixed
+root-owned files are installed: the checker/status/queue helpers, pinned GPU
+identity configuration, boot/update services, dpkg/boot-image watcher, APT/kernel
+post-install queue hooks and MOTD status. Boot service and watcher are enabled;
+the watcher is active on dpkg status and /boot. The checker executes its installed
+copy, never user-writable project code. It only verifies; it does not change the
+unlock, drivers, swappiness, firmware or reboot the host.
+
+`gpu-unlock-health status --brief` reports VERIFIED. Initial boot and update-hook
+checks passed for kernel 7.0.0-38-generic and NVIDIA 595.99.02: exact-target DKMS,
+all five firmware assets, module and early-loader in the image, generated GRUB,
+both successful unlocks before NVIDIA initialization, and both cards available.
+All installed hashes, root ownership/modes and unit states were checked. 103 CPU
+tests pass. Hook shell/APT syntax and systemd unit verification passed.
+
+The initial service sandbox hid kernel module files, producing a false DKMS
+failure. Module files are now readable but read-only, with CAP_SYS_MODULE and
+module-loading syscalls denied. Corrected live audits pass; old failure evidence
+and both bundles remain under data/gpu-unlock-health-20261027/. Three superseded
+source/settings snapshots are archived privately at ac7474a with hashes verified.
+
+Authoritative status is root-written /var/lib/gpu-unlock-health/{boot,update,latest}.json;
+failed units expose failures, and supported MOTD logins show a brief result.
+Package transactions are allowed to finish; checks queue asynchronously and wait
+for settled package state. Changed software awaiting boot stays pending, not
+verified. A new successful boot resolves stale old-boot status. No real package
+update or reboot was performed for installation; future actual events must save
+fresh evidence automatically. See GPU-UNLOCK-HEALTH.md. Preserve these OS hooks.

@@ -52,3 +52,13 @@ intentional SIGTERM; the supervisors now stop sampling at requested shutdown.
 latch and HyperQwen restored. Unexpected telemetry loss remains guarded. The
 original timed expiry and its initial reload failure are preserved, not repeated
 or silently relabeled. Maya sustained-swap qualification remains unresolved.
+
+## Automatic unlock-health monitoring — October 27
+
+Root-owned boot/update checks are installed and enabled, independent of agents.
+Current kernel 7.0.0-38-generic/NVIDIA 595.99.02 passed DKMS, five firmware assets,
+boot-image/GRUB and both pre-NVIDIA unlock records. All 103 CPU tests passed; no
+new compute or LLM benchmark was run and no inference setting changed. This is
+configuration/boot-persistence evidence, not a new measured performance result.
+The initial module-visibility sandbox error was corrected and its preimages
+archived; live service results now pass. See GPU-UNLOCK-HEALTH.md.

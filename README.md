@@ -175,6 +175,11 @@ installed hardware; evaluate its evidence before testing, then validate locally
 inside the bounded worker service. This restriction concerns dense-model weight
 offload, not ordinary loading buffers or the existing MoE expert-streaming paths.
 
+The [OS-level GPU unlock health checker](docs/GPU-UNLOCK-HEALTH.md) is installed
+and enabled for package-update and boot events, independent of agents. Check
+`gpu-unlock-health status --brief`; root-owned services save results and expose
+failed/pending verification automatically. Both initial live audits passed.
+
 GPU unlock persistence is a standing maintenance requirement. Whenever an agent
 updates the kernel or NVIDIA driver, or resumes after either version changed, it
 must automatically perform the [unlock update checks](docs/UNLOCK-SETUP-20261026.md#required-checks-after-kernel-or-nvidia-driver-updates),

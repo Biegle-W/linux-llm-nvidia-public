@@ -47,3 +47,11 @@ NVIDIA binds and record the running kernel/driver and boot evidence. Do not call
 next-boot preparation post-boot verification. Keep incomplete/failed checks visible
 in CURRENT-STATE.md. The user controls reboot; this requirement does not authorize
 driver updates, new unlock benchmarks, firmware changes or switching unlock source.
+
+The user subsequently requested OS-level automatic checks independent of agents.
+The [health checker](docs/GPU-UNLOCK-HEALTH.md) is installed and enabled. Boot and
+package-update events run root-owned services without an agent. Initial boot and
+update-hook audits passed. Inspect `gpu-unlock-health status --brief`, root-written
+results and failed units rather than relying on this reminder. Preserve the
+root-owned installed copy and event hooks; agents must not silently substitute
+user-writable service code. Actual updates/reboots remain user-controlled.
