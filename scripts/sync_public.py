@@ -31,7 +31,7 @@ FILES = (
     'tests/test_router.py', 'docs/ROUTER-DEPLOYMENT-20261027.md',
     'assets/icons/README.md', 'assets/icons/strata.svg', 'assets/icons/maya.svg',
     'assets/icons/sglang.svg', 'assets/icons/dsh.svg', 'assets/icons/hyperqwen.png',
-    'scripts/benchmark_models.py', 'tests/test_benchmark_metrics.py',
+    'scripts/benchmark_models.py', 'tests/test_benchmark_metrics.py', 'scripts/visible_terminal.py',
     'docs/BENCHMARK-20261027-101219.md', 'docs/benchmark-results/20261027-101219.json',
     'docs/STORAGE-POLICY.md', 'scripts/storage_policy.py', 'tests/test_storage_policy.py',
     'docs/BENCHMARK-REPORTING.md',

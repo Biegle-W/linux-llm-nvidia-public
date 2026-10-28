@@ -104,3 +104,7 @@ startup/capacity failure, exact settings, final capacity checks and limitations.
 Corrected MTP3 at 32K failed the immediate post-load GPU-free check: 904 MiB
 on the 3080 Ti and 1,039 MiB on the 3080. No throughput was accepted for it.
 The completed 16K retrieval checks used 14,686 input tokens.
+
+October 28 operational update: visible backend/harness terminals are required;
+future isolated tests finish idle rather than automatically restoring HyperQwen.
+Nineteen router regressions passed in a visible terminal. No benchmark values changed.

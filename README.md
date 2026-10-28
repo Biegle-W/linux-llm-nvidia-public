@@ -215,3 +215,25 @@ Consult the [forum and primary-source trail](docs/FORUM-OPTIMIZATION-SOURCES.md)
 when researching inference tuning. Distinguish community proposals and other
 hardware from locally validated results, and cite direct post/article and upstream
 implementation URLs beside source-derived claims.
+
+## Visible terminals and test cleanup — user direction, October 28
+
+All backend and harness launches must have visible desktop terminals so the user
+can monitor progress. Guarded services keep their resource limits; live terminal
+consoles display their journals and redirected engine logs. Dense bounded launches,
+router MoE launches, router startup and DSH web startup open consoles automatically.
+A failed visible-console handshake must not silently fall back to a hidden launch.
+Closing a console leaves the guarded service running; its stop command is printed.
+
+Run every future benchmark/test coordinator through the visible foreground wrapper:
+`python3 scripts/visible_terminal.py run --title "Test name" -- /absolute/command args`.
+For custom worker units, open a console with `visible_terminal.py open --title
+"Backend" --unit NAME.service --log /absolute/engine.log` before starting them.
+Preserve dated logs/results as well as visible output. Do not run new harnesses
+silently through detached API commands. Completed terminal harnesses retain their
+exit code and wait for Enter so results remain visible.
+
+Do not automatically reload HyperQwen after an isolated experiment. Unload the
+owned test worker, release its reservation and report the idle state unless the
+user explicitly requests a backend to be left running. HyperQwen's existing
+catalog/default metadata is not permission to repeatedly reload it after tests.

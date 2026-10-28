@@ -225,3 +225,23 @@ Final restoration verified October 28 at 00:39 EDT: router selects HyperQwen,
 not busy/loading, normal supervise_dense.py hyperqwen worker active, all isolated
 coordinators finished and GPU-LOCK released. Swappiness is 60; OS unlock health
 is VERIFIED. Private final-restoration-health.json records the check.
+
+## Latest user direction: visible terminals
+
+The user objected to repeated automatic restoration of HyperQwen. Future tests
+must finish idle after owned-worker cleanup unless a final backend is explicitly
+requested. Do not change the catalog/default model to infer a different selection.
+
+Backend, router and DSH live consoles are now opened with visible_terminal.py.
+Dense bounded starts, router MoE starts, router startup and DSH web startup open
+visible consoles; foreground test coordinators must use the documented `run`
+wrapper. All resource guards remain intact. The existing HyperQwen worker was
+made visible without restarting or rebenchmarking it. Public publication remains
+pending explicit approval after automatic review rejected the preceding public
+push; this new instruction does not authorize bypassing that rejection.
+
+Visible foreground verification passed 19 router tests. The router was reloaded
+without restarting the inference worker or changing its selection. Console GUI
+processes launch in separate user services, outside inference resource cgroups.
+Evidence is private under data/visible-backends-20261028/. No new GPU benchmark
+was run. Swappiness remains 60.

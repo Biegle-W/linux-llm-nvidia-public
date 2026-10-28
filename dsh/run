@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+if [[ "${1:-}" == web ]]; then
+  /usr/bin/python3 "$root/scripts/visible_terminal.py" open --title "DeepSeek Harness" --unit nvidia-dsh.service --log "$root/data/dsh-web.log"
+fi
 export DSH_HOME="$root/data/dsh"
 export LOCAL_LLM_API_KEY="$(cat "$root/data/local-api-key")"
 exec /usr/bin/node "$root/runtimes/deepseek-harness/node_modules/@deepseek-ai/dsh/lib/bin.js" "$@"

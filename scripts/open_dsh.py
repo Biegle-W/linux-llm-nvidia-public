@@ -5,6 +5,8 @@ import re
 import subprocess
 import time
 ROOT = Path(__file__).resolve().parents[1]
+from visible_terminal import open_monitor
+open_monitor('DeepSeek Harness', 'nvidia-dsh.service', [ROOT / 'data/dsh-web.log'])
 subprocess.run(['systemctl', '--user', 'start', 'nvidia-dsh.service'], check=True)
 for _ in range(60):
     path = ROOT / 'data/dsh-web.log'

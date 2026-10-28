@@ -12,6 +12,7 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from profile_catalog import load_catalog, worker_budget
+from visible_terminal import open_monitor
 from inference_swap_guard import WorkerWatch
 from idle_control import claim as claim_idle, release as release_idle, owned_native_idle
 
@@ -201,6 +202,8 @@ class Workers:
                        '--property=LimitRTTIME=infinity', '--working-directory=' + str(ROOT),
                        '/usr/bin/python3', str(ROOT / 'scripts/serve_router_moe.py'), profile_id]
                 unit = MOE_UNIT
+                open_monitor('NVIDIA MoE backend', unit, [ROOT / 'data/router' / (p['id'] + '-engine.log')
+                             for p in profiles().values() if p['engine'] in ('Strata', 'Maya')])
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
             if result.returncode:
                 raise RouterError('Worker launch failed; inspect the owned worker journal.', 'launch_failed')

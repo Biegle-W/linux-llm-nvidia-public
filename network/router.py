@@ -238,6 +238,8 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
+    from visible_terminal import open_monitor
+    open_monitor("NVIDIA model router", "nvidia-model-router.service")
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--config', type=Path, default=ROOT / 'data/router/access.json')
     args = parser.parse_args()
