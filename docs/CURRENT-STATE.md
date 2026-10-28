@@ -253,6 +253,10 @@ was run. Swappiness remains 60.
 The user did not request a separate publication approval step. Continue routine
 sanitized synchronization and pushes under the standing instruction. An external
 automatic-review rejection must be identified as such, without inventing a user
-policy or bypassing the tool restriction. The pending public commits are being
-published using this newly explicit clarification; final synchronization evidence
-is recorded privately in data/repository-sync-20261028/.
+policy or bypassing the tool restriction. A public push was retried with this explicit clarification, but platform automatic
+review rejected it again, requiring authorization of the specific payload to the
+public destination. This remains an external restriction, not a user-requested
+approval policy. Do not bypass it. The public checkout contains the reviewed
+benchmark report/numeric evidence, handoff, experimental patch and visible-terminal
+changes, committed locally but not pushed. Private updates continue normally.
+Final synchronization evidence is private under data/repository-sync-20261028/.
