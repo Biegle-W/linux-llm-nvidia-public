@@ -76,7 +76,12 @@ def main():
         lifecycle.start()
     child = subprocess.Popen(command, start_new_session=True)
     watch = WorkerWatch(cgroup_base, profile['id'], key.read_text().strip())
+    stopping = False
     def stop(*_):
+        nonlocal stopping
+        stopping = True
+        if lifecycle:
+            lifecycle.set_phase("stopping")
         if child.poll() is None:
             os.killpg(child.pid, signal.SIGTERM)
     signal.signal(signal.SIGTERM, stop)
@@ -84,8 +89,10 @@ def main():
     bad = 0
     reason = None
     try:
-        while child.poll() is None:
+        while child.poll() is None and not stopping:
             reason = watch.step()
+            if stopping:
+                break
             if lifecycle:
                 lifecycle.set_phase(watch.last_phase)
             if reason:
@@ -103,7 +110,7 @@ def main():
                 child.wait(timeout=20)
                 raise SystemExit(1)
             time.sleep(2)
-        raise SystemExit(child.returncode)
+        raise SystemExit(0 if stopping else child.returncode)
     finally:
         if child.poll() is None:
             stop()

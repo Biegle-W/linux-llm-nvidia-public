@@ -4,7 +4,9 @@ Deployment checkpoint, October 27: guarded 600-second idle release and bounded
 private lifecycle logging are enabled; both native adapters are applied with
 hash-verified preimages. Manual candidate staging is available without activation.
 All six normal launch paths passed JSON, supported images, context metadata and
-actual RAM/swap readbacks. Actual idle/reload verification is in progress. Context rollout
+actual RAM/swap readbacks. Actual GLM/dense 600-second expiry and normal reload passed; Strata passed an
+isolated 30-second idle/reload proof while production remains 600. See the
+documented intentional-shutdown false-latch fix in CURRENT-STATE.md. Context rollout
 is partial: four qualified upgrades deployed; Maya sustained-swap qualification
 remains unresolved. See CURRENT-STATE.md.
 
@@ -25,7 +27,8 @@ It also stops Maya's lazy CPU vision process before releasing its text engine;
 the encoder can start again for the next image. Only matching reservation owners
 remove locks. Router, DSH, other programs and benchmark reservations are preserved.
 CPU tests cover boundary timing, request races, FIFO behavior, missing telemetry,
-vision teardown order and ownership. Actual idle expiry/reload remains pending.
+vision teardown order and ownership. Actual GLM idle expiry and fresh-image reload passed. Strata passed isolated
+short-timeout expiry and fresh-image reload; its production timeout stays 600.
 No measured power saving is claimed.
 
 ## Private lifecycle telemetry
@@ -45,8 +48,8 @@ one 10 MiB log plus two rotated files. This bounded logging does not change GPU
 clocks, fan settings, power limits or thermal guards. A raw limiter mask alone
 does not establish a performance cause. Swap monitoring is independently required;
 see INFERENCE-SWAP-POLICY.md. Normal-launch sensor coverage is verified for all six profiles: two GPUs, six
-hwmon devices and owned cgroup counters in owner-only logs. Actual automatic
-unload/reload remains under verification.
+hwmon devices and owned cgroup counters in owner-only logs. Automatic unload/reload evidence is complete with the shutdown-fix qualification
+described in CURRENT-STATE.md.
 
 ## Manual candidate staging
 
@@ -83,3 +86,9 @@ before promotion. Evidence declarations are not independent hardware attestation
 There is no automatic activation, recurring update job or new model coverage.
 The current 2.2K/128 benchmark protocol remains unchanged; portable code/prose
 fixtures must be separately named and their actual tokenizer counts recorded.
+
+Intentional SIGTERM now ends supervisor sampling before the backend disappears.
+This prevents a false missing-telemetry safety latch on ordinary shutdown.
+Unexpected telemetry loss remains fail closed; four regression cases and 74 CPU
+checks pass. Dense 600-second expiry was measured before this fix; subsequent
+real normal stop and automatic API reload validated the corrected shutdown path.

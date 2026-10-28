@@ -44,7 +44,7 @@ FILES = (
     'network/idle_control.py', 'scripts/native_idle_policy.py',
     'scripts/lifecycle_telemetry.py', 'scripts/stage_engine_candidate.py',
     'tests/test_idle_policy.py', 'tests/test_lifecycle_telemetry.py',
-    'tests/test_engine_staging.py', 'tests/test_moe_supervisor.py', 'docs/OPERATIONAL-LIFECYCLE.md',
+    'tests/test_engine_staging.py', 'tests/test_moe_supervisor.py', 'tests/test_supervisor_shutdown.py', 'docs/OPERATIONAL-LIFECYCLE.md',
 )
 BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
                    r'gh[pousr]_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]+|'

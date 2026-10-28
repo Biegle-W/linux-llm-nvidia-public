@@ -141,3 +141,20 @@ history. Only the four qualified settings listed above were promoted.
 Private exact configurations, source snapshots, frozen profiles, requests, SSE,
 metrics, telemetry, admission failures and qualification responses remain under
 `data/context-expansion-20261027/`. All earlier benchmark/cleanup evidence remains.
+
+## Completed normal lifecycle verification
+
+All six normal launch paths passed JSON, supported images, catalog context and
+actual RAM/swap limit readbacks. GLM actual 600-second release was observed at
+610.44s, with GPU and owned-memory release while its frontend survived; a fresh
+blue image reloaded the model/encoder. Strata passed isolated 30-second release
+and a different fresh blue image; production remains 600 seconds.
+
+Dense actual 600-second expiry was observed at 610.53s. Its initial API reload
+exposed a false missing-telemetry latch during intentional shutdown. Both
+supervisors now stop sampling on requested SIGTERM; unexpected telemetry loss
+still fails closed. Four regressions and 74 CPU checks passed. A real normal
+stop and automatic API reload then passed, restoring HyperQwen. The original
+timed expiry and failed first reload remain evidence; that 600-second wait was
+not repeated after the shutdown-only fix. Maya sustained-swap qualification
+remains unresolved; its retained 32K settings were not promoted as newly safe.

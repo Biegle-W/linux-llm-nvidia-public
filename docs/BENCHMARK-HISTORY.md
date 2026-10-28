@@ -40,3 +40,15 @@ unresolved under the active-swap policy. Its lookahead-off 64K confirmation stop
 at 7.68287 MiB/s writes; the passing screen was not promoted. Native idle adapters,
 600-second release and bounded lifecycle logging are deployed. Normal functional
 and actual idle/reload verification are in progress; see CURRENT-STATE.md.
+
+## Final lifecycle verification
+
+All six normal guarded launches passed functional/context/readback checks. GLM
+and dense actual 600-second expiry were observed at 610.44s and 610.53s. Strata
+passed isolated 30-second expiry/reload; production remains 600. Fresh blue-image
+reloads passed for GLM/Strata. Dense reload exposed a false telemetry latch during
+intentional SIGTERM; the supervisors now stop sampling at requested shutdown.
+74 CPU checks passed, then a real normal stop and API auto-reload passed with no
+latch and HyperQwen restored. Unexpected telemetry loss remains guarded. The
+original timed expiry and its initial reload failure are preserved, not repeated
+or silently relabeled. Maya sustained-swap qualification remains unresolved.

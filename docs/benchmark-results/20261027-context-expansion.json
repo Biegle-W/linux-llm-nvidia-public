@@ -3138,5 +3138,61 @@
       "hwmon_devices_count": 6
     }
   ],
-  "actual_idle_verification": "in progress; no automatic release/reload success claimed yet"
+  "actual_idle_verification": {
+    "stage": "complete-with-documented-shutdown-fix",
+    "glm": {
+      "production_timeout_s": 600,
+      "observed_release_elapsed_s": 610.4399418830872,
+      "gpu_before_mib": [
+        10011,
+        7984
+      ],
+      "gpu_after_mib": [
+        646,
+        14
+      ],
+      "frontend_alive": true,
+      "engine_exited": true,
+      "owned_memory_before_max_bytes": 48103538688,
+      "owned_memory_after_min_bytes": 519864320,
+      "fresh_blue_image_reload_passed": true
+    },
+    "strata": {
+      "isolated_timeout_s": 30,
+      "production_timeout_s": 600,
+      "observed_release_elapsed_s": 35.32779407501221,
+      "gpu_before_mib": [
+        11608,
+        9470
+      ],
+      "gpu_after_mib": [
+        655,
+        14
+      ],
+      "frontend_alive": true,
+      "fresh_blue_image_reload_passed": true,
+      "scope": "isolated shorter timeout; no claim of a real600-second Strata wait"
+    },
+    "dense": {
+      "dense_actual_idle_timeout_s": 600,
+      "dense_observed_release_s": 610.5319087505341,
+      "dense_gpu_before_mib": [
+        9454,
+        8764
+      ],
+      "dense_gpu_after_mib": [
+        652,
+        14
+      ],
+      "dense_initial_reload_false_latch": true,
+      "shutdown_fix": "Intentional SIGTERM stops telemetry polling; unexpected telemetry loss still fails closed.",
+      "postfix_validation": "Real normal unload and API auto-reload passed; prior real600-second expiry evidence preserved, not repeated."
+    }
+  },
+  "post_deployment_cpu_checks": {
+    "passed": 74,
+    "failed": 0
+  },
+  "final_default": "qwen27b-hyperqwen",
+  "remaining_limitation": "Maya DeepSeek sustained active-swap qualification remains unresolved at retained 32K; no unsafe candidate was promoted."
 }

@@ -34,7 +34,12 @@ def main():
     env = dict(os.environ, LOCAL_LLM_GUARDED_WORKER='1')
     child = subprocess.Popen(['/usr/bin/python3', str(ROOT / 'scripts/serve_qwen27b_engines.py'), engine],
                              start_new_session=True, env=env)
+    stopping = False
     def stop(*_):
+        nonlocal stopping
+        stopping = True
+        if lifecycle:
+            lifecycle.set_phase("stopping")
         if child.poll() is None:
             os.killpg(child.pid, signal.SIGTERM)
     signal.signal(signal.SIGTERM, stop)
@@ -42,8 +47,10 @@ def main():
     bad = 0
     reason = None
     try:
-        while child.poll() is None:
+        while child.poll() is None and not stopping:
             reason = watch.step()
+            if stopping:
+                break
             if lifecycle:
                 lifecycle.set_phase(watch.last_phase)
             available = next(int(line.split()[1]) for line in Path('/proc/meminfo').read_text().splitlines()
@@ -59,7 +66,7 @@ def main():
                 stop()
                 raise SystemExit(1)
             time.sleep(2)
-        raise SystemExit(child.returncode)
+        raise SystemExit(0 if stopping else child.returncode)
     finally:
         stop()
         try:

@@ -6,9 +6,12 @@ Read [README.md](README.md) for standing policy, then
 settings. Update these entry points, the benchmark ledger and both NVIDIA repos
 after meaningful changes so another agent can resume without chat history.
 
-An active context benchmark is in progress. Do not launch competing GPU work or
-repeat completed measurements. The current-state document identifies the exact
-coordinators, raw evidence, accepted tradeoffs and remaining steps.
+Four qualified context upgrades and the approved lifecycle controls are deployed.
+All six normal launch paths passed functional/limit checks. Actual GLM/dense idle
+expiry and normal reload, plus isolated Strata idle/reload, are verified. No test
+coordinator remains active. Maya sustained-swap qualification remains unresolved;
+retain its guarded 32K setting and do not relabel short API success as qualification.
+Do not repeat completed measurements. CURRENT-STATE.md records exact evidence.
 
 The user accepted GLM 65,536 and Strata DeepSeek 131,072 despite the recorded
 speed tradeoffs. Resource and near-window quality qualification still applies.

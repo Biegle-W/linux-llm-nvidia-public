@@ -146,3 +146,8 @@ replaced guards, the pre-upgrade registry and two changed native settings, plus
 the before-idle source adapters. The four qualified upgrades are independent of
 Maya's unchanged/unresolved setting. DSH chats/settings, weights, full runtime
 distributions and raw logs are excluded.
+
+The two supervisor sources immediately before the intentional-shutdown fix are
+archived separately in `linux-nvidia/2026-10-27-intentional-shutdown-fix`, commit
+`0840f24`, with original/stored hashes verified. The fix prevents false missing-
+telemetry latches during requested shutdown; unexpected failures remain guarded.

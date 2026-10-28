@@ -125,6 +125,6 @@ the GPUs against new launches. Runtime settings, keys, logs, session data and li
 addresses are ignored; only sanitized source, reports and artwork are exported.
 
 Ten-minute guarded idle release and bounded private lifecycle telemetry are now
-enabled. Actual idle/reload verification is recorded in CURRENT-STATE.md. Host
+enabled. Actual idle/reload verification passed with the shutdown-fix qualification in CURRENT-STATE.md. Host
 swappiness remains 60. Maya DeepSeek 32K has unresolved sustained-swap qualification;
 its active guard remains enabled.

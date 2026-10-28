@@ -64,7 +64,7 @@ separate client on port 3080; Strata and Maya shortcuts open their native web ap
 [saved-evidence unlock assessment](docs/UNLOCK-IMPACT-20261027.md), and
 [AMD/NVIDIA gap audit](docs/AMD-NVIDIA-GAP-AUDIT-20261027.md) are maintained with this task.
 
-**Context rollout:** [four qualified context upgrades deployed at swappiness 60](docs/CONTEXT-EXPANSION-20261027.md). Flash remains 32K; Maya DeepSeek remains 32K with unresolved sustained-swap qualification. All six normal functional paths passed; actual idle/reload verification is in progress.
+**Context rollout:** [four qualified context upgrades deployed at swappiness 60](docs/CONTEXT-EXPANSION-20261027.md). Flash remains 32K; Maya DeepSeek remains 32K with unresolved sustained-swap qualification. All six normal functional paths passed; idle/reload verification passed with the documented shutdown fix.
 
 **Latest results:** [GLM/DeepSeek cache optimization at unchanged contexts](docs/MOE-OPTIMIZATION-20261027.md).
 The [previous full six-profile benchmark](docs/BENCHMARK-20261027-101219.md) and all
