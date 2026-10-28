@@ -557,9 +557,8 @@ job/reservation was stopped or removed; no completed GPU qualification was repea
 Next action: follow the next user task; do not enable concurrency without separate
 qualification. See [router validation](ROUTER-IMPROVEMENTS-20261028.md).
 
-Publication status for the router update: reviewed local changes are committed
-privately and as a sanitized public reference; remote pushes remain pending approval for this
-router payload to linux-llm-nvidia, linux-llm-nvidia-public and the private
-retired-llm-setting preimage archive. Automatic approval review rejected the
-archive push because the earlier explicit approval covered only the context port.
-No remote router publication occurred. The deployed implementation is verified.
+Publication complete: the user explicitly approved all three router destinations.
+Private implementation aabf41f, sanitized public reference51ec194 and private
+preimage archivefced113 were pushed and verified against their remote main branches.
+The private context meter/switcher source, policy, helpers and raw state remain
+excluded from public exports. No router implementation publication blocker remains.
