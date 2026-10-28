@@ -120,3 +120,14 @@ Do not automatically reload HyperQwen after an isolated experiment. Unload the
 owned test worker, release its reservation and report the idle state unless the
 user explicitly requests a backend to be left running. HyperQwen's existing
 catalog/default metadata is not permission to repeatedly reload it after tests.
+
+## Standing repository publication authorization — October 28 clarification
+
+The user reaffirmed: always keep both repositories and Markdown documentation
+updated. Routine publication of reviewed, sanitized project reports, handoffs,
+reference code and experimental patches is included in that standing direction;
+do not ask for a separate approval after every study or implementation change.
+Continue the existing export allowlist, privacy review, nonpersonal commits and
+independent pushes. A platform automatic-review rejection is an external tool
+restriction, not a user-requested approval policy. Describe it accurately and
+never attribute that restriction to the user or bypass a rejection.
