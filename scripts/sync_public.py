@@ -28,6 +28,8 @@ FILES = (
     'network/router.py', 'network/worker_manager.py', 'network/install.py', 'network/README.md',
     'scripts/serve_router_moe.py', 'scripts/router_client.py', 'scripts/open_dsh.py',
     'dsh/configure.py', 'dsh/run', 'dsh/package.json', 'dsh/package-lock.json',
+    'config/terminal-runtime.json', 'scripts/install_visible_terminal_runtime.py', 'tests/test_minimized_terminals.py',
+    'tests/test_backend_console.py', 'docs/ENGINE-SWITCHING-20261028.md', 'docs/validation-results/20261028-engine-switching.json',
     'tests/test_router.py', 'docs/ROUTER-DEPLOYMENT-20261027.md',
     'assets/icons/README.md', 'assets/icons/strata.svg', 'assets/icons/maya.svg',
     'assets/icons/sglang.svg', 'assets/icons/dsh.svg', 'assets/icons/hyperqwen.png',

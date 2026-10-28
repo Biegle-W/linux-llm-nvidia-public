@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from profile_catalog import load_catalog, worker_budget
 from inference_policy import load_policy
-from visible_terminal import open_monitor
+from visible_terminal import open_monitor, close_backend_monitor
 from inference_swap_guard import WorkerWatch
 from idle_control import claim as claim_idle, release as release_idle, owned_native_idle
 
@@ -110,6 +110,7 @@ class Workers:
                 recognized = recognized or str(ROOT / 'scripts/supervise_dense.py') in command
             if not recognized:
                 raise RouterError('An unexpected process owns the inference unit; nothing was stopped.', 'ownership_conflict')
+            invocation = unit_property(unit, 'InvocationID')
             if unit == MOE_UNIT:
                 request = urllib.request.Request('http://127.0.0.1:10000/status',
                           headers={'Authorization': 'Bearer ' + self.key})
@@ -132,7 +133,11 @@ class Workers:
                         owned_pids.update(int(x) for x in path.read_text().split())
                     except OSError:
                         pass
+            if invocation != unit_property(unit, 'InvocationID'):
+                raise RouterError('Worker ownership changed during switching; retry after it settles.',
+                                  'ownership_conflict')
             subprocess.run(['systemctl', '--user', 'stop', unit], check=True, timeout=90)
+            close_backend_monitor(unit)
         self.active = None
         STATE.unlink(missing_ok=True)
         deadline = time.monotonic() + 45
@@ -160,7 +165,7 @@ class Workers:
     def start(self, profile_id, progress=lambda: None):
         self.wait_native_idle(progress)
         if (ROOT / 'data/GPU-LOCK').exists():
-            raise RouterError('GPUs are reserved; remove the reservation after its owner finishes.', 'gpu_reserved')
+            raise RouterError('GPUs are reserved by another task. Wait for its owner to finish; the router and harness are preserved.', 'gpu_reserved')
         latch = ROOT / 'data/router/guard-stops' / (profile_id + '.json')
         if latch.exists():
             raise RouterError('This worker was stopped by a safety guard. Explicitly select the model to reload after reviewing its guard log.',

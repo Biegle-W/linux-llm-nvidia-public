@@ -265,3 +265,49 @@ complete; the remaining blocker is reliable full-KV backing on normal reload.
 Next action: investigate startup memory/capacity variability without relaxing
 guards; do not repeat completed speed screens for luck. Reduced-RAM MoE/Maya
 sustained-swap caveats remain separate unresolved work. See [qualification](docs/SGLANG-38K-QUALIFICATION-20261028.md).
+
+
+## Latest: automatic engine switch closes only its backend — October 28
+
+Normal model/engine selection drains an active API reply, stops the previous
+recognized guarded worker, verifies resources released and starts the new one.
+Backend consoles now follow the worker invocation and close on stop/switch;
+completed Desktop selection launchers no longer remain waiting for Enter.
+Only the registered backend viewer is signaled after path/mode/unit validation.
+Router, DSH, harness/review consoles and unrelated processes remain. Protected
+GPU-LOCK owners block selection; their reservations are never removed by switching.
+
+A real SGLang 32K→HyperQwen 56,320 switch completed a 512-token active stream first,
+closed old worker/viewer, opened the new backend console and passed API JSON.
+Router/DSH invocations stayed unchanged. Normal unload closed the replacement
+backend/viewer; final router idle, DSH active, no GPU-LOCK or coordinator. 53 engine/ownership
+CPU regressions cover native busy/loading/vision, unknown state, ownership changes,
+viewer PID reuse and protected harnesses. No new MoE loads or benchmarks.
+Keep 512 MiB reserve,swappiness 60, 600s idle and all other guards; SGLang remains 32K.
+See [engine switching verification](docs/ENGINE-SWITCHING-20261028.md). Next action: follow the next user task;
+do not repeat completed GPU qualification or restore a fallback automatically.
+
+
+## Latest: all project terminals start minimized — October 28
+
+The user requires engines, router, DSH/harnesses, selectors and test tasks to remain
+visible in the taskbar but start minimized without taking focus. The shared
+launcher now uses a SHA256-pinned project-local XTerm runtime with native-iconic
+startup. There is no focus-then-minimize race or global desktop focus-policy change.
+System packages and inference environments were not modified. Setup is reproduced
+with scripts/install_visible_terminal_runtime.py and config/terminal-runtime.json.
+
+All four engine shortcuts use Terminal=false and the shared minimized selector,
+avoiding a foreground default-terminal window. Successful selectors close after
+readiness; failures remain available for inspection. Native engine readiness prints
+a web URL instead of activating a browser. Explicit UI opening remains user-controlled.
+Backend-only auto-close and protected router/harness ownership rules remain.
+
+A live window-manager audit verified initial Iconic,hidden and not-active state for
+the test harness, router, DSH and actual SGLang backend. The real SGLang Desktop
+shortcut passed API JSON; router/DSH invocations stayed unchanged during selection.
+The DSH service was not restarted when its viewer was migrated. Router was activated
+once while idle to load the launcher change. 53 engine/ownership regressions passed;
+no benchmark, driver, precision, budget or context change. Final router idle, DSH active,
+no GPU-LOCK. Dense 512 MiB, swappiness 60, 600s idle and other guards remain unchanged.
+See [switching and minimized-window evidence](docs/ENGINE-SWITCHING-20261028.md).

@@ -1,0 +1,127 @@
+{
+  "date": "2026-10-28",
+  "status": "deployed-and-verified",
+  "engine_switch": {
+    "status": "complete",
+    "actual_switch": "SGLang32K to HyperQwen-vLLM56320",
+    "active_stream_completed_before_switch": true,
+    "old_worker_and_backend_console_closed": true,
+    "new_backend_console_visible": true,
+    "hyperqwen_api_json_passed": true,
+    "harness_reservation_preserved": true,
+    "router_and_dsh_invocations_unchanged_during_switch": true,
+    "moe_worker_not_loaded": true,
+    "swappiness": 60,
+    "dense_gpu_reserve_mib": 512,
+    "normal_unload_closed_backend_console": true,
+    "final_router_health": {
+      "status": "ok",
+      "active_model": null,
+      "loading_model": null,
+      "busy": false,
+      "models": 6,
+      "idle_unloading_model": null
+    },
+    "gpu_reservation_present": false,
+    "dsh_active": true
+  },
+  "cpu_regression_count": 53,
+  "cpu_patterns": [
+    "test_backend_console.py",
+    "test_router.py",
+    "test_idle_policy.py",
+    "test_worker_budgets.py",
+    "test_supervisor_shutdown.py",
+    "test_minimized_terminals.py"
+  ],
+  "console_scope": [
+    "llm-test-qwen27b.service",
+    "llm-router-worker.service"
+  ],
+  "preserved": [
+    "nvidia-model-router.service",
+    "nvidia-dsh.service",
+    "protected GPU-LOCK owners",
+    "test harness/review terminals",
+    "unrelated applications and processes"
+  ],
+  "benchmark_repeated": false,
+  "guards": {
+    "dense_gpu_free_floor_mib": 512,
+    "swappiness": 60,
+    "idle_timeout_s": 600,
+    "other_guards_unchanged": true
+  },
+  "limitations": [
+    "Real normal switching verified SGLang32K to HyperQwen56320 with an active streamed response; no new throughput measurement.",
+    "Native stop/console ownership, busy/loading/vision and unknown-state deferral were verified by CPU regressions; large MoE models were not reloaded on reduced RAM.",
+    "A protected experiment reservation blocks selection rather than being stolen or removed.",
+    "Completed harness/review terminals remain available; only registered backend viewers close with their workers."
+  ],
+  "engine_settings_changed": false,
+  "terminal_presentation_changed": true,
+  "minimized_terminal_verification": {
+    "status": "complete",
+    "harness_window": {
+      "initial_state": "Iconic",
+      "current_state_iconic": true,
+      "hidden": true,
+      "active_window_is_terminal": false
+    },
+    "router_window": {
+      "initial_state": "Iconic",
+      "current_state_iconic": true,
+      "hidden": true,
+      "active_window_is_terminal": false
+    },
+    "dsh_window": {
+      "initial_state": "Iconic",
+      "current_state_iconic": true,
+      "hidden": true,
+      "active_window_is_terminal": false
+    },
+    "sglang_backend_window": {
+      "initial_state": "Iconic",
+      "current_state_iconic": true,
+      "hidden": true,
+      "active_window_is_terminal": false
+    },
+    "desktop_shortcuts_use_minimized_selector": true,
+    "actual_desktop_sglang_api_passed": true,
+    "router_and_harness_preserved_during_selection": true,
+    "dsh_not_restarted_for_viewer_migration": true,
+    "cpu_checks": [
+      {
+        "pattern": "test_minimized_terminals.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_backend_console.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_router.py",
+        "exit_code": 0
+      },
+      {
+        "pattern": "test_worker_budgets.py",
+        "exit_code": 0
+      }
+    ],
+    "engine_context": 32768,
+    "swappiness": 60,
+    "dense_gpu_reserve_mib": 512,
+    "system_packages_unchanged": true,
+    "final_router_health": {
+      "status": "ok",
+      "active_model": null,
+      "loading_model": null,
+      "busy": false,
+      "models": 6,
+      "idle_unloading_model": null
+    },
+    "gpu_reservation_present": false
+  },
+  "terminal_runtime_manifest": "config/terminal-runtime.json",
+  "native_browser_activation_on_readiness": false
+}

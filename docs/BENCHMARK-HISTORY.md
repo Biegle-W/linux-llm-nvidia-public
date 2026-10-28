@@ -160,3 +160,14 @@ with defaults preserved. 39 CPU tests passed after an old visible-console fixtur
 was corrected. Final state idle; reserve 512 MiB, swappiness 60 and all guards unchanged.
 The saved fenced-JSON answer was correctly parsed without retrying passed quality
 checks; an unfinished sustained test resumed. Raw failed/successful evidence remains.
+
+
+October 28 engine ownership/console update: a functional SGLang→HyperQwen switch
+and API smoke passed without a performance benchmark. Existing speed results and
+32K/38K qualification attribution remain. 53 engine/ownership CPU regressions and protected-harness
+checks passed; see ENGINE-SWITCHING-20261028.md. Final state idle, all guards unchanged.
+
+
+October 28 terminal correction: engine/router/harness/test consoles now start visible
+but minimized. Live initial-iconic/non-activation checks and a normal SGLang Desktop
+API smoke passed. This is presentation/ownership verification, not a new speed result.

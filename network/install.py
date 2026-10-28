@@ -27,6 +27,15 @@ def remove_managed_menu(path):
             path.unlink()
 
 
+def engine_desktop(engine, label, icon):
+    web = ' --web' if engine in ('strata', 'maya') else ''
+    return (MARKER + '\n[Desktop Entry]\nVersion=1.0\nType=Application\nName=' + label + '\n'
+            'Comment=Select a guarded backend in a visible minimized terminal\n'
+            f'Exec=/usr/bin/python3 "{ROOT}/scripts/visible_terminal.py" launch --title "{label} selection" -- '
+            f'/usr/bin/python3 "{ROOT}/scripts/router_client.py" --engine {engine} --desktop{web}\n'
+            f'Icon={icon}\nTerminal=false\nCategories=Development;\n')
+
+
 def main():
     os.umask(0o077)
     tail = json.loads(subprocess.check_output(['tailscale', 'status', '--json'], text=True))
@@ -61,11 +70,7 @@ def main():
     engines = {'hyperqwen': 'HyperQwen vLLM', 'sglang': 'SGLang', 'strata': 'Strata', 'maya': 'Maya'}
     for engine, label in engines.items():
         icon = ROOT / 'assets/icons' / (engine + ('.png' if engine == 'hyperqwen' else '.svg'))
-        web = ' --web' if engine in ('strata', 'maya') else ''
-        desktop = (MARKER + '\n[Desktop Entry]\nVersion=1.0\nType=Application\nName=' + label + '\n'
-                   'Comment=Select and load a qualified NVIDIA model through the router\n'
-                   f'Exec=/usr/bin/python3 "{ROOT}/scripts/router_client.py" --engine {engine} --desktop{web}\n'
-                   f'Icon={icon}\nTerminal=true\nCategories=Development;\n')
+        desktop = engine_desktop(engine, label, icon)
         name = label.replace(' ', '-') + '.desktop'
         write_managed(Path.home() / 'Desktop' / name, desktop, 0o755)
         remove_managed_menu(Path.home() / 'Desktop' / ('LLM-' + engine + '.desktop'))

@@ -20,6 +20,11 @@ if [[ "$name" == qwen27b && $# -eq 3 && "$1" == /usr/bin/python3 &&
 fi
 monitor_args=(--title "LLM: $name" --unit "llm-test-${name}.service")
 if [[ "$name" == qwen27b ]]; then
+  if [[ "${3:-}" == sglang ]]; then
+    monitor_args=(--title "SGLang backend" --unit "llm-test-${name}.service")
+  else
+    monitor_args=(--title "HyperQwen vLLM backend" --unit "llm-test-${name}.service")
+  fi
   monitor_args+=(--log "$root/data/qwen27b-server.log")
 fi
 /usr/bin/python3 "$root/scripts/visible_terminal.py" open "${monitor_args[@]}"

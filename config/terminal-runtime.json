@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "origin": "Ubuntu26.04 signed APT package metadata; downloaded bytes SHA256-verified",
+  "packages": [
+    {
+      "package": "xterm",
+      "version": "407-1ubuntu1",
+      "architecture": "amd64",
+      "sha256": "152cef8061050bb3428e3078208bc94187b57a6885a851094c26ad77e9db9169"
+    },
+    {
+      "package": "libutempter0",
+      "version": "1.2.1-4build1",
+      "architecture": "amd64",
+      "sha256": "8f0f912d0108286b99a953bd0f6febb41187bdf8608fa11ac3af026a6d8b6771"
+    }
+  ],
+  "binary": "runtimes/visible-terminal/usr/bin/xterm",
+  "library_directory": "runtimes/visible-terminal/usr/lib/x86_64-linux-gnu",
+  "app_defaults_directory": "runtimes/visible-terminal/etc/X11/app-defaults",
+  "sha256": {
+    "runtimes/visible-terminal/usr/bin/xterm": "2cc210a439866852240ac3110678d84bf22264f48122632f09f9a3cc591644eb",
+    "runtimes/visible-terminal/usr/lib/x86_64-linux-gnu/libutempter.so.1.2.1": "e5d8b33c66d23bf60714f1bba7cf81ddd1c5725a2e781361063315f68f120ff2"
+  },
+  "launch_policy": "native -iconic; no activation request; visible taskbar window"
+}

@@ -6,6 +6,7 @@ from pathlib import Path
 import sys
 import subprocess
 import urllib.request
+import urllib.error
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -15,8 +16,16 @@ def call(path, body=None):
     req = urllib.request.Request('http://127.0.0.1:10100' + path,
             headers={'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json'},
             data=None if body is None else json.dumps(body).encode())
-    with urllib.request.urlopen(req, timeout=3600) as response:
-        return json.load(response)
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    try:
+        with opener.open(req, timeout=3600) as response:
+            return json.load(response)
+    except urllib.error.HTTPError as error:
+        try:
+            detail = json.load(error)['error']['message']
+        except (ValueError, KeyError, TypeError):
+            detail = 'Router returned HTTP ' + str(error.code)
+        raise SystemExit(str(detail).replace(key, '[redacted]')) from None
 
 
 def main():
@@ -54,11 +63,11 @@ def main():
     if args.web:
         if args.engine not in ('strata', 'maya'):
             sys.exit('Native web apps are available for Strata and Maya.')
-        subprocess.Popen(['xdg-open', 'http://127.0.0.1:10000/'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        print('Native web app: http://127.0.0.1:10000/ (open when convenient; startup does not activate a browser)')
     print('OpenAI API: http://127.0.0.1:10100/v1')
     print('The model remains available after this terminal closes. Select the same ID in DSH.')
-    if args.desktop and sys.stdin.isatty():
-        input('Press Enter to close this launcher. ')
+    # The dedicated backend console remains visible. A finished selection
+    # launcher must not look like another running inference engine.
 
 
 if __name__ == '__main__':
