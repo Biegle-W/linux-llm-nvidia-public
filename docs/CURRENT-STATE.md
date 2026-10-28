@@ -556,3 +556,10 @@ normal-reload KV blocker and reduced-RAM MoE caveats remain unresolved. No exist
 job/reservation was stopped or removed; no completed GPU qualification was repeated.
 Next action: follow the next user task; do not enable concurrency without separate
 qualification. See [router validation](ROUTER-IMPROVEMENTS-20261028.md).
+
+Publication status for the router update: reviewed local changes are committed
+privately and as a sanitized public reference; remote pushes remain pending approval for this
+router payload to linux-llm-nvidia, linux-llm-nvidia-public and the private
+retired-llm-setting preimage archive. Automatic approval review rejected the
+archive push because the earlier explicit approval covered only the context port.
+No remote router publication occurred. The deployed implementation is verified.
