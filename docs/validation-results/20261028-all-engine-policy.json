@@ -1,0 +1,114 @@
+{
+  "date": "2026-10-28",
+  "status": "configured-all-six-profiles",
+  "policy": {
+    "schema": 1,
+    "idle_timeout_s": 600,
+    "lifecycle_telemetry": true,
+    "visible_terminals_required": true,
+    "context_tradeoffs": "proportional context gain versus measured generation slowdown; quality and resource qualification required"
+  },
+  "coverage": {
+    "qwen27b-hyperqwen": {
+      "engine": "HyperQwen-vLLM",
+      "idle_timeout_s": 600
+    },
+    "qwen27b-sglang": {
+      "engine": "SGLang",
+      "idle_timeout_s": 600
+    },
+    "flash-next-strata": {
+      "engine": "Strata",
+      "idle_timeout_s": 600,
+      "adapter_sha256": "7ba4bb80085c630d392fbcaa113a10d83051b45df4e624d4b9a10123e35f849a"
+    },
+    "glm-maya": {
+      "engine": "Maya",
+      "idle_timeout_s": 600,
+      "adapter_sha256": "fb9014a0c5ea586fba3e1be974da20c41d0a787b7925d39ba8379d9f0e02820b"
+    },
+    "deepseek-strata": {
+      "engine": "Strata",
+      "idle_timeout_s": 600,
+      "adapter_sha256": "7ba4bb80085c630d392fbcaa113a10d83051b45df4e624d4b9a10123e35f849a"
+    },
+    "deepseek-maya": {
+      "engine": "Maya",
+      "idle_timeout_s": 600,
+      "adapter_sha256": "fb9014a0c5ea586fba3e1be974da20c41d0a787b7925d39ba8379d9f0e02820b"
+    }
+  },
+  "regressions": [
+    {
+      "pattern": "test_inference_policy.py",
+      "exit_code": 0
+    },
+    {
+      "pattern": "test_idle_policy.py",
+      "exit_code": 0
+    },
+    {
+      "pattern": "test_router.py",
+      "exit_code": 0
+    },
+    {
+      "pattern": "test_supervisor_shutdown.py",
+      "exit_code": 0
+    },
+    {
+      "pattern": "test_moe_supervisor.py",
+      "exit_code": 0
+    },
+    {
+      "pattern": "test_lifecycle_telemetry.py",
+      "exit_code": 0
+    }
+  ],
+  "final_constructor_policy_checks": [
+    {
+      "pattern": "test_inference_policy.py",
+      "exit_code": 0
+    },
+    {
+      "pattern": "test_idle_policy.py",
+      "exit_code": 0
+    },
+    {
+      "pattern": "test_router.py",
+      "exit_code": 0
+    }
+  ],
+  "actual_sglang_expiry": {
+    "event": {
+      "time": 1793210032.872051,
+      "profile": "qwen27b-sglang",
+      "event": "idle-unloaded",
+      "timeout_s": 600
+    },
+    "observed_elapsed_s": 610.1498187130055,
+    "manual_unload_used": false
+  },
+  "normal_request_reload_verified": true,
+  "final_router_idle": true,
+  "router_and_dsh_preserved": true,
+  "guards_unchanged": {
+    "dense_gpu_free_floor_mib": 512,
+    "swappiness": 60,
+    "worker_ram_and_native_cache_settings": "unchanged per profile",
+    "host_available_floor_gib": 8,
+    "temperature_stop_c": 82,
+    "swap_occupancy_cap": null,
+    "active_swap_pressure_guards": true
+  },
+  "scope": "All six maintained profiles and four engines via Desktop/CLI/router/DSH managed launch paths. No model expansion.",
+  "runtime_source_preimages": {
+    "repository": "Biegle-W/retired-llm-setting",
+    "commit": "8ca025e",
+    "manifest": "linux-nvidia/2026-10-28-unified-inference-policy/MANIFEST.json"
+  },
+  "limitations": [
+    "Actual full600-second idle expiry newly observed for deployed SGLang. Other profiles use audited shared policy and existing tests/evidence, not six new live timer runs.",
+    "Large MoE models were not reloaded while one RAM stick is removed; sustained-swap qualification limitations remain.",
+    "Proportional tuning is a selection rule requiring quality/resource validation, not an automatic context updater."
+  ]
+}

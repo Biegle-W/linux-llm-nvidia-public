@@ -140,3 +140,8 @@ rejected before timing. No confirmation or benchmark retries followed. Keep 32K;
 other settings unchanged. All runs were visible under reserve 512 MiB/swappiness 60;
 cleanup finished idle. Small differences include normal timing variation and do
 not prove a permanent architectural limit. Original numeric evidence is preserved.
+
+October 28 operational policy update: shared 600-second idle release now applies to
+all six profiles and survives reinstall/normal CLI launch. Real SGLang automatic
+expiry and subsequent normal reload passed in visible terminals. No performance
+benchmark, context or numerical setting changed; see ALL-ENGINE-POLICY-20261028.md.

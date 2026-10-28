@@ -54,6 +54,8 @@ FILES = (
     'tests/test_worker_budgets.py',
     'network/idle_control.py', 'scripts/native_idle_policy.py',
     'scripts/lifecycle_telemetry.py', 'scripts/stage_engine_candidate.py',
+    'config/inference-policy.json', 'scripts/inference_policy.py', 'tests/test_inference_policy.py',
+    'docs/ALL-ENGINE-POLICY-20261028.md', 'docs/validation-results/20261028-all-engine-policy.json',
     'tests/test_idle_policy.py', 'tests/test_lifecycle_telemetry.py',
     'tests/test_engine_staging.py', 'tests/test_moe_supervisor.py', 'tests/test_supervisor_shutdown.py', 'docs/OPERATIONAL-LIFECYCLE.md',
 )

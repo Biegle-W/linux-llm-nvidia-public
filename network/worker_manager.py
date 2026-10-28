@@ -12,6 +12,7 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from profile_catalog import load_catalog, worker_budget
+from inference_policy import load_policy
 from visible_terminal import open_monitor
 from inference_swap_guard import WorkerWatch
 from idle_control import claim as claim_idle, release as release_idle, owned_native_idle
@@ -38,13 +39,15 @@ def unit_property(unit, prop):
 
 
 class Workers:
-    def __init__(self, key, timeout=1200, idle_timeout=0):
+    def __init__(self, key, timeout=1200, idle_timeout=None):
         self.key, self.timeout = key, timeout
         self.lock = threading.Lock()
         self.active = self.detect()
         self.loading = None
         self.busy = False
-        self.idle_timeout = idle_timeout
+        self.idle_timeout = load_policy()['idle_timeout_s'] if idle_timeout is None else idle_timeout
+        if type(self.idle_timeout) is not int or self.idle_timeout <= 0:
+            raise ValueError('Managed model idle timeout must be positive')
         self.last_activity = time.monotonic()
         self.idle_unloading = None
         self._idle_probe = None
@@ -204,7 +207,8 @@ class Workers:
                 unit = MOE_UNIT
                 open_monitor('NVIDIA MoE backend', unit, [ROOT / 'data/router' / (p['id'] + '-engine.log')
                              for p in profiles().values() if p['engine'] in ('Strata', 'Maya')])
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+            result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
+                                    env=dict(os.environ, LOCAL_LLM_ROUTER_WORKER='1'))
             if result.returncode:
                 raise RouterError('Worker launch failed; inspect the owned worker journal.', 'launch_failed')
             invocation = unit_property(unit, 'InvocationID')

@@ -9,6 +9,7 @@ import signal
 import time
 from profile_catalog import get_profile, worker_budget
 from storage_policy import verify_storage
+from inference_policy import apply_native_idle
 from inference_swap_guard import WorkerWatch
 from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 
@@ -53,11 +54,7 @@ def main():
     config.update(host='127.0.0.1', port=10000, api_key=key.read_text().strip(),
                   parallel=1, reasoning_effort='none', open_browser=False,
                   log=str(ROOT / 'data/router' / (profile['id'] + '-engine.log')))
-    policy = json.loads((ROOT / 'data/router/access.json').read_text())
-    if policy.get('idle_timeout_s'):
-        config.update(idle_unload_s=policy['idle_timeout_s'],
-                      idle_lock_path=str(ROOT / 'data/GPU-LOCK'),
-                      idle_activity_path=str(ROOT / 'data/router/activity' / (profile['id'] + '.txt')))
+    config = apply_native_idle(config, profile)
     config.pop('args_written', None)
     target = ROOT / 'data/router' / (profile['id'] + '-runtime.json')
     target.parent.mkdir(parents=True, exist_ok=True)

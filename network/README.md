@@ -158,3 +158,19 @@ Desktop display names and filenames now omit the LLM prefix: HyperQwen vLLM,
 SGLang, Strata and Maya. CLI commands retain their existing llm-* names. Re-running
 the installer migrates only this project's managed old Desktop entries, preserving
 unrelated shortcuts and avoiding application-menu entries.
+
+## Shared policy for every maintained engine/model — October 28
+
+../config/inference-policy.json is authoritative: automatic 600-second idle unload,
+required visible terminals/lifecycle telemetry and proportional context/speed
+tradeoffs requiring quality/resource qualification. Applies to all six profiles
+across HyperQwen-vLLM, SGLang, Strata and Maya. Active/queued/loading/vision work,
+reservations and unknown state defer teardown; health/model listing does not
+refresh the timer. Next request reloads; do not preload a fallback model.
+
+Router/native wrappers/lifecycle logger read the shared file. The installer now
+preserves 600s on reinstall. Normal dense CLI enters router ownership; its marked
+internal worker path avoids recursion while retaining original preflight/guards.
+No contexts or model/cache settings changed. Preserve 512 MiB dense reserve,
+swappiness 60, all RAM/thermal/swap guards and the reduced-RAM MoE caveats.
+See ../docs/ALL-ENGINE-POLICY-20261028.md for coverage and actual idle/reload proof.

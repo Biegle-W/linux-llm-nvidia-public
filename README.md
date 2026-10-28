@@ -287,7 +287,23 @@ failed full-KV capacity proof. No larger profile was promoted; precision, the
 
 The user now accepts proportional context/speed tradeoffs. 38K adds 18.75% context
 for 1.70% measured slowdown, but still requires tool/near-window qualification before
-promotion; 32K remains deployed. The600-second idle rule is enabled. Saved automatic
+promotion; 32K remains deployed. The 600-second idle rule is enabled. Saved automatic
 expiry proof covers HyperQwen; new SGLang was explicitly unloaded about 11 seconds
-before its deadline, so its timed automatic expiry is not yet verified. See
+before its deadline, so timed expiry was not yet verified at that checkpoint; the subsequent shared-policy setup verified it. See
 [the lifecycle evidence clarification](docs/OPERATIONAL-LIFECYCLE.md).
+
+## Shared policy for every maintained engine/model — October 28
+
+config/inference-policy.json is authoritative: automatic 600-second idle unload,
+required visible terminals/lifecycle telemetry and proportional context/speed
+tradeoffs requiring quality/resource qualification. Applies to all six profiles
+across HyperQwen-vLLM, SGLang, Strata and Maya. Active/queued/loading/vision work,
+reservations and unknown state defer teardown; health/model listing does not
+refresh the timer. Next request reloads; do not preload a fallback model.
+
+Router/native wrappers/lifecycle logger read the shared file. The installer now
+preserves 600s on reinstall. Normal dense CLI enters router ownership; its marked
+internal worker path avoids recursion while retaining original preflight/guards.
+No contexts or model/cache settings changed. Preserve 512 MiB dense reserve,
+swappiness 60, all RAM/thermal/swap guards and the reduced-RAM MoE caveats.
+See docs/ALL-ENGINE-POLICY-20261028.md for coverage and actual idle/reload proof.

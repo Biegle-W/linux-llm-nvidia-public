@@ -17,7 +17,8 @@ FIELDS = ['index', 'name', 'pci.bus_id', 'temperature.gpu', 'pstate',
 
 def enabled():
     try:
-        return bool(json.loads((ROOT / 'data/router/access.json').read_text()).get('lifecycle_telemetry'))
+        from inference_policy import load_policy
+        return load_policy(ROOT)['lifecycle_telemetry']
     except (OSError, ValueError):
         return False
 

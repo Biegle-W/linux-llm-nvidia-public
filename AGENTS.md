@@ -15,7 +15,7 @@ Do not repeat completed measurements. CURRENT-STATE.md records exact evidence.
 
 The user accepted GLM 65,536 and Strata DeepSeek 131,072 despite the recorded
 speed tradeoffs. Resource and near-window quality qualification still applies.
-Other context changes retain their matched no-speed-loss selection requirement.
+That historical no-loss gate is superseded by the shared proportional-tradeoff policy below.
 The AMD repository is read-only reference for the requested gap audit; ask before
 filling optional cross-repository feature/model gaps. No new unlock tests or
 hardware changes are authorized by that audit.
@@ -185,7 +185,7 @@ changed. See docs/SGLANG-DEPLOYMENT-20261028.md and CURRENT-STATE.md.
 ## Context expansion authorization — October 28
 
 The user authorized larger deployed SGLang context only without losing generation
-speed. Preserve the512 MiB reserve, swappiness60 and visible terminals. Use fresh
+speed. Preserve the512 MiB reserve, swappiness 60 and visible terminals. Use fresh
 matched controls and confirmation, full KV capacity and near-window quality/resource
 checks before promotion; do not equate a larger advertised limit with usable KV.
 Current study evidence: data/sglang-context-20261028/. Keep both repositories and
@@ -211,3 +211,19 @@ old gate. 38K is the stronger next qualification candidate; no new speed result,
 quality pass or context deployment is implied by this reassessment. Keep 32K until
 qualification is complete. The 512 MiB reserve, swappiness 60 and visible terminals
 remain mandatory; no further guard relaxation was authorized.
+
+## Shared policy for every maintained engine/model — October 28
+
+config/inference-policy.json is authoritative: automatic 600-second idle unload,
+required visible terminals/lifecycle telemetry and proportional context/speed
+tradeoffs requiring quality/resource qualification. Applies to all six profiles
+across HyperQwen-vLLM, SGLang, Strata and Maya. Active/queued/loading/vision work,
+reservations and unknown state defer teardown; health/model listing does not
+refresh the timer. Next request reloads; do not preload a fallback model.
+
+Router/native wrappers/lifecycle logger read the shared file. The installer now
+preserves 600s on reinstall. Normal dense CLI enters router ownership; its marked
+internal worker path avoids recursion while retaining original preflight/guards.
+No contexts or model/cache settings changed. Preserve 512 MiB dense reserve,
+swappiness 60, all RAM/thermal/swap guards and the reduced-RAM MoE caveats.
+See docs/ALL-ENGINE-POLICY-20261028.md for coverage and actual idle/reload proof.

@@ -5,8 +5,11 @@ import os
 from pathlib import Path
 import shlex
 import subprocess
+import sys
 ROOT = Path(__file__).resolve().parents[1]
 MARKER = '# Managed by linux-llm-nvidia'
+sys.path.insert(0, str(ROOT / 'scripts'))
+from inference_policy import load_policy
 
 
 def write_managed(path, text, mode=0o644):
@@ -33,7 +36,8 @@ def main():
     data = ROOT / 'data/router';data.mkdir(parents=True, exist_ok=True)
     (ROOT / 'data/dsh-workspace').mkdir(parents=True, exist_ok=True)
     (data / 'access.json').write_text(json.dumps({'listen': ['127.0.0.1', ts], 'port': 10100,
-                       'key_file': str(ROOT / 'data/local-api-key')}, indent=2) + '\n')
+                       'key_file': str(ROOT / 'data/local-api-key'),
+                       'idle_timeout_s': load_policy()['idle_timeout_s'], 'lifecycle_telemetry': True}, indent=2) + '\n')
     (data / 'access.json').chmod(0o600)
     key = ROOT / 'data/local-api-key'
     if key.stat().st_mode & 0o077 or len(key.read_text().strip()) < 32:

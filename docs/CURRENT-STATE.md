@@ -401,3 +401,40 @@ old gate. 38K is the stronger next qualification candidate; no new speed result,
 quality pass or context deployment is implied by this reassessment. Keep 32K until
 qualification is complete. The 512 MiB reserve, swappiness 60 and visible terminals
 remain mandatory; no further guard relaxation was authorized.
+
+
+## Shared all-engine policy active — October 28
+
+Canonical config/inference-policy.json enforces 600-second automatic idle unload,
+required visible terminals/lifecycle telemetry and proportional context/performance
+tradeoffs across all six models and four engines. Router/native launchers and
+lifecycle logger read it. The worker manager defaults to that timeout and rejects
+zero/invalid disabling. The installer persists timeout/telemetry on reinstall.
+Dense normal CLI launches now enter router ownership; an internal launch marker
+prevents recursion and retains all original setup/storage/port/resource preflight.
+Maya/Strata native configs always get 600s, per-profile activity and exclusive idle
+reservation; a missing native adapter refuses launch. Active/queued/loading/vision
+work, reservations and unknown state defer unload. Health/catalog polling does
+not refresh the idle clock. Native web/control servers can remain after weights
+unload; router, DSH and unrelated applications/terminals are preserved.
+
+Visible verification observed actual SGLang idle-unloaded at timeout 600, about
+610.15 seconds including scheduler checks/teardown, without a manual unload or
+shorter timeout. Router/DSH remained active and GPU-LOCK was released. A separate
+normal Chat Completions request then automatically reloaded SGLang, passed JSON,
+and was explicitly unloaded only for final smoke-test cleanup. Do not confuse
+that later cleanup with the recorded automatic-expiry proof. Final router is idle;
+no HyperQwen was restored. Shared-policy, idle/FIFO/races, router, supervisor,
+MoE and telemetry regressions passed. New live 600s proof is SGLang; other profiles
+have audited shared wiring and prior evidence, not six new live expiry tests.
+Large MoE models were not reloaded while RAM is reduced.
+
+All contexts/cache/precision settings and benchmark values are unchanged, including
+SGLang 32K and its 38K qualification backlog. Preserve dense 512 MiB reserve,
+swappiness 60, all existing RAM/thermal/swap guards and visible terminals. Proportional
+tuning is a shared qualification rule, not an automatic context updater or new
+fixed loss tolerance. Six exact source preimages were archived privately at 8ca025e.
+[Policy/report](ALL-ENGINE-POLICY-20261028.md) and validation JSON record scope,
+settings, tests and timer proof. Raw logs/receipts are under
+data/all-engine-policy-20261028/. verification.json and final-verification.json
+are complete; no idle-check GPU worker remains running.

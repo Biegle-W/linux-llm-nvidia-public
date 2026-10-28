@@ -12,6 +12,7 @@ import time
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 from worker_manager import Workers, RouterError, profiles, ROOT
+from inference_policy import load_policy
 
 MAX_BODY = 32 * 1024 * 1024
 
@@ -273,7 +274,7 @@ def main():
         ip = ipaddress.ip_address(value)
         if ip.version != 4 or not any(ip in n for n in allowed):
             raise SystemExit('Explicit loopback or Tailscale IPv4 listeners are required.')
-    workers = Workers(key, idle_timeout=cfg.get('idle_timeout_s', 0))
+    workers = Workers(key, idle_timeout=load_policy()['idle_timeout_s'])
     servers = {}
     stop = threading.Event()
     for sig in [signal.SIGTERM, signal.SIGINT]:

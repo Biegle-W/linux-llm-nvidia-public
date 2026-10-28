@@ -15,15 +15,15 @@ case "$model" in
     qwen|qwen27b|strata-deepseek|glm|maya-deepseek) ;;
     *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek' >&2; exit 2 ;;
 esac
-# MoE launches use the same bounded worker and selected cache budget as Desktop/API launches.
+# Normal CLI calls use router ownership; only its internal worker path runs preflight below.
 case "$model" in
     qwen) route_model="flash-next-strata" ;;
     glm) route_model="glm-maya" ;;
     strata-deepseek) route_model="deepseek-strata" ;;
     maya-deepseek) route_model="deepseek-maya" ;;
-    qwen27b) route_model="" ;;
+    qwen27b) route_model="qwen27b-$engine" ;;
 esac
-if [[ -n "$route_model" ]]; then
+if [[ "$model" != qwen27b || "${LOCAL_LLM_ROUTER_WORKER:-}" != 1 ]]; then
     exec /usr/bin/python3 "$project_dir/scripts/router_client.py" --model "$route_model"
 fi
 python3 - "$project_dir" "$model" "$engine" <<'PY'

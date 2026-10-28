@@ -12,7 +12,10 @@ remains unresolved. See CURRENT-STATE.md.
 
 ## Ten-minute idle release
 
-The deployed private router setting is `idle_timeout_s: 600`. Dense engines use
+The canonical shared policy is `config/inference-policy.json`, with
+`idle_timeout_s: 600` for every maintained model and engine. The router, native
+launchers and lifecycle logger read it; the installer mirrors it into private
+access metadata so reinstalling cannot drop the timeout. Dense engines use
 the router's request/switch lock, an exclusive GPU reservation and a final direct
 request-gauge check. Unknown backend state defers unload. Native Maya and Strata
 use their existing request FIFO, with the narrow `native_idle_policy.py` adapter
@@ -110,3 +113,9 @@ and idle detection was observed; a full 600-second automatic-expiry observation 
 the new SGLang runtime remains unverified. The router is currently idle after
 explicit study cleanup. No new GPU load or timed idle test was launched for this
 read-only status check.
+
+The later shared-policy setup completed a real 600-second automatic unload for the
+new SGLang runtime (observed completion 610.15 s including checks/teardown), followed
+by normal request-triggered reload and JSON verification. The earlier unverified
+status above describes the prior stage and is now resolved. Other profiles were
+not all reloaded for new live timer tests. See ALL-ENGINE-POLICY-20261028.md.
