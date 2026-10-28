@@ -164,9 +164,9 @@
       "context_validation": "Deployed TP2 MTP3 W4A8 at 32K passed router streaming JSON, parsed tool call and 29434-input retrieval; a 4096-output, 39.62-second check exercised four active 30-second swap windows with zero swap I/O.",
       "benchmark_context": 32768,
       "benchmark": {
-        "prefill_tps": 1664.6716303885273,
-        "ttft_s": 1.3464565350004705,
-        "decode_tps": 82.78559477640556
+        "prefill_tps": 1667.8703781763365,
+        "ttft_s": 1.3455440140005521,
+        "decode_tps": 84.76390369181925
       },
       "evidence": "docs/SGLANG-DEPLOYMENT-20261028.md",
       "server_args": {
@@ -214,8 +214,8 @@
         "disable_prefill_cuda_graph": true
       },
       "latest_benchmark": {
-        "run": "20261028-sglang-mtp3-32k-512mib",
-        "variant": "hetero-tp2-mtp3-32k-512mib-v16",
+        "run": "20261028-sglang-context-study",
+        "variant": "control-32768",
         "date": "2026-10-28",
         "context": 32768,
         "repetitions": 3,
@@ -226,13 +226,13 @@
           2222
         ],
         "output_tokens": 128,
-        "ttft_s": 1.3464565350004705,
-        "prefill_tps": 1664.6716303885273,
-        "decode_tps": 82.78559477640556,
+        "ttft_s": 1.3455440140005521,
+        "prefill_tps": 1667.8703781763365,
+        "decode_tps": 84.76390369181925,
         "prefill_method": "SGLang per-request native prefill_forward delta, canonical TP rank",
         "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md",
-        "numeric_results": "docs/benchmark-results/20261028-sglang-mtp3-512mib.json",
+        "evidence": "docs/SGLANG-CONTEXT-20261028.md",
+        "numeric_results": "docs/benchmark-results/20261028-sglang-context.json",
         "dense_gpu_free_floor_mib": 512
       },
       "storage": {
@@ -246,8 +246,8 @@
         "swap": null
       },
       "latest_qualification": {
-        "run": "20261028-sglang-mtp3-32k-512mib",
-        "variant": "hetero-tp2-mtp3-32k-512mib-v16",
+        "run": "20261028-sglang-context-study",
+        "variant": "control-32768",
         "host_vm_swappiness": 60,
         "context": 32768,
         "retrieval_input_tokens": 29434,
@@ -256,8 +256,8 @@
         "image_passed": null,
         "full_window_retested": false,
         "near_window_retested": true,
-        "retrieval_ttft_s": 22.035170794000805,
-        "retrieval_decode_tps": 37.997191718501895,
+        "retrieval_ttft_s": 22.040448566000123,
+        "retrieval_decode_tps": 38.04950644521128,
         "dense_gpu_free_floor_mib": 512,
         "deployment_verified": true
       },
@@ -383,6 +383,18 @@
             "short_ttft_s": 0.10163222500023039,
             "long_ttft_s": 0.8653268469997784
           }
+        },
+        {
+          "run": "20261028-sglang-mtp3-32k-512mib",
+          "variant": "hetero-tp2-mtp3-32k-512mib-v16",
+          "context": 32768,
+          "values": {
+            "prefill_tps": 1664.6716303885273,
+            "ttft_s": 1.3464565350004705,
+            "decode_tps": 82.78559477640556
+          },
+          "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md",
+          "numeric_results": "docs/benchmark-results/20261028-sglang-mtp3-512mib.json"
         }
       ],
       "deployment": {
@@ -414,6 +426,27 @@
         "commit": "733820f",
         "manifest": "linux-nvidia/2026-10-28-sglang-tp2-mtp3-deployment/MANIFEST.json",
         "reason": "User selected fastest tested SGLang generation architecture at qualified 32K; old benchmark evidence remains unchanged."
+      },
+      "latest_context_study": {
+        "run": "20261028-sglang-context-study",
+        "status": "no speed-preserving upgrade qualified",
+        "production_context_retained": 32768,
+        "candidate_contexts": [
+          40960,
+          38912,
+          36864
+        ],
+        "generation_control_tps": 84.76390369181925,
+        "generation_change_pct": {
+          "38912": -1.7019752144914468,
+          "36864": -1.4889334781346353
+        },
+        "full_kv_failure": {
+          "configured_context": 40960,
+          "actual_tokens_per_pool": 40760
+        },
+        "evidence": "docs/SGLANG-CONTEXT-20261028.md",
+        "numeric_results": "docs/benchmark-results/20261028-sglang-context.json"
       }
     },
     {

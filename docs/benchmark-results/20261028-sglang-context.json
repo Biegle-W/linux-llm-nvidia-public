@@ -1,0 +1,1261 @@
+{
+  "run": "20261028-sglang-context-study",
+  "date": "2026-10-28",
+  "status": "complete-no-speed-preserving-upgrade-qualified",
+  "production_context_retained": 32768,
+  "generation_control": {
+    "profile": "qwen27b-sglang",
+    "context": 32768,
+    "variant": "control-32768",
+    "repetitions": 3,
+    "prefill_tps": 1667.8703781763365,
+    "ttft_s": 1.3455440140005521,
+    "client_decode_tps": 84.76390369181925,
+    "memory_high_gib": 30,
+    "memory_max_gib": 36
+  },
+  "protocol": {
+    "context_targets": [
+      40960,
+      38912,
+      36864
+    ],
+    "stop_at_first_initial_qualified_candidate": true,
+    "speed_rule": "candidate initial generation median >= fresh32K control; candidate confirmation median >= late32K control; no benchmark retries after confirmation failure",
+    "matched_protocol": "same saved2212\u20132222 input /128 output fixtures, three requests and warmup, load excluded",
+    "quality": "forced tool call followed by JSON/arithmetic and near90% context three-marker retrieval",
+    "capacity": "all four KV pools must cover configured context,512MiB minimum free, same guards",
+    "cleanup": "idle; no automatic HyperQwen or SGLang restoration after tests; only deploy if selection passes"
+  },
+  "runtime": {
+    "schema": 1,
+    "source_repository": "https://github.com/efschu/htsglang",
+    "source_commit": "62271fd7c8aa8fe9edebf04e00a414b7fbf64388",
+    "python": "runtimes/env-htsglang-62271fd/bin/python",
+    "package_directory": "runtimes/sglang-hetero-62271fd/python",
+    "package_tree_sha256": "817b6ef1c693510a96b3708a86733eb7ea2f4f5fa68166d63b1e45f087c5984d",
+    "patch": "scripts/patches/sglang-hetero-ct-w4a8-mtp.patch",
+    "patch_sha256": "311a4ac9c572a52488651e1c993e36eae3d54b89b98cf0f53a420eafc953315d",
+    "cache_directory": "runtimes/cache-sglang-hetero-62271fd",
+    "runtime_versions": {
+      "torch": "2.11.0",
+      "torchvision": "0.26.0",
+      "torchaudio": "2.11.0",
+      "torchcodec": "0.11.1",
+      "torchao": "0.17.0",
+      "triton": "3.6.0",
+      "flashinfer-python": "0.6.14",
+      "sglang-kernel": "0.4.4",
+      "transformers": "5.12.1",
+      "apache-tvm-ffi": "0.1.11",
+      "nvidia-nccl-cu13": "2.28.9",
+      "compressed-tensors": "0.20.0",
+      "xgrammar": "0.2.1"
+    },
+    "fallback_dependencies": "The pinned env uses the retained env-sglang site-packages for general Python dependencies only; native versions above take precedence.",
+    "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md"
+  },
+  "production_runtime_and_settings_unchanged": true,
+  "guards": {
+    "gpu_free_floor_mib": 512,
+    "swappiness": 60,
+    "ram_high_gib": 30,
+    "ram_max_gib": 36,
+    "host_available_floor_gib": 8,
+    "temperature_stop_c": 82,
+    "swap_occupancy_cap": null,
+    "active_swap_churn_guard": true
+  },
+  "trials": [
+    {
+      "variant": "control-32768",
+      "configured_context": 32768,
+      "settings": {
+        "tp_size": 2,
+        "pp_size": 1,
+        "disable_custom_all_reduce": true,
+        "mem_fraction_static": null,
+        "context_length": 32768,
+        "max_running_requests": 1,
+        "chunked_prefill_size": 384,
+        "disable_cuda_graph": false,
+        "cuda_graph_max_bs_decode": 1,
+        "enable_multimodal": false,
+        "json_model_override_args": "{\"language_model_only\":true}",
+        "max_mamba_cache_size": 1,
+        "mamba_ssm_dtype": "bfloat16",
+        "cpu_offload_gb": 0,
+        "attention_backend": "triton",
+        "disable_radix_cache": true,
+        "tool_call_parser": "qwen3_coder",
+        "enable_metrics": true,
+        "rank_gpu_id": [
+          0,
+          1
+        ],
+        "rank_gpu_memory_mib": [
+          11008,
+          8960
+        ],
+        "rank_tp_ratio": [
+          9,
+          8
+        ],
+        "rank_mlp_ratio": [
+          10,
+          7
+        ],
+        "max_total_tokens": 32768,
+        "disable_overlap_schedule": false,
+        "speculative_algorithm": "NEXTN",
+        "speculative_draft_model_path": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "speculative_num_steps": 3,
+        "speculative_eagle_topk": 1,
+        "speculative_num_draft_tokens": 4,
+        "disable_prefill_cuda_graph": true
+      },
+      "state": {
+        "time": "2026-10-28T01:18:01-0400",
+        "stage": "complete",
+        "error": null,
+        "cleanup": "owned worker stopped; no automatic backend restoration"
+      },
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 32768,
+        "variant": "control-32768",
+        "repetitions": 3,
+        "prefill_tps": 1667.8703781763365,
+        "ttft_s": 1.3455440140005521,
+        "client_decode_tps": 84.76390369181925,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "profile": "qwen27b-sglang",
+          "case": "warmup",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 650,
+          "output_tokens": 64,
+          "ttft_s": 0.44357960500019544,
+          "last_content_s": 1.0328987770008098,
+          "wall_s": 1.0329988319999757,
+          "usage": {
+            "prompt_tokens": 650,
+            "total_tokens": 714,
+            "completion_tokens": 64,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 106.90302130529417,
+          "native_decode_tps": null,
+          "prefill_tps": 1553.1939859614538,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that fosters community connection, food security, and environmental stewardship. To successfully launch and",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.4184924780001893
+            ]
+          ],
+          "prefill_s": 0.4184924780001893,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 1.3455440140005521,
+          "last_content_s": 2.843823287000305,
+          "wall_s": 2.843924294000317,
+          "usage": {
+            "prompt_tokens": 2222,
+            "total_tokens": 2350,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 84.76390369181925,
+          "native_decode_tps": null,
+          "prefill_tps": 1667.8703781763365,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about building a sustainable ecosystem that supports both the plants and the people who tend to them. The process begins long before the first shovel hits the soil, starting with a comprehensive planning phase that defines the garden\u2019s purpose, scope, and governance structure. This initial stage is critical because it sets the tone for the entire project. You must first identify the available land, ensuring it has adequate sunlight, access to water, and is free from significant",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.3322378220000246
+            ]
+          ],
+          "prefill_s": 1.3322378220000246,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 1,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 1.3461392319995866,
+          "last_content_s": 2.8288453079994724,
+          "wall_s": 2.8290359539996643,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 85.65419812848315,
+          "native_decode_tps": null,
+          "prefill_tps": 1665.5736565438285,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that serves the social, environmental, and nutritional needs of a neighborhood. The process begins with a robust planning phase, which is the foundation upon which all subsequent activities are built. Before a single shovel hits the soil, the organizing committee must define the garden\u2019s mission, scope, and legal standing. This involves securing a lease or deed for the land, ensuring it is free from contamination, and establishing a clear governance",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.328070956999909
+            ]
+          ],
+          "prefill_s": 1.328070956999909,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 2,
+          "context": 32768,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 1.3356464620001134,
+          "last_content_s": 2.953093828999954,
+          "wall_s": 2.9532469220002895,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 78.51878372745375,
+          "native_decode_tps": null,
+          "prefill_tps": 1668.0069703409627,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the sustainable management of resources, the fair distribution of labor, and the creation of a welcoming environment for diverse participants. To begin, the planning phase is critical and must address both the physical layout and the social structure of the garden. Before breaking ground, organizers should conduct a thorough site assessment, evaluating sunlight exposure, soil quality, water access, and potential hazards such as traffic noise or pollution. The physical layout should be",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.3261335470006088
+            ]
+          ],
+          "prefill_s": 1.3261335470006088,
+          "valid": true
+        }
+      ],
+      "speed_check": null,
+      "qualifications": [
+        {
+          "check": "json",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 39,
+            "total_tokens": 60,
+            "completion_tokens": 21,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.08289502099978563,
+          "wall_s": 0.19956724199983,
+          "answer": "{\n  \"sum\": 42,\n  \"word\": \"ready\"\n}",
+          "reasoning": "",
+          "client_decode_tps": 171.57874449784006,
+          "passed": true
+        },
+        {
+          "check": "arithmetic",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 49,
+            "total_tokens": 72,
+            "completion_tokens": 23,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 0.08204730999932508,
+          "wall_s": 0.24324699799944938,
+          "answer": "{\n  \"product\": 437,\n  \"smallest\": 12\n}",
+          "reasoning": "",
+          "client_decode_tps": 160.16450583708684,
+          "passed": true
+        },
+        {
+          "check": "retrieval",
+          "context": 32768,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 29434,
+            "total_tokens": 29491,
+            "completion_tokens": 57,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "timings": {},
+          "ttft_s": 22.040448566000123,
+          "wall_s": 23.512291381999603,
+          "answer": "{\n  \"start\": \"COPPER-8271-ORBIT\",\n  \"middle\": \"VELVET-4936-HARBOR\",\n  \"end\": \"QUARTZ-6182-RIVER\"\n}",
+          "reasoning": "",
+          "client_decode_tps": 38.04950644521128,
+          "passed": true
+        }
+      ],
+      "tool_check": {
+        "passed": true,
+        "tool": "report_number",
+        "arguments": {
+          "value": 42
+        }
+      },
+      "qualification_passed": true,
+      "kv_capacity": {
+        "context": 32768,
+        "allocated_tokens_per_pool": [
+          32768,
+          32768,
+          32768,
+          32768
+        ]
+      },
+      "post_load_gpu_free_mib": [
+        880,
+        1039
+      ],
+      "resources": {
+        "min_gpu_free_mib": [
+          819.0,
+          997.0
+        ],
+        "max_gpu_temp_c": [
+          57.0,
+          44.0
+        ],
+        "min_host_available_gib": 31.696186065673828,
+        "peak_worker_ram_gib": 7.336826324462891,
+        "peak_worker_swap_gib": 0.0
+      },
+      "w4a8_rank_projection_count": 256,
+      "w4a8_log_entry_count": 256,
+      "post_capacity_harness_audit_completed": true,
+      "mtp_completeness_audit_count": 2,
+      "mtp_module_sharing_audit_count": 2,
+      "safety_stop": null,
+      "startup_errors": [],
+      "generation_change_vs_control_pct": 0.0
+    },
+    {
+      "variant": "candidate-40960",
+      "configured_context": 40960,
+      "settings": {
+        "tp_size": 2,
+        "pp_size": 1,
+        "disable_custom_all_reduce": true,
+        "mem_fraction_static": null,
+        "context_length": 40960,
+        "max_running_requests": 1,
+        "chunked_prefill_size": 384,
+        "disable_cuda_graph": false,
+        "cuda_graph_max_bs_decode": 1,
+        "enable_multimodal": false,
+        "json_model_override_args": "{\"language_model_only\":true}",
+        "max_mamba_cache_size": 1,
+        "mamba_ssm_dtype": "bfloat16",
+        "cpu_offload_gb": 0,
+        "attention_backend": "triton",
+        "disable_radix_cache": true,
+        "tool_call_parser": "qwen3_coder",
+        "enable_metrics": true,
+        "rank_gpu_id": [
+          0,
+          1
+        ],
+        "rank_gpu_memory_mib": [
+          11008,
+          8960
+        ],
+        "rank_tp_ratio": [
+          9,
+          8
+        ],
+        "rank_mlp_ratio": [
+          10,
+          7
+        ],
+        "max_total_tokens": 40960,
+        "disable_overlap_schedule": false,
+        "speculative_algorithm": "NEXTN",
+        "speculative_draft_model_path": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "speculative_num_steps": 3,
+        "speculative_eagle_topk": 1,
+        "speculative_num_draft_tokens": 4,
+        "disable_prefill_cuda_graph": true
+      },
+      "state": {
+        "time": "2026-10-28T01:18:27-0400",
+        "stage": "incomplete",
+        "error": "Allocated KV pool does not cover the configured context",
+        "cleanup": "owned worker stopped; no automatic backend restoration"
+      },
+      "summary": null,
+      "samples": [],
+      "speed_check": null,
+      "qualifications": [],
+      "tool_check": null,
+      "qualification_passed": false,
+      "kv_capacity": {
+        "context": 40960,
+        "allocated_tokens_per_pool": [
+          40760,
+          40760,
+          40760,
+          40760
+        ]
+      },
+      "post_load_gpu_free_mib": [
+        645,
+        837
+      ],
+      "resources": {
+        "min_gpu_free_mib": [
+          769.0,
+          962.0
+        ],
+        "max_gpu_temp_c": [
+          51.0,
+          39.0
+        ],
+        "min_host_available_gib": 33.836700439453125,
+        "peak_worker_ram_gib": 5.245475769042969,
+        "peak_worker_swap_gib": 0.0
+      },
+      "w4a8_rank_projection_count": 0,
+      "w4a8_log_entry_count": 256,
+      "post_capacity_harness_audit_completed": false,
+      "mtp_completeness_audit_count": 2,
+      "mtp_module_sharing_audit_count": 2,
+      "safety_stop": null,
+      "startup_errors": []
+    },
+    {
+      "variant": "candidate-38912",
+      "configured_context": 38912,
+      "settings": {
+        "tp_size": 2,
+        "pp_size": 1,
+        "disable_custom_all_reduce": true,
+        "mem_fraction_static": null,
+        "context_length": 38912,
+        "max_running_requests": 1,
+        "chunked_prefill_size": 384,
+        "disable_cuda_graph": false,
+        "cuda_graph_max_bs_decode": 1,
+        "enable_multimodal": false,
+        "json_model_override_args": "{\"language_model_only\":true}",
+        "max_mamba_cache_size": 1,
+        "mamba_ssm_dtype": "bfloat16",
+        "cpu_offload_gb": 0,
+        "attention_backend": "triton",
+        "disable_radix_cache": true,
+        "tool_call_parser": "qwen3_coder",
+        "enable_metrics": true,
+        "rank_gpu_id": [
+          0,
+          1
+        ],
+        "rank_gpu_memory_mib": [
+          11008,
+          8960
+        ],
+        "rank_tp_ratio": [
+          9,
+          8
+        ],
+        "rank_mlp_ratio": [
+          10,
+          7
+        ],
+        "max_total_tokens": 38912,
+        "disable_overlap_schedule": false,
+        "speculative_algorithm": "NEXTN",
+        "speculative_draft_model_path": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "speculative_num_steps": 3,
+        "speculative_eagle_topk": 1,
+        "speculative_num_draft_tokens": 4,
+        "disable_prefill_cuda_graph": true
+      },
+      "state": {
+        "time": "2026-10-28T01:19:03-0400",
+        "stage": "complete",
+        "error": null,
+        "cleanup": "owned worker stopped; no automatic backend restoration"
+      },
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 38912,
+        "variant": "candidate-38912",
+        "repetitions": 3,
+        "prefill_tps": 1660.6774856178629,
+        "ttft_s": 1.3483884019997276,
+        "client_decode_tps": 83.32124306014909,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "profile": "qwen27b-sglang",
+          "case": "warmup",
+          "rep": 0,
+          "context": 38912,
+          "prompt_tokens": 650,
+          "output_tokens": 64,
+          "ttft_s": 0.43594661699989956,
+          "last_content_s": 1.0430515680000099,
+          "wall_s": 1.0431971480002176,
+          "usage": {
+            "prompt_tokens": 650,
+            "total_tokens": 714,
+            "completion_tokens": 64,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 103.77118469585426,
+          "native_decode_tps": null,
+          "prefill_tps": 1571.717328719125,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that fosters community connection, food security, and environmental stewardship. To successfully launch and",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.4135603699996864
+            ]
+          ],
+          "prefill_s": 0.4135603699996864,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 0,
+          "context": 38912,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 1.342488321000019,
+          "last_content_s": 2.8667094599995835,
+          "wall_s": 2.8669101719997343,
+          "usage": {
+            "prompt_tokens": 2222,
+            "total_tokens": 2350,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 83.32124306014909,
+          "native_decode_tps": null,
+          "prefill_tps": 1663.8818386657165,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about building a sustainable ecosystem that supports both the plants and the people who tend to them. The process begins long before the first shovel hits the soil, starting with a comprehensive planning phase that defines the garden\u2019s purpose, scope, and governance structure. This initial stage is critical because it sets the tone for the entire project. You must first identify the available land, ensuring it has adequate sunlight, access to water, and is free from significant",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.3354313680001724
+            ]
+          ],
+          "prefill_s": 1.3354313680001724,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 1,
+          "context": 38912,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 1.348774429000514,
+          "last_content_s": 2.827879880999717,
+          "wall_s": 2.828068448000522,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 85.8627083203182,
+          "native_decode_tps": null,
+          "prefill_tps": 1660.6774856178629,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that serves the social, environmental, and nutritional needs of a neighborhood. The process begins with a robust planning phase, which is the foundation upon which all subsequent activities are built. Before a single shovel hits the soil, the organizing committee must define the garden\u2019s mission, scope, and legal standing. This involves securing a lease or deed for the land, ensuring it is free from contamination, and establishing a clear governance",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.3319865049998043
+            ]
+          ],
+          "prefill_s": 1.3319865049998043,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 2,
+          "context": 38912,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 1.3483884019997276,
+          "last_content_s": 2.972409988000436,
+          "wall_s": 2.9726073550000365,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 78.20093100655659,
+          "native_decode_tps": null,
+          "prefill_tps": 1657.9414586755838,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the sustainable management of resources, the fair distribution of labor, and the creation of a welcoming environment for diverse participants. To begin, the planning phase is critical and must address both the physical layout and the social structure of the garden. Before breaking ground, organizers should conduct a thorough site assessment, evaluating sunlight exposure, soil quality, water access, and potential hazards such as traffic noise or pollution. The physical layout should be",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.3341846230005103
+            ]
+          ],
+          "prefill_s": 1.3341846230005103,
+          "valid": true
+        }
+      ],
+      "speed_check": {
+        "control": "control-32768",
+        "passes": false,
+        "rule": "generation median >= fresh control; prefill and TTFT reported separately"
+      },
+      "qualifications": [],
+      "tool_check": null,
+      "qualification_passed": false,
+      "kv_capacity": {
+        "context": 38912,
+        "allocated_tokens_per_pool": [
+          38912,
+          38912,
+          38912,
+          38912
+        ]
+      },
+      "post_load_gpu_free_mib": [
+        616,
+        837
+      ],
+      "resources": {
+        "min_gpu_free_mib": [
+          559.0,
+          795.0
+        ],
+        "max_gpu_temp_c": [
+          56.0,
+          45.0
+        ],
+        "min_host_available_gib": 31.798500061035156,
+        "peak_worker_ram_gib": 7.2319488525390625,
+        "peak_worker_swap_gib": 0.0
+      },
+      "w4a8_rank_projection_count": 256,
+      "w4a8_log_entry_count": 256,
+      "post_capacity_harness_audit_completed": true,
+      "mtp_completeness_audit_count": 2,
+      "mtp_module_sharing_audit_count": 2,
+      "safety_stop": null,
+      "startup_errors": [],
+      "generation_change_vs_control_pct": -1.7019752144914468
+    },
+    {
+      "variant": "candidate-36864",
+      "configured_context": 36864,
+      "settings": {
+        "tp_size": 2,
+        "pp_size": 1,
+        "disable_custom_all_reduce": true,
+        "mem_fraction_static": null,
+        "context_length": 36864,
+        "max_running_requests": 1,
+        "chunked_prefill_size": 384,
+        "disable_cuda_graph": false,
+        "cuda_graph_max_bs_decode": 1,
+        "enable_multimodal": false,
+        "json_model_override_args": "{\"language_model_only\":true}",
+        "max_mamba_cache_size": 1,
+        "mamba_ssm_dtype": "bfloat16",
+        "cpu_offload_gb": 0,
+        "attention_backend": "triton",
+        "disable_radix_cache": true,
+        "tool_call_parser": "qwen3_coder",
+        "enable_metrics": true,
+        "rank_gpu_id": [
+          0,
+          1
+        ],
+        "rank_gpu_memory_mib": [
+          11008,
+          8960
+        ],
+        "rank_tp_ratio": [
+          9,
+          8
+        ],
+        "rank_mlp_ratio": [
+          10,
+          7
+        ],
+        "max_total_tokens": 36864,
+        "disable_overlap_schedule": false,
+        "speculative_algorithm": "NEXTN",
+        "speculative_draft_model_path": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "speculative_num_steps": 3,
+        "speculative_eagle_topk": 1,
+        "speculative_num_draft_tokens": 4,
+        "disable_prefill_cuda_graph": true
+      },
+      "state": {
+        "time": "2026-10-28T01:19:39-0400",
+        "stage": "complete",
+        "error": null,
+        "cleanup": "owned worker stopped; no automatic backend restoration"
+      },
+      "summary": {
+        "profile": "qwen27b-sglang",
+        "context": 36864,
+        "variant": "candidate-36864",
+        "repetitions": 3,
+        "prefill_tps": 1661.0873194185758,
+        "ttft_s": 1.3507398699994155,
+        "client_decode_tps": 83.50182555237795,
+        "memory_high_gib": 30,
+        "memory_max_gib": 36
+      },
+      "samples": [
+        {
+          "profile": "qwen27b-sglang",
+          "case": "warmup",
+          "rep": 0,
+          "context": 36864,
+          "prompt_tokens": 650,
+          "output_tokens": 64,
+          "ttft_s": 0.4354943620000995,
+          "last_content_s": 1.039124255000388,
+          "wall_s": 1.0392225109999345,
+          "usage": {
+            "prompt_tokens": 650,
+            "total_tokens": 714,
+            "completion_tokens": 64,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 104.3685886510095,
+          "native_decode_tps": null,
+          "prefill_tps": 1574.4867683612772,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that fosters community connection, food security, and environmental stewardship. To successfully launch and",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              0.4128329390005092
+            ]
+          ],
+          "prefill_s": 0.4128329390005092,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 0,
+          "context": 36864,
+          "prompt_tokens": 2222,
+          "output_tokens": 128,
+          "ttft_s": 1.3507398699994155,
+          "last_content_s": 2.871664702000089,
+          "wall_s": 2.8718075010001485,
+          "usage": {
+            "prompt_tokens": 2222,
+            "total_tokens": 2350,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 83.50182555237795,
+          "native_decode_tps": null,
+          "prefill_tps": 1662.5986138438598,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about building a sustainable ecosystem that supports both the plants and the people who tend to them. The process begins long before the first shovel hits the soil, starting with a comprehensive planning phase that defines the garden\u2019s purpose, scope, and governance structure. This initial stage is critical because it sets the tone for the entire project. You must first identify the available land, ensuring it has adequate sunlight, access to water, and is free from significant",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.3364620789998298
+            ]
+          ],
+          "prefill_s": 1.3364620789998298,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 1,
+          "context": 36864,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 1.3495392969998647,
+          "last_content_s": 2.8420434070003466,
+          "wall_s": 2.8421910490005757,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 85.09189297975132,
+          "native_decode_tps": null,
+          "prefill_tps": 1659.2461010407362,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. It is not merely about planting seeds in the ground; it is about cultivating a shared space that serves the social, environmental, and nutritional needs of a neighborhood. The process begins with a robust planning phase, which is the foundation upon which all subsequent activities are built. Before a single shovel hits the soil, the organizing committee must define the garden\u2019s mission, scope, and legal standing. This involves securing a lease or deed for the land, ensuring it is free from contamination, and establishing a clear governance",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.3331355720001739
+            ]
+          ],
+          "prefill_s": 1.3331355720001739,
+          "valid": true
+        },
+        {
+          "profile": "qwen27b-sglang",
+          "case": "measured",
+          "rep": 2,
+          "context": 36864,
+          "prompt_tokens": 2212,
+          "output_tokens": 128,
+          "ttft_s": 1.3512514610001745,
+          "last_content_s": 2.9746737329996904,
+          "wall_s": 2.974811064000278,
+          "usage": {
+            "prompt_tokens": 2212,
+            "total_tokens": 2340,
+            "completion_tokens": 128,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "native_timings": {},
+          "client_decode_tps": 78.22980021308828,
+          "native_decode_tps": null,
+          "prefill_tps": 1661.0873194185758,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "answer": "Organizing a community garden is a multifaceted endeavor that requires a blend of horticultural knowledge, logistical planning, and strong interpersonal skills. The success of such an initiative relies not merely on the growth of plants, but on the sustainable management of resources, the fair distribution of labor, and the creation of a welcoming environment for diverse participants. To begin, the planning phase is critical and must address both the physical layout and the social structure of the garden. Before breaking ground, organizers should conduct a thorough site assessment, evaluating sunlight exposure, soil quality, water access, and potential hazards such as traffic noise or pollution. The physical layout should be",
+          "reasoning": "",
+          "prefill_metric_count": 1.0,
+          "prefill_metric_count_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.0
+            ]
+          ],
+          "prefill_metric_duration_rows": [
+            [
+              {
+                "engine_type": "unified",
+                "model_name": "qwen3.8-27b",
+                "moe_ep_rank": "0",
+                "pp_rank": "0",
+                "stage": "prefill_forward",
+                "tp_rank": "0"
+              },
+              1.3316578690000824
+            ]
+          ],
+          "prefill_s": 1.3316578690000824,
+          "valid": true
+        }
+      ],
+      "speed_check": {
+        "control": "control-32768",
+        "passes": false,
+        "rule": "generation median >= fresh control; prefill and TTFT reported separately"
+      },
+      "qualifications": [],
+      "tool_check": null,
+      "qualification_passed": false,
+      "kv_capacity": {
+        "context": 36864,
+        "allocated_tokens_per_pool": [
+          36864,
+          36864,
+          36864,
+          36864
+        ]
+      },
+      "post_load_gpu_free_mib": [
+        653,
+        905
+      ],
+      "resources": {
+        "min_gpu_free_mib": [
+          597.0,
+          863.0
+        ],
+        "max_gpu_temp_c": [
+          58.0,
+          45.0
+        ],
+        "min_host_available_gib": 31.730789184570312,
+        "peak_worker_ram_gib": 7.230430603027344,
+        "peak_worker_swap_gib": 0.0
+      },
+      "w4a8_rank_projection_count": 256,
+      "w4a8_log_entry_count": 256,
+      "post_capacity_harness_audit_completed": true,
+      "mtp_completeness_audit_count": 2,
+      "mtp_module_sharing_audit_count": 2,
+      "safety_stop": null,
+      "startup_errors": [],
+      "generation_change_vs_control_pct": -1.4889334781346353
+    }
+  ],
+  "confirmation": "Not run: no initial candidate passed its acceptance gate. No timing retries after rejection.",
+  "cleanup": {
+    "time": "2026-10-28T01:21:49-0400",
+    "router_health": {
+      "status": "ok",
+      "active_model": null,
+      "loading_model": null,
+      "busy": false,
+      "models": 6,
+      "idle_unloading_model": null
+    },
+    "worker_unit_state": "inactive",
+    "gpu_lock_released": true,
+    "swappiness": 60,
+    "dense_gpu_free_floor_mib": 512,
+    "production_context": 32768,
+    "automatic_backend_restore": false
+  },
+  "limitations": [
+    "Three fixed sequential code/prose requests per measured allocation;2212\u20132222 input and128 output, temperature0, thinking disabled, warmup/load excluded.",
+    "Decode uses client SSE intervals; speculative bursts and normal run-to-run variation affect small differences. These screens do not establish statistically significant slowdowns or impossibility of other tuning.",
+    "Only maximum allocation changes were screened; no source, precision, MTP count, shard ratio or budget changes.",
+    "38K and36K quality/tool checks were intentionally skipped after the initial speed gate failed; they are not qualified deployment candidates.",
+    "A no-loss result at fixed input length would not promise equal speed on longer actual prompts.",
+    "The advertised40K context failed full-KV capacity proof before benchmark; no40K throughput result exists."
+  ]
+}

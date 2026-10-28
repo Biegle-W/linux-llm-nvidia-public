@@ -181,3 +181,20 @@ The original 82.79 tok/s qualification median is carried forward, not remeasured
 SGLang is intentionally selected after deployment; the ordinary 10-minute idle
 unload still applies. HyperQwen was not restored and saved DSH defaults were not
 changed. See docs/SGLANG-DEPLOYMENT-20261028.md and CURRENT-STATE.md.
+
+## Context expansion authorization — October 28
+
+The user authorized larger deployed SGLang context only without losing generation
+speed. Preserve the512 MiB reserve, swappiness60 and visible terminals. Use fresh
+matched controls and confirmation, full KV capacity and near-window quality/resource
+checks before promotion; do not equate a larger advertised limit with usable KV.
+Current study evidence: data/sglang-context-20261028/. Keep both repositories and
+Markdown documentation current and preserve previous benchmark attribution.
+
+Context study completed: retain 32K. Fresh control 84.76 decode; 38K/36K screens
+regressed 1.70%/1.49% and did not proceed to long-window qualification. Advertised 40K
+backed only 40,760 KV tokens and was rejected before timing. No candidate qualified
+for promotion or confirmation. These small screens do not prove other tuning is
+impossible. Production settings/runtime are unchanged; router is idle after owned
+cleanup. See docs/SGLANG-CONTEXT-20261028.md. Do not rerun rejected measurements
+merely to refresh repositories or obtain a passing median.

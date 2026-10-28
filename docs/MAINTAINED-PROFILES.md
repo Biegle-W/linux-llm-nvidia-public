@@ -49,7 +49,7 @@ and retrieval runs keep their actual legacy/new swap-policy attribution.
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / heterogeneous TP2 + MTP3 W4A8 | 1,664.7 | 1.346 | 82.79 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / heterogeneous TP2 + MTP3 W4A8 | 1,667.9 | 1.346 | 84.76 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 
 ### MoE models with CPU RAM offload
 
@@ -65,8 +65,9 @@ None currently kept. RAM tiers are caches of SSD-streamed weights.
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 
 
-The selected SGLang median comes from the October 28 three-request 512 MiB retest;
-normal-path deployment verification did not repeat its benchmark.
+The selected SGLang median is the latest October 28 three-request 32K control
+from the [context study](SGLANG-CONTEXT-20261028.md). The original 82.79 deployment
+qualification remains preserved. No larger context passed the no-loss criterion.
 Historical speed/qualification reports remain preserved. Maya speed values come
 from the previous MoE study; its settings were not relabeled newly qualified.
 

@@ -80,7 +80,8 @@ profiles and historical benchmark results remain preserved.
 **SGLang deployed:** [TP2 + MTP3 with decoder MLP W4A8 at 32K](docs/SGLANG-DEPLOYMENT-20261028.md)
 now backs `qwen27b-sglang`, the SGLang shortcut and the DSH SGLang provider. It is
 the fastest tested SGLang generation architecture at this qualified context:
-82.79 decode tok/s, 1664.67 prefill tok/s and 1.34646 s TTFT. The user selected faster
+The latest matched control measured 84.76 decode tok/s, 1667.87 prefill tok/s and
+1.34554 s TTFT; the original 82.79 qualification remains preserved. The user selected faster
 generation despite slower prefill than PP2 W4A8. The normal route passed streaming,
 tool calls, 29,434-input retrieval and a 39.62 s continuous-generation guard check.
 The dense free-VRAM floor remains 512 MiB; swappiness 60 and visible terminals remain.
@@ -278,3 +279,8 @@ only project-owned legacy entries. Preserve DSH and unrelated shortcuts. CLI
 llm-* command names remain unchanged. See network/README.md for current routing:
 DSH/API model IDs select fixed engine profiles; the experimental TP2/MTP3 fork
 now backs the maintained qwen27b-sglang profile after the authorized deployment.
+
+The [larger-context study](docs/SGLANG-CONTEXT-20261028.md) retains 32K: 38K and 36K
+screens measured 1.7%/1.5% slower generation than a fresh 32K control, while 40K
+failed full-KV capacity proof. No larger profile was promoted; precision, the
+512 MiB reserve, swappiness 60 and all other guards remain unchanged.

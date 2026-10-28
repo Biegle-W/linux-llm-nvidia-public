@@ -356,3 +356,35 @@ The active registry retains a pointer and numeric history, not a second runnable
 PP2 profile. Raw evidence and private rollback snapshots are under
 data/sglang-deployment-20261028/. See SGLANG-DEPLOYMENT-20261028.md and its numeric
 verification. Historical numeric reports are unchanged.
+
+## Latest context study complete — October 28, 01:22 EDT
+
+The user requested context beyond 32K without losing generation speed. The deployed
+TP2/MTP3 W4A8 source, precision, rank ratios/budgets and guards were unchanged.
+A fresh 32K control passed tool/JSON/arithmetic and 29,434-input retrieval at 1667.87
+prefill / 1.34554 s TTFT / 84.7639 decode. This is now the latest measured control for
+the same selected profile; the original 82.79 qualification and deployment evidence
+is retained, not relabeled or discarded. No production context/engine change.
+
+The predeclared 40K/38K/36K sequence found no initial candidate meeting the criterion.
+40,960 advertised tokens backed only 40,760 in every target/draft KV pool; the worker
+was rejected before timing. At 38,912, generation 83.3212 was 1.70% below control;
+at 36,864, generation 83.5018 was 1.49% below. Their short screens are not qualified
+larger contexts: tool/near-window qualification was skipped after the speed gate
+failed. The planned late-control/candidate confirmation was not run because none
+passed initially. Small measured differences can include normal variation; these
+screens do not prove that other tuning or contexts are impossible, but do not
+establish a no-loss upgrade. Do not repeat these settings to seek a favorable run.
+
+Keep context 32,768 and max_total_tokens 32,768. Dense reserve 512 MiB, swappiness 60,
+RAM 30/36 GiB, host available 8 GiB, temperature 82°C, unlimited swap occupancy and
+active swap/pressure guards remain. The visible coordinator finished, all owned
+workers stopped, GPU-LOCK was released and router is idle. Do not automatically
+restore HyperQwen or SGLang after this isolated study. The unchanged deployed
+SGLang profile will load normally on request; DSH still advertises 32K and requires
+no metadata change. Other five profiles and historical numeric files are unchanged.
+
+[Report](SGLANG-CONTEXT-20261028.md) and matching numeric evidence record all four
+trials. Private plans, terminal logs, native metrics, audits and telemetry are under
+data/sglang-context-20261028/. complete.json, progress.json and final-health.json
+are authoritative. No study worker/coordinator remains active.

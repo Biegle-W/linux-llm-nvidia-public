@@ -128,3 +128,15 @@ Normal-router streamed JSON/tool call, 29,434-input retrieval, a 4,096-output, 3
 continuous request and normal unload/reload passed. Four active swap windows had
 zero I/O; all 50 CPU regressions passed. Runtime/source pins, rollback pointer and
 current grouped measurements are updated. No other model profile changed.
+
+## SGLang context screening — October 28
+
+[Fresh 32K control and larger allocations](SGLANG-CONTEXT-20261028.md): control
+1667.87 prefill / 1.34554 s TTFT / 84.7639 decode, with tool, JSON/arithmetic and
+29,434-input retrieval passed. At 38,912, 83.3212 decode (-1.70%); at 36,864, 83.5018
+(-1.49%). Both failed the initial no-generation-loss gate and did not undergo
+long-window qualification. The 40,960 setting backed only 40,760 KV tokens and was
+rejected before timing. No confirmation or benchmark retries followed. Keep 32K;
+other settings unchanged. All runs were visible under reserve 512 MiB/swappiness 60;
+cleanup finished idle. Small differences include normal timing variation and do
+not prove a permanent architectural limit. Original numeric evidence is preserved.

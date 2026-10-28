@@ -45,6 +45,7 @@ FILES = (
     'docs/SGLANG-MTP3-512MIB-20261028.md', 'docs/benchmark-results/20261028-sglang-mtp3-512mib.json',
     'config/sglang-runtime.json', 'scripts/sglang_runtime.py', 'tests/test_sglang_runtime.py',
     'docs/SGLANG-DEPLOYMENT-20261028.md', 'docs/benchmark-results/20261028-sglang-deployment.json',
+    'docs/SGLANG-CONTEXT-20261028.md', 'docs/benchmark-results/20261028-sglang-context.json',
     'docs/INFERENCE-SWAP-POLICY.md', 'docs/UNLOCK-IMPACT-20261027.md',
     'scripts/inference_swap_guard.py', 'scripts/supervise_dense.py', 'tests/test_inference_swap_guard.py',
     'docs/UNUSED-MODEL-CLEANUP-20261027.md', 'docs/benchmark-results/20261027-dspark-screening.json',
