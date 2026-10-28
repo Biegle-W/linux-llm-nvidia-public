@@ -292,3 +292,23 @@ the normal dense GPU guard is now 512 MiB on future launches.
 See [the retest report](SGLANG-MTP3-512MIB-20261028.md) and matching numeric results.
 Raw evidence is private under data/sglang-mtp3-512mib-20261028/. Do not repeat
 completed control/kernel tests or silently promote this candidate.
+
+## Router/harness and Desktop names — October 28
+
+Live read-only verification confirms six router IDs and four DSH NVIDIA providers,
+all using http://127.0.0.1:10100/v1. Changing the selected DSH provider/model sends
+a different model ID; the router serializes requests, waits for active work and
+switches its single owned backend. Same-profile requests reuse a ready worker.
+The router is idle with no selected/loaded worker. DSH retains its saved HyperQwen
+UI default; this does not preload it. No GPU request or new benchmark was run.
+
+The SGLang API ID still launches maintained PP2 W4A16/FP32 at 32K. The successful
+TP2/MTP3 W4A8 512 MiB retest remains isolated, not registered or silently deployed.
+The normal dense reserve is 512 MiB; swappiness remains 60. See network/README.md.
+
+Removed the LLM prefix from all four managed Desktop shortcut display names and
+filenames: HyperQwen-vLLM.desktop, SGLang.desktop, Strata.desktop and Maya.desktop.
+All are executable/trusted, with unchanged launch commands, icons and terminal
+behavior. DSH and unrelated RGB shortcuts are preserved. The installer now writes
+these names and removes only its own legacy LLM-* Desktop/menu entries. No service
+reinstallation/restart, provider reconfiguration or backend selection was needed.

@@ -150,3 +150,12 @@ The [512 MiB retest](docs/SGLANG-MTP3-512MIB-20261028.md) passed at 32K: 82.79
 decode tok/s, JSON/arithmetic and 29,434-input retrieval, minimum sampled free
 VRAM 802/997 MiB. No production fork promotion; prior 1 GiB failures are preserved.
 The visible test finished idle, with no automatic HyperQwen restoration.
+
+## Desktop shortcut names — October 28
+
+Managed Desktop shortcuts are named HyperQwen vLLM, SGLang, Strata and Maya,
+without an LLM prefix. Their filenames omit that prefix too; the installer migrates
+only project-owned legacy entries. Preserve DSH and unrelated shortcuts. CLI
+llm-* command names remain unchanged. See network/README.md for current routing:
+DSH/API model IDs select fixed engine profiles; the experimental TP2/MTP3 fork
+has not replaced the maintained qwen27b-sglang profile.

@@ -56,10 +56,10 @@ desktop programs can appear in NVIDIA's compute-app query and are preserved.
 
 Desktop shortcuts are installed for:
 
-- **LLM HyperQwen vLLM** and **LLM SGLang**: start their selected dense profile.
-- **LLM Strata**: select Flash-Next or DeepSeek, then open Strata's own Chat/Monitor
+- **HyperQwen vLLM** and **SGLang**: start their selected dense profile.
+- **Strata**: select Flash-Next or DeepSeek, then open Strata's own Chat/Monitor
   web app at `http://127.0.0.1:10000/`.
-- **LLM Maya**: select GLM or DeepSeek, then open Maya's own Chat/Monitor web app
+- **Maya**: select GLM or DeepSeek, then open Maya's own Chat/Monitor web app
   at the same worker address.
 - **DeepSeek Harness (DSH)**: reopen the separately running DSH web app using its
   private startup URL. It lists four engine providers and all six profiles.
@@ -128,3 +128,26 @@ Ten-minute guarded idle release and bounded private lifecycle telemetry are now
 enabled. Actual idle/reload verification passed with the shutdown-fix qualification in CURRENT-STATE.md. Host
 swappiness remains 60. Maya DeepSeek 32K has unresolved sustained-swap qualification;
 its active guard remains enabled.
+
+## Current routing behavior — October 28
+
+The request model ID selects a complete maintained model/quantization/engine
+profile. DSH registers four NVIDIA engine providers, each pointing to the same
+router URL; selecting a provider and one of its models changes the ID sent on the
+next Chat Completions request. The router then waits for existing work, unloads
+its owned prior worker and starts the requested profile in its guarded service
+with a visible console. Repeated requests for the same loaded profile reuse it.
+There is one active inference worker; this is serialized switching, not concurrent
+multi-engine serving or automatic selection of the fastest engine.
+
+The isolated TP2/MTP3 W4A8 fork is not registered as a selectable provider/profile.
+`qwen27b-sglang` still selects maintained PP2 W4A16/FP32 at 32K. Its normal dense
+free-VRAM guard is now 512 MiB; swappiness stays 60. An explicit deployment change
+would be required to replace that maintained implementation with the tested fork.
+The router remains idle after isolated tests; it does not restore HyperQwen.
+DSH's saved default provider is a UI setting, not an instruction to preload it.
+
+Desktop display names and filenames now omit the LLM prefix: HyperQwen vLLM,
+SGLang, Strata and Maya. CLI commands retain their existing llm-* names. Re-running
+the installer migrates only this project's managed old Desktop entries, preserving
+unrelated shortcuts and avoiding application-menu entries.

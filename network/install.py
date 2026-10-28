@@ -58,12 +58,14 @@ def main():
     for engine, label in engines.items():
         icon = ROOT / 'assets/icons' / (engine + ('.png' if engine == 'hyperqwen' else '.svg'))
         web = ' --web' if engine in ('strata', 'maya') else ''
-        desktop = (MARKER + '\n[Desktop Entry]\nVersion=1.0\nType=Application\nName=LLM ' + label + '\n'
+        desktop = (MARKER + '\n[Desktop Entry]\nVersion=1.0\nType=Application\nName=' + label + '\n'
                    'Comment=Select and load a qualified NVIDIA model through the router\n'
                    f'Exec=/usr/bin/python3 "{ROOT}/scripts/router_client.py" --engine {engine} --desktop{web}\n'
                    f'Icon={icon}\nTerminal=true\nCategories=Development;\n')
-        name = 'LLM-' + engine + '.desktop'
+        name = label.replace(' ', '-') + '.desktop'
         write_managed(Path.home() / 'Desktop' / name, desktop, 0o755)
+        remove_managed_menu(Path.home() / 'Desktop' / ('LLM-' + engine + '.desktop'))
+        remove_managed_menu(Path.home() / '.local/share/applications' / ('LLM-' + engine + '.desktop'))
         remove_managed_menu(Path.home() / '.local/share/applications' / name)
         command = '#!/bin/sh\n' + MARKER + '\nexec /usr/bin/python3 ' + shlex.quote(str(ROOT / 'scripts/router_client.py')) + ' --engine ' + engine + ' "$@"\n'
         write_managed(Path.home() / '.local/bin' / ('llm-' + engine), command, 0o755)
@@ -76,7 +78,7 @@ def main():
     write_managed(Path.home() / '.local/bin/dsh', '#!/bin/sh\n' + MARKER + '\nif [ "$#" -eq 0 ]; then\n  exec /usr/bin/python3 ' + shlex.quote(str(ROOT / 'scripts/open_dsh.py')) + '\nfi\nexec ' + shlex.quote(str(ROOT / 'dsh/run')) + ' "$@"\n', 0o755)
     subprocess.run(['systemctl', '--user', 'daemon-reload'], check=True)
     subprocess.run(['systemctl', '--user', 'enable', '--now', 'nvidia-model-router.service', 'nvidia-dsh.service'], check=True)
-    for path in [*(Path.home() / 'Desktop').glob('LLM-*.desktop'), Path.home() / 'Desktop/DSH.desktop']:
+    for path in [*(Path.home() / 'Desktop' / (label.replace(' ', '-') + '.desktop') for label in engines.values()), Path.home() / 'Desktop/DSH.desktop']:
         subprocess.run(['gio', 'set', str(path), 'metadata::trusted', 'true'], capture_output=True)
     print('Installed router, DSH, four engine shortcuts, and DSH shortcut.')
     print('Loopback API: http://127.0.0.1:10100/v1')
