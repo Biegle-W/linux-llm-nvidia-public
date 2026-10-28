@@ -5,7 +5,9 @@ protection on October 27. Loading and parked pages are allowed; normal workers
 use `MemorySwapMax=infinity`, whose kernel readback is `memory.swap.max=max`.
 The host swap file is not enlarged. Selected RAM soft/hard limits, the 8 GiB
 host-available floor, temperature guards and GPU placement/reserves remain.
-No global swapoff or swappiness change is part of this policy. The observed host
+No global swapoff or swappiness change is part of this policy. The latest user
+direction supersedes an earlier separate VM10 experiment approval: keep host
+swappiness at 60; that experiment never ran. The observed host
 swappiness is the Linux default 60; occupancy alone does not measure swap I/O.
 The former 1 GiB cap remains historical benchmark attribution, not current policy.
 

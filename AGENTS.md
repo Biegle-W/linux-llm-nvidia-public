@@ -28,6 +28,6 @@ The user approved unlimited worker swap occupancy with active churn protection.
 The maintained guarded paths implement this; preserve RAM/GPU limits and consult
 [the policy and rollout evidence](docs/INFERENCE-SWAP-POLICY.md).
 
-A separate bounded swappiness60-to10 trial and conditional persistence were
-approved. Do not change a running benchmark's policy or treat pending OS
-authentication as completed execution; consult CURRENT-STATE.md.
+The latest user instruction supersedes the earlier VM10 trial approval: keep host
+swappiness at 60. Do not launch or persist swappiness10. Continue remaining
+qualification and deployment at 60 with the existing worker swap/churn guards.

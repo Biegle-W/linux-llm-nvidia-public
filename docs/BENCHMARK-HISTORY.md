@@ -21,3 +21,13 @@ VM60 queue checkpoint, 19:23 EDT: SGLang32K (.92 pool, chunks384) qualified at
 2,613.82 prefill / .8532 s TTFT /46.59 decode. All four larger Flash screens
 missed speed; Maya cache trials remain unsafe under active-write guards. The
 approved VM10 experiment still awaits OS authentication; no VM10 results exist.
+
+## Swappiness60 continuation — October 27
+
+The user superseded the proposed VM10 trial: host swappiness remains 60.
+A distinct Maya64 screen disables existing DS4_AHEAD speculative lookahead, with
+24 GB load warming, post-prompt warming and Engram row cache disabled. One
+measured 2,198-input/128-output request passed the active swap guard at
+44.7 prefill tok/s, 49.1786 s TTFT and 3.80265 decode tok/s. Full confirmation and
+near-window quality qualification remain pending; no production promotion.
+Historical numeric hashes remain unchanged. See CURRENT-STATE.md.

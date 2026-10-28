@@ -88,6 +88,7 @@ None currently kept.
 | GLM-5.3-Flash / Maya-S24 | Maya / `glm-maya-32768-control` | 65.2 | 33.901 | 4.22 | 32,768 | 94.70 | NVME: `models/maya/Maya-S24` |
 | GLM-5.3-Flash / Maya-S24 | Maya / `glm-maya-65536-accepted-confirmed` | 65.5 | 33.740 | 4.81 | 65,536 | 94.70 | NVME: `models/maya/Maya-S24` |
 | GLM-5.3-Flash / Maya-S24 | Maya / `glm-maya-65536-screen` | 65.4 | 33.765 | 4.03 | 65,536 | 94.70 | NVME: `models/maya/Maya-S24` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya / `vm60-deepseek-maya-65536-ahead0-warm24-engram0-screen` | 44.7 | 49.179 | 3.80 | 65,536 | 339.48 | NVME: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 
 ## Status and preserved evidence
 

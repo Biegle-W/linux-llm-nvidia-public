@@ -2,7 +2,7 @@
   "schema": 1,
   "run": "20261027-context-expansion",
   "status": "in_progress",
-  "updated": "2026-10-27T19:22:49-0400",
+  "updated": "2026-10-27T20:05:45-0400",
   "production_promotion": false,
   "deployed_contexts": {
     "qwen27b-hyperqwen": 32768,
@@ -2615,6 +2615,64 @@
         "access": "gpu-resident",
         "required_transport": "sata",
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
+      }
+    },
+    {
+      "variant": "vm60-deepseek-maya-65536-ahead0-warm24-engram0-screen",
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "context": 65536,
+      "state": "measured",
+      "swap_policy": "loading-swap-active-churn-v2",
+      "host_vm_swappiness": 60,
+      "host_policy_source": "launch readback",
+      "summary": {
+        "prefill_tps": 44.7,
+        "ttft_s": 49.17857545700099,
+        "client_decode_tps": 3.802645361368,
+        "decode_tps": 3.8,
+        "prompt_tokens": 2198,
+        "generated_tokens": 128,
+        "profile": "deepseek-maya",
+        "variant": "vm60-deepseek-maya-65536-ahead0-warm24-engram0-screen",
+        "context": 65536,
+        "repetitions": 1,
+        "memory_high_gib": 46,
+        "memory_max_gib": 48
+      },
+      "samples": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2198,
+          "generated_tokens": 128,
+          "output_tokens": null,
+          "prefill_tps": 44.7,
+          "ttft_s": 49.17857545700099,
+          "client_decode_tps": 3.802645361368,
+          "cached_tokens": 0,
+          "valid": true,
+          "wall_s": 82.57667923800182
+        }
+      ],
+      "changes": {
+        "context": 65536,
+        "args": {},
+        "env": {
+          "DS4_WARM_CAP_GB": "24",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "0",
+          "DS4_AHEAD": "0"
+        }
+      },
+      "qualification": [],
+      "storage_size_bytes": 339477953988,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
       }
     }
   ],
