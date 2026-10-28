@@ -1,6 +1,6 @@
 # Current takeover state
 
-Updated October 27, 2026, 23:48 EDT. Read README.md and AGENTS.md first.
+Updated October 28, 2026, after the heterogeneous TP2/MTP study. Read README.md and AGENTS.md first.
 
 ## Standing direction
 
@@ -182,3 +182,46 @@ reproducible experimental patch and sanitized results are linked in
 took about four minutes; loading/compilation are excluded from inference timing.
 Do not repeat completed measurements or enable the candidate in production
 without a separately reviewed selection. Reduced-RAM MoE capacity is unqualified.
+
+## Heterogeneous TP2/MTP — October 28
+
+The user accepted the W4A8 tradeoff and requested this isolated study. The
+pinned htsglang 62271fd fork runs from a private candidate copy and a separate
+Torch2.11/cu130 native environment. Its reproducible patch and all evidence are
+in [SGLANG-HETERO-MTP-20261028.md](SGLANG-HETERO-MTP-20261028.md). Normal SGLang
+remains W4A16 PP2/FP32/32K; HyperQwen remains the default. No fork promotion.
+
+The 32K TP2 BF16/one-slot control qualified at 64.18 decode tok/s (+40.46% versus
+accepted PP2 W4A8) but prefill fell 46.92%. At 16K, the matched control reached
+63.87; corrected MTP1 reached 70.25 (+10.00%) and MTP3 84.63 (+32.51%).
+Both corrected 16K MTP candidates passed JSON, arithmetic and near-window
+three-marker retrieval with all 256 decoder rank/projection audits, both draft
+weight-completeness audits, GPU-only placement and shared packed vocab modules.
+MTP1 at 32K measured 69.59 on short prompts but failed the unchanged headroom
+guard during retrieval at 990 MiB free. It is not qualified at 32K.
+
+The fork required packed INT8 embedding/text-only adaptations, packed vocab
+module sharing, cyclic discarded-vocab collection, verification-mask sizing and
+quant-aware MTP fusion loading. The first 16K MTP1 run used an uninitialized
+fusion projection because the fork skipped packed mtp.fc weights: its zero-
+acceptance speed is invalid diagnostic evidence. MTP3 was interrupted on discovery.
+The corrected loader rejects any missing required draft parameter before timing.
+Three focused candidate regressions pass. The metric reader selects one TP
+replica after the final PP stage; seven CPU regressions pass. This fixes duplicate
+native counters/durations; historical results remain unchanged.
+
+Raw evidence: data/sglang-hetero-mtp-20261027/; the study crossed midnight.
+Eighteen standalone W4A8 kernel cases and eight bit-exact packed-shard checks
+passed. Kernel math and maintained runtime/checkpoint files are unchanged by the
+heterogeneous patch. Preserve swappiness60, all resource guards and the automatic
+unlock checker. Reduced-RAM MoE capacity is still unqualified. Do not repeat these
+completed variants or mistake a 16K candidate for a qualified 32K replacement.
+
+Corrected MTP3 at 32K failed the immediate post-load GPU-free check: 904 MiB
+on the 3080 Ti and 1,039 MiB on the 3080. No throughput was accepted for it.
+The completed 16K retrieval checks used 14,686 input tokens.
+
+Final restoration verified October 28 at 00:39 EDT: router selects HyperQwen,
+not busy/loading, normal supervise_dense.py hyperqwen worker active, all isolated
+coordinators finished and GPU-LOCK released. Swappiness is 60; OS unlock health
+is VERIFIED. Private final-restoration-health.json records the check.

@@ -45,6 +45,14 @@ def metric_delta(before, after, metric, stage=None):
         values = [int(labels[rank]) for labels, _ in rows if rank in labels]
         if values:
             rows = [(labels, value) for labels, value in rows if int(labels.get(rank, -1)) == max(values)]
+    # Tensor ranks execute the same request in parallel. Keep its sampling rank,
+    # rather than summing duplicate request counts and overlapping durations.
+    for rank in ['tp_rank', 'tensor_parallel_rank']:
+        values = [int(labels[rank]) for labels, _ in rows if rank in labels]
+        if values:
+            selected = min(values)
+            rows = [(labels, value) for labels, value in rows
+                    if int(labels.get(rank, -1)) == selected]
     return sum(value for _, value in rows), rows
 
 

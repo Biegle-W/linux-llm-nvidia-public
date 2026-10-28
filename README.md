@@ -83,8 +83,13 @@ BF16 changed decode by only +0.9% with slightly slower prefill. No candidate was
 
 The [isolated SGLang MLP W4A8 test](docs/SGLANG-W4A8-20261027.md) improves
 prefill by 21.6% and first-token latency by 17.5%, with 1.4% slower decode; it
-remains experimental. Its fresh controls use 45.55 GiB usable RAM while one stick
+remains experimental; the user subsequently accepted that tradeoff. Its fresh controls use 45.55 GiB usable RAM while one stick
 is temporarily removed for maintenance. No MoE profile was tested or changed.
+
+The [heterogeneous TP2/MTP follow-up](docs/SGLANG-HETERO-MTP-20261028.md) tests a
+pinned fork in a separate runtime with a reproducible compatibility patch.
+Its generation gains, prefill tradeoffs, capacity failures and quality checks are
+reported separately. HyperQwen remains the default; normal SGLang is unchanged.
 
 ## Repository ownership
 

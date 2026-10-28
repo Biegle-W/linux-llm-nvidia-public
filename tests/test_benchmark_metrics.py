@@ -1,4 +1,4 @@
-"""Protect benchmark accounting against pipeline double-counting and stage mixing."""
+"""Protect benchmark accounting against parallel-rank duplication and stage mixing."""
 from pathlib import Path
 import sys
 import unittest
@@ -30,6 +30,27 @@ class MetricAccounting(unittest.TestCase):
                                 'vllm:request_prefill_time_seconds_sum{engine="0"} 12.1\n',
                                 'vllm:request_prefill_time_seconds_sum')
         self.assertAlmostEqual(value, 1.6)
+
+    def test_tensor_rank_counters_represent_one_request(self):
+        before = 'm{pp_rank="0",tp_rank="1",stage="prefill_forward"} 1\nm{pp_rank="0",tp_rank="0",stage="prefill_forward"} 1\n'
+        after = 'm{pp_rank="0",tp_rank="1",stage="prefill_forward"} 2\nm{pp_rank="0",tp_rank="0",stage="prefill_forward"} 2\n'
+        value, rows = metric_delta(before, after, 'm', 'prefill_forward')
+        self.assertEqual(value, 1)
+        self.assertEqual(rows[0][0]['tp_rank'], '0')
+
+    def test_tensor_duration_matches_saved_parallel_wall_interval(self):
+        before = 'm{pp_rank="0",tp_rank="1"} 0.21442542000022513\nm{pp_rank="0",tp_rank="0"} 0.21457340799997837\n'
+        after = 'm{pp_rank="0",tp_rank="1"} 1.257920753000235\nm{pp_rank="0",tp_rank="0"} 1.2580878730000222\n'
+        value, rows = metric_delta(before, after, 'm')
+        self.assertAlmostEqual(value, 1.0435144650000439)
+        self.assertEqual(len(rows), 1)
+
+    def test_combined_pipeline_and_tensor_replicas(self):
+        after = '\n'.join(f'm{{pp_rank="{pp}",tp_rank="{tp}"}} {value}'
+                          for pp, tp, value in [(0, 0, .4), (0, 1, .5), (1, 0, .7), (1, 1, .8)])
+        value, rows = metric_delta('', after, 'm')
+        self.assertAlmostEqual(value, .7)
+        self.assertEqual(rows[0][0], {'pp_rank': '1', 'tp_rank': '0'})
 
 
 if __name__ == '__main__':

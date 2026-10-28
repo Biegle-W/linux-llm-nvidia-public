@@ -259,12 +259,53 @@
         "maintained_recurrent_state_dtype": "float32"
       },
       "latest_isolated_engine_test": {
-        "run": "20261027-sglang-isolated-mlp-w4a8",
-        "evidence": "docs/SGLANG-W4A8-20261027.md",
-        "numeric_results": "docs/benchmark-results/20261027-sglang-w4a8.json",
+        "run": "20261028-sglang-heterogeneous-tp2-mtp",
+        "evidence": "docs/SGLANG-HETERO-MTP-20261028.md",
+        "numeric_results": "docs/benchmark-results/20261028-sglang-hetero-mtp.json",
         "production_promoted": false,
-        "candidate_status": "complete"
-      }
+        "candidate_status": "MTP3 qualified at 16K; corrected MTP1 and MTP3 fail 32K headroom qualification",
+        "user_w4a8_tradeoff_accepted": true,
+        "qualified_candidate": {
+          "tp_size": 2,
+          "pp_size": 1,
+          "rank_gpu_id": [
+            0,
+            1
+          ],
+          "rank_tp_ratio": [
+            9,
+            8
+          ],
+          "rank_mlp_ratio": [
+            10,
+            7
+          ],
+          "rank_gpu_memory_mib": [
+            11008,
+            8960
+          ],
+          "context_length": 16384,
+          "mamba_ssm_dtype": "bfloat16",
+          "max_mamba_cache_size": 1,
+          "speculative_num_steps": 3,
+          "speculative_num_draft_tokens": 4,
+          "mlp_w4a8": true,
+          "prefill_tps": 1662.792247971516,
+          "ttft_s": 1.3475014569999075,
+          "client_decode_tps": 84.63369259011576,
+          "runtime_scope": "isolated only"
+        }
+      },
+      "isolated_engine_test_history": [
+        {
+          "run": "20261027-sglang-isolated-mlp-w4a8",
+          "evidence": "docs/SGLANG-W4A8-20261027.md",
+          "numeric_results": "docs/benchmark-results/20261027-sglang-w4a8.json",
+          "production_promoted": false,
+          "candidate_status": "complete",
+          "user_tradeoff_accepted": true
+        }
+      ]
     },
     {
       "id": "flash-next-strata",

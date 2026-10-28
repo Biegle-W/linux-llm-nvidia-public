@@ -79,3 +79,22 @@ One RAM stick is temporarily removed; Linux currently sees 45.55 GiB usable.
 This dense study used fresh controls and retained all guards at swappiness60.
 MoE profiles have not been qualified on reduced RAM; check capacity and budgets
 before any future MoE work. GPU unlock health reports VERIFIED after reboot.
+
+## Heterogeneous TP2/MTP follow-up — October 28
+
+The user accepted the W4A8 tradeoff and authorized an isolated heterogeneous
+TP2/MTP study. The earlier decode regression is not a reason to reject that
+accepted tradeoff. This authorization does not silently promote the fork.
+The pinned fork, separate native runtime, reproducible local compatibility patch,
+all startup failures and completed controls are recorded in
+[the study report](docs/SGLANG-HETERO-MTP-20261028.md). Preserve the unchanged
+1 GiB GPU-free guard, 8 GiB host floor, 30/36 GiB worker limits, active swap-churn
+protection and swappiness60. No generic CPU weight offload is permitted.
+The benchmark metric reader now counts one canonical TP replica after the final
+PP stage; seven regression tests cover parallel-rank accounting. Do not recompute
+historical measurements or repeat completed variants because the reader changed.
+
+Final outcome: MTP3 qualified at 16K (84.63 decode tok/s, +32.51% over its
+matched TP2 control; 14,686-input retrieval). Corrected MTP1/MTP3 failed 32K
+GPU-headroom qualification. HyperQwen and normal worker were restored; no
+experimental coordinator or GPU-LOCK remains. See CURRENT-STATE.md for details.

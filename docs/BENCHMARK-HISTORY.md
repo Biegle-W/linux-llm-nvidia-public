@@ -82,3 +82,25 @@ decode -1.42%. Both passed JSON, arithmetic and 29,434-input retrieval. Eighteen
 standalone kernel cases passed on both GPUs. The first adapter was rejected
 with zero activated layers before its benchmark; initial control/diagnostics
 remain preserved. No production setting changed; HyperQwen remains default.
+
+## Heterogeneous SGLang TP2/MTP — October 28
+
+[Isolated pinned-fork study](SGLANG-HETERO-MTP-20261028.md), with the accepted
+MLP W4A8 tradeoff, 45.55 GiB usable RAM and unchanged guards. Completed 32K
+BF16/one-slot TP2 control: 1716.45 prefill / 1.2947 s TTFT / 64.18 decode;
++40.46% decode versus the prior PP2 W4A8 reference, with 46.92% slower prefill.
+Matched 16K control: 1712.66 / 1.3001 / 63.87. Corrected MTP1: 1662.17 /
+1.3454 / 70.25 (+10.00% decode); MTP3: 1662.79 / 1.3475 / 84.63 (+32.51%).
+These complete trials passed JSON, arithmetic and near-window retrieval.
+Corrected MTP1 at 32K measured 69.59 decode on short prompts but failed the
+headroom guard during long retrieval (990 MiB sampled free); it is unqualified.
+Initial MTP draft-fusion weights were skipped by the fork; zero-acceptance
+measurements are invalid diagnostic evidence, not an MTP performance result.
+The corrected loader audits all required draft parameters. Eighteen GPU kernel
+cases, eight packed-shard checks, three candidate regressions and seven metric
+regressions pass. No production profile was changed. See the report for every
+startup/capacity failure, exact settings, final capacity checks and limitations.
+
+Corrected MTP3 at 32K failed the immediate post-load GPU-free check: 904 MiB
+on the 3080 Ti and 1,039 MiB on the 3080. No throughput was accepted for it.
+The completed 16K retrieval checks used 14,686 input tokens.
