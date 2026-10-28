@@ -1,6 +1,6 @@
 # Current takeover state
 
-Updated October 28, 2026, after the heterogeneous TP2/MTP study. Read README.md and AGENTS.md first.
+Updated October 28, 2026, after shared idle-policy deployment and handoff upkeep. Read README.md and AGENTS.md first.
 
 ## Standing direction
 
@@ -438,3 +438,18 @@ fixed loss tolerance. Six exact source preimages were archived privately at 8ca0
 settings, tests and timer proof. Raw logs/receipts are under
 data/all-engine-policy-20261028/. verification.json and final-verification.json
 are complete; no idle-check GPU worker remains running.
+
+## Handoff upkeep — October 28
+
+The user requested the AMD context-monitor/handoff workflow here. The general
+handoff rule is now explicit in README/AGENTS: before yielding after meaningful
+work, record objective/constraints, selected versus candidate settings, completed
+verification, actual blockers/failures, active jobs/locks, unfinished steps and
+one concrete next action. Update this canonical takeover record and applicable
+reports, review public sanitization, push both repositories and verify sync, or
+state the exact outstanding publication step. Do not create competing current
+runtime handoffs or rerun completed benchmarks just for documentation.
+
+No inference settings, benchmark values, services or GPU tests changed in this
+workflow task. The existing 32K SGLang deployment, 38K qualification backlog,
+reduced-RAM MoE caveats, shared 600s idle policy and all guards still apply.

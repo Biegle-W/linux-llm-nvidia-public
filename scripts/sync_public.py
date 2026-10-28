@@ -75,6 +75,22 @@ def privacy_scan_text(relative, content):
     return text
 
 
+def strip_private_workflow(content):
+    """AMD-style local Codex workflow details stay out of public exports."""
+    # Split literals so exporting this source cannot strip its own implementation.
+    start = '<!-- private-' + 'codex-context:start -->'
+    end = '<!-- private-' + 'codex-context:end -->'
+    if start not in content and end not in content:
+        return content
+    if content.count(start) != 1 or content.count(end) != 1:
+        raise ValueError('Unbalanced private workflow markers')
+    before, remainder = content.split(start)
+    if end not in remainder:
+        raise ValueError('Reversed private workflow markers')
+    _, after = remainder.split(end)
+    return (before.rstrip() + '\n\n' + after.lstrip()).rstrip() + '\n'
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('checkout', type=Path)
@@ -95,6 +111,8 @@ def main():
             raise SystemExit('Expected official PNG artwork.')
         if relative == 'README.md':
             content = content.replace('# Linux LLM NVIDIA\n', '# Linux LLM NVIDIA — public reference\n', 1)
+        if not binary:
+            content = strip_private_workflow(content)
         if not binary and BLOCK.search(privacy_scan_text(relative, content)):
             raise SystemExit(f'Privacy check failed for {relative}; review locally.')
         exports[relative] = content

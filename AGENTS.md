@@ -6,6 +6,11 @@ Read [README.md](README.md) for standing policy, then
 settings. Update these entry points, the benchmark ledger and both NVIDIA repos
 after meaningful changes so another agent can resume without chat history.
 
+Before yielding, record the objective, selected versus candidate settings,
+completed verification, actual blockers, active jobs/locks, unfinished steps and
+one concrete next action in the canonical takeover handoff. Verify both pushes
+or record the exact outstanding sync step. Do not rerun completed GPU tests for docs.
+
 Four qualified context upgrades and the approved lifecycle controls are deployed.
 All six normal launch paths passed functional/limit checks. Actual GLM/dense idle
 expiry and normal reload, plus isolated Strata idle/reload, are verified. No test

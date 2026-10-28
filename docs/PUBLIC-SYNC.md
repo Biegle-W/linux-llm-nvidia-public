@@ -23,6 +23,12 @@ Launch helpers in the public tree are reference source: they require locally
 installed engines, profiles and a private API key. Those assets are not exported.
 This is a maintenance workflow, not a scheduled background publisher.
 
+Local Codex session helpers, their workflow document/tests, raw session evidence
+and private checkpoints are outside the export allowlist. Explicit
+`private-codex-context` sections are removed from reference Markdown before the
+privacy scan; unbalanced or reversed markers refuse export. General takeover
+handoff upkeep remains part of the public maintenance policy.
+
 Benchmark preservation and synchronization are standing requirements. Save dated
 raw results privately after every run; retain prior results even when a setting or
 model is retired. Update the benchmark reports and maintained-profile registry

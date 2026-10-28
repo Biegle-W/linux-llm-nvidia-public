@@ -136,6 +136,12 @@ code comments, messages and commits in English. Keep private/public repositories
 current after validated changes, with nonpersonal commits and no force pushes.
 Export selected sanitized files only; never export private history or state.
 
+Before yielding after meaningful work, update the existing canonical takeover
+handoff with the objective, selected versus candidate settings, completed checks,
+actual blockers/failures, active jobs/locks, unfinished work and one concrete next
+action. Verify both repository pushes, or record the exact outstanding publication
+step. Preserve evidence and avoid competing copies of current runtime state.
+
 Always preserve benchmark results and keep both Linux NVIDIA repositories updated.
 After each benchmark, qualification, or maintained-setting change, save dated raw
 results privately and update the relevant benchmark report and profile registry.
