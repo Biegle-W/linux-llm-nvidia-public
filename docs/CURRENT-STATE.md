@@ -92,3 +92,13 @@ Update both NVIDIA repos with nonpersonal commits, no force pushes, verify clean
 upstream 0/0 and record actual heads in publication-checkpoint.json. Final verified
 heads and cleanliness are recorded privately in publication-checkpoint.json;
 inspect actual Git state before further work.
+
+## Standing follow-up: unlock persistence
+
+The user requires future agents to automatically check GPU unlock persistence
+after any authorized kernel or NVIDIA driver update, and on resuming with changed
+versions. Follow UNLOCK-SETUP-20261026.md's required update checks. Verify DKMS and
+the target boot image before reboot; verify both per-card unlock results and
+NVIDIA availability after the user's reboot. Record versions and evidence, and
+leave post-boot status pending until actually verified. No update, reboot, new
+unlock benchmark or unlock-source change is authorized by this reminder.

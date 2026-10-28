@@ -51,3 +51,39 @@ For recovery, remove `gpu_unlock.targets=...` once in the GRUB editor and boot
 normally, then run `sudo python3 scripts/native_linux_gpu_unlock.py disable` from
 the repository. The helper removes its own boot configuration and rebuilds the
 images; the installed packages remain. Let the user control the next power cycle.
+
+## Required checks after kernel or NVIDIA driver updates
+
+The user requires future agents to perform these checks automatically as part of
+an otherwise authorized kernel/driver update, and when resuming after either
+version changed. This is an update-workflow requirement, not a recurring scheduled
+job or permission to initiate updates/reboots. Retain the reviewed unlock source
+unless the user separately authorizes a source/version change.
+
+1. Record the running kernel, installed/loaded NVIDIA driver versions, selected
+   GPU identities and PCI addresses, and the last verified boot. Distinguish the
+   running kernel from a newly installed kernel awaiting reboot. Re-discover
+   addresses if cards or PCIe topology changed; do not expand targets blindly.
+2. Check `dkms status` and module availability for the kernel that will boot next.
+   Confirm the unlock module built/installed successfully for that exact kernel.
+   Verify the helper-owned GRUB target argument and dracut early-load configuration
+   still exist. Inspect the generated target initramfs for the unlock module, its
+   declared firmware and the pre-udev early-load request. Review update errors;
+   presence of configuration files alone is not proof of a complete boot image.
+3. After the user chooses to reboot, inspect that boot's kernel command line and
+   kernel log. Both selected cards must report successful unlock before NVIDIA
+   driver binding. Confirm both cards are available through `nvidia-smi` under
+   the expected driver, and inspect relevant unlock/NVIDIA errors. A driver update
+   using an unchanged kernel still requires this post-boot compatibility check;
+   do not assume all future driver releases behave identically.
+4. Record dated evidence in CURRENT-STATE.md: kernel and driver versions, target
+   identities/addresses, DKMS/image checks, boot evidence and pass/fail/pending
+   status. Before reboot, report only next-boot readiness with post-boot verification
+   pending. On failure, report the exact missing/failed stage and recovery plan;
+   do not silently disable the unlock, change firmware security, flash VBIOS, or
+   upgrade the pinned unlock source. Preserve the user-controlled reboot policy.
+
+These read-only persistence checks do not require rerunning completed compute or
+LLM benchmarks. Module installation and boot messages do not quantify performance
+on a new software stack; any additional qualification must be scoped separately.
+Keep both NVIDIA repositories and their handoff current after meaningful findings.

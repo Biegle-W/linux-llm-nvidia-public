@@ -34,3 +34,16 @@ The maintained guarded paths implement this; preserve RAM/GPU limits and consult
 The latest user instruction supersedes the earlier VM10 trial approval: keep host
 swappiness at 60. Do not launch or persist swappiness10. Continue remaining
 qualification and deployment at 60 with the existing worker swap/churn guards.
+
+## GPU unlock persistence after updates
+
+As part of every kernel or NVIDIA driver update, automatically check that the
+existing GPU unlock remains installed and configured for the next boot. Also
+perform this check when resuming on a different kernel/driver version. Follow
+[the update verification procedure](docs/UNLOCK-SETUP-20261026.md#required-checks-after-kernel-or-nvidia-driver-updates).
+Verify DKMS for the target kernel, GRUB targets and early initramfs loading; after
+the user's next reboot, confirm successful unlock on both selected GPUs before
+NVIDIA binds and record the running kernel/driver and boot evidence. Do not call
+next-boot preparation post-boot verification. Keep incomplete/failed checks visible
+in CURRENT-STATE.md. The user controls reboot; this requirement does not authorize
+driver updates, new unlock benchmarks, firmware changes or switching unlock source.

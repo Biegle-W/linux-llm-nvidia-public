@@ -175,6 +175,13 @@ installed hardware; evaluate its evidence before testing, then validate locally
 inside the bounded worker service. This restriction concerns dense-model weight
 offload, not ordinary loading buffers or the existing MoE expert-streaming paths.
 
+GPU unlock persistence is a standing maintenance requirement. Whenever an agent
+updates the kernel or NVIDIA driver, or resumes after either version changed, it
+must automatically perform the [unlock update checks](docs/UNLOCK-SETUP-20261026.md#required-checks-after-kernel-or-nvidia-driver-updates),
+record next-boot readiness, then verify actual unlock after the user reboots.
+DKMS installation alone does not establish successful unlock on the new boot.
+Report failures or pending reboot verification in CURRENT-STATE.md.
+
 The user chooses when to reboot and switch OS. Do not repartition, flash VBIOS,
 change firmware security, restore the removed Windows NVMe unlock or install a
 blanket `targets=all` unlock through a documentation migration. Record fresh native
