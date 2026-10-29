@@ -30,6 +30,11 @@ or that untested larger contexts work.
 
 ## The six retained profiles
 
+The human-approved Qwen/Strata host reserve is now **2 GiB**; other profiles keep
+8 GiB. The 2 GiB pageable retest still failed the active swap guard, so its model/
+cache setup and 53.29 tok/s rejected screen were not promoted. Current table values
+remain unchanged. See [guard change and evidence](QWEN-HOST-RESERVE2-20261028.md).
+
 Qwen/Strata follow-up: the lcz.me pageable full-resident setup was refused for
 insufficient RAM headroom; a 28 GiB pageable adaptation hit swap-churn protection.
 Neither was applied. Qwen remains unqualified on reduced RAM. Current settings
@@ -49,7 +54,7 @@ cache optimum. Dense measurements were carried forward without retesting.
 
 Comparisons use saved historical full-RAM fixtures, not a fresh paired full-RAM
 control. Preserve swappiness 60, 512 MiB dense reserve, native MoE GPU reserves,
-8 GiB host floor, 82 C temperature limit, unchanged worker budgets and active
+Qwen host floor 2 GiB / other profiles 8 GiB, 82 C temperature limit, unchanged worker budgets and active
 swap/churn/pressure/telemetry guards, concurrency one and 600-second idle unload.
 Normal validation finished idle; router and DSH ownership were preserved and no
 fallback was restored. Original credential-redacted settings are archived privately

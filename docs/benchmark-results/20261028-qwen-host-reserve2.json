@@ -1,0 +1,146 @@
+{
+  "schema": 1,
+  "date": "2026-10-28",
+  "profile": "flash-next-strata",
+  "human_approved_change": "Qwen host-RAM reserve8GiB->2GiB",
+  "host_reserve_change_applied": true,
+  "qwen_host_ram_reserve_gib": 2,
+  "all_other_profile_host_ram_reserves_gib": 8,
+  "normal_guard_effective_on_next_worker_launch": true,
+  "lcz_model_setup_applied": false,
+  "isolated_candidate_result": "failed owned-worker swap-churn guard during quality stage",
+  "candidate_plan": {
+    "id": "qwen-strata-lcz-pageable-headroom2",
+    "profile": "flash-next-strata",
+    "args": {
+      "--prefill": 4096,
+      "--pool-workers": 7,
+      "--adapt-every": 0,
+      "--pcie-frac": 0,
+      "--vram-reserve-mib": 1536,
+      "--conversation-cache-mib": 0
+    },
+    "flags": [
+      "--mmap-experts",
+      "--resident-cpu-experts",
+      "--resident-experts"
+    ],
+    "env": {
+      "STRATA_RESIDENT_PIN": "0",
+      "STRATA_RESIDENT_HEADROOM_GIB": "2"
+    },
+    "qualify": true,
+    "source": "https://lcz.me/topic/2042",
+    "adaptations": [
+      "Keep current32768 context",
+      "Keep600-second idle and all guards",
+      "NativeCUDA; no AMD HIP env or runtime changes",
+      "Keep current model/weights/precision/MTP and GPU ordering",
+      "Human explicitly lowered Qwen host-RAM headroom8->2GiB; use resident-experts interface to pass native headroom without rebuilding; require full-resident load, no partial fallback"
+    ]
+  },
+  "physical_ram_usable_gib": 45.55,
+  "actual_pageable_resident_gib": 35.38,
+  "actual_pinned_resident_gib": 0,
+  "adaptive_expert_swaps": false,
+  "partial_resident_fallback_used": false,
+  "screen_benchmark": {
+    "prefill_tps": 437.4,
+    "ttft_s": 5.077982568996958,
+    "client_decode_tps": 53.29342133351377,
+    "decode_tps": 53.3,
+    "prompt_tokens": 2212,
+    "generated_tokens": 128,
+    "profile": "flash-next-strata",
+    "context": 32768,
+    "variant": "qwen-strata-lcz-pageable-headroom2",
+    "repetitions": 3,
+    "env": {
+      "STRATA_RESIDENT_PIN": "0",
+      "STRATA_RESIDENT_HEADROOM_GIB": "2"
+    },
+    "args": {
+      "--prefill": 4096,
+      "--pool-workers": 7,
+      "--adapt-every": 0,
+      "--pcie-frac": 0,
+      "--vram-reserve-mib": 1536,
+      "--conversation-cache-mib": 0
+    }
+  },
+  "screen_is_qualified_operating_result": false,
+  "benchmark_repetitions": 3,
+  "benchmark_output_tokens": 128,
+  "benchmark_input_token_range": [
+    2212,
+    2222
+  ],
+  "comparison": "No fresh control or qualified performance-loss claim; failed screen does not replace selected historical benchmark",
+  "resources": {
+    "minimum_host_available_gib": 3.390483856201172,
+    "peak_worker_cgroup_gib": 41.57698440551758,
+    "peak_worker_swap_gib": 4.447074890136719,
+    "maximum_gpu_temperature_c": 53.0,
+    "minimum_gpu_free_mib": {
+      "0": 1105.0,
+      "1": 1222.0
+    },
+    "guard_stop": "Sustained owned-worker swap churn during inference",
+    "stopping_window": {
+      "window_s": 30.455831352999667,
+      "read_mib_s": 76.90247818565354,
+      "write_mib_s": 18.80502454888959,
+      "combined_mib_s": 95.70750273454313
+    }
+  },
+  "quality_protocol_complete": false,
+  "near_window_sustained_reload_and_normal_route": "not reached after swap stop",
+  "cpu_regressions": {
+    "passed": true,
+    "new_host_boundary_thermal_swap_checks": 8,
+    "existing_budget_swap_supervisor_checks": 18,
+    "total": 26
+  },
+  "unchanged": [
+    "other five profiles",
+    "all context limits",
+    "worker RAM/swap occupancy budgets",
+    "active swap/pressure/telemetry guard",
+    "82C temperature limit",
+    "VRAM reserve policies",
+    "model/weights/precision/runtime",
+    "canonical launch config",
+    "selected benchmark history",
+    "router/DSH ownership",
+    "600-second idle",
+    "swappiness60"
+  ],
+  "final_state": {
+    "router_idle": true,
+    "dsh_preserved": true,
+    "workers_stopped": true,
+    "no_gpu_lock": true
+  },
+  "fallback_restored": false,
+  "preimage_archive": {
+    "repository": "Biegle-W/retired-llm-setting",
+    "commit": "728965791d824d4a6eb58901ec8bb9fe5bf6ec96",
+    "path": "linux-nvidia/20261028-qwen-host-reserve2/MANIFEST.json",
+    "remote_verified": true
+  },
+  "runtime_provenance": {
+    "Strata source": "4b9e05a2a806a3fe24f7b2560d98626c37dade35",
+    "Maya source": "8b4b39f84e35393833b31b80e82bee92e69bb646",
+    "Strata engine": {
+      "sha256": "ae49d5da81b9b65d50af1108c4b3f8b289ee198d9992d66268b7e885cf1a4776"
+    },
+    "Maya native server": {
+      "sha256": "fb9014a0c5ea586fba3e1be974da20c41d0a787b7925d39ba8379d9f0e02820b"
+    },
+    "Strata native server": {
+      "sha256": "7ba4bb80085c630d392fbcaa113a10d83051b45df4e624d4b9a10123e35f849a"
+    },
+    "gpu_driver": "NVIDIA GeForce RTX 3080 Ti, 595.99.02, 12288 MiB\nNVIDIA GeForce RTX 3080, 595.99.02, 10240 MiB"
+  },
+  "temporary_ram_restoration": "Only after explicit human confirmation and Linux capacity verification; restore cache settings and preserve separately approved reserve unless human changes it"
+}

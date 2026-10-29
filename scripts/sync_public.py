@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/QWEN-HOST-RESERVE2-20261028.md', 'docs/benchmark-results/20261028-qwen-host-reserve2.json',
+    'tests/test_host_ram_reserve.py',
     'docs/QWEN-STRATA-LCZ-20261028.md', 'docs/benchmark-results/20261028-qwen-strata-lcz.json',
     'docs/REDUCED-RAM-20261028.md', 'docs/benchmark-results/20261028-reduced-ram.json',
     'README.md', 'AGENTS.md', 'docs/CURRENT-STATE.md', 'docs/AMD-PARITY-HANDOFF-20261027.md', 'docs/BENCHMARK-HISTORY.md', 'docs/AMD-NVIDIA-GAP-AUDIT-20261027.md', '.gitignore', '.gitattributes', 'docs/MIGRATION-HANDOFF.md', 'docs/REPOSITORY-MAP.md', 'docs/LOCAL-SETUP.md',

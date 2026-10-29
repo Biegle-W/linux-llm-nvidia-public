@@ -21,6 +21,15 @@ def worker_budget(profile):
     return dict(budget)
 
 
+def host_ram_reserve_gib(profile):
+    """Keep 8 GiB by default; only Qwen/Strata may select the approved 2 GiB floor."""
+    reserve = profile.get('host_ram_reserve_gib', 8)
+    if (type(reserve) is not int or reserve not in (2, 8)
+            or (reserve == 2 and profile['id'] != 'flash-next-strata')):
+        raise ValueError(f"Invalid host RAM reserve: {profile['id']}")
+    return reserve
+
+
 def validate_catalog(catalog):
     if catalog.get('schema') != 1:
         raise ValueError('Unsupported maintained-profile catalog schema.')
@@ -44,6 +53,7 @@ def validate_catalog(catalog):
                 or location.is_absolute() or '..' in location.parts):
             raise ValueError(f'Invalid model storage policy: {identifier}')
         worker_budget(profile)
+        host_ram_reserve_gib(profile)
         args = profile.get('cli_args', [])
         for flag in ('--max-model-len', '--ctx-size'):
             if flag in args and int(args[args.index(flag) + 1]) != profile['allocated_context']:

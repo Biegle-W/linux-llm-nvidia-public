@@ -7,7 +7,7 @@ import sys
 import subprocess
 import signal
 import time
-from profile_catalog import get_profile, worker_budget
+from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib
 from storage_policy import verify_storage
 from inference_policy import apply_native_idle
 from inference_swap_guard import WorkerWatch
@@ -23,6 +23,7 @@ def main():
     limit = (Path('/sys/fs/cgroup') / group.lstrip('/') / 'memory.max').read_text().strip()
     profile = get_profile(sys.argv[1])
     budget = worker_budget(profile)
+    host_floor_kib = host_ram_reserve_gib(profile) * 1024 ** 2
     cgroup_base = Path('/sys/fs/cgroup') / group.lstrip('/')
     if (not group.endswith('/llm-router-worker.service') or limit == 'max'
             or int(limit) != budget['max'] * 1024 ** 3
@@ -99,7 +100,7 @@ def main():
                 raise SystemExit(1)
             available = next(int(line.split()[1]) for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:'))
             temps = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu', '--format=csv,noheader,nounits'], text=True)
-            bad = bad + 1 if available < 8 * 1024 ** 2 or any(float(t) >= 82 for t in temps.splitlines()) else 0
+            bad = bad + 1 if available < host_floor_kib or any(float(t) >= 82 for t in temps.splitlines()) else 0
             if bad >= 3:
                 reason = 'Worker stopped by host-memory/temperature guard.'
                 print('Worker stopped by host-memory/temperature guard.', flush=True)

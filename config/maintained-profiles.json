@@ -549,7 +549,8 @@
         "control": "flash-next-strata-32768-screen",
         "selected_variant": "flash-next-strata-32768-screen",
         "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
-      }
+      },
+      "host_ram_reserve_gib": 2
     },
     {
       "id": "glm-maya",

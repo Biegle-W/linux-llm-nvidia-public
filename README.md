@@ -1,5 +1,33 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: Qwen host-RAM reserve 2 GiB — October 28
+
+The human explicitly lowered Qwen/Strata host-RAM headroom from 8 GiB to **2 GiB**.
+The normal supervisor now reads this Qwen-only selected floor from the registry;
+all other five profiles retain 8 GiB. Eight new boundary/thermal/swap checks and
+18 existing budget/swap/supervisor regressions passed (26 total). Three low
+readings still stop the worker; swap/pressure/telemetry, VRAM reserves, temperature
+82 C, RAM/swap budgets, swappiness 60, idle 600s and concurrency one are preserved.
+No router or DSH restart was needed.
+
+The full-pageable lcz.me candidate was retested with native and isolated host
+headroom 2 GiB. It loaded 35.38 GiB pageable expert RAM (zero pinned), completed
+three benchmark screens (53.29 decode tok/s median), then hit the unchanged swap
+guard at 76.90 MiB/s reads plus 18.81 MiB/s writes over 30.46 seconds. This is a
+rejected screen, not a qualified operating benchmark. **The failed lcz.me cache/
+execution setup was not applied.** Native launch config, selected benchmark fields,
+contexts and the other five profiles are unchanged.
+
+Test worker stopped, GPU reservation released, router idle, DSH ownership preserved;
+no fallback restored. Preimages are archived privately with hashes. See
+[guard selection and retest](docs/QWEN-HOST-RESERVE2-20261028.md) and
+[numeric evidence](docs/benchmark-results/20261028-qwen-host-reserve2.json).
+Next action: after explicit human RAM-restoration confirmation, verify Linux
+capacity, restore appropriate full-RAM caches and verify normal guarded loading.
+Preserve this separately approved reserve selection and unrelated router/Desktop
+changes unless the human changes that direction. No timer/MemAvailable trigger.
+
+
 ## Latest: lcz.me Qwen/Strata follow-up — October 28
 
 The user requested qualification of the lcz.me pageable Qwen/Strata setup on the
