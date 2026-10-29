@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import signal
+import shlex
 from pathlib import Path
 import subprocess
 import sys
@@ -24,11 +25,69 @@ def service_state(unit):
     return dict(line.split('=', 1) for line in result.stdout.splitlines() if '=' in line)
 
 
+def viewer_finished(unit, seen_invocation, state):
+    """End confirmed finished viewers; persistent services can keep their live console."""
+    if not seen_invocation:
+        return False
+    if state.get('ActiveState') in ('inactive', 'failed'):
+        return True
+    current = state.get('InvocationID')
+    return bool(unit in BACKEND_UNITS and current and current != seen_invocation)
+
+
 def backend_finished(unit, seen_invocation, state):
-    """Only backend viewers follow worker lifetime; router/DSH/harnesses stay open."""
-    return (unit in BACKEND_UNITS and bool(seen_invocation)
-            and (state.get('ActiveState') not in ('active', 'activating')
-                 or state.get('InvocationID') != seen_invocation))
+    """Backend teardown remains scoped; it cannot retire router/DSH viewers."""
+    return unit in BACKEND_UNITS and viewer_finished(unit, seen_invocation, state)
+
+
+def pending_viewer_expired(seen_invocation, state, deadline, now):
+    return (not seen_invocation and now > deadline
+            and state.get('ActiveState') in ('inactive', 'failed'))
+
+
+def write_receipt(path, record):
+    temporary = path.with_name('.' + path.name + '.' + uuid.uuid4().hex + '.tmp')
+    try:
+        fd = os.open(temporary, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+        with os.fdopen(fd, 'w') as stream:
+            stream.write(json.dumps(record) + '\n')
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def run_foreground(command, title, receipt):
+    """Keep a real child PTY, durable output/exit status, and no post-exit prompt."""
+    receipt.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
+    transcript = receipt.with_suffix('.log')
+    fd = os.open(transcript, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o600)
+    os.close(fd)
+    record = {'pid': os.getpid(), 'command': command,
+              'visible_tty': os.ttyname(sys.stdout.fileno()),
+              'window_id': os.environ.get('WINDOWID'), 'starts_minimized': True,
+              'state': 'running', 'started_at': time.time(), 'transcript': str(transcript)}
+    write_receipt(receipt, record)
+    print(title, flush=True)
+    code = 127
+    try:
+        # util-linux script preserves interactive selectors and isatty-dependent commands.
+        # Its --return propagates failure too; the transcript is private and remains on disk.
+        env = dict(os.environ, SHELL='/bin/sh')
+        result = subprocess.run(['/usr/bin/script', '--quiet', '--return', '--flush',
+                                 '--command', shlex.join(command), str(transcript)],
+                                cwd=ROOT, env=env)
+        code = result.returncode
+    except OSError as error:
+        with transcript.open('a') as stream:
+            stream.write('Launch failed: ' + str(error) + '\n')
+        print('Launch failed; details saved in the terminal transcript.', flush=True)
+    except KeyboardInterrupt:
+        code = 130
+    finally:
+        record.update(state='finished', exit_code=code, finished_at=time.time())
+        write_receipt(receipt, record)
+    print(f'\nFinished with exit code {code}; transcript: {transcript}', flush=True)
+    return code
 
 
 def close_registered_monitor(unit):
@@ -100,8 +159,8 @@ def open_monitor(title, unit, logs=()):
         raise ValueError('Expected a user service name')
     STATE.mkdir(parents=True, exist_ok=True, mode=0o700)
     marker = STATE / (unit + '.json')
-    if unit in BACKEND_UNITS and service_state(unit).get('ActiveState') not in ('active', 'activating'):
-        close_backend_monitor(unit)
+    if service_state(unit).get('ActiveState') in ('inactive', 'failed'):
+        close_registered_monitor(unit)
     try:
         previous = json.loads(marker.read_text())
         cmdline = Path(f"/proc/{previous['pid']}/cmdline").read_bytes()
@@ -158,11 +217,11 @@ def watch(args):
                 children.append(subprocess.Popen(['tail', '-n', '30', '-F', '--', *args.log]))
             while all(child.poll() is None for child in children):
                 current = service_state(args.unit)
-                if args.unit in BACKEND_UNITS and not seen_invocation and time.monotonic() > startup_deadline:
-                    print('Backend never started; closing its pending console.', flush=True)
+                if pending_viewer_expired(seen_invocation, current, startup_deadline, time.monotonic()):
+                    print('Service never started; closing its pending console.', flush=True)
                     break
-                if backend_finished(args.unit, seen_invocation, current):
-                    print('Owned backend stopped or switched; closing this backend console.', flush=True)
+                if viewer_finished(args.unit, seen_invocation, current):
+                    print('Owned service stopped or backend switched; closing its console.', flush=True)
                     break
                 if current.get('ActiveState') in ('active', 'activating'):
                     seen_invocation = current.get('InvocationID') or seen_invocation
@@ -217,17 +276,9 @@ def main():
         else:
             if not sys.stdout.isatty():
                 raise SystemExit('Harness must run in a visible terminal')
-            if args.receipt:
-                args.receipt.write_text(json.dumps({'pid': os.getpid(), 'command': command,
-                                                   'visible_tty': os.ttyname(sys.stdout.fileno()),
-                                                   'window_id': os.environ.get('WINDOWID'),
-                                                   'starts_minimized': True}))
-            print(args.title, flush=True)
-            result = subprocess.run(command, cwd=ROOT)
-            print(f'\nFinished with exit code {result.returncode}.', flush=True)
-            if args.mode == 'foreground' or result.returncode:
-                input('Press Enter to close this terminal. ')
-            raise SystemExit(result.returncode)
+            receipt = args.receipt or STATE / ('harness-' + uuid.uuid4().hex + '.json')
+            raise SystemExit(run_foreground(command, args.title, receipt))
+
 
 
 if __name__ == '__main__':

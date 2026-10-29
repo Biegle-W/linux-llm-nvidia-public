@@ -1,5 +1,10 @@
 # Agent entry point
 
+## Latest: completed terminals close automatically — October 29
+
+Harness and selector windows now close when the command finishes, including failures. Private transcripts and atomic exit-code receipts retain the results. Service viewers close after their own service stops; active work, router/DSH service processes, unknown state and unrelated terminals are preserved. Minimized/no-focus startup remains. All 207 CPU regressions and real PTY success/failure/service-stop checks passed; final project terminal inventory was zero. No model or guard setting changed and no GPU benchmark was repeated. See [terminal lifetime](docs/TERMINAL-LIFETIME-20261029.md) and [verification](docs/validation-results/20261029-terminal-lifetime.json).
+
+
 ## Latest: targeted 15% pressure guard and two-profile 64GB benchmark — October 29
 
 Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. Only Qwen/Strata and DeepSeek/Maya were repeated; HyperQwen, SGLang, GLM/Maya and DeepSeek/Strata rows are explicitly carried forward from their earlier October 29 records. This composite table is not a new six-profile matched run. See [report](docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md) and [numeric evidence](docs/benchmark-results/20261029-pressure-guard.json). Workers are stopped; router idle; no GPU lock; DSH preserved; no fallback.
@@ -427,8 +432,9 @@ Run every future benchmark/test coordinator through the visible foreground wrapp
 For custom worker units, open a console with `visible_terminal.py open --title
 "Backend" --unit NAME.service --log /absolute/engine.log` before starting them.
 Preserve dated logs/results as well as visible output. Do not run new harnesses
-silently through detached API commands. Completed terminal harnesses retain their
-exit code and wait for Enter so results remain visible.
+silently through detached API commands. Completed harness and selector terminals close automatically after the command exits,
+including failures. Private transcripts and exit-code receipts retain the results;
+do not wait for Enter merely to keep a finished terminal open.
 
 Do not automatically reload HyperQwen after an isolated experiment. Unload the
 owned test worker, release its reservation and report the idle state unless the

@@ -1,5 +1,12 @@
 # Inference swap and memory-pressure policy
 
+These rates are **guard stop thresholds**, not bandwidth throttles. They do not
+force Linux to use more swap or change the host swap-file capacity. Raising them
+permits a run to continue where it would otherwise be stopped; it does not
+accelerate inference that remains below the thresholds. Worker swap occupancy
+settings and host swappiness 60 remain unchanged.
+
+
 ## Targeted memory-pressure allowance — October 29
 
 Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. See [bounded two-profile screen](BENCHMARK-PRESSURE-GUARD-64GB-20261029.md).

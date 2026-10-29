@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-29",
+  "cpu_regressions": {
+    "passed": 207,
+    "failed": 0
+  },
+  "live_foreground_cases": [
+    {
+      "exit_code": 0,
+      "pty_preserved": true,
+      "closed_after_completion": true,
+      "private_transcript_retained": true
+    },
+    {
+      "exit_code": 7,
+      "pty_preserved": true,
+      "closed_after_completion": true,
+      "private_transcript_retained": true
+    }
+  ],
+  "live_service_viewer": {
+    "preserved_while_service_active": true,
+    "closed_after_service_stopped": true,
+    "marker_removed": true
+  },
+  "post_check_project_terminal_units": 0,
+  "router_and_dsh_original_invocations_preserved": true,
+  "model_guard_and_pinned_terminal_settings_byte_unchanged": true,
+  "new_model_or_gpu_benchmarks": false,
+  "foreground_completion_receipts": "atomic JSON with exit code and private transcript; mode0600",
+  "terminal_policy": {
+    "foreground_and_selectors": "close automatically on command exit, including failures",
+    "service_viewers": "close on confirmed inactive/failed service",
+    "backend_viewers": "also close when exact backend invocation changes",
+    "persistent_service_restart": "keep viewer while service remains active",
+    "pending_start_timeout_s": 30,
+    "unknown_or_running_work": "preserved",
+    "launch_style": "unchanged native-iconic, no focus request"
+  }
+}

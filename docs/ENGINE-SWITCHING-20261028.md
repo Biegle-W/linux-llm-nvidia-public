@@ -1,5 +1,7 @@
 # Automatic engine switching and console ownership — October 28,2026
 
+October 29 terminal-lifetime update: all completed harnesses/selectors now auto-close, and router/DSH viewers close when their own service stops. Backend switching still cannot close those viewers while their services remain active. [Current policy and verification](TERMINAL-LIFETIME-20261029.md) supersede the historical console-lifetime exceptions below.
+
 Selecting a different maintained engine/model closes the previous owned backend
 before starting the new one. Active API replies finish first; native queued/loading/
 vision work and unknown state continue to defer teardown. The router, DSH,protected

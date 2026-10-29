@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/TERMINAL-LIFETIME-20261029.md',
+    'docs/validation-results/20261029-terminal-lifetime.json',
     'docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md',
     'docs/benchmark-results/20261029-pressure-guard.json',
     'docs/BENCHMARK-SSD-SWAP-64GB-20261029.md',

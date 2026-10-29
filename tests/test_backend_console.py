@@ -1,5 +1,6 @@
 """Backend viewer closure is separate from router, harness and worker ownership."""
 import json
+import shlex
 from pathlib import Path
 import sys
 import tempfile
@@ -47,6 +48,76 @@ class BackendConsole(unittest.TestCase):
             with patch.object(Path,'read_bytes',return_value=command),patch.object(Path,'exists',return_value=False),patch.object(console.os,'kill') as kill:
                 console.close_backend_monitor(unit)
                 kill.assert_called_once_with(12345,console.signal.SIGTERM)
+
+
+class TerminalLifetime(unittest.TestCase):
+    def test_all_viewers_close_on_confirmed_service_end_only(self):
+        for unit in ['llm-router-worker.service', 'nvidia-model-router.service',
+                     'nvidia-dsh.service', 'benchmark.service']:
+            for state in ['inactive', 'failed']:
+                self.assertTrue(console.viewer_finished(unit, 'first', {'ActiveState': state}))
+            for state in [{}, {'ActiveState': 'active', 'InvocationID': 'first'},
+                          {'ActiveState': 'deactivating', 'InvocationID': 'first'}]:
+                self.assertFalse(console.viewer_finished(unit, 'first', state))
+            self.assertFalse(console.viewer_finished(unit, None, {'ActiveState': 'inactive'}))
+        self.assertTrue(console.viewer_finished('llm-router-worker.service', 'first',
+                                               {'ActiveState': 'active', 'InvocationID': 'second'}))
+        self.assertFalse(console.viewer_finished('nvidia-dsh.service', 'first',
+                                                {'ActiveState': 'active', 'InvocationID': 'second'}))
+
+    def test_pending_viewer_timeout_never_closes_running_or_unknown_work(self):
+        for state in ['inactive', 'failed']:
+            self.assertTrue(console.pending_viewer_expired(None, {'ActiveState': state}, 30, 31))
+            self.assertFalse(console.pending_viewer_expired(None, {'ActiveState': state}, 30, 29))
+        for state in [{}, {'ActiveState': 'active'}, {'ActiveState': 'activating'}]:
+            self.assertFalse(console.pending_viewer_expired(None, state, 30, 31))
+        self.assertFalse(console.pending_viewer_expired('seen', {'ActiveState': 'inactive'}, 30, 31))
+
+    def test_foreground_keeps_pty_exit_status_private_log_and_never_prompts(self):
+        for code in [0, 7]:
+            with tempfile.TemporaryDirectory() as directory:
+                receipt = Path(directory)/'receipt.json'
+                command = ['/bin/echo', 'literal; $(no-command-substitution)']
+                def completed(argv, **kwargs):
+                    started = json.loads(receipt.read_text())
+                    self.assertEqual(started['state'], 'running')
+                    self.assertIn('--return', argv); self.assertIn('--flush', argv)
+                    self.assertEqual(shlex.split(argv[argv.index('--command')+1]), command)
+                    return Mock(returncode=code)
+                with patch.object(console.os, 'ttyname', return_value='/dev/pts/fixture'), \
+                     patch.object(console.subprocess, 'run', side_effect=completed), \
+                     patch('builtins.input') as prompt:
+                    self.assertEqual(console.run_foreground(command, 'Fixture', receipt), code)
+                    prompt.assert_not_called()
+                data = json.loads(receipt.read_text())
+                self.assertEqual((data['state'], data['exit_code']), ('finished', code))
+                self.assertEqual(receipt.stat().st_mode & 0o777, 0o600)
+                self.assertEqual(Path(data['transcript']).stat().st_mode & 0o777, 0o600)
+
+    def test_launch_error_is_saved_and_exits_without_hold(self):
+        with tempfile.TemporaryDirectory() as directory:
+            receipt = Path(directory)/'receipt.json'
+            with patch.object(console.os, 'ttyname', return_value='/dev/pts/fixture'), \
+                 patch.object(console.subprocess, 'run', side_effect=OSError('missing utility')), \
+                 patch('builtins.input') as prompt:
+                self.assertEqual(console.run_foreground(['/missing'], 'Fixture', receipt), 127)
+                prompt.assert_not_called()
+            self.assertEqual(json.loads(receipt.read_text())['exit_code'], 127)
+            self.assertIn('Launch failed', receipt.with_suffix('.log').read_text())
+
+    def test_foreground_and_failed_selector_modes_do_not_hold(self):
+        for mode in ['foreground', 'selection']:
+            with tempfile.TemporaryDirectory() as directory:
+                receipt = Path(directory)/'receipt.json'
+                with patch.object(sys, 'argv', ['visible_terminal.py', mode, '--receipt', str(receipt), '--', '/bin/false']), \
+                     patch.object(sys.stdout, 'isatty', return_value=True), \
+                     patch.object(console, 'run_foreground', return_value=7) as run, \
+                     patch('builtins.input') as prompt:
+                    with self.assertRaises(SystemExit) as exit_status:
+                        console.main()
+                    self.assertEqual(exit_status.exception.code, 7)
+                    run.assert_called_once_with(['/bin/false'], 'Local LLM', receipt)
+                    prompt.assert_not_called()
 
 
 class StopOwnership(unittest.TestCase):
