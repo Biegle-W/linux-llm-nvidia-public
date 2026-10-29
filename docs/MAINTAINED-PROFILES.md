@@ -30,12 +30,35 @@ or that untested larger contexts work.
 
 ## The six retained profiles
 
-Current contexts and dated speed evidence appear below. Four new contexts passed
-matched confirmation and near-window retrieval: HyperQwen 50,627 input tokens,
-SGLang 29,434, GLM 58,986 and Strata DeepSeek 117,866. Flash is retained at 32K.
-Maya DeepSeek stays at 32K with earlier 9,674-input retrieval evidence; sustained
-active-swap qualification remains unresolved. It keeps all guards and may stop on
-longer requests. A passing short request does not resolve that limitation.
+2 of the four SSD-streaming profiles now have bounded qualification with one 16 GiB
+DIMM removed (45.55 GiB usable): unchanged contexts, JSON/arithmetic, near-window
+retrieval, supported images, sustained generation, fresh-process reload and normal
+router loading. Qualified cache choices are deployed temporarily. This supersedes earlier
+reduced-RAM caveats only for these selected settings and this
+bounded workload; it does not establish multi-hour reliability or an exhaustive
+cache optimum. Dense measurements were carried forward without retesting.
+
+- `glm-maya`: 2.11 decode tok/s (-56.1% against saved full-RAM fixtures), 65,536 context; 231.1s continuous generation and fresh-process reload passed.
+- `deepseek-strata`: 1.80 decode tok/s (-39.2% against saved full-RAM fixtures), 131,072 context; 381.1s continuous generation and fresh-process reload passed.
+
+Comparisons use saved historical full-RAM fixtures, not a fresh paired full-RAM
+control. Preserve swappiness 60, 512 MiB dense reserve, native MoE GPU reserves,
+8 GiB host floor, 82 C temperature limit, unchanged worker budgets and active
+swap/churn/pressure/telemetry guards, concurrency one and 600-second idle unload.
+Normal validation finished idle; router and DSH ownership were preserved and no
+fallback was restored. Original credential-redacted settings are archived privately
+with hashes; raw credentials and study evidence stay local.
+
+Restore the appropriate full-RAM cache settings only after explicit human
+confirmation that the DIMM is restored and Linux capacity verification, followed
+by normal guarded loading checks and selected-setting metadata updates. A rise
+in MemAvailable or elapsed time does not trigger restoration. Preserve unrelated
+router/desktop improvements, credentials, guards and independent speed history.
+
+See [qualification and all six current results](REDUCED-RAM-20261028.md) and
+[machine-readable evidence](benchmark-results/20261028-reduced-ram.json).
+
+Unresolved on reduced RAM: `deepseek-maya`, `flash-next-strata`. Their original cache settings and historical full-RAM table values are retained; they may stop at the unchanged guards. No passing reduced-RAM operating configuration or reliable slowdown percentage was established for them.
 
 HyperQwen uses 704 MiB KV/rank and 256-token chunks. SGLang now uses the
 [deployed TP2/MTP3 W4A8 runtime](SGLANG-DEPLOYMENT-20261028.md), BF16 state/KV,
@@ -48,28 +71,25 @@ and retrieval runs keep their actual legacy/new swap-policy attribution.
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang / heterogeneous TP2 + MTP3 W4A8 | 1,667.9 | 1.346 | 84.76 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | SGLang / htsglang TP2 + MTP3, MLP W4A8 | 1,667.9 | 1.346 | 84.76 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 
 ### MoE models with CPU RAM offload
 
-None currently kept. RAM tiers are caches of SSD-streamed weights.
+None currently kept. Expert RAM tiers below are caches within SSD-streamed profiles.
 
 ### MoE models with SSD streaming
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: `models/strata/models/IQ3_XXS` |
-| GLM-5.3-Flash / Maya-S24 | Maya | 65.5 | 33.740 | 4.81 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: `models/maya/Maya-S24` |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 33.3 | 65.796 | 2.95 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| GLM-5.3-Flash / Maya-S24 | Maya | 46.8 | 47.061 | 2.11 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: `models/maya/Maya-S24` |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 32.2 | 68.049 | 1.80 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
 
-
-The selected SGLang median is the latest October 28 three-request 32K control
-from the [context study](SGLANG-CONTEXT-20261028.md). The original 82.79 deployment
-qualification remains preserved. No larger context passed the no-loss criterion.
-Historical speed/qualification reports remain preserved. Maya speed values come
-from the previous MoE study; its settings were not relabeled newly qualified.
+Only qualified SSD rows are new reduced-RAM medians. Unresolved SSD rows and dense rows retain their latest
+qualified measurements. Historical results remain preserved in the benchmark
+ledger and dated reports; see the reduced-RAM report for methods and limitations.
 
 ## Launching
 

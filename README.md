@@ -1,5 +1,39 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: reduced-RAM SSD qualification — October 28
+
+2 of the four SSD-streaming profiles now have bounded qualification with one 16 GiB
+DIMM removed (45.55 GiB usable): unchanged contexts, JSON/arithmetic, near-window
+retrieval, supported images, sustained generation, fresh-process reload and normal
+router loading. Qualified cache choices are deployed temporarily. This supersedes earlier
+reduced-RAM caveats only for these selected settings and this
+bounded workload; it does not establish multi-hour reliability or an exhaustive
+cache optimum. Dense measurements were carried forward without retesting.
+
+- `glm-maya`: 2.11 decode tok/s (-56.1% against saved full-RAM fixtures), 65,536 context; 231.1s continuous generation and fresh-process reload passed.
+- `deepseek-strata`: 1.80 decode tok/s (-39.2% against saved full-RAM fixtures), 131,072 context; 381.1s continuous generation and fresh-process reload passed.
+
+Comparisons use saved historical full-RAM fixtures, not a fresh paired full-RAM
+control. Preserve swappiness 60, 512 MiB dense reserve, native MoE GPU reserves,
+8 GiB host floor, 82 C temperature limit, unchanged worker budgets and active
+swap/churn/pressure/telemetry guards, concurrency one and 600-second idle unload.
+Normal validation finished idle; router and DSH ownership were preserved and no
+fallback was restored. Original credential-redacted settings are archived privately
+with hashes; raw credentials and study evidence stay local.
+
+Restore the appropriate full-RAM cache settings only after explicit human
+confirmation that the DIMM is restored and Linux capacity verification, followed
+by normal guarded loading checks and selected-setting metadata updates. A rise
+in MemAvailable or elapsed time does not trigger restoration. Preserve unrelated
+router/desktop improvements, credentials, guards and independent speed history.
+
+See [qualification and all six current results](docs/REDUCED-RAM-20261028.md) and
+[machine-readable evidence](docs/benchmark-results/20261028-reduced-ram.json).
+
+Unresolved on reduced RAM: `deepseek-maya`, `flash-next-strata`. Their original cache settings and historical full-RAM table values are retained; they may stop at the unchanged guards. No passing reduced-RAM operating configuration or reliable slowdown percentage was established for them.
+
+Earlier dated qualification statements below remain historical evidence.
+
 ## NVIDIA-agent parity handoff — October 27
 
 The user requested [notes for NVIDIA-server agents](docs/AMD-PARITY-HANDOFF-20261027.md)

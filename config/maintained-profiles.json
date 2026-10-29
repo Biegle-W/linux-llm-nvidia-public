@@ -575,41 +575,48 @@
       },
       "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
       "selected_settings": {
-        "expert_ram_gib": 40,
+        "expert_ram_gib": 24,
         "environment": {
-          "MAYA_GLM_RAM_GB": "40"
+          "MAYA_GLM_RAM_GB": "24"
         },
-        "reason": "Larger bounded expert tier and on-demand CPU vision retain 32K while improving prompt and decode throughput.",
+        "reason": "Temporary qualified cache choice for 45.55 GiB usable RAM with one 16 GiB DIMM removed; context, model/precision, concurrency, runtime pins and all guards retained.",
         "expert_profile": "data/glm-maya-expert-profile.bin",
         "prefill": "auto",
         "kv_streaming": true,
         "mtp": true,
         "cpu_vision": "on-demand fallback; released after image encoding",
         "reserve_mib_per_gpu": 2048,
-        "context_trial_args": {}
+        "context_trial_args": {},
+        "temporary_reduced_ram": {
+          "temporary": true,
+          "restore_after": "Explicit human RAM-restoration confirmation plus Linux capacity verification; restore full-RAM cache preimages only, then normal guarded loading verification",
+          "preimage_manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
+          "archive_commit": "38d70cda3860da0576222987b4677b993467f4b1"
+        }
       },
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "benchmark_configuration_note": "Historical 8K automatic-RAM benchmark remains under benchmark; latest_benchmark records the current bounded tier and on-demand CPU vision.",
       "latest_benchmark": {
-        "run": "20261027-context-expansion",
-        "variant": "glm-maya-65536-accepted-confirmed",
-        "date": "2026-10-27",
+        "run": "20261028-reduced-ram",
+        "variant": "glm-maya-ram24",
+        "date": "2026-10-28",
         "context": 65536,
+        "physical_ram_usable_gib": 45.55,
         "repetitions": 3,
-        "host_vm_swappiness": 60,
-        "swap_policy": "bounded-1GiB legacy",
         "input_tokens_range": [
           2199,
           2209
         ],
         "output_tokens": 128,
-        "ttft_s": 33.73995778399694,
-        "prefill_tps": 65.5,
-        "decode_tps": 4.809461400594785,
-        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
-        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
-        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        "prefill_tps": 46.8,
+        "ttft_s": 47.060714291001204,
+        "decode_tps": 2.1108503035112087,
+        "prefill_method": "native engine prompt timing",
+        "decode_method": "client SSE (completion_tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/REDUCED-RAM-20261028.md",
+        "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
+        "host_vm_swappiness": 60,
+        "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -642,6 +649,50 @@
         "control": "glm-maya-32768-control",
         "selected_variant": "glm-maya-65536-accepted-confirmed",
         "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
+      },
+      "benchmark_history": [
+        {
+          "run": "20261027-context-expansion",
+          "variant": "glm-maya-65536-accepted-confirmed",
+          "date": "2026-10-27",
+          "context": 65536,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "bounded-1GiB legacy",
+          "input_tokens_range": [
+            2199,
+            2209
+          ],
+          "output_tokens": 128,
+          "ttft_s": 33.73995778399694,
+          "prefill_tps": 65.5,
+          "decode_tps": 4.809461400594785,
+          "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+          "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+          "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        }
+      ],
+      "reduced_ram_qualification": {
+        "run": "20261028-reduced-ram",
+        "variant": "glm-maya-ram24",
+        "context": 65536,
+        "physical_ram_usable_gib": 45.55,
+        "retrieval_input_tokens": 58986,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": true,
+        "continuous_generation_s": 231.06560096499743,
+        "fresh_process_reload_passed": true,
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "evidence": "docs/REDUCED-RAM-20261028.md"
+      },
+      "retired_full_ram_cache_reference": {
+        "repository": "Biegle-W/retired-llm-setting",
+        "commit": "38d70cda3860da0576222987b4677b993467f4b1",
+        "manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
+        "credentials": "Redacted from Git preimages; original owner-only local credentials are retained"
       }
     },
     {
@@ -695,35 +746,42 @@
         "parallel": 1,
         "reasoning_effort": "none",
         "environment": {
-          "DS4_STORE_GB": "42",
+          "DS4_STORE_GB": "24",
           "DS4_STORE_POLICY": "1"
         },
         "expert_profile": "data/deepseek-strata-expert-profile.bin",
-        "expert_ram_store_gb": 42.0,
+        "expert_ram_store_gb": 24.0,
         "expert_cache_policy": "LFU",
-        "reason": "Bounded 48 GiB worker and 42 GB frequency-based expert store retain the 64K allocation.",
-        "context_trial_args": {}
+        "reason": "Temporary qualified cache choice for 45.55 GiB usable RAM with one 16 GiB DIMM removed; context, model/precision, concurrency, runtime pins and all guards retained.",
+        "context_trial_args": {},
+        "temporary_reduced_ram": {
+          "temporary": true,
+          "restore_after": "Explicit human RAM-restoration confirmation plus Linux capacity verification; restore full-RAM cache preimages only, then normal guarded loading verification",
+          "preimage_manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
+          "archive_commit": "38d70cda3860da0576222987b4677b993467f4b1"
+        }
       },
       "latest_benchmark": {
-        "run": "20261027-context-expansion",
-        "variant": "deepseek-strata-131072-accepted-confirmed",
-        "date": "2026-10-27",
+        "run": "20261028-reduced-ram",
+        "variant": "deepseek-strata-store24",
+        "date": "2026-10-28",
         "context": 131072,
+        "physical_ram_usable_gib": 45.55,
         "repetitions": 3,
-        "host_vm_swappiness": 60,
-        "swap_policy": "bounded-1GiB legacy",
         "input_tokens_range": [
           2179,
           2198
         ],
         "output_tokens": 128,
-        "ttft_s": 65.79570539899578,
-        "prefill_tps": 33.3,
-        "decode_tps": 2.954827446086253,
-        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
-        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
-        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        "prefill_tps": 32.2,
+        "ttft_s": 68.04903762399044,
+        "decode_tps": 1.7953964876237218,
+        "prefill_method": "native engine prompt timing",
+        "decode_method": "client SSE (completion_tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/REDUCED-RAM-20261028.md",
+        "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
+        "host_vm_swappiness": 60,
+        "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -755,6 +813,50 @@
         "control": "deepseek-strata-65536-control",
         "selected_variant": "deepseek-strata-131072-accepted-confirmed",
         "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
+      },
+      "benchmark_history": [
+        {
+          "run": "20261027-context-expansion",
+          "variant": "deepseek-strata-131072-accepted-confirmed",
+          "date": "2026-10-27",
+          "context": 131072,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "bounded-1GiB legacy",
+          "input_tokens_range": [
+            2179,
+            2198
+          ],
+          "output_tokens": 128,
+          "ttft_s": 65.79570539899578,
+          "prefill_tps": 33.3,
+          "decode_tps": 2.954827446086253,
+          "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+          "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+          "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        }
+      ],
+      "reduced_ram_qualification": {
+        "run": "20261028-reduced-ram",
+        "variant": "deepseek-strata-store24",
+        "context": 131072,
+        "physical_ram_usable_gib": 45.55,
+        "retrieval_input_tokens": 117866,
+        "three_markers_passed": true,
+        "json_arithmetic_passed": true,
+        "image_passed": null,
+        "continuous_generation_s": 381.13710950899986,
+        "fresh_process_reload_passed": true,
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "evidence": "docs/REDUCED-RAM-20261028.md"
+      },
+      "retired_full_ram_cache_reference": {
+        "repository": "Biegle-W/retired-llm-setting",
+        "commit": "38d70cda3860da0576222987b4677b993467f4b1",
+        "manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
+        "credentials": "Redacted from Git preimages; original owner-only local credentials are retained"
       }
     },
     {
