@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'docs/MAYA-DS4-VRAM512-FOLLOWUP-20261029.md', 'docs/benchmark-results/20261029-maya512-followup.json',
     'docs/MOE-VRAM512-20261029.md', 'docs/benchmark-results/20261029-moe-vram512.json',
     'docs/ALL-PROFILES-HOST-RESERVE2-20261029.md', 'docs/validation-results/20261029-all-profiles-host-reserve2.json',
     'docs/QWEN-HOST-RESERVE2-20261028.md', 'docs/benchmark-results/20261028-qwen-host-reserve2.json',

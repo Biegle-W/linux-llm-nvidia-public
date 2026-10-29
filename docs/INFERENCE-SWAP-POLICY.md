@@ -129,3 +129,27 @@ qualified VRAM selections unless the human revises them. No timer trigger.
 
 See [qualification and current results](MOE-VRAM512-20261029.md) and
 [numeric evidence](benchmark-results/20261029-moe-vram512.json).
+
+
+## DeepSeek/Maya 512 MiB follow-up — October 29
+
+Three additional DeepSeek/Maya 512 MiB candidates were rejected: disabled warming/prefetch,
+256-token prompt chunks, and a native 12 GB copied/pinned expert cache. All hit the
+unchanged owned-worker swap-write guard (7.23, 4.29 and 6.03 MiB/s over ~30 seconds;
+write limit 1 MiB/s). Smaller chunks completed warm-up but failed during the first
+measured response. No cgroup high/max/OOM event occurred; the engine's generic
+OOM suggestion is not evidence of an OOM kill. File-cache/anonymous reclaim
+competition is consistent with the observations; exact kernel victim selection
+was not isolated.
+
+Nothing was applied. DeepSeek/Maya retains 2,048 MiB reserve, 32K, original cache/
+prefill settings and historical benchmark. GLM/Strata DeepSeek 512 MiB selections
+and dense RAM-cap removal remain unchanged. No runtime, precision, worker budget,
+swappiness 60, host 2 GiB, thermal/swap/PSI/telemetry guard, idle 600s or concurrency
+change. Trial workers stopped, GPU reservation released, router idle and DSH
+preserved; no fallback. No passing 512 MiB setup was found in these tested controls.
+Full-RAM cache restoration still requires explicit human confirmation and Linux
+capacity verification.
+
+See [DeepSeek/Maya follow-up](MAYA-DS4-VRAM512-FOLLOWUP-20261029.md) and
+[numeric evidence](benchmark-results/20261029-maya512-followup.json).

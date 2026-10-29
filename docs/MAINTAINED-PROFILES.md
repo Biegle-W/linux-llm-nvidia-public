@@ -233,3 +233,10 @@ quality/history/tools and sustained resources under the accepted proportional
 policy. Normal reload backed only 37,501 of 38,912 advertised tokens, so promotion
 was rejected and the selected 32K profile/speed table above remains current.
 No speed screens were repeated; source/precision/budgets/guards remain unchanged.
+
+
+October 29 follow-up: three additional DeepSeek/Maya 512 MiB cache candidates failed
+the unchanged swap guard; selected settings and all six table results remain unchanged.
+
+See [DeepSeek/Maya follow-up](MAYA-DS4-VRAM512-FOLLOWUP-20261029.md) and
+[numeric evidence](benchmark-results/20261029-maya512-followup.json).

@@ -1,0 +1,220 @@
+{
+  "schema": 1,
+  "date": "2026-10-29",
+  "physical_ram_usable_gib": 45.55,
+  "profile": "deepseek-maya",
+  "requested_reserve_mib": 512,
+  "applied": false,
+  "selected_reserve_mib": 2048,
+  "production_config_unchanged": true,
+  "selected_benchmark_unchanged": true,
+  "trials": [
+    {
+      "variant": "deepseek-maya-vram512",
+      "plan": {
+        "id": "deepseek-maya-vram512",
+        "profile": "deepseek-maya",
+        "args": {
+          "--reserve-mib": 512
+        },
+        "env": {},
+        "qualify": true
+      },
+      "passed": false,
+      "guard_stop": "Sustained owned-worker swap churn during inference",
+      "stopping_rates": {
+        "window_s": 30.43140096400748,
+        "read_mib_s": 0.0033374243966001536,
+        "write_mib_s": 7.940374451895727,
+        "combined_mib_s": 7.943711876292327
+      },
+      "peak_charged_worker_gib": 39.799591064453125,
+      "peak_worker_swap_mib": 318.9140625,
+      "minimum_host_available_gib": 35.13723373413086,
+      "peak_charged_file_gib": 39.206424713134766,
+      "maximum_temperature_c": 52.0,
+      "minimum_free_vram_mib": {
+        "0": 327.0,
+        "1": 346.0
+      },
+      "final_memory_events": {
+        "low": "0",
+        "high": "0",
+        "max": "0",
+        "oom": "0",
+        "oom_kill": "0",
+        "oom_group_kill": "0",
+        "sock_throttled": "0"
+      },
+      "completed_requests": []
+    },
+    {
+      "variant": "deepseek-maya-vram512-no-prefetch",
+      "plan": {
+        "id": "deepseek-maya-vram512-no-prefetch",
+        "profile": "deepseek-maya",
+        "args": {
+          "--reserve-mib": 512
+        },
+        "env": {
+          "DS4_WARM_CAP_GB": "0",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "0",
+          "DS4_READAHEAD_MB": "0",
+          "DS4_AHEAD": "0"
+        },
+        "qualify": true,
+        "hypothesis": "Bound speculative file-cache pollution while retaining all resource guards; first such candidate at512MiB"
+      },
+      "passed": false,
+      "guard_stop": "Sustained owned-worker swap churn during inference",
+      "stopping_rates": {
+        "window_s": 30.415466941005434,
+        "read_mib_s": 0.012586112872852231,
+        "write_mib_s": 7.227125813204221,
+        "combined_mib_s": 7.2397119260770735
+      },
+      "peak_charged_worker_gib": 36.022315979003906,
+      "peak_worker_swap_mib": 228.609375,
+      "minimum_host_available_gib": 34.787437438964844,
+      "peak_charged_file_gib": 35.468780517578125,
+      "maximum_temperature_c": 54.0,
+      "minimum_free_vram_mib": {
+        "0": 357.0,
+        "1": 346.0
+      },
+      "final_memory_events": {
+        "low": "0",
+        "high": "0",
+        "max": "0",
+        "oom": "0",
+        "oom_kill": "0",
+        "oom_group_kill": "0",
+        "sock_throttled": "6"
+      },
+      "completed_requests": []
+    },
+    {
+      "variant": "deepseek-maya-vram512-chunk256",
+      "plan": {
+        "id": "deepseek-maya-vram512-chunk256",
+        "profile": "deepseek-maya",
+        "args": {
+          "--reserve-mib": 512,
+          "--prefill-chunk": 256
+        },
+        "env": {
+          "DS4_WARM_CAP_GB": "0",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "0",
+          "DS4_READAHEAD_MB": "0",
+          "DS4_AHEAD": "0"
+        },
+        "qualify": true,
+        "hypothesis": "Keep zero-prefetch settings and reduce prompt batch4096to256 to bound native staging and expert working set"
+      },
+      "passed": false,
+      "guard_stop": "Sustained owned-worker swap churn during inference",
+      "stopping_rates": {
+        "window_s": 30.40914428200631,
+        "read_mib_s": 0.0007707385575419967,
+        "write_mib_s": 4.28877470344244,
+        "combined_mib_s": 4.289545441999983
+      },
+      "peak_charged_worker_gib": 30.83686065673828,
+      "peak_worker_swap_mib": 134.0234375,
+      "minimum_host_available_gib": 36.82840347290039,
+      "peak_charged_file_gib": 30.109596252441406,
+      "maximum_temperature_c": 59.0,
+      "minimum_free_vram_mib": {
+        "0": 339.0,
+        "1": 334.0
+      },
+      "final_memory_events": {
+        "low": "0",
+        "high": "0",
+        "max": "0",
+        "oom": "0",
+        "oom_kill": "0",
+        "oom_group_kill": "0",
+        "sock_throttled": "6"
+      },
+      "completed_requests": [
+        {
+          "case": "warmup",
+          "rep": 0,
+          "prompt_tokens": 628,
+          "generated_tokens": 64,
+          "wall_s": 134.909
+        }
+      ]
+    },
+    {
+      "variant": "deepseek-maya-vram512-pinned12",
+      "plan": {
+        "id": "deepseek-maya-vram512-pinned12",
+        "profile": "deepseek-maya",
+        "args": {
+          "--reserve-mib": 512,
+          "--prefill-chunk": 256,
+          "--mmap-experts": "off"
+        },
+        "env": {
+          "DS4_WARM_CAP_GB": "12",
+          "DS4_WARM_GB": "0",
+          "DS4_ENGRAM_CACHE_MB": "0",
+          "DS4_READAHEAD_MB": "128",
+          "DS4_AHEAD": "0",
+          "DS4_STREAM_ZC": "1",
+          "STRATA_DS4_PIN_BY_NEED": "1",
+          "STRATA_DS4_PIN_GB": "12"
+        },
+        "qualify": true,
+        "hypothesis": "Native copied expert cache bounded12decimalGB, pinned by routing need under same12GBcap; remaining experts stream; preserve all guards"
+      },
+      "passed": false,
+      "guard_stop": "Sustained owned-worker swap churn during inference",
+      "stopping_rates": {
+        "window_s": 30.430212613006006,
+        "read_mib_s": 0.0038510246868900793,
+        "write_mib_s": 6.031474864607242,
+        "combined_mib_s": 6.035325889294132
+      },
+      "peak_charged_worker_gib": 37.12480926513672,
+      "peak_worker_swap_mib": 279.609375,
+      "minimum_host_available_gib": 25.843135833740234,
+      "peak_charged_file_gib": 25.417282104492188,
+      "maximum_temperature_c": 57.0,
+      "minimum_free_vram_mib": {
+        "0": 312.0,
+        "1": 312.0
+      },
+      "final_memory_events": {
+        "low": "0",
+        "high": "0",
+        "max": "0",
+        "oom": "0",
+        "oom_kill": "0",
+        "oom_group_kill": "0",
+        "sock_throttled": "4"
+      },
+      "completed_requests": []
+    }
+  ],
+  "interpretation": "Owned-cgroup swap writes exceeded the unchanged guard. No cgroup high/max/OOM events. Large file-backed working sets and reclaim are consistent with file-cache/anonymous reclaim competition, but an exact kernel victim-selection cause was not isolated.",
+  "limits": "No candidate completed three measured requests or full quality/retrieval/sustained/reload qualification. Partial request speeds are not qualified benchmarks. Cgroup residency is charge ownership, not total physical residency of shared mapped files.",
+  "other_deployed_profiles_unchanged": true,
+  "guard_policy": {
+    "host_available_floor_gib": 2,
+    "temperature_c": 82,
+    "worker_high_gib": 46,
+    "worker_max_gib": 48,
+    "swappiness": 60,
+    "concurrency": 1,
+    "idle_seconds": 600,
+    "sustained_write_limit_mib_s": 1,
+    "combined_swap_limit_mib_s": 8,
+    "swap_window_s": 30
+  },
+  "normal_validation": "Not reached: all isolated candidates failed; prepared validator was never executed"
+}
