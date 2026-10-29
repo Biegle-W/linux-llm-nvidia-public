@@ -595,3 +595,16 @@ See [qualification and all six current results](REDUCED-RAM-20261028.md) and
 [machine-readable evidence](benchmark-results/20261028-reduced-ram.json).
 
 Unresolved on reduced RAM: `deepseek-maya`, `flash-next-strata`. Their original cache settings and historical full-RAM table values are retained; they may stop at the unchanged guards. No passing reduced-RAM operating configuration or reliable slowdown percentage was established for them.
+
+Final ownership: no qualification coordinator or GPU reservation remains; isolated
+and normal workers are stopped. Completed minimized review consoles may remain
+available. Router is idle and DSH remains active; no fallback was restored.
+
+No publication or selected-profile validation work remains after the verified
+both-repository push recorded privately. Flash and Maya DeepSeek reduced-RAM
+qualification remains unresolved after the bounded cache study; do not relabel
+partial retrieval/benchmark passes or repeat completed variants for luck.
+Next action: when the human explicitly confirms the RAM DIMM is restored, verify
+Linux capacity, restore only the appropriate full-RAM cache settings from saved
+preimages, validate normal guarded loading and update selected metadata. Preserve
+all unrelated router/desktop changes and independent benchmark history.
