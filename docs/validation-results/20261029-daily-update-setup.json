@@ -7,7 +7,7 @@
   "missed_nights_catch_up": false,
   "idle_seconds": 1200,
   "admission_deadline_local": "06:30",
-  "cpu_tests_passed": 197,
+  "cpu_tests_passed": 198,
   "six_component_discovery": [
     {
       "component": "hyperqwen",
@@ -48,5 +48,6 @@
   "gpu_reservation_absent": true,
   "qwen_selected_settings_preserved": true,
   "maya_cachebound_binary_pin_verified": true,
-  "systemd_verification": "passed; unrelated existing spice-vdagent Install-section warning"
+  "systemd_verification": "passed; unrelated existing spice-vdagent Install-section warning",
+  "nightly_nonpersonal_commit_identity_enforced": true
 }

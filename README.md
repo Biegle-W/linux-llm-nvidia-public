@@ -14,7 +14,7 @@ sustained generation, fresh reload and resource checks. Paired performance uses
 the AMD 95% prefill/decode and bounded TTFT envelope. Patch drift, missing evidence,
 failed production baselines or candidate gates block promotion. Durable preimages,
 recovery-before-router ordering and exact reservation ownership protect existing
-work. All 197 CPU regressions passed. See [schedule and gates](docs/DAILY-ENGINE-UPDATE-POLICY.md)
+work. All 198 CPU regressions passed. See [schedule and gates](docs/DAILY-ENGINE-UPDATE-POLICY.md)
 and [daily ledger](docs/DAILY-ENGINE-UPDATES.md).
 
 Qwen Flash-Next now uses plain mapped experts and both GPUs at 32K, with its

@@ -1,5 +1,6 @@
 """Publish only reviewed ledger/pin files; retain independent public history."""
 import hashlib
+import os
 import subprocess
 from pathlib import Path
 import sys
@@ -28,6 +29,14 @@ def audit_payload(root):
     return hashes
 
 
+def commit(root,message,files=()):
+    env=dict(os.environ,GIT_AUTHOR_NAME='LLM Maintenance',GIT_AUTHOR_EMAIL='llm-maintenance@example.invalid',
+             GIT_COMMITTER_NAME='LLM Maintenance',GIT_COMMITTER_EMAIL='llm-maintenance@example.invalid')
+    command=['git','-C',str(root),'commit','-m',message]
+    if files: command.extend(['--',*files])
+    subprocess.run(command,check=True,env=env)
+
+
 def publish(root, owned):
     root = Path(root); public = root.parent/'linux-llm-nvidia-public'
     if git(root,'diff','--name-only','--cached'): raise RuntimeError('Unrelated staged changes preserved; publication deferred')
@@ -38,12 +47,12 @@ def publish(root, owned):
     changed = [p for p in owned if git(root,'status','--porcelain','--',p)]
     if changed:
         subprocess.run(['git','-C',str(root),'add','--',*changed],check=True)
-        subprocess.run(['git','-C',str(root),'commit','-m','Record qualified nightly NVIDIA engine update','--',*changed],check=True)
+        commit(root,'Record qualified nightly NVIDIA engine update',changed)
         subprocess.run(['git','-C',str(root),'push'],check=True,timeout=120)
     subprocess.run([sys.executable,str(root/'scripts/sync_public.py'),str(public)],check=True)
     for name,expected in hashes.items():
         if hashlib.sha256((public/name).read_bytes()).hexdigest()!=expected: raise RuntimeError('Export byte identity mismatch: '+name)
     if git(public,'diff','--name-only'):
         subprocess.run(['git','-C',str(public),'add','--',*hashes],check=True)
-        subprocess.run(['git','-C',str(public),'commit','-m','Publish qualified nightly NVIDIA engine results'],check=True)
+        commit(public,'Publish qualified nightly NVIDIA engine results')
         subprocess.run(['git','-C',str(public),'push'],check=True,timeout=120)

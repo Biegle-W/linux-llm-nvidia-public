@@ -226,4 +226,16 @@ class NativeCoverageTests(unittest.TestCase):
             with patch('update_builders.subprocess.check_output',return_value='Test #1: kernel_parity\nTotal Tests: 1'),patch('update_builders.run',side_effect=skipped):
                 with self.assertRaisesRegex(RuntimeError,'skipped'):kernel_tests({'ctest':str(root)},root)
 
+class CommitIdentityTests(unittest.TestCase):
+    def test_nightly_commit_overrides_personal_environment_identity(self):
+        from update_publish import commit
+        with patch.dict(os.environ,{'GIT_AUTHOR_NAME':'personal','GIT_AUTHOR_EMAIL':'personal@example.invalid'}),patch('update_publish.subprocess.run') as run:
+            commit(Path('/repository'),'Update',['config/pin.json'])
+            env=run.call_args.kwargs['env']
+            self.assertEqual(env['GIT_AUTHOR_NAME'],'LLM Maintenance')
+            self.assertEqual(env['GIT_COMMITTER_NAME'],'LLM Maintenance')
+            self.assertEqual(env['GIT_AUTHOR_EMAIL'],'llm-maintenance@example.invalid')
+            self.assertEqual(env['GIT_COMMITTER_EMAIL'],'llm-maintenance@example.invalid')
+
+
 if __name__=='__main__':unittest.main()
