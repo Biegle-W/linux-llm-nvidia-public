@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/BENCHMARK-SSD-SWAP-64GB-20261029.md',
+    'docs/benchmark-results/20261029-ssd-relaxed-swap.json',
     'docs/BENCHMARK-64GB-20261029.md',
     'docs/benchmark-results/20261029-full-ram.json',
     'docs/FULL-RAM-RESTORATION-20261029.md',

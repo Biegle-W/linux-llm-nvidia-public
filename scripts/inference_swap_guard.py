@@ -13,6 +13,10 @@ PAGE_BYTES = os.sysconf('SC_PAGE_SIZE')
 MIB = 1024 ** 2
 # User-approved dense GPU free-memory floor; independent of swap thresholds.
 DENSE_GPU_FREE_MIB = 512
+# Explicit maintained SSD-streaming profiles; unknown/dense profiles fail closed.
+SSD_STREAMING_PROFILES = frozenset({
+    'flash-next-strata', 'glm-maya', 'deepseek-strata', 'deepseek-maya',
+})
 
 
 class TelemetryError(RuntimeError):
@@ -94,10 +98,10 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 class WorkerWatch:
     def __init__(self, group, profile, key, *, evidence=None, phase_file=None, latch=True):
         self.group, self.profile, self.key = Path(group), profile, key
-        # Qwen's mapped-expert mode may evict cold anonymous pages while its
-        # file cache warms. Permit bounded I/O without weakening other models.
+        # SSD-streaming profiles may evict cold anonymous pages as file caches
+        # warm. Keep their bounded I/O policy separate from dense defaults.
         self.policy = ({'write_mib_s': 128, 'combined_mib_s': 160}
-                       if profile == 'flash-next-strata' else {})
+                       if profile in SSD_STREAMING_PROFILES else {})
         self.guard, self.ready = SwapGuard(**self.policy), False
         self.evidence = Path(evidence) if evidence else ROOT / 'data/router' / (profile + '-swap-guard.jsonl')
         self.phase_file = Path(phase_file) if phase_file else None

@@ -1,5 +1,30 @@
 # Maintained model, quantization and engine settings
 
+## Latest matched speed evidence
+
+2 of four SSD profiles completed three valid measured requests without guard violations on restored 64GB RAM. RAM remains DDR5-4200 MT/s across four 16GB DIMMs (61.3013GiB usable; 2100MHz DDR clock). The dense profiles were not repeated; their table rows carry forward the earlier October 29 full-RAM run. See [full report](BENCHMARK-SSD-SWAP-64GB-20261029.md). Qwen Flash-Next/Strata and DeepSeek/Maya stopped on the unchanged pressure guard; no new passing medians are selected for them. Older dated qualification sections below retain their original settings.
+
+### VRAM-only models
+
+| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 1,494.29 | 1.49 | 88.55 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 1,587.90 | 1.40 | 80.87 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
+
+### MoE models with CPU RAM offload
+
+None currently kept. RAM tiers below are caches within SSD-streaming profiles.
+
+### MoE models with SSD streaming
+
+| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | Not measured | Not measured | Not measured | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: models/strata/models/IQ3_XXS |
+| GLM-5.3-Flash / Maya-S24 | Maya | 63.80 | 34.73 | 4.93 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: models/maya/Maya-S24 |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 34.20 | 63.87 | 2.75 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | Not measured | Not measured | Not measured | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+
+
 ## Latest: qualified bounded DeepSeek/Maya cache — October 29
 
 DeepSeek/Maya passed at **512 MiB native VRAM reserve and unchanged 32,768-token context** on the 45.55 GiB reduced-RAM host. The selected temporary configuration combines a 16 GiB model-file cache target with a native 12 decimal GB pinned hot-expert cache. JSON, arithmetic, image, 29,467-input-token retrieval, 426.5s continuous generation, a fresh isolated process reload and two normal guarded loads all passed. Observed worker swap occupancy and swap read/write rates were zero.
@@ -144,27 +169,7 @@ This generation-first selection supersedes PP2 FP32; other profiles are unchange
 See [context decisions and trials](CONTEXT-EXPANSION-20261027.md). Initial benchmark
 and retrieval runs keep their actual legacy/new swap-policy attribution.
 
-### VRAM-only models
-
-| Model / quant | Engine | Prefill (tok/s) | TTFT (s) | Decode (tok/s) | Context (tokens) | Storage (GB) | Storage location |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
-| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | SGLang | 1,667.9 | 1.346 | 84.76 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
-
-### MoE models with CPU RAM offload
-
-None currently kept. Expert RAM tiers in streamed profiles are caches.
-
-### MoE models with SSD streaming
-
-| Model / quant | Engine | Prefill (tok/s) | TTFT (s) | Decode (tok/s) | Context (tokens) | Storage (GB) | Storage location |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: models/strata/models/IQ3_XXS |
-| GLM-5.3-Flash / Maya-S24 | Maya | 49.3 | 44.703 | 2.59 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: models/maya/Maya-S24 |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 33.6 | 65.220 | 1.88 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 42.5 | 51.491 | 1.23 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
-
-Current table rows use selected measurements; earlier values remain in dated history.
+Older speed measurements are retained in dated reports and registry benchmark history. The current table is at the top of this page.
 
 ## Launching
 

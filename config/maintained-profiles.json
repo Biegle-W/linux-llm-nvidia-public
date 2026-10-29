@@ -663,14 +663,14 @@
         "date": "2026-10-29",
         "physical_ram_usable_gib": 61.30133056640625,
         "normal_router_profile": true,
-        "passed": true,
-        "stage": "normal-startup-and-json",
-        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+        "passed": false,
+        "stage": "fixed-fixture speed benchmark",
+        "scope": "Fixed saved approximately 2.2K-input prompts, one 64-output warmup and three 128-output measured requests. No fresh full-window, image, tool, fresh-reload or long-duration qualification. OS page cache not flushed; loading excluded.",
         "host_floor_gib": 2,
-        "source_settings_unchanged": true,
-        "benchmark_repeated": false,
-        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
-        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+        "only_policy_change": "Four SSD profiles 128/160 MiB/s; independent guards unchanged",
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "stop_cause": "Sustained full-memory pressure during inference"
       },
       "tested_retrieval_input": 29450,
       "selected_settings": {
@@ -700,6 +700,19 @@
           "swap_policy": "Qwen-only 128 MiB/s writes and 160 MiB/s combined over 30 seconds; pressure guard unchanged",
           "evidence": "docs/QWEN-RELAXED-SWAP-20261029.md",
           "numeric_results": "docs/validation-results/20261029-qwen-relaxed-swap.json"
+        },
+        {
+          "date": "2026-10-29",
+          "physical_ram_usable_gib": 61.30133056640625,
+          "normal_router_profile": true,
+          "passed": true,
+          "stage": "normal-startup-and-json",
+          "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+          "host_floor_gib": 2,
+          "source_settings_unchanged": true,
+          "benchmark_repeated": false,
+          "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+          "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
         }
       ],
       "full_ram_restoration": {
@@ -733,9 +746,27 @@
         }
       ],
       "current_configuration_benchmark": {
-        "status": "measured on restored 64GB with current selected settings",
+        "status": "failed; no new speed median",
         "date": "2026-10-29",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md"
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "historical_benchmark_is_not_current_configuration": true
+      },
+      "swap_policy_selection": {
+        "date": "2026-10-29",
+        "scope": "Four maintained SSD-streaming profiles; dense and unknown profiles retain 1/8 MiB/s",
+        "evidence": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "other_guards": "unchanged",
+        "benchmark_status": "failed or incomplete"
+      },
+      "latest_benchmark_attempt": {
+        "date": "2026-10-29",
+        "passed": false,
+        "physical_ram_gb": 64,
+        "configured_ram_speed_mt_s": 4200,
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "scope": "three fixed requests with SSD swap128/160 policy",
+        "reason": "Sustained full-memory pressure during inference"
       }
     },
     {
@@ -783,13 +814,19 @@
         },
         "vram_reserve_args": {
           "--vram-reserve-mib": 512
+        },
+        "swap_guard": {
+          "window_s": 30,
+          "write_mib_s": 128,
+          "combined_mib_s": 160,
+          "pressure_pct": 10
         }
       },
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "benchmark_configuration_note": "Historical 8K automatic-RAM benchmark remains under benchmark; latest_benchmark records the current bounded tier and on-demand CPU vision.",
       "latest_benchmark": {
-        "run": "20261029-full-ram",
-        "variant": "glm-maya-64gb-fixed-fixture",
+        "run": "20261029-ssd-relaxed-swap",
+        "variant": "glm-maya-64gb-ssd128-160",
         "date": "2026-10-29",
         "context": 65536,
         "physical_ram_gb": 64,
@@ -797,20 +834,20 @@
         "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
         "host_vm_swappiness": 60,
-        "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
+        "swap_policy": "SSD-streaming128 MiB/s writes /160 MiB/s combined over30s",
+        "output_tokens": 128,
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c",
+        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+        "prefill_tps": 63.8,
+        "ttft_s": 34.7332943600004,
+        "decode_tps": 4.92634812288044,
         "input_tokens_range": [
           2191,
           2201
         ],
-        "output_tokens": 128,
-        "ttft_s": 31.40691496499994,
-        "prefill_tps": 70.1,
-        "decode_tps": 5.318581178520475,
-        "prefill_method": "native prompt_n / native prompt time",
-        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
-        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        "prefill_method": "native prompt_n / native prompt time"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -903,6 +940,31 @@
           "host_ram_reserve_gib": 2,
           "host_vm_swappiness": 60,
           "method": "Savedfixedfixture/nativeprefill/clientSSETTFTanddecode;historicalpriorcontrolonly"
+        },
+        {
+          "run": "20261029-full-ram",
+          "variant": "glm-maya-64gb-fixed-fixture",
+          "date": "2026-10-29",
+          "context": 65536,
+          "physical_ram_gb": 64,
+          "physical_ram_usable_gib": 61.30133056640625,
+          "configured_ram_speed_mt_s": 4200,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
+          "input_tokens_range": [
+            2191,
+            2201
+          ],
+          "output_tokens": 128,
+          "ttft_s": 31.40691496499994,
+          "prefill_tps": 70.1,
+          "decode_tps": 5.318581178520475,
+          "prefill_method": "native prompt_n / native prompt time",
+          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/BENCHMARK-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
+          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
         }
       ],
       "reduced_ram_qualification": {
@@ -940,22 +1002,22 @@
         "evidence": "docs/MOE-VRAM512-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "measured on restored 64GB with current selected settings",
+        "status": "measured on restored 64GB with SSD128/160 policy",
         "date": "2026-10-29",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md"
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "historical_benchmark_is_not_current_configuration": false
       },
       "current_guard_validation": {
         "date": "2026-10-29",
         "physical_ram_usable_gib": 61.30133056640625,
         "normal_router_profile": true,
         "passed": true,
-        "stage": "normal-startup-json-and-fresh-reload",
-        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+        "stage": "fixed-fixture speed benchmark",
+        "scope": "Fixed saved approximately 2.2K-input prompts, one 64-output warmup and three 128-output measured requests. No fresh full-window, image, tool, fresh-reload or long-duration qualification. OS page cache not flushed; loading excluded.",
         "host_floor_gib": 2,
-        "source_settings_unchanged": false,
-        "benchmark_repeated": false,
-        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
-        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+        "only_policy_change": "Four SSD profiles 128/160 MiB/s; independent guards unchanged",
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json"
       },
       "full_ram_restoration": {
         "confirmed_on": "2026-10-29",
@@ -963,7 +1025,38 @@
         "cache_settings_restored": true,
         "normal_guarded_load_passed": true,
         "historical_benchmarks_unchanged": true
-      }
+      },
+      "swap_policy_selection": {
+        "date": "2026-10-29",
+        "scope": "Four maintained SSD-streaming profiles; dense and unknown profiles retain 1/8 MiB/s",
+        "evidence": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "other_guards": "unchanged",
+        "benchmark_status": "three measured requests passed"
+      },
+      "latest_benchmark_attempt": {
+        "date": "2026-10-29",
+        "passed": true,
+        "physical_ram_gb": 64,
+        "configured_ram_speed_mt_s": 4200,
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "scope": "three fixed requests with SSD swap128/160 policy"
+      },
+      "guard_validation_history": [
+        {
+          "date": "2026-10-29",
+          "physical_ram_usable_gib": 61.30133056640625,
+          "normal_router_profile": true,
+          "passed": true,
+          "stage": "normal-startup-json-and-fresh-reload",
+          "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+          "host_floor_gib": 2,
+          "source_settings_unchanged": false,
+          "benchmark_repeated": false,
+          "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+          "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+        }
+      ]
     },
     {
       "id": "deepseek-strata",
@@ -1033,11 +1126,17 @@
         },
         "vram_reserve_args": {
           "--reserve-mib": 512
+        },
+        "swap_guard": {
+          "window_s": 30,
+          "write_mib_s": 128,
+          "combined_mib_s": 160,
+          "pressure_pct": 10
         }
       },
       "latest_benchmark": {
-        "run": "20261029-full-ram",
-        "variant": "deepseek-strata-64gb-fixed-fixture",
+        "run": "20261029-ssd-relaxed-swap",
+        "variant": "deepseek-strata-64gb-ssd128-160",
         "date": "2026-10-29",
         "context": 131072,
         "physical_ram_gb": 64,
@@ -1045,20 +1144,20 @@
         "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
         "host_vm_swappiness": 60,
-        "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
+        "swap_policy": "SSD-streaming128 MiB/s writes /160 MiB/s combined over30s",
+        "output_tokens": 128,
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c",
+        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+        "prefill_tps": 34.2,
+        "ttft_s": 63.86864420999973,
+        "decode_tps": 2.7538217587589835,
         "input_tokens_range": [
           2173,
           2192
         ],
-        "output_tokens": 128,
-        "ttft_s": 67.29431004299977,
-        "prefill_tps": 32.6,
-        "decode_tps": 3.1206183602624455,
-        "prefill_method": "native prompt_n / native prompt time",
-        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
-        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        "prefill_method": "native prompt_n / native prompt time"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -1150,6 +1249,31 @@
           "host_ram_reserve_gib": 2,
           "host_vm_swappiness": 60,
           "method": "Savedfixedfixture/nativeprefill/clientSSETTFTanddecode;historicalpriorcontrolonly"
+        },
+        {
+          "run": "20261029-full-ram",
+          "variant": "deepseek-strata-64gb-fixed-fixture",
+          "date": "2026-10-29",
+          "context": 131072,
+          "physical_ram_gb": 64,
+          "physical_ram_usable_gib": 61.30133056640625,
+          "configured_ram_speed_mt_s": 4200,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
+          "input_tokens_range": [
+            2173,
+            2192
+          ],
+          "output_tokens": 128,
+          "ttft_s": 67.29431004299977,
+          "prefill_tps": 32.6,
+          "decode_tps": 3.1206183602624455,
+          "prefill_method": "native prompt_n / native prompt time",
+          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/BENCHMARK-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
+          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
         }
       ],
       "reduced_ram_qualification": {
@@ -1187,22 +1311,22 @@
         "evidence": "docs/MOE-VRAM512-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "measured on restored 64GB with current selected settings",
+        "status": "measured on restored 64GB with SSD128/160 policy",
         "date": "2026-10-29",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md"
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "historical_benchmark_is_not_current_configuration": false
       },
       "current_guard_validation": {
         "date": "2026-10-29",
         "physical_ram_usable_gib": 61.30133056640625,
         "normal_router_profile": true,
         "passed": true,
-        "stage": "normal-startup-json-and-fresh-reload",
-        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+        "stage": "fixed-fixture speed benchmark",
+        "scope": "Fixed saved approximately 2.2K-input prompts, one 64-output warmup and three 128-output measured requests. No fresh full-window, image, tool, fresh-reload or long-duration qualification. OS page cache not flushed; loading excluded.",
         "host_floor_gib": 2,
-        "source_settings_unchanged": false,
-        "benchmark_repeated": false,
-        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
-        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+        "only_policy_change": "Four SSD profiles 128/160 MiB/s; independent guards unchanged",
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json"
       },
       "full_ram_restoration": {
         "confirmed_on": "2026-10-29",
@@ -1210,7 +1334,38 @@
         "cache_settings_restored": true,
         "normal_guarded_load_passed": true,
         "historical_benchmarks_unchanged": true
-      }
+      },
+      "swap_policy_selection": {
+        "date": "2026-10-29",
+        "scope": "Four maintained SSD-streaming profiles; dense and unknown profiles retain 1/8 MiB/s",
+        "evidence": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "other_guards": "unchanged",
+        "benchmark_status": "three measured requests passed"
+      },
+      "latest_benchmark_attempt": {
+        "date": "2026-10-29",
+        "passed": true,
+        "physical_ram_gb": 64,
+        "configured_ram_speed_mt_s": 4200,
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "scope": "three fixed requests with SSD swap128/160 policy"
+      },
+      "guard_validation_history": [
+        {
+          "date": "2026-10-29",
+          "physical_ram_usable_gib": 61.30133056640625,
+          "normal_router_profile": true,
+          "passed": true,
+          "stage": "normal-startup-json-and-fresh-reload",
+          "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+          "host_floor_gib": 2,
+          "source_settings_unchanged": false,
+          "benchmark_repeated": false,
+          "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+          "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+        }
+      ]
     },
     {
       "id": "deepseek-maya",
@@ -1290,7 +1445,13 @@
           "preimage_reference": "20261028-reduced-ram",
           "normal_guarded_verification": "passed"
         },
-        "optional_file_controller_active": false
+        "optional_file_controller_active": false,
+        "swap_guard": {
+          "window_s": 30,
+          "write_mib_s": 128,
+          "combined_mib_s": 160,
+          "pressure_pct": 10
+        }
       },
       "latest_qualification": {
         "run": "20261027-moe-optimized",
@@ -1348,7 +1509,9 @@
         "evidence": "docs/MAYA-DEMAND-CACHE-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "failed active swap guard; no new speed median",
+        "status": "failed; no new speed median",
+        "date": "2026-10-29",
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
         "historical_benchmark_is_not_current_configuration": true
       },
       "current_guard_validation": {
@@ -1356,10 +1519,13 @@
         "physical_ram_usable_gib": 61.30133056640625,
         "normal_router_profile": true,
         "passed": false,
-        "stage": "benchmark first measured request",
-        "stop_cause": "owned_worker_swap_write_rate",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-full-ram.json"
+        "stage": "fixed-fixture speed benchmark",
+        "scope": "Fixed saved approximately 2.2K-input prompts, one 64-output warmup and three 128-output measured requests. No fresh full-window, image, tool, fresh-reload or long-duration qualification. OS page cache not flushed; loading excluded.",
+        "host_floor_gib": 2,
+        "only_policy_change": "Four SSD profiles 128/160 MiB/s; independent guards unchanged",
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "stop_cause": "Sustained full-memory pressure during inference"
       },
       "full_ram_restoration": {
         "confirmed_on": "2026-10-29",
@@ -1370,18 +1536,13 @@
       },
       "latest_benchmark_attempt": {
         "date": "2026-10-29",
+        "passed": false,
         "physical_ram_gb": 64,
         "configured_ram_speed_mt_s": 4200,
-        "passed": false,
-        "stage": "first measured request",
-        "reason": "Sustained owned-worker swap churn during inference",
-        "rates": {
-          "window_s": 30.440210597999794,
-          "read_mib_s": 0.36662546121587364,
-          "write_mib_s": 5.313823494395559,
-          "combined_mib_s": 5.680448955611433
-        },
-        "evidence": "docs/BENCHMARK-64GB-20261029.md"
+        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "scope": "three fixed requests with SSD swap128/160 policy",
+        "reason": "Sustained full-memory pressure during inference"
       },
       "guard_validation_history": [
         {
@@ -1396,6 +1557,40 @@
           "benchmark_repeated": false,
           "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
           "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+        },
+        {
+          "date": "2026-10-29",
+          "physical_ram_usable_gib": 61.30133056640625,
+          "normal_router_profile": true,
+          "passed": false,
+          "stage": "benchmark first measured request",
+          "stop_cause": "owned_worker_swap_write_rate",
+          "evidence": "docs/BENCHMARK-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-full-ram.json"
+        }
+      ],
+      "swap_policy_selection": {
+        "date": "2026-10-29",
+        "scope": "Four maintained SSD-streaming profiles; dense and unknown profiles retain 1/8 MiB/s",
+        "evidence": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+        "other_guards": "unchanged",
+        "benchmark_status": "failed or incomplete"
+      },
+      "benchmark_attempt_history": [
+        {
+          "date": "2026-10-29",
+          "physical_ram_gb": 64,
+          "configured_ram_speed_mt_s": 4200,
+          "passed": false,
+          "stage": "first measured request",
+          "reason": "Sustained owned-worker swap churn during inference",
+          "rates": {
+            "window_s": 30.440210597999794,
+            "read_mib_s": 0.36662546121587364,
+            "write_mib_s": 5.313823494395559,
+            "combined_mib_s": 5.680448955611433
+          },
+          "evidence": "docs/BENCHMARK-64GB-20261029.md"
         }
       ]
     }

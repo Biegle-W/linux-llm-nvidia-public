@@ -1,5 +1,12 @@
 # Agent entry point
 
+## Latest: four SSD profiles use 128/160 swap limits — October 29
+
+Four SSD-streaming profiles now use bounded swap limits of 128 MiB/s writes and 160 MiB/s combined over 30 seconds. Dense and unknown profiles retain 1/8 MiB/s. All other resource guards, contexts, expert-cache settings, precision choices, runtime pins and model settings are unchanged. 2 of four SSD profiles completed three valid measured requests without guard violations on restored 64GB RAM. RAM remains DDR5-4200 MT/s across four 16GB DIMMs (61.3013GiB usable; 2100MHz DDR clock). The dense profiles were not repeated; their table rows carry forward the earlier October 29 full-RAM run. deepseek-maya did not pass: Sustained full-memory pressure during inference. Qwen reached three outputs but stopped on the unchanged pressure guard; its timings are diagnostic and no new passing median is selected. See [the new report](docs/BENCHMARK-SSD-SWAP-64GB-20261029.md) and [numeric evidence](docs/benchmark-results/20261029-ssd-relaxed-swap.json). The earlier DeepSeek/Maya guard failure and all prior measurements remain dated evidence; this speed screen does not repeat full-window quality qualification.
+
+
+Workers are stopped; router idle; no GPU reservation; DSH preserved. Both pressure-stop latches are retained. No fallback was loaded. No benchmark work remains pending.
+
 ## Latest: all six current profiles benchmarked on 64GB — October 29
 
 Firmware configured RAM speed is DDR5-4200 MT/s across four 16GB DIMMs

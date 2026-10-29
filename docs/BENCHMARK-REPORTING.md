@@ -63,3 +63,7 @@ The [maintained result tables](MAINTAINED-PROFILES.md#latest-matched-speed-evide
 use this format. The [storage policy](STORAGE-POLICY.md) reserves NVMe for
 SSD-streaming models and puts GPU/RAM-resident checkpoints on SATA. New results
 must update both repositories while preserving dated benchmark evidence.
+
+## Repeating exact prompts with persistent conversation KV
+
+A fresh process may still restore a saved conversation prefix from disk. Reusing exact fixtures therefore requires checking native cached-token counts, not just restarting the worker. Reject cached-prefill attempts. For an uncached repeat, preserve and temporarily isolate only the conversation-KV snapshots while workers are idle, retain expert-cache settings and exact prompts, then restore the snapshots byte-for-byte after owned-worker cleanup. Preserve rejected attempts separately. The October 29 SSD-policy report records this correction; it does not turn a rejected cached response into a speed result.

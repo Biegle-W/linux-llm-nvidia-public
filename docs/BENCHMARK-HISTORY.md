@@ -1,5 +1,10 @@
 # Benchmark ledger
 
+## October 29: matched four SSD 128/160 swap-policy rerun
+
+2 of four SSD profiles completed three valid measured requests without guard violations on restored 64GB RAM. RAM remains DDR5-4200 MT/s across four 16GB DIMMs (61.3013GiB usable; 2100MHz DDR clock). The dense profiles were not repeated; their table rows carry forward the earlier October 29 full-RAM run. All other settings/guards unchanged. [Report](BENCHMARK-SSD-SWAP-64GB-20261029.md), [numeric evidence](benchmark-results/20261029-ssd-relaxed-swap.json). Original saved fixtures reused; old results preserved.
+
+
 ## October 29: six-profile 64GB / DDR5-4200 screen
 
 All six were attempted: five completed three valid fixed-fixture requests after a warmup; DeepSeek/Maya stopped at its swap-write guard and has no new speed median. Latest measured results are in [the full-RAM report](BENCHMARK-64GB-20261029.md); previous latest entries are retained under each profile's benchmark history. RAM configured speed4200MT/s was verified read-only through firmware DMI. No settings or guard were relaxed for the benchmark.

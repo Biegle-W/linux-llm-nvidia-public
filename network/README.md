@@ -1,6 +1,6 @@
 # NVIDIA model router, Tailscale and DeepSeek Harness
 
-The [daily gated updater](../docs/DAILY-ENGINE-UPDATE-POLICY.md) is enabled at 03:00 local time. It preserves normal request admission and reserves only idle GPUs. Current resource settings are the maintained registry: dense worker RAM is uncapped, all host floors are 2 GiB, swap occupancy is allowed, and Qwen Flash-Next alone uses the qualified 128/160 MiB/s active-swap limits. Older dated budget/qualification paragraphs below remain historical.
+The [daily gated updater](../docs/DAILY-ENGINE-UPDATE-POLICY.md) is enabled at 03:00 local time. It preserves normal request admission and reserves only idle GPUs. Current resource settings are the maintained registry: dense worker RAM is uncapped, all host floors are 2 GiB, swap occupancy is allowed, and the four maintained SSD-streaming profiles use 128/160 MiB/s active-swap limits over 30 seconds. Dense and unknown profiles retain 1/8 MiB/s; independent guards are unchanged. Current benchmark outcomes are in [the SSD-policy report](../docs/BENCHMARK-SSD-SWAP-64GB-20261029.md). Older dated budget/qualification paragraphs below remain historical.
 
 The deployment follows the AMD repository's catalog/on-demand switching design,
 adapted to the six selected NVIDIA profiles. Only one inference worker runs at a

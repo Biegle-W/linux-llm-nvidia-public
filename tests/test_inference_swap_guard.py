@@ -13,21 +13,33 @@ def pages(mib):
 
 
 class SwapPolicyTest(unittest.TestCase):
-    def test_qwen_relaxation_is_scoped_and_still_bounded(self):
-        q = WorkerWatch('/unused', 'flash-next-strata', 'test').guard
-        other = WorkerWatch('/unused', 'deepseek-strata', 'test').guard
-        self.assertEqual((other.write_limit, other.combined_limit), (1, 8))
-        self.assertEqual((q.write_limit, q.combined_limit, q.pressure_limit), (128, 160, 10))
-        q.sample(0, 'inference', 0, 0, 0)
-        self.assertIsNone(q.sample(30, 'inference', pages(0.22 * 30), pages(12.95 * 30), 0))
-        self.assertIsNotNone(q.sample(60, 'inference', pages(0.22 * 30), pages((12.95 + 129) * 30), 0))
-        read = WorkerWatch('/unused', 'flash-next-strata', 'test').guard
-        read.sample(0, 'inference', 0, 0, 0)
-        self.assertIsNotNone(read.sample(30, 'inference', pages(161 * 30), 0, 0))
-        pressure = WorkerWatch('/unused', 'flash-next-strata', 'test').guard
-        for t in [0, 30, 32]:
-            self.assertIsNone(pressure.sample(t, 'inference', 0, 0, 11))
-        self.assertIsNotNone(pressure.sample(34, 'inference', 0, 0, 11))
+    def test_ssd_relaxation_is_scoped_and_still_bounded(self):
+        for profile in ('flash-next-strata', 'glm-maya', 'deepseek-strata', 'deepseek-maya'):
+            with self.subTest(profile=profile):
+                q = WorkerWatch('/unused', profile, 'test').guard
+                self.assertEqual((q.window_s, q.write_limit, q.combined_limit,
+                                  q.pressure_limit, q.bad_samples), (30, 128, 160, 10, 3))
+                q.sample(0, 'inference', 0, 0, 0)
+                self.assertIsNone(q.sample(30, 'inference', pages(0.22 * 30), pages(12.95 * 30), 0))
+                self.assertIsNotNone(q.sample(60, 'inference', pages(0.22 * 30), pages((12.95 + 129) * 30), 0))
+                read = WorkerWatch('/unused', profile, 'test').guard
+                read.sample(0, 'inference', 0, 0, 0)
+                self.assertIsNotNone(read.sample(30, 'inference', pages(161 * 30), 0, 0))
+                pressure = WorkerWatch('/unused', profile, 'test').guard
+                for t in [0, 30, 32]:
+                    self.assertIsNone(pressure.sample(t, 'inference', 0, 0, 11))
+                self.assertIsNotNone(pressure.sample(34, 'inference', 0, 0, 11))
+                missing = WorkerWatch('/unused', profile, 'test').guard
+                self.assertIsNone(missing.unavailable('missing'))
+                self.assertIsNone(missing.unavailable('missing'))
+                self.assertIsNotNone(missing.unavailable('missing'))
+                reset = WorkerWatch('/unused', profile, 'test').guard
+                reset.sample(1, 'inference', 10, 10, 0)
+                self.assertIsNotNone(reset.sample(2, 'inference', 9, 10, 0))
+        for profile in ('qwen27b-hyperqwen', 'qwen27b-sglang', 'unknown', 'deepseek-new'):
+            with self.subTest(profile=profile):
+                guard = WorkerWatch('/unused', profile, 'test').guard
+                self.assertEqual((guard.write_limit, guard.combined_limit), (1, 8))
 
     def test_loading_and_parked_swap_are_allowed(self):
         g = SwapGuard()
