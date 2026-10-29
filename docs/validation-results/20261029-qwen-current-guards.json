@@ -1,0 +1,95 @@
+{
+  "schema": 1,
+  "date": "2026-10-29",
+  "profile": "flash-next-strata",
+  "physical_ram_usable_gib": 45.551353454589844,
+  "normal_router_profile_test": true,
+  "passed": false,
+  "stage": "loading",
+  "stop_cause": "host available RAM below2GiB; temperature belowlimit",
+  "api_error": "HTTP503 after guarded backendstop",
+  "selected_settings_changed": false,
+  "source_unchanged": true,
+  "benchmark_repeated": false,
+  "historical_selected_benchmark": {
+    "run": "20261027-context-expansion",
+    "variant": "flash-next-strata-32768-screen",
+    "date": "2026-10-27",
+    "context": 32768,
+    "repetitions": 3,
+    "host_vm_swappiness": 60,
+    "swap_policy": "bounded-1GiB legacy",
+    "input_tokens_range": [
+      2212,
+      2222
+    ],
+    "output_tokens": 128,
+    "ttft_s": 3.752891517004173,
+    "prefill_tps": 593.2,
+    "decode_tps": 97.08909285944816,
+    "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+    "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+    "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+    "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+  },
+  "guards": {
+    "host_floor_gib": 2,
+    "worker_high_gib": 44,
+    "worker_max_gib": 48,
+    "worker_swap_max": "unlimited occupancy; active inference churn/PSI/telemetry checks retained",
+    "temperature_limit_c": 82,
+    "swappiness": 60,
+    "idle_seconds": 600,
+    "concurrency": 1,
+    "native_startup_reported_internal_ram_floor_mib": 2560,
+    "native_vram_policy": "Original automatic placement; no explicit VRAM reserve override in preset/native arguments. Steady-state VRAM qualification not reached."
+  },
+  "actual_cgroup_limits": {
+    "memory.high": "47244640256",
+    "memory.max": "51539607552",
+    "memory.swap.max": "max"
+  },
+  "final_cgroup_memory_events": {
+    "low": "0",
+    "high": "0",
+    "max": "0",
+    "oom": "0",
+    "oom_kill": "0",
+    "oom_group_kill": "0",
+    "sock_throttled": "0"
+  },
+  "resources": {
+    "minimum_host_available_gib": 0.7165985107421875,
+    "minimum_host_free_gib": 0.4079399108886719,
+    "peak_charged_worker_gib": 41.17655563354492,
+    "peak_worker_swap_gib_during_loading": 1.6787376403808594,
+    "maximum_gpu_temperature_c": 42.0,
+    "minimum_gpu_free_mib": {
+      "0": 5321.0,
+      "1": 5792.0
+    },
+    "loading_to_error_s": 34.46998643875122,
+    "below_floor_samples": 6
+  },
+  "native_startup": {
+    "expert_arena_requested_2mib_pages": 20464,
+    "expert_arena_requested_gib": 39.96875,
+    "host_available_reported_gib_before_arena": 38.9,
+    "approximate_expert_load_announced_gb": 47
+  },
+  "inference_swap_rate_samples": 0,
+  "swap_guard_violation_recorded": false,
+  "checks_not_reached": [
+    "JSON",
+    "arithmetic",
+    "image",
+    "near-window retrieval",
+    "sustained generation",
+    "fresh reload"
+  ],
+  "router_preserved": true,
+  "dsh_preserved": true,
+  "final_idle": true,
+  "fallback_restored": false,
+  "limitations": "Sampled extrema; no inference or performance qualification because normal loading stopped. Native approximateGB warning is not a measured resident byte count."
+}

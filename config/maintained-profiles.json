@@ -552,7 +552,19 @@
         "selected_variant": "flash-next-strata-32768-screen",
         "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
       },
-      "host_ram_reserve_gib": 2
+      "host_ram_reserve_gib": 2,
+      "current_guard_validation": {
+        "date": "2026-10-29",
+        "physical_ram_usable_gib": 45.551353454589844,
+        "normal_router_profile": true,
+        "passed": false,
+        "stage": "loading",
+        "stop_cause": "host_available_floor",
+        "host_floor_gib": 2,
+        "source_settings_unchanged": true,
+        "evidence": "docs/QWEN-CURRENT-GUARDS-20261029.md",
+        "numeric_results": "docs/validation-results/20261029-qwen-current-guards.json"
+      }
     },
     {
       "id": "glm-maya",

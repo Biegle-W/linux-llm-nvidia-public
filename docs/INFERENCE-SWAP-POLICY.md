@@ -180,3 +180,27 @@ No timer or MemAvailable trigger.
 
 See [demand-cache qualification and six selected results](MAYA-DEMAND-CACHE-20261029.md)
 and [numeric evidence](benchmark-results/20261029-maya-demand-cache.json).
+
+
+## Current Qwen/Flash-Next guard test — October 29
+
+The unchanged normal Qwen/Flash-Next Strata preset was tested through the router
+with the current guards. It failed during loading: native startup announced
+about 47 GB of RAM experts and a 39.97 GiB expert arena; host available fell to 0.717 GiB
+(free 0.408 GiB), below the 2 GiB supervisor floor. Peak temperature 42 C; no cgroup
+high/max/OOM event. The RAM guard stopped it safely before readiness.
+
+Loading swap peaked at 1.68 GiB, but this was not an active-inference swap stop:
+no inference window was reached. JSON/image/retrieval/sustained/reload checks
+were not reached. No speed benchmark was repeated;97.09 tok/s remains historical.
+
+Source/cache/context settings and every guard remain unchanged. 44/48 GiB cgroup
+limits and unlimited loading swap occupancy were read back. Router/DSH preserved,
+worker stopped, router idle, no reservation/fallback. This is a current reduced-RAM
+resident-allocation failure, not general incompatibility between Qwen and Strata.
+The other five selections remain unchanged. Do not apply rejected pageable variants
+or restore full-RAM settings without explicit human confirmation and Linux capacity
+verification. Further cache tuning requires its own qualification.
+
+See [current normal-profile test](QWEN-CURRENT-GUARDS-20261029.md) and
+[numeric evidence](validation-results/20261029-qwen-current-guards.json).
