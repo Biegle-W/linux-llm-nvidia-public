@@ -148,7 +148,27 @@
         "selected_variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
         "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
       },
-      "host_ram_reserve_gib": 2
+      "host_ram_reserve_gib": 2,
+      "current_guard_validation": {
+        "date": "2026-10-29",
+        "physical_ram_usable_gib": 61.30133056640625,
+        "normal_router_profile": true,
+        "passed": true,
+        "stage": "normal-startup-and-json",
+        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+        "host_floor_gib": 2,
+        "source_settings_unchanged": true,
+        "benchmark_repeated": false,
+        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+      },
+      "full_ram_restoration": {
+        "confirmed_on": "2026-10-29",
+        "linux_memtotal_kib": 64279104,
+        "cache_settings_restored": false,
+        "normal_guarded_load_passed": true,
+        "historical_benchmarks_unchanged": true
+      }
     },
     {
       "id": "qwen27b-sglang",
@@ -489,7 +509,27 @@
         "numeric_results": "docs/benchmark-results/20261028-sglang-38k-qualification.json",
         "archive_batch": "linux-nvidia/2026-10-28-sglang-38k"
       },
-      "host_ram_reserve_gib": 2
+      "host_ram_reserve_gib": 2,
+      "current_guard_validation": {
+        "date": "2026-10-29",
+        "physical_ram_usable_gib": 61.30133056640625,
+        "normal_router_profile": true,
+        "passed": true,
+        "stage": "normal-startup-and-json",
+        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+        "host_floor_gib": 2,
+        "source_settings_unchanged": true,
+        "benchmark_repeated": false,
+        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+      },
+      "full_ram_restoration": {
+        "confirmed_on": "2026-10-29",
+        "linux_memtotal_kib": 64279104,
+        "cache_settings_restored": false,
+        "normal_guarded_load_passed": true,
+        "historical_benchmarks_unchanged": true
+      }
     },
     {
       "id": "flash-next-strata",
@@ -555,15 +595,16 @@
       "host_ram_reserve_gib": 2,
       "current_guard_validation": {
         "date": "2026-10-29",
-        "physical_ram_usable_gib": 45.551353454589844,
+        "physical_ram_usable_gib": 61.30133056640625,
         "normal_router_profile": true,
         "passed": true,
-        "stage": "quality-long-generation-and-fresh-reload",
+        "stage": "normal-startup-and-json",
+        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
         "host_floor_gib": 2,
-        "source_settings_unchanged": false,
-        "swap_policy": "Qwen-only 128 MiB/s writes and 160 MiB/s combined over 30 seconds; pressure guard unchanged",
-        "evidence": "docs/QWEN-RELAXED-SWAP-20261029.md",
-        "numeric_results": "docs/validation-results/20261029-qwen-relaxed-swap.json"
+        "source_settings_unchanged": true,
+        "benchmark_repeated": false,
+        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
       },
       "tested_retrieval_input": 29450,
       "selected_settings": {
@@ -579,7 +620,28 @@
           "combined_mib_s": 160,
           "pressure_pct": 10
         },
-        "temporary_reduced_ram": true
+        "temporary_reduced_ram": false
+      },
+      "guard_validation_history": [
+        {
+          "date": "2026-10-29",
+          "physical_ram_usable_gib": 45.551353454589844,
+          "normal_router_profile": true,
+          "passed": true,
+          "stage": "quality-long-generation-and-fresh-reload",
+          "host_floor_gib": 2,
+          "source_settings_unchanged": false,
+          "swap_policy": "Qwen-only 128 MiB/s writes and 160 MiB/s combined over 30 seconds; pressure guard unchanged",
+          "evidence": "docs/QWEN-RELAXED-SWAP-20261029.md",
+          "numeric_results": "docs/validation-results/20261029-qwen-relaxed-swap.json"
+        }
+      ],
+      "full_ram_restoration": {
+        "confirmed_on": "2026-10-29",
+        "linux_memtotal_kib": 64279104,
+        "cache_settings_restored": false,
+        "normal_guarded_load_passed": true,
+        "historical_benchmarks_unchanged": true
       }
     },
     {
@@ -606,11 +668,11 @@
       },
       "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
       "selected_settings": {
-        "expert_ram_gib": 24,
+        "expert_ram_gib": 40,
         "environment": {
-          "MAYA_GLM_RAM_GB": "24"
+          "MAYA_GLM_RAM_GB": "40"
         },
-        "reason": "Temporary qualified cache choice for 45.55 GiB usable RAM with one 16 GiB DIMM removed; context, model/precision, concurrency, runtime pins and all guards retained.",
+        "reason": "Saved full-RAM cache settings restored after explicit hardware confirmation and Linux capacity verification; later runtime pins, VRAM reserve and guards preserved.",
         "expert_profile": "data/glm-maya-expert-profile.bin",
         "prefill": "auto",
         "kv_streaming": true,
@@ -619,10 +681,11 @@
         "reserve_mib_per_gpu": 512,
         "context_trial_args": {},
         "temporary_reduced_ram": {
-          "temporary": true,
-          "restore_after": "Explicit human RAM-restoration confirmation plus Linux capacity verification; restore full-RAM cache preimages only, then normal guarded loading verification",
-          "preimage_manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
-          "archive_commit": "38d70cda3860da0576222987b4677b993467f4b1"
+          "temporary": false,
+          "restored_on": "2026-10-29",
+          "verified_memtotal_kib": 64279104,
+          "preimage_reference": "20261028-reduced-ram",
+          "normal_guarded_verification": "passed"
         },
         "vram_reserve_args": {
           "--vram-reserve-mib": 512
@@ -756,6 +819,30 @@
         "fresh_process_reload_passed": true,
         "normal_route_passed": true,
         "evidence": "docs/MOE-VRAM512-20261029.md"
+      },
+      "current_configuration_benchmark": {
+        "status": "not rebenchmarked after RAM restoration",
+        "historical_results_unchanged": true
+      },
+      "current_guard_validation": {
+        "date": "2026-10-29",
+        "physical_ram_usable_gib": 61.30133056640625,
+        "normal_router_profile": true,
+        "passed": true,
+        "stage": "normal-startup-json-and-fresh-reload",
+        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+        "host_floor_gib": 2,
+        "source_settings_unchanged": false,
+        "benchmark_repeated": false,
+        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+      },
+      "full_ram_restoration": {
+        "confirmed_on": "2026-10-29",
+        "linux_memtotal_kib": 64279104,
+        "cache_settings_restored": true,
+        "normal_guarded_load_passed": true,
+        "historical_benchmarks_unchanged": true
       }
     },
     {
@@ -809,19 +896,20 @@
         "parallel": 1,
         "reasoning_effort": "none",
         "environment": {
-          "DS4_STORE_GB": "24",
+          "DS4_STORE_GB": "42",
           "DS4_STORE_POLICY": "1"
         },
         "expert_profile": "data/deepseek-strata-expert-profile.bin",
-        "expert_ram_store_gb": 24.0,
+        "expert_ram_store_gb": 42.0,
         "expert_cache_policy": "LFU",
-        "reason": "Temporary qualified cache choice for 45.55 GiB usable RAM with one 16 GiB DIMM removed; context, model/precision, concurrency, runtime pins and all guards retained.",
+        "reason": "Saved full-RAM cache settings restored after explicit hardware confirmation and Linux capacity verification; later runtime pins, VRAM reserve and guards preserved.",
         "context_trial_args": {},
         "temporary_reduced_ram": {
-          "temporary": true,
-          "restore_after": "Explicit human RAM-restoration confirmation plus Linux capacity verification; restore full-RAM cache preimages only, then normal guarded loading verification",
-          "preimage_manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
-          "archive_commit": "38d70cda3860da0576222987b4677b993467f4b1"
+          "temporary": false,
+          "restored_on": "2026-10-29",
+          "verified_memtotal_kib": 64279104,
+          "preimage_reference": "20261028-reduced-ram",
+          "normal_guarded_verification": "passed"
         },
         "vram_reserve_args": {
           "--reserve-mib": 512
@@ -952,6 +1040,30 @@
         "fresh_process_reload_passed": true,
         "normal_route_passed": true,
         "evidence": "docs/MOE-VRAM512-20261029.md"
+      },
+      "current_configuration_benchmark": {
+        "status": "not rebenchmarked after RAM restoration",
+        "historical_results_unchanged": true
+      },
+      "current_guard_validation": {
+        "date": "2026-10-29",
+        "physical_ram_usable_gib": 61.30133056640625,
+        "normal_router_profile": true,
+        "passed": true,
+        "stage": "normal-startup-json-and-fresh-reload",
+        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+        "host_floor_gib": 2,
+        "source_settings_unchanged": false,
+        "benchmark_repeated": false,
+        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+      },
+      "full_ram_restoration": {
+        "confirmed_on": "2026-10-29",
+        "linux_memtotal_kib": 64279104,
+        "cache_settings_restored": true,
+        "normal_guarded_load_passed": true,
+        "historical_benchmarks_unchanged": true
       }
     },
     {
@@ -1006,15 +1118,7 @@
       },
       "selected_settings": {
         "environment": {
-          "DS4_WARM_GB": "0",
-          "DS4_WARM_CAP_GB": "12",
-          "DS4_ENGRAM_CACHE_MB": "0",
-          "DS4_READAHEAD_MB": "128",
-          "DS4_AHEAD": "0",
-          "DS4_FILE_CACHE_MIB": "16384",
-          "DS4_STREAM_ZC": "1",
-          "STRATA_DS4_PIN_BY_NEED": "1",
-          "STRATA_DS4_PIN_GB": "12"
+          "DS4_WARM_GB": "8"
         },
         "expert_profile": "data/deepseek-maya-expert-profile.bin",
         "tp_requested": 2,
@@ -1023,27 +1127,24 @@
         "vision": true,
         "cpu_threads": 14,
         "prefill_chunk": 4096,
-        "mmap_experts": false,
+        "mmap_experts": true,
         "reserve_mib_per_gpu": 512,
         "parallel": 1,
         "reasoning_effort": "none",
-        "reason": "Reduced-RAM qualification: bounded file residency plus a native pinned hot-expert cache; original guards retained",
-        "decode_expert_warm_gb": 0.0,
+        "reason": "Saved full-RAM cache settings restored after explicit hardware confirmation and Linux capacity verification; later runtime pins, VRAM reserve and guards preserved.",
+        "decode_expert_warm_gb": 8.0,
         "vram_reserve_args": {
           "--reserve-mib": 512
         },
-        "expert_warm_cap_gb": 12.0,
-        "pinned_expert_cache_decimal_gb": 12,
-        "file_cache_target_mib": 16384,
-        "file_cache_trim_target_mib": 12288,
-        "file_cache_controller": "periodic clean model-file eviction; target, not a hard ceiling",
         "runtime_manifest": "config/maya-cachebound-runtime.json",
         "temporary_reduced_ram": {
-          "temporary": true,
-          "archive_commit": "65f69679bfcc76bb03346f20a6b7c458811bb5cb",
-          "preimage_batch": "linux-nvidia/20261029-maya-demand-cache",
-          "restore_after": "Explicit human RAM-restoration confirmation and Linux capacity verification; restore appropriate full-RAM cache/prefill settings from preimages, preserve qualified512MiB reserve and all guards, then verify normal guarded load/reload. No timer or MemAvailable trigger."
-        }
+          "temporary": false,
+          "restored_on": "2026-10-29",
+          "verified_memtotal_kib": 64279104,
+          "preimage_reference": "20261028-reduced-ram",
+          "normal_guarded_verification": "passed"
+        },
+        "optional_file_controller_active": false
       },
       "latest_qualification": {
         "run": "20261027-moe-optimized",
@@ -1099,6 +1200,30 @@
         "normal_load_and_reload_passed": true,
         "cache_environment_unchanged": false,
         "evidence": "docs/MAYA-DEMAND-CACHE-20261029.md"
+      },
+      "current_configuration_benchmark": {
+        "status": "not rebenchmarked after RAM restoration",
+        "historical_results_unchanged": true
+      },
+      "current_guard_validation": {
+        "date": "2026-10-29",
+        "physical_ram_usable_gib": 61.30133056640625,
+        "normal_router_profile": true,
+        "passed": true,
+        "stage": "normal-startup-json-and-fresh-reload",
+        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+        "host_floor_gib": 2,
+        "source_settings_unchanged": false,
+        "benchmark_repeated": false,
+        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+      },
+      "full_ram_restoration": {
+        "confirmed_on": "2026-10-29",
+        "linux_memtotal_kib": 64279104,
+        "cache_settings_restored": true,
+        "normal_guarded_load_passed": true,
+        "historical_benchmarks_unchanged": true
       }
     }
   ],

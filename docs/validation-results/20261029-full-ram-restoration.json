@@ -1,0 +1,239 @@
+{
+  "date": "2026-10-29",
+  "confirmed_installed_ram_gb": 64,
+  "linux_memtotal_kib": 64279104,
+  "linux_usable_gib": 61.30133056640625,
+  "passed": true,
+  "normal_load_checks": [
+    {
+      "profile": "glm-maya",
+      "rep": 0,
+      "passed": true,
+      "load_s": 78.756144576,
+      "fresh_invocation": true,
+      "context": 65536,
+      "budget_readback_passed": true
+    },
+    {
+      "profile": "glm-maya",
+      "rep": 1,
+      "passed": true,
+      "load_s": 82.63160245600005,
+      "fresh_invocation": true,
+      "context": 65536,
+      "budget_readback_passed": true
+    },
+    {
+      "profile": "deepseek-strata",
+      "rep": 0,
+      "passed": true,
+      "context": 131072,
+      "fresh_invocation": true,
+      "budget_readback_passed": true,
+      "reconciled_post_response_busy_flag_race": true
+    },
+    {
+      "profile": "deepseek-strata",
+      "rep": 1,
+      "passed": true,
+      "load_s": 51.47963744600008,
+      "fresh_invocation": true,
+      "context": 131072,
+      "budget_readback_passed": true
+    },
+    {
+      "profile": "deepseek-maya",
+      "rep": 0,
+      "passed": true,
+      "load_s": 55.487427596999964,
+      "fresh_invocation": true,
+      "context": 32768,
+      "budget_readback_passed": true
+    },
+    {
+      "profile": "deepseek-maya",
+      "rep": 1,
+      "passed": true,
+      "load_s": 39.42173577599999,
+      "fresh_invocation": true,
+      "context": 32768,
+      "budget_readback_passed": true
+    },
+    {
+      "profile": "flash-next-strata",
+      "rep": 0,
+      "passed": true,
+      "load_s": 47.54445282200004,
+      "fresh_invocation": true,
+      "context": 32768,
+      "budget_readback_passed": true
+    },
+    {
+      "profile": "qwen27b-hyperqwen",
+      "rep": 0,
+      "passed": true,
+      "load_s": 70.7029091039999,
+      "fresh_invocation": true,
+      "context": 56320,
+      "budget_readback_passed": true
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "rep": 0,
+      "passed": true,
+      "load_s": 28.426600828999995,
+      "fresh_invocation": true,
+      "context": 32768,
+      "budget_readback_passed": true
+    }
+  ],
+  "resources": {
+    "qwen27b-sglang": {
+      "normal_loads_and_json_passed": 1,
+      "peak_worker_gib": 8.394344329833984,
+      "minimum_host_available_gib": 48.32963180541992,
+      "peak_worker_swap_gib": 0.0,
+      "guard_violations": 0,
+      "measured_inference_rate_windows": 0,
+      "memory_events_max_observed": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "glm-maya": {
+      "normal_loads_and_json_passed": 2,
+      "peak_worker_gib": 46.00119400024414,
+      "minimum_host_available_gib": 8.797481536865234,
+      "peak_worker_swap_gib": 1.7911643981933594,
+      "guard_violations": 0,
+      "measured_inference_rate_windows": 0,
+      "memory_events_max_observed": {
+        "low": 0,
+        "high": 530,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "flash-next-strata": {
+      "normal_loads_and_json_passed": 1,
+      "peak_worker_gib": 29.00551986694336,
+      "minimum_host_available_gib": 50.25870895385742,
+      "peak_worker_swap_gib": 0.0,
+      "guard_violations": 0,
+      "measured_inference_rate_windows": 0,
+      "memory_events_max_observed": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "qwen27b-hyperqwen": {
+      "normal_loads_and_json_passed": 1,
+      "peak_worker_gib": 22.094707489013672,
+      "minimum_host_available_gib": 49.3060188293457,
+      "peak_worker_swap_gib": 0.0,
+      "guard_violations": 0,
+      "measured_inference_rate_windows": 0,
+      "memory_events_max_observed": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "deepseek-maya": {
+      "normal_loads_and_json_passed": 2,
+      "peak_worker_gib": 46.001922607421875,
+      "minimum_host_available_gib": 50.02982711791992,
+      "peak_worker_swap_gib": 0.0,
+      "guard_violations": 0,
+      "measured_inference_rate_windows": 0,
+      "memory_events_max_observed": {
+        "low": 0,
+        "high": 77,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      }
+    },
+    "deepseek-strata": {
+      "normal_loads_and_json_passed": 2,
+      "peak_worker_gib": 44.002830505371094,
+      "minimum_host_available_gib": 16.526363372802734,
+      "peak_worker_swap_gib": 0.0,
+      "guard_violations": 0,
+      "measured_inference_rate_windows": 0,
+      "memory_events_max_observed": {
+        "low": 0,
+        "high": 379,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      }
+    }
+  },
+  "restored_settings": {
+    "glm-maya": {
+      "ram_tier_gib": 40
+    },
+    "deepseek-strata": {
+      "expert_store_decimal_gb": 42,
+      "policy": 1
+    },
+    "deepseek-maya": {
+      "warm_decimal_gb": 8,
+      "mmap_experts": true,
+      "temporary_file_target_active": false,
+      "improved_pinned_binary_retained": true
+    }
+  },
+  "preserved": {
+    "native_vram_reserve_mib": 512,
+    "qwen_mmap_both_gpus": true,
+    "qwen_swap_limits_mib_s": [
+      128,
+      160
+    ],
+    "other_swap_limits_mib_s": [
+      1,
+      8
+    ],
+    "host_floor_gib": 2,
+    "swappiness": 60,
+    "idle_unload_s": 600,
+    "concurrency": 1,
+    "dense_worker_ram_uncapped": true
+  },
+  "benchmark_repeated": false,
+  "near_window_or_sustained_test_repeated": false,
+  "initial_harness_busy_flag_race_reconciled": true,
+  "gpu_unlock_health": "VERIFIED",
+  "kernel": "7.0.0-42-generic",
+  "driver": "595.99.02",
+  "timer": {
+    "ActiveState": "active",
+    "UnitFileState": "enabled",
+    "NextElapseUSecRealtime": "Fri 2026-10-30 03:00:00 EDT"
+  },
+  "cleanup_idle": true,
+  "updater_soft_high_events": "Recorded as throttling; hard-limit/OOM and active pressure/swap gates unchanged"
+}

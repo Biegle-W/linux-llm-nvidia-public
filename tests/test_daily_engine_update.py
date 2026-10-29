@@ -238,4 +238,15 @@ class CommitIdentityTests(unittest.TestCase):
             self.assertEqual(env['GIT_COMMITTER_EMAIL'],'llm-maintenance@example.invalid')
 
 
+class MemoryEventTests(unittest.TestCase):
+    def test_soft_throttle_does_not_hide_hard_failure_or_missing_counters(self):
+        from update_qualification import check_memory_events
+        self.assertEqual(check_memory_events('high 530\nmax 0\noom 0\noom_kill 0\n')['high'],530)
+        for name in ('max','oom','oom_kill'):
+            values={'high':530,'max':0,'oom':0,'oom_kill':0};values[name]=1
+            with self.assertRaises(RuntimeError):check_memory_events('\n'.join(k+' '+str(v) for k,v in values.items()))
+        with self.assertRaises(RuntimeError):check_memory_events('high 0\n')
+        with self.assertRaises(ValueError):check_memory_events('high unknown\nmax 0\noom 0\noom_kill 0\n')
+
+
 if __name__=='__main__':unittest.main()

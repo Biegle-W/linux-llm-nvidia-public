@@ -39,7 +39,7 @@ Both production and candidate must pass:
 - JSON, arithmetic and three-marker retrieval using more than 85% of the selected context. Actual backend input counts must confirm coverage.
 - Supported image checks for the selected native vision profiles and parsed tool-call checks for the dense profiles.
 - At least 90 seconds of continuous generation and a distinct fresh-process reload with JSON arithmetic.
-- Owned worker/cgroup telemetry, expected memory budgets, selected host headroom, GPU inventory/headroom and temperature, no memory-limit/OOM events or active guard stop. Missing/invalid evidence blocks promotion.
+- Owned worker/cgroup telemetry, expected memory budgets, selected host headroom, GPU inventory/headroom and temperature, no hard-memory-limit/OOM events or active guard stop. Soft `memory.high` throttling is recorded rather than treated as a hard failure; paired performance and active pressure/swap guards still decide acceptance. Missing/invalid evidence blocks promotion.
 - Candidate prefill and decode must each be at least **95% of the fresh production baseline**. TTFT must be no greater than **max(1.25 × baseline, baseline + 0.05 seconds)**, matching the AMD acceptance envelope. Context/settings/model precision cannot be reduced to make a candidate pass.
 
 Existing guards are not weakened: host floor 2 GiB, selected native VRAM reserves, dense free-VRAM floor 512 MiB, temperature 82°C, memory-pressure and telemetry checks, concurrency one, swappiness 60 and idle 600 seconds. Qwen Flash-Next retains its separately approved 128 MiB/s write / 160 MiB/s combined swap allowance; other profiles retain 1/8 MiB/s. These are runtime I/O limits, not SSD-endurance budgets.

@@ -1,5 +1,20 @@
 # Agent entry point
 
+## Latest: 64GB RAM restored — October 29
+
+The owner confirmed hardware restoration. Linux sees 61.3013 GiB usable.
+Saved full-RAM cache choices are restored: GLM 40 GiB, Strata DeepSeek 42 decimal
+GB and Maya DeepSeek 8 GB warming with original mapped-expert mode. The newer
+Maya binary/hash guard remains; its temporary 16 GiB file-cache target is inactive.
+Qwen mapped experts/both GPUs and its separate 128/160 MiB/s swap allowance,
+512 MiB native reserves, 2 GiB host floor, all independent guards, swappiness60,
+concurrency one and idle600 remain unchanged. All six normal guarded startup/JSON
+paths passed; the three cache restorations passed fresh reloads. No speed,
+near-window, image or sustained benchmark was repeated. Older reduced-RAM
+measurements retain their hardware/cache scope and are not current speed claims.
+The daily 03:00 Toronto timer is resumed; next October30 03:00EDT. Router idle,
+workers stopped, DSH preserved, no GPU reservation. See [restoration](docs/FULL-RAM-RESTORATION-20261029.md).
+
 ## Latest: daily gated engine updates and qualified Qwen — October 29
 
 The daily NVIDIA engine updater is installed and enabled for 03:00 local time

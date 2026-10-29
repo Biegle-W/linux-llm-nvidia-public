@@ -19,6 +19,17 @@ from update_transaction import write_json
 VOCAB = 'river stone market lantern copper winter garden signal harbor needle orbit velvet canyon ember ledger quartz meadow anchor violet thunder'.split()
 
 
+def check_memory_events(text):
+    """A soft high-watermark throttle is evidence, not a hard allocation failure."""
+    values=dict(line.split() for line in text.splitlines())
+    required=('high','max','oom','oom_kill')
+    if any(k not in values for k in required): raise RuntimeError('Missing memory-event telemetry')
+    counts={k:int(values[k]) for k in required}
+    if any(v<0 for v in counts.values()): raise RuntimeError('Invalid memory-event telemetry')
+    if any(counts[k] for k in ('max','oom','oom_kill')): raise RuntimeError('Worker hard-memory-limit/oom event')
+    return counts
+
+
 class Qualification:
     def __init__(self, root, profile, output, manager, owner):
         self.root, self.p, self.out = Path(root), profile, Path(output)
@@ -137,9 +148,7 @@ class Qualification:
                     for field, value in [('memory.high', budget['high']), ('memory.max', budget['max']), ('memory.swap.max', None)]:
                         expected = 'max' if value is None else str(value * 1024 ** 3)
                         if (cg / field).read_text().strip() != expected: raise RuntimeError('Worker budget differs from selection')
-                    events = dict(x.split() for x in (cg / 'memory.events').read_text().splitlines())
-                    if any(int(events.get(k, 0)) for k in ('high', 'max', 'oom', 'oom_kill')):
-                        raise RuntimeError('Worker memory limit/oom event')
+                    row['memory_events'] = check_memory_events((cg / 'memory.events').read_text())
                     row['cgroup'] = {x: (cg / x).read_text() for x in ('memory.current','memory.swap.current','memory.events','memory.stat','memory.pressure')}
                     memory = dict(x.split(':', 1) for x in Path('/proc/meminfo').read_text().splitlines())
                     row['available_kib'] = int(memory['MemAvailable'].split()[0])

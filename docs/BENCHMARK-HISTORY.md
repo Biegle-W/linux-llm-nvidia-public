@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## October 29: full RAM restored without rebenchmarking
+
+64GB hardware was confirmed and Linux verified 61.3013GiB usable. Full-RAM cache choices were restored and normal guarded load/JSON/reload checks passed. No new throughput measurement was produced; all earlier speed records retain their original hardware/cache scope. See [restoration](FULL-RAM-RESTORATION-20261029.md).
+
 ## October 29: Qwen mapped experts and daily update policy
 
 Qwen Flash-Next passed 29,450-token retrieval and separate continuous generation of 8,192 outputs over 139.52s (58.71 client decode tok/s) plus fresh reload with Qwen-only relaxed swap limits. This is a different workload from the dated three-request benchmark, which remains unchanged. See [qualification](QWEN-RELAXED-SWAP-20261029.md). The [daily updater](DAILY-ENGINE-UPDATE-POLICY.md) was installed without running new GPU benchmarks or promoting an engine; future paired results go in [its ledger](DAILY-ENGINE-UPDATES.md).
