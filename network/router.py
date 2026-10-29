@@ -93,6 +93,7 @@ class Handler(BaseHTTPRequestHandler):
                                     'busy': w.busy, 'models': len(profiles()),
                                     'idle_unloading_model': getattr(w, 'idle_unloading', None),
                                     'idle_timeout_seconds': w.idle_timeout,
+                                    'idle_for_s': max(0, time.monotonic() - w.last_activity),
                                     **w.request_status()})
         models = self.catalog()
         if path == '/v1/models':

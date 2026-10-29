@@ -13,6 +13,22 @@ def pages(mib):
 
 
 class SwapPolicyTest(unittest.TestCase):
+    def test_qwen_relaxation_is_scoped_and_still_bounded(self):
+        q = WorkerWatch('/unused', 'flash-next-strata', 'test').guard
+        other = WorkerWatch('/unused', 'deepseek-strata', 'test').guard
+        self.assertEqual((other.write_limit, other.combined_limit), (1, 8))
+        self.assertEqual((q.write_limit, q.combined_limit, q.pressure_limit), (128, 160, 10))
+        q.sample(0, 'inference', 0, 0, 0)
+        self.assertIsNone(q.sample(30, 'inference', pages(0.22 * 30), pages(12.95 * 30), 0))
+        self.assertIsNotNone(q.sample(60, 'inference', pages(0.22 * 30), pages((12.95 + 129) * 30), 0))
+        read = WorkerWatch('/unused', 'flash-next-strata', 'test').guard
+        read.sample(0, 'inference', 0, 0, 0)
+        self.assertIsNotNone(read.sample(30, 'inference', pages(161 * 30), 0, 0))
+        pressure = WorkerWatch('/unused', 'flash-next-strata', 'test').guard
+        for t in [0, 30, 32]:
+            self.assertIsNone(pressure.sample(t, 'inference', 0, 0, 11))
+        self.assertIsNotNone(pressure.sample(34, 'inference', 0, 0, 11))
+
     def test_loading_and_parked_swap_are_allowed(self):
         g = SwapGuard()
         self.assertIsNone(g.sample(0, 'loading', 0, 0, 90))

@@ -1,0 +1,8 @@
+{
+  "hyperqwen": {"source_commit":"ce9615c4f2309be727407918a6c979bd67968069","status":"existing qualified production"},
+  "sglang": {"source_commit":"62271fd7c8aa8fe9edebf04e00a414b7fbf64388","status":"existing qualified patched production"},
+  "strata-qwen": {"source_commit":"4b9e05a2a806a3fe24f7b2560d98626c37dade35","status":"existing installed engine; source provenance reference"},
+  "maya-glm": {"source_commit":"8b4b39f84e35393833b31b80e82bee92e69bb646","status":"existing qualified production"},
+  "maya-deepseek": {"source_commit":"8b4b39f84e35393833b31b80e82bee92e69bb646","status":"existing qualified file-cache-controller build"},
+  "strata-deepseek": {"source_commit":"4b9e05a2a806a3fe24f7b2560d98626c37dade35","status":"existing installed engine; source provenance reference"}
+}

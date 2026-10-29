@@ -1,5 +1,35 @@
 # Current takeover state
 
+## Latest: daily gated engine updates and qualified Qwen — October 29
+
+The daily NVIDIA engine updater is installed and enabled for 03:00 local time
+(America/Toronto), with no missed-night catch-up. Next run at installation:
+October 30, 03:00 EDT. Six selected profiles are covered by independent components:
+HyperQwen, heterogeneous SGLang, Strata Qwen, Maya GLM, Maya DeepSeek and Strata
+DeepSeek. No engine was updated during setup. The read-only discovery found newer
+sources for five components; discovery does not qualify them.
+
+Production and candidate must pass matched speed, quality, near-window retrieval,
+sustained generation, fresh reload and resource checks. Paired performance uses
+the AMD 95% prefill/decode and bounded TTFT envelope. Patch drift, missing evidence,
+failed production baselines or candidate gates block promotion. Durable preimages,
+recovery-before-router ordering and exact reservation ownership protect existing
+work. All 197 CPU regressions passed. See [schedule and gates](docs/DAILY-ENGINE-UPDATE-POLICY.md)
+and [daily ledger](docs/DAILY-ENGINE-UPDATES.md).
+
+Qwen Flash-Next now uses plain mapped experts and both GPUs at 32K, with its
+qualified Qwen-only 128 MiB/s writes / 160 MiB/s combined swap allowance over
+30 seconds. JSON/arithmetic/image, 29,450-token retrieval, separate 8,192-output
+continuous generation (139.52s) and fresh reload passed. Other profiles retain
+1/8 MiB/s swap limits. Independent guards and existing historical benchmarks are
+unchanged. See [qualification](docs/QWEN-RELAXED-SWAP-20261029.md).
+
+DeepSeek/Maya retains its qualified 512 MiB reserve, 16 GiB periodic model-file
+residency target and native 12 GB pinned hot cache. Reduced-RAM cache choices stay
+temporary: full-RAM cache restoration still requires explicit hardware confirmation
+and capacity verification. Older failure/pause/no-updater notes below are historical
+and superseded for the specific configurations described here.
+
 Updated October 28, 2026, after engine-switch and context-visibility fixes. Read README.md and AGENTS.md first.
 
 ## Standing direction
@@ -11,8 +41,7 @@ launch it or persist 10. Unlimited worker swap occupancy and the existing active
 churn, RAM/GPU/headroom/temperature safeguards remain. No swap-file growth,
 swapoff, driver, engine binary, hardware, firmware, clocks or fan changes occurred.
 
-Scope remains six profiles. AMD repos are read-only reference. No model expansion
-or recurring updater was selected. Preserve all completed evidence; do not repeat
+Scope remains six profiles. AMD repos are read-only reference. No model expansion was selected. The October 29 daily updater selection above supersedes the old no-updater state. Preserve all completed evidence; do not repeat
 benchmarks. The old thread handed off and will not initiate work.
 
 ## Deployed settings and unresolved Maya

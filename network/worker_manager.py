@@ -162,10 +162,13 @@ class Workers:
             progress()
             time.sleep(.25)
 
-    def start(self, profile_id, progress=lambda: None):
+    def start(self, profile_id, progress=lambda: None, allowed_lock=None):
         self.wait_native_idle(progress)
-        if (ROOT / 'data/GPU-LOCK').exists():
-            raise RouterError('GPUs are reserved by another task. Wait for its owner to finish; the router and harness are preserved.', 'gpu_reserved')
+        reservation = ROOT / 'data/GPU-LOCK'
+        if reservation.exists() or allowed_lock is not None:
+            from daily_update_owner import allowed_reservation
+            if not allowed_reservation(reservation,allowed_lock,ROOT):
+                raise RouterError('GPUs are reserved by another task. Wait for its owner to finish; the router and harness are preserved.', 'gpu_reserved')
         latch = ROOT / 'data/router/guard-stops' / (profile_id + '.json')
         if latch.exists():
             raise RouterError('This worker was stopped by a safety guard. Explicitly select the model to reload after reviewing its guard log.',
@@ -193,7 +196,7 @@ class Workers:
                 if time.monotonic() >= deadline:
                     raise RouterError('The native web app is still answering.', 'backend_busy')
                 time.sleep(1)
-        self.stop_owned()
+        self.stop_owned(allowed_lock=allowed_lock)
         profile = profiles()[profile_id]
         self.loading = profile_id
         try:

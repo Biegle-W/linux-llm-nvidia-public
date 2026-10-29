@@ -501,7 +501,7 @@
         "qwen"
       ],
       "allocated_context": 32768,
-      "context_validation": "installed 32K allocation passed startup and short API smoke; no full-window retrieval test",
+      "context_validation": "Reduced-RAM mapped-expert profile passed uncached three-marker retrieval at 29450 input tokens under Qwen-specific relaxed swap limits; separate 8192-output continuous generation and fresh-process reload passed.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 98.8,
@@ -557,13 +557,29 @@
         "date": "2026-10-29",
         "physical_ram_usable_gib": 45.551353454589844,
         "normal_router_profile": true,
-        "passed": false,
-        "stage": "loading",
-        "stop_cause": "host_available_floor",
+        "passed": true,
+        "stage": "quality-long-generation-and-fresh-reload",
         "host_floor_gib": 2,
-        "source_settings_unchanged": true,
-        "evidence": "docs/QWEN-CURRENT-GUARDS-20261029.md",
-        "numeric_results": "docs/validation-results/20261029-qwen-current-guards.json"
+        "source_settings_unchanged": false,
+        "swap_policy": "Qwen-only 128 MiB/s writes and 160 MiB/s combined over 30 seconds; pressure guard unchanged",
+        "evidence": "docs/QWEN-RELAXED-SWAP-20261029.md",
+        "numeric_results": "docs/validation-results/20261029-qwen-relaxed-swap.json"
+      },
+      "tested_retrieval_input": 29450,
+      "selected_settings": {
+        "mmap_experts": true,
+        "gpu": [
+          0,
+          1
+        ],
+        "layer_split": "auto",
+        "swap_guard": {
+          "window_s": 30,
+          "write_mib_s": 128,
+          "combined_mib_s": 160,
+          "pressure_pct": 10
+        },
+        "temporary_reduced_ram": true
       }
     },
     {

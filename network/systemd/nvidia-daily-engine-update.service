@@ -1,0 +1,22 @@
+[Unit]
+Description=Build and qualify NVIDIA LLM engine updates; promote only passing candidates
+Requires=nvidia-daily-engine-update-recover.service
+After=nvidia-daily-engine-update-recover.service nvidia-model-router.service
+OnFailure=nvidia-daily-engine-update-recover.service
+
+[Service]
+Type=oneshot
+WorkingDirectory=@ROOT@
+Environment=PYTHONUNBUFFERED=1 BUILD_JOBS=2
+Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/python3 @ROOT@/scripts/daily_engine_update.py
+ExecStopPost=/usr/bin/python3 @ROOT@/scripts/daily_engine_update.py --recover-only
+TimeoutStartSec=10h
+TimeoutStopSec=10min
+KillMode=mixed
+MemoryHigh=6G
+MemoryMax=8G
+OOMPolicy=stop
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=7

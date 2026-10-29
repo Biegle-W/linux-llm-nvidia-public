@@ -1,0 +1,65 @@
+{
+  "complete": {
+    "passed": true,
+    "error": null,
+    "cleanup_idle": true,
+    "source_unchanged": true,
+    "registry_unchanged": true,
+    "router_preserved": true,
+    "dsh_preserved": true,
+    "benchmark_repeated": false
+  },
+  "context": 32768,
+  "gpu": [
+    0,
+    1
+  ],
+  "mmap_experts": true,
+  "swap_limits": {
+    "window_s": 30,
+    "write_mib_s": 128,
+    "combined_mib_s": 160,
+    "pressure_pct": 10
+  },
+  "passed_checks": [
+    "json",
+    "arithmetic",
+    "image",
+    "retrieval"
+  ],
+  "retrieval_input_tokens": 29450,
+  "sustained": {
+    "done": true,
+    "usage": {
+      "prompt_tokens": 115,
+      "completion_tokens": 8192,
+      "total_tokens": 8307,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "generation_s": 139.51866844299366,
+    "wall_s": 144.33274728799006
+  },
+  "sustained_client_decode_tps": 58.7089892084713,
+  "peak_swap_read_mib_s": 0.06557546259383892,
+  "peak_swap_write_mib_s": 12.020950975010912,
+  "peak_swap_combined_mib_s": 12.086032568591673,
+  "peak_worker_swap_gib": 0.3878669738769531,
+  "min_host_available_gib": 35.73841857910156,
+  "peak_worker_gib": 16.39605712890625,
+  "max_gpu_temp_c": 66.0,
+  "max_full_pressure_pct": 0.0,
+  "memory_events": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0,
+    "sock_throttled": 4
+  },
+  "quality_trial_peak_write_mib_s": 48.40853179401691,
+  "applied": true,
+  "historical_benchmark_unchanged": true
+}

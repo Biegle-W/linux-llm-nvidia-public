@@ -1,5 +1,9 @@
 # Inference swap and memory-pressure policy
 
+## October 29 Qwen-specific exception
+
+`flash-next-strata` uses 128 MiB/s writes and 160 MiB/s combined over 30 seconds after mapped-expert qualification. Every other profile retains the default 1/8 MiB/s limits described below. Pressure, RAM/VRAM, thermal and telemetry guards are unchanged; the daily updater must preserve this per-profile distinction. See [qualification](QWEN-RELAXED-SWAP-20261029.md). These are runtime I/O limits, not SSD-endurance budgets.
+
 The user explicitly approved unlimited worker swap occupancy with active churn
 protection on October 27. Loading and parked pages are allowed; normal workers
 use `MemorySwapMax=infinity`, whose kernel readback is `memory.swap.max=max`.

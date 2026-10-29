@@ -94,7 +94,11 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 class WorkerWatch:
     def __init__(self, group, profile, key, *, evidence=None, phase_file=None, latch=True):
         self.group, self.profile, self.key = Path(group), profile, key
-        self.guard, self.ready = SwapGuard(), False
+        # Qwen's mapped-expert mode may evict cold anonymous pages while its
+        # file cache warms. Permit bounded I/O without weakening other models.
+        self.policy = ({'write_mib_s': 128, 'combined_mib_s': 160}
+                       if profile == 'flash-next-strata' else {})
+        self.guard, self.ready = SwapGuard(**self.policy), False
         self.evidence = Path(evidence) if evidence else ROOT / 'data/router' / (profile + '-swap-guard.jsonl')
         self.phase_file = Path(phase_file) if phase_file else None
         self.latch = latch
@@ -146,7 +150,11 @@ class WorkerWatch:
 
     def step(self):
         now = time.monotonic()
-        row = {'time': time.time(), 'profile': self.profile}
+        row = {'time': time.time(), 'profile': self.profile,
+               'limits': {'window_s': self.guard.window_s,
+                          'write_mib_s': self.guard.write_limit,
+                          'combined_mib_s': self.guard.combined_limit,
+                          'pressure_pct': self.guard.pressure_limit}}
         try:
             phase = self.phase()
             self.last_phase = phase

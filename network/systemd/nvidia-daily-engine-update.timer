@@ -1,0 +1,11 @@
+[Unit]
+Description=Qualify newer NVIDIA LLM engines daily at 03:00
+
+[Timer]
+OnCalendar=*-*-* 03:00:00
+Persistent=false
+RandomizedDelaySec=0
+Unit=nvidia-daily-engine-update.service
+
+[Install]
+WantedBy=timers.target

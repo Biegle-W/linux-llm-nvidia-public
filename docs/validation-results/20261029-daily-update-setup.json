@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-29",
+  "installed": true,
+  "timer_enabled": true,
+  "schedule": "03:00 America/Toronto",
+  "next_run": "2026-10-30T03:00:00-04:00",
+  "missed_nights_catch_up": false,
+  "idle_seconds": 1200,
+  "admission_deadline_local": "06:30",
+  "cpu_tests_passed": 197,
+  "six_component_discovery": [
+    {
+      "component": "hyperqwen",
+      "revision": "ce9615c4f2309be727407918a6c979bd67968069",
+      "status": "unchanged"
+    },
+    {
+      "component": "sglang",
+      "revision": "d61ded5b9e2dc46453d924a3d4db06ec2c373f54",
+      "status": "update-available"
+    },
+    {
+      "component": "strata-qwen",
+      "revision": "46c152a1310f77cd2f0ce2c7cd213962df14fe83",
+      "status": "update-available"
+    },
+    {
+      "component": "maya-glm",
+      "revision": "52e9131f582b4e25bec8cb0a2fe9a84c09cd6df9",
+      "status": "update-available"
+    },
+    {
+      "component": "maya-deepseek",
+      "revision": "52e9131f582b4e25bec8cb0a2fe9a84c09cd6df9",
+      "status": "update-available"
+    },
+    {
+      "component": "strata-deepseek",
+      "revision": "46c152a1310f77cd2f0ce2c7cd213962df14fe83",
+      "status": "update-available"
+    }
+  ],
+  "gpu_update_or_benchmark_performed": false,
+  "candidate_promoted": false,
+  "router_idle": true,
+  "router_active": true,
+  "dsh_active": true,
+  "gpu_reservation_absent": true,
+  "qwen_selected_settings_preserved": true,
+  "maya_cachebound_binary_pin_verified": true,
+  "systemd_verification": "passed; unrelated existing spice-vdagent Install-section warning"
+}

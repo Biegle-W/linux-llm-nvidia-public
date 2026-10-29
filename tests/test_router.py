@@ -40,7 +40,7 @@ class Backend(BaseHTTPRequestHandler):
             self.send_response(200);self.send_header('Content-Length',str(len(payload)));self.end_headers();self.wfile.write(payload)
 
 class FakeWorkers:
-    active=None;loading=None;busy=False;idle_timeout=600
+    active=None;loading=None;busy=False;idle_timeout=600;last_activity=time.monotonic()
     def request_status(self):return dict(queued=0,inflight=int(self.busy),max_inflight=1,max_queued=8,same_model_concurrency=False)
     def acquire(self,name,progress=lambda:None,clear_guard=False):self.active=name;self.busy=True;self.clear_guard=clear_guard
     def release(self):self.busy=False
@@ -120,6 +120,7 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(state['max_inflight'],1)
         self.assertEqual(state['max_queued'],8)
         self.assertEqual(state['idle_timeout_seconds'],600)
+        self.assertGreaterEqual(state['idle_for_s'],0)
         self.assertFalse(state['same_model_concurrency'])
 
     def test_plain_backend_error_preserves_status_and_redacts_key(self):

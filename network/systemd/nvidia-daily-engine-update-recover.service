@@ -1,0 +1,15 @@
+[Unit]
+Description=Recover any interrupted provisional NVIDIA engine update before model serving
+Before=nvidia-model-router.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+WorkingDirectory=@ROOT@
+ExecStart=/usr/bin/python3 @ROOT@/scripts/daily_engine_update.py --recover-only
+TimeoutStartSec=10min
+Restart=on-failure
+RestartSec=60
+
+[Install]
+WantedBy=default.target

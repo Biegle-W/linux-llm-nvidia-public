@@ -6,6 +6,26 @@ import re
 import subprocess
 
 FILES = (
+    'scripts/daily_engine_update.py',
+    'scripts/daily_update_owner.py',
+    'scripts/install_daily_engine_update.py',
+    'scripts/update_transaction.py',
+    'scripts/update_policy.py',
+    'scripts/update_builders.py',
+    'scripts/update_qualification.py',
+    'scripts/update_publish.py',
+    'tests/test_daily_engine_update.py',
+    'config/daily-update.json',
+    'config/daily-update-versions.json',
+    'network/systemd/nvidia-daily-engine-update.service',
+    'network/systemd/nvidia-daily-engine-update.timer',
+    'network/systemd/nvidia-daily-engine-update-recover.service',
+    'docs/DAILY-ENGINE-UPDATES.md',
+    'docs/DAILY-ENGINE-UPDATE-POLICY.md',
+    'docs/QWEN-RELAXED-SWAP-20261029.md',
+    'docs/validation-results/20261029-qwen-relaxed-swap.json',
+    'docs/validation-results/20261029-daily-update-setup.json',
+
     'docs/QWEN-CURRENT-GUARDS-20261029.md', 'docs/validation-results/20261029-qwen-current-guards.json',
     'docs/MAYA-DEMAND-CACHE-20261029.md', 'docs/benchmark-results/20261029-maya-demand-cache.json', 'config/maya-cachebound-runtime.json', 'patches/maya-ds4-file-cache-target.patch', 'scripts/build_maya_file_cache_bound.py', 'scripts/maya_cachebound_runtime.py', 'tests/test_maya_cachebound_runtime.py', 'tools/maya-file-cache-bound/test_cache_bound.cpp',
     'docs/MAYA-DS4-VRAM512-FOLLOWUP-20261029.md', 'docs/benchmark-results/20261029-maya512-followup.json',
