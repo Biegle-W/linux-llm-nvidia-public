@@ -1,5 +1,19 @@
 # Agent entry point
 
+## Latest: all six current profiles benchmarked on 64GB — October 29
+
+Firmware configured RAM speed is DDR5-4200 MT/s across four 16GB DIMMs
+(equivalent DDR clock2100MHz); Linux sees61.3013GiB usable. No clock/BIOS change.
+Five selected model/engine profiles completed one warmup and three valid
+128-output fixed-fixture requests with current full-RAM caches and unchanged
+guards. Fresh medians and ranges are in [the report](docs/BENCHMARK-64GB-20261029.md)
+and [numeric evidence](docs/benchmark-results/20261029-full-ram.json); the registry
+now points to five measured results and retains prior entries in history. DeepSeek/Maya failed its first measured request at5.31MiB/s swap writes above1MiB/s; no new speed median or pass is claimed. Its guard remains latched and source settings unchanged.
+These approximately2.2K-input screens exclude model loading; they do not replace
+full-window quality or long-duration qualification. Prior configurations/runs are
+not paired controls for a RAM-only causal comparison. Source readiness/cleanup
+corrections do not change model/runtime settings or the fixed measured fixtures.
+
 ## Latest: 64GB RAM restored — October 29
 
 The owner confirmed hardware restoration. Linux sees 61.3013 GiB usable.

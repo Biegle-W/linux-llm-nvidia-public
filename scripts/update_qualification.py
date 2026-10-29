@@ -221,6 +221,9 @@ class Qualification:
         checks = {}
         try:
             self.manager.start(self.p['id'], allowed_lock=self.owner)
+            if self.p['id']=='qwen27b-sglang':
+                from benchmark_models import wait_sglang_warmup
+                wait_sglang_warmup(self.root/'data/qwen27b-server.log')
             self.request('warmup', self.fixtures[0], 64, speed=True)
             speeds = [self.request('speed-' + str(i), self.fixtures[i + 1], 128, speed=True) for i in range(3)]
             self.exact_json('json', 'Return only JSON keys sum and word with sum=17+25 and word="ready".', {'sum':42,'word':'ready'}); checks['json'] = True

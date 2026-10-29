@@ -12,6 +12,7 @@ import subprocess
 import threading
 import time
 import urllib.request
+import urllib.error
 
 ROOT = Path(__file__).resolve().parents[1]
 from profile_catalog import load_catalog, host_ram_reserve_gib
@@ -56,9 +57,25 @@ def metric_delta(before, after, metric, stage=None):
     return sum(value for _, value in rows), rows
 
 
+def wait_sglang_warmup(log,timeout=30):
+    """The fork's native /generate warmup is absent from OpenAI counters."""
+    deadline=time.monotonic()+timeout
+    while time.monotonic()<deadline:
+        try:
+            with Path(log).open() as source:
+                source.seek(max(0,Path(log).stat().st_size-131072))
+                text=source.read()
+            if 'The server is fired up and ready to roll!' in text:return
+        except OSError:pass
+        time.sleep(.2)
+    raise RuntimeError('SGLang native startup warmup did not finish')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT / 'data/benchmarks' / time.strftime('%Y%m%d-%H%M%S-current'))
+    parser.add_argument('--profiles',nargs='+',help='Run only these maintained IDs; use to continue without repeating completed profiles')
+    parser.add_argument('--fixtures',type=Path,help='Reuse the original saved prompts when continuing a partial run')
     args = parser.parse_args()
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
@@ -66,6 +83,9 @@ def main():
     key = (ROOT / 'data/local-api-key').read_text().strip()
     headers = {'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json'}
     catalog = load_catalog()
+    if args.profiles:
+        if not set(args.profiles).issubset({p['id'] for p in catalog['profiles']}):parser.error('Unknown maintained profile')
+        catalog=dict(catalog,profiles=[p for p in catalog['profiles'] if p['id'] in args.profiles])
     host_floors_kib = {p["id"]: host_ram_reserve_gib(p) * 1024 ** 2 for p in catalog["profiles"]}
     (out / 'catalog.json').write_text(json.dumps(catalog, indent=2))
     (ROOT / 'data/benchmark-latest-path').write_text(str(out))
@@ -74,6 +94,7 @@ def main():
     stop = threading.Event()
     rows = []
     active = [None]
+    owned_worker = [None]
 
     def event(stage, **values):
         row = {'time': time.strftime('%Y-%m-%dT%H:%M:%S%z'), 'stage': stage, **values}
@@ -114,6 +135,9 @@ def main():
                 {'role': 'user', 'content': 'Reference notes:\n' + words + '\n\nWrite a detailed practical guide explaining how to organize a community garden. Include planning, soil, water, tools, volunteer coordination, seasonal maintenance and record keeping. Use at least 1000 words in continuous prose. Start the guide immediately and continue in detail.'}]
 
     fixtures = {**{f'measured-{rep}': messages(rep) for rep in range(3)}, 'warmup': messages(0, True)}
+    if args.fixtures:
+        fixtures=json.loads(args.fixtures.read_text())
+        if set(fixtures)!=set(['warmup']+[f'measured-{i}' for i in range(3)]):raise ValueError('Incomplete saved fixtures')
     (out / 'prompts.json').write_text(json.dumps(fixtures, indent=2))
     protocol = {'created': time.strftime('%Y-%m-%dT%H:%M:%S%z'), 'repetitions': 3, 'output_tokens': 128,
                 'reference_words': 2000, 'warmup': {'reference_words': 512, 'output_tokens': 64},
@@ -242,6 +266,7 @@ def main():
             unit = 'llm-test-qwen27b.service' if profile['id'].startswith('qwen27b-') else 'llm-router-worker.service'
             record = subprocess.check_output(['systemctl', '--user', 'show', unit, '-p', 'ExecStart', '-p', 'MemoryHigh', '-p', 'MemoryMax', '-p', 'MemorySwapMax'], text=True)
             (out / (profile['id'] + '-unit.txt')).write_text(record)
+            owned_worker[0]=(unit,subprocess.check_output(['systemctl','--user','show',unit,'-p','InvocationID','--value'],text=True).strip())
             if not profile['id'].startswith('qwen27b-'):
                 cfg = json.loads((ROOT / 'data/router' / (profile['id'] + '-runtime.json')).read_text()); cfg.pop('api_key', None)
                 (out / (profile['id'] + '-config-redacted.json')).write_text(json.dumps(cfg, indent=2))
@@ -249,14 +274,7 @@ def main():
                 # HTTP model listing can become ready before SGLang's own small
                 # non-streaming startup generation finishes. Do not mix its
                 # prefill counters into the measured request.
-                deadline = time.monotonic() + 30
-                while time.monotonic() < deadline:
-                    samples = metric_rows(metrics(), 'sglang:num_requests_total')
-                    if sum(v for labels, v in samples if labels.get('is_streaming') == 'false') >= 1:
-                        break
-                    time.sleep(.2)
-                else:
-                    raise RuntimeError('SGLang internal startup warm-up did not settle.')
+                wait_sglang_warmup(ROOT/'data/qwen27b-server.log')
             measure(profile, 0, True)
             for rep in range(3):
                 measure(profile, rep)
@@ -264,12 +282,28 @@ def main():
     except BaseException as e:
         error = (str(e) or type(e).__name__).replace(key, '[redacted]'); event('failed', error=error)
     finally:
-        release(); event('restoring-default')
+        release(); event('unloading-owned-benchmark')
         try:
-            select('qwen27b-hyperqwen'); event('default-restored')
+            # The worker's final busy flag can briefly outlive the last SSE delta.
+            # Normal unloading still refuses active requests and unknown ownership.
+            deadline=time.monotonic()+120
+            while True:
+                if owned_worker[0]:
+                    unit,invocation=owned_worker[0]
+                    current=subprocess.check_output(['systemctl','--user','show',unit,'-p','InvocationID','--value'],text=True).strip()
+                    if current and current!=invocation:
+                        event('cleanup-preserved-new-worker');break
+                try:
+                    with http(10100,'/router/unload',{},timeout=30) as response:
+                        assert json.load(response)['status']=='unloaded'
+                    break
+                except urllib.error.HTTPError as exception:
+                    if exception.code!=409 or time.monotonic()>=deadline:raise
+                    time.sleep(1)
+            event('idle-cleanup-complete')
         except Exception as e:
-            error = error or 'Default restoration failed: ' + str(e).replace(key, '[redacted]')
-            event('restore-failed', error=str(e).replace(key, '[redacted]'))
+            error=error or 'Idle cleanup failed: '+str(e).replace(key,'[redacted]')
+            event('cleanup-failed',error=str(e).replace(key,'[redacted]'))
         stop.set(); thread.join(timeout=8)
         summary = []
         for profile in catalog['profiles']:

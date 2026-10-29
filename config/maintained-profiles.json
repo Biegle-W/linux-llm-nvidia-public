@@ -97,25 +97,29 @@
         "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp"
       },
       "latest_benchmark": {
-        "run": "20261027-context-expansion",
-        "variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
-        "date": "2026-10-27",
+        "run": "20261029-full-ram",
+        "variant": "qwen27b-hyperqwen-64gb-fixed-fixture",
+        "date": "2026-10-29",
         "context": 56320,
+        "physical_ram_gb": 64,
+        "physical_ram_usable_gib": 61.30133056640625,
+        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
         "host_vm_swappiness": 60,
-        "swap_policy": "bounded-1GiB legacy",
+        "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
         "input_tokens_range": [
-          2212,
-          2222
+          2197,
+          2207
         ],
         "output_tokens": 128,
-        "ttft_s": 1.4985212169995066,
-        "prefill_tps": 1491.6519342069585,
-        "decode_tps": 89.10066847129683,
-        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
-        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
-        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        "ttft_s": 1.4885867039999994,
+        "prefill_tps": 1494.2935903448647,
+        "decode_tps": 88.55229922882138,
+        "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
+        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
+        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
       },
       "storage": {
         "access": "gpu-resident",
@@ -168,6 +172,34 @@
         "cache_settings_restored": false,
         "normal_guarded_load_passed": true,
         "historical_benchmarks_unchanged": true
+      },
+      "benchmark_history": [
+        {
+          "run": "20261027-context-expansion",
+          "variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
+          "date": "2026-10-27",
+          "context": 56320,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "bounded-1GiB legacy",
+          "input_tokens_range": [
+            2212,
+            2222
+          ],
+          "output_tokens": 128,
+          "ttft_s": 1.4985212169995066,
+          "prefill_tps": 1491.6519342069585,
+          "decode_tps": 89.10066847129683,
+          "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+          "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+          "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        }
+      ],
+      "current_configuration_benchmark": {
+        "status": "measured on restored 64GB with current selected settings",
+        "date": "2026-10-29",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md"
       }
     },
     {
@@ -235,26 +267,29 @@
         "disable_prefill_cuda_graph": true
       },
       "latest_benchmark": {
-        "run": "20261028-sglang-context-study",
-        "variant": "control-32768",
-        "date": "2026-10-28",
+        "run": "20261029-full-ram",
+        "variant": "qwen27b-sglang-64gb-fixed-fixture",
+        "date": "2026-10-29",
         "context": 32768,
+        "physical_ram_gb": 64,
+        "physical_ram_usable_gib": 61.30133056640625,
+        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
         "host_vm_swappiness": 60,
-        "swap_policy": "loading-swap-active-churn-v2",
+        "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
         "input_tokens_range": [
-          2212,
-          2222
+          2197,
+          2207
         ],
         "output_tokens": 128,
-        "ttft_s": 1.3455440140005521,
-        "prefill_tps": 1667.8703781763365,
-        "decode_tps": 84.76390369181925,
-        "prefill_method": "SGLang per-request native prefill_forward delta, canonical TP rank",
-        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/SGLANG-CONTEXT-20261028.md",
-        "numeric_results": "docs/benchmark-results/20261028-sglang-context.json",
-        "dense_gpu_free_floor_mib": 512
+        "ttft_s": 1.3962740080000913,
+        "prefill_tps": 1587.9034833612302,
+        "decode_tps": 80.86850013245734,
+        "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
+        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
       },
       "storage": {
         "access": "gpu-resident",
@@ -416,6 +451,28 @@
           },
           "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md",
           "numeric_results": "docs/benchmark-results/20261028-sglang-mtp3-512mib.json"
+        },
+        {
+          "run": "20261028-sglang-context-study",
+          "variant": "control-32768",
+          "date": "2026-10-28",
+          "context": 32768,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "loading-swap-active-churn-v2",
+          "input_tokens_range": [
+            2212,
+            2222
+          ],
+          "output_tokens": 128,
+          "ttft_s": 1.3455440140005521,
+          "prefill_tps": 1667.8703781763365,
+          "decode_tps": 84.76390369181925,
+          "prefill_method": "SGLang per-request native prefill_forward delta, canonical TP rank",
+          "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/SGLANG-CONTEXT-20261028.md",
+          "numeric_results": "docs/benchmark-results/20261028-sglang-context.json",
+          "dense_gpu_free_floor_mib": 512
         }
       ],
       "deployment": {
@@ -529,6 +586,11 @@
         "cache_settings_restored": false,
         "normal_guarded_load_passed": true,
         "historical_benchmarks_unchanged": true
+      },
+      "current_configuration_benchmark": {
+        "status": "measured on restored 64GB with current selected settings",
+        "date": "2026-10-29",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md"
       }
     },
     {
@@ -555,25 +617,29 @@
       },
       "evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "latest_benchmark": {
-        "run": "20261027-context-expansion",
-        "variant": "flash-next-strata-32768-screen",
-        "date": "2026-10-27",
+        "run": "20261029-full-ram",
+        "variant": "flash-next-strata-64gb-fixed-fixture",
+        "date": "2026-10-29",
         "context": 32768,
+        "physical_ram_gb": 64,
+        "physical_ram_usable_gib": 61.30133056640625,
+        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
         "host_vm_swappiness": 60,
-        "swap_policy": "bounded-1GiB legacy",
+        "swap_policy": "Qwen-only 128 MiB/s writes / 160 MiB/s combined over 30 seconds",
         "input_tokens_range": [
-          2212,
-          2222
+          2197,
+          2207
         ],
         "output_tokens": 128,
-        "ttft_s": 3.752891517004173,
-        "prefill_tps": 593.2,
-        "decode_tps": 97.08909285944816,
-        "prefill_method": "native prompt timing or dense per-request prefill counter delta",
-        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
-        "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        "ttft_s": 18.671214983000027,
+        "prefill_tps": 117.8,
+        "decode_tps": 55.83622098556693,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
+        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -642,6 +708,34 @@
         "cache_settings_restored": false,
         "normal_guarded_load_passed": true,
         "historical_benchmarks_unchanged": true
+      },
+      "benchmark_history": [
+        {
+          "run": "20261027-context-expansion",
+          "variant": "flash-next-strata-32768-screen",
+          "date": "2026-10-27",
+          "context": 32768,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "bounded-1GiB legacy",
+          "input_tokens_range": [
+            2212,
+            2222
+          ],
+          "output_tokens": 128,
+          "ttft_s": 3.752891517004173,
+          "prefill_tps": 593.2,
+          "decode_tps": 97.08909285944816,
+          "prefill_method": "native prompt timing or dense per-request prefill counter delta",
+          "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
+          "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        }
+      ],
+      "current_configuration_benchmark": {
+        "status": "measured on restored 64GB with current selected settings",
+        "date": "2026-10-29",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md"
       }
     },
     {
@@ -694,20 +788,29 @@
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "benchmark_configuration_note": "Historical 8K automatic-RAM benchmark remains under benchmark; latest_benchmark records the current bounded tier and on-demand CPU vision.",
       "latest_benchmark": {
-        "run": "20261029-moe-vram512",
-        "variant": "glm-maya-vram512-routerfix",
+        "run": "20261029-full-ram",
+        "variant": "glm-maya-64gb-fixed-fixture",
         "date": "2026-10-29",
         "context": 65536,
-        "prefill_tps": 49.3,
-        "ttft_s": 44.70305655199627,
-        "decode_tps": 2.5914861853090536,
+        "physical_ram_gb": 64,
+        "physical_ram_usable_gib": 61.30133056640625,
+        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
-        "output_tokens": 128,
-        "evidence": "docs/MOE-VRAM512-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-moe-vram512.json",
-        "host_ram_reserve_gib": 2,
         "host_vm_swappiness": 60,
-        "method": "Savedfixedfixture/nativeprefill/clientSSETTFTanddecode;historicalpriorcontrolonly"
+        "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
+        "input_tokens_range": [
+          2191,
+          2201
+        ],
+        "output_tokens": 128,
+        "ttft_s": 31.40691496499994,
+        "prefill_tps": 70.1,
+        "decode_tps": 5.318581178520475,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
+        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -784,6 +887,22 @@
           "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
           "host_vm_swappiness": 60,
           "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
+        },
+        {
+          "run": "20261029-moe-vram512",
+          "variant": "glm-maya-vram512-routerfix",
+          "date": "2026-10-29",
+          "context": 65536,
+          "prefill_tps": 49.3,
+          "ttft_s": 44.70305655199627,
+          "decode_tps": 2.5914861853090536,
+          "repetitions": 3,
+          "output_tokens": 128,
+          "evidence": "docs/MOE-VRAM512-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-moe-vram512.json",
+          "host_ram_reserve_gib": 2,
+          "host_vm_swappiness": 60,
+          "method": "Savedfixedfixture/nativeprefill/clientSSETTFTanddecode;historicalpriorcontrolonly"
         }
       ],
       "reduced_ram_qualification": {
@@ -821,8 +940,9 @@
         "evidence": "docs/MOE-VRAM512-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "not rebenchmarked after RAM restoration",
-        "historical_results_unchanged": true
+        "status": "measured on restored 64GB with current selected settings",
+        "date": "2026-10-29",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md"
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -916,20 +1036,29 @@
         }
       },
       "latest_benchmark": {
-        "run": "20261029-moe-vram512",
-        "variant": "deepseek-strata-vram512-routerfix",
+        "run": "20261029-full-ram",
+        "variant": "deepseek-strata-64gb-fixed-fixture",
         "date": "2026-10-29",
         "context": 131072,
-        "prefill_tps": 33.6,
-        "ttft_s": 65.21959592099302,
-        "decode_tps": 1.8793914172189028,
+        "physical_ram_gb": 64,
+        "physical_ram_usable_gib": 61.30133056640625,
+        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
-        "output_tokens": 128,
-        "evidence": "docs/MOE-VRAM512-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-moe-vram512.json",
-        "host_ram_reserve_gib": 2,
         "host_vm_swappiness": 60,
-        "method": "Savedfixedfixture/nativeprefill/clientSSETTFTanddecode;historicalpriorcontrolonly"
+        "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
+        "input_tokens_range": [
+          2173,
+          2192
+        ],
+        "output_tokens": 128,
+        "ttft_s": 67.29431004299977,
+        "prefill_tps": 32.6,
+        "decode_tps": 3.1206183602624455,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
+        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -1005,6 +1134,22 @@
           "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
           "host_vm_swappiness": 60,
           "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
+        },
+        {
+          "run": "20261029-moe-vram512",
+          "variant": "deepseek-strata-vram512-routerfix",
+          "date": "2026-10-29",
+          "context": 131072,
+          "prefill_tps": 33.6,
+          "ttft_s": 65.21959592099302,
+          "decode_tps": 1.8793914172189028,
+          "repetitions": 3,
+          "output_tokens": 128,
+          "evidence": "docs/MOE-VRAM512-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-moe-vram512.json",
+          "host_ram_reserve_gib": 2,
+          "host_vm_swappiness": 60,
+          "method": "Savedfixedfixture/nativeprefill/clientSSETTFTanddecode;historicalpriorcontrolonly"
         }
       ],
       "reduced_ram_qualification": {
@@ -1042,8 +1187,9 @@
         "evidence": "docs/MOE-VRAM512-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "not rebenchmarked after RAM restoration",
-        "historical_results_unchanged": true
+        "status": "measured on restored 64GB with current selected settings",
+        "date": "2026-10-29",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md"
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -1202,21 +1348,18 @@
         "evidence": "docs/MAYA-DEMAND-CACHE-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "not rebenchmarked after RAM restoration",
-        "historical_results_unchanged": true
+        "status": "failed active swap guard; no new speed median",
+        "historical_benchmark_is_not_current_configuration": true
       },
       "current_guard_validation": {
         "date": "2026-10-29",
         "physical_ram_usable_gib": 61.30133056640625,
         "normal_router_profile": true,
-        "passed": true,
-        "stage": "normal-startup-json-and-fresh-reload",
-        "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
-        "host_floor_gib": 2,
-        "source_settings_unchanged": false,
-        "benchmark_repeated": false,
-        "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
-        "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+        "passed": false,
+        "stage": "benchmark first measured request",
+        "stop_cause": "owned_worker_swap_write_rate",
+        "evidence": "docs/BENCHMARK-64GB-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-full-ram.json"
       },
       "full_ram_restoration": {
         "confirmed_on": "2026-10-29",
@@ -1224,7 +1367,37 @@
         "cache_settings_restored": true,
         "normal_guarded_load_passed": true,
         "historical_benchmarks_unchanged": true
-      }
+      },
+      "latest_benchmark_attempt": {
+        "date": "2026-10-29",
+        "physical_ram_gb": 64,
+        "configured_ram_speed_mt_s": 4200,
+        "passed": false,
+        "stage": "first measured request",
+        "reason": "Sustained owned-worker swap churn during inference",
+        "rates": {
+          "window_s": 30.440210597999794,
+          "read_mib_s": 0.36662546121587364,
+          "write_mib_s": 5.313823494395559,
+          "combined_mib_s": 5.680448955611433
+        },
+        "evidence": "docs/BENCHMARK-64GB-20261029.md"
+      },
+      "guard_validation_history": [
+        {
+          "date": "2026-10-29",
+          "physical_ram_usable_gib": 61.30133056640625,
+          "normal_router_profile": true,
+          "passed": true,
+          "stage": "normal-startup-json-and-fresh-reload",
+          "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
+          "host_floor_gib": 2,
+          "source_settings_unchanged": false,
+          "benchmark_repeated": false,
+          "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
+          "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+        }
+      ]
     }
   ],
   "host_reclaim_policy": {

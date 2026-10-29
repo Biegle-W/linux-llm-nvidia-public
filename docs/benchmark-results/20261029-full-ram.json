@@ -1,0 +1,467 @@
+{
+  "date": "2026-10-29",
+  "physical_ram_gb": 64,
+  "usable_ram_gib": 61.30133056640625,
+  "configured_ram_speed_mt_s": 4200,
+  "equivalent_ddr_clock_mhz": 2100,
+  "dimms": 4,
+  "dimm_size_gb": 16,
+  "ram_speed_source": "Firmware SMBIOS/DMI configured memory speed",
+  "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c",
+  "protocol": {
+    "created": "2026-10-29T16:27:53-0400",
+    "repetitions": 3,
+    "output_tokens": 128,
+    "reference_words": 2000,
+    "warmup": {
+      "reference_words": 512,
+      "output_tokens": 64
+    },
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 261026,
+    "thinking": false,
+    "concurrency": 1,
+    "context": "Each kept profile retains its installed allocation.",
+    "ttft": "HTTP request to first nonempty content SSE delta, worker loopback API; load/warmup excluded.",
+    "decode": "(completion_tokens - 1)/(last-content timestamp - first-content timestamp), same formula across engines.",
+    "prefill": "Native prompt timings for Strata/Maya; per-request native prefill-phase metric deltas for dense engines.",
+    "cache": "Unique early system tags; prefix reuse off in dense profiles; native cached counts checked; OS page cache not flushed.",
+    "reservation": "Router and DSH stay running. GPU reservation blocks other router generation/switching during measurements.",
+    "host_ram_reserve_gib": {
+      "qwen27b-hyperqwen": 2,
+      "qwen27b-sglang": 2,
+      "flash-next-strata": 2,
+      "glm-maya": 2,
+      "deepseek-strata": 2,
+      "deepseek-maya": 2
+    },
+    "safety": "Existing worker cgroups, model guards and selected RAM budgets remain; monitor aborts below the selected profile host-RAM reserve or at 82 C."
+  },
+  "all_profiles_complete": false,
+  "all_profiles_attempted": true,
+  "completed_profiles": 5,
+  "models": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "engine": "HyperQwen-vLLM",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "context": 56320,
+      "status": "completed",
+      "repetitions": 3,
+      "output_tokens": 128,
+      "input_tokens_range": [
+        2197,
+        2207
+      ],
+      "cached_tokens": [
+        0,
+        0,
+        0
+      ],
+      "prefill_tps": 1494.2935903448647,
+      "prefill_tps_range": [
+        1488.8948912574344,
+        1496.613483853701
+      ],
+      "ttft_s": 1.4885867039999994,
+      "ttft_s_range": [
+        1.476357132999965,
+        1.4897887480001373
+      ],
+      "decode_tps": 88.55229922882138,
+      "decode_tps_range": [
+        82.4947007044416,
+        91.96585234910071
+      ],
+      "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
+      "resources": {
+        "sampled_min_host_available_gib": 47.338191986083984,
+        "peak_worker_swap_gib": 0.0,
+        "active_rate_windows": 0,
+        "peak_swap_write_mib_s": 0,
+        "peak_swap_read_mib_s": 0,
+        "observed_guard_violations": 0
+      },
+      "repetitions_raw": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2207,
+          "output_tokens": 128,
+          "ttft_s": 1.4885867039999994,
+          "prefill_tps": 1488.8948912574344,
+          "client_decode_tps": 82.4947007044416,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2197,
+          "output_tokens": 128,
+          "ttft_s": 1.4897887480001373,
+          "prefill_tps": 1496.613483853701,
+          "client_decode_tps": 91.96585234910071,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2197,
+          "output_tokens": 128,
+          "ttft_s": 1.476357132999965,
+          "prefill_tps": 1494.2935903448647,
+          "client_decode_tps": 88.55229922882138,
+          "cached_tokens": 0,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "engine": "SGLang",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "context": 32768,
+      "status": "completed",
+      "repetitions": 3,
+      "output_tokens": 128,
+      "input_tokens_range": [
+        2197,
+        2207
+      ],
+      "cached_tokens": [
+        0,
+        0,
+        0
+      ],
+      "prefill_tps": 1587.9034833612302,
+      "prefill_tps_range": [
+        1585.8472483591945,
+        1645.2253835513866
+      ],
+      "ttft_s": 1.3962740080000913,
+      "ttft_s_range": [
+        1.354762497000138,
+        1.398346543000116
+      ],
+      "decode_tps": 80.86850013245734,
+      "decode_tps_range": [
+        80.39432843309149,
+        84.58812197126765
+      ],
+      "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+      "resources": {
+        "sampled_min_host_available_gib": 46.196746826171875,
+        "peak_worker_swap_gib": 0.0,
+        "active_rate_windows": 0,
+        "peak_swap_write_mib_s": 0,
+        "peak_swap_read_mib_s": 0,
+        "observed_guard_violations": 0
+      },
+      "repetitions_raw": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2207,
+          "output_tokens": 128,
+          "ttft_s": 1.3962740080000913,
+          "prefill_tps": 1587.9034833612302,
+          "client_decode_tps": 80.39432843309149,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2197,
+          "output_tokens": 128,
+          "ttft_s": 1.398346543000116,
+          "prefill_tps": 1585.8472483591945,
+          "client_decode_tps": 84.58812197126765,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2197,
+          "output_tokens": 128,
+          "ttft_s": 1.354762497000138,
+          "prefill_tps": 1645.2253835513866,
+          "client_decode_tps": 80.86850013245734,
+          "cached_tokens": 0,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "engine": "Strata",
+      "weight_quant": "IQ3_XXS",
+      "context": 32768,
+      "status": "completed",
+      "repetitions": 3,
+      "output_tokens": 128,
+      "input_tokens_range": [
+        2197,
+        2207
+      ],
+      "cached_tokens": [
+        0,
+        0,
+        0
+      ],
+      "prefill_tps": 117.8,
+      "prefill_tps_range": [
+        104.8,
+        118.3
+      ],
+      "ttft_s": 18.671214983000027,
+      "ttft_s_range": [
+        18.58871570700012,
+        21.076947195000002
+      ],
+      "decode_tps": 55.83622098556693,
+      "decode_tps_range": [
+        30.36546649134526,
+        62.4625348670721
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "resources": {
+        "sampled_min_host_available_gib": 48.79988479614258,
+        "peak_worker_swap_gib": 0.0,
+        "active_rate_windows": 28,
+        "peak_swap_write_mib_s": 0.0,
+        "peak_swap_read_mib_s": 0.0,
+        "observed_guard_violations": 0
+      },
+      "repetitions_raw": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2207,
+          "output_tokens": 128,
+          "ttft_s": 21.076947195000002,
+          "prefill_tps": 104.8,
+          "client_decode_tps": 30.36546649134526,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2197,
+          "output_tokens": 128,
+          "ttft_s": 18.671214983000027,
+          "prefill_tps": 117.8,
+          "client_decode_tps": 55.83622098556693,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2197,
+          "output_tokens": 128,
+          "ttft_s": 18.58871570700012,
+          "prefill_tps": 118.3,
+          "client_decode_tps": 62.4625348670721,
+          "cached_tokens": 0,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "profile": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "engine": "Maya",
+      "weight_quant": "Maya-S24",
+      "context": 65536,
+      "status": "completed",
+      "repetitions": 3,
+      "output_tokens": 128,
+      "input_tokens_range": [
+        2191,
+        2201
+      ],
+      "cached_tokens": [
+        0,
+        0,
+        0
+      ],
+      "prefill_tps": 70.1,
+      "prefill_tps_range": [
+        69.2,
+        70.1
+      ],
+      "ttft_s": 31.40691496499994,
+      "ttft_s_range": [
+        31.338988299999983,
+        31.722772816000088
+      ],
+      "decode_tps": 5.318581178520475,
+      "decode_tps_range": [
+        4.565300106321294,
+        5.437597322496917
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "resources": {
+        "sampled_min_host_available_gib": 8.207717895507812,
+        "peak_worker_swap_gib": 0.2848701477050781,
+        "active_rate_windows": 88,
+        "peak_swap_write_mib_s": 0.0,
+        "peak_swap_read_mib_s": 0.03844728269567504,
+        "observed_guard_violations": 0
+      },
+      "repetitions_raw": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2201,
+          "output_tokens": 128,
+          "ttft_s": 31.40691496499994,
+          "prefill_tps": 70.1,
+          "client_decode_tps": 4.565300106321294,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2191,
+          "output_tokens": 128,
+          "ttft_s": 31.722772816000088,
+          "prefill_tps": 69.2,
+          "client_decode_tps": 5.437597322496917,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2191,
+          "output_tokens": 128,
+          "ttft_s": 31.338988299999983,
+          "prefill_tps": 70.1,
+          "client_decode_tps": 5.318581178520475,
+          "cached_tokens": 0,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "profile": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engine": "Strata",
+      "weight_quant": "Maya-S",
+      "context": 131072,
+      "status": "completed",
+      "repetitions": 3,
+      "output_tokens": 128,
+      "input_tokens_range": [
+        2173,
+        2192
+      ],
+      "cached_tokens": [
+        0,
+        0,
+        0
+      ],
+      "prefill_tps": 32.6,
+      "prefill_tps_range": [
+        31.0,
+        35.9
+      ],
+      "ttft_s": 67.29431004299977,
+      "ttft_s_range": [
+        60.573703737000415,
+        70.44539952100013
+      ],
+      "decode_tps": 3.1206183602624455,
+      "decode_tps_range": [
+        1.7125084192958158,
+        3.254036356705263
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "resources": {
+        "sampled_min_host_available_gib": 8.811565399169922,
+        "peak_worker_swap_gib": 0.0,
+        "active_rate_windows": 196,
+        "peak_swap_write_mib_s": 0.0,
+        "peak_swap_read_mib_s": 0.0,
+        "observed_guard_violations": 0
+      },
+      "repetitions_raw": [
+        {
+          "rep": 0,
+          "prompt_tokens": 2192,
+          "output_tokens": 128,
+          "ttft_s": 67.29431004299977,
+          "prefill_tps": 32.6,
+          "client_decode_tps": 1.7125084192958158,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 1,
+          "prompt_tokens": 2182,
+          "output_tokens": 128,
+          "ttft_s": 70.44539952100013,
+          "prefill_tps": 31.0,
+          "client_decode_tps": 3.1206183602624455,
+          "cached_tokens": 0,
+          "valid": true
+        },
+        {
+          "rep": 2,
+          "prompt_tokens": 2173,
+          "output_tokens": 128,
+          "ttft_s": 60.573703737000415,
+          "prefill_tps": 35.9,
+          "client_decode_tps": 3.254036356705263,
+          "cached_tokens": 0,
+          "valid": true
+        }
+      ]
+    },
+    {
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engine": "Maya",
+      "weight_quant": "Maya-S",
+      "context": 32768,
+      "status": "failed_swap_guard",
+      "repetitions": 0,
+      "output_tokens": 128,
+      "prefill_tps": null,
+      "ttft_s": null,
+      "decode_tps": null,
+      "guard_stop": {
+        "time": 1793306880.0946825,
+        "profile": "deepseek-maya",
+        "limits": {
+          "window_s": 30,
+          "write_mib_s": 1,
+          "combined_mib_s": 8,
+          "pressure_pct": 10
+        },
+        "phase": "inference",
+        "swap_in_pages": 2857,
+        "swap_out_pages": 41409,
+        "pressure_pct": 1.77,
+        "swap_current_bytes": 217145344,
+        "rates": {
+          "window_s": 30.440210597999794,
+          "read_mib_s": 0.36662546121587364,
+          "write_mib_s": 5.313823494395559,
+          "combined_mib_s": 5.680448955611433
+        },
+        "violation": "Sustained owned-worker swap churn during inference"
+      },
+      "resources": {
+        "sampled_min_host_available_gib": 13.77667236328125,
+        "peak_worker_swap_gib": 0.20223236083984375,
+        "active_rate_windows": 46,
+        "peak_swap_write_mib_s": 5.313823494395559,
+        "peak_swap_read_mib_s": 0.36662546121587364,
+        "observed_guard_violations": 1
+      },
+      "repetitions_raw": []
+    }
+  ],
+  "startup_harness_correction": "Native SGLang startup completion replaces an inapplicable OpenAI counter; the discarded setup attempt measured no requests. Same saved fixtures, engine settings and per-request native metric validation retained.",
+  "benchmark_scope": "One warmup plus three 128-output fixed-fixture requests per profile; not full-window quality/reload qualification."
+}

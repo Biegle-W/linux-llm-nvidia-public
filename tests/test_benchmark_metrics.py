@@ -2,8 +2,10 @@
 from pathlib import Path
 import sys
 import unittest
+import tempfile
+from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
-from benchmark_models import metric_delta
+from benchmark_models import metric_delta, wait_sglang_warmup
 
 
 class MetricAccounting(unittest.TestCase):
@@ -51,6 +53,20 @@ class MetricAccounting(unittest.TestCase):
         value, rows = metric_delta('', after, 'm')
         self.assertAlmostEqual(value, .7)
         self.assertEqual(rows[0][0], {'pp_rank': '1', 'tp_rank': '0'})
+
+
+class StartupReadiness(unittest.TestCase):
+    def test_native_warmup_completion_does_not_require_an_openai_request_counter(self):
+        with tempfile.TemporaryDirectory() as temp:
+            log=Path(temp)/'server.log'
+            log.write_text('POST /generate 200 OK\nThe server is fired up and ready to roll!\n')
+            wait_sglang_warmup(log,timeout=1)
+
+    def test_model_listing_alone_does_not_establish_warmup_completion(self):
+        with tempfile.TemporaryDirectory() as temp:
+            log=Path(temp)/'server.log';log.write_text('GET /v1/models 200 OK\n')
+            with patch('benchmark_models.time.monotonic',side_effect=[0,0,31]),patch('benchmark_models.time.sleep'):
+                with self.assertRaisesRegex(RuntimeError,'warmup'):wait_sglang_warmup(log)
 
 
 if __name__ == '__main__':

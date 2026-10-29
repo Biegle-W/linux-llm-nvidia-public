@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/BENCHMARK-64GB-20261029.md',
+    'docs/benchmark-results/20261029-full-ram.json',
     'docs/FULL-RAM-RESTORATION-20261029.md',
     'docs/validation-results/20261029-full-ram-restoration.json',
     'scripts/daily_engine_update.py',

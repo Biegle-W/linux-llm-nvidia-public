@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## October 29: six-profile 64GB / DDR5-4200 screen
+
+All six were attempted: five completed three valid fixed-fixture requests after a warmup; DeepSeek/Maya stopped at its swap-write guard and has no new speed median. Latest measured results are in [the full-RAM report](BENCHMARK-64GB-20261029.md); previous latest entries are retained under each profile's benchmark history. RAM configured speed4200MT/s was verified read-only through firmware DMI. No settings or guard were relaxed for the benchmark.
+
 ## October 29: full RAM restored without rebenchmarking
 
 64GB hardware was confirmed and Linux verified 61.3013GiB usable. Full-RAM cache choices were restored and normal guarded load/JSON/reload checks passed. No new throughput measurement was produced; all earlier speed records retain their original hardware/cache scope. See [restoration](FULL-RAM-RESTORATION-20261029.md).
