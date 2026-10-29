@@ -2,28 +2,27 @@
 
 ## Latest matched speed evidence
 
-2 of four SSD profiles completed three valid measured requests without guard violations on restored 64GB RAM. RAM remains DDR5-4200 MT/s across four 16GB DIMMs (61.3013GiB usable; 2100MHz DDR clock). The dense profiles were not repeated; their table rows carry forward the earlier October 29 full-RAM run. See [full report](BENCHMARK-SSD-SWAP-64GB-20261029.md). Qwen Flash-Next/Strata and DeepSeek/Maya stopped on the unchanged pressure guard; no new passing medians are selected for them. Older dated qualification sections below retain their original settings.
+Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. Only Qwen/Strata and DeepSeek/Maya were repeated; HyperQwen, SGLang, GLM/Maya and DeepSeek/Strata rows are explicitly carried forward from their earlier October 29 records. This composite table is not a new six-profile matched run. See [report](BENCHMARK-PRESSURE-GUARD-64GB-20261029.md).
 
 ### VRAM-only models
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 1,494.29 | 1.49 | 88.55 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 1,587.90 | 1.40 | 80.87 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 1,494.29 | 1.489 | 88.55 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 1,587.90 | 1.396 | 80.87 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
 
 ### MoE models with CPU RAM offload
 
-None currently kept. RAM tiers below are caches within SSD-streaming profiles.
+None currently kept. Expert RAM tiers below are caches within SSD-streaming profiles.
 
 ### MoE models with SSD streaming
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | Not measured | Not measured | Not measured | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: models/strata/models/IQ3_XXS |
-| GLM-5.3-Flash / Maya-S24 | Maya | 63.80 | 34.73 | 4.93 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: models/maya/Maya-S24 |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 34.20 | 63.87 | 2.75 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | Not measured | Not measured | Not measured | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
-
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 67.10 | 32.842 | 16.87 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: models/strata/models/IQ3_XXS |
+| GLM-5.3-Flash / Maya-S24 | Maya | 63.80 | 34.733 | 4.93 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: models/maya/Maya-S24 |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 34.20 | 63.869 | 2.75 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 45.90 | 47.534 | 3.30 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
 
 ## Latest: qualified bounded DeepSeek/Maya cache — October 29
 

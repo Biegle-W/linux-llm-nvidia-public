@@ -1,5 +1,12 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: targeted 15% pressure guard and two-profile 64GB benchmark — October 29
+
+Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. Only Qwen/Strata and DeepSeek/Maya were repeated; HyperQwen, SGLang, GLM/Maya and DeepSeek/Strata rows are explicitly carried forward from their earlier October 29 records. This composite table is not a new six-profile matched run. See [report](docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md) and [numeric evidence](docs/benchmark-results/20261029-pressure-guard.json). Workers are stopped; router idle; no GPU lock; DSH preserved; no fallback.
+
+
+The earlier 10% stop records remain archived. Explicit model selection cleared the old invocation latches; neither profile has a new guard latch. Peak inference pressure was 0% for Qwen and 6.80% for Maya; the added allowance was not exercised in these short runs.
+
 ## Latest: four SSD profiles use 128/160 swap limits — October 29
 
 Four SSD-streaming profiles now use bounded swap limits of 128 MiB/s writes and 160 MiB/s combined over 30 seconds. Dense and unknown profiles retain 1/8 MiB/s. All other resource guards, contexts, expert-cache settings, precision choices, runtime pins and model settings are unchanged. 2 of four SSD profiles completed three valid measured requests without guard violations on restored 64GB RAM. RAM remains DDR5-4200 MT/s across four 16GB DIMMs (61.3013GiB usable; 2100MHz DDR clock). The dense profiles were not repeated; their table rows carry forward the earlier October 29 full-RAM run. deepseek-maya did not pass: Sustained full-memory pressure during inference. Qwen reached three outputs but stopped on the unchanged pressure guard; its timings are diagnostic and no new passing median is selected. See [the new report](docs/BENCHMARK-SSD-SWAP-64GB-20261029.md) and [numeric evidence](docs/benchmark-results/20261029-ssd-relaxed-swap.json). The earlier DeepSeek/Maya guard failure and all prior measurements remain dated evidence; this speed screen does not repeat full-window quality qualification.

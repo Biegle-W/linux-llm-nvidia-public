@@ -1,0 +1,517 @@
+{
+  "date": "2026-10-29",
+  "physical_ram_gb": 64,
+  "usable_ram_gib": 61.30133056640625,
+  "configured_ram_speed_mt_s": 4200,
+  "equivalent_ddr_clock_mhz": 2100,
+  "dimms": 4,
+  "dimm_size_gb": 16,
+  "ram_speed_source": "Firmware SMBIOS/DMI configured memory speed",
+  "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c",
+  "fixture_hash_method": "SHA256 of json.dumps(fixtures, sort_keys=True)",
+  "fixture_file_sha256": "190006d0c3a74225d202222b3188f970ae11a9d7b801f51907b769a2a5fcc1e5",
+  "protocol": {
+    "created": "2026-10-29T18:59:36-0400",
+    "repetitions": 3,
+    "output_tokens": 128,
+    "reference_words": 2000,
+    "warmup": {
+      "reference_words": 512,
+      "output_tokens": 64
+    },
+    "temperature": 0,
+    "top_p": 1,
+    "seed": 261026,
+    "thinking": false,
+    "concurrency": 1,
+    "context": "Each kept profile retains its installed allocation.",
+    "ttft": "HTTP request to first nonempty content SSE delta, worker loopback API; load/warmup excluded.",
+    "decode": "(completion_tokens - 1)/(last-content timestamp - first-content timestamp), same formula across engines.",
+    "prefill": "Native prompt timings for Strata/Maya; per-request native prefill-phase metric deltas for dense engines.",
+    "cache": "Unique early system tags; prefix reuse off in dense profiles; native cached counts checked; OS page cache not flushed.",
+    "reservation": "Router and DSH stay running. GPU reservation blocks other router generation/switching during measurements.",
+    "host_ram_reserve_gib": {
+      "flash-next-strata": 2,
+      "deepseek-maya": 2
+    },
+    "safety": "Existing worker cgroups, model guards and selected RAM budgets remain; monitor aborts below the selected profile host-RAM reserve or at 82 C."
+  },
+  "requested_profiles": [
+    "flash-next-strata",
+    "deepseek-maya"
+  ],
+  "all_profiles_attempted": true,
+  "all_profiles_complete": true,
+  "completed_profiles": 2,
+  "models": [
+    {
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "engine": "Strata",
+      "weight_quant": "IQ3_XXS",
+      "context": 32768,
+      "status": "completed",
+      "measurement_scope": "fresh two-profile pressure15 benchmark",
+      "repetitions": 3,
+      "output_tokens": 128,
+      "guard_limits": {
+        "window_s": 30,
+        "write_mib_s": 128,
+        "combined_mib_s": 160,
+        "pressure_pct": 15,
+        "bad_samples": 3
+      },
+      "resources": {
+        "sampled_min_host_available_gib": 48.90870666503906,
+        "sampled_peak_gpu_temperature_c": 54.0,
+        "peak_worker_swap_gib": 0.0,
+        "active_rate_windows": 59,
+        "peak_swap_write_mib_s": 0.0,
+        "peak_swap_read_mib_s": 0.0,
+        "peak_combined_swap_mib_s": 0.0,
+        "peak_full_memory_pressure_pct": 0.0,
+        "peak_inference_full_memory_pressure_pct": 0.0,
+        "observed_guard_violations": 0,
+        "observed_telemetry_errors": 0,
+        "worker_limits_readback": [
+          "MemoryHigh=47244640256",
+          "MemoryMax=51539607552",
+          "MemorySwapMax=infinity"
+        ],
+        "max_consecutive_eligible_pressure_samples_above_old10": 0,
+        "guard_latch_present_at_completion": false
+      },
+      "repetitions_raw": [
+        {
+          "profile": "flash-next-strata",
+          "case": "measured",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 2207,
+          "output_tokens": 128,
+          "ttft_s": 36.27644058199985,
+          "last_content_s": 47.79459798799871,
+          "wall_s": 47.81691907200002,
+          "usage": {
+            "prompt_tokens": 2207,
+            "completion_tokens": 128,
+            "total_tokens": 2335,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 2207,
+            "prompt_ms": 36210.5,
+            "prompt_per_token_ms": 16.407,
+            "prompt_per_second": 60.9,
+            "predicted_n": 128,
+            "predicted_ms": 11603.0,
+            "predicted_per_token_ms": 90.648,
+            "predicted_per_second": 11.0,
+            "draft_n": 124,
+            "draft_n_accepted": 60
+          },
+          "client_decode_tps": 11.026069146602921,
+          "native_decode_tps": 11.0,
+          "prefill_tps": 60.9,
+          "prefill_method": "native prompt_n / native prompt time",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "valid": true
+        },
+        {
+          "profile": "flash-next-strata",
+          "case": "measured",
+          "rep": 1,
+          "context": 32768,
+          "prompt_tokens": 2197,
+          "output_tokens": 128,
+          "ttft_s": 32.84203533899927,
+          "last_content_s": 40.37067627399847,
+          "wall_s": 40.37085277099868,
+          "usage": {
+            "prompt_tokens": 2197,
+            "completion_tokens": 128,
+            "total_tokens": 2325,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 2197,
+            "prompt_ms": 32759.6,
+            "prompt_per_token_ms": 14.911,
+            "prompt_per_second": 67.1,
+            "predicted_n": 128,
+            "predicted_ms": 7607.8,
+            "predicted_per_token_ms": 59.436,
+            "predicted_per_second": 16.8,
+            "draft_n": 117,
+            "draft_n_accepted": 62
+          },
+          "client_decode_tps": 16.868914468958327,
+          "native_decode_tps": 16.8,
+          "prefill_tps": 67.1,
+          "prefill_method": "native prompt_n / native prompt time",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "valid": true
+        },
+        {
+          "profile": "flash-next-strata",
+          "case": "measured",
+          "rep": 2,
+          "context": 32768,
+          "prompt_tokens": 2197,
+          "output_tokens": 128,
+          "ttft_s": 26.85935956800131,
+          "last_content_s": 31.340817734000666,
+          "wall_s": 31.34088942100061,
+          "usage": {
+            "prompt_tokens": 2197,
+            "completion_tokens": 128,
+            "total_tokens": 2325,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 2197,
+            "prompt_ms": 26828.8,
+            "prompt_per_token_ms": 12.212,
+            "prompt_per_second": 81.9,
+            "predicted_n": 128,
+            "predicted_ms": 4508.8,
+            "predicted_per_token_ms": 35.225,
+            "predicted_per_second": 28.4,
+            "draft_n": 123,
+            "draft_n_accepted": 60
+          },
+          "client_decode_tps": 28.338990412438502,
+          "native_decode_tps": 28.4,
+          "prefill_tps": 81.9,
+          "prefill_method": "native prompt_n / native prompt time",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "valid": true
+        }
+      ],
+      "prefill_tps": 67.1,
+      "prefill_tps_range": [
+        60.9,
+        81.9
+      ],
+      "ttft_s": 32.84203533899927,
+      "ttft_s_range": [
+        26.85935956800131,
+        36.27644058199985
+      ],
+      "decode_tps": 16.868914468958327,
+      "decode_tps_range": [
+        11.026069146602921,
+        28.338990412438502
+      ],
+      "input_tokens_range": [
+        2197,
+        2207
+      ],
+      "cached_tokens": [
+        0,
+        0,
+        0
+      ],
+      "prefill_method": "native prompt_n / native prompt time"
+    },
+    {
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engine": "Maya",
+      "weight_quant": "Maya-S",
+      "context": 32768,
+      "status": "completed",
+      "measurement_scope": "fresh two-profile pressure15 benchmark",
+      "repetitions": 3,
+      "output_tokens": 128,
+      "guard_limits": {
+        "window_s": 30,
+        "write_mib_s": 128,
+        "combined_mib_s": 160,
+        "pressure_pct": 15,
+        "bad_samples": 3
+      },
+      "resources": {
+        "sampled_min_host_available_gib": 49.74585723876953,
+        "sampled_peak_gpu_temperature_c": 59.0,
+        "peak_worker_swap_gib": 0.6645240783691406,
+        "active_rate_windows": 173,
+        "peak_swap_write_mib_s": 14.410646581211402,
+        "peak_swap_read_mib_s": 1.389082475371568,
+        "peak_combined_swap_mib_s": 15.595820909136576,
+        "peak_full_memory_pressure_pct": 12.53,
+        "peak_inference_full_memory_pressure_pct": 6.8,
+        "observed_guard_violations": 0,
+        "observed_telemetry_errors": 0,
+        "worker_limits_readback": [
+          "MemoryHigh=49392123904",
+          "MemoryMax=51539607552",
+          "MemorySwapMax=infinity"
+        ],
+        "max_consecutive_eligible_pressure_samples_above_old10": 0,
+        "guard_latch_present_at_completion": false
+      },
+      "repetitions_raw": [
+        {
+          "profile": "deepseek-maya",
+          "case": "measured",
+          "rep": 0,
+          "context": 32768,
+          "prompt_tokens": 2192,
+          "output_tokens": 128,
+          "ttft_s": 46.51269177500035,
+          "last_content_s": 80.4285904540011,
+          "wall_s": 80.4385873629999,
+          "usage": {
+            "prompt_tokens": 2192,
+            "completion_tokens": 128,
+            "total_tokens": 2320,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 2192,
+            "prompt_ms": 46483.5,
+            "prompt_per_token_ms": 21.206,
+            "prompt_per_second": 47.2,
+            "predicted_n": 128,
+            "predicted_ms": 33915.9,
+            "predicted_per_token_ms": 264.968,
+            "predicted_per_second": 3.8,
+            "draft_n": 0,
+            "draft_n_accepted": 0
+          },
+          "client_decode_tps": 3.744556533854516,
+          "native_decode_tps": 3.8,
+          "prefill_tps": 47.2,
+          "prefill_method": "native prompt_n / native prompt time",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "valid": true
+        },
+        {
+          "profile": "deepseek-maya",
+          "case": "measured",
+          "rep": 1,
+          "context": 32768,
+          "prompt_tokens": 2182,
+          "output_tokens": 128,
+          "ttft_s": 47.534375536999505,
+          "last_content_s": 85.99449610500051,
+          "wall_s": 85.99996309699964,
+          "usage": {
+            "prompt_tokens": 2182,
+            "completion_tokens": 128,
+            "total_tokens": 2310,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 2182,
+            "prompt_ms": 47506.6,
+            "prompt_per_token_ms": 21.772,
+            "prompt_per_second": 45.9,
+            "predicted_n": 128,
+            "predicted_ms": 38460.1,
+            "predicted_per_token_ms": 300.47,
+            "predicted_per_second": 3.3,
+            "draft_n": 0,
+            "draft_n_accepted": 0
+          },
+          "client_decode_tps": 3.302121733483711,
+          "native_decode_tps": 3.3,
+          "prefill_tps": 45.9,
+          "prefill_method": "native prompt_n / native prompt time",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "valid": true
+        },
+        {
+          "profile": "deepseek-maya",
+          "case": "measured",
+          "rep": 2,
+          "context": 32768,
+          "prompt_tokens": 2173,
+          "output_tokens": 128,
+          "ttft_s": 63.79980682299902,
+          "last_content_s": 130.50193945299907,
+          "wall_s": 130.51034998700015,
+          "usage": {
+            "prompt_tokens": 2173,
+            "completion_tokens": 128,
+            "total_tokens": 2301,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          },
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 2173,
+            "prompt_ms": 63774.8,
+            "prompt_per_token_ms": 29.349,
+            "prompt_per_second": 34.1,
+            "predicted_n": 128,
+            "predicted_ms": 66702.2,
+            "predicted_per_token_ms": 521.111,
+            "predicted_per_second": 1.9,
+            "draft_n": 0,
+            "draft_n_accepted": 0
+          },
+          "client_decode_tps": 1.9039870989504208,
+          "native_decode_tps": 1.9,
+          "prefill_tps": 34.1,
+          "prefill_method": "native prompt_n / native prompt time",
+          "cached_tokens": 0,
+          "finish_reason": "length",
+          "done": true,
+          "valid": true
+        }
+      ],
+      "prefill_tps": 45.9,
+      "prefill_tps_range": [
+        34.1,
+        47.2
+      ],
+      "ttft_s": 47.534375536999505,
+      "ttft_s_range": [
+        46.51269177500035,
+        63.79980682299902
+      ],
+      "decode_tps": 3.302121733483711,
+      "decode_tps_range": [
+        1.9039870989504208,
+        3.744556533854516
+      ],
+      "input_tokens_range": [
+        2173,
+        2192
+      ],
+      "cached_tokens": [
+        0,
+        0,
+        0
+      ],
+      "prefill_method": "native prompt_n / native prompt time"
+    }
+  ],
+  "carried_forward": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "engine": "HyperQwen-vLLM",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "context": 56320,
+      "status": "carried forward",
+      "measurement_scope": "not repeated in this task",
+      "source_run": "20261029-full-ram",
+      "source_evidence": "docs/BENCHMARK-64GB-20261029.md",
+      "prefill_tps": 1494.2935903448647,
+      "ttft_s": 1.4885867039999994,
+      "decode_tps": 88.55229922882138
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "engine": "SGLang",
+      "weight_quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "context": 32768,
+      "status": "carried forward",
+      "measurement_scope": "not repeated in this task",
+      "source_run": "20261029-full-ram",
+      "source_evidence": "docs/BENCHMARK-64GB-20261029.md",
+      "prefill_tps": 1587.9034833612302,
+      "ttft_s": 1.3962740080000913,
+      "decode_tps": 80.86850013245734
+    },
+    {
+      "profile": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "engine": "Maya",
+      "weight_quant": "Maya-S24",
+      "context": 65536,
+      "status": "carried forward",
+      "measurement_scope": "not repeated in this task",
+      "source_run": "20261029-ssd-relaxed-swap",
+      "source_evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+      "prefill_tps": 63.8,
+      "ttft_s": 34.7332943600004,
+      "decode_tps": 4.92634812288044
+    },
+    {
+      "profile": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engine": "Strata",
+      "weight_quant": "Maya-S",
+      "context": 131072,
+      "status": "carried forward",
+      "measurement_scope": "not repeated in this task",
+      "source_run": "20261029-ssd-relaxed-swap",
+      "source_evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+      "prefill_tps": 34.2,
+      "ttft_s": 63.86864420999973,
+      "decode_tps": 2.7538217587589835
+    }
+  ],
+  "cpu_tests": {
+    "passed": 202,
+    "failed": 0
+  },
+  "pressure_policy": {
+    "profiles": [
+      "flash-next-strata",
+      "deepseek-maya"
+    ],
+    "old_pct": 10,
+    "new_pct": 15,
+    "unchanged_active_window_s": 30,
+    "unchanged_bad_samples": 3,
+    "other_profiles_pct": 10,
+    "rationale": "Bounded headroom above prior recorded full-memory-pressure peaks of 13.19% and 12.21%; retain independent resource limits.",
+    "additional_allowance_exercised_in_inference": {
+      "flash-next-strata": false,
+      "deepseek-maya": false
+    },
+    "interpretation": "Both reruns stayed below the former10% inference threshold. Loading peaks do not count toward the active-inference stop. This short run does not establish that the raised threshold caused the successful completions; bounds/latching were tested by CPU regressions."
+  },
+  "unchanged_guards": {
+    "ssd_swap_write_mib_s": 128,
+    "ssd_swap_combined_mib_s": 160,
+    "dense_unknown_swap_write_combined_mib_s": [
+      1,
+      8
+    ],
+    "host_floor_gib": 2,
+    "temperature_limit_c": 82,
+    "dense_gpu_free_mib": 512,
+    "native_reserve_mib_per_gpu": 512,
+    "swappiness": 60,
+    "concurrency": 1,
+    "idle_s": 600,
+    "cgroup_budgets": "unchanged",
+    "telemetry_and_continuity": "unchanged"
+  },
+  "unchanged_model_settings": "Contexts, weights, quantization, engine binaries, expert-cache settings and native launch configurations unchanged.",
+  "benchmark_scope": "Only Qwen/Strata and DeepSeek/Maya repeated. One 64-output warmup and three target 128-output measured requests with exact saved approximately 2.2K-input fixtures. Loading excluded, OS page cache not flushed. No new near-window, tool/image, fresh-reload or multi-hour qualification.",
+  "previous_evidence": "docs/benchmark-results/20261029-ssd-relaxed-swap.json"
+}

@@ -1,5 +1,10 @@
 # Inference swap and memory-pressure policy
 
+## Targeted memory-pressure allowance — October 29
+
+Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. See [bounded two-profile screen](BENCHMARK-PRESSURE-GUARD-64GB-20261029.md).
+
+
 ## October 29 SSD-streaming limits
 
 Four SSD-streaming profiles now use bounded swap limits of 128 MiB/s writes and 160 MiB/s combined over 30 seconds. Dense and unknown profiles retain 1/8 MiB/s. All other resource guards, contexts, expert-cache settings, precision choices, runtime pins and model settings are unchanged. The explicit allowlist is `flash-next-strata`, `glm-maya`, `deepseek-strata`, `deepseek-maya`; new/unknown profiles receive conservative defaults. The daily updater preserves the same scope. See [matched 64GB screen](BENCHMARK-SSD-SWAP-64GB-20261029.md). These are runtime I/O limits, not SSD-endurance budgets.
@@ -20,7 +25,7 @@ The former 1 GiB cap remains historical benchmark attribution, not current polic
 warm-up, idle and actual inference using native busy state or dense running-request
 gauges. Benchmark warm-up is explicitly marked. After a continuous 30-second
 inference window, more than **128 MiB/s swap writes** or **160 MiB/s combined swap
-I/O** stops an allowlisted SSD worker; dense/unknown profiles retain **1/8 MiB/s**. Full-memory pressure above 10% for three samples
+I/O** stops an allowlisted SSD worker; dense/unknown profiles retain **1/8 MiB/s**. Full-memory pressure above the selected limit (15% for Qwen/Strata and DeepSeek/Maya; 10% for all others) for three samples
 after that active window also stops it. Missing telemetry and counter continuity
 fail closed after the documented checks. Short requests may have no complete
 30-second window; that is not a sustained-churn qualification.

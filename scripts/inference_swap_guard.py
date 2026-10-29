@@ -17,6 +17,8 @@ DENSE_GPU_FREE_MIB = 512
 SSD_STREAMING_PROFILES = frozenset({
     'flash-next-strata', 'glm-maya', 'deepseek-strata', 'deepseek-maya',
 })
+# Bounded per-profile allowance above the recorded 12–13% full-PSI peaks.
+PRESSURE_15_PROFILES = frozenset({'flash-next-strata', 'deepseek-maya'})
 
 
 class TelemetryError(RuntimeError):
@@ -102,6 +104,8 @@ class WorkerWatch:
         # warm. Keep their bounded I/O policy separate from dense defaults.
         self.policy = ({'write_mib_s': 128, 'combined_mib_s': 160}
                        if profile in SSD_STREAMING_PROFILES else {})
+        if profile in PRESSURE_15_PROFILES:
+            self.policy['pressure_pct'] = 15
         self.guard, self.ready = SwapGuard(**self.policy), False
         self.evidence = Path(evidence) if evidence else ROOT / 'data/router' / (profile + '-swap-guard.jsonl')
         self.phase_file = Path(phase_file) if phase_file else None

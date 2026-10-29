@@ -1,5 +1,10 @@
 # Benchmark ledger
 
+## October 29: bounded 15% pressure trial for two profiles
+
+Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. Only these two profiles were repeated. [Report](BENCHMARK-PRESSURE-GUARD-64GB-20261029.md), [numeric evidence](benchmark-results/20261029-pressure-guard.json). Prior 10% guard stops remain historical evidence.
+
+
 ## October 29: matched four SSD 128/160 swap-policy rerun
 
 2 of four SSD profiles completed three valid measured requests without guard violations on restored 64GB RAM. RAM remains DDR5-4200 MT/s across four 16GB DIMMs (61.3013GiB usable; 2100MHz DDR clock). The dense profiles were not repeated; their table rows carry forward the earlier October 29 full-RAM run. All other settings/guards unchanged. [Report](BENCHMARK-SSD-SWAP-64GB-20261029.md), [numeric evidence](benchmark-results/20261029-ssd-relaxed-swap.json). Original saved fixtures reused; old results preserved.
