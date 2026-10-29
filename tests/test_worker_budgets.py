@@ -1,4 +1,4 @@
-"""Preserve RAM limits while allowing the approved phase-aware loading swap policy."""
+"""Keep MoE RAM limits and guarded ownership while allowing uncapped dense host RAM."""
 from copy import deepcopy
 from pathlib import Path
 import sys
@@ -36,6 +36,8 @@ class WorkerBudget(unittest.TestCase):
                 result=subprocess.check_output(['bash',str(script),name,'/usr/bin/python3',command,engine],text=True,env=env)
                 self.assertIn('fixture-console-opened',result)
                 self.assertIn('--property=MemorySwapMax='+limit,result)
+                self.assertIn('--property=MemoryHigh='+('infinity' if limit=='infinity' else '30G'),result)
+                self.assertIn('--property=MemoryMax='+('infinity' if limit=='infinity' else '36G'),result)
     def test_moe_shell_commands_use_managed_router_selection(self):
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as directory:
@@ -50,9 +52,9 @@ class WorkerBudget(unittest.TestCase):
                     result = subprocess.check_output(['bash', str(shell), command], text=True).strip()
                     self.assertEqual(result, '--model ' + model)
 
-    def test_dense_models_keep_their_original_budget(self):
+    def test_dense_models_have_no_per_worker_ram_caps(self):
         for name in ['qwen27b-hyperqwen', 'qwen27b-sglang']:
-            self.assertEqual(worker_budget(get_profile(name)), {'high': 30, 'max': 36, 'swap': None})
+            self.assertEqual(worker_budget(get_profile(name)), {'high': None, 'max': None, 'swap': None})
 
     def test_dense_cannot_take_the_larger_moe_budget(self):
         p = deepcopy(get_profile('qwen27b-hyperqwen'))
@@ -72,6 +74,33 @@ class WorkerBudget(unittest.TestCase):
             with self.assertRaises(ValueError):
                 worker_budget(p)
 
+
+class DenseNativeGuard(unittest.TestCase):
+    def test_uncapped_dense_preflight_still_requires_exact_owned_cgroup(self):
+        from unittest.mock import patch,Mock
+        import serve_qwen27b_engines as engine
+        p=get_profile('qwen27b-hyperqwen')
+        for unit,high,hard,accepted in [
+                ('llm-test-qwen27b.service','max','max',True),
+                ('foreign.service','max','max',False),
+                ('llm-test-qwen27b.service',str(30*1024**3),'max',False),
+                ('llm-test-qwen27b.service','max',str(36*1024**3),False)]:
+            with self.subTest(unit=unit,high=high,hard=hard),tempfile.TemporaryDirectory() as d:
+                root=Path(d);group=root/'managed'/unit;group.mkdir(parents=True)
+                (group/'memory.high').write_text(high);(group/'memory.max').write_text(hard)
+                proc=Mock();proc.read_text.return_value='0::/managed/'+unit+'\n'
+                def paths(v):
+                    if v=='/proc/self/cgroup':return proc
+                    if v=='/sys/fs/cgroup':return root
+                    return Path(v)
+                with patch.object(engine,'Path',side_effect=paths),patch.dict(os.environ,{'LOCAL_LLM_GUARDED_WORKER':'1'}),patch.object(engine,'verify_storage',side_effect=RuntimeError('storage-boundary')) as verify:
+                    with self.assertRaises(RuntimeError if accepted else SystemExit):engine.preflight(p)
+                    self.assertEqual(verify.call_count,1 if accepted else 0)
+    def test_unbounded_or_half_unbounded_moe_budgets_are_rejected(self):
+        for b in [{'high':None,'max':None,'swap':None},{'high':30,'max':None,'swap':None},{'high':None,'max':36,'swap':None}]:
+            for name in ['glm-maya','deepseek-strata','deepseek-maya','flash-next-strata']:
+                p=deepcopy(get_profile(name));p['worker_memory_gib']=b
+                with self.subTest(profile=name,budget=b),self.assertRaises(ValueError):worker_budget(p)
 
 if __name__ == '__main__':
     unittest.main()

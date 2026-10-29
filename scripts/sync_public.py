@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'docs/MOE-VRAM512-20261029.md', 'docs/benchmark-results/20261029-moe-vram512.json',
     'docs/ALL-PROFILES-HOST-RESERVE2-20261029.md', 'docs/validation-results/20261029-all-profiles-host-reserve2.json',
     'docs/QWEN-HOST-RESERVE2-20261028.md', 'docs/benchmark-results/20261028-qwen-host-reserve2.json',
     'tests/test_host_ram_reserve.py',

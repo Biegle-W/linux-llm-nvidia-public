@@ -13,10 +13,14 @@ if [[ "$1" != /* ]]; then
 fi
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 swap_limit=1G
+ram_high=30G
+ram_max=36G
 if [[ "$name" == qwen27b && $# -eq 3 && "$1" == /usr/bin/python3 &&
       "$2" == "$root/scripts/supervise_dense.py" &&
       ( "$3" == hyperqwen || "$3" == sglang ) ]]; then
   swap_limit=infinity
+  ram_high=infinity
+  ram_max=infinity
 fi
 monitor_args=(--title "LLM: $name" --unit "llm-test-${name}.service")
 if [[ "$name" == qwen27b ]]; then
@@ -29,6 +33,6 @@ if [[ "$name" == qwen27b ]]; then
 fi
 /usr/bin/python3 "$root/scripts/visible_terminal.py" open "${monitor_args[@]}"
 exec systemd-run --user --unit="llm-test-${name}" --collect --service-type=exec \
-  --property=MemoryHigh=30G --property=MemoryMax=36G \
+  --property="MemoryHigh=$ram_high" --property="MemoryMax=$ram_max" \
   --property="MemorySwapMax=$swap_limit" --property=OOMPolicy=kill \
   --working-directory="$root" "$@"

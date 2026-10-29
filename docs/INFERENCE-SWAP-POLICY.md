@@ -3,7 +3,7 @@
 The user explicitly approved unlimited worker swap occupancy with active churn
 protection on October 27. Loading and parked pages are allowed; normal workers
 use `MemorySwapMax=infinity`, whose kernel readback is `memory.swap.max=max`.
-The host swap file is not enlarged. Selected RAM soft/hard limits, the user-approved 2 GiB
+The host swap file is not enlarged. Selected MoE RAM soft/hard limits, uncapped guarded dense RAM, and the user-approved 2 GiB
 host-available floor across all six profiles, temperature guards and GPU placement/reserves remain.
 No global swapoff or swappiness change is part of this policy. The latest user
 direction supersedes an earlier separate VM10 experiment approval: keep host
@@ -91,3 +91,41 @@ temperature 82°C, unlimited swap occupancy and active swap-churn guards are unc
 Earlier 1 GiB failures remain historical evidence under their original guard.
 This approval does not promote the experimental fork or change the selected
 engine settings. Future tests still run visibly and finish idle after cleanup.
+
+
+## October 29: dense worker RAM caps removed
+
+HyperQwen and SGLang no longer have the 30/36 GiB per-worker RAM caps.
+Their normal guarded launches passed JSON and actual MemoryHigh/MemoryMax
+infinity readbacks (cgroup memory.high/memory.max=max). Ownership enforcement,
+host-available floor 2 GiB, dense free-VRAM floor 512 MiB, temperature 82 C,
+active owned-worker swap/PSI/telemetry stops, swappiness 60, concurrency one and
+idle unload 600 seconds remain. MoE worker RAM budgets are unchanged.
+Forty-two CPU guard/ownership/budget/runtime checks passed; no dense speed or
+context measurements were repeated.
+
+GLM and both DeepSeek engines were tested with 512 MiB native VRAM allocation
+reserves on the current reduced-RAM machine. Only profiles passing isolated
+quality, near-window retrieval, sustained generation, fresh-process reload and
+normal guarded loading were applied:
+
+- deepseek-maya: 512 MiB candidate not applied; original 2,048 MiB reserve retained.
+- glm-maya: 512 MiB reserve qualified and applied.
+- deepseek-strata: 512 MiB reserve qualified and applied.
+
+Native allocation reserves and the dense minimum-free-VRAM stop are different
+controls. All model/cache/context choices were preserved, and prior benchmark
+values remain historical evidence. Only applied candidates have new selected
+measurements. The two early GLM/Strata connection failures occurred before engine
+loading because the router cached the old dense-budget validator; corrected
+trials supersede those setup failures. One idle router reload loaded the new
+validator with no worker interrupted; DSH was preserved.
+
+Final router idle, owned workers stopped and no GPU reservation; no fallback
+restored. Next action: after explicit human DIMM-restoration confirmation, verify
+Linux capacity, restore appropriate full-RAM cache values and verify guarded
+loading. Preserve the separately approved dense cap removal, host reserve and
+qualified VRAM selections unless the human revises them. No timer trigger.
+
+See [qualification and current results](MOE-VRAM512-20261029.md) and
+[numeric evidence](benchmark-results/20261029-moe-vram512.json).

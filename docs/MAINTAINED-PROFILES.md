@@ -30,6 +30,41 @@ or that untested larger contexts work.
 
 ## The six retained profiles
 
+HyperQwen and SGLang no longer have the 30/36 GiB per-worker RAM caps.
+Their normal guarded launches passed JSON and actual MemoryHigh/MemoryMax
+infinity readbacks (cgroup memory.high/memory.max=max). Ownership enforcement,
+host-available floor 2 GiB, dense free-VRAM floor 512 MiB, temperature 82 C,
+active owned-worker swap/PSI/telemetry stops, swappiness 60, concurrency one and
+idle unload 600 seconds remain. MoE worker RAM budgets are unchanged.
+Forty-two CPU guard/ownership/budget/runtime checks passed; no dense speed or
+context measurements were repeated.
+
+GLM and both DeepSeek engines were tested with 512 MiB native VRAM allocation
+reserves on the current reduced-RAM machine. Only profiles passing isolated
+quality, near-window retrieval, sustained generation, fresh-process reload and
+normal guarded loading were applied:
+
+- deepseek-maya: 512 MiB candidate not applied; original 2,048 MiB reserve retained.
+- glm-maya: 512 MiB reserve qualified and applied.
+- deepseek-strata: 512 MiB reserve qualified and applied.
+
+Native allocation reserves and the dense minimum-free-VRAM stop are different
+controls. All model/cache/context choices were preserved, and prior benchmark
+values remain historical evidence. Only applied candidates have new selected
+measurements. The two early GLM/Strata connection failures occurred before engine
+loading because the router cached the old dense-budget validator; corrected
+trials supersede those setup failures. One idle router reload loaded the new
+validator with no worker interrupted; DSH was preserved.
+
+Final router idle, owned workers stopped and no GPU reservation; no fallback
+restored. Next action: after explicit human DIMM-restoration confirmation, verify
+Linux capacity, restore appropriate full-RAM cache values and verify guarded
+loading. Preserve the separately approved dense cap removal, host reserve and
+qualified VRAM selections unless the human revises them. No timer trigger.
+
+See [qualification and current results](MOE-VRAM512-20261029.md) and
+[numeric evidence](benchmark-results/20261029-moe-vram512.json).
+
 October 29: all six profiles explicitly select a 2 GiB host reserve. Dense/MoE
 supervisors and the benchmark monitor share this selection; 41 CPU checks passed.
 Model/cache/context choices and all table measurements are unchanged. See
@@ -58,7 +93,7 @@ cache optimum. Dense measurements were carried forward without retesting.
 
 Comparisons use saved historical full-RAM fixtures, not a fresh paired full-RAM
 control. Preserve swappiness 60, 512 MiB dense reserve, native MoE GPU reserves,
-host floor 2 GiB across all six profiles, 82 C temperature limit, unchanged worker budgets and active
+host floor 2 GiB across all six profiles, 82 C temperature limit, unchanged MoE worker budgets, uncapped dense RAM and active
 swap/churn/pressure/telemetry guards, concurrency one and 600-second idle unload.
 Normal validation finished idle; router and DSH ownership were preserved and no
 fallback was restored. Original credential-redacted settings are archived privately
@@ -86,25 +121,25 @@ and retrieval runs keep their actual legacy/new swap-policy attribution.
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
-| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | SGLang / htsglang TP2 + MTP3, MLP W4A8 | 1,667.9 | 1.346 | 84.76 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: `models/engine-tests/qwen38-27b-hyperqwen-fast` |
+| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
+| Qwen3.8-27B / AutoRound INT4 / INT8 embedding | SGLang | 1,667.9 | 1.346 | 84.76 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
 
 ### MoE models with CPU RAM offload
 
-None currently kept. Expert RAM tiers below are caches within SSD-streamed profiles.
+None currently kept. Expert RAM tiers in streamed profiles are caches.
 
 ### MoE models with SSD streaming
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: `models/strata/models/IQ3_XXS` |
-| GLM-5.3-Flash / Maya-S24 | Maya | 46.8 | 47.061 | 2.11 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: `models/maya/Maya-S24` |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 32.2 | 68.049 | 1.80 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: models/strata/models/IQ3_XXS |
+| GLM-5.3-Flash / Maya-S24 | Maya | 49.3 | 44.703 | 2.59 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: models/maya/Maya-S24 |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 33.6 | 65.220 | 1.88 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
 
-Only qualified SSD rows are new reduced-RAM medians. Unresolved SSD rows and dense rows retain their latest
-qualified measurements. Historical results remain preserved in the benchmark
-ledger and dated reports; see the reduced-RAM report for methods and limitations.
+
+These table rows use current selected measurements; rejected screens remain in
+the dated study and do not replace qualified results.
 
 ## Launching
 

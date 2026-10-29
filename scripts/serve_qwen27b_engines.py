@@ -7,7 +7,7 @@ from pathlib import Path
 import socket
 import subprocess
 import sys
-from profile_catalog import get_profile
+from profile_catalog import get_profile, worker_budget
 from storage_policy import verify_storage
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -39,9 +39,14 @@ def preflight(profile):
         sys.exit('Use the maintained guarded launcher; direct unmonitored worker startup is disabled.')
     group = next(line.split('::', 1)[1] for line in
                  Path('/proc/self/cgroup').read_text().splitlines() if line.startswith('0::'))
-    limit = (Path('/sys/fs/cgroup') / group.lstrip('/') / 'memory.max').read_text().strip()
+    base = Path('/sys/fs/cgroup') / group.lstrip('/')
+    budget = worker_budget(profile)
+    expected_max = 'max' if budget['max'] is None else str(budget['max'] * 1024 ** 3)
+    expected_high = 'max' if budget['high'] is None else str(budget['high'] * 1024 ** 3)
+    limit = (base / 'memory.max').read_text().strip()
     if (not group.endswith('/llm-test-qwen27b.service')
-            or limit == 'max' or int(limit) > 36 * 1024 ** 3):
+            or limit != expected_max
+            or (base / 'memory.high').read_text().strip() != expected_high):
         sys.exit('Use scripts/start_model.sh qwen27b [hyperqwen|sglang].')
     verify_storage(profile)
     if not KEY.is_file() or KEY.stat().st_mode & 0o077:

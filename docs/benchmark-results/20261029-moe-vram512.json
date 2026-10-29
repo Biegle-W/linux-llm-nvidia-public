@@ -1,0 +1,489 @@
+{
+  "schema": 1,
+  "date": "2026-10-29",
+  "physical_ram_usable_gib": 45.55,
+  "applied_moe_profiles": [
+    "deepseek-strata",
+    "glm-maya"
+  ],
+  "moe_trials": [
+    {
+      "profile": "deepseek-maya",
+      "variant": "deepseek-maya-vram512",
+      "tested_reserve_mib": 512,
+      "isolated_passed": false,
+      "normal_route_passed": false,
+      "applied": false,
+      "selected_reserve_mib": 2048,
+      "benchmark": null,
+      "prior_selected_benchmark": {
+        "run": "20261027-moe-optimized",
+        "date": "2026-10-27",
+        "context": 32768,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2179,
+          2198
+        ],
+        "output_tokens": 128,
+        "ttft_s": 44.016855533001944,
+        "prefill_tps": 49.6,
+        "decode_tps": 4.083400544889873,
+        "prefill_method": "native prompt_n / native prompt time",
+        "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
+        "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
+      },
+      "resources": {
+        "minimum_host_available_gib": 35.13723373413086,
+        "peak_worker_cgroup_gib": 39.799591064453125,
+        "peak_worker_swap_gib": 0.31143951416015625,
+        "maximum_gpu_temperature_c": 52.0,
+        "minimum_gpu_free_mib": {
+          "0": 327.0,
+          "1": 346.0
+        },
+        "guard_stop": "Sustained owned-worker swap churn during inference",
+        "stopping_rates": {
+          "window_s": 30.43140096400748,
+          "read_mib_s": 0.0033374243966001536,
+          "write_mib_s": 7.940374451895727,
+          "combined_mib_s": 7.943711876292327
+        }
+      },
+      "quality_checks": []
+    },
+    {
+      "profile": "glm-maya",
+      "variant": "glm-maya-vram512-routerfix",
+      "tested_reserve_mib": 512,
+      "isolated_passed": true,
+      "normal_route_passed": true,
+      "applied": true,
+      "selected_reserve_mib": 512,
+      "benchmark": {
+        "prefill_tps": 49.3,
+        "ttft_s": 44.70305655199627,
+        "client_decode_tps": 2.5914861853090536,
+        "decode_tps": 2.6,
+        "prompt_tokens": 2199,
+        "generated_tokens": 128,
+        "profile": "glm-maya",
+        "context": 65536,
+        "variant": "glm-maya-vram512-routerfix",
+        "repetitions": 3,
+        "env": {},
+        "args": {
+          "--vram-reserve-mib": 512
+        }
+      },
+      "prior_selected_benchmark": {
+        "run": "20261028-reduced-ram",
+        "variant": "glm-maya-ram24",
+        "date": "2026-10-28",
+        "context": 65536,
+        "physical_ram_usable_gib": 45.55,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2199,
+          2209
+        ],
+        "output_tokens": 128,
+        "prefill_tps": 46.8,
+        "ttft_s": 47.060714291001204,
+        "decode_tps": 2.1108503035112087,
+        "prefill_method": "native engine prompt timing",
+        "decode_method": "client SSE (completion_tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/REDUCED-RAM-20261028.md",
+        "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
+        "host_vm_swappiness": 60,
+        "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
+      },
+      "resources": {
+        "minimum_host_available_gib": 9.668098449707031,
+        "peak_worker_cgroup_gib": 36.7172966003418,
+        "peak_worker_swap_gib": 0.0,
+        "maximum_gpu_temperature_c": 62.0,
+        "minimum_gpu_free_mib": {
+          "0": 348.0,
+          "1": 390.0
+        },
+        "guard_stop": null,
+        "stopping_rates": null
+      },
+      "quality_checks": [
+        {
+          "check": "json",
+          "passed": true,
+          "input_tokens": 38
+        },
+        {
+          "check": "arithmetic",
+          "passed": true,
+          "input_tokens": 45
+        },
+        {
+          "check": "image",
+          "passed": true,
+          "input_tokens": 1053
+        },
+        {
+          "check": "retrieval",
+          "passed": true,
+          "input_tokens": 58986
+        }
+      ],
+      "sustained": {
+        "done": true,
+        "generation_s": 181.0753354470071,
+        "usage": {
+          "prompt_tokens": 76,
+          "completion_tokens": 512,
+          "total_tokens": 588,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "reload-json": {
+        "done": true,
+        "generation_s": 2.6808487119997153,
+        "usage": {
+          "prompt_tokens": 28,
+          "completion_tokens": 7,
+          "total_tokens": 35,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "change_percent_vs_saved_prior": {
+        "prefill_tps": 5.341880341880345,
+        "ttft_s": -5.0098214073553855,
+        "decode_tps": 22.769775810172344
+      }
+    },
+    {
+      "profile": "deepseek-strata",
+      "variant": "deepseek-strata-vram512-routerfix",
+      "tested_reserve_mib": 512,
+      "isolated_passed": true,
+      "normal_route_passed": true,
+      "applied": true,
+      "selected_reserve_mib": 512,
+      "benchmark": {
+        "prefill_tps": 33.6,
+        "ttft_s": 65.21959592099302,
+        "client_decode_tps": 1.8793914172189028,
+        "decode_tps": 1.9,
+        "prompt_tokens": 2188,
+        "generated_tokens": 128,
+        "profile": "deepseek-strata",
+        "context": 131072,
+        "variant": "deepseek-strata-vram512-routerfix",
+        "repetitions": 3,
+        "env": {},
+        "args": {
+          "--reserve-mib": 512
+        }
+      },
+      "prior_selected_benchmark": {
+        "run": "20261028-reduced-ram",
+        "variant": "deepseek-strata-store24",
+        "date": "2026-10-28",
+        "context": 131072,
+        "physical_ram_usable_gib": 45.55,
+        "repetitions": 3,
+        "input_tokens_range": [
+          2179,
+          2198
+        ],
+        "output_tokens": 128,
+        "prefill_tps": 32.2,
+        "ttft_s": 68.04903762399044,
+        "decode_tps": 1.7953964876237218,
+        "prefill_method": "native engine prompt timing",
+        "decode_method": "client SSE (completion_tokens - 1) / first-to-last-content interval",
+        "evidence": "docs/REDUCED-RAM-20261028.md",
+        "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
+        "host_vm_swappiness": 60,
+        "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
+      },
+      "resources": {
+        "minimum_host_available_gib": 13.107147216796875,
+        "peak_worker_cgroup_gib": 35.674034118652344,
+        "peak_worker_swap_gib": 0.0,
+        "maximum_gpu_temperature_c": 63.0,
+        "minimum_gpu_free_mib": {
+          "0": 312.0,
+          "1": 440.0
+        },
+        "guard_stop": null,
+        "stopping_rates": null
+      },
+      "quality_checks": [
+        {
+          "check": "json",
+          "passed": true,
+          "input_tokens": 29
+        },
+        {
+          "check": "arithmetic",
+          "passed": true,
+          "input_tokens": 36
+        },
+        {
+          "check": "retrieval",
+          "passed": true,
+          "input_tokens": 117866
+        }
+      ],
+      "sustained": {
+        "done": true,
+        "generation_s": 316.3172094949987,
+        "usage": {
+          "prompt_tokens": 67,
+          "completion_tokens": 512,
+          "total_tokens": 579,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "reload-json": {
+        "done": true,
+        "generation_s": 3.802051962004043,
+        "usage": {
+          "prompt_tokens": 19,
+          "completion_tokens": 7,
+          "total_tokens": 26,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        }
+      },
+      "change_percent_vs_saved_prior": {
+        "prefill_tps": 4.347826086956519,
+        "ttft_s": -4.157945213908388,
+        "decode_tps": 4.678349889519473
+      }
+    }
+  ],
+  "current_kept_profiles": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound INT4 / INT8 embedding",
+      "engine": "HyperQwen-vLLM",
+      "category": "VRAM-only models",
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "transport": "sata",
+        "checkpoint_alias": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "drive": "Samsung SSD 870 QVO SATA",
+        "shared_group": "qwen27b"
+      },
+      "prefill_tps": 1491.6519342069585,
+      "ttft_s": 1.4985212169995066,
+      "decode_tps": 89.10066847129683,
+      "context_limit_tokens": 56320,
+      "new_measurement_applied": false,
+      "measurement_run": "20261027-context-expansion",
+      "measurement_date": "2026-10-27",
+      "worker_memory_gib": {
+        "high": null,
+        "max": null,
+        "swap": null
+      }
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound INT4 / INT8 embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "transport": "sata",
+        "checkpoint_alias": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "drive": "Samsung SSD 870 QVO SATA",
+        "shared_group": "qwen27b"
+      },
+      "prefill_tps": 1667.8703781763365,
+      "ttft_s": 1.3455440140005521,
+      "decode_tps": 84.76390369181925,
+      "context_limit_tokens": 32768,
+      "new_measurement_applied": false,
+      "measurement_run": "20261028-sglang-context-study",
+      "measurement_date": "2026-10-28",
+      "worker_memory_gib": {
+        "high": null,
+        "max": null,
+        "swap": null
+      }
+    },
+    {
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "IQ3_XXS",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "storage_size_bytes": 75839998528,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/strata/models/IQ3_XXS",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "flash-next-strata"
+      },
+      "prefill_tps": 593.2,
+      "ttft_s": 3.752891517004173,
+      "decode_tps": 97.08909285944816,
+      "context_limit_tokens": 32768,
+      "new_measurement_applied": false,
+      "measurement_run": "20261027-context-expansion",
+      "measurement_date": "2026-10-27",
+      "worker_memory_gib": {
+        "high": 44,
+        "max": 48,
+        "swap": null
+      }
+    },
+    {
+      "profile": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "quant": "Maya-S24",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "storage_size_bytes": 94701676224,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/maya/Maya-S24",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "glm-maya"
+      },
+      "prefill_tps": 49.3,
+      "ttft_s": 44.70305655199627,
+      "decode_tps": 2.5914861853090536,
+      "context_limit_tokens": 65536,
+      "new_measurement_applied": true,
+      "measurement_run": "20261029-moe-vram512",
+      "measurement_date": "2026-10-29",
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": null
+      }
+    },
+    {
+      "profile": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "storage_size_bytes": 339477953988,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "deepseek-maya-s"
+      },
+      "prefill_tps": 33.6,
+      "ttft_s": 65.21959592099302,
+      "decode_tps": 1.8793914172189028,
+      "context_limit_tokens": 131072,
+      "new_measurement_applied": true,
+      "measurement_run": "20261029-moe-vram512",
+      "measurement_date": "2026-10-29",
+      "worker_memory_gib": {
+        "high": 44,
+        "max": 48,
+        "swap": null
+      }
+    },
+    {
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "storage_size_bytes": 339477953988,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "deepseek-maya-s"
+      },
+      "prefill_tps": 49.6,
+      "ttft_s": 44.016855533001944,
+      "decode_tps": 4.083400544889873,
+      "context_limit_tokens": 32768,
+      "new_measurement_applied": false,
+      "measurement_run": "20261027-moe-optimized",
+      "measurement_date": "2026-10-27",
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": null
+      }
+    }
+  ],
+  "setup_rejections": [
+    "glm-maya-vram512",
+    "deepseek-strata-vram512"
+  ],
+  "setup_rejection_reason": "Cached old router catalog validator rejected new dense metadata before engine loading; corrected trials supersede these setup failures",
+  "dense_ram_caps": {
+    "removed": true,
+    "normal_checks": [
+      {
+        "profile": "qwen27b-hyperqwen",
+        "passed": true,
+        "readbacks": {
+          "MemoryHigh": "infinity",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "memory.high": "max",
+          "memory.max": "max",
+          "memory.swap.max": "max"
+        }
+      },
+      {
+        "profile": "qwen27b-sglang",
+        "passed": true,
+        "readbacks": {
+          "MemoryHigh": "infinity",
+          "MemoryMax": "infinity",
+          "MemorySwapMax": "infinity",
+          "memory.high": "max",
+          "memory.max": "max",
+          "memory.swap.max": "max"
+        }
+      }
+    ],
+    "speed_benchmarks_repeated": false
+  },
+  "cpu_checks_passed": 42,
+  "host_floor_gib": 2,
+  "dense_free_vram_floor_mib": 512,
+  "temperature_limit_c": 82,
+  "swappiness": 60,
+  "concurrency": 1,
+  "idle_seconds": 600,
+  "moe_ram_budgets_unchanged": true,
+  "swap": "Unlimited occupancy; unchanged owned-worker churn/pressure/telemetry guards",
+  "router_reload": {
+    "count": 1,
+    "while_idle": true,
+    "reason": "Load uncapped RAM-budget catalog validator",
+    "dsh_preserved": true,
+    "worker_interrupted": false
+  },
+  "preimage_archive": {
+    "repository": "Biegle-W/retired-llm-setting",
+    "commit": "c7bade9936fa774fa7fda177a2b67afb16ef072a",
+    "batch": "linux-nvidia/20261029-moe-vram512-dense-ram",
+    "credentials": "Redacted from Git; exact owner-only raw copies remain local"
+  },
+  "final_idle": true,
+  "fallback_restored": false
+}

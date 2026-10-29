@@ -27,7 +27,7 @@ class HostRamReserve(unittest.TestCase):
         identifier='qwen27b-'+dense_engine if dense_engine else 'flash-next-strata'
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);unit='llm-test-qwen27b.service' if dense_engine else 'llm-router-worker.service';group=root/'cgroups/managed'/unit;group.mkdir(parents=True)
-            for n,v in [('memory.max',(36 if dense_engine else 48)*1024**3),('memory.high',(30 if dense_engine else 44)*1024**3),('memory.swap.max','max')]:
+            for n,v in [('memory.max',('max' if dense_engine else 48*1024**3)),('memory.high',('max' if dense_engine else 44*1024**3)),('memory.swap.max','max')]:
                 (group/n).write_text(str(v))
             (root/'data').mkdir();(root/'data/local-api-key').write_text('test-only-key');(root/'data/local-api-key').chmod(0o600)
             source=root/'.local/state/strata/launch/qwen-flash-next.json';source.parent.mkdir(parents=True);source.write_text(json.dumps({'args':['--max-context','32768']}))

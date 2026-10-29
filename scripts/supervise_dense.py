@@ -22,9 +22,11 @@ def main():
                  if line.startswith('0::'))
     base = Path('/sys/fs/cgroup') / group.lstrip('/')
     budget = worker_budget(profile)
+    expected_max = 'max' if budget['max'] is None else str(budget['max'] * 1024 ** 3)
+    expected_high = 'max' if budget['high'] is None else str(budget['high'] * 1024 ** 3)
     if (not group.endswith('/llm-test-qwen27b.service')
-            or (base / 'memory.max').read_text().strip() != str(budget['max'] * 1024 ** 3)
-            or (base / 'memory.high').read_text().strip() != str(budget['high'] * 1024 ** 3)
+            or (base / 'memory.max').read_text().strip() != expected_max
+            or (base / 'memory.high').read_text().strip() != expected_high
             or (base / 'memory.swap.max').read_text().strip() != 'max'):
         raise SystemExit('Start the dense worker through the bounded launcher.')
     key = (ROOT / 'data/local-api-key').read_text().strip()

@@ -123,8 +123,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": 30,
-        "max": 36,
+        "high": null,
+        "max": null,
         "swap": null
       },
       "latest_qualification": {
@@ -242,8 +242,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": 30,
-        "max": 36,
+        "high": null,
+        "max": null,
         "swap": null
       },
       "latest_qualification": {
@@ -588,38 +588,35 @@
         "kv_streaming": true,
         "mtp": true,
         "cpu_vision": "on-demand fallback; released after image encoding",
-        "reserve_mib_per_gpu": 2048,
+        "reserve_mib_per_gpu": 512,
         "context_trial_args": {},
         "temporary_reduced_ram": {
           "temporary": true,
           "restore_after": "Explicit human RAM-restoration confirmation plus Linux capacity verification; restore full-RAM cache preimages only, then normal guarded loading verification",
           "preimage_manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
           "archive_commit": "38d70cda3860da0576222987b4677b993467f4b1"
+        },
+        "vram_reserve_args": {
+          "--vram-reserve-mib": 512
         }
       },
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "benchmark_configuration_note": "Historical 8K automatic-RAM benchmark remains under benchmark; latest_benchmark records the current bounded tier and on-demand CPU vision.",
       "latest_benchmark": {
-        "run": "20261028-reduced-ram",
-        "variant": "glm-maya-ram24",
-        "date": "2026-10-28",
+        "run": "20261029-moe-vram512",
+        "variant": "glm-maya-vram512-routerfix",
+        "date": "2026-10-29",
         "context": 65536,
-        "physical_ram_usable_gib": 45.55,
+        "prefill_tps": 49.3,
+        "ttft_s": 44.70305655199627,
+        "decode_tps": 2.5914861853090536,
         "repetitions": 3,
-        "input_tokens_range": [
-          2199,
-          2209
-        ],
         "output_tokens": 128,
-        "prefill_tps": 46.8,
-        "ttft_s": 47.060714291001204,
-        "decode_tps": 2.1108503035112087,
-        "prefill_method": "native engine prompt timing",
-        "decode_method": "client SSE (completion_tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/REDUCED-RAM-20261028.md",
-        "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
+        "evidence": "docs/MOE-VRAM512-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-moe-vram512.json",
+        "host_ram_reserve_gib": 2,
         "host_vm_swappiness": 60,
-        "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
+        "method": "Savedfixedfixture/nativeprefill/clientSSETTFTanddecode;historicalpriorcontrolonly"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -674,6 +671,28 @@
           "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
           "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
           "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        },
+        {
+          "run": "20261028-reduced-ram",
+          "variant": "glm-maya-ram24",
+          "date": "2026-10-28",
+          "context": 65536,
+          "physical_ram_usable_gib": 45.55,
+          "repetitions": 3,
+          "input_tokens_range": [
+            2199,
+            2209
+          ],
+          "output_tokens": 128,
+          "prefill_tps": 46.8,
+          "ttft_s": 47.060714291001204,
+          "decode_tps": 2.1108503035112087,
+          "prefill_method": "native engine prompt timing",
+          "decode_method": "client SSE (completion_tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/REDUCED-RAM-20261028.md",
+          "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
+          "host_vm_swappiness": 60,
+          "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
         }
       ],
       "reduced_ram_qualification": {
@@ -697,7 +716,19 @@
         "manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
         "credentials": "Redacted from Git preimages; original owner-only local credentials are retained"
       },
-      "host_ram_reserve_gib": 2
+      "host_ram_reserve_gib": 2,
+      "vram512_qualification": {
+        "date": "2026-10-29",
+        "reserve_mib_per_gpu": 512,
+        "context_unchanged": 65536,
+        "cache_environment_unchanged": true,
+        "quality_passed": true,
+        "near_window_passed": true,
+        "sustained_generation_s": 181.0753354470071,
+        "fresh_process_reload_passed": true,
+        "normal_route_passed": true,
+        "evidence": "docs/MOE-VRAM512-20261029.md"
+      }
     },
     {
       "id": "deepseek-strata",
@@ -746,7 +777,7 @@
         "cpu_threads": 14,
         "prefill_chunk": 4096,
         "mmap_experts": true,
-        "reserve_mib_per_gpu": 2048,
+        "reserve_mib_per_gpu": 512,
         "parallel": 1,
         "reasoning_effort": "none",
         "environment": {
@@ -763,29 +794,26 @@
           "restore_after": "Explicit human RAM-restoration confirmation plus Linux capacity verification; restore full-RAM cache preimages only, then normal guarded loading verification",
           "preimage_manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
           "archive_commit": "38d70cda3860da0576222987b4677b993467f4b1"
+        },
+        "vram_reserve_args": {
+          "--reserve-mib": 512
         }
       },
       "latest_benchmark": {
-        "run": "20261028-reduced-ram",
-        "variant": "deepseek-strata-store24",
-        "date": "2026-10-28",
+        "run": "20261029-moe-vram512",
+        "variant": "deepseek-strata-vram512-routerfix",
+        "date": "2026-10-29",
         "context": 131072,
-        "physical_ram_usable_gib": 45.55,
+        "prefill_tps": 33.6,
+        "ttft_s": 65.21959592099302,
+        "decode_tps": 1.8793914172189028,
         "repetitions": 3,
-        "input_tokens_range": [
-          2179,
-          2198
-        ],
         "output_tokens": 128,
-        "prefill_tps": 32.2,
-        "ttft_s": 68.04903762399044,
-        "decode_tps": 1.7953964876237218,
-        "prefill_method": "native engine prompt timing",
-        "decode_method": "client SSE (completion_tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/REDUCED-RAM-20261028.md",
-        "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
+        "evidence": "docs/MOE-VRAM512-20261029.md",
+        "numeric_results": "docs/benchmark-results/20261029-moe-vram512.json",
+        "host_ram_reserve_gib": 2,
         "host_vm_swappiness": 60,
-        "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
+        "method": "Savedfixedfixture/nativeprefill/clientSSETTFTanddecode;historicalpriorcontrolonly"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -839,6 +867,28 @@
           "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
           "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
           "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        },
+        {
+          "run": "20261028-reduced-ram",
+          "variant": "deepseek-strata-store24",
+          "date": "2026-10-28",
+          "context": 131072,
+          "physical_ram_usable_gib": 45.55,
+          "repetitions": 3,
+          "input_tokens_range": [
+            2179,
+            2198
+          ],
+          "output_tokens": 128,
+          "prefill_tps": 32.2,
+          "ttft_s": 68.04903762399044,
+          "decode_tps": 1.7953964876237218,
+          "prefill_method": "native engine prompt timing",
+          "decode_method": "client SSE (completion_tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/REDUCED-RAM-20261028.md",
+          "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
+          "host_vm_swappiness": 60,
+          "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
         }
       ],
       "reduced_ram_qualification": {
@@ -862,7 +912,19 @@
         "manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
         "credentials": "Redacted from Git preimages; original owner-only local credentials are retained"
       },
-      "host_ram_reserve_gib": 2
+      "host_ram_reserve_gib": 2,
+      "vram512_qualification": {
+        "date": "2026-10-29",
+        "reserve_mib_per_gpu": 512,
+        "context_unchanged": 131072,
+        "cache_environment_unchanged": true,
+        "quality_passed": true,
+        "near_window_passed": true,
+        "sustained_generation_s": 316.3172094949987,
+        "fresh_process_reload_passed": true,
+        "normal_route_passed": true,
+        "evidence": "docs/MOE-VRAM512-20261029.md"
+      }
     },
     {
       "id": "deepseek-maya",
