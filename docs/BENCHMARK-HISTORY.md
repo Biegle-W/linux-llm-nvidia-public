@@ -354,3 +354,30 @@ capacity verification.
 
 See [DeepSeek/Maya follow-up](MAYA-DS4-VRAM512-FOLLOWUP-20261029.md) and
 [numeric evidence](benchmark-results/20261029-maya512-followup.json).
+
+
+## DeepSeek/Maya demand-cache qualification — October 29
+
+DeepSeek/Maya passed at **512 MiB native VRAM reserve and unchanged 32,768-token context** on the 45.55 GiB reduced-RAM host. The selected temporary configuration combines a 16 GiB model-file cache target with a native 12 decimal GB pinned hot-expert cache. JSON, arithmetic, image, 29,467-input-token retrieval, 426.5s continuous generation, a fresh isolated process reload and two normal guarded loads all passed. Observed worker swap occupancy and swap read/write rates were zero.
+
+The saved three-request screen measured **1.23 decode tok/s**, 42.5 prefill tok/s and 51.491s TTFT. Earlier full-RAM/historical rates remain preserved; no fresh paired 2,048 MiB control was produced, because the earlier reduced-RAM configuration failed its swap guard.
+
+This supersedes the earlier unresolved DeepSeek/Maya reduced-RAM status only for
+this qualified configuration. Other five selected settings/results remain unchanged;
+Flash/Strata's earlier reduced-RAM failure remains unresolved. Native warming limits
+did not bound demand mmap residency; the new controller targets clean model-file
+residency, with overshoot possible between scans. Its qualified binary is hash-pinned.
+
+The host 2 GiB floor, 46/48 GiB MoE worker budget, dense 512 MiB free-VRAM stop,
+82 C thermal limit, owned swap/PSI/telemetry guards, swappiness 60, concurrency one
+and idle 600s remain. Original native source/binary and archived preimages remain;
+weights, precision and mathematical kernels are unchanged. Router idle, owned
+workers stopped, no GPU reservation, DSH preserved and no fallback.
+
+After explicit human RAM-restoration confirmation, verify Linux capacity, restore
+appropriate full-RAM cache/prefill choices from preimages while preserving the
+qualified VRAM reserve and guards, then verify normal guarded load/reload.
+No timer or MemAvailable trigger.
+
+See [demand-cache qualification and six selected results](MAYA-DEMAND-CACHE-20261029.md)
+and [numeric evidence](benchmark-results/20261029-maya-demand-cache.json).

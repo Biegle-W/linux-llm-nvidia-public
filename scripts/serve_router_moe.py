@@ -9,6 +9,7 @@ import signal
 import time
 from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib
 from storage_policy import verify_storage
+from maya_cachebound_runtime import verify as verify_cachebound_runtime
 from inference_policy import apply_native_idle
 from inference_swap_guard import WorkerWatch
 from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
@@ -43,6 +44,7 @@ def main():
     else:
         sys.exit('No qualified MoE profile selected.')
     config = json.loads(source.read_text())
+    verify_cachebound_runtime(config, profile)
     for name, value in profile.get('selected_settings', {}).get('environment', {}).items():
         if str(config.get('env', {}).get(name)) != str(value):
             sys.exit('Canonical RAM/cache setting differs from the selected registry.')

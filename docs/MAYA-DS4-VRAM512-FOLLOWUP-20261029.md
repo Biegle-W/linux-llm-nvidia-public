@@ -1,5 +1,7 @@
 # DeepSeek/Maya did not qualify at 512 MiB after three cache follow-ups
 
+Later October 29 update: the [demand-file-cache controller](MAYA-DEMAND-CACHE-20261029.md) qualified DeepSeek/Maya at 512 MiB. Outcomes below remain historical evidence for earlier configurations.
+
 Three additional isolated candidates failed the unchanged owned-worker swap guard on the 45.55 GiB reduced-RAM machine. **Nothing was applied:** DeepSeek/Maya retains its original 2,048 MiB reserve and configuration. GLM and DeepSeek/Strata retain their previously qualified 512 MiB selections; dense RAM-cap removal is unchanged.
 
 ## What stopped the worker

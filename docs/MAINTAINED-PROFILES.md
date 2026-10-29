@@ -1,5 +1,32 @@
 # Maintained model, quantization and engine settings
 
+## Latest: qualified bounded DeepSeek/Maya cache — October 29
+
+DeepSeek/Maya passed at **512 MiB native VRAM reserve and unchanged 32,768-token context** on the 45.55 GiB reduced-RAM host. The selected temporary configuration combines a 16 GiB model-file cache target with a native 12 decimal GB pinned hot-expert cache. JSON, arithmetic, image, 29,467-input-token retrieval, 426.5s continuous generation, a fresh isolated process reload and two normal guarded loads all passed. Observed worker swap occupancy and swap read/write rates were zero.
+
+The saved three-request screen measured **1.23 decode tok/s**, 42.5 prefill tok/s and 51.491s TTFT. Earlier full-RAM/historical rates remain preserved; no fresh paired 2,048 MiB control was produced, because the earlier reduced-RAM configuration failed its swap guard.
+
+This supersedes the earlier unresolved DeepSeek/Maya reduced-RAM status only for
+this qualified configuration. Other five selected settings/results remain unchanged;
+Flash/Strata's earlier reduced-RAM failure remains unresolved. Native warming limits
+did not bound demand mmap residency; the new controller targets clean model-file
+residency, with overshoot possible between scans. Its qualified binary is hash-pinned.
+
+The host 2 GiB floor, 46/48 GiB MoE worker budget, dense 512 MiB free-VRAM stop,
+82 C thermal limit, owned swap/PSI/telemetry guards, swappiness 60, concurrency one
+and idle 600s remain. Original native source/binary and archived preimages remain;
+weights, precision and mathematical kernels are unchanged. Router idle, owned
+workers stopped, no GPU reservation, DSH preserved and no fallback.
+
+After explicit human RAM-restoration confirmation, verify Linux capacity, restore
+appropriate full-RAM cache/prefill choices from preimages while preserving the
+qualified VRAM reserve and guards, then verify normal guarded load/reload.
+No timer or MemAvailable trigger.
+
+See [demand-cache qualification and six selected results](MAYA-DEMAND-CACHE-20261029.md)
+and [numeric evidence](benchmark-results/20261029-maya-demand-cache.json).
+
+
 `config/maintained-profiles.json` is the current registry: **six selected
 profiles**, with one entry for each `(model, weight quantization, engine)`.
 The dense launchers read their arguments directly from this file. Strata and
@@ -119,7 +146,7 @@ and retrieval runs keep their actual legacy/new swap-policy attribution.
 
 ### VRAM-only models
 
-| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| Model / quant | Engine | Prefill (tok/s) | TTFT (s) | Decode (tok/s) | Context (tokens) | Storage (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-27B / AutoRound INT4 / INT8 embedding | HyperQwen-vLLM | 1,491.7 | 1.499 | 89.10 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
 | Qwen3.8-27B / AutoRound INT4 / INT8 embedding | SGLang | 1,667.9 | 1.346 | 84.76 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
@@ -130,16 +157,14 @@ None currently kept. Expert RAM tiers in streamed profiles are caches.
 
 ### MoE models with SSD streaming
 
-| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| Model / quant | Engine | Prefill (tok/s) | TTFT (s) | Decode (tok/s) | Context (tokens) | Storage (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | 593.2 | 3.753 | 97.09 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: models/strata/models/IQ3_XXS |
 | GLM-5.3-Flash / Maya-S24 | Maya | 49.3 | 44.703 | 2.59 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: models/maya/Maya-S24 |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 33.6 | 65.220 | 1.88 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 49.6 | 44.017 | 4.08 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 42.5 | 51.491 | 1.23 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
 
-
-These table rows use current selected measurements; rejected screens remain in
-the dated study and do not replace qualified results.
+Current table rows use selected measurements; earlier values remain in dated history.
 
 ## Launching
 

@@ -1,0 +1,147 @@
+--- a/src/ds4/ds4_model.cu
++++ b/src/ds4/ds4_model.cu
+@@ -19,6 +19,7 @@
+ #include "ds4_kernels.cuh"
+ #include "ds4_lt.hpp"
+ #include "ds4_os.hpp"
++#include "bounded_file_cache.hpp"
+ #include "ds4_pcie.cuh"
+ #include "ds4_pcie.hpp"
+ #include "ds4_q6k.cuh"
+@@ -306,7 +307,9 @@
+     std::vector<os::fd_t> dfds;   // (gguf) file -> unbuffered (os::open_direct; kBadFd: buffered reads only)
+     std::vector<os::fd_t> pfds;   // (gguf) file -> for reads from many threads at once (os::open_par)
+ 
++    std::unique_ptr<maya_cache_bound::Controller> bounded_cache;
+     ~Pack() {
++        if (bounded_cache) bounded_cache->stop();
+         for (auto& m : maps) os::unmap(m.first, m.second);
+         for (os::fd_t fd : fds) os::close_fd(fd);
+         for (os::fd_t fd : dfds) os::close_fd(fd);
+@@ -1403,6 +1406,20 @@
+     // between requests (the serve loop, the CLI's prompt): the switch back on, when the page cache lost most of what
+     // the last answer left in it
+     void begin_request() {
++        if (pk.gguf && !pk.bounded_cache) {
++            const char* value = std::getenv("DS4_FILE_CACHE_MIB");
++            const long long mib = value ? std::atoll(value) : 0;
++            if (mib > 0) {
++                std::vector<maya_cache_bound::Region> regions;
++                for (size_t i = 0; i < pk.maps.size(); ++i) {
++                    auto& m = pk.maps[i];
++                    if (!m.first || !m.second) continue;
++                    regions.push_back({m.first, m.second, (int)pk.fds[i], 0});
++                }
++                pk.bounded_cache = std::make_unique<maya_cache_bound::Controller>(std::move(regions), (size_t)mib << 20);
++                pk.bounded_cache->start();
++            }
++        }
+         if (!disk_skip_auto) return;
+         SkipAuto& a = sk_auto;
+         ++a.requests;
+--- /dev/null
++++ b/src/ds4/bounded_file_cache.hpp
+@@ -0,0 +1,103 @@
++#pragma once
++// Opt-in Linux clean-file cache target. Never unmaps memory or changes file data.
++#include <atomic>
++#include <chrono>
++#include <condition_variable>
++#include <cstdio>
++#include <mutex>
++#include <thread>
++#include <vector>
++#include <cstdint>
++#include <algorithm>
++#include <sys/mman.h>
++#include <fcntl.h>
++#include <unistd.h>
++
++namespace maya_cache_bound {
++struct Region { unsigned char* address; size_t bytes; int fd; uint64_t offset; };
++class Controller {
++    std::vector<Region> regions_;
++    size_t budget_, granule_, cursor_ = 0;
++    std::atomic<bool> stop_{false};
++    std::thread thread_;
++    std::mutex mutex_;
++    std::condition_variable cv_;
++    uint64_t sweeps_ = 0;
++public:
++    struct Result { uint64_t before = 0, after = 0, discarded = 0, errors = 0; };
++    Controller(std::vector<Region> regions, size_t budget, size_t granule = 64UL << 20)
++        : regions_(std::move(regions)), budget_(budget), granule_(granule) {}
++    Controller(const Controller&) = delete;
++    ~Controller() { stop(); }
++    size_t resident(const Region& r, std::vector<unsigned char>& bits, bool& ok) {
++        const size_t page = (size_t) sysconf(_SC_PAGESIZE);
++        bits.resize((r.bytes + page - 1) / page);
++        if (mincore(r.address, r.bytes, bits.data()) != 0) { ok = false; return 0; }
++        size_t bytes = 0;
++        for (unsigned char bit : bits) if (bit & 1) bytes += page;
++        return std::min(bytes, r.bytes);
++    }
++    Result sweep() {
++        // The owner keeps mappings and descriptors alive until stop() joins.
++        struct Segment { Region region; size_t resident; };
++        std::vector<Segment> segments;
++        std::vector<unsigned char> bits;
++        Result result;
++        for (const Region& region : regions_) {
++            for (size_t off = 0; off < region.bytes; off += granule_) {
++                Region part{region.address + off, std::min(granule_, region.bytes - off), region.fd, region.offset + off};
++                bool ok = true;
++                size_t n = resident(part, bits, ok);
++                if (!ok) ++result.errors;
++                result.before += n;
++                segments.push_back({part, n});
++            }
++        }
++        result.after = result.before;
++        // Leave room for demand reads between sweeps. This is a target, not a hard limit.
++        const uint64_t low = budget_ * 3 / 4;
++        if (result.before > budget_ && !segments.empty()) {
++            const size_t start = cursor_;
++            for (size_t j = 0; j < segments.size() && result.after > low; ++j) {
++                size_t i = (start + j) % segments.size();
++                const Segment& segment = segments[i];
++                if (!segment.resident) continue;
++                const Region& r = segment.region;
++                // DONTNEED drops this read-only mapping's PTEs, then asks Linux to
++                // discard clean backing pages. Concurrent reads may fault them back.
++                if (madvise(r.address, r.bytes, MADV_DONTNEED) != 0 ||
++                    posix_fadvise(r.fd, (off_t) r.offset, (off_t) r.bytes, POSIX_FADV_DONTNEED) != 0) {
++                    ++result.errors; continue;
++                }
++                bool ok = true;
++                size_t remaining = resident(r, bits, ok);
++                if (!ok) { ++result.errors; continue; }
++                const size_t freed = segment.resident > remaining ? segment.resident - remaining : 0;
++                result.after -= freed; result.discarded += freed;
++                cursor_ = (i + 1) % segments.size();
++            }
++        }
++        ++sweeps_;
++        if (sweeps_ == 1 || result.discarded || result.errors || sweeps_ % 50 == 0)
++            std::fprintf(stderr, "ds4 file-cache target: sweep=%llu target_mib=%llu observed_before_mib=%llu estimated_after_mib=%llu discarded_mib=%llu errors=%llu\n",
++                (unsigned long long)sweeps_, (unsigned long long)(budget_ >> 20),
++                (unsigned long long)(result.before >> 20), (unsigned long long)(result.after >> 20),
++                (unsigned long long)(result.discarded >> 20), (unsigned long long)result.errors);
++        return result;
++    }
++    void start() {
++        sweep();
++        thread_ = std::thread([this] {
++            while (!stop_) {
++                std::unique_lock<std::mutex> lock(mutex_);
++                if (cv_.wait_for(lock, std::chrono::milliseconds(200), [this] { return stop_.load(); })) break;
++                lock.unlock(); sweep();
++            }
++        });
++    }
++    void stop() {
++        stop_ = true; cv_.notify_all();
++        if (thread_.joinable()) thread_.join();
++    }
++};
++}

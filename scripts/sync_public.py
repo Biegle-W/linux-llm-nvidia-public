@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'docs/MAYA-DEMAND-CACHE-20261029.md', 'docs/benchmark-results/20261029-maya-demand-cache.json', 'config/maya-cachebound-runtime.json', 'patches/maya-ds4-file-cache-target.patch', 'scripts/build_maya_file_cache_bound.py', 'scripts/maya_cachebound_runtime.py', 'tests/test_maya_cachebound_runtime.py', 'tools/maya-file-cache-bound/test_cache_bound.cpp',
     'docs/MAYA-DS4-VRAM512-FOLLOWUP-20261029.md', 'docs/benchmark-results/20261029-maya512-followup.json',
     'docs/MOE-VRAM512-20261029.md', 'docs/benchmark-results/20261029-moe-vram512.json',
     'docs/ALL-PROFILES-HOST-RESERVE2-20261029.md', 'docs/validation-results/20261029-all-profiles-host-reserve2.json',

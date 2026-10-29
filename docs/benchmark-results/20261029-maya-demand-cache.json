@@ -1,0 +1,397 @@
+{
+  "schema": 1,
+  "date": "2026-10-29",
+  "physical_ram_usable_gib": 45.55,
+  "applied": true,
+  "selected_profile": "deepseek-maya",
+  "reserve_mib_per_gpu": 512,
+  "context_limit_tokens": 32768,
+  "trials": [
+    {
+      "variant": "deepseek-maya-vram512-filecache8",
+      "isolated_passed": false,
+      "interrupted": true,
+      "outcome": "intentionally stopped performance screen; not qualified",
+      "partial_decode_progress_tps": 0.2,
+      "args": {
+        "--reserve-mib": 512
+      },
+      "environment": {
+        "DS4_WARM_CAP_GB": "0",
+        "DS4_WARM_GB": "0",
+        "DS4_ENGRAM_CACHE_MB": "0",
+        "DS4_READAHEAD_MB": "0",
+        "DS4_AHEAD": "0",
+        "DS4_FILE_CACHE_MIB": "8192"
+      },
+      "binary_sha256": "0b398f3d171b4eba70aac298e5427405d1d779a82e7ca4ac2253fdc20d58cc82",
+      "resources": {
+        "minimum_host_available_gib": 34.73798751831055,
+        "peak_charged_worker_gib": 15.550662994384766,
+        "peak_worker_swap_mib": 0.0,
+        "maximum_temperature_c": 55.0,
+        "minimum_free_vram_mib": {
+          "0": 332.0,
+          "1": 346.0
+        },
+        "maximum_swap_read_mib_s": 0.0,
+        "maximum_swap_write_mib_s": 0.0,
+        "guard_stop": null
+      },
+      "controller": {
+        "target_mib": 8192,
+        "trim_target_mib": 6144,
+        "maximum_observed_before_mib_including_initial_scans": 29076,
+        "maximum_observed_before_mib_excluding_initial_scans": 8351,
+        "maximum_estimated_after_mib": 7926,
+        "reported_syscall_errors": 0,
+        "semantics": "periodic clean-file residency target, not hard ceiling;200ms pause between complete scans"
+      }
+    },
+    {
+      "variant": "deepseek-maya-vram512-filecache24",
+      "isolated_passed": false,
+      "interrupted": true,
+      "outcome": "intentionally stopped performance screen; not qualified",
+      "partial_decode_progress_tps": 0.2,
+      "args": {
+        "--reserve-mib": 512
+      },
+      "environment": {
+        "DS4_WARM_CAP_GB": "0",
+        "DS4_WARM_GB": "0",
+        "DS4_ENGRAM_CACHE_MB": "0",
+        "DS4_READAHEAD_MB": "0",
+        "DS4_AHEAD": "0",
+        "DS4_FILE_CACHE_MIB": "24576"
+      },
+      "binary_sha256": "0b398f3d171b4eba70aac298e5427405d1d779a82e7ca4ac2253fdc20d58cc82",
+      "resources": {
+        "minimum_host_available_gib": 34.725189208984375,
+        "peak_charged_worker_gib": 26.99349594116211,
+        "peak_worker_swap_mib": 0.0,
+        "maximum_temperature_c": 57.0,
+        "minimum_free_vram_mib": {
+          "0": 359.0,
+          "1": 346.0
+        },
+        "maximum_swap_read_mib_s": 0.0,
+        "maximum_swap_write_mib_s": 0.0,
+        "guard_stop": null
+      },
+      "controller": {
+        "target_mib": 24576,
+        "trim_target_mib": 18432,
+        "maximum_observed_before_mib_including_initial_scans": 24775,
+        "maximum_observed_before_mib_excluding_initial_scans": 24775,
+        "maximum_estimated_after_mib": 24411,
+        "reported_syscall_errors": 0,
+        "semantics": "periodic clean-file residency target, not hard ceiling;200ms pause between complete scans"
+      }
+    },
+    {
+      "variant": "deepseek-maya-vram512-file16-pinned12-pathfix",
+      "isolated_passed": true,
+      "interrupted": false,
+      "outcome": "qualified and applied",
+      "partial_decode_progress_tps": null,
+      "args": {
+        "--reserve-mib": 512,
+        "--mmap-experts": "off"
+      },
+      "environment": {
+        "DS4_WARM_CAP_GB": "12",
+        "DS4_WARM_GB": "0",
+        "DS4_ENGRAM_CACHE_MB": "0",
+        "DS4_READAHEAD_MB": "128",
+        "DS4_AHEAD": "0",
+        "DS4_FILE_CACHE_MIB": "16384",
+        "DS4_STREAM_ZC": "1",
+        "STRATA_DS4_PIN_BY_NEED": "1",
+        "STRATA_DS4_PIN_GB": "12"
+      },
+      "binary_sha256": "885d5a10628c1aea6206a03eb7ae9537d31913c76c115272636cf207388bb960",
+      "resources": {
+        "minimum_host_available_gib": 21.66204833984375,
+        "peak_charged_worker_gib": 34.09299850463867,
+        "peak_worker_swap_mib": 0.0,
+        "maximum_temperature_c": 60.0,
+        "minimum_free_vram_mib": {
+          "0": 298.0,
+          "1": 324.0
+        },
+        "maximum_swap_read_mib_s": 0.0,
+        "maximum_swap_write_mib_s": 0.0,
+        "guard_stop": null
+      },
+      "controller": {
+        "target_mib": 16384,
+        "trim_target_mib": 12288,
+        "maximum_observed_before_mib_including_initial_scans": 22308,
+        "maximum_observed_before_mib_excluding_initial_scans": 17296,
+        "maximum_estimated_after_mib": 16231,
+        "reported_syscall_errors": 0,
+        "semantics": "periodic clean-file residency target, not hard ceiling;200ms pause between complete scans"
+      }
+    }
+  ],
+  "setup_rejection": {
+    "variant": "deepseek-maya-vram512-file16-pinned12",
+    "engine_started": false,
+    "reason": "Exact binary allowlist initially namedv1only; correctedbeforeloading"
+  },
+  "benchmark": {
+    "prefill_tps": 42.5,
+    "ttft_s": 51.49113582599966,
+    "client_decode_tps": 1.231560909750394,
+    "repetitions": 3,
+    "prompt_tokens": 2188,
+    "generated_tokens": 128
+  },
+  "quality_checks": [
+    {
+      "check": "json",
+      "passed": true,
+      "input_tokens": 29
+    },
+    {
+      "check": "arithmetic",
+      "passed": true,
+      "input_tokens": 36
+    },
+    {
+      "check": "image",
+      "passed": true,
+      "input_tokens": 670
+    },
+    {
+      "check": "retrieval",
+      "passed": true,
+      "input_tokens": 29467
+    }
+  ],
+  "sustained": {
+    "done": true,
+    "generation_s": 426.521856767009,
+    "usage": {
+      "prompt_tokens": 67,
+      "completion_tokens": 512,
+      "total_tokens": 579,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    }
+  },
+  "fresh_process_reload": {
+    "passed": true
+  },
+  "normal_validation": {
+    "passed": true,
+    "load_count": 2,
+    "all_json_passed": true,
+    "worker_swap_bytes_before_unload": [
+      0,
+      0
+    ],
+    "limits": [
+      {
+        "MemoryHigh": "49392123904",
+        "MemoryMax": "51539607552",
+        "MemorySwapMax": "infinity"
+      },
+      {
+        "MemoryHigh": "49392123904",
+        "MemoryMax": "51539607552",
+        "MemorySwapMax": "infinity"
+      }
+    ],
+    "router_preserved": true,
+    "dsh_preserved": true,
+    "final_idle": true
+  },
+  "runtime": {
+    "schema": 1,
+    "profile": "deepseek-maya",
+    "binary": {
+      "path": "runtimes/maya-ds4-file-cache-bound/maya-ds4",
+      "sha256": "885d5a10628c1aea6206a03eb7ae9537d31913c76c115272636cf207388bb960"
+    },
+    "base_source_commit": "8b4b39f84e35393833b31b80e82bee92e69bb646",
+    "base_source_sha256": "96a5e7ccb71803ebd9e05eb9ac401b5404eec96808055e4acf2f771458232024",
+    "patch": {
+      "path": "patches/maya-ds4-file-cache-target.patch",
+      "sha256": "cfb40efddc82fe48c6c9eec0eeafab735c1e8e9fd79c4439277b4caba0888e35"
+    },
+    "status": "qualified isolated and normal load/reload"
+  },
+  "validation": {
+    "python_runtime_pin_and_guard_regressions": 7,
+    "cpp_clean_file_eviction_concurrent_read_shutdown": "passed in isolated and reconstructed builds",
+    "reconstructed_source_identical": true,
+    "bit_identical_rebuild_claimed": false
+  },
+  "prior_selected_benchmark": {
+    "run": "20261027-moe-optimized",
+    "date": "2026-10-27",
+    "context": 32768,
+    "repetitions": 3,
+    "input_tokens_range": [
+      2179,
+      2198
+    ],
+    "output_tokens": 128,
+    "ttft_s": 44.016855533001944,
+    "prefill_tps": 49.6,
+    "decode_tps": 4.083400544889873,
+    "prefill_method": "native prompt_n / native prompt time",
+    "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
+    "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
+    "numeric_results": "docs/benchmark-results/20261027-moe-optimized.json"
+  },
+  "current_kept_profiles": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound INT4 / INT8 embedding",
+      "engine": "HyperQwen-vLLM",
+      "category": "VRAM-only models",
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "transport": "sata",
+        "checkpoint_alias": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "drive": "Samsung SSD 870 QVO SATA",
+        "shared_group": "qwen27b"
+      },
+      "prefill_tps": 1491.6519342069585,
+      "ttft_s": 1.4985212169995066,
+      "decode_tps": 89.10066847129683,
+      "context_limit_tokens": 56320,
+      "measurement_run": "20261027-context-expansion",
+      "measurement_date": "2026-10-27"
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound INT4 / INT8 embedding",
+      "engine": "SGLang",
+      "category": "VRAM-only models",
+      "storage_size_bytes": 15791777864,
+      "storage_location": {
+        "transport": "sata",
+        "checkpoint_alias": "models/engine-tests/qwen38-27b-hyperqwen-fast",
+        "drive": "Samsung SSD 870 QVO SATA",
+        "shared_group": "qwen27b"
+      },
+      "prefill_tps": 1667.8703781763365,
+      "ttft_s": 1.3455440140005521,
+      "decode_tps": 84.76390369181925,
+      "context_limit_tokens": 32768,
+      "measurement_run": "20261028-sglang-context-study",
+      "measurement_date": "2026-10-28"
+    },
+    {
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "IQ3_XXS",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "storage_size_bytes": 75839998528,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/strata/models/IQ3_XXS",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "flash-next-strata"
+      },
+      "prefill_tps": 593.2,
+      "ttft_s": 3.752891517004173,
+      "decode_tps": 97.08909285944816,
+      "context_limit_tokens": 32768,
+      "measurement_run": "20261027-context-expansion",
+      "measurement_date": "2026-10-27"
+    },
+    {
+      "profile": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "quant": "Maya-S24",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "storage_size_bytes": 94701676224,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/maya/Maya-S24",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "glm-maya"
+      },
+      "prefill_tps": 49.3,
+      "ttft_s": 44.70305655199627,
+      "decode_tps": 2.5914861853090536,
+      "context_limit_tokens": 65536,
+      "measurement_run": "20261029-moe-vram512",
+      "measurement_date": "2026-10-29"
+    },
+    {
+      "profile": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S",
+      "engine": "Strata",
+      "category": "MoE models with SSD streaming",
+      "storage_size_bytes": 339477953988,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "deepseek-maya-s"
+      },
+      "prefill_tps": 33.6,
+      "ttft_s": 65.21959592099302,
+      "decode_tps": 1.8793914172189028,
+      "context_limit_tokens": 131072,
+      "measurement_run": "20261029-moe-vram512",
+      "measurement_date": "2026-10-29"
+    },
+    {
+      "profile": "deepseek-maya",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "Maya-S",
+      "engine": "Maya",
+      "category": "MoE models with SSD streaming",
+      "storage_size_bytes": 339477953988,
+      "storage_location": {
+        "transport": "nvme",
+        "checkpoint_alias": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S",
+        "drive": "CT1000P3PSSD8 NVMe",
+        "shared_group": "deepseek-maya-s"
+      },
+      "prefill_tps": 42.5,
+      "ttft_s": 51.49113582599966,
+      "decode_tps": 1.231560909750394,
+      "context_limit_tokens": 32768,
+      "measurement_run": "20261029-maya-demand-cache",
+      "measurement_date": "2026-10-29"
+    }
+  ],
+  "guards": {
+    "host_available_floor_gib": 2,
+    "worker_high_gib": 46,
+    "worker_max_gib": 48,
+    "swap_write_mib_s": 1,
+    "swap_combined_mib_s": 8,
+    "swap_window_s": 30,
+    "temperature_c": 82,
+    "swappiness": 60,
+    "concurrency": 1,
+    "idle_seconds": 600,
+    "dense_free_vram_floor_mib": 512
+  },
+  "preimage_archive": {
+    "repository": "Biegle-W/retired-llm-setting",
+    "commit": "65f69679bfcc76bb03346f20a6b7c458811bb5cb",
+    "batch": "linux-nvidia/20261029-maya-demand-cache",
+    "remote_verified": true
+  },
+  "limitations": "Bounded qualification; target may be exceeded between/during scans; MemAvailable includes reclaimable cache; exact prior swap victim mapping not isolated; historical speed is not paired control",
+  "sources": [
+    "https://docs.kernel.org/admin-guide/sysctl/vm.html#swappiness",
+    "https://www.kernel.org/doc/html/next/filesystems/proc.html#meminfo"
+  ]
+}
