@@ -1,0 +1,56 @@
+{
+  "schema": 1,
+  "date": "2026-10-29",
+  "change": "User-approved host-RAM reserve2GiB across all six maintained profiles",
+  "profiles": {
+    "qwen27b-hyperqwen": 2,
+    "qwen27b-sglang": 2,
+    "flash-next-strata": 2,
+    "glm-maya": 2,
+    "deepseek-strata": 2,
+    "deepseek-maya": 2
+  },
+  "cpu_tests": {
+    "passed": true,
+    "total": 41,
+    "host_boundaries_dense_gpu_thermal_swap": 12,
+    "worker_budgets": 6,
+    "swap_guard": 11,
+    "moe_supervisor": 1,
+    "shutdown_ownership": 4,
+    "benchmark_metrics": 7
+  },
+  "paths_updated": [
+    "selected profile metadata",
+    "common profile reserve reader",
+    "dense supervisor",
+    "existing MoE supervisor through common reader",
+    "benchmark monitor and future protocol metadata"
+  ],
+  "effective": "Next guarded worker launch; current workers were inactive and no services were restarted",
+  "gpu_model_trials_run": 0,
+  "model_cache_context_budget_benchmark_fields_unchanged": true,
+  "unchanged": [
+    "512MiB dense freeVRAM floor",
+    "native MoE VRAM reserves",
+    "82C thermal stop",
+    "three-reading supervisor hysteresis",
+    "worker RAM soft/hard and unlimited-swap-occupancy budgets",
+    "active owned-worker swap/churn/PSI/telemetry guards",
+    "swappiness60",
+    "concurrency1",
+    "idle600s",
+    "model/cache/context choices",
+    "all historical benchmark values"
+  ],
+  "router_dsh_and_worker_ownership_preserved": true,
+  "final_router_idle": true,
+  "no_gpu_lock": true,
+  "preimage_archive": {
+    "repository": "Biegle-W/retired-llm-setting",
+    "commit": "932b8fbfb782abaf7191406c921bf19ceca27546",
+    "path": "linux-nvidia/20261028-all-profiles-host-reserve2/MANIFEST.json",
+    "remote_verified": true
+  },
+  "qualification": "Policy change only; previous Qwen/Maya reduced-RAM failures remain failures; no newly qualified model setup"
+}

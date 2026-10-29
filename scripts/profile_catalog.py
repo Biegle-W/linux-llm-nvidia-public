@@ -22,10 +22,9 @@ def worker_budget(profile):
 
 
 def host_ram_reserve_gib(profile):
-    """Keep 8 GiB by default; only Qwen/Strata may select the approved 2 GiB floor."""
-    reserve = profile.get('host_ram_reserve_gib', 8)
-    if (type(reserve) is not int or reserve not in (2, 8)
-            or (reserve == 2 and profile['id'] != 'flash-next-strata')):
+    """Read the selected host reserve; 2 GiB is approved across all maintained profiles."""
+    reserve = profile.get('host_ram_reserve_gib', 2)
+    if type(reserve) is not int or reserve not in (2, 8):
         raise ValueError(f"Invalid host RAM reserve: {profile['id']}")
     return reserve
 

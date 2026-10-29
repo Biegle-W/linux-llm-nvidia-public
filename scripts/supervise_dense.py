@@ -7,7 +7,7 @@ import subprocess
 import sys
 import time
 from inference_swap_guard import WorkerWatch, ROOT, DENSE_GPU_FREE_MIB
-from profile_catalog import get_profile, worker_budget
+from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib
 from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 
 
@@ -17,6 +17,7 @@ def main():
     if engine not in ('hyperqwen', 'sglang'):
         raise SystemExit('Choose a maintained dense engine.')
     profile = get_profile('qwen27b-' + engine)
+    host_floor_kib = host_ram_reserve_gib(profile) * 1024 ** 2
     group = next(line.split('::', 1)[1] for line in Path('/proc/self/cgroup').read_text().splitlines()
                  if line.startswith('0::'))
     base = Path('/sys/fs/cgroup') / group.lstrip('/')
@@ -58,7 +59,7 @@ def main():
             raw = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu,memory.free',
                                            '--format=csv,noheader,nounits'], text=True)
             cards = [[float(value) for value in line.split(',')] for line in raw.splitlines()]
-            bad = bad + 1 if (available < 8 * 1024 ** 2 or any(card[0] >= 82 for card in cards)
+            bad = bad + 1 if (available < host_floor_kib or any(card[0] >= 82 for card in cards)
                              or (watch.ready and any(card[1] < DENSE_GPU_FREE_MIB for card in cards))) else 0
             if reason or bad >= 3:
                 reason = reason or 'Dense host/temperature/GPU-headroom guard reached.'

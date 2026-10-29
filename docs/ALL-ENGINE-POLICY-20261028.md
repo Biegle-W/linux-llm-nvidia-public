@@ -31,6 +31,8 @@ Shared-policy, idle/FIFO/race, router, supervisor, MoE and lifecycle regressions
 
 The user accepts proportional context/performance tradeoffs across models/engines: compare percentage capacity gain against measured generation slowdown and report prefill/TTFT too. Quality, full allocated context and resource qualification remain required. No fixed acceptable-loss percentage was invented and no context was automatically expanded. SGLang 38K remains pending qualification.
 
-Keep swappiness 60, the 512 MiB dense VRAM reserve, current per-profile RAM/cache limits, 8 GiB host reserve, 82°C thermal stop and active swap/pressure/telemetry guards. Model loading and parked swap remain allowed. Required visible terminals are unchanged. Model performance results were not rebenchmarked.
+Keep swappiness 60, the 512 MiB dense VRAM reserve, current per-profile RAM/cache limits, the user-approved 2 GiB host reserve across all six profiles, 82°C thermal stop and active swap/pressure/telemetry guards. Model loading and parked swap remain allowed. Required visible terminals are unchanged. Model performance results were not rebenchmarked.
 
 Six exact prior source files were hash-verified and preserved in the private retirement archive at 8ca025e. Raw console/test/coverage/idle evidence is private under `data/all-engine-policy-20261028/`.
+
+October 29: [all-profile 2 GiB reserve](ALL-PROFILES-HOST-RESERVE2-20261029.md) is verified by 41 CPU checks; earlier 8 GiB settings remain historical.

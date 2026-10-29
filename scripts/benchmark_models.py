@@ -14,7 +14,7 @@ import time
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-from profile_catalog import load_catalog
+from profile_catalog import load_catalog, host_ram_reserve_gib
 
 OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 VOCAB = 'river stone market lantern copper winter garden signal harbor needle orbit velvet canyon ember ledger quartz meadow anchor violet thunder'.split()
@@ -66,6 +66,7 @@ def main():
     key = (ROOT / 'data/local-api-key').read_text().strip()
     headers = {'Authorization': 'Bearer ' + key, 'Content-Type': 'application/json'}
     catalog = load_catalog()
+    host_floors_kib = {p["id"]: host_ram_reserve_gib(p) * 1024 ** 2 for p in catalog["profiles"]}
     (out / 'catalog.json').write_text(json.dumps(catalog, indent=2))
     (ROOT / 'data/benchmark-latest-path').write_text(str(out))
     lock = ROOT / 'data/GPU-LOCK'
@@ -123,7 +124,8 @@ def main():
                 'prefill': 'Native prompt timings for Strata/Maya; per-request native prefill-phase metric deltas for dense engines.',
                 'cache': 'Unique early system tags; prefix reuse off in dense profiles; native cached counts checked; OS page cache not flushed.',
                 'reservation': 'Router and DSH stay running. GPU reservation blocks other router generation/switching during measurements.',
-                'safety': 'Existing worker cgroups, model guards and selected RAM budgets remain; monitor aborts below 8 GiB host available or at 82 C.'}
+                'host_ram_reserve_gib': {p['id']: host_ram_reserve_gib(p) for p in catalog['profiles']},
+                'safety': 'Existing worker cgroups, model guards and selected RAM budgets remain; monitor aborts below the selected profile host-RAM reserve or at 82 C.'}
     (out / 'protocol.json').write_text(json.dumps(protocol, indent=2))
 
     def monitor():
@@ -137,7 +139,7 @@ def main():
                 except Exception:
                     gpu = ''
                 f.write(json.dumps({'time': time.time(), 'profile': active[0], 'memory_kib': memory, 'gpu_csv': gpu}) + '\n'); f.flush()
-                if memory['MemAvailable'] < 8 * 1024 ** 2 or (gpu and any(float(line.split(',')[1]) >= 82 for line in gpu.splitlines())):
+                if memory['MemAvailable'] < host_floors_kib.get(active[0], max(host_floors_kib.values())) or (gpu and any(float(line.split(',')[1]) >= 82 for line in gpu.splitlines())):
                     (out / 'SAFETY-STOP').write_text('Host RAM or GPU temperature guard reached.')
                 stop.wait(5)
 

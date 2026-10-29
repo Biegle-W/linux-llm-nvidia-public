@@ -147,7 +147,8 @@
         "control": "hyperqwen-32768-control",
         "selected_variant": "hyperqwen-56320-kv704-pf256-final-confirmed",
         "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
-      }
+      },
+      "host_ram_reserve_gib": 2
     },
     {
       "id": "qwen27b-sglang",
@@ -487,7 +488,8 @@
         "evidence": "docs/SGLANG-38K-QUALIFICATION-20261028.md",
         "numeric_results": "docs/benchmark-results/20261028-sglang-38k-qualification.json",
         "archive_batch": "linux-nvidia/2026-10-28-sglang-38k"
-      }
+      },
+      "host_ram_reserve_gib": 2
     },
     {
       "id": "flash-next-strata",
@@ -694,7 +696,8 @@
         "commit": "38d70cda3860da0576222987b4677b993467f4b1",
         "manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
         "credentials": "Redacted from Git preimages; original owner-only local credentials are retained"
-      }
+      },
+      "host_ram_reserve_gib": 2
     },
     {
       "id": "deepseek-strata",
@@ -858,7 +861,8 @@
         "commit": "38d70cda3860da0576222987b4677b993467f4b1",
         "manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
         "credentials": "Redacted from Git preimages; original owner-only local credentials are retained"
-      }
+      },
+      "host_ram_reserve_gib": 2
     },
     {
       "id": "deepseek-maya",
@@ -945,7 +949,8 @@
         "control": "deepseek-maya-32768-control",
         "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
         "production_context_unchanged": true
-      }
+      },
+      "host_ram_reserve_gib": 2
     }
   ],
   "host_reclaim_policy": {
