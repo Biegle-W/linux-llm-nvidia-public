@@ -1,0 +1,190 @@
+{
+  "schema": 1,
+  "date": "2026-10-28",
+  "profile": "flash-next-strata",
+  "source": "https://lcz.me/topic/2042",
+  "physical_ram_usable_gib": 45.55,
+  "result": "failed; not applied",
+  "candidate_count": 2,
+  "context_unchanged": 32768,
+  "runtime_provenance": {
+    "Strata source": "4b9e05a2a806a3fe24f7b2560d98626c37dade35",
+    "Maya source": "8b4b39f84e35393833b31b80e82bee92e69bb646",
+    "Strata engine": {
+      "sha256": "ae49d5da81b9b65d50af1108c4b3f8b289ee198d9992d66268b7e885cf1a4776"
+    },
+    "Maya native server": {
+      "sha256": "fb9014a0c5ea586fba3e1be974da20c41d0a787b7925d39ba8379d9f0e02820b"
+    },
+    "Strata native server": {
+      "sha256": "7ba4bb80085c630d392fbcaa113a10d83051b45df4e624d4b9a10123e35f849a"
+    },
+    "gpu_driver": "NVIDIA GeForce RTX 3080 Ti, 595.99.02, 12288 MiB\nNVIDIA GeForce RTX 3080, 595.99.02, 10240 MiB"
+  },
+  "protocol": {
+    "temporary": true,
+    "restore_full_ram": "Only after explicit human confirmation and Linux capacity verification; preserve unrelated changes",
+    "guards_preserved": true,
+    "budget_gib": {
+      "high": 44,
+      "max": 48,
+      "swap": "unlimited occupancy; unchanged active churn/pressure/telemetry stop"
+    },
+    "host_min_available_gib": 8,
+    "temperature_c": 82,
+    "swappiness": 60,
+    "concurrency": 1,
+    "idle_s": 600,
+    "quality": [
+      "JSON",
+      "arithmetic",
+      "image",
+      "three-marker near-window retrieval",
+      ">=90s continuous generation",
+      "fresh-process reload",
+      "normal guarded route validation before acceptance"
+    ],
+    "benchmark": {
+      "warmups": 1,
+      "measured_requests": 3,
+      "output_tokens": 128,
+      "fixtures": "saved fixed-input fixtures; no fresh paired full-RAM control"
+    }
+  },
+  "attempts": [
+    {
+      "variant": "qwen-strata-lcz-pageable",
+      "plan": {
+        "id": "qwen-strata-lcz-pageable",
+        "profile": "flash-next-strata",
+        "args": {
+          "--prefill": 4096,
+          "--pool-workers": 7,
+          "--adapt-every": 0,
+          "--pcie-frac": 0,
+          "--vram-reserve-mib": 1536,
+          "--conversation-cache-mib": 0
+        },
+        "flags": [
+          "--mmap-experts",
+          "--resident-cpu-experts"
+        ],
+        "env": {
+          "STRATA_RESIDENT_PIN": "0"
+        },
+        "qualify": true,
+        "source": "https://lcz.me/topic/2042",
+        "adaptations": [
+          "Keep current32768 context",
+          "Keep600-second idle and all guards",
+          "NativeCUDA; no AMD HIP env or runtime changes",
+          "Keep current model/weights/precision/MTP and GPU ordering"
+        ]
+      },
+      "passed": false,
+      "failure_type": "native resident-RAM preflight refusal",
+      "benchmark_complete": false,
+      "completed_measured_requests": 0,
+      "completed_requests": [],
+      "minimum_host_available_gib": 38.35449981689453,
+      "peak_worker_cgroup_gib": 16.647052764892578,
+      "peak_worker_swap_gib": 0.0,
+      "maximum_gpu_temperature_c": 47.0,
+      "minimum_gpu_free_mib": {
+        "0": 1632.0,
+        "1": 1538.0
+      },
+      "guard_violation": null,
+      "native_capacity_refusal": {
+        "resident_complement_gib": 31.88,
+        "available_ram_gib": 38.51,
+        "safety_headroom_gib": 8,
+        "usable_for_complement_gib": 30.51
+      }
+    },
+    {
+      "variant": "qwen-strata-lcz-pageable28",
+      "plan": {
+        "id": "qwen-strata-lcz-pageable28",
+        "profile": "flash-next-strata",
+        "args": {
+          "--prefill": 4096,
+          "--pool-workers": 7,
+          "--adapt-every": 0,
+          "--pcie-frac": 0,
+          "--vram-reserve-mib": 1536,
+          "--conversation-cache-mib": 0,
+          "--resident-budget-gib": 28
+        },
+        "flags": [
+          "--mmap-experts",
+          "--resident-cpu-experts"
+        ],
+        "env": {
+          "STRATA_RESIDENT_PIN": "0",
+          "STRATA_RESIDENT_HEADROOM_GIB": "8"
+        },
+        "qualify": true,
+        "source": "https://lcz.me/topic/2042",
+        "adaptations": [
+          "Keep current32768 context",
+          "Keep600-second idle and all guards",
+          "NativeCUDA; no AMD HIP env or runtime changes",
+          "Keep current model/weights/precision/MTP and GPU ordering",
+          "Full resident complement31.88GiB failed native8GiB safety headroom; use28GiB pageable cache and explicitly retain8GiB native safety headroom"
+        ]
+      },
+      "passed": false,
+      "failure_type": "owned-worker swap-churn guard",
+      "benchmark_complete": false,
+      "completed_measured_requests": 1,
+      "completed_requests": [
+        {
+          "case": "warmup",
+          "valid": true,
+          "prompt_tokens": 650,
+          "generated_tokens": 64,
+          "prefill_tps": 60.9,
+          "ttft_s": 10.820518848006031,
+          "client_decode_tps": 32.451788165943455
+        },
+        {
+          "case": "long",
+          "valid": true,
+          "prompt_tokens": 2222,
+          "generated_tokens": 128,
+          "prefill_tps": 138.2,
+          "ttft_s": 16.10036797200155,
+          "client_decode_tps": 44.930082614454214
+        }
+      ],
+      "minimum_host_available_gib": 9.75753402709961,
+      "peak_worker_cgroup_gib": 40.903480529785156,
+      "peak_worker_swap_gib": 4.570823669433594,
+      "maximum_gpu_temperature_c": 52.0,
+      "minimum_gpu_free_mib": {
+        "0": 1115.0,
+        "1": 1222.0
+      },
+      "guard_violation": {
+        "reason": "Sustained owned-worker swap churn during inference",
+        "window_s": 30.42772152199177,
+        "read_mib_s": 92.35282160279395,
+        "write_mib_s": 0.0
+      }
+    }
+  ],
+  "production_settings_unchanged": true,
+  "registry_unchanged": true,
+  "all_protected_guard_policy_router_hashes_unchanged": true,
+  "normal_route_validation": "not attempted because isolated qualification failed",
+  "final_state": {
+    "router_idle": true,
+    "dsh_preserved": true,
+    "workers_stopped": true,
+    "no_gpu_lock": true,
+    "fallback_restored": false
+  },
+  "reliable_speed_comparison_available": false,
+  "prior_17_attempts": "docs/REDUCED-RAM-20261028.md"
+}

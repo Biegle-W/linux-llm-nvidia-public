@@ -30,6 +30,12 @@ or that untested larger contexts work.
 
 ## The six retained profiles
 
+Qwen/Strata follow-up: the lcz.me pageable full-resident setup was refused for
+insufficient RAM headroom; a 28 GiB pageable adaptation hit swap-churn protection.
+Neither was applied. Qwen remains unqualified on reduced RAM. Current settings
+and numeric table rows below are unchanged by this follow-up; see
+[the tested configuration and evidence](QWEN-STRATA-LCZ-20261028.md).
+
 2 of the four SSD-streaming profiles now have bounded qualification with one 16 GiB
 DIMM removed (45.55 GiB usable): unchanged contexts, JSON/arithmetic, near-window
 retrieval, supported images, sustained generation, fresh-process reload and normal

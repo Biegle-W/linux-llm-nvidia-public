@@ -608,3 +608,26 @@ Next action: when the human explicitly confirms the RAM DIMM is restored, verify
 Linux capacity, restore only the appropriate full-RAM cache settings from saved
 preimages, validate normal guarded loading and update selected metadata. Preserve
 all unrelated router/desktop changes and independent benchmark history.
+
+
+## Latest: lcz.me Qwen/Strata follow-up — October 28
+
+The user requested qualification of the lcz.me pageable Qwen/Strata setup on the
+current reduced-RAM machine, with application only after a pass. Both candidates
+failed and **nothing was applied**. Full pageable residency needed 31.88 GiB for
+CPU experts but only 30.51 GiB fit after native 8 GiB headroom. A bounded 28 GiB
+pageable candidate, fixed 4096 prefill, seven workers, adaptation/PCIe sharing off,
+1536 MiB VRAM reserve and no conversation cache loaded, then hit active owned-worker
+swap protection at 92.35 MiB/s reads over 30.43 seconds. Its one completed measured
+request does not establish a benchmark median or reliable operating performance.
+
+Qwen context stays 32K. Canonical launch config, registry, runtime, all guards and
+other five profiles are unchanged; the temporary GLM/Strata DeepSeek settings remain.
+Worker stopped, GPU reservation released, router idle, DSH ownership preserved;
+no fallback restored. Prior tests were preserved rather than repeated.
+
+See [candidate settings and failure evidence](QWEN-STRATA-LCZ-20261028.md) and
+[numeric results](benchmark-results/20261028-qwen-strata-lcz.json).
+The next action is to await explicit human RAM-restoration confirmation, verify
+Linux capacity, then restore appropriate full-RAM caches and verify normal guarded
+loading. No timer/MemAvailable trigger, guard relaxation or unrelated rollback.
