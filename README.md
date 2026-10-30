@@ -1,5 +1,10 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: OpenAI-compatible request retries repaired — October 30
+
+The router now reuses a verified running worker and waits for its existing cold load after a client disconnect, avoiding repeated reloads and the reported “Native worker state is unavailable” error. Ownership, active-work and resource guards remain intact. All 224 CPU tests passed. Live loopback streaming/non-streaming and Tailscale requests completed in under half a second without restarting the worker. Only the router was restarted; the loaded worker and DSH were preserved. See [repair](docs/API-RELIABILITY-20261030.md) and [verification](docs/validation-results/20261030-api-reliability.json).
+
+
 ## Latest: Qwen resident mode qualified and selected — October 30
 
 Qwen now keeps the non-GPU expert cache complement resident across both GPUs at 32K. The matched full-qualification screen measured 88.12 versus 78.74 decode tok/s, 628.8 versus 435.1 prefill tok/s, and 3.46 versus 4.99 seconds TTFT. Both arms passed JSON/arithmetic/image, 29,435-input uncached retrieval, over 120 seconds sustained generation and fresh reload. Two selected normal guarded loads passed. Guards, runtime pins, quantization, context and GPU selection remain unchanged. GLM's exploratory gain did not survive confirmation; DeepSeek fixed/auto both failed the specific JSON fixture, so neither profile changed. The Strata native tokenizer counter was repaired;27 targeted CPU regressions and the real saved-reference counter check passed. See [qualification](docs/HARDWARE-TUNING-QUALIFICATION-20261030.md) and [numeric evidence](docs/validation-results/20261030-hardware-tuning.json).

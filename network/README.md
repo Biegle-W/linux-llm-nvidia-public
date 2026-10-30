@@ -1,5 +1,10 @@
 # NVIDIA model router, Tailscale and DeepSeek Harness
 
+## Latest: OpenAI-compatible request retries repaired — October 30
+
+The router now reuses a verified running worker and waits for its existing cold load after a client disconnect, avoiding repeated reloads and the reported “Native worker state is unavailable” error. Ownership, active-work and resource guards remain intact. All 224 CPU tests passed. Live loopback streaming/non-streaming and Tailscale requests completed in under half a second without restarting the worker. Only the router was restarted; the loaded worker and DSH were preserved. See [repair](../docs/API-RELIABILITY-20261030.md) and [verification](../docs/validation-results/20261030-api-reliability.json).
+
+
 The [daily gated updater](../docs/DAILY-ENGINE-UPDATE-POLICY.md) is enabled at 03:00 local time. It preserves normal request admission and reserves only idle GPUs. Current resource settings are the maintained registry: dense worker RAM is uncapped, all host floors are 2 GiB, swap occupancy is allowed, and the four maintained SSD-streaming profiles use 128/160 MiB/s active-swap limits over 30 seconds. Dense and unknown profiles retain 1/8 MiB/s. Only Qwen/Strata and DeepSeek/Maya use 15% full-memory pressure; other profiles remain 10%, with the same 30-second window/three samples. Every other guard is unchanged. Current benchmark outcomes are in [the pressure-policy report](../docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md). Older dated budget/qualification paragraphs below remain historical.
 
 The deployment follows the AMD repository's catalog/on-demand switching design,

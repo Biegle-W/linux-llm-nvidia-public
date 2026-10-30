@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/API-RELIABILITY-20261030.md',
+    'docs/validation-results/20261030-api-reliability.json',
     'docs/HARDWARE-TUNING-QUALIFICATION-20261030.md',
     'docs/validation-results/20261030-hardware-tuning.json',
     'docs/HARDWARE-TUNING-RESEARCH-20261029.md',

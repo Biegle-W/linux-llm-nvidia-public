@@ -167,7 +167,7 @@ class UpdaterIntegrationTests(unittest.TestCase):
         import worker_manager
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);(root/'data').mkdir();lock=root/'data/GPU-LOCK';owner={'owner':'nvidia-daily-update','nonce':'a'*48,'pid':1,'start_ticks':'1'};lock.write_text(json.dumps(owner))
-            w=worker_manager.Workers.__new__(worker_manager.Workers);w.wait_native_idle=Mock();w.active='test';w.backend_models=Mock(return_value=[{'id':'test'}])
+            w=worker_manager.Workers.__new__(worker_manager.Workers);w.wait_native_idle=Mock();w.active='test';w.backend_models=Mock(return_value=[{'id':'test'}]);w.detect=Mock(return_value='test');w.touch_activity=Mock()
             with patch.object(worker_manager,'ROOT',root),patch('daily_update_owner.owner_valid',return_value=True):
                 with self.assertRaises(worker_manager.RouterError):w.start('test')
                 w.start('test',allowed_lock=owner)
@@ -249,7 +249,6 @@ class MemoryEventTests(unittest.TestCase):
         with self.assertRaises(ValueError):check_memory_events('high unknown\nmax 0\noom 0\noom_kill 0\n')
 
 
-if __name__=='__main__':unittest.main()
 
 
 class RetrievalCountingTests(unittest.TestCase):
@@ -327,3 +326,5 @@ class NativeCheckpointCountingTests(unittest.TestCase):
             with patch('update_qualification.subprocess.check_output',side_effect=subprocess.CalledProcessError(1,['counter'])):
                 with self.assertRaises(subprocess.CalledProcessError):
                     checkpoint_token_count(root,directory,'archive')
+
+if __name__=='__main__':unittest.main()

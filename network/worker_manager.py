@@ -79,9 +79,11 @@ class Workers:
                 pass
         try:
             state = json.loads(STATE.read_text())
-            if (state.get('profile') in profiles() and
-                    state.get('invocation') == unit_property(state['unit'], 'InvocationID') and
-                    unit_property(state['unit'], 'ActiveState') == 'active'):
+            if (state.get('profile') in profiles() and state.get('unit') == MOE_UNIT
+                    and state.get('invocation')
+                    and state['invocation'] == unit_property(MOE_UNIT, 'InvocationID')
+                    and unit_property(MOE_UNIT, 'ActiveState') == 'active'
+                    and str(ROOT / 'scripts/serve_router_moe.py') in unit_property(MOE_UNIT, 'ExecStart')):
                 return state['profile']
         except (OSError, ValueError, KeyError):
             pass
@@ -162,6 +164,52 @@ class Workers:
             progress()
             time.sleep(.25)
 
+    def wait_existing_start(self, profile_id, progress, allowed_lock=None):
+        """Reattach to a verified launch after its HTTP caller disconnected.
+
+        Readiness is not ownership: a native service binds its API only after a
+        cold load. Preserve that invocation and wait instead of trying to stop
+        it via a status endpoint which does not exist yet.
+        """
+        unit = DENSE_UNIT if profile_id.startswith('qwen27b-') else MOE_UNIT
+        invocation = unit_property(unit, 'InvocationID')
+        if not invocation:
+            raise RouterError('Worker ownership is unavailable; existing work was preserved.', 'ownership_conflict')
+        self.loading = profile_id
+        try:
+            deadline = time.monotonic() + self.timeout
+            while time.monotonic() < deadline:
+                progress()
+                reservation = ROOT / 'data/GPU-LOCK'
+                if reservation.exists() or allowed_lock is not None:
+                    from daily_update_owner import allowed_reservation
+                    if not allowed_reservation(reservation, allowed_lock, ROOT):
+                        raise RouterError('GPUs are reserved by another task; existing work was preserved.', 'gpu_reserved')
+                if (ROOT / 'data/router/guard-stops' / (profile_id + '.json')).exists():
+                    raise RouterError('The worker was stopped by a safety guard; explicitly select it after reviewing its log.', 'safety_guard_latched')
+                if invocation != unit_property(unit, 'InvocationID'):
+                    raise RouterError('Worker ownership changed while waiting; existing work was preserved.', 'ownership_conflict')
+                if unit_property(unit, 'ActiveState') not in ('active', 'activating'):
+                    raise RouterError('Worker stopped during loading; inspect its journal.', 'launch_failed')
+                if unit == MOE_UNIT:
+                    try:
+                        state = json.loads(STATE.read_text())
+                    except (OSError, ValueError) as error:
+                        raise RouterError('Worker ownership is unavailable; existing work was preserved.', 'ownership_conflict') from error
+                    if state != {'profile':profile_id, 'unit':unit, 'invocation':invocation}:
+                        raise RouterError('Worker ownership changed while waiting; existing work was preserved.', 'ownership_conflict')
+                models = self.backend_models()
+                if models:
+                    if any(model.get('status', {}).get('value') != 'unloaded' for model in models):
+                        self.active = profile_id
+                        self.touch_activity()
+                        return True
+                    return False  # Native idle unload: follow the existing guarded reload path.
+                time.sleep(1)
+            raise RouterError('Existing worker startup timed out; no replacement was launched.', 'load_timeout', 504)
+        finally:
+            self.loading = None
+
     def start(self, profile_id, progress=lambda: None, allowed_lock=None):
         self.wait_native_idle(progress)
         reservation = ROOT / 'data/GPU-LOCK'
@@ -173,9 +221,16 @@ class Workers:
         if latch.exists():
             raise RouterError('This worker was stopped by a safety guard. Explicitly select the model to reload after reviewing its guard log.',
                               'safety_guard_latched')
-        if self.active == profile_id:
+        owned = self.detect()
+        if owned is not None:
+            self.active = owned
             models = self.backend_models()
-            if any(model.get('status', {}).get('value') != 'unloaded' for model in models):
+            if not models:
+                ready = self.wait_existing_start(owned, progress, allowed_lock)
+                if ready and owned == profile_id:
+                    return
+            elif owned == profile_id and any(model.get('status', {}).get('value') != 'unloaded' for model in models):
+                self.touch_activity()
                 return
         # Native Strata/Maya pages call their worker directly, outside this router lock.
         # Observe their status as well before starting a switch.

@@ -262,4 +262,104 @@ class SwitchTest(unittest.TestCase):
             with self.assertRaises(RouterError):w.stop_owned()
             run.assert_not_called()
 
+
+
+class WorkerReattachmentTests(unittest.TestCase):
+    def setUp(self):
+        from unittest.mock import Mock
+        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup)
+        self.root=Path(self.tmp.name);(self.root/'data/router').mkdir(parents=True)
+        self.state=self.root/'data/router/worker.json'
+        self.state.write_text(json.dumps({'profile':'flash-next-strata','unit':'llm-router-worker.service','invocation':'owned-invocation'}))
+        for name,value in [('ROOT',self.root),('STATE',self.state)]:
+            p=patch('worker_manager.'+name,value);p.start();self.addCleanup(p.stop)
+        self.w=Workers.__new__(Workers);self.w.active=None;self.w.loading=None;self.w.key=KEY;self.w.timeout=5
+        self.w.wait_native_idle=Mock();self.w.touch_activity=Mock()
+        self.w.detect=Mock(return_value='flash-next-strata')
+        self.w.backend_models=Mock(return_value=[{'id':'native-model'}])
+        self.w.stop_owned=Mock(side_effect=AssertionError('Existing worker must not restart'))
+        native=patch('worker_manager.OPENER.open',side_effect=lambda *a,**k:io.BytesIO(b'{"busy":false}'))
+        native.start();self.addCleanup(native.stop)
+        def prop(unit,name):
+            if unit!='llm-router-worker.service':return '0' if name=='MainPID' else 'inactive'
+            return {'ActiveState':'active','InvocationID':'owned-invocation','ExecStart':str(self.root/'scripts/serve_router_moe.py')+' flash-next-strata'}.get(name,'')
+        p=patch('worker_manager.unit_property',side_effect=prop);p.start();self.addCleanup(p.stop)
+
+    def test_ready_external_worker_is_adopted_without_restart(self):
+        self.w.start('flash-next-strata')
+        self.assertEqual(self.w.active,'flash-next-strata');self.w.stop_owned.assert_not_called()
+
+    def test_retry_waits_for_existing_cold_load(self):
+        self.w.backend_models.side_effect=[[],[],[{'id':'native-model'}]]
+        with patch('worker_manager.time.sleep'):
+            self.w.start('flash-next-strata')
+        self.assertEqual(self.w.active,'flash-next-strata');self.assertIsNone(self.w.loading)
+        self.w.stop_owned.assert_not_called()
+
+    def test_disconnected_retry_preserves_loader_and_can_resume(self):
+        from unittest.mock import Mock
+        self.w.backend_models.side_effect=[[],[{'id':'native-model'}]]
+        progress=Mock(side_effect=BrokenPipeError('Client disconnected'))
+        with self.assertRaises(BrokenPipeError):self.w.start('flash-next-strata',progress)
+        self.assertIsNone(self.w.loading);self.w.stop_owned.assert_not_called()
+        self.w.start('flash-next-strata');self.w.stop_owned.assert_not_called()
+
+    def test_invocation_change_during_wait_preserves_replacement(self):
+        self.w.backend_models.return_value=[]
+        def progress():self.state.write_text(json.dumps({'profile':'flash-next-strata','unit':'llm-router-worker.service','invocation':'replacement'}))
+        with self.assertRaises(RouterError):self.w.start('flash-next-strata',progress)
+        self.w.stop_owned.assert_not_called()
+
+    def test_ready_listener_without_verified_owner_is_not_adopted(self):
+        self.w.active='flash-next-strata';self.w.detect.return_value=None
+        self.w.stop_owned.side_effect=RouterError('Unrecognized worker preserved','ownership_conflict')
+        with self.assertRaises(RouterError):self.w.start('flash-next-strata')
+        self.w.stop_owned.assert_called_once()
+
+    def test_reservation_still_blocks_adoption(self):
+        (self.root/'data/GPU-LOCK').write_text('{}')
+        with self.assertRaises(RouterError):self.w.start('flash-next-strata')
+        self.w.detect.assert_not_called();self.w.stop_owned.assert_not_called()
+
+    def test_detection_rejects_forged_unit_record(self):
+        self.state.write_text(json.dumps({'profile':'flash-next-strata','unit':'other.service','invocation':'owned-invocation'}))
+        with patch('worker_manager.unit_property',side_effect=lambda unit,key:'0' if key=='MainPID' else 'owned-invocation' if key=='InvocationID' else 'active'):
+            self.assertIsNone(Workers.detect(self.w))
+
+
+    def test_other_model_waits_for_owned_loader_before_safe_switch(self):
+        self.w.backend_models.side_effect=[[],[],[{'id':'native-model'}]]
+        self.w.stop_owned.side_effect=RouterError('safe-switch-marker')
+        with patch('worker_manager.time.sleep'):
+            with self.assertRaisesRegex(RouterError,'safe-switch-marker'):
+                self.w.start('qwen27b-hyperqwen')
+        self.assertEqual(self.w.backend_models.call_count,3)
+        self.w.stop_owned.assert_called_once();self.assertIsNone(self.w.loading)
+
+    def test_existing_loader_timeout_does_not_stop_or_replace_it(self):
+        self.w.backend_models.return_value=[]
+        with patch('worker_manager.time.monotonic',side_effect=[0,0,10]),patch('worker_manager.time.sleep'):
+            with self.assertRaises(RouterError) as error:self.w.start('flash-next-strata')
+        self.assertEqual(error.exception.code,'load_timeout');self.w.stop_owned.assert_not_called()
+
+    def test_guard_latch_appearing_during_loading_remains_latched(self):
+        self.w.backend_models.return_value=[]
+        latch=self.root/'data/router/guard-stops/flash-next-strata.json'
+        def progress():latch.parent.mkdir(exist_ok=True);latch.write_text('{}')
+        with self.assertRaises(RouterError) as error:self.w.start('flash-next-strata',progress)
+        self.assertEqual(error.exception.code,'safety_guard_latched');self.assertTrue(latch.exists())
+        self.w.stop_owned.assert_not_called()
+
+    def test_new_reservation_during_loading_preserves_worker(self):
+        self.w.backend_models.return_value=[]
+        def progress():(self.root/'data/GPU-LOCK').write_text('{}')
+        with self.assertRaises(RouterError) as error:self.w.start('flash-next-strata',progress)
+        self.assertEqual(error.exception.code,'gpu_reserved');self.w.stop_owned.assert_not_called()
+
+    def test_native_idle_unloaded_model_uses_existing_reload_path(self):
+        self.w.backend_models.return_value=[{'id':'native-model','status':{'value':'unloaded'}}]
+        self.w.stop_owned.side_effect=RouterError('guarded-reload-marker')
+        with self.assertRaisesRegex(RouterError,'guarded-reload-marker'):self.w.start('flash-next-strata')
+        self.w.stop_owned.assert_called_once()
+
 if __name__=='__main__':unittest.main()

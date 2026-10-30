@@ -1,0 +1,66 @@
+{
+  "schema": 1,
+  "date": "2026-10-30",
+  "status": "deployed_verified",
+  "reported_error": "Native worker state is unavailable; active work was preserved.",
+  "root_cause": "Stale cached worker identity caused unnecessary reloads; a retry during the existing cold load attempted an idle-state check before the native status API was available.",
+  "fix": [
+    "Reconcile the requested model with the verified owned worker before deciding to switch.",
+    "Wait for the same verified loading invocation after a client disconnect instead of restarting it.",
+    "Require the expected native unit, recognized executable and matching invocation when detecting ownership."
+  ],
+  "cpu_tests": {
+    "full_suite": 224,
+    "passed": true,
+    "new_router_regressions": 12,
+    "router_suite_total": 39
+  },
+  "live_requests": [
+    {
+      "network": "loopback",
+      "stream": false,
+      "http_status": 200,
+      "answer_correct": true,
+      "completed": true,
+      "elapsed_s": 0.44971131200145464,
+      "worker_preserved": true
+    },
+    {
+      "network": "loopback",
+      "stream": true,
+      "http_status": 200,
+      "answer_correct": true,
+      "completed": true,
+      "elapsed_s": 0.16744918100448558,
+      "worker_preserved": true
+    },
+    {
+      "network": "tailnet",
+      "stream": false,
+      "http_status": 200,
+      "answer_correct": true,
+      "completed": true,
+      "elapsed_s": 0.1658117730039521,
+      "worker_preserved": true
+    }
+  ],
+  "deployment": {
+    "router_only_restarted": true,
+    "loaded_worker_invocation_preserved": true,
+    "dsh_invocation_preserved": true,
+    "reservation_released": true
+  },
+  "unchanged": [
+    "model settings",
+    "runtime versions",
+    "context limits",
+    "RAM and VRAM policies",
+    "swap and pressure guards",
+    "thermal and telemetry guards",
+    "API key and allowed networks",
+    "idle600",
+    "FIFO admission",
+    "concurrency1"
+  ],
+  "scope": "Live verification covers chat completions in streaming and non-streaming modes; cold-load disconnect, timeout, switching and ownership races are covered by isolated CPU regressions."
+}
