@@ -1,0 +1,123 @@
+{
+  "date": "2026-10-30",
+  "status": "deployed_representative_headline_queries_live_verified",
+  "reported_issue": "model_said_specific_headline_details_missing_from_search_results",
+  "source_issue_reproduced": "generic_news_landing_pages_with_sparse_snippets",
+  "user_original_query_available": false,
+  "cpu_tests": {
+    "passed": 259,
+    "failed": 0,
+    "final_targeted_search_checks_passed": 22
+  },
+  "live_requests": [
+    {
+      "network": "loopback",
+      "stream": false,
+      "http_status": 200,
+      "completed": true,
+      "client_tools_empty": true,
+      "search_alias": "qwen27b-hyperqwen-search",
+      "real_headline_titles_in_answer": 3,
+      "citation_annotations": 6,
+      "clickable_sources": true,
+      "generic_access_refusal": false,
+      "elapsed_s": 2.845,
+      "worker_preserved": true,
+      "dsh_preserved": true,
+      "typed_events": []
+    },
+    {
+      "network": "tailnet",
+      "stream": true,
+      "http_status": 200,
+      "completed": true,
+      "client_tools_empty": true,
+      "search_alias": "qwen27b-hyperqwen-search",
+      "real_headline_titles_in_answer": 3,
+      "citation_annotations": 9,
+      "clickable_sources": true,
+      "generic_access_refusal": false,
+      "elapsed_s": 3.192,
+      "worker_preserved": true,
+      "dsh_preserved": true,
+      "typed_events": [
+        "response.completed",
+        "response.content_part.added",
+        "response.content_part.done",
+        "response.created",
+        "response.in_progress",
+        "response.output_item.added",
+        "response.output_item.done",
+        "response.output_text.annotation.added",
+        "response.output_text.delta",
+        "response.output_text.done",
+        "response.web_search_call.completed",
+        "response.web_search_call.in_progress",
+        "response.web_search_call.searching"
+      ]
+    }
+  ],
+  "topical_provider_check": {
+    "provider": "google_news_rss",
+    "fresh_records": 3,
+    "api_key_used": false
+  },
+  "routing": {
+    "general_headlines": [
+      "bbc_world_rss",
+      "google_news_rss_fallback"
+    ],
+    "topical_current_news": "google_news_rss_search_when_1d",
+    "ordinary_search": "mwmbl_anonymous"
+  },
+  "limits": {
+    "rss_timeout_seconds": 12,
+    "maximum_feed_bytes": 524288,
+    "general_feed_attempts": 2,
+    "topical_feed_attempts": 1,
+    "maximum_record_age_hours": 48,
+    "maximum_future_skew_seconds": 300
+  },
+  "full_articles_fetched": false,
+  "search_key_required": false,
+  "paid_requests": 0,
+  "model_settings_changed": false,
+  "resource_guards_changed": false,
+  "benchmarks_run": false,
+  "worker_invocations_preserved": true,
+  "dsh_preserved": true,
+  "access_config_preserved": true,
+  "remaining": [
+    "Confirm the original headline question from the iPhone"
+  ],
+  "prior_refusal_history_live_check": {
+    "network": "history",
+    "stream": true,
+    "http_status": 200,
+    "completed": true,
+    "client_tools_empty": true,
+    "search_alias": "qwen27b-hyperqwen-search",
+    "real_headline_titles_in_answer": 3,
+    "citation_annotations": 9,
+    "clickable_sources": true,
+    "generic_access_refusal": false,
+    "elapsed_s": 3.685,
+    "worker_preserved": true,
+    "dsh_preserved": true,
+    "typed_events": [
+      "response.completed",
+      "response.content_part.added",
+      "response.content_part.done",
+      "response.created",
+      "response.in_progress",
+      "response.output_item.added",
+      "response.output_item.done",
+      "response.output_text.annotation.added",
+      "response.output_text.delta",
+      "response.output_text.done",
+      "response.web_search_call.completed",
+      "response.web_search_call.in_progress",
+      "response.web_search_call.searching"
+    ]
+  }
+}

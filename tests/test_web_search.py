@@ -147,6 +147,68 @@ class SearchTests(unittest.TestCase):
                 ws.mwmbl_search('Mars', [], 5)
         self.assertEqual(opener.open.call_count, 1)
 
+    def test_headline_intent_does_not_change_ordinary_search(self):
+        for query in ['Top headlines today', 'latest news on NVIDIA', 'current news', 'world headlines']:
+            self.assertTrue(ws.news_query(query))
+        for query in ['What is Hacker News?', 'SearXNG', 'latest NVIDIA driver version', 'What is a headline?']:
+            self.assertFalse(ws.news_query(query))
+        with patch.object(ws, 'SEARCH_CONFIG') as cfg, patch.object(ws, 'news_search', return_value=ROWS) as news, \
+             patch.object(ws, 'mwmbl_search') as ordinary:
+            cfg.exists.return_value = False
+            self.assertEqual(ws.search('top headlines today', [], 3), ROWS)
+        news.assert_called_once_with('top headlines today', [], 3)
+        ordinary.assert_not_called()
+
+    def test_feed_records_contain_actual_headlines_summaries_dates_and_links(self):
+        from io import BytesIO
+        from email.utils import formatdate
+        import time
+        class Response(BytesIO):
+            status = 200
+        now = time.time()
+        def item(title, url, stamp, description='Details &amp; context'):
+            return '<item><title>'+title+'</title><link>'+url+'</link><description>'+description+'</description><pubDate>'+formatdate(stamp, usegmt=True)+'</pubDate></item>'
+        rss = ('<rss><channel>' + item('Real headline', 'https://www.bbc.com/news/a', now - 60)
+               + item('Duplicate', 'https://www.bbc.com/news/a', now - 60)
+               + item('Stale headline', 'https://www.bbc.com/news/old', now - 72*3600)
+               + item('Future headline', 'https://www.bbc.com/news/future', now + 3600)
+               + item('Local rejected', 'http://127.0.0.1/news', now)
+               + item('Excluded domain', 'https://elsewhere.example/news', now) + '</channel></rss>')
+        opener = SimpleNamespace(open=unittest.mock.Mock(return_value=Response(rss.encode())))
+        with patch.object(ws.urllib.request, 'build_opener', return_value=opener):
+            result = ws.news_search('top headlines today', ['bbc.com'], 5)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]['title'], 'Real headline')
+        self.assertEqual(result[0]['snippet'], 'Details & context')
+        self.assertEqual(result[0]['content_kind'], 'dated_news_feed_item')
+        self.assertTrue(result[0]['published_at'])
+        self.assertEqual(ws.urlsplit(opener.open.call_args.args[0].full_url).hostname, 'feeds.bbci.co.uk')
+
+    def test_specific_news_query_uses_fixed_feed_host_and_bounded_no_secret_headers(self):
+        from io import BytesIO
+        from email.utils import formatdate
+        import time
+        class Response(BytesIO):
+            status = 200
+        rss = '<rss><channel><item><title>Technology headline</title><link>https://news.google.com/rss/articles/example</link><source>Publisher</source><description>&lt;b&gt;Actual headline details&lt;/b&gt;</description><pubDate>'+formatdate(time.time()-60, usegmt=True)+'</pubDate></item></channel></rss>'
+        opener = SimpleNamespace(open=unittest.mock.Mock(return_value=Response(rss.encode())))
+        with patch.object(ws.urllib.request, 'build_opener', return_value=opener):
+            result = ws.news_search('latest news NVIDIA', [], 3)
+        req = opener.open.call_args.args[0]
+        self.assertEqual(ws.urlsplit(req.full_url).hostname, 'news.google.com')
+        self.assertEqual(ws.parse_qs(ws.urlsplit(req.full_url).query)['q'], ['nvidia when:1d'])
+        self.assertEqual(set(req.headers), {'User-agent', 'Accept'})
+        self.assertEqual(opener.open.call_args.kwargs['timeout'], 12)
+        self.assertEqual(result[0]['snippet'], 'Actual headline details')
+        self.assertEqual(result[0]['publisher'], 'Publisher')
+
+    def test_failed_news_feeds_do_not_substitute_generic_landing_pages(self):
+        opener = SimpleNamespace(open=unittest.mock.Mock(side_effect=OSError('unavailable')))
+        with patch.object(ws.urllib.request, 'build_opener', return_value=opener):
+            with self.assertRaisesRegex(RouterError, 'no fresh matching headlines'):
+                ws.news_search('top headlines today', [], 3)
+        self.assertEqual(opener.open.call_count, 2)
+
     def test_brave_parses_filters_and_deduplicates(self):
         from io import BytesIO
         class Response(BytesIO):

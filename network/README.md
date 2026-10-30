@@ -1,5 +1,9 @@
 # NVIDIA model router, Tailscale and DeepSeek Harness
 
+## Latest: actual headline content for OpenCat search — October 30
+
+Headline/current-news queries now retrieve actual dated RSS story titles and descriptions rather than sparse generic news-site search snippets. General headlines use BBC World with a Google News fallback; topical current news uses Google News RSS search. Ordinary search remains free anonymous Mwmbl. All 259 CPU tests passed, followed by 22 targeted checks after final normalization. Real nonstreaming and Tailscale streaming responses included three exact fetched headlines with citations (2.845/3.192 seconds), without generic access refusals. Continue selecting `qwen27b-hyperqwen-search`. Worker/DSH, access configuration, model settings and resource guards are preserved. The user's exact original question and direct iPhone confirmation remain pending. See [repair and limits](../docs/OPENCAT-HEADLINES-20261030.md) and [verification](../docs/validation-results/20261030-opencat-headlines.json).
+
 ## Latest: OpenCat empty-tools search compatibility — October 30
 
 The phone trace showed Responses requests with an empty tool list, so the existing entry did not search. A new opt-in `qwen27b-hyperqwen-search` catalog entry enables free web search on the server while reusing the same guarded HyperQwen worker. Refresh OpenCat's model list and select this ID; keep the existing connection and Responses settings. All 255 CPU tests and real empty-tools nonstreaming/streaming/Tailscale requests passed (1.719/1.810/2.613 seconds), with grounded answers and citations. Original model entries, profiles and resource guards are preserved. Temporary diagnostics were removed and the access configuration restored exactly. Phone confirmation after selecting the new entry remains pending. See [repair](../docs/OPENCAT-SEARCH-MODEL-20261030.md) and [verification](../docs/validation-results/20261030-opencat-search-model.json).

@@ -1,5 +1,7 @@
 # Local Responses web search — October 30, 2026
 
+**Headline follow-up:** Current-news/headline questions now use actual dated RSS items; ordinary search remains Mwmbl. See [headline retrieval and verification](OPENCAT-HEADLINES-20261030.md).
+
 **OpenCat follow-up:** The phone was observed to send an empty tool list. Select `qwen27b-hyperqwen-search` to opt into server-side search; see [the verified compatibility repair](OPENCAT-SEARCH-MODEL-20261030.md).
 
 **Implemented, deployed and live-tested with free keyless search.** The router
