@@ -16,6 +16,26 @@ from backend_proxy import BackendProxy, rewrite_model_alias
 import web_search
 
 MAX_BODY = 32 * 1024 * 1024
+WEB_SEARCH_ALIASES = {'qwen27b-hyperqwen-search': 'qwen27b-hyperqwen'}
+
+
+def request_model(data, path):
+    """Resolve an explicit search catalog alias without adding a worker/profile."""
+    alias = data.get('model')
+    if not isinstance(alias, str):
+        raise RouterError('Choose an ID from GET /v1/models.', 'model_not_found', 404)
+    name = WEB_SEARCH_ALIASES.get(alias, alias)
+    if name not in profiles():
+        raise RouterError('Choose an ID from GET /v1/models.', 'model_not_found', 404)
+    if alias in WEB_SEARCH_ALIASES and path != '/router/select':
+        if path != '/v1/responses':
+            raise RouterError('The Web Search model entry requires the Responses API.', 'unsupported_endpoint', 400)
+        tools = data.get('tools', [])
+        if not isinstance(tools, list):
+            raise RouterError('tools must be an array.', 'bad_request', 400)
+        if not any(isinstance(t, dict) and t.get('type') in web_search.SEARCH_TYPES for t in tools):
+            data = dict(data, tools=[*tools, {'type': 'web_search'}])
+    return name, alias, data
 
 
 def apply_request_defaults(data, profile):
@@ -104,12 +124,17 @@ class Handler(BaseHTTPRequestHandler):
         w = self.server.workers
         backend = w.backend_models() if w.active and w.loading is None else []
         ready = any(model.get('status', {}).get('value') != 'unloaded' for model in backend)
-        return {p['id']: {'id': p['id'], 'object': 'model', 'created': 0, 'owned_by': 'local-nvidia',
+        catalog = {p['id']: {'id': p['id'], 'object': 'model', 'created': 0, 'owned_by': 'local-nvidia',
                          'name': p['model'] + ' / ' + p['engine'], 'engine': p['engine'],
                          'quant': p['weight_quant'], 'context_window': p['allocated_context'],
                          'max_model_len': p['allocated_context'], 'auto_start': True,
                          'loaded': ready and w.active == p['id'] and w.loading is None}
                 for p in profiles().values()}
+        for alias, name in WEB_SEARCH_ALIASES.items():
+            catalog[alias] = dict(catalog[name], id=alias,
+                                  name=catalog[name]['name'] + ' + Web Search (free)',
+                                  web_search=True, api='responses')
+        return catalog
 
     def do_GET(self):
         if not self.auth():
@@ -118,7 +143,7 @@ class Handler(BaseHTTPRequestHandler):
         if path == '/health':
             w = self.server.workers
             return self.reply(200, {'status': 'ok', 'active_model': w.active, 'loading_model': w.loading,
-                                    'busy': w.busy, 'models': len(profiles()),
+                                    'busy': w.busy, 'models': len(profiles()) + len(WEB_SEARCH_ALIASES),
                                     'idle_unloading_model': getattr(w, 'idle_unloading', None),
                                     'idle_timeout_seconds': w.idle_timeout,
                                     'idle_for_s': max(0, time.monotonic() - w.last_activity),
@@ -165,9 +190,7 @@ class Handler(BaseHTTPRequestHandler):
                 w = self.server.workers
                 w.unload()
                 return self.reply(200, {'status': 'unloaded'})
-            name = data.get('model')
-            if not isinstance(name, str) or name not in profiles():
-                raise RouterError('Choose an ID from GET /v1/models.', 'model_not_found', 404)
+            name, alias, data = request_model(data, path)
             profile = profiles()[name]
             if path == '/v1/chat/completions':
                 data = apply_request_defaults(data, profile)
@@ -180,16 +203,16 @@ class Handler(BaseHTTPRequestHandler):
                 data = web_search.strip_tools(data)
                 search_options = None
             if data.get('stream') and path != '/router/select':
-                return self.stream(name, path, data, search_options)
+                return self.stream(name, path, data, search_options, alias)
             if path == '/router/select':
                 self.server.workers.acquire(name, clear_guard=True)
             else:
                 self.server.workers.acquire(name)
             try:
                 if path == '/router/select':
-                    return self.reply(200, {'status': 'ready', 'model': name,
+                    return self.reply(200, {'status': 'ready', 'model': alias,
                                             'context_window': profile['allocated_context']})
-                self.forward(name, path, data, search_options)
+                self.forward(alias, path, data, search_options)
             finally:
                 self.server.workers.release()
         except RouterError as e:
@@ -223,7 +246,8 @@ class Handler(BaseHTTPRequestHandler):
         finally:
             conn.close()
 
-    def stream(self, name, path, data, search_options=None):
+    def stream(self, name, path, data, search_options=None, alias=None):
+        alias = alias or name
         self.send_response(200)
         self.send_header('Content-Type', 'text/event-stream')
         self.send_header('Cache-Control', 'no-store')
@@ -263,7 +287,7 @@ class Handler(BaseHTTPRequestHandler):
             self.server.workers.acquire(name, progress)
             acquired = True
             if search_options:
-                web_search.execute(data, name, self.proxy(), search_options, emit_event, progress)
+                web_search.execute(data, alias, self.proxy(), search_options, emit_event, progress)
                 return
             conn = self.open_backend(path, data)
             response = conn.getresponse()
@@ -273,7 +297,7 @@ class Handler(BaseHTTPRequestHandler):
                 if line.startswith(b'data:') and line[5:].strip() != b'[DONE]':
                     try:
                         value = json.loads(line[5:])
-                        rewrite_model_alias(value, name)
+                        rewrite_model_alias(value, alias)
                         line = b'data: ' + json.dumps(value).encode() + b'\n'
                     except ValueError:
                         pass

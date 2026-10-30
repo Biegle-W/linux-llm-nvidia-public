@@ -1,5 +1,7 @@
 # Local Responses web search — October 30, 2026
 
+**OpenCat follow-up:** The phone was observed to send an empty tool list. Select `qwen27b-hyperqwen-search` to opt into server-side search; see [the verified compatibility repair](OPENCAT-SEARCH-MODEL-20261030.md).
+
 **Implemented, deployed and live-tested with free keyless search.** The router
 uses Mwmbl's anonymous public API, supplies untrusted result snippets to the
 selected local model, and returns a `web_search_call`, a generated answer,

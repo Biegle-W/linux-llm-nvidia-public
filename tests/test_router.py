@@ -93,12 +93,63 @@ class RouterTest(unittest.TestCase):
             self.assertEqual(self.request('/v1/models',key=key)[0],401)
     def test_catalog(self):
         status,data=self.request('/v1/models');self.assertEqual(status,200)
-        models=json.loads(data)['data'];self.assertEqual(len(models),6)
+        models=json.loads(data)['data'];self.assertEqual(len(models),7)
         self.assertEqual(next(m for m in models if m['id']=='deepseek-strata')['context_window'],router.profiles()['deepseek-strata']['allocated_context'])
     def test_explicit_selection_requests_guard_reload(self):
         status,_=self.request('/router/select',{'model':'qwen27b-hyperqwen'})
         self.assertEqual(status,200)
         self.assertTrue(self.server.workers.clear_guard)
+
+    def test_search_alias_catalog_uses_existing_worker_context(self):
+        status, raw = self.request('/v1/models/qwen27b-hyperqwen-search')
+        self.assertEqual(status, 200)
+        value = json.loads(raw)
+        self.assertTrue(value['web_search'])
+        self.assertEqual(value['api'], 'responses')
+        self.assertEqual(value['context_window'], router.profiles()['qwen27b-hyperqwen']['allocated_context'])
+
+    def test_search_alias_injects_tool_for_phone_shape_and_preserves_worker_identity(self):
+        rows = [{'url': 'https://science.nasa.gov/mars/', 'title': 'Mars', 'snippet': 'Iron oxide makes Mars red.'}]
+        for stream in (False, True):
+            body = {'model': 'qwen27b-hyperqwen-search', 'input': [{'role': 'user', 'content': [{'type': 'input_text', 'text': 'Mars'}]}],
+                    'tools': [], 'tool_choice': 'auto', 'stream': stream}
+            with patch.object(router.web_search, 'search', return_value=rows) as search, \
+                 patch.object(self.server.workers, 'acquire', wraps=self.server.workers.acquire) as acquire:
+                status, raw = self.request('/v1/responses', body)
+            self.assertEqual(status, 200)
+            search.assert_called_once_with('Mars', [], 5)
+            self.assertEqual(acquire.call_args.args[0], 'qwen27b-hyperqwen')
+            if stream:
+                events = [json.loads(x[5:]) for x in raw.splitlines() if x.startswith(b'data:')]
+                value = events[-1]['response']
+                self.assertEqual(events[0]['response']['model'], 'qwen27b-hyperqwen-search')
+            else:
+                value = json.loads(raw)
+            self.assertEqual(value['model'], 'qwen27b-hyperqwen-search')
+            self.assertEqual(value['output'][0]['type'], 'web_search_call')
+            self.assertEqual(self.backend.body['model'], 'worker-name')
+            self.assertFalse(self.server.workers.busy)
+
+    def test_search_alias_opt_out_and_regular_alias_do_not_search(self):
+        with patch.object(router.web_search, 'search') as search:
+            for model, choice in [('qwen27b-hyperqwen-search', 'none'), ('qwen27b-hyperqwen', 'auto')]:
+                status, raw = self.request('/v1/responses', {'model': model, 'input': 'hello', 'tools': [], 'tool_choice': choice})
+                self.assertEqual(status, 200)
+                self.assertEqual(json.loads(raw)['model'], model)
+                self.assertEqual(json.loads(raw)['output'][0]['type'], 'message')
+        search.assert_not_called()
+
+    def test_search_alias_requires_responses_before_worker_acquisition(self):
+        with patch.object(self.server.workers, 'acquire') as acquire:
+            status, _ = self.request('/v1/chat/completions', {'model': 'qwen27b-hyperqwen-search', 'messages': []})
+        self.assertEqual(status, 400)
+        acquire.assert_not_called()
+
+    def test_search_alias_selection_resolves_original_profile(self):
+        status, raw = self.request('/router/select', {'model': 'qwen27b-hyperqwen-search'})
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(raw)['model'], 'qwen27b-hyperqwen-search')
+        self.assertEqual(self.server.workers.active, 'qwen27b-hyperqwen')
     def test_unknown_model_never_loads(self):
         before=self.server.workers.active
         self.assertEqual(self.request('/v1/chat/completions',{'model':'qwen27b-llama'})[0],404)

@@ -1,5 +1,9 @@
 # NVIDIA model router, Tailscale and DeepSeek Harness
 
+## Latest: OpenCat empty-tools search compatibility — October 30
+
+The phone trace showed Responses requests with an empty tool list, so the existing entry did not search. A new opt-in `qwen27b-hyperqwen-search` catalog entry enables free web search on the server while reusing the same guarded HyperQwen worker. Refresh OpenCat's model list and select this ID; keep the existing connection and Responses settings. All 255 CPU tests and real empty-tools nonstreaming/streaming/Tailscale requests passed (1.719/1.810/2.613 seconds), with grounded answers and citations. Original model entries, profiles and resource guards are preserved. Temporary diagnostics were removed and the access configuration restored exactly. Phone confirmation after selecting the new entry remains pending. See [repair](../docs/OPENCAT-SEARCH-MODEL-20261030.md) and [verification](../docs/validation-results/20261030-opencat-search-model.json).
+
 ## Latest: free keyless Responses web search live-verified — October 30
 
 The router uses Mwmbl's free anonymous API for `web_search`/`web_search_preview`, with typed streaming search events, untrusted snippets, clickable source links and URL citation annotations. All 250 CPU tests pass. Real nonstreaming, streaming and Tailscale streaming Responses passed in 1.981/1.506/2.176 seconds, including source-domain filtering and stable event ordering. No search key, signup or paid request was used. The documented anonymous allowance is 1,000 requests/month per IP at one request/second; unavailable/quota-limited searches return explicit errors. Model settings, guards and worker/DSH service invocations are preserved. Direct iPhone UI confirmation remains pending. See [implementation and limits](../docs/RESPONSES-WEB-SEARCH-20261030.md) and [verification](../docs/validation-results/20261030-responses-web-search.json).
