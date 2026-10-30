@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Latest: Unsloth and Comfy desktop installation — October 30
+
+Official Unsloth Desktop 0.1.913-beta and Comfy Desktop 1.1.8 stable are installed per-user with **Unsloth** and **ComfyUI** Desktop/menu shortcuts. Unsloth's official isolated backend setup completed all 17 stages; Python 3.13.17, backend 2026.10.11 and PyTorch 2.13.0+cu130 see both CUDA GPUs. Both apps' AppImage/native-library/shortcut checks pass. Comfy's Electron launch is blocked by Ubuntu's sandbox policy; a prepared app-specific namespace profile is syntax-valid but not loaded, and no `--no-sandbox` flag or system policy change was applied. Comfy launch/first-run setup remains pending. Existing LLM environments/settings are preserved; no model or training/generation job started. See [installation status](UNSLOTH-COMFY-DESKTOP-20261030.md) and [verification](validation-results/20261030-unsloth-comfy-desktop.json).
+
 ## Latest: official Strata desktop app linked to existing Q3 — October 30
 
 The official Strata 0.2.8 Linux desktop app and its matching 0.1.54 CUDA engine are installed separately, with a new **Strata Official** Desktop/menu shortcut. Its real desktop host recognizes the existing Qwen3.8-Flash-Next IQ3_XXS at 32K with no missing files. Existing GGUF shards and prepared packs are reused; no model weights were downloaded, moved or copied. App state/components and the app-local profile are separate, the router credential was omitted, and the original selector, runtime pins, profiles and guards are preserved. Official binary/help and desktop-host inventory checks passed; the owned host stopped afterward. No model was loaded or benchmarked, and native GUI interaction/inference were not tested. See [installation and use](STRATA-OFFICIAL-APP-20261030.md) and [verification](validation-results/20261030-strata-official-app.json).

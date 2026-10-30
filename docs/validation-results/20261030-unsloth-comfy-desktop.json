@@ -1,0 +1,57 @@
+{
+  "apps": [
+    {
+      "app": "Unsloth",
+      "version": "0.1.913-beta",
+      "sha256": "94be4a21a10ef80a7dc2fcfb569a0a13cee1f453d08cc5912e7b4abd0ae5ec6e",
+      "published_sha256_verified": true,
+      "official_download_etag_matched_md5": false,
+      "appimage_runtime_passed": true,
+      "native_libraries_resolved": true,
+      "desktop_entries_validated": true,
+      "model_downloaded": false
+    },
+    {
+      "app": "ComfyUI",
+      "version": "1.1.8",
+      "sha256": "3f3d4b710ecd7f6c0d3a4bb45a1d0cd8a5f5aa8f4d053975580a3de1ebb750a7",
+      "published_sha256_verified": false,
+      "official_download_etag_matched_md5": true,
+      "appimage_runtime_passed": true,
+      "native_libraries_resolved": true,
+      "desktop_entries_validated": true,
+      "model_downloaded": false,
+      "headless_bootstrap_running_after_12s": false,
+      "headless_bootstrap_early_exit_code": -5,
+      "headless_bootstrap_fatal_error": true
+    }
+  ],
+  "generation_or_training_tested": false,
+  "first_run_setup_remaining": true,
+  "date": "2026-10-30",
+  "status": "unsloth_installed_comfy_installed_launch_blocked",
+  "unsloth_backend": {
+    "python": "3.13.17",
+    "unsloth_backend": "2026.10.11",
+    "torch": "2.13.0+cu130",
+    "torch_cuda": "13.0",
+    "cuda_available": true,
+    "gpu_count": 2,
+    "model_loaded": false,
+    "training_started": false
+  },
+  "unsloth_official_setup_completed": true,
+  "unsloth_setup_stages_completed": 17,
+  "autostart_enabled_by_installation": false,
+  "comfy_launch_blocker": "Ubuntu_Electron_user_namespace_sandbox_restriction",
+  "comfy_no_sandbox_flag_applied": false,
+  "system_sandbox_policy_changed": false,
+  "prepared_app_specific_profile_syntax_valid": true,
+  "app_specific_profile_loaded": false,
+  "comfy_local_instance_created": false,
+  "existing_llm_profiles_and_environments_modified": false,
+  "remaining": [
+    "Choose Comfy sandbox-preserving administrator-authenticated profile or explicitly authorize Comfy-only no-sandbox",
+    "Complete Comfy first-run setup after launch is available"
+  ]
+}
