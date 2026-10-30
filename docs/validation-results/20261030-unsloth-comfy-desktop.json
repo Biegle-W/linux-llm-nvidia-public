@@ -21,15 +21,19 @@
       "native_libraries_resolved": true,
       "desktop_entries_validated": true,
       "model_downloaded": false,
-      "headless_bootstrap_running_after_12s": false,
-      "headless_bootstrap_early_exit_code": -5,
-      "headless_bootstrap_fatal_error": true
+      "initial_sandboxed_bootstrap": {
+        "headless_bootstrap_running_after_12s": false,
+        "headless_bootstrap_early_exit_code": -5,
+        "headless_bootstrap_fatal_error": true
+      },
+      "current_bootstrap_passed": true,
+      "comfy_only_no_sandbox": true
     }
   ],
   "generation_or_training_tested": false,
   "first_run_setup_remaining": true,
   "date": "2026-10-30",
-  "status": "unsloth_installed_comfy_installed_launch_blocked",
+  "status": "both_desktop_apps_installed_comfy_launch_verified",
   "unsloth_backend": {
     "python": "3.13.17",
     "unsloth_backend": "2026.10.11",
@@ -43,15 +47,26 @@
   "unsloth_official_setup_completed": true,
   "unsloth_setup_stages_completed": 17,
   "autostart_enabled_by_installation": false,
-  "comfy_launch_blocker": "Ubuntu_Electron_user_namespace_sandbox_restriction",
-  "comfy_no_sandbox_flag_applied": false,
+  "comfy_launch_blocker": null,
+  "comfy_no_sandbox_flag_applied": true,
   "system_sandbox_policy_changed": false,
   "prepared_app_specific_profile_syntax_valid": true,
   "app_specific_profile_loaded": false,
   "comfy_local_instance_created": false,
   "existing_llm_profiles_and_environments_modified": false,
   "remaining": [
-    "Choose Comfy sandbox-preserving administrator-authenticated profile or explicitly authorize Comfy-only no-sandbox",
-    "Complete Comfy first-run setup after launch is available"
-  ]
+    "Complete Comfy first-run Local/Cloud, terms and instance choices; select models/workflows as desired"
+  ],
+  "comfy_launch_resolution": {
+    "app": "ComfyUI",
+    "version": "1.1.8",
+    "comfy_only_no_sandbox": true,
+    "system_wide_sandbox_settings_changed": false,
+    "actual_installed_launcher_used": true,
+    "headless_bootstrap_running_after_15s": true,
+    "early_exit_code": null,
+    "fatal_sandbox_error": false,
+    "local_instance_or_model_created": false,
+    "generation_tested": false
+  }
 }

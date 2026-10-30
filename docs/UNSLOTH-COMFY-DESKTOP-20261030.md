@@ -6,7 +6,7 @@ Desktop and application-menu shortcuts named **Unsloth** and **ComfyUI**.
 | App | Installed version | State |
 | --- | --- | --- |
 | Unsloth Desktop | 0.1.913-beta | App, isolated CUDA backend and shortcuts installed |
-| Comfy Desktop / ComfyUI | 1.1.8 stable | App and shortcuts installed; normal Electron launch blocked by Ubuntu sandbox policy |
+| Comfy Desktop / ComfyUI | 1.1.8 stable | App and shortcuts installed; Comfy-only compatibility launcher passed startup |
 
 Comfy's newer 1.1.9 release-candidate was not selected; 1.1.8 is the current
 official stable download. The Unsloth release itself carries the beta suffix.
@@ -52,26 +52,28 @@ PyTorch SDPA; existing environments were not altered. A separate import/CUDA
 check records the final Python, backend and Torch versions and GPU detection.
 No generation model was selected and no training or generation job was started.
 
-## Comfy launch blocker
+## Comfy launch resolution
 
-The real headless Electron bootstrap failed with **No usable sandbox** under
-the current Ubuntu AppArmor/user-namespace restrictions. Native libraries and
-the AppImage runtime are present; the failure is specifically Electron startup.
-The current installed launcher does **not** contain `--no-sandbox`.
+The initial headless Electron bootstrap failed with **No usable sandbox** under
+Ubuntu's AppArmor/user-namespace restrictions. Native libraries and the AppImage
+runtime were present; the failure was specifically Electron startup.
 
-The sandbox-preserving option is an application-specific AppArmor profile based
-on the profile shipped by Comfy itself. It permits user namespaces for the
-installed Comfy executable while retaining Electron's user-namespace sandbox.
-The prepared profile passed parser validation without being loaded into the
-kernel. Applying it requires administrator authentication. A corresponding
-launcher would use the fixed extracted payload with `--disable-setuid-sandbox`
-to select the user-namespace sandbox rather than the unavailable SUID helper.
+The ComfyUI launcher now uses the official Linux **`--no-sandbox` compatibility
+option for ComfyUI only**. This disables Electron sandboxing for Comfy processes;
+no system-wide sandbox or namespace setting was changed. The original launcher
+is retained as a preimage beside it. The system-wide restrictions remain intact.
 
-Comfy's official Linux docs also document `--no-sandbox` when normal sandboxed
-launches fail; that option disables Electron sandboxing for Comfy processes.
-It has not been applied. The system-wide namespace/sandbox policy was not
-changed. The launch option remains pending a user choice and, for the
-sandbox-preserving option, administrator authentication.
+The actual installed launcher then passed a new offscreen startup check: version
+1.1.8 started and stayed running for 15 seconds without a fatal sandbox error.
+The isolated test profile was used and its owned process group stopped afterward.
+No instance, model or workflow was started. This verifies bootstrap, not native
+GUI interaction or image generation.
+
+A sandbox-preserving alternative was also prepared from Comfy's bundled
+application-specific AppArmor profile. It passed parser validation without
+being loaded into the kernel. It remains unapplied and would require
+administrator authentication. The installed setup uses the per-app compatibility
+option above; it does not install that profile.
 
 Comfy's first-run Local/Cloud and installation screens remain pending. No local
 ComfyUI instance or image model was created. Training, generation and native GUI
