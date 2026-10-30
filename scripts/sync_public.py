@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/STRATA-OFFICIAL-APP-20261030.md',
+    'docs/validation-results/20261030-strata-official-app.json',
     'docs/OPENCAT-HEADLINES-20261030.md',
     'docs/validation-results/20261030-opencat-headlines.json',
     'docs/OPENCAT-SEARCH-MODEL-20261030.md',

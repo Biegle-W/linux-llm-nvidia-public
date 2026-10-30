@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: official Strata desktop app linked to existing Q3 — October 30
+
+The official Strata 0.2.8 Linux desktop app and its matching 0.1.54 CUDA engine are installed separately, with a new **Strata Official** Desktop/menu shortcut. Its real desktop host recognizes the existing Qwen3.8-Flash-Next IQ3_XXS at 32K with no missing files. Existing GGUF shards and prepared packs are reused; no model weights were downloaded, moved or copied. App state/components and the app-local profile are separate, the router credential was omitted, and the original selector, runtime pins, profiles and guards are preserved. Official binary/help and desktop-host inventory checks passed; the owned host stopped afterward. No model was loaded or benchmarked, and native GUI interaction/inference were not tested. See [installation and use](docs/STRATA-OFFICIAL-APP-20261030.md) and [verification](docs/validation-results/20261030-strata-official-app.json).
+
 ## Latest: actual headline content for OpenCat search — October 30
 
 Headline/current-news queries now retrieve actual dated RSS story titles and descriptions rather than sparse generic news-site search snippets. General headlines use BBC World with a Google News fallback; topical current news uses Google News RSS search. Ordinary search remains free anonymous Mwmbl. All 259 CPU tests passed, followed by 22 targeted checks after final normalization. Real nonstreaming and Tailscale streaming responses included three exact fetched headlines with citations (2.845/3.192 seconds), without generic access refusals. Continue selecting `qwen27b-hyperqwen-search`. Worker/DSH, access configuration, model settings and resource guards are preserved. The user's exact original question and direct iPhone confirmation remain pending. See [repair and limits](docs/OPENCAT-HEADLINES-20261030.md) and [verification](docs/validation-results/20261030-opencat-headlines.json).
