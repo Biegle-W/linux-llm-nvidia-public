@@ -77,7 +77,9 @@ class SearchTests(unittest.TestCase):
                         b'<a class="result__a" href="https://science.nasa.gov/mars/">Mars</a>'
                         b'<a class="result__snippet">Iron <b>oxide</b></a>')
         opener = SimpleNamespace(open=unittest.mock.Mock(side_effect=[challenge, good]))
-        with patch.object(ws.urllib.request, 'build_opener', return_value=opener):
+        with patch.object(ws.urllib.request, 'build_opener', return_value=opener), patch.object(ws, 'SEARCH_CONFIG') as cfg:
+            cfg.exists.return_value = True
+            cfg.read_text.return_value = '{"provider":"duckduckgo"}'
             rows = ws.search('Mars', ['nasa.gov'])
         self.assertEqual(len(rows), 1)
         self.assertEqual(rows[0]['snippet'], 'Iron oxide')
@@ -88,7 +90,9 @@ class SearchTests(unittest.TestCase):
 
     def test_provider_failure_is_bounded_and_explicit(self):
         opener = SimpleNamespace(open=unittest.mock.Mock(side_effect=OSError('network down')))
-        with patch.object(ws.urllib.request, 'build_opener', return_value=opener):
+        with patch.object(ws.urllib.request, 'build_opener', return_value=opener), patch.object(ws, 'SEARCH_CONFIG') as cfg:
+            cfg.exists.return_value = True
+            cfg.read_text.return_value = '{"provider":"duckduckgo"}'
             with self.assertRaisesRegex(RouterError, 'no usable results'):
                 ws.search('Mars')
         self.assertEqual(opener.open.call_count, 2)
@@ -109,6 +113,39 @@ class SearchTests(unittest.TestCase):
             req = opener.open.call_args.args[0]
             self.assertEqual(req.get_header('X-subscription-token'), 'test-search-secret')
             self.assertEqual(ws.urlsplit(req.full_url).hostname, 'api.search.brave.com')
+
+    def test_keyless_default_dispatches_to_mwmbl(self):
+        with patch.object(ws, 'SEARCH_CONFIG') as cfg, patch.object(ws, 'mwmbl_search', return_value=ROWS) as provider:
+            cfg.exists.return_value = False
+            self.assertEqual(ws.search('Mars', ['nasa.gov'], 3), ROWS)
+        provider.assert_called_once_with('Mars', ['nasa.gov'], 3)
+
+    def test_mwmbl_anonymous_headers_filtering_and_rate_limit(self):
+        from io import BytesIO
+        class Response(BytesIO):
+            status = 200
+        raw = {'results': [{'url': ROWS[0]['url'], 'title': 'Mars', 'content': 'Iron\noxide'},
+                           {'url': 'https://evilnasa.gov/', 'title': 'Excluded'},
+                           {'url': ROWS[0]['url'], 'title': 'Duplicate'}]}
+        opener = SimpleNamespace(open=unittest.mock.Mock(return_value=Response(json.dumps(raw).encode())))
+        with patch.object(ws.urllib.request, 'build_opener', return_value=opener), \
+             patch.object(ws, '_mwmbl_last_request', 100), patch.object(ws.time, 'monotonic', return_value=100.2), \
+             patch.object(ws.time, 'sleep') as sleep:
+            result = ws.mwmbl_search('Mars', ['nasa.gov'], 5)
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]['snippet'], 'Iron oxide')
+        self.assertAlmostEqual(sleep.call_args.args[0], .85)
+        req = opener.open.call_args.args[0]
+        self.assertEqual(set(req.headers), {'User-agent', 'Accept'})
+        self.assertEqual(ws.urlsplit(req.full_url).hostname, 'api.mwmbl.org')
+        self.assertEqual(ws.parse_qs(ws.urlsplit(req.full_url).query), {'q': ['Mars']})
+
+    def test_mwmbl_quota_error_is_explicit_without_retries(self):
+        opener = SimpleNamespace(open=unittest.mock.Mock(side_effect=OSError('quota reached')))
+        with patch.object(ws.urllib.request, 'build_opener', return_value=opener), patch.object(ws, '_mwmbl_last_request', 0):
+            with self.assertRaisesRegex(RouterError, 'anonymous quota'):
+                ws.mwmbl_search('Mars', [], 5)
+        self.assertEqual(opener.open.call_count, 1)
 
     def test_brave_parses_filters_and_deduplicates(self):
         from io import BytesIO

@@ -10,6 +10,7 @@ import json
 import os
 from pathlib import Path
 import re
+import threading
 import time
 from urllib.parse import parse_qs, urlencode, urlsplit
 import urllib.request
@@ -22,6 +23,8 @@ SEARCH_TYPES = ('web_search', 'web_search_preview', 'web_search_2025_08_26',
                 'web_search_preview_2025_03_11')
 MAX_SEARCH_BYTES = 512 * 1024
 SEARCH_CONFIG = ROOT / 'data/router/web-search.json'
+_mwmbl_lock = threading.Lock()
+_mwmbl_last_request = 0.0
 
 
 def invalid(message):
@@ -132,14 +135,56 @@ def brave_search(query, domains, limit, cfg):
                           'Check the local provider configuration and quota.', 'web_search_unavailable', 503)
 
 
+def mwmbl_search(query, domains, limit):
+    """Official anonymous API; respect its 1 request/second free allowance."""
+    global _mwmbl_last_request
+    with _mwmbl_lock:
+        delay = 1.05 - (time.monotonic() - _mwmbl_last_request)
+        if delay > 0:
+            time.sleep(delay)
+        _mwmbl_last_request = time.monotonic()
+    # Domain filtering is enforced locally; Mwmbl does not implement site:.
+    request = urllib.request.Request('https://api.mwmbl.org/api/v2/search/?' + urlencode({'q': query}),
+                                     headers={'User-Agent': 'LocalResponsesSearch/1.0', 'Accept': 'application/json'})
+    try:
+        with urllib.request.build_opener(NoRedirect()).open(request, timeout=15) as response:
+            payload = response.read(MAX_SEARCH_BYTES + 1)
+            if response.status != 200 or len(payload) > MAX_SEARCH_BYTES:
+                raise ValueError('Invalid provider response')
+        data = json.loads(payload)
+        rows, seen = [], set()
+        for row in data.get('results', []):
+            if not isinstance(row, dict) or not isinstance(row.get('url'), str) or not public_url(row['url']):
+                continue
+            host = urlsplit(row['url']).hostname.lower()
+            if domains and not any(host == d or host.endswith('.' + d) for d in domains):
+                continue
+            if row['url'] in seen:
+                continue
+            seen.add(row['url'])
+            rows.append({'url': row['url'][:4096], 'title': str(row.get('title', ''))[:300],
+                         'snippet': ' '.join(str(row.get('content', '')).split())[:1000]})
+            if len(rows) == limit:
+                break
+        if not rows:
+            raise ValueError('No matching results')
+        return rows
+    except (OSError, ValueError, AttributeError, TypeError):
+        raise RouterError('Free keyless web search is unavailable or returned no matching results. '
+                          'The provider may have reached its anonymous quota; retry later or refine the query.',
+                          'web_search_unavailable', 503)
+
+
 def search(query, domains=(), limit=5):
     try:
-        cfg = json.loads(SEARCH_CONFIG.read_text()) if SEARCH_CONFIG.exists() else {'provider': 'duckduckgo'}
+        cfg = json.loads(SEARCH_CONFIG.read_text()) if SEARCH_CONFIG.exists() else {'provider': 'mwmbl'}
         provider = cfg.get('provider')
     except (OSError, ValueError, AttributeError):
         raise RouterError('Invalid local web-search configuration.', 'web_search_not_configured', 503)
     if provider == 'brave':
         return brave_search(query, domains, limit, cfg)
+    if provider == 'mwmbl':
+        return mwmbl_search(query, domains, limit)
     if provider != 'duckduckgo':
         raise RouterError('Unknown local web-search provider.', 'web_search_not_configured', 503)
     terms = query

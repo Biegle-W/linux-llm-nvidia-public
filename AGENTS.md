@@ -1,8 +1,8 @@
 # Agent entry point
 
-## Latest: Responses web-search adapter, provider availability pending — October 30
+## Latest: free keyless Responses web search live-verified — October 30
 
-The router now executes `web_search`/`web_search_preview` for local Responses, with bounded provider calls, typed streaming search events, grounded snippets and URL citation annotations. All 247 CPU tests pass; one real nonstreaming HyperQwen request passed with NASA sources, a clickable citation and the expected answer. Subsequent streaming tests hit DuckDuckGo bot challenges and correctly returned explicit errors. Live streaming/Tailscale search and iPhone confirmation remain pending an available provider. Optional Brave Search support is implemented and CPU-tested; no credential is configured or paid request made. Model settings and resource guards are unchanged. See [implementation and limits](docs/RESPONSES-WEB-SEARCH-20261030.md) and [verification](docs/validation-results/20261030-responses-web-search.json).
+The router uses Mwmbl's free anonymous API for `web_search`/`web_search_preview`, with typed streaming search events, untrusted snippets, clickable source links and URL citation annotations. All 250 CPU tests pass. Real nonstreaming, streaming and Tailscale streaming Responses passed in 1.981/1.506/2.176 seconds, including source-domain filtering and stable event ordering. No search key, signup or paid request was used. The documented anonymous allowance is 1,000 requests/month per IP at one request/second; unavailable/quota-limited searches return explicit errors. Model settings, guards and worker/DSH service invocations are preserved. Direct iPhone UI confirmation remains pending. See [implementation and limits](docs/RESPONSES-WEB-SEARCH-20261030.md) and [verification](docs/validation-results/20261030-responses-web-search.json).
 
 ## Latest: OpenCat Responses API exposed — October 30
 
