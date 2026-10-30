@@ -1,5 +1,10 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: forum-backed hardware tuning candidates — October 29
+
+Research supports testing Qwen resident experts on both GPUs, GLM native calibration, and DeepSeek/Maya automatic CPU-lane selection on the restored 64GB system. These are unvalidated candidates; no runtime, model, guard or selected setting changed and no GPU test was started. The installed Qwen setup has a quant-specific budget restriction requiring a native launcher compatibility check. DeepSeek source warns against assuming partial RAM copies improve speed. See [research](docs/HARDWARE-TUNING-RESEARCH-20261029.md) and [candidate evidence](docs/validation-results/20261029-hardware-tuning-research.json).
+
+
 ## Latest: completed terminals close automatically — October 29
 
 Harness and selector windows now close when the command finishes, including failures. Private transcripts and atomic exit-code receipts retain the results. Service viewers close after their own service stops; active work, router/DSH service processes, unknown state and unrelated terminals are preserved. Minimized/no-focus startup remains. All 207 CPU regressions and real PTY success/failure/service-stop checks passed; final project terminal inventory was zero. No model or guard setting changed and no GPU benchmark was repeated. See [terminal lifetime](docs/TERMINAL-LIFETIME-20261029.md) and [verification](docs/validation-results/20261029-terminal-lifetime.json).

@@ -1,0 +1,61 @@
+{
+  "schema": 1,
+  "date": "2026-10-29",
+  "status": "research_only_unvalidated",
+  "runtime_changes": false,
+  "gpu_tests_started": false,
+  "hardware": {
+    "cpu": "i5-13600KF",
+    "ram_installed_gb": 64,
+    "ram_usable_gib": 61.3013,
+    "ram_mt_s": 4200,
+    "gpus": [
+      "RTX 3080 Ti 12GB",
+      "RTX 3080 10GB"
+    ],
+    "qwen_measured_pcie_gb_s": {
+      "helper_10gb": 6.4,
+      "main_12gb": 19.5
+    }
+  },
+  "candidates": [
+    {
+      "profile": "flash-next-strata",
+      "priority": 1,
+      "change": "resident non-GPU experts when total footprint fits; otherwise native bounded tier after launcher compatibility check",
+      "initial_budget_gib": 32,
+      "conditional_upper_starting_budget_gib": 36,
+      "validated": false
+    },
+    {
+      "profile": "glm-maya",
+      "priority": 2,
+      "change": "family-specific CPU/PCIe/thread/read-chunk calibration",
+      "validated": false
+    },
+    {
+      "profile": "deepseek-maya",
+      "priority": 3,
+      "change": "omit fixed cpu-threads and forced lane to enable native measurement; keep mmap",
+      "validated": false
+    }
+  ],
+  "excluded_recommendations": [
+    "copy forum 42.85GiB without footprint qualification",
+    "assume nine workers is a bug",
+    "force DeepSeek partial RAM copy as a speed fix",
+    "relax guards for throughput",
+    "treat community rates as local predictions"
+  ],
+  "report": "HARDWARE-TUNING-RESEARCH-20261029.md",
+  "sources": [
+    "https://github.com/Niko1221/Strata/issues/2367",
+    "https://github.com/Niko1221/Strata/blob/main/docs/DETAILS.md",
+    "https://github.com/Niko1221/Strata/blob/main/docs/MULTI_GPU.md",
+    "https://github.com/Niko1221/Strata/issues/1578",
+    "https://github.com/Niko1221/Strata/issues/642",
+    "https://github.com/mw00/project-maya/blob/main/docs/SETTINGS.md",
+    "https://github.com/mw00/project-maya/blob/8b4b39f84e35393833b31b80e82bee92e69bb646/src/ds4/ds4_model.cu",
+    "https://github.com/mw00/project-maya/issues/43"
+  ]
+}
