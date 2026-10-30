@@ -1,5 +1,7 @@
 # Hardware tuning research — October 29, 2026
 
+Follow-up: [October30 qualification and selected result](HARDWARE-TUNING-QUALIFICATION-20261030.md). The research-only status below describes the earlier investigation.
+
 Status: recommendations for qualification; no settings applied, runtime updated or GPU tests started by this research.
 
 The 64GB RAM / RTX 3080 Ti 12GB / RTX 3080 10GB system has credible upstream support for Qwen Flash-Next. Its current mapped-expert configuration is one memory mode, not proof that the hardware cannot run a faster resident configuration. No exact forum-tested winner for this CPU and GPU pair was found.

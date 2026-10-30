@@ -1,0 +1,532 @@
+{
+  "schema": 1,
+  "started_local_date": "2026-10-29",
+  "completed_local_date": "2026-10-30",
+  "status": "qwen_resident_selected_after_qualification",
+  "hardware": {
+    "cpu": "i5-13600KF",
+    "ram_installed_gb": 64,
+    "ram_usable_gib": 61.30133056640625,
+    "ram_mt_s": 4200,
+    "gpus": [
+      "RTX 3080 Ti 12GB",
+      "RTX 3080 10GB"
+    ]
+  },
+  "review": {
+    "passed": true,
+    "sole_runtime_setting_delta": "plain mapped experts to resident cache complement",
+    "model_context_gpu_guard_policy_unchanged": true,
+    "matched_fixture_hardware_and_token_counts": true,
+    "interleaved_confirmation": {
+      "mapped_tps": 66.46090944966896,
+      "resident_tps": 90.86418728105632,
+      "gain_pct": 36.71824239761274
+    },
+    "full_screen": {
+      "mapped": {
+        "decode_tps": 78.73736098347126,
+        "prefill_tps": 435.1,
+        "ttft_s": 4.9935452440004156,
+        "retrieval_input_tokens": 29435,
+        "sustained_generation_s": 120.28165499700117
+      },
+      "resident": {
+        "decode_tps": 88.11848245738248,
+        "prefill_tps": 628.8,
+        "ttft_s": 3.462467130000732,
+        "retrieval_input_tokens": 29435,
+        "sustained_generation_s": 122.9080954029996
+      }
+    },
+    "quality_resources_reload_passed": true,
+    "baseline_completed_checks_retained": true
+  },
+  "full_qualification": {
+    "mapped": {
+      "profile": "flash-next-strata",
+      "context": 32768,
+      "repetitions": 3,
+      "prompt_tokens": [
+        2166,
+        2166,
+        2178
+      ],
+      "output_tokens": [
+        128,
+        128,
+        128
+      ],
+      "prefill_tps": 435.1,
+      "decode_tps": 78.73736098347126,
+      "ttft_s": 4.9935452440004156,
+      "vision": true,
+      "tools": false,
+      "checks": {
+        "json": true,
+        "arithmetic": true,
+        "image": true,
+        "retrieval": true,
+        "sustained": true,
+        "reload": true
+      },
+      "retrieval_input_tokens": 29435,
+      "sustained_generation_s": 120.28165499700117,
+      "resources_passed": true,
+      "telemetry_samples": 143
+    },
+    "resident": {
+      "profile": "flash-next-strata",
+      "context": 32768,
+      "repetitions": 3,
+      "prompt_tokens": [
+        2166,
+        2166,
+        2178
+      ],
+      "output_tokens": [
+        128,
+        128,
+        128
+      ],
+      "prefill_tps": 628.8,
+      "decode_tps": 88.11848245738248,
+      "ttft_s": 3.462467130000732,
+      "vision": true,
+      "tools": false,
+      "checks": {
+        "json": true,
+        "arithmetic": true,
+        "image": true,
+        "retrieval": true,
+        "sustained": true,
+        "reload": true
+      },
+      "retrieval_input_tokens": 29435,
+      "sustained_generation_s": 122.9080954029996,
+      "resources_passed": true,
+      "telemetry_samples": 120
+    }
+  },
+  "normal_loads": [
+    {
+      "cycle": 1,
+      "json_passed": true,
+      "resident_gib": 36.65,
+      "pinned_gib": 36.65
+    },
+    {
+      "cycle": 2,
+      "json_passed": true,
+      "resident_gib": 36.65,
+      "pinned_gib": 36.65
+    }
+  ],
+  "resources": {
+    "mapped": {
+      "samples": 51,
+      "peak_cgroup_gib": 43.999996185302734,
+      "peak_worker_swap_mib": 0.0,
+      "min_host_available_gib": 49.978885650634766,
+      "max_cgroup_hard_limit_events": 0,
+      "max_cgroup_oom_events": 0,
+      "max_cgroup_oom_kills": 0,
+      "max_temperature_c": 59.0
+    },
+    "mapped_remaining": {
+      "samples": 92,
+      "peak_cgroup_gib": 28.69908905029297,
+      "peak_worker_swap_mib": 0.0,
+      "min_host_available_gib": 49.91584777832031,
+      "max_cgroup_hard_limit_events": 0,
+      "max_cgroup_oom_events": 0,
+      "max_cgroup_oom_kills": 0,
+      "max_temperature_c": 67.0,
+      "eligible_inference_window_peak_rates": {
+        "read_mib_s": 0.0,
+        "write_mib_s": 0.0,
+        "combined_mib_s": 0.0
+      }
+    },
+    "resident": {
+      "samples": 120,
+      "peak_cgroup_gib": 44.001033782958984,
+      "peak_worker_swap_mib": 2416.76171875,
+      "min_host_available_gib": 14.125175476074219,
+      "max_cgroup_hard_limit_events": 0,
+      "max_cgroup_oom_events": 0,
+      "max_cgroup_oom_kills": 0,
+      "max_temperature_c": 70.0,
+      "eligible_inference_window_peak_rates": {
+        "read_mib_s": 33.74782644919198,
+        "write_mib_s": 0.0,
+        "combined_mib_s": 33.74782644919198
+      }
+    },
+    "normal_selection": {
+      "samples": 114,
+      "peak_cgroup_gib": 44.000579833984375,
+      "peak_worker_swap_mib": 2273.17578125,
+      "min_host_available_gib": 13.318405151367188,
+      "max_cgroup_hard_limit_events": 0,
+      "max_cgroup_oom_events": 0,
+      "max_cgroup_oom_kills": 0,
+      "max_temperature_c": 53.0
+    }
+  },
+  "short_trials": [
+    {
+      "profile": "flash-next-strata",
+      "name": "qwen-baseline",
+      "passed": true,
+      "decode_tps": 46.7212464021746,
+      "prefill_tps": 86.2,
+      "ttft_s": 25.51513149799939,
+      "decode_range": [
+        24.823783728948804,
+        56.39290213397537
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "flash-next-strata",
+      "name": "qwen-budget32",
+      "passed": true,
+      "decode_tps": 77.391357212955,
+      "prefill_tps": 592.1,
+      "ttft_s": 3.7285894300002838,
+      "decode_range": [
+        71.26692505579115,
+        84.53938405747421
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "flash-next-strata",
+      "name": "qwen-resident",
+      "passed": true,
+      "decode_tps": 88.1513745399491,
+      "prefill_tps": 635.3,
+      "ttft_s": 3.48760085899994,
+      "decode_range": [
+        73.32322356577323,
+        91.68932075754041
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "deepseek-maya",
+      "name": "ds-baseline",
+      "passed": false,
+      "decode_tps": 3.3184328450295952,
+      "prefill_tps": 47.5,
+      "ttft_s": 45.934070639999845,
+      "decode_range": [
+        1.7368159071931264,
+        3.3454915014251694
+      ],
+      "settings_restored_after_trial": true,
+      "reason": "JSON arithmetic check returned expression text instead of the numeric result"
+    },
+    {
+      "profile": "deepseek-maya",
+      "name": "ds-auto",
+      "passed": false,
+      "decode_tps": 3.4354471385026737,
+      "prefill_tps": 48.7,
+      "ttft_s": 44.806212282997876,
+      "decode_range": [
+        1.6832903306227875,
+        4.201062616956635
+      ],
+      "settings_restored_after_trial": true,
+      "reason": "JSON arithmetic check returned expression text instead of the numeric result"
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-baseline",
+      "passed": true,
+      "decode_tps": 5.687914367666199,
+      "prefill_tps": 73.3,
+      "ttft_s": 30.025811341998633,
+      "decode_range": [
+        5.058103652997144,
+        5.721512798963022
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-pcie-0.0",
+      "passed": true,
+      "decode_tps": 5.468132804254605,
+      "prefill_tps": 71.8,
+      "ttft_s": 30.644942176997574,
+      "decode_range": [
+        5.041960227608236,
+        5.767122262436355
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-pcie-0.1",
+      "passed": true,
+      "decode_tps": 5.581091727963287,
+      "prefill_tps": 72.8,
+      "ttft_s": 30.156667758998083,
+      "decode_range": [
+        5.556303824886733,
+        6.079051167264599
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-pcie-0.25",
+      "passed": true,
+      "decode_tps": 5.928298546838494,
+      "prefill_tps": 73.5,
+      "ttft_s": 29.93271039299725,
+      "decode_range": [
+        5.23590536598679,
+        6.440361997162393
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-pcie-0.5",
+      "passed": true,
+      "decode_tps": 5.00580346583211,
+      "prefill_tps": 73.2,
+      "ttft_s": 30.05615838900121,
+      "decode_range": [
+        2.6566947521759046,
+        6.174373409413382
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-pcie-0.75",
+      "passed": true,
+      "decode_tps": 5.554847566419696,
+      "prefill_tps": 73.4,
+      "ttft_s": 29.94426172800013,
+      "decode_range": [
+        4.8065888445561376,
+        5.561772877766608
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-threads-5",
+      "passed": true,
+      "decode_tps": 6.040894961381625,
+      "prefill_tps": 73.4,
+      "ttft_s": 29.99568452299718,
+      "decode_range": [
+        5.202497089571247,
+        7.068799453609772
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-threads-9",
+      "passed": true,
+      "decode_tps": 5.521343006721589,
+      "prefill_tps": 73.3,
+      "ttft_s": 29.97898708900175,
+      "decode_range": [
+        5.2374194770718665,
+        6.095902946494855
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-threads-13",
+      "passed": true,
+      "decode_tps": 5.246728899724712,
+      "prefill_tps": 73.6,
+      "ttft_s": 29.894551579000108,
+      "decode_range": [
+        4.599050204318358,
+        5.30169608307686
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-readchunks-4",
+      "passed": true,
+      "decode_tps": 6.040833408791857,
+      "prefill_tps": 77.9,
+      "ttft_s": 28.220974875999673,
+      "decode_range": [
+        4.975511244330225,
+        6.198576271429078
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-readchunks-2",
+      "passed": true,
+      "decode_tps": 5.777765370676623,
+      "prefill_tps": 71.5,
+      "ttft_s": 30.79024303100232,
+      "decode_range": [
+        2.037177887278519,
+        5.7977581924356
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "flash-next-strata",
+      "name": "qwen-resident-confirm1",
+      "passed": true,
+      "decode_tps": 94.22144779468562,
+      "prefill_tps": 656.2,
+      "ttft_s": 3.366888396001741,
+      "decode_range": [
+        87.76033362724871,
+        96.46451601426915
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "flash-next-strata",
+      "name": "qwen-baseline-confirm1",
+      "passed": true,
+      "decode_tps": 57.05151436976825,
+      "prefill_tps": 356.4,
+      "ttft_s": 6.187967778998427,
+      "decode_range": [
+        47.96422950728438,
+        60.27783729691551
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "flash-next-strata",
+      "name": "qwen-baseline-confirm2",
+      "passed": true,
+      "decode_tps": 75.87030452956967,
+      "prefill_tps": 458.4,
+      "ttft_s": 4.8109796669996285,
+      "decode_range": [
+        68.87796950836008,
+        80.96325996476592
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "flash-next-strata",
+      "name": "qwen-resident-confirm2",
+      "passed": true,
+      "decode_tps": 87.50692676742702,
+      "prefill_tps": 659.0,
+      "ttft_s": 3.3516812150010082,
+      "decode_range": [
+        86.15529378824996,
+        89.55004683455789
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-threads-5-confirm1",
+      "passed": true,
+      "decode_tps": 6.066540413839898,
+      "prefill_tps": 73.3,
+      "ttft_s": 29.975523468001484,
+      "decode_range": [
+        4.947465980140189,
+        6.164498594405785
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-baseline-confirm1",
+      "passed": true,
+      "decode_tps": 5.9113929580758295,
+      "prefill_tps": 73.3,
+      "ttft_s": 30.023311368000577,
+      "decode_range": [
+        5.1238779699141555,
+        6.231559434081238
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-baseline-confirm2",
+      "passed": true,
+      "decode_tps": 6.092388091750588,
+      "prefill_tps": 73.5,
+      "ttft_s": 30.055043809999916,
+      "decode_range": [
+        4.953886016152293,
+        6.11984009392332
+      ],
+      "settings_restored_after_trial": true
+    },
+    {
+      "profile": "glm-maya",
+      "name": "glm-threads-5-confirm2",
+      "passed": true,
+      "decode_tps": 5.62639442449548,
+      "prefill_tps": 73.2,
+      "ttft_s": 30.908616341002926,
+      "decode_range": [
+        4.6922749206721726,
+        5.678558594170667
+      ],
+      "settings_restored_after_trial": true
+    }
+  ],
+  "glm_confirmation": {
+    "default_tps": 6.001890524913209,
+    "five_threads_tps": 5.8464674191676895,
+    "gain_pct": -2.58956915492502,
+    "selected": false,
+    "reason": "No reproducible gain above 3% confirmation threshold"
+  },
+  "deepseek_maya": {
+    "selected_change": false,
+    "auto_measured_threads": 14,
+    "fixed_threads": 14,
+    "json_check_passed": false,
+    "reason": "Both settings returned sum as expression text rather than the expected number"
+  },
+  "unchanged": [
+    "model weights and quantization",
+    "contexts",
+    "runtime versions",
+    "GPU selection",
+    "RAM and VRAM budgets/reserves",
+    "host floor",
+    "swap and pressure guards",
+    "thermal and telemetry guards",
+    "swappiness60",
+    "idle600",
+    "concurrency1"
+  ],
+  "harness_fix": {
+    "targeted_cpu_tests_passed": 27,
+    "native_checkpoint_cpu_reference_tokens": 29498,
+    "actual_retrieval_usage_still_required": true,
+    "completed_baseline_checks_reused": true
+  },
+  "limitations": [
+    "OS page cache was not flushed; short-screen throughput varies substantially with cache state.",
+    "Performance screens exclude model loading. Resident mode copies and pins approximately36.7GiB at startup.",
+    "No exhaustive flag-combination or multi-hour reliability claim.",
+    "GLM and DeepSeek changes were not selected; only Qwen residency completed full new qualification."
+  ]
+}

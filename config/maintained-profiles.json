@@ -603,7 +603,7 @@
         "qwen"
       ],
       "allocated_context": 32768,
-      "context_validation": "Reduced-RAM mapped-expert profile passed uncached three-marker retrieval at 29450 input tokens under Qwen-specific relaxed swap limits; separate 8192-output continuous generation and fresh-process reload passed.",
+      "context_validation": "Resident experts across both GPUs at32768 passed JSON/arithmetic/image,29435-input uncached retrieval,sustained generation and fresh reload with unchanged resource guards.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 98.8,
@@ -617,9 +617,9 @@
       },
       "evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "latest_benchmark": {
-        "run": "20261029-pressure-guard",
-        "variant": "flash-next-strata-64gb-pressure15",
-        "date": "2026-10-29",
+        "run": "20261030-hardware-tuning",
+        "variant": "qwen-resident-both-gpus-32k",
+        "date": "2026-10-30",
         "context": 32768,
         "physical_ram_gb": 64,
         "physical_ram_usable_gib": 61.30133056640625,
@@ -627,20 +627,19 @@
         "repetitions": 3,
         "output_tokens": 128,
         "host_vm_swappiness": 60,
-        "swap_policy": "128 MiB/s writes /160 MiB/s combined over30seconds",
-        "pressure_policy": "15% full-memory pressure for3 samples after30s active window",
-        "prefill_tps": 67.1,
-        "ttft_s": 32.84203533899927,
-        "decode_tps": 16.868914468958327,
+        "prefill_tps": 628.8,
+        "decode_tps": 88.11848245738248,
+        "ttft_s": 3.462467130000732,
         "input_tokens_range": [
-          2197,
-          2207
+          2166,
+          2178
         ],
-        "prefill_method": "native prompt_n / native prompt time",
+        "evidence": "docs/HARDWARE-TUNING-QUALIFICATION-20261030.md",
+        "numeric_results": "docs/validation-results/20261030-hardware-tuning.json",
+        "fixture_sha256": "2d2f29f93acf7cd7e58d484df976e7983b661938a8341428a00eaf3ca726c080",
+        "prefill_method": "native prompt timing",
         "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json",
-        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        "scope": "matched full-qualification speed screen; cache state remains variable"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -661,23 +660,26 @@
       },
       "host_ram_reserve_gib": 2,
       "current_guard_validation": {
-        "date": "2026-10-29",
-        "physical_ram_usable_gib": 61.30133056640625,
-        "normal_router_profile": true,
+        "date": "2026-10-30",
         "passed": true,
-        "stage": "fixed-fixture speed/resource screen",
-        "pressure_pct": 15,
-        "active_window_s": 30,
-        "bad_samples": 3,
-        "scope": "Only Qwen/Strata and DeepSeek/Maya repeated. One 64-output warmup and three target 128-output measured requests with exact saved approximately 2.2K-input fixtures. Loading excluded, OS page cache not flushed. No new near-window, tool/image, fresh-reload or multi-hour qualification.",
-        "host_floor_gib": 2,
-        "only_changed_guard": "pressure threshold10 to15 for these two profiles",
-        "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json",
-        "observed_peak_inference_pressure_pct": 0.0,
-        "additional_allowance_exercised": false
+        "context": 32768,
+        "mode": "resident_non_gpu_cache_complement",
+        "checks": {
+          "json": true,
+          "arithmetic": true,
+          "image": true,
+          "retrieval": true,
+          "sustained": true,
+          "reload": true
+        },
+        "actual_retrieval_input_tokens": 29435,
+        "sustained_generation_s": 122.9080954029996,
+        "fresh_reload": true,
+        "guards_unchanged": true,
+        "evidence": "docs/HARDWARE-TUNING-QUALIFICATION-20261030.md",
+        "numeric_results": "docs/validation-results/20261030-hardware-tuning.json"
       },
-      "tested_retrieval_input": 29450,
+      "tested_retrieval_input": 29435,
       "selected_settings": {
         "mmap_experts": true,
         "gpu": [
@@ -691,7 +693,12 @@
           "combined_mib_s": 160,
           "pressure_pct": 15
         },
-        "temporary_reduced_ram": false
+        "temporary_reduced_ram": false,
+        "resident_experts": true,
+        "plain_mmap_experts": false,
+        "expert_memory_mode": "resident_non_gpu_cache_complement",
+        "observed_native_reserve_mib": 700,
+        "reason": "Resident expert mode passed matched performance, JSON/arithmetic/image, near-window retrieval, sustained generation and fresh reload under unchanged guards."
       },
       "guard_validation_history": [
         {
@@ -731,6 +738,23 @@
           "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
           "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
           "stop_cause": "Sustained full-memory pressure during inference"
+        },
+        {
+          "date": "2026-10-29",
+          "physical_ram_usable_gib": 61.30133056640625,
+          "normal_router_profile": true,
+          "passed": true,
+          "stage": "fixed-fixture speed/resource screen",
+          "pressure_pct": 15,
+          "active_window_s": 30,
+          "bad_samples": 3,
+          "scope": "Only Qwen/Strata and DeepSeek/Maya repeated. One 64-output warmup and three target 128-output measured requests with exact saved approximately 2.2K-input fixtures. Loading excluded, OS page cache not flushed. No new near-window, tool/image, fresh-reload or multi-hour qualification.",
+          "host_floor_gib": 2,
+          "only_changed_guard": "pressure threshold10 to15 for these two profiles",
+          "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json",
+          "observed_peak_inference_pressure_pct": 0.0,
+          "additional_allowance_exercised": false
         }
       ],
       "full_ram_restoration": {
@@ -786,12 +810,38 @@
           "evidence": "docs/BENCHMARK-64GB-20261029.md",
           "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
           "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        },
+        {
+          "run": "20261029-pressure-guard",
+          "variant": "flash-next-strata-64gb-pressure15",
+          "date": "2026-10-29",
+          "context": 32768,
+          "physical_ram_gb": 64,
+          "physical_ram_usable_gib": 61.30133056640625,
+          "configured_ram_speed_mt_s": 4200,
+          "repetitions": 3,
+          "output_tokens": 128,
+          "host_vm_swappiness": 60,
+          "swap_policy": "128 MiB/s writes /160 MiB/s combined over30seconds",
+          "pressure_policy": "15% full-memory pressure for3 samples after30s active window",
+          "prefill_tps": 67.1,
+          "ttft_s": 32.84203533899927,
+          "decode_tps": 16.868914468958327,
+          "input_tokens_range": [
+            2197,
+            2207
+          ],
+          "prefill_method": "native prompt_n / native prompt time",
+          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json",
+          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
         }
       ],
       "current_configuration_benchmark": {
-        "status": "measured on64GB with targeted pressure15 policy",
-        "date": "2026-10-29",
-        "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
+        "status": "resident mode qualified on restored64GB under unchanged guards",
+        "date": "2026-10-30",
+        "evidence": "docs/HARDWARE-TUNING-QUALIFICATION-20261030.md",
         "historical_benchmark_is_not_current_configuration": false
       },
       "swap_policy_selection": {
@@ -804,13 +854,12 @@
         "pressure_pct": 15
       },
       "latest_benchmark_attempt": {
-        "date": "2026-10-29",
+        "date": "2026-10-30",
         "passed": true,
         "physical_ram_gb": 64,
-        "pressure_pct": 15,
         "repetitions": 3,
-        "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json"
+        "evidence": "docs/HARDWARE-TUNING-QUALIFICATION-20261030.md",
+        "numeric_results": "docs/validation-results/20261030-hardware-tuning.json"
       },
       "pressure_policy_selection": {
         "date": "2026-10-29",
@@ -835,6 +884,15 @@
           "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
           "scope": "three fixed requests with SSD swap128/160 policy",
           "reason": "Sustained full-memory pressure during inference"
+        },
+        {
+          "date": "2026-10-29",
+          "passed": true,
+          "physical_ram_gb": 64,
+          "pressure_pct": 15,
+          "repetitions": 3,
+          "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json"
         }
       ],
       "swap_policy_validation_history": [

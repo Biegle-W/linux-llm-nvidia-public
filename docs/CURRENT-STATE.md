@@ -1,5 +1,10 @@
 # Current takeover state
 
+## Latest: Qwen resident mode qualified and selected — October 30
+
+Qwen now keeps the non-GPU expert cache complement resident across both GPUs at 32K. The matched full-qualification screen measured 88.12 versus 78.74 decode tok/s, 628.8 versus 435.1 prefill tok/s, and 3.46 versus 4.99 seconds TTFT. Both arms passed JSON/arithmetic/image, 29,435-input uncached retrieval, over 120 seconds sustained generation and fresh reload. Two selected normal guarded loads passed. Guards, runtime pins, quantization, context and GPU selection remain unchanged. GLM's exploratory gain did not survive confirmation; DeepSeek fixed/auto both failed the specific JSON fixture, so neither profile changed. The Strata native tokenizer counter was repaired;27 targeted CPU regressions and the real saved-reference counter check passed. See [qualification](HARDWARE-TUNING-QUALIFICATION-20261030.md) and [numeric evidence](validation-results/20261030-hardware-tuning.json).
+
+
 ## Latest: forum-backed hardware tuning candidates — October 29
 
 Research supports testing Qwen resident experts on both GPUs, GLM native calibration, and DeepSeek/Maya automatic CPU-lane selection on the restored 64GB system. These are unvalidated candidates; no runtime, model, guard or selected setting changed and no GPU test was started. The installed Qwen setup has a quant-specific budget restriction requiring a native launcher compatibility check. DeepSeek source warns against assuming partial RAM copies improve speed. See [research](HARDWARE-TUNING-RESEARCH-20261029.md) and [candidate evidence](validation-results/20261029-hardware-tuning-research.json).

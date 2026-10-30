@@ -250,3 +250,80 @@ class MemoryEventTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+
+class RetrievalCountingTests(unittest.TestCase):
+    def qualification(self, root, engine, actual=29450):
+        from update_qualification import Qualification
+        from unittest.mock import Mock
+        profile = 'flash-next-strata' if engine == 'Strata' else 'glm-maya'
+        cfg = root / 'data/router' / (profile + '-runtime.json')
+        cfg.parent.mkdir(parents=True, exist_ok=True)
+        cfg.write_text(json.dumps({'tokenizer': str(root / 'pinned-tokenizer')}))
+        (root / 'pinned-tokenizer').mkdir(exist_ok=True)
+        (root / 'pinned-tokenizer/tokenizer.json').write_text(json.dumps({'model': {'type':'BPE'}}))
+        q = object.__new__(Qualification)
+        q.root, q.p = root, {'id': profile, 'engine': engine, 'allocated_context': 32768}
+        q.request = Mock(return_value={'answer': json.dumps({'start':'COPPER-8271-ORBIT',
+            'middle':'VELVET-4936-HARBOR','end':'QUARTZ-6182-RIVER'}),
+            'usage': {'prompt_tokens': actual, 'prompt_tokens_details': {'cached_tokens':0}}})
+        return q
+
+    def test_strata_uses_pinned_tokenizer_without_unsupported_endpoint(self):
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); q=self.qualification(root, 'Strata')
+            q.http=Mock(side_effect=AssertionError('Strata has no token-count endpoint'))
+            with patch('update_qualification.subprocess.check_output', return_value='29491') as count:
+                self.assertEqual(q.retrieval(),29450)
+            q.http.assert_not_called()
+            payload=json.loads(count.call_args.kwargs['input'])
+            self.assertEqual(payload['path'],str(root/'pinned-tokenizer/tokenizer.json'))
+            q.request.assert_called_once()
+
+    def test_maya_keeps_native_token_counter(self):
+        import io
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as temp:
+            q=self.qualification(Path(temp), 'Maya')
+            q.http=Mock(return_value=io.BytesIO(b'{"tokens":29491}'))
+            with patch('update_qualification.subprocess.check_output') as count:
+                self.assertEqual(q.retrieval(),29450)
+            count.assert_not_called();self.assertEqual(q.http.call_args.args[0],'/api/tokens')
+
+    def test_estimate_does_not_replace_actual_usage_coverage_gate(self):
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory() as temp:
+            q=self.qualification(Path(temp), 'Strata',actual=10000);q.http=Mock()
+            with patch('update_qualification.subprocess.check_output', return_value='29491'):
+                with self.assertRaisesRegex(RuntimeError,'Retrieval below allocated context'):
+                    q.retrieval()
+
+
+class NativeCheckpointCountingTests(unittest.TestCase):
+    def test_native_format_uses_resolved_terminal_bundle(self):
+        from update_qualification import checkpoint_token_count
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp); directory=root/'pack-tokenizer';directory.mkdir()
+            (directory/'tokenizer.json').write_text('{"model":"gpt2","pre":"qwen35"}')
+            bundle=root/'pinned-terminal';(bundle/'bin').mkdir(parents=True)
+            (bundle/'bin/strata').touch();(root/'runtimes/bin').mkdir(parents=True)
+            (root/'runtimes/bin/strata').symlink_to(bundle/'bin/strata')
+            with patch('update_qualification.subprocess.check_output',return_value='29498') as count:
+                self.assertEqual(checkpoint_token_count(root,directory,'archive'),29498)
+            args=count.call_args.args[0];payload=json.loads(count.call_args.kwargs['input'])
+            self.assertEqual(args[0],str(bundle/'python/bin/python3'))
+            self.assertEqual(payload['tools'],str(bundle/'tools'))
+            self.assertEqual(payload['directory'],str(directory))
+            self.assertIn('from strata_tokenizer import Tokenizer',args[2])
+            self.assertEqual(count.call_args.kwargs['timeout'],120)
+
+    def test_native_counter_failure_remains_fail_closed(self):
+        import subprocess
+        from update_qualification import checkpoint_token_count
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);directory=root/'tokenizer';directory.mkdir()
+            (directory/'tokenizer.json').write_text('{"model":"gpt2","pre":"qwen35"}')
+            with patch('update_qualification.subprocess.check_output',side_effect=subprocess.CalledProcessError(1,['counter'])):
+                with self.assertRaises(subprocess.CalledProcessError):
+                    checkpoint_token_count(root,directory,'archive')

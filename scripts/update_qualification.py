@@ -30,6 +30,33 @@ def check_memory_events(text):
     return counts
 
 
+def checkpoint_token_count(root, directory, text):
+    """Count with the checkpoint's format and installed runtime; never fetch a tokenizer."""
+    root, directory = Path(root), Path(directory)
+    config = json.loads((directory / 'tokenizer.json').read_text())
+    if isinstance(config.get('model'), str):
+        # Strata GGUF packs contain the native GPT-2 vocabulary/merge format,
+        # not Hugging Face's tokenizer serialization. Resolve the installed
+        # Terminal bundle used by the actual launcher instead of guessing a version.
+        terminal = (root / 'runtimes/bin/strata').resolve().parent.parent
+        python = terminal / 'python/bin/python3'
+        code = ('import sys,json; from pathlib import Path; d=json.load(sys.stdin); '
+                'sys.path.insert(0,d["tools"]); from strata_tokenizer import Tokenizer; '
+                'p=Path(d["directory"]); v=json.loads((p/"vocab.json").read_text()); '
+                'tokens=[None]*len(v); [(tokens.__setitem__(i,s)) for s,i in v.items()]; '
+                'c=json.loads((p/"tokenizer.json").read_text()); '
+                'tok=Tokenizer(tokens,(p/"merges.txt").read_text().split("\\n"),'
+                'json.loads((p/"token_type.json").read_text()),c["pre"],c.get("special_ids")); '
+                'print(len(tok.encode(d["text"]))+64)')
+        payload = {'directory':str(directory),'tools':str(terminal / 'tools'),'text':text}
+    else:
+        python = root / 'runtimes/env-hyperqwen/bin/python'
+        code = ('import sys,json; from tokenizers import Tokenizer; d=json.load(sys.stdin); '
+                'print(len(Tokenizer.from_file(d["path"]).encode(d["text"]).ids)+64)')
+        payload = {'path':str(directory / 'tokenizer.json'),'text':text}
+    return int(subprocess.check_output([str(python),'-c',code],input=json.dumps(payload),text=True,timeout=120))
+
+
 class Qualification:
     def __init__(self, root, profile, output, manager, owner):
         self.root, self.p, self.out = Path(root), profile, Path(output)
@@ -178,22 +205,20 @@ class Qualification:
         # Same checkpoint tokenizer for both production and candidate, not a moving
         # model download. Actual backend usage must confirm the allocated window.
         directory = self.root / 'models/engine-tests/qwen38-27b-hyperqwen-fast'
-        if self.p['id'].startswith('qwen27b-'):
-            code = 'import sys,json; from tokenizers import Tokenizer; d=json.load(sys.stdin); print(len(Tokenizer.from_file(d["path"]).encode(d["text"]).ids)+64)'
-            python = self.root / 'runtimes/env-hyperqwen/bin/python'
-        else:
+        if not self.p['id'].startswith('qwen27b-'):
             cfg = json.loads((self.root / 'data/router' / (self.p['id'] + '-runtime.json')).read_text())
             directory = Path(cfg['tokenizer'])
-            code = 'import sys,json; from tokenizers import Tokenizer; d=json.load(sys.stdin); print(len(Tokenizer.from_file(d["path"]).encode(d["text"]).ids)+64)'
-            python = self.root / 'runtimes/env-hyperqwen/bin/python'
         n = max(10, int(context * .9) // 20)
         for _ in range(5):
             msg = messages(n); text = '\n'.join(m['content'] for m in msg)
-            if not self.p['id'].startswith('qwen27b-'):
+            # Maya exposes /api/tokens; Strata Terminal does not. Use the pinned
+            # checkpoint tokenizer for Strata, as for dense profiles, then still
+            # require the actual response usage to prove near-window coverage.
+            if self.p['engine'] == 'Maya':
                 with self.http('/api/tokens', {'messages':msg,'reasoning_effort':'none','chat_template_kwargs':{'enable_thinking':False}}, timeout=120) as response:
                     count = int(json.load(response)['tokens'])
             else:
-                count = int(subprocess.check_output([str(python), '-c', code], input=json.dumps({'path': str(directory / 'tokenizer.json'), 'text': text}), text=True, timeout=120))
+                count = checkpoint_token_count(self.root, directory, text)
             if abs(count - context * .9) < 150: break
             n = max(10, int(n * context * .9 / count))
         row = self.request('retrieval', messages(n)); text = row['answer'].strip()
