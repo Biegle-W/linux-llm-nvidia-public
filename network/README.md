@@ -1,5 +1,10 @@
 # NVIDIA model router, Tailscale and DeepSeek Harness
 
+## Latest: OpenCat Responses API exposed — October 30
+
+The router now exposes native POST /v1/responses alongside Chat Completions, fixing OpenCat's OpenAIResponses “Unknown endpoint” failure. Typed streaming events, model aliases and upstream errors are preserved through the same authentication, queueing and worker guards. All 232 CPU tests passed; live HyperQwen Responses passed in streaming/non-streaming modes over loopback and Tailscale without restarting the model. Direct iPhone confirmation is pending. Optional protocol diagnostics remain default-off and exclude content and credentials. See [compatibility](../docs/OPENCAT-RESPONSES-20261030.md) and [verification](../docs/validation-results/20261030-opencat-responses.json).
+
+
 ## Latest: OpenAI-compatible request retries repaired — October 30
 
 The router now reuses a verified running worker and waits for its existing cold load after a client disconnect, avoiding repeated reloads and the reported “Native worker state is unavailable” error. Ownership, active-work and resource guards remain intact. All 224 CPU tests passed. Live loopback streaming/non-streaming and Tailscale requests completed in under half a second without restarting the worker. Only the router was restarted; the loaded worker and DSH were preserved. See [repair](../docs/API-RELIABILITY-20261030.md) and [verification](../docs/validation-results/20261030-api-reliability.json).

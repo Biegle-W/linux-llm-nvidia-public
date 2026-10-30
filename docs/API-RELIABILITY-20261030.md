@@ -1,5 +1,7 @@
 # OpenAI-compatible API reliability — October 30, 2026
 
+Follow-up: [OpenCat Responses endpoint compatibility](OPENCAT-RESPONSES-20261030.md).
+
 The reported error, `Native worker state is unavailable; active work was preserved.`, was traced to worker lifecycle reconciliation. The repaired router is deployed. Real chat-completion requests passed over loopback and the configured Tailscale address without restarting the loaded worker. [Numeric verification](validation-results/20261030-api-reliability.json).
 
 ## Failure mechanism

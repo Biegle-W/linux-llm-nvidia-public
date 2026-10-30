@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/OPENCAT-RESPONSES-20261030.md',
+    'docs/validation-results/20261030-opencat-responses.json',
     'docs/API-RELIABILITY-20261030.md',
     'docs/validation-results/20261030-api-reliability.json',
     'docs/HARDWARE-TUNING-QUALIFICATION-20261030.md',

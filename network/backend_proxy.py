@@ -8,6 +8,17 @@ import json
 from worker_manager import RouterError
 
 
+def rewrite_model_alias(value, alias):
+    """Keep the public alias in both Chat and Responses lifecycle payloads."""
+    if isinstance(value, dict):
+        if 'model' in value:
+            value['model'] = alias
+        response = value.get('response')
+        if isinstance(response, dict) and 'model' in response:
+            response['model'] = alias
+    return value
+
+
 class BackendProxy:
     def __init__(self, key, models):
         self.key, self.models = key, models
@@ -37,7 +48,7 @@ class BackendProxy:
             pass  # Keep plain-text backend errors and their original HTTP status.
         else:
             if isinstance(value, dict) and 'model' in value:
-                value['model'] = alias
+                rewrite_model_alias(value, alias)
                 payload = json.dumps(value).encode()
         if response.status >= 400:
             payload = payload.replace(self.key.encode(), b'[redacted]')

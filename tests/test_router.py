@@ -26,6 +26,20 @@ class Backend(BaseHTTPRequestHandler):
         body=json.loads(self.rfile.read(int(self.headers['Content-Length'])))
         self.server.body=body
         self.server.forwarded_headers=dict(self.headers)
+        self.server.path=self.path
+        if self.path == '/v1/responses' and not body.get('mock_error'):
+            response={'id':'resp_test','object':'response','status':'completed','model':'worker-name',
+                      'output':[{'id':'msg_test','type':'message','role':'assistant','status':'completed',
+                                 'content':[{'type':'output_text','text':'ok','annotations':[]}]}]}
+            if body.get('stream'):
+                self.send_response(200);self.send_header('Content-Type','text/event-stream');self.end_headers()
+                for event in [{'type':'response.created','response':dict(response,status='in_progress',output=[])},
+                              {'type':'response.output_text.delta','delta':'ok','item_id':'msg_test','output_index':0,'content_index':0},
+                              {'type':'response.completed','response':response}]:
+                    self.wfile.write(('event: '+event['type']+'\ndata: '+json.dumps(event)+'\n\n').encode())
+            else:
+                payload=json.dumps(response).encode();self.send_response(200);self.send_header('Content-Type','application/json');self.send_header('Content-Length',str(len(payload)));self.end_headers();self.wfile.write(payload)
+            return
         if body.get('mock_error'):
             payload=('backend overloaded '+KEY).encode()
             self.send_response(503);self.send_header('Content-Type','text/plain')
@@ -151,6 +165,35 @@ class RouterTest(unittest.TestCase):
             self.assertEqual(response.status,429);self.assertEqual(response.getheader('Retry-After'),'5')
             self.assertEqual(json.loads(response.read())['error']['code'],'router_queue_full');client.close()
 
+    def test_responses_nonstream_preserves_input_and_alias(self):
+        body={'model':'qwen27b-hyperqwen','input':[{'role':'user','content':[{'type':'input_text','text':'hello'}]}],
+              'max_output_tokens':32,'store':False,'tools':[{'type':'function','name':'check','parameters':{'type':'object'}}]}
+        status,data=self.request('/v1/responses',body);row=json.loads(data)
+        self.assertEqual(status,200);self.assertEqual(row['object'],'response');self.assertEqual(row['model'],'qwen27b-hyperqwen')
+        self.assertEqual(self.backend.path,'/v1/responses');self.assertEqual(self.backend.body['input'],body['input'])
+        self.assertEqual(self.backend.body['max_output_tokens'],32);self.assertEqual(self.backend.body['tools'],body['tools'])
+        self.assertEqual(self.backend.body['model'],'worker-name')
+
+    def test_responses_stream_keeps_typed_events_and_nested_alias(self):
+        status,data=self.request('/v1/responses',{'model':'qwen27b-hyperqwen','input':'hello','stream':True})
+        self.assertEqual(status,200);self.assertIn(b'event: response.output_text.delta',data);self.assertNotIn(b'[DONE]',data)
+        events=[json.loads(line[5:]) for line in data.splitlines() if line.startswith(b'data:')]
+        self.assertEqual([x['type'] for x in events],['response.created','response.output_text.delta','response.completed'])
+        self.assertEqual(events[0]['response']['model'],'qwen27b-hyperqwen');self.assertEqual(events[-1]['response']['model'],'qwen27b-hyperqwen')
+        self.assertEqual(events[1]['delta'],'ok')
+
+    def test_responses_stream_error_is_typed_and_redacts_backend_key(self):
+        status,data=self.request('/v1/responses',{'model':'qwen27b-hyperqwen','input':'hello','stream':True,'mock_error':True})
+        self.assertEqual(status,200);self.assertIn(b'event: error',data);self.assertNotIn(KEY.encode(),data)
+        event=next(json.loads(line[5:]) for line in data.splitlines() if line.startswith(b'data:'))
+        self.assertEqual(event['type'],'error');self.assertEqual(event['code'],'backend_error');self.assertNotIn(b'[DONE]',data)
+
+    def test_responses_unknown_model_rejected_before_acquire(self):
+        with patch.object(self.server.workers,'acquire') as acquire:
+            status,_=self.request('/v1/responses',{'model':'not-a-model','input':'hello'})
+        self.assertEqual(status,404);acquire.assert_not_called()
+
+
 class SwitchTest(unittest.TestCase):
     def test_latched_worker_does_not_auto_restart(self):
         from worker_manager import ROOT as active_root
@@ -194,6 +237,7 @@ class SwitchTest(unittest.TestCase):
             mock.start();self.addCleanup(mock.stop)
     def worker(self):
         w=Workers.__new__(Workers);w.lock=RequestAdmission();w.busy=False;w.started=[]
+        w.detect=unittest.mock.Mock(return_value=None)  # Never inspect a live GPU worker from a CPU fixture.
         w.start=lambda name,progress=lambda:None:w.started.append(name)
         return w
     def test_switch_waits_for_reply(self):
@@ -361,5 +405,27 @@ class WorkerReattachmentTests(unittest.TestCase):
         self.w.stop_owned.side_effect=RouterError('guarded-reload-marker')
         with self.assertRaisesRegex(RouterError,'guarded-reload-marker'):self.w.start('flash-next-strata')
         self.w.stop_owned.assert_called_once()
+
+
+
+
+class ProtocolDiagnosticsTests(unittest.TestCase):
+    def handler(self, enabled=True, path='/v1/chat/completions?key=private-query'):
+        from types import SimpleNamespace
+        h=router.Handler.__new__(router.Handler);h.server=SimpleNamespace(protocol_diagnostics=enabled)
+        h.command='POST';h.path=path;return h
+    def test_default_disabled_logs_nothing(self):
+        with patch('builtins.print') as output:self.handler(False).log_message('"%s" %s %s','secret',200,'-')
+        output.assert_not_called()
+    def test_enabled_logs_only_protocol_metadata(self):
+        with patch('builtins.print') as output:self.handler().log_message('"%s" %s %s',KEY,400,'-')
+        value=json.loads(output.call_args.args[0]);self.assertEqual(value,{'event':'api_protocol','method':'POST','path':'/v1/chat/completions','status':400})
+        self.assertNotIn(KEY,output.call_args.args[0]);self.assertNotIn('private-query',output.call_args.args[0])
+    def test_unknown_paths_and_malformed_urls_are_hidden(self):
+        for path in ['/secret/'+KEY,'http://[invalid']:
+            self.assertEqual(router.protocol_path(path),'<other>')
+    def test_common_endpoint_mismatches_are_visible_without_query(self):
+        for path in ['/v1/responses','/v1/v1/chat/completions','/v1/chat/completions/','/chat/completions']:
+            self.assertEqual(router.protocol_path(path+'?secret=x'),path)
 
 if __name__=='__main__':unittest.main()

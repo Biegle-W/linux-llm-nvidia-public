@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "date": "2026-10-30",
+  "status": "deployed_server_verified",
+  "client": "OpenCat iPhone",
+  "client_provider": "OpenAIResponses",
+  "reported_error": "Error not_found: Unknown endpoint.",
+  "cause": "The router did not expose POST /v1/responses although the loaded HyperQwen server supported it natively.",
+  "fix": [
+    "Native Responses pass-through through the existing authenticated admission and worker lifecycle.",
+    "Preserve typed Responses SSE events and model aliases in nested lifecycle response objects.",
+    "Send typed Responses error events on upstream failures."
+  ],
+  "tests": {
+    "cpu_total": 232,
+    "cpu_passed": true,
+    "router_total": 47
+  },
+  "live_requests": [
+    {
+      "network": "loopback",
+      "stream": false,
+      "http_status": 200,
+      "completed": true,
+      "answer_correct": true,
+      "elapsed_s": 0.1225302419916261,
+      "typed_events": [],
+      "worker_preserved": true
+    },
+    {
+      "network": "loopback",
+      "stream": true,
+      "http_status": 200,
+      "completed": true,
+      "answer_correct": true,
+      "elapsed_s": 0.12585851000039838,
+      "typed_events": [
+        "response.completed",
+        "response.content_part.added",
+        "response.content_part.done",
+        "response.created",
+        "response.in_progress",
+        "response.output_item.added",
+        "response.output_item.done",
+        "response.output_text.delta",
+        "response.output_text.done"
+      ],
+      "worker_preserved": true
+    },
+    {
+      "network": "tailnet",
+      "stream": true,
+      "http_status": 200,
+      "completed": true,
+      "answer_correct": true,
+      "elapsed_s": 0.10258631900069304,
+      "typed_events": [
+        "response.completed",
+        "response.content_part.added",
+        "response.content_part.done",
+        "response.created",
+        "response.in_progress",
+        "response.output_item.added",
+        "response.output_item.done",
+        "response.output_text.delta",
+        "response.output_text.done"
+      ],
+      "worker_preserved": true
+    }
+  ],
+  "worker_preserved": true,
+  "iphone_end_to_end_confirmation": "pending user retry",
+  "scope": "HyperQwen native Responses verified live; other backends retain their own native feature support. No new model or context benchmark.",
+  "diagnostics": {
+    "optional": true,
+    "default_enabled": false,
+    "fields": [
+      "HTTP method",
+      "allowlisted endpoint shape",
+      "HTTP status"
+    ],
+    "excluded": [
+      "prompts",
+      "responses",
+      "credentials",
+      "query strings",
+      "arbitrary paths",
+      "client identities"
+    ]
+  },
+  "unchanged": [
+    "model settings",
+    "runtime pins",
+    "contexts",
+    "RAM/VRAM/swap/pressure/thermal guards",
+    "credentials",
+    "allowed networks",
+    "FIFO admission",
+    "idle600",
+    "concurrency1"
+  ],
+  "official_reference": "https://developers.openai.com/api/docs/guides/streaming-responses"
+}

@@ -12,7 +12,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 from worker_manager import Workers, RouterError, profiles, ROOT
 from inference_policy import load_policy
-from backend_proxy import BackendProxy
+from backend_proxy import BackendProxy, rewrite_model_alias
 
 MAX_BODY = 32 * 1024 * 1024
 
@@ -33,12 +33,39 @@ def apply_request_defaults(data, profile):
     return body
 
 
+def protocol_path(value):
+    """Allow only endpoint shapes in optional diagnostics; never log arbitrary URLs."""
+    try:
+        path = urlsplit(value).path
+    except ValueError:
+        return '<other>'
+    if path in ('/health','/router/select','/router/unload'):
+        return path
+    allowed = {'','v1','v2','api','openai','chat','completions','completion',
+               'responses','response','models','messages','stream','generate'}
+    if path.startswith('/') and len(path) <= 160 and all(part in allowed for part in path.split('/')):
+        return path
+    return '<other>'
+
+
 class Handler(BaseHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'
 
-    def log_message(self, *_):
-        # Bodies, credentials, query strings, and client identities are never logged.
-        pass
+    def log_message(self, format, *args):
+        # Optional protocol metadata only. Bodies, credentials, query strings,
+        # arbitrary paths and client identities are never logged.
+        if not getattr(self.server, 'protocol_diagnostics', False) or format != '"%s" %s %s':
+            return
+        try:
+            status = int(args[1])
+        except (IndexError, TypeError, ValueError):
+            return
+        method = self.command if self.command in ('GET','POST','HEAD','OPTIONS','PUT','DELETE') else 'OTHER'
+        try:
+            print(json.dumps({'event':'api_protocol','method':method,
+                              'path':protocol_path(self.path),'status':status}), flush=True)
+        except OSError:
+            pass  # Diagnostics must not break a request.
 
     def reply(self, status, body):
         payload = json.dumps(body).encode()
@@ -129,7 +156,7 @@ class Handler(BaseHTTPRequestHandler):
         if not self.auth():
             return
         path = urlsplit(self.path).path
-        if path not in ('/v1/chat/completions', '/v1/completions', '/router/select', '/router/unload'):
+        if path not in ('/v1/chat/completions', '/v1/completions', '/v1/responses', '/router/select', '/router/unload'):
             return self.error(404, 'Unknown endpoint.', 'not_found')
         try:
             data = self.read_body()
@@ -229,8 +256,7 @@ class Handler(BaseHTTPRequestHandler):
                 if line.startswith(b'data:') and line[5:].strip() != b'[DONE]':
                     try:
                         value = json.loads(line[5:])
-                        if 'model' in value:
-                            value['model'] = name
+                        rewrite_model_alias(value, name)
                         line = b'data: ' + json.dumps(value).encode() + b'\n'
                     except ValueError:
                         pass
@@ -239,9 +265,14 @@ class Handler(BaseHTTPRequestHandler):
             pass
         except (RouterError, OSError) as e:
             try:
-                write(b'data: ' + json.dumps({'error': {'message': str(e).replace(self.server.key, '[redacted]'),
-                      'code': getattr(e, 'code', 'backend_unavailable'),
-                      'status': getattr(e, 'status', 503)}}).encode() + b'\n\ndata: [DONE]\n\n')
+                message = str(e).replace(self.server.key, '[redacted]')
+                code = getattr(e, 'code', 'backend_unavailable')
+                if path == '/v1/responses':
+                    payload = {'type':'error','code':code,'message':message,'param':None,'sequence_number':0}
+                    write(b'event: error\ndata: ' + json.dumps(payload).encode() + b'\n\n')
+                else:
+                    write(b'data: ' + json.dumps({'error': {'message':message,'code':code,
+                          'status':getattr(e,'status',503)}}).encode() + b'\n\ndata: [DONE]\n\n')
             except OSError:
                 pass
         finally:
@@ -286,6 +317,7 @@ def main():
                     continue  # Tailscale may acquire its address after the user service starts.
                 server.daemon_threads = True
                 server.workers, server.key, server.allowed = workers, key, allowed
+                server.protocol_diagnostics = cfg.get('protocol_diagnostics') is True
                 servers[address] = server
                 threading.Thread(target=server.serve_forever, daemon=True).start()
             workers.idle_tick()
