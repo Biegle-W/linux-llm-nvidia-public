@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-30",
+  "status": "implemented_provider_availability_blocks_remaining_live_tests",
+  "cpu_tests": {
+    "passed": 247,
+    "failed": 0
+  },
+  "live_requests": [
+    {
+      "network": "loopback",
+      "stream": false,
+      "tool": "web_search",
+      "http_status": 200,
+      "completed": true,
+      "answer_grounded_in_live_snippets": true,
+      "clickable_link": true,
+      "citation_annotations": 1,
+      "search_sources": 5,
+      "elapsed_s": 30.28,
+      "typed_events": [],
+      "dsh_preserved": true
+    }
+  ],
+  "live_provider_initial_check": {
+    "provider": "duckduckgo",
+    "sources": 5,
+    "snippets": true
+  },
+  "live_streaming": {
+    "status": "blocked_by_provider_bot_challenge",
+    "typed_error": "web_search_unavailable"
+  },
+  "live_tailscale": {
+    "status": "pending_available_provider"
+  },
+  "iphone_confirmation": "pending",
+  "brave_provider": {
+    "implemented": true,
+    "cpu_tested": true,
+    "credential_configured": false,
+    "live_tested": false,
+    "paid_requests": 0
+  },
+  "search_limits": {
+    "latest_user_query_characters": 512,
+    "maximum_sources": 8,
+    "provider_response_bytes": 524288,
+    "duckduckgo_attempts": 2,
+    "duckduckgo_timeout_seconds_per_attempt": 12,
+    "brave_timeout_seconds": 20
+  },
+  "model_settings_changed": false,
+  "resource_guards_changed": false,
+  "benchmarks_run": false,
+  "worker_service_preserved_during_router_deployments": true,
+  "dsh_preserved": true,
+  "native_idle_unloaded_weights_reloaded_by_first_request": true,
+  "no_full_page_fetching": true,
+  "no_persistent_query_cache": true,
+  "remaining": [
+    "Choose supported search provider/key or retain keyless availability limitation",
+    "Finish live streaming and Tailscale web search with an available provider",
+    "Confirm from OpenCat iPhone"
+  ]
+}

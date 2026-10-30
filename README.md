@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: Responses web-search adapter, provider availability pending — October 30
+
+The router now executes `web_search`/`web_search_preview` for local Responses, with bounded provider calls, typed streaming search events, grounded snippets and URL citation annotations. All 247 CPU tests pass; one real nonstreaming HyperQwen request passed with NASA sources, a clickable citation and the expected answer. Subsequent streaming tests hit DuckDuckGo bot challenges and correctly returned explicit errors. Live streaming/Tailscale search and iPhone confirmation remain pending an available provider. Optional Brave Search support is implemented and CPU-tested; no credential is configured or paid request made. Model settings and resource guards are unchanged. See [implementation and limits](docs/RESPONSES-WEB-SEARCH-20261030.md) and [verification](docs/validation-results/20261030-responses-web-search.json).
+
 ## Latest: OpenCat Responses API exposed — October 30
 
 The router now exposes native POST /v1/responses alongside Chat Completions, fixing OpenCat's OpenAIResponses “Unknown endpoint” failure. Typed streaming events, model aliases and upstream errors are preserved through the same authentication, queueing and worker guards. All 232 CPU tests passed; live HyperQwen Responses passed in streaming/non-streaming modes over loopback and Tailscale without restarting the model. Direct iPhone confirmation is pending. Optional protocol diagnostics remain default-off and exclude content and credentials. See [compatibility](docs/OPENCAT-RESPONSES-20261030.md) and [verification](docs/validation-results/20261030-opencat-responses.json).

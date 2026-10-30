@@ -13,6 +13,7 @@ from urllib.parse import unquote, urlsplit
 from worker_manager import Workers, RouterError, profiles, ROOT
 from inference_policy import load_policy
 from backend_proxy import BackendProxy, rewrite_model_alias
+import web_search
 
 MAX_BODY = 32 * 1024 * 1024
 
@@ -174,8 +175,12 @@ class Handler(BaseHTTPRequestHandler):
                 raise RouterError('This engine supports chat completions.', 'unsupported_endpoint', 400)
             if 'stream' in data and not isinstance(data['stream'], bool):
                 raise RouterError('stream must be a boolean.', 'bad_request', 400)
+            search_options = web_search.plan(data) if path == '/v1/responses' else None
+            if search_options and search_options.get('disabled'):
+                data = web_search.strip_tools(data)
+                search_options = None
             if data.get('stream') and path != '/router/select':
-                return self.stream(name, path, data)
+                return self.stream(name, path, data, search_options)
             if path == '/router/select':
                 self.server.workers.acquire(name, clear_guard=True)
             else:
@@ -184,7 +189,7 @@ class Handler(BaseHTTPRequestHandler):
                 if path == '/router/select':
                     return self.reply(200, {'status': 'ready', 'model': name,
                                             'context_window': profile['allocated_context']})
-                self.forward(name, path, data)
+                self.forward(name, path, data, search_options)
             finally:
                 self.server.workers.release()
         except RouterError as e:
@@ -202,7 +207,9 @@ class Handler(BaseHTTPRequestHandler):
     def open_backend(self, path, data):
         return self.proxy().open(path, data)
 
-    def forward(self, name, path, data):
+    def forward(self, name, path, data, search_options=None):
+        if search_options:
+            return self.reply(200, web_search.execute(data, name, self.proxy(), search_options))
         conn = self.open_backend(path, data)
         try:
             response = conn.getresponse()
@@ -216,7 +223,7 @@ class Handler(BaseHTTPRequestHandler):
         finally:
             conn.close()
 
-    def stream(self, name, path, data):
+    def stream(self, name, path, data, search_options=None):
         self.send_response(200)
         self.send_header('Content-Type', 'text/event-stream')
         self.send_header('Cache-Control', 'no-store')
@@ -226,6 +233,7 @@ class Handler(BaseHTTPRequestHandler):
         done = threading.Event()
         acquired = False
         conn = None
+        sequence = 0
 
         def write(payload):
             with lock:
@@ -243,11 +251,20 @@ class Handler(BaseHTTPRequestHandler):
             if done.is_set():
                 raise BrokenPipeError('Client disconnected')
 
+        def emit_event(value):
+            nonlocal sequence
+            value['sequence_number'] = sequence
+            sequence += 1
+            write(('event: ' + value['type'] + '\ndata: ' + json.dumps(value) + '\n\n').encode())
+
         threading.Thread(target=heartbeat, daemon=True).start()
         try:
             write(b': local inference router\n\n')
             self.server.workers.acquire(name, progress)
             acquired = True
+            if search_options:
+                web_search.execute(data, name, self.proxy(), search_options, emit_event, progress)
+                return
             conn = self.open_backend(path, data)
             response = conn.getresponse()
             if response.status != 200:
@@ -268,8 +285,7 @@ class Handler(BaseHTTPRequestHandler):
                 message = str(e).replace(self.server.key, '[redacted]')
                 code = getattr(e, 'code', 'backend_unavailable')
                 if path == '/v1/responses':
-                    payload = {'type':'error','code':code,'message':message,'param':None,'sequence_number':0}
-                    write(b'event: error\ndata: ' + json.dumps(payload).encode() + b'\n\n')
+                    emit_event({'type':'error','code':code,'message':message,'param':None})
                 else:
                     write(b'data: ' + json.dumps({'error': {'message':message,'code':code,
                           'status':getattr(e,'status',503)}}).encode() + b'\n\ndata: [DONE]\n\n')

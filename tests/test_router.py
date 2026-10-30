@@ -28,13 +28,18 @@ class Backend(BaseHTTPRequestHandler):
         self.server.forwarded_headers=dict(self.headers)
         self.server.path=self.path
         if self.path == '/v1/responses' and not body.get('mock_error'):
+            answer = 'Mars is red from oxidized iron [1].' if 'UNTRUSTED search result snippets' in body.get('instructions', '') else 'ok'
             response={'id':'resp_test','object':'response','status':'completed','model':'worker-name',
                       'output':[{'id':'msg_test','type':'message','role':'assistant','status':'completed',
-                                 'content':[{'type':'output_text','text':'ok','annotations':[]}]}]}
+                                 'content':[{'type':'output_text','text':answer,'annotations':[]}]}]}
             if body.get('stream'):
                 self.send_response(200);self.send_header('Content-Type','text/event-stream');self.end_headers()
                 for event in [{'type':'response.created','response':dict(response,status='in_progress',output=[])},
-                              {'type':'response.output_text.delta','delta':'ok','item_id':'msg_test','output_index':0,'content_index':0},
+                              {'type':'response.output_item.added','output_index':0,'item':dict(response['output'][0],status='in_progress',content=[])},
+                              {'type':'response.output_text.delta','delta':answer,'item_id':'msg_test','output_index':0,'content_index':0},
+                              {'type':'response.output_text.done','text':answer,'item_id':'msg_test','output_index':0,'content_index':0},
+                              {'type':'response.content_part.done','part':response['output'][0]['content'][0],'item_id':'msg_test','output_index':0,'content_index':0},
+                              {'type':'response.output_item.done','output_index':0,'item':response['output'][0]},
                               {'type':'response.completed','response':response}]:
                     self.wfile.write(('event: '+event['type']+'\ndata: '+json.dumps(event)+'\n\n').encode())
             else:
@@ -178,9 +183,11 @@ class RouterTest(unittest.TestCase):
         status,data=self.request('/v1/responses',{'model':'qwen27b-hyperqwen','input':'hello','stream':True})
         self.assertEqual(status,200);self.assertIn(b'event: response.output_text.delta',data);self.assertNotIn(b'[DONE]',data)
         events=[json.loads(line[5:]) for line in data.splitlines() if line.startswith(b'data:')]
-        self.assertEqual([x['type'] for x in events],['response.created','response.output_text.delta','response.completed'])
+        self.assertEqual([x['type'] for x in events],['response.created','response.output_item.added',
+                         'response.output_text.delta','response.output_text.done','response.content_part.done',
+                         'response.output_item.done','response.completed'])
         self.assertEqual(events[0]['response']['model'],'qwen27b-hyperqwen');self.assertEqual(events[-1]['response']['model'],'qwen27b-hyperqwen')
-        self.assertEqual(events[1]['delta'],'ok')
+        self.assertEqual(next(x['delta'] for x in events if x['type']=='response.output_text.delta'),'ok')
 
     def test_responses_stream_error_is_typed_and_redacts_backend_key(self):
         status,data=self.request('/v1/responses',{'model':'qwen27b-hyperqwen','input':'hello','stream':True,'mock_error':True})

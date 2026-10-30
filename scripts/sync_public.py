@@ -6,6 +6,9 @@ import re
 import subprocess
 
 FILES = (
+    'network/web_search.py', 'tests/test_web_search.py', 'config/web-search.example.json',
+    'docs/RESPONSES-WEB-SEARCH-20261030.md',
+    'docs/validation-results/20261030-responses-web-search.json',
     'docs/OPENCAT-RESPONSES-20261030.md',
     'docs/validation-results/20261030-opencat-responses.json',
     'docs/API-RELIABILITY-20261030.md',
