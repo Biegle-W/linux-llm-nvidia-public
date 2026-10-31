@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/NEMOTRON-INT4-OFFLOAD-20261031.md',
+    'docs/validation-results/20261031-nemotron-int4-offload.json',
     'docs/validation-results/20261031-pair-p2p.json',
     'docs/TERMINAL-ATTENTION-20261031.md',
     'docs/PEX-ACS-PAIR-20261031.md',

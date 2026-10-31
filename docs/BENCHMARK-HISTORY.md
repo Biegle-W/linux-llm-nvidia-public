@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## October 31: Nemotron INT4 startup rejection; no benchmark
+
+Bolt real-weight offload loads failed RAM/VRAM guards; Super VL constructor gates failed layout/resources, and neither model completed SGLang startup. No speed or quality result replaces historical benchmarks. [Startup report](NEMOTRON-INT4-OFFLOAD-20261031.md), [evidence](validation-results/20261031-nemotron-int4-offload.json).
+
 ## October 29: bounded 15% pressure trial for two profiles
 
 Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. Only these two profiles were repeated. [Report](BENCHMARK-PRESSURE-GUARD-64GB-20261029.md), [numeric evidence](benchmark-results/20261029-pressure-guard.json). Prior 10% guard stops remain historical evidence.

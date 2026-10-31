@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Latest: Nemotron INT4 offload startup checks — October 31
+
+Neither Bolt 74B AWQ INT4 nor Super VL mixed INT4 reached inference in the tested installed engines. Bolt real-weight vLLM loads stopped at RAM pressure or the GPU reserve; Super VL initialization hit group-layout/resource gates, and SGLang rejected its fallback implementation. Super VL was initialization-tested only, not fully downloaded or benchmarked. Qwen and all maintained profiles remain unchanged; owned workers/downloads are stopped and no GPU reservation remains. See [scope, failures and next step](docs/NEMOTRON-INT4-OFFLOAD-20261031.md).
+
 ## Latest: pair-only P2P correctness PASS after scoped ACS fix — October 31
 
 Clearing request/completion redirection on four Broadcom switch bridges fixed the remote-read mismatch. Bidirectional seeded read/write validation passed twice, including after persistent rule activation, with about 13.08 GB/s copy throughput each way. Only 3080 Ti ↔ 3080 advertises peer access; all 3060 peer directions remain disabled. All-three-GPU tensor unlock remains VERIFIED, links are x8/x8 plus motherboard x4, and the root-owned boot rule is enabled. A new reboot of that ACS rule has not yet been observed. See [measurements, scope and rollback](docs/PEX-ACS-PAIR-20261031.md).

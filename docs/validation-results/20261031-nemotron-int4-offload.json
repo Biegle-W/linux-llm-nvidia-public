@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-31",
+  "status": "not-qualified",
+  "scope": "Guarded startup and compatibility tests; no successful inference, quality check, or speed benchmark.",
+  "hardware": {
+    "ram_usable_gib": 61.3013,
+    "gpus_vram_gib": [
+      12,
+      10,
+      12
+    ],
+    "vllm_test_gpus": "3080 Ti 12 GiB + 3080 10 GiB",
+    "third_gpu_used_for_model": false
+  },
+  "engines": {
+    "vllm": "0.31.0 installed HyperQwen environment",
+    "sglang": "0.5.22, pinned heterogeneous source 62271fd7c8aa8fe9edebf04e00a414b7fbf64388"
+  },
+  "limits": {
+    "worker_memory_high_gib_trials": [
+      44,
+      46
+    ],
+    "worker_memory_max_gib": 48,
+    "host_available_min_gib": 2,
+    "gpu_free_min_mib": 512,
+    "max_temperature_c": 82,
+    "swappiness": 60,
+    "active_swap_write_mib_s": 1,
+    "active_swap_combined_mib_s": 8,
+    "active_pressure_percent": 10,
+    "active_window_seconds": 30,
+    "trial_loading_pressure_stop": "full avg10 >15 percent on three samples",
+    "context_tokens": 2048,
+    "concurrency": 1
+  },
+  "bolt": {
+    "repo": "cyankiwi/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-AWQ-INT4",
+    "revision": "3df8bd99af5d58abe5f052ef81127dff092f26b4",
+    "weight_bytes": 55332700488,
+    "full_checkpoint_downloaded": true,
+    "vllm_configuration": "native Nemotron class and compressed-tensors config resolved",
+    "original_vllm_error": "All MoE projections need to have same quantization scheme but found multiple",
+    "trial_mapping": "Launch-only quantization regex also matches unused gate_proj so the engine sees the same scheme as up/down; original files unmodified.",
+    "real_weight_trials": [
+      {
+        "cpu_offload_gib_per_rank": 17.5,
+        "memory_high_gib": 44,
+        "result": "loading-pressure guard stop"
+      },
+      {
+        "cpu_offload_gib_per_rank": 16,
+        "memory_high_gib": 44,
+        "result": "loading-pressure guard stop"
+      },
+      {
+        "cpu_offload_gib_per_rank": 16,
+        "memory_high_gib": 46,
+        "result": "VRAM reserve guard stop",
+        "minimum_gpu_free_mib": 33,
+        "last_host_available_gib": 8.872,
+        "confirmed_cpu_offload_gib_rank_1": 16.03
+      }
+    ],
+    "weight_breakdown_bytes": {
+      "routed_experts": 38240043008,
+      "language_other": 15391584768,
+      "vision_other": 1684884496
+    },
+    "sglang": "Startup failed: remote fallback requires mamba-ssm, which cannot be imported. No native registration for this architecture.",
+    "inference_reached": false
+  },
+  "super": {
+    "repo": "halt95/Nemotron-3.5-Super-VL-120B-A12B-W4A16-Merlin",
+    "revision": "835d4cc7c9cc95f6dff9b1e4db2d5c520e847148",
+    "weight_bytes": 72888191872,
+    "full_checkpoint_downloaded": false,
+    "test_type": "Metadata plus dummy-weight constructor/initialization gates, not real-weight inference.",
+    "vllm_tp2_error": "MoE intermediate size per tensor-parallel partition 1344 must be divisible by group size 128.",
+    "vllm_ep2": "Enabling expert parallelism cleared that group-alignment check; initialization then stopped for sustained loading pressure under the 44/48 GiB budget, before readiness.",
+    "sglang": "Startup failed: NemotronH_Omni_Reasoning_V3 has no SGLang implementation and its Transformers implementation is not compatible with SGLang.",
+    "inference_reached": false
+  },
+  "three_gpu_limit": "Installed native vLLM model class rejects pipeline parallelism. Ordinary TP3 cannot divide the 32 attention heads. A DP3+EP layout was considered but not run; replicated non-expert weights increase memory cost, so it is not equivalent to pooling all 34 GiB.",
+  "trial_harness_notes": [
+    "Resource watcher was moved outside worker cgroup after memory.high throttling stalled the initial in-cgroup watcher.",
+    "Owned worker units have bounded shutdown and forced cleanup after a guard stop.",
+    "Console windows launched, but window-manager foreground activation acknowledgement failed; no foreground verification pass is claimed."
+  ],
+  "cleanup": {
+    "owned_workers_stopped": true,
+    "gpu_reservation_released": true,
+    "owned_download_stopped": true,
+    "super_partial_download_retained_resumable": true,
+    "existing_qwen_profiles_and_engines_unchanged": true,
+    "unrelated_jobs_preserved": true
+  },
+  "next_step": "An isolated loader/runtime that supports this quantization and a lower-overhead CPU expert tier is needed before further inference qualification; do not promote either checkpoint or repeat the same stopped configurations."
+}
