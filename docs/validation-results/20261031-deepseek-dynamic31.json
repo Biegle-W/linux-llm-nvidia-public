@@ -98,7 +98,37 @@
       "peak_worker_swap_gib": 0.19638824462890625,
       "min_host_available_gib": 54.604042053222656,
       "min_gpu_free_mib": 5811.0,
-      "max_gpu_temperature_c": 37.0
+      "max_gpu_temperature_c": 37.0,
+      "peak_loading_full_pressure_pct": 20.02,
+      "peak_inference_full_pressure_pct": 16.39,
+      "peak_measured_30s_swap_rates": {
+        "read_mib_s": 0.6590811459494389,
+        "write_mib_s": 1.5616915029697709,
+        "combined_mib_s": 2.2207726489192097
+      },
+      "memory_events_max": {
+        "low": 0,
+        "high": 7929,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 5
+      }
+    },
+    "json_check": "interrupted by guard; no correctness result",
+    "sustained_stream": "not attempted",
+    "math_response": "323",
+    "math_wall_s": 16.587690938999003,
+    "math_prompt_tokens": 17,
+    "math_completion_tokens": 2,
+    "server_context_reported": 2048,
+    "cleanup": {
+      "guarded_stop": true,
+      "stop_timeout_then_sigkill": true,
+      "owned_worker_inactive": true,
+      "reservation_released": true,
+      "router_and_dsh_invocations_preserved": true
     }
   },
   "selected": false

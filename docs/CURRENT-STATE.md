@@ -2,7 +2,7 @@
 
 ## Latest: Unsloth Dynamic3.1 DeepSeek bounded trial — October 31
 
-The pinned UD-IQ1_S candidate did not achieve a completed basic-quality pass; maintained selections are unchanged. The report records pinned sizes/hashes, the final-shard HTTP failure and Xet recovery, actual outcome and unchanged guards. [Results and limits](DEEPSEEK-DYNAMIC31-20261031.md).
+All five pinned UD-IQ1_S shard hashes passed. The model loaded at 2K and passed arithmetic, then the unchanged swap-write guard stopped the JSON request; sustained streaming was not reached. Maintained selections are unchanged. The report records pinned sizes/hashes, the final-shard HTTP failure and Xet recovery, actual outcome and unchanged guards. [Results and limits](DEEPSEEK-DYNAMIC31-20261031.md).
 
 ## Latest: Bolt installed and verified through the normal router — October 31
 

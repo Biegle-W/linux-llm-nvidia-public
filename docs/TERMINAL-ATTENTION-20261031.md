@@ -7,3 +7,7 @@ The shared launcher now omits native-iconic startup for harnesses, installation/
 Three focused launcher tests passed. The actual ACS password terminal was opened with foreground activation confirmed by the window manager. No running backend was restarted or refocused.
 
 The previous ACS audit had exited before any change because its work guard counted a ptyxis terminal on the motherboard-connected 3060. The guard now filters by the two target GPU UUIDs; four ACS safety tests passed, including exclusion of 3060 work. The retry is an attention task and opens in front. These UI/guard fixes do not establish P2P correctness; the actual scoped routing trial is still separately recorded.
+
+## Runtime inspection completion check
+
+A live foreground `--help` inspection completed with exit code zero and its XTerm process exited automatically, without an Enter prompt or hold. Runtime inspection terminals use the shared foreground wrapper. The DeepSeek download, continuation, trial and publication consoles also closed after their owned jobs finished; active jobs were preserved. No launcher code or global terminal setting needed changing.
