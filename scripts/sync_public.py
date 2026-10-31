@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'docs/PEX-ACS-PAIR-20261031.md',
     'docs/P2P-DYNAMIC-UNLOCK-20261031.md',
     'scripts/dracut/91local-llm-gpu-unlock/module-setup.sh',
     'scripts/dracut/91local-llm-gpu-unlock/unlock-auto.sh',

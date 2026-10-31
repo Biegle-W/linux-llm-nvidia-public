@@ -1,5 +1,10 @@
 # Agent entry point
 
+## Latest: pair-only switch ACS diagnosis prepared — October 31
+
+The driver advertises P2P only for the two switched GA102 cards; all 3060 peer directions are disabled. Their IOMMU domains are identity. A scoped Broadcom bridge audit and reversible ACS trial is prepared, with conditional persistence only after full pair-only correctness passes. Three CPU safety checks passed; actual ACS/GPU results await administrator authentication. All-three-GPU tensor unlock remains verified. See [scope and validation](docs/PEX-ACS-PAIR-20261031.md).
+
+
 ## Latest: all three GPU unlocks verified; P2P still fails — October 31
 
 The dynamic candidate is loaded and the early model-ID hook successfully unlocked the 3080 Ti, 3080 and 3060 before NVIDIA initialized, despite another PCI-address change. Health reports VERIFIED. Switched links remain x8/x8. Actual peer reads still fail: local source data passes validation, while a bounded read-only peer diagnostic returns 0xffffffff. No P2P bandwidth or model improvement is claimed. See [actual results](docs/P2P-DYNAMIC-UNLOCK-20261031.md).
