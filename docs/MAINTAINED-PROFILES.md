@@ -2,27 +2,36 @@
 
 ## Latest matched speed evidence
 
-Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. Only Qwen/Strata and DeepSeek/Maya were repeated; HyperQwen, SGLang, GLM/Maya and DeepSeek/Strata rows are explicitly carried forward from their earlier October 29 records. This composite table is not a new six-profile matched run. See [report](BENCHMARK-PRESSURE-GUARD-64GB-20261029.md).
+
+Protocol: same fixed synthetic prompts across the six profiles, one warmup (64 output tokens), three requested measured requests (128 output tokens), temperature zero, concurrency one; medians of complete three-repetition runs. DeepSeek/Maya completed two repetitions before its existing sustained-memory-pressure guard stopped the third; its partial result is not selected as a new benchmark. Model loading is excluded. Models and expert caches are warm/adaptive; conversation cached-token counts are checked. Prefill uses the native per-request counter/timing; decode is client SSE `(completion_tokens - 1)/(last_content - first_content)`. Token counts vary by tokenizer. Dense rows use the selected fresh confirmation; native rows use unchanged selected settings on current hardware. The native rows are fresh short screens; their earlier full-context qualifications are retained and are not relabeled as newly repeated.
 
 ### VRAM-only models
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 1,494.29 | 1.489 | 88.55 | 56,320 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 1,587.90 | 1.396 | 80.87 | 32,768 | 15.79 | Samsung SSD 870 QVO SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 2,516.49 | 0.891 | 112.14 | 56,320 | 15.79 | SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 2,778.24 | 0.804 | 95.86 | 32,768 | 15.79 | SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
 
 ### MoE models with CPU RAM offload
 
-None currently kept. Expert RAM tiers below are caches within SSD-streaming profiles.
+None currently maintained as fully RAM-resident offload. Bolt remains an experimental candidate described below; expert caches in the next section are part of SSD-streaming profiles.
 
 ### MoE models with SSD streaming
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 67.10 | 32.842 | 16.87 | 32,768 | 75.84 | CT1000P3PSSD8 NVMe: models/strata/models/IQ3_XXS |
-| GLM-5.3-Flash / Maya-S24 | Maya | 63.80 | 34.733 | 4.93 | 65,536 | 94.70 | CT1000P3PSSD8 NVMe: models/maya/Maya-S24 |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 34.20 | 63.869 | 2.75 | 131,072 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 45.90 | 47.534 | 3.30 | 32,768 | 339.48 | CT1000P3PSSD8 NVMe: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 695.20 | 3.199 | 98.42 | 32,768 | 75.84 | NVME: models/strata/models/IQ3_XXS |
+| GLM-5.3-Flash / Maya-S24 | Maya | 74.10 | 29.837 | 6.39 | 65,536 | 94.70 | NVME: models/maya/Maya-S24 |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 30.80 | 70.845 | 3.27 | 131,072 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | Incomplete | Incomplete | Incomplete | 32,768 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+
+DeepSeek/Maya: incomplete. Two measured requests completed (49.4 prefill tok/s, 2.58 decode tok/s median); the third stopped on sustained full-memory pressure. The previous selected benchmark remains historical and unchanged. No guard was relaxed and the run was not repeated.
+
+Measured prompt-token ranges: qwen27b-hyperqwen [2212, 2222], qwen27b-sglang [2212, 2222], flash-next-strata [2212, 2222], glm-maya [2199, 2209], deepseek-strata [2179, 2198].
+
+Storage counts decimal GB of base checkpoint weights. Qwen's safetensors are shared between its two engines, and DeepSeek's base weights are shared between its two engines; count each shared base once. Derived packs/caches and the separate GGUF trial assets are excluded from those base sizes. No native cache, context or worker budget was changed. Differences against older dated runs are not causal P2P estimates.
+
+See [the optimization report](GPU-PAIR-AUX-OPTIMIZATION-20261031.md) for matched controls and selection limits.
 
 ## Latest: qualified bounded DeepSeek/Maya cache — October 29
 

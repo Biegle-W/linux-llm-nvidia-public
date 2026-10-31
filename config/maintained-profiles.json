@@ -51,7 +51,6 @@
         "qwen3.8-27b",
         "--tensor-parallel-size",
         "2",
-        "--disable-custom-all-reduce",
         "--gpu-memory-utilization",
         "0.76",
         "--kv-cache-memory-bytes",
@@ -94,32 +93,29 @@
         "VLLM_SPEC_DECODE_ATTN_QMAX": "4",
         "VLLM_MARLIN_INPUT_DTYPE": "int8",
         "VLLM_MARLIN_INT8_INCLUDE_RE": "mlp",
-        "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp"
+        "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp",
+        "NCCL_P2P_DISABLE": "0",
+        "NCCL_P2P_LEVEL": "SYS"
       },
       "latest_benchmark": {
-        "run": "20261029-full-ram",
-        "variant": "qwen27b-hyperqwen-64gb-fixed-fixture",
-        "date": "2026-10-29",
+        "run": "20261031-pair-main-aux",
+        "variant": "qwen27b-hyperqwen-selected-pair",
+        "date": "2026-10-31",
         "context": 56320,
         "physical_ram_gb": 64,
         "physical_ram_usable_gib": 61.30133056640625,
-        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
         "host_vm_swappiness": 60,
-        "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
-        "input_tokens_range": [
-          2197,
-          2207
-        ],
+        "input_tokens": 2212,
         "output_tokens": 128,
-        "ttft_s": 1.4885867039999994,
-        "prefill_tps": 1494.2935903448647,
-        "decode_tps": 88.55229922882138,
+        "ttft_s": 0.890903151999737,
+        "prefill_tps": 2516.494042797954,
+        "decode_tps": 112.1396179143124,
         "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
         "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
-        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        "fixture_sha256": "1b228aa28e5fa3e1409a98609789a924efdd72da109b965cc22bbdac0e808b2f",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-pair-main-aux.json"
       },
       "storage": {
         "access": "gpu-resident",
@@ -194,12 +190,68 @@
           "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
           "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
           "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
+        },
+        {
+          "run": "20261029-full-ram",
+          "variant": "qwen27b-hyperqwen-64gb-fixed-fixture",
+          "date": "2026-10-29",
+          "context": 56320,
+          "physical_ram_gb": 64,
+          "physical_ram_usable_gib": 61.30133056640625,
+          "configured_ram_speed_mt_s": 4200,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
+          "input_tokens_range": [
+            2197,
+            2207
+          ],
+          "output_tokens": 128,
+          "ttft_s": 1.4885867039999994,
+          "prefill_tps": 1494.2935903448647,
+          "decode_tps": 88.55229922882138,
+          "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
+          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/BENCHMARK-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
+          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
         }
       ],
       "current_configuration_benchmark": {
-        "status": "measured on restored 64GB with current selected settings",
-        "date": "2026-10-29",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md"
+        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
+        "date": "2026-10-31",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
+      },
+      "p2p_optimization": {
+        "date": "2026-10-31",
+        "stage": "selected-normal-reload-verified",
+        "main_gpu_indices": [
+          0,
+          1
+        ],
+        "auxiliary_gpu_index": 2,
+        "method": "NCCL P2P + custom all-reduce",
+        "control_decode_tps": 99.85739090807407,
+        "candidate_decode_tps": 112.1396179143124,
+        "control_prefill_tps": 2097.2912216196974,
+        "candidate_prefill_tps": 2516.494042797954,
+        "qualification": {
+          "tool_call": "pass",
+          "tool_roundtrip": "pass",
+          "retrieval_prompt_tokens": 49049,
+          "sustained_usage": {
+            "prompt_tokens": 49106,
+            "total_tokens": 53202,
+            "completion_tokens": 4096,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "continuous_generation_s": 174.25928640499933,
+          "status": "pass"
+        },
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
+        "normal_fresh_loads_verified": 2
       }
     },
     {
@@ -267,29 +319,24 @@
         "disable_prefill_cuda_graph": true
       },
       "latest_benchmark": {
-        "run": "20261029-full-ram",
-        "variant": "qwen27b-sglang-64gb-fixed-fixture",
-        "date": "2026-10-29",
+        "run": "20261031-pair-main-aux",
+        "variant": "qwen27b-sglang-selected-pair",
+        "date": "2026-10-31",
         "context": 32768,
         "physical_ram_gb": 64,
         "physical_ram_usable_gib": 61.30133056640625,
-        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
         "host_vm_swappiness": 60,
-        "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
-        "input_tokens_range": [
-          2197,
-          2207
-        ],
+        "input_tokens": 2212,
         "output_tokens": 128,
-        "ttft_s": 1.3962740080000913,
-        "prefill_tps": 1587.9034833612302,
-        "decode_tps": 80.86850013245734,
+        "ttft_s": 0.8043027920002714,
+        "prefill_tps": 2778.2402805422134,
+        "decode_tps": 95.86370696575719,
         "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
         "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
-        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        "fixture_sha256": "1b228aa28e5fa3e1409a98609789a924efdd72da109b965cc22bbdac0e808b2f",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-pair-main-aux.json"
       },
       "storage": {
         "access": "gpu-resident",
@@ -473,6 +520,31 @@
           "evidence": "docs/SGLANG-CONTEXT-20261028.md",
           "numeric_results": "docs/benchmark-results/20261028-sglang-context.json",
           "dense_gpu_free_floor_mib": 512
+        },
+        {
+          "run": "20261029-full-ram",
+          "variant": "qwen27b-sglang-64gb-fixed-fixture",
+          "date": "2026-10-29",
+          "context": 32768,
+          "physical_ram_gb": 64,
+          "physical_ram_usable_gib": 61.30133056640625,
+          "configured_ram_speed_mt_s": 4200,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
+          "input_tokens_range": [
+            2197,
+            2207
+          ],
+          "output_tokens": 128,
+          "ttft_s": 1.3962740080000913,
+          "prefill_tps": 1587.9034833612302,
+          "decode_tps": 80.86850013245734,
+          "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta",
+          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/BENCHMARK-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
+          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
         }
       ],
       "deployment": {
@@ -588,9 +660,43 @@
         "historical_benchmarks_unchanged": true
       },
       "current_configuration_benchmark": {
-        "status": "measured on restored 64GB with current selected settings",
-        "date": "2026-10-29",
-        "evidence": "docs/BENCHMARK-64GB-20261029.md"
+        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
+        "date": "2026-10-31",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
+      },
+      "environment": {
+        "NCCL_P2P_DISABLE": "0",
+        "NCCL_P2P_LEVEL": "SYS"
+      },
+      "p2p_optimization": {
+        "date": "2026-10-31",
+        "stage": "selected-normal-reload-verified",
+        "main_gpu_indices": [
+          0,
+          1
+        ],
+        "auxiliary_gpu_index": 2,
+        "method": "NCCL P2P, custom all-reduce disabled",
+        "control_decode_tps": 92.94738787028051,
+        "candidate_decode_tps": 95.86370696575719,
+        "control_prefill_tps": 2349.8915828025933,
+        "candidate_prefill_tps": 2778.2402805422134,
+        "qualification": {
+          "tool_call": "pass",
+          "tool_roundtrip": "pass",
+          "retrieval_prompt_tokens": 27049,
+          "sustained_usage": {
+            "prompt_tokens": 27106,
+            "total_tokens": 31202,
+            "completion_tokens": 4096,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "continuous_generation_s": 153.80048644,
+          "status": "pass"
+        },
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
+        "normal_fresh_loads_verified": 2
       }
     },
     {
@@ -617,29 +723,24 @@
       },
       "evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "latest_benchmark": {
-        "run": "20261030-hardware-tuning",
-        "variant": "qwen-resident-both-gpus-32k",
-        "date": "2026-10-30",
+        "run": "20261031-pair-main-aux",
+        "variant": "flash-next-strata-selected-pair",
+        "date": "2026-10-31",
         "context": 32768,
         "physical_ram_gb": 64,
         "physical_ram_usable_gib": 61.30133056640625,
-        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
-        "output_tokens": 128,
         "host_vm_swappiness": 60,
-        "prefill_tps": 628.8,
-        "decode_tps": 88.11848245738248,
-        "ttft_s": 3.462467130000732,
-        "input_tokens_range": [
-          2166,
-          2178
-        ],
-        "evidence": "docs/HARDWARE-TUNING-QUALIFICATION-20261030.md",
-        "numeric_results": "docs/validation-results/20261030-hardware-tuning.json",
-        "fixture_sha256": "2d2f29f93acf7cd7e58d484df976e7983b661938a8341428a00eaf3ca726c080",
-        "prefill_method": "native prompt timing",
+        "input_tokens": 2212,
+        "output_tokens": 128,
+        "ttft_s": 3.199303364000116,
+        "prefill_tps": 695.2,
+        "decode_tps": 98.41561850407794,
+        "prefill_method": "native prompt_n / native prompt time",
         "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "scope": "matched full-qualification speed screen; cache state remains variable"
+        "fixture_sha256": "1b228aa28e5fa3e1409a98609789a924efdd72da109b965cc22bbdac0e808b2f",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-pair-main-aux.json"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -836,13 +937,37 @@
           "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
           "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json",
           "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        },
+        {
+          "run": "20261030-hardware-tuning",
+          "variant": "qwen-resident-both-gpus-32k",
+          "date": "2026-10-30",
+          "context": 32768,
+          "physical_ram_gb": 64,
+          "physical_ram_usable_gib": 61.30133056640625,
+          "configured_ram_speed_mt_s": 4200,
+          "repetitions": 3,
+          "output_tokens": 128,
+          "host_vm_swappiness": 60,
+          "prefill_tps": 628.8,
+          "decode_tps": 88.11848245738248,
+          "ttft_s": 3.462467130000732,
+          "input_tokens_range": [
+            2166,
+            2178
+          ],
+          "evidence": "docs/HARDWARE-TUNING-QUALIFICATION-20261030.md",
+          "numeric_results": "docs/validation-results/20261030-hardware-tuning.json",
+          "fixture_sha256": "2d2f29f93acf7cd7e58d484df976e7983b661938a8341428a00eaf3ca726c080",
+          "prefill_method": "native prompt timing",
+          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+          "scope": "matched full-qualification speed screen; cache state remains variable"
         }
       ],
       "current_configuration_benchmark": {
-        "status": "resident mode qualified on restored64GB under unchanged guards",
-        "date": "2026-10-30",
-        "evidence": "docs/HARDWARE-TUNING-QUALIFICATION-20261030.md",
-        "historical_benchmark_is_not_current_configuration": false
+        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
+        "date": "2026-10-31",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
       },
       "swap_policy_selection": {
         "date": "2026-10-29",
@@ -961,29 +1086,24 @@
       "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
       "benchmark_configuration_note": "Historical 8K automatic-RAM benchmark remains under benchmark; latest_benchmark records the current bounded tier and on-demand CPU vision.",
       "latest_benchmark": {
-        "run": "20261029-ssd-relaxed-swap",
-        "variant": "glm-maya-64gb-ssd128-160",
-        "date": "2026-10-29",
+        "run": "20261031-pair-main-aux",
+        "variant": "glm-maya-selected-pair",
+        "date": "2026-10-31",
         "context": 65536,
         "physical_ram_gb": 64,
         "physical_ram_usable_gib": 61.30133056640625,
-        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
         "host_vm_swappiness": 60,
-        "swap_policy": "SSD-streaming128 MiB/s writes /160 MiB/s combined over30s",
+        "input_tokens": 2199,
         "output_tokens": 128,
-        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
-        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c",
+        "ttft_s": 29.83726274899982,
+        "prefill_tps": 74.1,
+        "decode_tps": 6.389474324445759,
+        "prefill_method": "native prompt_n / native prompt time",
         "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "prefill_tps": 63.8,
-        "ttft_s": 34.7332943600004,
-        "decode_tps": 4.92634812288044,
-        "input_tokens_range": [
-          2191,
-          2201
-        ],
-        "prefill_method": "native prompt_n / native prompt time"
+        "fixture_sha256": "1b228aa28e5fa3e1409a98609789a924efdd72da109b965cc22bbdac0e808b2f",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-pair-main-aux.json"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -1101,6 +1221,31 @@
           "evidence": "docs/BENCHMARK-64GB-20261029.md",
           "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
           "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        },
+        {
+          "run": "20261029-ssd-relaxed-swap",
+          "variant": "glm-maya-64gb-ssd128-160",
+          "date": "2026-10-29",
+          "context": 65536,
+          "physical_ram_gb": 64,
+          "physical_ram_usable_gib": 61.30133056640625,
+          "configured_ram_speed_mt_s": 4200,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "SSD-streaming128 MiB/s writes /160 MiB/s combined over30s",
+          "output_tokens": 128,
+          "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c",
+          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+          "prefill_tps": 63.8,
+          "ttft_s": 34.7332943600004,
+          "decode_tps": 4.92634812288044,
+          "input_tokens_range": [
+            2191,
+            2201
+          ],
+          "prefill_method": "native prompt_n / native prompt time"
         }
       ],
       "reduced_ram_qualification": {
@@ -1138,10 +1283,9 @@
         "evidence": "docs/MOE-VRAM512-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "measured on restored 64GB with SSD128/160 policy",
-        "date": "2026-10-29",
-        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
-        "historical_benchmark_is_not_current_configuration": false
+        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
+        "date": "2026-10-31",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -1271,29 +1415,24 @@
         }
       },
       "latest_benchmark": {
-        "run": "20261029-ssd-relaxed-swap",
-        "variant": "deepseek-strata-64gb-ssd128-160",
-        "date": "2026-10-29",
+        "run": "20261031-pair-main-aux",
+        "variant": "deepseek-strata-selected-pair",
+        "date": "2026-10-31",
         "context": 131072,
         "physical_ram_gb": 64,
         "physical_ram_usable_gib": 61.30133056640625,
-        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
         "host_vm_swappiness": 60,
-        "swap_policy": "SSD-streaming128 MiB/s writes /160 MiB/s combined over30s",
+        "input_tokens": 2188,
         "output_tokens": 128,
-        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
-        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c",
+        "ttft_s": 70.84524688199963,
+        "prefill_tps": 30.8,
+        "decode_tps": 3.2712231863921586,
+        "prefill_method": "native prompt_n / native prompt time",
         "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "prefill_tps": 34.2,
-        "ttft_s": 63.86864420999973,
-        "decode_tps": 2.7538217587589835,
-        "input_tokens_range": [
-          2173,
-          2192
-        ],
-        "prefill_method": "native prompt_n / native prompt time"
+        "fixture_sha256": "1b228aa28e5fa3e1409a98609789a924efdd72da109b965cc22bbdac0e808b2f",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-pair-main-aux.json"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -1410,6 +1549,31 @@
           "evidence": "docs/BENCHMARK-64GB-20261029.md",
           "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
           "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        },
+        {
+          "run": "20261029-ssd-relaxed-swap",
+          "variant": "deepseek-strata-64gb-ssd128-160",
+          "date": "2026-10-29",
+          "context": 131072,
+          "physical_ram_gb": 64,
+          "physical_ram_usable_gib": 61.30133056640625,
+          "configured_ram_speed_mt_s": 4200,
+          "repetitions": 3,
+          "host_vm_swappiness": 60,
+          "swap_policy": "SSD-streaming128 MiB/s writes /160 MiB/s combined over30s",
+          "output_tokens": 128,
+          "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
+          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c",
+          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+          "prefill_tps": 34.2,
+          "ttft_s": 63.86864420999973,
+          "decode_tps": 2.7538217587589835,
+          "input_tokens_range": [
+            2173,
+            2192
+          ],
+          "prefill_method": "native prompt_n / native prompt time"
         }
       ],
       "reduced_ram_qualification": {
@@ -1447,10 +1611,9 @@
         "evidence": "docs/MOE-VRAM512-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "measured on restored 64GB with SSD128/160 policy",
-        "date": "2026-10-29",
-        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
-        "historical_benchmark_is_not_current_configuration": false
+        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
+        "date": "2026-10-31",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -1671,10 +1834,9 @@
         "evidence": "docs/MAYA-DEMAND-CACHE-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "measured on64GB with targeted pressure15 policy",
-        "date": "2026-10-29",
-        "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
-        "historical_benchmark_is_not_current_configuration": false
+        "status": "incomplete: existing sustained-memory-pressure guard stopped repetition 3 after two completed requests; prior latest benchmark retained",
+        "date": "2026-10-31",
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
       },
       "current_guard_validation": {
         "date": "2026-10-29",

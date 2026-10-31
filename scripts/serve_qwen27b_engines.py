@@ -90,6 +90,8 @@ def main():
                PYTORCH_CUDA_ALLOC_CONF='expandable_segments:False',
                SGLANG_ENABLE_TP_MEMORY_INBALANCE_CHECK='1',
                CC='gcc-13', CXX='g++-13')
+    # Main inference stays on the 3080 pair; the 3060 is reserved for auxiliary work.
+    env.update(profile.get('environment') or {})
     env['PATH'] = str(cuda / 'bin') + ':' + env['PATH']
     if engine == 'sglang':
         from sglang_runtime import prepare_environment
@@ -126,7 +128,6 @@ def main():
             **dict(profile['server_args'], speculative_draft_model_path=str(MODEL)),
         ))
         return
-    env.update(profile['environment'])
     env['VLLM_API_KEY'] = KEY.read_text().strip()
     args = [str(binary), 'serve', str(MODEL)] + profile['cli_args']
     os.execve(binary, args, env)

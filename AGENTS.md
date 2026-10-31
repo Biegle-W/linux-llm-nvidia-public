@@ -1,5 +1,13 @@
 # Agent entry point
 
+## Main and auxiliary GPU roles — October 31
+
+Use the RTX 3080 Ti 12 GB and RTX 3080 10 GB for main inference. Reserve the RTX 3060 12 GB for auxiliary work. A separate drafter requires explicit engine placement support and a measured benefit before selection; the tested Qwen GGUF 3060 drafter was slower and remains experimental. Preserve the verified pair-only P2P setup, independent resource/ownership guards, unrelated workloads and existing client defaults. Rediscover device identities before changing placement after hardware changes.
+
+## Latest: main-pair inference and auxiliary 3060 optimization — October 31
+
+Main inference uses the RTX 3080 Ti/3080 pair; the RTX 3060 is reserved for auxiliary work. Qualified NCCL P2P settings are selected for both Qwen 27B engines, with custom all-reduce enabled only in HyperQwen. Fresh controls, tools, near-window retrieval, sustained generation and two normal-router reloads per engine passed. The dedicated 3060 GGUF drafter worked but was slower than main-pair MTP and was not selected. Existing native model caches/contexts and all guards are preserved. See [measurements and scope](docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md).
+
 ## Latest: Nemotron INT4 offload startup checks — October 31
 
 Neither Bolt 74B AWQ INT4 nor Super VL mixed INT4 reached inference in the tested installed engines. Bolt real-weight vLLM loads stopped at RAM pressure or the GPU reserve; Super VL initialization hit group-layout/resource gates, and SGLang rejected its fallback implementation. Super VL was initialization-tested only, not fully downloaded or benchmarked. Qwen and all maintained profiles remain unchanged; owned workers/downloads are stopped and no GPU reservation remains. See [scope, failures and next step](docs/NEMOTRON-INT4-OFFLOAD-20261031.md).

@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md',
+    'docs/benchmark-results/20261031-pair-main-aux.json',
     'docs/NEMOTRON-INT4-OFFLOAD-20261031.md',
     'docs/validation-results/20261031-nemotron-int4-offload.json',
     'docs/validation-results/20261031-pair-p2p.json',

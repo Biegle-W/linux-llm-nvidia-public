@@ -1,0 +1,935 @@
+{
+  "date": "2026-10-31",
+  "hardware": {
+    "host_ram_gb": 64,
+    "host_usable_gib": 61.3013,
+    "main_gpus": [
+      "RTX 3080 Ti 12GB",
+      "RTX 3080 10GB"
+    ],
+    "auxiliary_gpu": "RTX 3060 12GB",
+    "main_gpu_indices": [
+      0,
+      1
+    ],
+    "auxiliary_gpu_index": 2,
+    "pair_p2p_previously_correctness_qualified": true
+  },
+  "protocol": {
+    "fixture_sha256": "1b228aa28e5fa3e1409a98609789a924efdd72da109b965cc22bbdac0e808b2f",
+    "repetitions": 3,
+    "warmup_output_tokens": 64,
+    "measured_output_tokens": 128,
+    "temperature": 0,
+    "concurrency": 1,
+    "load_time_included": false,
+    "cache_state": "loaded model, one warmup; native expert caches adaptive; cached conversation tokens rejected; original persisted conversation KV isolated and restored",
+    "decode_definition": "Client SSE (completion tokens - 1) / first-to-last-content interval"
+  },
+  "dense_screens": [
+    {
+      "engine": "hyperqwen",
+      "arm": "control",
+      "status": "screen-pass",
+      "context": 56320,
+      "decode_median": 99.85739090807407,
+      "prefill_median": 2097.2912216196974,
+      "ttft_median": 1.068759325999963,
+      "short_quality": "pass"
+    },
+    {
+      "engine": "hyperqwen",
+      "arm": "p2p-nccl",
+      "status": "screen-pass",
+      "context": 56320,
+      "decode_median": 104.91315456760232,
+      "prefill_median": 2527.972302090838,
+      "ttft_median": 0.8873575960005837,
+      "short_quality": "pass"
+    },
+    {
+      "engine": "hyperqwen",
+      "arm": "p2p-custom",
+      "status": "screen-pass",
+      "context": 56320,
+      "decode_median": 111.90218446432563,
+      "prefill_median": 2508.227214883998,
+      "ttft_median": 0.8959998480004288,
+      "short_quality": "pass"
+    },
+    {
+      "engine": "sglang",
+      "arm": "control",
+      "status": "screen-pass",
+      "context": 32768,
+      "decode_median": 92.94738787028051,
+      "prefill_median": 2349.8915828025933,
+      "ttft_median": 0.9537742429993159,
+      "short_quality": "pass"
+    },
+    {
+      "engine": "sglang",
+      "arm": "p2p-nccl",
+      "status": "screen-pass",
+      "context": 32768,
+      "decode_median": 96.26606689276834,
+      "prefill_median": 2779.744225503837,
+      "ttft_median": 0.8054229859999396,
+      "short_quality": "pass"
+    },
+    {
+      "engine": "sglang",
+      "arm": "p2p-custom",
+      "status": "screen-pass",
+      "context": 32768,
+      "decode_median": 96.32024638030332,
+      "prefill_median": 2782.7150422301265,
+      "ttft_median": 0.809389306000412,
+      "short_quality": "pass"
+    }
+  ],
+  "dense_confirmations": [
+    {
+      "engine": "hyperqwen",
+      "arm": "qualify-p2p-custom",
+      "status": "screen-pass",
+      "context": 56320,
+      "decode_median": 112.1396179143124,
+      "prefill_median": 2516.494042797954,
+      "ttft_median": 0.890903151999737,
+      "short_quality": "pass",
+      "qualification": {
+        "tool_call": "pass",
+        "tool_roundtrip": "pass",
+        "retrieval_prompt_tokens": 49049,
+        "sustained_usage": {
+          "prompt_tokens": 49106,
+          "total_tokens": 53202,
+          "completion_tokens": 4096,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "continuous_generation_s": 174.25928640499933,
+        "status": "pass"
+      }
+    },
+    {
+      "engine": "sglang",
+      "arm": "qualify-p2p-nccl",
+      "status": "screen-pass",
+      "context": 32768,
+      "decode_median": 95.86370696575719,
+      "prefill_median": 2778.2402805422134,
+      "ttft_median": 0.8043027920002714,
+      "short_quality": "pass",
+      "qualification": {
+        "tool_call": "pass",
+        "tool_roundtrip": "pass",
+        "retrieval_prompt_tokens": 27049,
+        "sustained_usage": {
+          "prompt_tokens": 27106,
+          "total_tokens": 31202,
+          "completion_tokens": 4096,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "continuous_generation_s": 153.80048644,
+        "status": "pass"
+      }
+    }
+  ],
+  "normal_reload_checks": [
+    {
+      "engine": "hyperqwen",
+      "repeat": 0,
+      "new_worker_invocation": true,
+      "arithmetic": "pass",
+      "kv_pool_capacities": [
+        59914
+      ],
+      "environment": [
+        {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        }
+      ],
+      "status": "pass"
+    },
+    {
+      "engine": "hyperqwen",
+      "repeat": 1,
+      "new_worker_invocation": true,
+      "arithmetic": "pass",
+      "kv_pool_capacities": [
+        59914
+      ],
+      "environment": [
+        {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        }
+      ],
+      "status": "pass"
+    },
+    {
+      "engine": "sglang",
+      "repeat": 0,
+      "new_worker_invocation": true,
+      "arithmetic": "pass",
+      "kv_pool_capacities": [
+        32768,
+        32768,
+        32768,
+        32768
+      ],
+      "environment": [
+        {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        }
+      ],
+      "status": "pass"
+    },
+    {
+      "engine": "sglang",
+      "repeat": 1,
+      "new_worker_invocation": true,
+      "arithmetic": "pass",
+      "kv_pool_capacities": [
+        32768,
+        32768,
+        32768,
+        32768
+      ],
+      "environment": [
+        {
+          "CUDA_VISIBLE_DEVICES": "0,1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "1",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        },
+        {
+          "CUDA_VISIBLE_DEVICES": "0",
+          "NCCL_P2P_DISABLE": "0",
+          "NCCL_P2P_LEVEL": "SYS"
+        }
+      ],
+      "status": "pass"
+    }
+  ],
+  "selected_profile_measurements": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "model": "Qwen3.8-27B",
+      "engine": "HyperQwen-vLLM",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "context": 56320,
+      "repetitions": 3,
+      "ttft_s": 0.890903151999737,
+      "prefill_tps": 2516.494042797954,
+      "client_decode_tps": 112.1396179143124,
+      "prompt_tokens": 2212,
+      "output_tokens": 128,
+      "prompt_tokens_range": [
+        2212,
+        2222
+      ],
+      "prefill_method": "vllm:request_prefill_time_seconds per-request delta"
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "model": "Qwen3.8-27B",
+      "engine": "SGLang",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "context": 32768,
+      "repetitions": 3,
+      "ttft_s": 0.8043027920002714,
+      "prefill_tps": 2778.2402805422134,
+      "client_decode_tps": 95.86370696575719,
+      "prompt_tokens": 2212,
+      "output_tokens": 128,
+      "prompt_tokens_range": [
+        2212,
+        2222
+      ],
+      "prefill_method": "sglang:per_stage_req_latency_seconds{stage=\"prefill_forward\"} per-request delta"
+    },
+    {
+      "profile": "flash-next-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "engine": "Strata",
+      "quant": "IQ3_XXS",
+      "context": 32768,
+      "repetitions": 3,
+      "ttft_s": 3.199303364000116,
+      "ttft_s_range": [
+        3.1690197730004,
+        3.239987535999717
+      ],
+      "prefill_tps": 695.2,
+      "prefill_tps_range": [
+        690.0,
+        702.5
+      ],
+      "client_decode_tps": 98.41561850407794,
+      "client_decode_tps_range": [
+        76.40367699854383,
+        102.32796078558276
+      ],
+      "native_decode_tps": 98.1,
+      "native_decode_tps_range": [
+        76.4,
+        102.0
+      ],
+      "prompt_tokens": 2212,
+      "prompt_tokens_range": [
+        2212,
+        2222
+      ],
+      "output_tokens": 128,
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "wall_s": 4.459593116000178,
+      "wall_s_range": [
+        4.440784047999841,
+        4.9023927650005135
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "prior_qualification_retrieval_input": 29435
+    },
+    {
+      "profile": "glm-maya",
+      "model": "GLM-5.3-Flash",
+      "engine": "Maya",
+      "quant": "Maya-S24",
+      "context": 65536,
+      "repetitions": 3,
+      "ttft_s": 29.83726274899982,
+      "ttft_s_range": [
+        29.587171060999935,
+        29.95405561699954
+      ],
+      "prefill_tps": 74.1,
+      "prefill_tps_range": [
+        73.6,
+        74.5
+      ],
+      "client_decode_tps": 6.389474324445759,
+      "client_decode_tps_range": [
+        5.405432041451229,
+        6.905752052281081
+      ],
+      "native_decode_tps": 6.4,
+      "native_decode_tps_range": [
+        5.4,
+        7.0
+      ],
+      "prompt_tokens": 2199,
+      "prompt_tokens_range": [
+        2199,
+        2209
+      ],
+      "output_tokens": 128,
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "wall_s": 49.88412681999944,
+      "wall_s_range": [
+        47.992379431999325,
+        53.34358464199977
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "prior_qualification_retrieval_input": 58986
+    },
+    {
+      "profile": "deepseek-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "engine": "Strata",
+      "quant": "Maya-S",
+      "context": 131072,
+      "repetitions": 3,
+      "ttft_s": 70.84524688199963,
+      "ttft_s_range": [
+        56.00920836400019,
+        106.7472864349993
+      ],
+      "prefill_tps": 30.8,
+      "prefill_tps_range": [
+        20.6,
+        39.1
+      ],
+      "client_decode_tps": 3.2712231863921586,
+      "client_decode_tps_range": [
+        2.2007339595603,
+        3.3020769872183484
+      ],
+      "native_decode_tps": 3.3,
+      "native_decode_tps_range": [
+        2.2,
+        3.3
+      ],
+      "prompt_tokens": 2188,
+      "prompt_tokens_range": [
+        2179,
+        2198
+      ],
+      "output_tokens": 128,
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "wall_s": 113.71739443200022,
+      "wall_s_range": [
+        109.30604778299949,
+        145.570799868
+      ],
+      "prefill_method": "native prompt_n / native prompt time",
+      "prior_qualification_retrieval_input": 117866
+    }
+  ],
+  "gguf_auxiliary_experiment": [
+    {
+      "arm": "layer-no-draft",
+      "status": "screen-pass",
+      "context": 32768,
+      "decode_median": 38.798553922177476,
+      "prefill_median": 1952.5267655935124,
+      "ttft_median": 1.3476051540001208
+    },
+    {
+      "arm": "tensor-no-draft",
+      "status": "screen-pass",
+      "context": 32768,
+      "decode_median": 55.31954319425506,
+      "prefill_median": 1231.6470941313576,
+      "ttft_median": 2.027914354999666
+    },
+    {
+      "arm": "tensor-pair-mtp",
+      "status": "screen-pass",
+      "context": 32768,
+      "decode_median": 84.66956129319287,
+      "prefill_median": 1158.2659372336627,
+      "ttft_median": 2.1442909080005847
+    },
+    {
+      "arm": "tensor-3060-mtp",
+      "status": "screen-pass",
+      "context": 32768,
+      "decode_median": 67.39253950471759,
+      "prefill_median": 1152.5497558126388,
+      "ttft_median": 2.154916368999693
+    }
+  ],
+  "derived_mtp": {
+    "source_gguf_bytes": 17442399968,
+    "bytes": 2008054496,
+    "original_tensors_byte_identical": true,
+    "new_weights_downloaded": false,
+    "selected_for_production": false,
+    "reason": "3060 drafting was slower than drafting on the main pair; HyperQwen remains faster overall"
+  },
+  "native_benchmark_outcome": {
+    "status": "incomplete",
+    "profile": "deepseek-maya",
+    "completed_repetitions": 2,
+    "requested_repetitions": 3,
+    "reason": "Sustained full-memory pressure during inference; existing guard stopped the worker",
+    "configuration_changed": false
+  },
+  "native_conversation_snapshots_restored": true,
+  "production_changes": [
+    "Both dense profiles enable NCCL P2P on GPUs 0/1 only",
+    "HyperQwen enables custom all-reduce; SGLang retains disabled custom all-reduce",
+    "Attention terminal focus fallback; backend minimization preserved"
+  ],
+  "preserved": [
+    "model weights and quantization",
+    "allocated contexts",
+    "runtime source/dependency pins",
+    "MoE cache settings and budgets",
+    "all resource guards, swappiness60 and idle600",
+    "hardware configuration and unrelated jobs"
+  ],
+  "sources": [
+    {
+      "url": "https://github.com/syv-ai/HyperQwen/issues/254",
+      "lead": "NCCL policy can retain host SHM even with CUDA peers enabled; match NCCL route logs and benchmark controls."
+    },
+    {
+      "url": "https://github.com/syv-ai/HyperQwen/blob/main/docs/multi-gpu.md",
+      "lead": "TP2 plus independent third-card service; TP3 invalid for Qwen27B; P2P settings require per-topology tests."
+    },
+    {
+      "url": "https://github.com/efschu/htsglang",
+      "lead": "Solo drafter is hosted on an existing TP rank; no proof of external3060 draft support in pinned fork."
+    },
+    {
+      "url": "https://www.reddit.com/r/LocalLLM/comments/1wpc1rz/best_local_coding_model_for_3x_rtx_3060_12gb/",
+      "lead": "Community report: adding a third card can slow inference; treat as hypothesis, not a measured result for this machine."
+    },
+    {
+      "url": "https://huggingface.co/ggml-org/Qwen3.8-27B-GGUF/discussions/4",
+      "lead": "Community Qwen27B GGUF MTP placement experiments; inspect installed code and actual draft device."
+    }
+  ],
+  "bolt_pageable_followup": {
+    "status": "failed",
+    "error": "RAM/VRAM reserve guard",
+    "guard_stop": "RAM/VRAM reserve guard",
+    "memory_high_gib": 46,
+    "memory_max_gib": 48,
+    "load_seconds": null
+  },
+  "validation": {
+    "cpu_regression_tests": 263,
+    "cpu_result": "pass",
+    "catalog_validation": "pass",
+    "normal_fresh_reloads": 4,
+    "snapshot_hashes_restored": true,
+    "owned_workers_inactive": true,
+    "router_idle": true,
+    "dsh_preserved_active": true
+  }
+}

@@ -151,6 +151,10 @@ def focus_terminal(window_id):
     x.XDefaultRootWindow.argtypes = [ctypes.c_void_p]; x.XDefaultRootWindow.restype = ctypes.c_ulong
     x.XInternAtom.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int]; x.XInternAtom.restype = ctypes.c_ulong
     x.XMapRaised.argtypes = [ctypes.c_void_p, ctypes.c_ulong]
+    x.XRaiseWindow.argtypes = [ctypes.c_void_p, ctypes.c_ulong]
+    x.XSetInputFocus.argtypes = [ctypes.c_void_p, ctypes.c_ulong, ctypes.c_int, ctypes.c_ulong]
+    x.XQueryTree.argtypes = [ctypes.c_void_p, ctypes.c_ulong, ctypes.POINTER(ctypes.c_ulong),
+        ctypes.POINTER(ctypes.c_ulong), ctypes.POINTER(ctypes.POINTER(ctypes.c_ulong)), ctypes.POINTER(ctypes.c_uint)]
     x.XFlush.argtypes = [ctypes.c_void_p]; x.XCloseDisplay.argtypes = [ctypes.c_void_p]
     x.XFree.argtypes = [ctypes.c_void_p]
     class Data(ctypes.Union):
@@ -182,7 +186,20 @@ def focus_terminal(window_id):
         event.message.window = window; event.message.message_type = atom; event.message.format = 32
         event.message.data.l[0] = 2  # User-requested activation of this owned terminal.
         x.XSendEvent(display, root, 0, (1 << 20) | (1 << 19), ctypes.byref(event)); x.XFlush(display)
-        for _ in range(40):
+        for attempt in range(40):
+            # Some reparenting window managers ignore the activation message.
+            # Focus only this owned attention client and raise its own frame.
+            if attempt == 10:
+                tree_root = ctypes.c_ulong(); parent = ctypes.c_ulong()
+                children = ctypes.POINTER(ctypes.c_ulong)(); nchildren = ctypes.c_uint()
+                if x.XQueryTree(display, window, ctypes.byref(tree_root), ctypes.byref(parent),
+                                ctypes.byref(children), ctypes.byref(nchildren)):
+                    frame = parent.value if parent.value != root else window
+                    x.XRaiseWindow(display, frame)
+                if children:
+                    x.XFree(children)
+                x.XSetInputFocus(display, window, 2, 0)  # RevertToParent, CurrentTime.
+                x.XFlush(display)
             actual = ctypes.c_ulong(); fmt = ctypes.c_int(); count = ctypes.c_ulong(); left = ctypes.c_ulong()
             value = ctypes.POINTER(ctypes.c_ubyte)()
             rc = x.XGetWindowProperty(display, root, atom, 0, 1, 0, 0, ctypes.byref(actual), ctypes.byref(fmt),
