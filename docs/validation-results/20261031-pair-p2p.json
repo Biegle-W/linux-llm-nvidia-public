@@ -28,6 +28,13 @@
   "changed_bridge_count": 4,
   "acs_service_enabled": true,
   "acs_service_active": true,
-  "acs_policy_fresh_reboot_tested": false,
-  "model_performance_tested": false
+  "acs_policy_fresh_reboot_tested": true,
+  "model_performance_tested": false,
+  "unlock_version": "2.0.0",
+  "post_reboot_all_three_unlock_verified": true,
+  "post_reboot_p2p_correctness_pass": true,
+  "post_reboot_peer_copy_gbps": [
+    13.081,
+    13.085
+  ]
 }

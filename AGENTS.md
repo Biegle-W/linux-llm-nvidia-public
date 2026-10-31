@@ -1,5 +1,24 @@
 # Agent entry point
 
+## Latest: unlock 2.0 and pair P2P verified after reboot — October 31
+
+The loaded gpu_unlock module is **2.0.0** on Linux 7.0.0-42-generic with NVIDIA
+615.71.09. Boot health reports **VERIFIED**, with successful unlock of the 3080 Ti,
+3080 and 3060 before NVIDIA initialized and no pending reboot. The identity-based
+hook handled changed PCI addresses. All 16 firmware files and the boot image
+passed health checks. Patched NVIDIA module srcversions match the qualified
+candidate. The scoped ACS service applied successfully on this boot; seeded
+16 MiB remote reads/writes passed both directions at 13.081/13.085 GB/s peer copy.
+No model-performance improvement is inferred from this hardware check.
+
+Local scratch work/output folders are consolidated under the project's ignored
+`data/work/` directory; compatibility links preserve existing paths. Cleanup
+removed 2,402,957,853 logical bytes of duplicate downloads, superseded static-driver
+builds and regenerable build products. Obsolete installers and retired settings
+were hash-verified in the private retirement archive before removal. Maintained
+runtimes, models, guards, rollback packages, source pins and benchmark evidence
+remain available. Existing router and harness services remain active.
+
 ## Latest: GPU unlock 2.0 staged for all three cards — October 31
 
 The requested upgrade installed gpu-unlock 2.0.0 from reviewed upstream commit
