@@ -42,8 +42,8 @@ class SwapPolicyTest(unittest.TestCase):
                 guard = WorkerWatch('/unused', profile, 'test').guard
                 self.assertEqual((guard.write_limit, guard.combined_limit), (1, 8))
 
-    def test_pressure_allowance_is_two_profile_only_and_still_latches(self):
-        for profile in ('flash-next-strata', 'deepseek-maya'):
+    def test_pressure_allowance_is_selected_profile_only_and_still_latches(self):
+        for profile in ('flash-next-strata', 'deepseek-maya', 'deepseek-unsloth-strata'):
             with self.subTest(profile=profile):
                 g = WorkerWatch('/unused', profile, 'test').guard
                 for t in (0, 30, 32, 34):

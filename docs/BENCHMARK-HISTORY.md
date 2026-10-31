@@ -1,5 +1,20 @@
 # Benchmark ledger
 
+## Latest: additional Unsloth DeepSeek Strata option at 32K — October 31
+
+The Strata model menu now includes a separate **Unsloth Dynamic3.1 UD-IQ1_S**
+DeepSeek option on its independently pinned Strata 0.2.9 / engine 0.1.55 runtime.
+The 32,768-token setting passed three-marker retrieval at **29,446 actual input
+tokens**, plus a complete 256-token stream on a separate same-setting reload.
+Two fresh normal-router loads passed arithmetic, JSON, streaming, authentication
+and actual busy-unload protection. The original seven profile objects remain
+unchanged; the registry now has eight selected profiles. Guards, six experts,
+main-pair placement and idle 600 seconds are preserved. The 3060 remains auxiliary.
+The 29K retrieval request took about 15 minutes; the reply used a JSON code fence,
+recorded separately from correct retrieval content. CPU regression checks passed
+320 tests, with 13 focused checks after cache isolation. Larger contexts were not
+qualified. [Results, use and limits](DEEPSEEK-UNSLOTH-CONTEXT-20261031.md).
+
 ## Latest: working Dynamic3.1 SSD candidate and quiet automated terminals — October 31
 
 Strata 0.2.9 / engine 0.1.55 passed isolated 2K arithmetic/JSON and two complete 256-token streams with bounded 128/160 MiB/s swap and 15% pressure guards. Decode observations were 5.769 and 7.745 tok/s (second prompt cached); swap activity and pressure were zero. Existing selections remain unchanged. Automated harnesses now stay minimized; 307 CPU tests and a live no-focus/auto-close check passed. [Settings, evidence and scope](DEEPSEEK-DYNAMIC31-20261031.md).

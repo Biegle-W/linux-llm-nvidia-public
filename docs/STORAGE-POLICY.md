@@ -1,5 +1,14 @@
 # Model storage policy
 
+## Unsloth DeepSeek split-storage profile — October 31
+
+The additional `deepseek-unsloth-strata` profile has an explicit per-file policy:
+its first four GGUF shards, including metadata, stay on NVMe; its final Engram
+shard stays on SATA. The checker resolves each file link, requires the declared
+five-file set and rejects the wrong physical transport or missing shards.
+This is a narrow split-storage exception; existing profiles keep their original
+transport requirements. No weights were moved or downloaded for menu integration.
+
 Effective October 27, 2026, reserve NVMe model storage for models that stream
 weights from SSD during inference. Put models whose execution weights reside in
 GPU memory or RAM, including unused dense trial checkpoints, on the SATA SSD.

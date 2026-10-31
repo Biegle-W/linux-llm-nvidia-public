@@ -11,7 +11,7 @@ class SharedPolicy(unittest.TestCase):
         self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name)
         (self.root/'config').mkdir();self.policy={'schema':1,'idle_timeout_s':600,'lifecycle_telemetry':True,'visible_terminals_required':True}
         self.save()
-        for rel in NATIVE_SOURCES.values():
+        for rel in [*NATIVE_SOURCES.values(), 'runtimes/strata-unsloth-029/source/serve/server.py']:
             p=self.root/rel;p.parent.mkdir(parents=True);p.write_text('# Managed NVIDIA idle reservation\nidle_activity_path=None\nidle_lock_path=None\n')
     def save(self):(self.root/'config/inference-policy.json').write_text(json.dumps(self.policy))
     def test_all_maintained_profiles_receive_the_same_timeout(self):

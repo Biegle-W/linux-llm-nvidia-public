@@ -2117,6 +2117,70 @@
         "normal_router_sustained_output_tokens": 128,
         "normal_router_generation_s": 281.8612519469971
       }
+    },
+    {
+      "id": "deepseek-unsloth-strata",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "weight_quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
+      "engine": "Strata",
+      "status": "selected",
+      "launch": [
+        "strata-unsloth"
+      ],
+      "allocated_context": 32768,
+      "context_validation": "Arithmetic, JSON, three-marker retrieval at 29446 actual input tokens, and 256-token stream passed under unchanged guards; normal router verification recorded separately.",
+      "runtime_selector": {
+        "kind": "pinned-strata029",
+        "manifest": "config/deepseek-unsloth-runtime.json"
+      },
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": null
+      },
+      "host_ram_reserve_gib": 2,
+      "selected_settings": {
+        "gpu": [
+          0,
+          1
+        ],
+        "auxiliary_gpu_index": 2,
+        "experts": 6,
+        "cpu_store_decimal_gb": 36,
+        "internal_gpu_reserve_mib": 768,
+        "mmap_experts": true,
+        "drafting": "none",
+        "prefill_chunk": 128,
+        "swap_guard": {
+          "window_s": 30,
+          "write_mib_s": 128,
+          "combined_mib_s": 160,
+          "pressure_pct": 15
+        },
+        "effective_prefill_chunk_observed": 256
+      },
+      "storage": {
+        "access": "ssd-streaming",
+        "checkpoint_directory": "models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S",
+        "required_transport": "nvme",
+        "file_transports": {
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00001-of-00005.gguf": "nvme",
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00002-of-00005.gguf": "nvme",
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00003-of-00005.gguf": "nvme",
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00004-of-00005.gguf": "nvme",
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00005-of-00005.gguf": "sata"
+        },
+        "base_weight_bytes": 232979608420,
+        "base_weight_gb": 232.97960842
+      },
+      "evidence": "docs/DEEPSEEK-UNSLOTH-CONTEXT-20261031.md",
+      "runtime_manifest": "config/deepseek-unsloth-runtime.json",
+      "display_name": "DeepSeek-V4.1-Flash-1017 / Unsloth Dynamic3.1 UD-IQ1_S / Strata",
+      "benchmark": {
+        "short_decode_tps": 5.79684787067062,
+        "context": 32768,
+        "status": "single-stream observation; not a matched speed comparison"
+      }
     }
   ],
   "host_reclaim_policy": {

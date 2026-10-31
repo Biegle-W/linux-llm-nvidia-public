@@ -19,7 +19,10 @@ def load_policy(root=ROOT):
 
 def apply_native_idle(config, profile, root=ROOT):
     policy = load_policy(root)
-    source = (root / NATIVE_SOURCES[profile['engine']]).read_text()
+    native_source = ('runtimes/strata-unsloth-029/source/serve/server.py'
+                     if profile['id'] == 'deepseek-unsloth-strata'
+                     else NATIVE_SOURCES[profile['engine']])
+    source = (root / native_source).read_text()
     for marker in ['# Managed NVIDIA idle reservation', 'idle_activity_path', 'idle_lock_path']:
         if marker not in source:
             raise RuntimeError('Required native idle adapter missing for ' + profile['engine'])

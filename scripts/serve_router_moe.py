@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Run the canonical selected MoE setting in the router's bounded owned service."""
 import json
+import math
 import os
 from pathlib import Path
 import sys
@@ -35,7 +36,10 @@ def main():
             or (cgroup_base / 'memory.swap.max').read_text().strip() != 'max'):
         sys.exit('Start MoE workers through the model router with the selected bounded budget.')
     verify_storage(profile)
-    if profile['id'] == 'flash-next-strata':
+    if profile['id'] == 'deepseek-unsloth-strata':
+        from strata_unsloth_runtime import prepare_config
+        source = prepare_config(profile)
+    elif profile['id'] == 'flash-next-strata':
         source = Path.home() / '.local/state/strata/launch/qwen-flash-next.json'
     elif profile['id'] == 'deepseek-strata':
         wrapper = json.loads((Path.home() / '.config/strata/profiles/deepseek-maya-s.json').read_text())
@@ -67,7 +71,16 @@ def main():
     target.write_text(json.dumps(config, indent=2) + '\n')
     target.chmod(0o600)
     os.environ.update(CUDA_DEVICE_ORDER='PCI_BUS_ID', PYTHONUNBUFFERED='1')
-    if profile['engine'] == 'Strata':
+    if profile['id'] == 'deepseek-unsloth-strata':
+        isolated = ROOT / 'data/strata-unsloth'
+        os.environ.update(XDG_STATE_HOME=str(isolated / 'state'),
+                          XDG_CONFIG_HOME=str(isolated / 'config'),
+                          XDG_CACHE_HOME=str(isolated / 'cache'),
+                          HF_HUB_OFFLINE='1', TRANSFORMERS_OFFLINE='1')
+        command = [str(ROOT / 'runtimes/project-maya/.venv/bin/python'),
+                   str(ROOT / 'runtimes/strata-unsloth-029/source/serve/server.py'),
+                   '--engine', 'strata', '--port', '10000', '--config', str(target)]
+    elif profile['engine'] == 'Strata':
         binary = ROOT / 'runtimes/bin/strata'
         command = [str(binary), 'serve', '--profile', str(target), '--offline']
     else:
@@ -89,7 +102,7 @@ def main():
             os.killpg(child.pid, signal.SIGTERM)
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
-    bad = 0
+    bad = gpu_bad = loading_bad = 0
     reason = None
     try:
         while child.poll() is None and not stopping:
@@ -103,6 +116,22 @@ def main():
                 stop()
                 child.wait(timeout=20)
                 raise SystemExit(1)
+            if profile['id'] == 'deepseek-unsloth-strata':
+                free = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits'], text=True)
+                free_values = [float(x) for x in free.splitlines()]
+                if len(free_values) != 3 or any(not math.isfinite(x) or x < 0 for x in free_values):
+                    raise RuntimeError('Unsloth GPU telemetry unavailable')
+                gpu_bad = gpu_bad + 1 if any(x < 512 for x in free_values) else 0
+                from inference_swap_guard import read_cgroup
+                pressure = read_cgroup(cgroup_base)['pressure_pct']
+                loading_bad = loading_bad + 1 if watch.last_phase == 'loading' and pressure > 15 else 0
+                if gpu_bad >= 3 or loading_bad >= 3:
+                    reason = 'Unsloth GPU reserve/loading pressure guard'
+                    watch.guard.fail(reason)
+                    watch.step()
+                    stop()
+                    child.wait(timeout=20)
+                    raise SystemExit(1)
             available = next(int(line.split()[1]) for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:'))
             temps = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu', '--format=csv,noheader,nounits'], text=True)
             bad = bad + 1 if available < host_floor_kib or any(float(t) >= 82 for t in temps.splitlines()) else 0

@@ -56,6 +56,11 @@ def validate_catalog(catalog):
                 or storage.get('required_transport') != expected[storage['access']]
                 or location.is_absolute() or '..' in location.parts):
             raise ValueError(f'Invalid model storage policy: {identifier}')
+        per_file = storage.get('file_transports')
+        if per_file is not None and (not isinstance(per_file, dict) or not per_file or any(
+                Path(name).name != name or value not in ('nvme', 'sata')
+                for name, value in per_file.items())):
+            raise ValueError(f'Invalid per-file storage policy: {identifier}')
         worker_budget(profile)
         host_ram_reserve_gib(profile)
         args = profile.get('cli_args', [])

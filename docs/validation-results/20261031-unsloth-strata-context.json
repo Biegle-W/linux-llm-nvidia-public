@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-31",
+  "profile": "deepseek-unsloth-strata",
+  "selected_context": 32768,
+  "scope": "Practical default up to32K as requested; not an absolute context-capacity search.",
+  "model": "DeepSeek-V4.1-Flash-1017",
+  "quant": "Unsloth Dynamic3.1 UD-IQ1_S",
+  "strata_release": "0.2.9",
+  "engine_version": "0.1.55",
+  "source_commit": "c62d5e3a15b40ea51c96aae9e8d36928965f53ab",
+  "base_weight_bytes": 232979608420,
+  "main_gpus": [
+    "RTX3080Ti12GB",
+    "RTX308010GB"
+  ],
+  "auxiliary_gpu_not_used": "RTX306012GB",
+  "experts_per_token": 6,
+  "cpu_store_decimal_gb": 36,
+  "engine_prefill_chunk": {
+    "requested": 128,
+    "reported": 256
+  },
+  "limits": {
+    "worker_high_gib": 46,
+    "worker_max_gib": 48,
+    "host_reserve_gib": 2,
+    "gpu_reserve_mib": 512,
+    "engine_gpu_reserve_mib": 768,
+    "temperature_c": 82,
+    "swap_write_mib_s": 128,
+    "swap_combined_mib_s": 160,
+    "window_s": 30,
+    "loading_and_inference_pressure_pct": 15,
+    "idle_s": 600
+  },
+  "context_trials": [
+    {
+      "context": 8192,
+      "result": "context-quality-and-stream-pass",
+      "load_s": 47.79001235961914,
+      "math": "pass",
+      "json": "pass",
+      "retrieval": "pass",
+      "retrieval_input_tokens": 7347,
+      "retrieval_wall_s": 309.3230615520001,
+      "stream": [
+        {
+          "completion_tokens": 256,
+          "input_tokens": 22,
+          "ttft_s": 4.749710235999828,
+          "decode_tps": 5.156634866438542,
+          "generation_s": 49.4508544050002,
+          "wall_s": 54.200751772999865
+        }
+      ],
+      "guard_stop": null,
+      "error": null,
+      "retrieval_output_format": "Plain JSON",
+      "resources": {
+        "sample_count": 208,
+        "peak_sampled_worker_gib": 35.687164306640625,
+        "minimum_host_available_gib": 21.18657684326172,
+        "minimum_gpu_free_mib": 673.0,
+        "maximum_temperature_c": 52.0,
+        "peak_swap_gib": 0.0,
+        "maximum_pressure_pct": 0.0,
+        "max_write_mib_s": 0,
+        "max_combined_mib_s": 0,
+        "oom_kill_events": 0
+      },
+      "retrieval_content_pass": true,
+      "raw_retrieval_json_format_pass": true
+    },
+    {
+      "context": 32768,
+      "result": "context-quality-and-stream-pass",
+      "load_s": 44.90159797668457,
+      "math": "pass",
+      "json": "pass",
+      "retrieval": "pass-content",
+      "retrieval_input_tokens": 29446,
+      "retrieval_wall_s": 901.8307917730003,
+      "stream": [
+        {
+          "completion_tokens": 256,
+          "input_tokens": 22,
+          "ttft_s": 4.720796342000085,
+          "decode_tps": 5.79684787067062,
+          "generation_s": 43.98942419900004,
+          "wall_s": 48.71037346400044
+        }
+      ],
+      "guard_stop": null,
+      "error": null,
+      "retrieval_output_format": "Correct codes in JSON Markdown fence; raw JSON format check failed",
+      "resources": {
+        "sample_count": 523,
+        "peak_sampled_worker_gib": 41.096656799316406,
+        "minimum_host_available_gib": 22.085102081298828,
+        "minimum_gpu_free_mib": 663.0,
+        "maximum_temperature_c": 51.0,
+        "peak_swap_gib": 0.0,
+        "maximum_pressure_pct": 0.0,
+        "max_write_mib_s": 0,
+        "max_combined_mib_s": 0,
+        "oom_kill_events": 0
+      },
+      "retrieval_content_pass": true,
+      "raw_retrieval_json_format_pass": false,
+      "stream_from_separate_fresh_load": true,
+      "stream_confirmation_load_s": 44.82217502593994,
+      "identical_engine_args_verified": true
+    }
+  ],
+  "normal_router": {
+    "result": "pass",
+    "distinct_fresh_loads": 2,
+    "native_authentication_401": true,
+    "authentication_401": true,
+    "menu_entry_verified": true,
+    "loads": [
+      {
+        "load": 1,
+        "load_seconds": 37.41842525200036,
+        "math": "pass",
+        "json": "pass",
+        "stream": {
+          "busy_unload_http": 409,
+          "tokens": 256,
+          "prompt_tokens": 22,
+          "ttft_s": 4.881485103999694,
+          "decode_tps": 5.172403037232956,
+          "done": true
+        },
+        "retrieval": "pass",
+        "retrieval_input_tokens": 1564
+      },
+      {
+        "load": 2,
+        "load_seconds": 37.41652714200018,
+        "math": "pass",
+        "json": "pass",
+        "stream": {
+          "busy_unload_http": 409,
+          "tokens": 64,
+          "prompt_tokens": 22,
+          "ttft_s": 4.797912103000272,
+          "decode_tps": 4.2037686070921785,
+          "done": true
+        }
+      }
+    ]
+  },
+  "prefix_cache": {
+    "first_normal_load": "Engine reported four incompatible/incomplete old prefix-cache entries removed from shared data/router/ds4-slots. These are regenerable KV snapshots, not chat history.",
+    "mitigation": "New profile now explicitly uses data/strata-unsloth/ds4-slots; verified in second-load runtime configuration.",
+    "original_model_settings_unchanged": true,
+    "saved_chat_api_not_used_by_test": true
+  },
+  "original_seven_profiles_unchanged": true,
+  "updater": "Separately pinned signed runtime; automatic generic source builds excluded with explicit coverage reason.",
+  "no_model_download_or_weight_move": true,
+  "vision": "off; text-only qualification",
+  "performance_limits": "Single stream observations;32K streaming confirmed in a separate identical-setting fresh load, not a matched speed benchmark. Readiness alone is not context qualification. Larger than selected contexts are unqualified.",
+  "cpu_regression_tests_passed": 320,
+  "final_focused_tests_passed": 13
+}

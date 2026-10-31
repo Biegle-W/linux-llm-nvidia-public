@@ -58,6 +58,10 @@
     {
       "profile": "bolt-vllm",
       "reason": "Custom compact-prefetch adapter uses an independent pinned runtime snapshot; changes require explicit local requalification."
+    },
+    {
+      "profile": "deepseek-unsloth-strata",
+      "reason": "Independent signed Strata 0.2.9/engine 0.1.55 package with pinned serving adapter and context qualification; automatic source builds must not overwrite it."
     }
   ]
 }

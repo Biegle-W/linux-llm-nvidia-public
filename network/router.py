@@ -125,7 +125,7 @@ class Handler(BaseHTTPRequestHandler):
         backend = w.backend_models() if w.active and w.loading is None else []
         ready = any(model.get('status', {}).get('value') != 'unloaded' for model in backend)
         catalog = {p['id']: {'id': p['id'], 'object': 'model', 'created': 0, 'owned_by': 'local-nvidia',
-                         'name': p['model'] + ' / ' + p['engine'], 'engine': p['engine'],
+                         'name': p.get('display_name') or p['model'] + ' / ' + p['engine'], 'engine': p['engine'],
                          'quant': p['weight_quant'], 'context_window': p['allocated_context'],
                          'max_model_len': p['allocated_context'], 'auto_start': True,
                          'loaded': ready and w.active == p['id'] and w.loading is None}

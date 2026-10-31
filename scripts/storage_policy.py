@@ -33,14 +33,20 @@ def ensure_sata_mount(root):
 def verify_storage(profile, root=ROOT):
     """Follow file links and reject checkpoints on the wrong physical transport."""
     storage = profile['storage']
-    if storage['required_transport'] == 'sata':
+    per_file = storage.get('file_transports')
+    if storage['required_transport'] == 'sata' or (per_file and 'sata' in per_file.values()):
         ensure_sata_mount(root)
     folder = (root / storage['checkpoint_directory']).resolve(strict=True)
     files = sorted(p for p in folder.iterdir() if p.suffix in ('.safetensors', '.gguf') and p.is_file())
     if not files:
         raise RuntimeError(f"{profile['id']}: checkpoint files are missing; check the storage mount.")
+    if per_file is not None and set(per_file) != {p.name for p in files}:
+        raise RuntimeError('Checkpoint files differ from the explicit per-file storage policy.')
     devices = {}
     for path in files:
+        expected = per_file[path.name] if per_file else storage['required_transport']
+        if expected not in ('sata', 'nvme'):
+            raise RuntimeError('Invalid per-file transport requirement.')
         resolved = path.resolve(strict=True)
         device = subprocess.check_output(
             ['findmnt', '-n', '-o', 'SOURCE', '--target', str(resolved)], text=True).strip().split('[', 1)[0]
@@ -51,11 +57,13 @@ def verify_storage(profile, root=ROOT):
                 ['lsblk', '--inverse', '--noheadings', '--raw', '--output', 'TYPE,TRAN', '--', device], text=True)
             transports = {parts[1] for line in inventory.splitlines()
                           if len(parts := line.split()) == 2 and parts[0] == 'disk'}
-            if transports != {storage['required_transport']}:
-                raise RuntimeError(f"{profile['id']}: checkpoint storage requires {storage['required_transport']}; "
+            if transports != {expected}:
+                raise RuntimeError(f"{profile['id']}: checkpoint storage requires {expected}; "
                                    f"found {', '.join(sorted(transports)) or 'unknown transport'}. "
                                    'See docs/STORAGE-POLICY.md.')
-            devices[device] = storage['required_transport']
+            devices[device] = expected
+        elif devices[device] != expected:
+            raise RuntimeError('One device cannot satisfy conflicting per-file transport requirements.')
     return {'profile': profile['id'], 'resolved_directory': str(folder),
             'transport': storage['required_transport'], 'devices': sorted(devices), 'weight_files': len(files)}
 

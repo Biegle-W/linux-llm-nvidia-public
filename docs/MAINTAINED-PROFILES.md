@@ -1,5 +1,12 @@
 # Maintained model, quantization and engine settings
 
+The additional Unsloth Dynamic3.1 UD-IQ1_S DeepSeek/Strata profile is selected at
+**32,768 tokens**. It appears separately in the Strata shortcut menu and uses
+`deepseek-unsloth-strata` through the router. Existing seven profiles are unchanged.
+It reuses the already downloaded 232.98 GB GGUF, with core shards on NVMe and Engram
+on SATA. Its context screen and stream observations are not a matched benchmark
+against the older Maya-S quant; see [the qualification](DEEPSEEK-UNSLOTH-CONTEXT-20261031.md).
+
 ## Latest selected speed evidence (composite runs)
 
 These separate screens are not a matched comparison. Six earlier rows use one warmup and three 128-output requests; Bolt uses one 128-output stream after correctness/retrieval, without a dedicated fixture warmup. Loading is excluded. Native prefill and client SSE first-to-last-content decode methods are retained. See [scope and reliability](BOLT-MAYA-RELIABILITY-20261031.md).
@@ -25,6 +32,7 @@ These separate screens are not a matched comparison. Six earlier rows use one wa
 | GLM-5.3-Flash / Maya-S24 | Maya | 74.10 | 29.837 | 6.389 | 65,536 | 94.70 | NVME: models/maya/Maya-S24 |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 30.80 | 70.845 | 3.271 | 131,072 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 46.70 | 46.835 | 1.887 | 32,768 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| DeepSeek-V4.1-Flash-1017 / UD-IQ1_S (Unsloth Dynamic3.1) | Strata | — | — | — | 32,768 | 232.98 | NVMe core / SATA Engram |
 
 Storage uses decimal GB of base weights. Qwen engines share base weights, as do the two maintained DeepSeek engines; count each base once. Prepared packs/caches are excluded. Earlier evidence remains historical.
 
@@ -55,7 +63,7 @@ See [demand-cache qualification and six selected results](MAYA-DEMAND-CACHE-2026
 and [numeric evidence](benchmark-results/20261029-maya-demand-cache.json).
 
 
-`config/maintained-profiles.json` is the current registry: **six selected
+`config/maintained-profiles.json` is the current registry: **eight selected
 profiles**, with one entry for each `(model, weight quantization, engine)`.
 The dense launchers read their arguments directly from this file. Strata and
 Maya entries identify their single canonical private runtime setting; credentials

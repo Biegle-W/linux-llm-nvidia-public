@@ -6,6 +6,11 @@ import re
 import subprocess
 
 FILES = (
+    'config/deepseek-unsloth-runtime.json',
+    'scripts/strata_unsloth_runtime.py',
+    'tests/test_strata_unsloth_runtime.py',
+    'docs/DEEPSEEK-UNSLOTH-CONTEXT-20261031.md',
+    'docs/validation-results/20261031-unsloth-strata-context.json',
     'patches/llama-demand-mmap-prefault.patch',
     'docs/DEEPSEEK-DYNAMIC31-20261031.md',
     'docs/validation-results/20261031-deepseek-dynamic31.json',

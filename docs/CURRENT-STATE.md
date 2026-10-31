@@ -1,5 +1,20 @@
 # Current takeover state
 
+## Latest: additional Unsloth DeepSeek Strata option at 32K — October 31
+
+The Strata model menu now includes a separate **Unsloth Dynamic3.1 UD-IQ1_S**
+DeepSeek option on its independently pinned Strata 0.2.9 / engine 0.1.55 runtime.
+The 32,768-token setting passed three-marker retrieval at **29,446 actual input
+tokens**, plus a complete 256-token stream on a separate same-setting reload.
+Two fresh normal-router loads passed arithmetic, JSON, streaming, authentication
+and actual busy-unload protection. The original seven profile objects remain
+unchanged; the registry now has eight selected profiles. Guards, six experts,
+main-pair placement and idle 600 seconds are preserved. The 3060 remains auxiliary.
+The 29K retrieval request took about 15 minutes; the reply used a JSON code fence,
+recorded separately from correct retrieval content. CPU regression checks passed
+320 tests, with 13 focused checks after cache isolation. Larger contexts were not
+qualified. [Results, use and limits](DEEPSEEK-UNSLOTH-CONTEXT-20261031.md).
+
 ## Latest: all-three-card unlock 2.0 compute screen — October 31
 
 Three rotated GEMM sweeps passed all 135 timing samples and sampled CPU-reference
