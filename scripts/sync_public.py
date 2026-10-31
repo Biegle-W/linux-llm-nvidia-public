@@ -6,6 +6,10 @@ import re
 import subprocess
 
 FILES = (
+    'docs/P2P-DYNAMIC-UNLOCK-20261031.md',
+    'scripts/dracut/91local-llm-gpu-unlock/module-setup.sh',
+    'scripts/dracut/91local-llm-gpu-unlock/unlock-auto.sh',
+    'tests/test_gpu_unlock_auto.py',
     'docs/P2P-POSTBOOT-20261031.md',
     'docs/P2P-DRIVER-PREPARATION-20261030.md',
     'docs/THREE-GPU-PREPARATION-20261030.md',

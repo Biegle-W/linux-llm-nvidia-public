@@ -164,6 +164,8 @@ def target_kernel(config):
 def fingerprint(config, kernel, packages):
     paths = [Path('/boot/initrd.img-' + kernel), Path('/boot/vmlinuz-' + kernel),
              Path('/boot/grub/grub.cfg'), Path(config['grub_dropin']), Path(config['dracut_dropin'])]
+    if config.get('selection_mode') == 'boot-model-ids':
+        paths.extend([Path(config['auto_hook']), Path(config['auto_module_setup']), Path('/etc/modprobe.d/local-llm-dynamic-p2p.conf')])
     for module in ['gpu_unlock', 'nvidia']:
         try:
             paths.append(Path(run('modinfo', '-k', kernel, '-F', 'filename', module).strip()))
@@ -176,20 +178,54 @@ def fingerprint(config, kernel, packages):
             stamps.append([str(path), stat.st_mtime_ns, stat.st_size])
         except OSError:
             stamps.append([str(path), None, None])
-    evidence = {'kernel': kernel, 'packages': packages, 'files': stamps, 'config': config}
+    fingerprint_config = dict(config)
+    if config.get('selection_mode') == 'boot-model-ids':
+        fingerprint_config['targets'] = sorted((x['vendor'], x['device']) for x in config['targets'])
+    evidence = {'kernel': kernel, 'packages': packages, 'files': stamps, 'config': fingerprint_config}
     return hashlib.sha256(json.dumps(evidence, sort_keys=True).encode()).hexdigest()
+
+
+def resolve_config(config, base=Path('/sys/bus/pci/devices')):
+    if config.get('selection_mode') != 'boot-model-ids':
+        return config
+    approved = {'0x2206', '0x2208', '0x2503'}
+    if set(config.get('approved_device_ids', [])) != approved:
+        raise ValueError('Auto selection must retain exactly the approved three models')
+    found = []
+    for device in sorted(base.glob('*')):
+        if (device / 'vendor').read_text().strip() != '0x10de':
+            continue
+        if not (device / 'class').read_text().startswith('0x03'):
+            continue
+        model = (device / 'device').read_text().strip()
+        if model in approved:
+            if not BDF.fullmatch(device.name):
+                raise ValueError('Invalid discovered GPU address')
+            found.append({'bdf': device.name, 'vendor': '0x10de', 'device': model})
+    if len(found) != 3 or {x['device'] for x in found} != approved:
+        raise ValueError('Expected exactly one GPU of each approved model')
+    return dict(config, targets=found)
 
 
 def check_preboot(config, kernel):
     expected = {item['bdf'] for item in config['targets']}
-    if targets_from(Path(config['grub_dropin']).read_text()) != expected:
+    auto = config.get('selection_mode') == 'boot-model-ids'
+    grub_text = Path(config['grub_dropin']).read_text()
+    if auto:
+        if 'local_llm_gpu_unlock=auto' not in grub_text or 'gpu_unlock.targets=' in grub_text:
+            raise ValueError('Auto unlock opt-in missing or stale explicit targets remain')
+    elif targets_from(grub_text) != expected:
         raise ValueError('GRUB unlock target list differs from the approved GPU identities')
     for item in config['targets']:
         device = Path('/sys/bus/pci/devices') / item['bdf']
         for name in ['vendor', 'device']:
             if (device / name).read_text().strip() != item[name]:
                 raise ValueError('GPU identity/topology changed at ' + item['bdf'])
-    if not re.search(r'force_drivers\+?=.*\bgpu_unlock\b', Path(config['dracut_dropin']).read_text()):
+    dracut_text = Path(config['dracut_dropin']).read_text()
+    if auto:
+        if 'local-llm-gpu-unlock' not in dracut_text or 'force_drivers' in dracut_text:
+            raise ValueError('Dynamic early unlock module missing or conflicting force-load present')
+    elif not re.search(r'force_drivers\+?=.*\bgpu_unlock\b', dracut_text):
         raise ValueError('Dracut no longer requests early gpu_unlock loading')
     dkms = run('dkms', 'status')
     pattern = r'^gpu-unlock/' + re.escape(config['unlock_version']) + r',\s*' + re.escape(kernel) + r',.*:\s*installed\s*$'
@@ -213,15 +249,24 @@ def check_preboot(config, kernel):
         pattern = re.compile(r'(?:usr/)?lib/firmware/' + re.escape(name) + r'(?:\.(?:xz|gz|zst))?$')
         if not any(pattern.fullmatch(line) for line in listing):
             raise ValueError('Target initramfs lacks firmware: ' + name)
-    early = run('lsinitrd', '-f', 'etc/cmdline.d/20-force_drivers.conf', image)
-    if 'rd.driver.pre=gpu_unlock' not in early.split():
-        raise ValueError('Target initramfs lacks the pre-driver unlock request')
+    if auto:
+        hooks = [line for line in listing if line.endswith('/hooks/pre-udev/00-unlock-auto.sh')]
+        if len(hooks) != 1:
+            raise ValueError('Target initramfs lacks the unique automatic unlock hook')
+        early = run('lsinitrd', '-f', hooks[0], image)
+        wanted = Path(config['auto_hook']).read_text()
+        if early.strip() != wanted.strip():
+            raise ValueError('Automatic unlock hook differs from the installed reviewed copy')
+    else:
+        early = run('lsinitrd', '-f', 'etc/cmdline.d/20-force_drivers.conf', image)
+        if 'rd.driver.pre=gpu_unlock' not in early.split():
+            raise ValueError('Target initramfs lacks the pre-driver unlock request')
     if not any(line.endswith('/dracut-pre-udev.service') for line in listing):
         raise ValueError('Target initramfs lacks the dracut pre-udev service')
     lines = [line.strip() for line in Path('/boot/grub/grub.cfg').read_text().splitlines()]
     entries = [line for line in lines if re.match(r'linux(?:efi)?\s', line)
                and re.search(r'vmlinuz-' + re.escape(kernel) + r'(?:\s|$)', line) and 'recovery' not in line.split()]
-    if not entries or any(targets_from(line) != expected for line in entries):
+    if not entries or any(('local_llm_gpu_unlock=auto' not in line.split() or 'gpu_unlock.targets=' in line) if auto else targets_from(line) != expected for line in entries):
         raise ValueError('Generated normal GRUB entries do not preserve the selected unlock targets')
     return {'target_kernel': kernel, 'unlock_version': version, 'target_nvidia_version': driver,
             'firmware_files_verified': len(firmware), 'initramfs_verified': True, 'grub_verified': True}
@@ -229,7 +274,11 @@ def check_preboot(config, kernel):
 
 def check_boot(config, kernel, preboot):
     expected = {item['bdf'] for item in config['targets']}
-    if targets_from(Path('/proc/cmdline').read_text()) != expected:
+    cmdline = Path('/proc/cmdline').read_text()
+    if config.get('selection_mode') == 'boot-model-ids':
+        if 'local_llm_gpu_unlock=auto' not in cmdline.split() or 'gpu_unlock.targets=' in cmdline:
+            raise ValueError('Running kernel lacks the automatic unlock opt-in')
+    elif targets_from(cmdline) != expected:
         raise ValueError('Running kernel lacks the approved unlock target argument')
     deadline = time.monotonic() + 90
     while True:
@@ -292,6 +341,8 @@ def audit(config, state, event, force=False):
     atomic(state / 'latest.json', row)
     try:
         settle()
+        config = resolve_config(config)
+        row['resolved_targets'] = config['targets']
         packages = package_versions(run('dpkg-query', '-W', '-f=${binary:Package}\t${Version}\t${db:Status-Status}\n'))
         kernel = target_kernel(config)
         row['fingerprint'] = fingerprint(config, kernel, packages)

@@ -1,5 +1,10 @@
 # Agent entry point
 
+## Latest: dynamic P2P and automatic unlock candidate — October 31
+
+A matching 615.71.09 dynamic BAR1 candidate compiled; 33 CPU tests passed. A model-ID-scoped early hook and health checker now support PCI-address changes for exactly the 3080 Ti, 3080 and 3060. Installation/activation and actual post-boot P2P correctness remain pending. The previous static peer-read mismatch remains a failed result; production settings are unchanged. See [candidate and validation boundary](docs/P2P-DYNAMIC-UNLOCK-20261031.md).
+
+
 ## Latest: P2P post-boot correctness FAILED — October 31
 
 615.71.09 and IOMMU passthrough are active; the switched cards are x8/x8. Advertised CUDA P2P support is insufficient: the actual remote-read test failed data validation, so working P2P is not established. Only the 3060 has verified tensor unlock; switch enumeration moved both 3080 PCI addresses and their explicit unlock targets missed. Avoid multi-GPU workloads until corrected or the peer path is disabled. See [actual verification](docs/P2P-POSTBOOT-20261031.md).
