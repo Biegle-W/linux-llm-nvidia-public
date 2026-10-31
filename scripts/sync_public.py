@@ -102,6 +102,7 @@ FILES = (
     'scripts/test_native_linux_gpu_unlock.py',
     'scripts/gpu_unlock_health.py', 'scripts/install_gpu_unlock_health.py',
     'tests/test_gpu_unlock_health.py', 'docs/GPU-UNLOCK-HEALTH.md', 'docs/UNLOCK-SETUP-20261026.md',
+    'docs/UNLOCK-V2-BENCHMARK-20261031.md', 'docs/benchmark-results/20261031-unlock-v2-gemm.json',
     'docs/BENCHMARK-UNLOCK-20261026.md', 'docs/ENGINE-TESTS-20261026.md',
     'scripts/run_bounded_test.sh',
     'docs/QWEN27B-GPU-ONLY-20261026.md', 'scripts/sync_public.py', 'docs/PUBLIC-SYNC.md',

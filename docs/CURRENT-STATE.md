@@ -1,5 +1,16 @@
 # Current takeover state
 
+## Latest: all-three-card unlock 2.0 compute screen — October 31
+
+Three rotated GEMM sweeps passed all 135 timing samples and sampled CPU-reference
+correctness checks. FP16/BF16 medians were 121.53/126.87 TFLOPS on the 3080 Ti,
+120.95/121.80 on the 3080, and 49.53/49.07 on the 3060. Historical 1.0 changes
+were +0.34/+0.89% and +5.62/+7.66% on the two 3080 cards. Driver/kernel/topology
+changed, the 3080 FP32 control also rose 5.85%, and no Linux 1.0 baseline exists
+for the 3060: these are not controlled unlock-version gains. No guards stopped;
+unlock health stayed VERIFIED and the reservation was released. See the
+[protocol and comparison limits](UNLOCK-V2-BENCHMARK-20261031.md).
+
 ## Latest: unlock 2.0 and pair P2P verified after reboot — October 31
 
 The loaded gpu_unlock module is **2.0.0** on Linux 7.0.0-42-generic with NVIDIA

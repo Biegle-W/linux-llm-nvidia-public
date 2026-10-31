@@ -1,0 +1,183 @@
+{
+  "date": "2026-10-31",
+  "status": "pass",
+  "protocol": "unchanged saved binary;8192 cubed;FP32/FP16/BF16 with FP32 accumulation;2 warmups then5 samples of10 GEMMs;32 CPU-reference samples;3 sweeps rotated card order",
+  "binary_sha256": "d0ae965b3bb21fecd337cf82e8875bf7085ff8abf75895ec1fa439aa9d8315a7",
+  "source_sha256": "88732ec90535c95b5a1a37c3fec88793dfac2f05bedd622134934d0913362a2d",
+  "current_unlock": "2.0.0",
+  "previous_unlock": "1.0.0",
+  "current_driver": "615.71.09",
+  "previous_driver": "595.99.02",
+  "previous_date": "2026-10-26",
+  "comparison_type": "Historical; not controlled unlock-version A/B. Driver/topology/session conditions differ; no Linux1.0 RTX3060 baseline.",
+  "samples_correct": 135,
+  "rows": [
+    {
+      "gpu": "RTX 3080 Ti",
+      "type": "FP32",
+      "v1_tflops": 26.75712,
+      "v2_tflops": 26.803341,
+      "change_percent": 0.17274280640069417,
+      "v2_samples": 15,
+      "v1_samples": 5,
+      "v2_min": 26.6473,
+      "v2_max": 27.057653,
+      "v2_sweep_medians": [
+        26.865576,
+        26.790032,
+        26.770463
+      ],
+      "correct": true
+    },
+    {
+      "gpu": "RTX 3080 Ti",
+      "type": "FP16_FP32acc",
+      "v1_tflops": 121.12168,
+      "v2_tflops": 121.529991,
+      "change_percent": 0.3371081048413549,
+      "v2_samples": 15,
+      "v1_samples": 5,
+      "v2_min": 119.988578,
+      "v2_max": 128.655496,
+      "v2_sweep_medians": [
+        122.328891,
+        121.529991,
+        121.162472
+      ],
+      "correct": true
+    },
+    {
+      "gpu": "RTX 3080 Ti",
+      "type": "BF16_FP32acc",
+      "v1_tflops": 125.753302,
+      "v2_tflops": 126.868854,
+      "change_percent": 0.8870955929252577,
+      "v2_samples": 15,
+      "v1_samples": 5,
+      "v2_min": 125.74562,
+      "v2_max": 131.970818,
+      "v2_sweep_medians": [
+        127.103129,
+        126.85387,
+        125.934394
+      ],
+      "correct": true
+    },
+    {
+      "gpu": "RTX 3080",
+      "type": "FP32",
+      "v1_tflops": 22.404395,
+      "v2_tflops": 23.715002,
+      "change_percent": 5.849776349684954,
+      "v2_samples": 15,
+      "v1_samples": 5,
+      "v2_min": 23.570445,
+      "v2_max": 23.836708,
+      "v2_sweep_medians": [
+        23.74075,
+        23.618967,
+        23.613824
+      ],
+      "correct": true
+    },
+    {
+      "gpu": "RTX 3080",
+      "type": "FP16_FP32acc",
+      "v1_tflops": 114.508039,
+      "v2_tflops": 120.948198,
+      "change_percent": 5.624198140359393,
+      "v2_samples": 15,
+      "v1_samples": 5,
+      "v2_min": 119.440013,
+      "v2_max": 122.632328,
+      "v2_sweep_medians": [
+        121.674601,
+        120.73884,
+        120.86107
+      ],
+      "correct": true
+    },
+    {
+      "gpu": "RTX 3080",
+      "type": "BF16_FP32acc",
+      "v1_tflops": 113.129061,
+      "v2_tflops": 121.797437,
+      "change_percent": 7.662377751018368,
+      "v2_samples": 15,
+      "v1_samples": 5,
+      "v2_min": 120.52733,
+      "v2_max": 123.537166,
+      "v2_sweep_medians": [
+        122.682506,
+        121.6677,
+        121.707696
+      ],
+      "correct": true
+    },
+    {
+      "gpu": "RTX 3060",
+      "type": "FP32",
+      "v1_tflops": null,
+      "v2_tflops": 10.391723,
+      "change_percent": null,
+      "v2_samples": 15,
+      "v1_samples": 0,
+      "v2_min": 10.09246,
+      "v2_max": 10.855197,
+      "v2_sweep_medians": [
+        10.569303,
+        10.644112,
+        10.27112
+      ],
+      "correct": true
+    },
+    {
+      "gpu": "RTX 3060",
+      "type": "FP16_FP32acc",
+      "v1_tflops": null,
+      "v2_tflops": 49.534835,
+      "change_percent": null,
+      "v2_samples": 15,
+      "v1_samples": 0,
+      "v2_min": 47.350631,
+      "v2_max": 51.987364,
+      "v2_sweep_medians": [
+        49.534835,
+        50.092223,
+        48.397489
+      ],
+      "correct": true
+    },
+    {
+      "gpu": "RTX 3060",
+      "type": "BF16_FP32acc",
+      "v1_tflops": null,
+      "v2_tflops": 49.07345,
+      "change_percent": null,
+      "v2_samples": 15,
+      "v1_samples": 0,
+      "v2_min": 47.294733,
+      "v2_max": 50.690283,
+      "v2_sweep_medians": [
+        49.353827,
+        49.07345,
+        48.943267
+      ],
+      "correct": true
+    }
+  ],
+  "temperature_peaks_c": {
+    "RTX 3080 Ti": 40.0,
+    "RTX 3080": 38.0,
+    "RTX 3060": 50.0
+  },
+  "power_limits_w": {
+    "RTX 3080 Ti": 350.0,
+    "RTX 3080": 320.0,
+    "RTX 3060": 170.0
+  },
+  "host_available_min_gib": 54.199649810791016,
+  "guard_stops": 0,
+  "libraries": "Same saved GEMM binary; current system libcublas.so.12/libcublasLt.so.12. Previous library hashes not recorded.",
+  "no_clock_power_driver_or_module_changes": true
+}
