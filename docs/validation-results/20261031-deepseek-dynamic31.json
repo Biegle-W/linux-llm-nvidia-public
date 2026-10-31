@@ -1,0 +1,105 @@
+{
+  "date": "2026-10-31",
+  "repository": "unsloth/DeepSeek-V4.1-Flash-1017-GGUF",
+  "revision": "8a6ec9cf118e785a362ea94ee123c61c70553be6",
+  "quant": "UD-IQ1_S",
+  "files": [
+    {
+      "name": "UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00001-of-00005.gguf",
+      "bytes": 5780868,
+      "sha256": "5197c309479c7be06e3612dc696d7f18e13e5942cfe52e70c3c586b7e585a5ac"
+    },
+    {
+      "name": "UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00002-of-00005.gguf",
+      "bytes": 49120285248,
+      "sha256": "e83af39db628614d252d49a316af8cd5911d78ab96a9e7a5997b392ece26eaf7"
+    },
+    {
+      "name": "UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00003-of-00005.gguf",
+      "bytes": 48899707008,
+      "sha256": "6caa1da6302b532374d55da6510fc92a9031a0ee1bd2bb5bf7defca2477f3d98"
+    },
+    {
+      "name": "UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00004-of-00005.gguf",
+      "bytes": 24358544704,
+      "sha256": "71c6c54dd1f20008e2130188cc655742d3738a365de4571d21a56de503b206b7"
+    },
+    {
+      "name": "UD-IQ1_S/DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00005-of-00005.gguf",
+      "bytes": 110595290592,
+      "sha256": "771805301e695d72d268151dfc43043581ba904298574aa879d4349cbe67b020"
+    }
+  ],
+  "total_bytes": 232979608420,
+  "storage": {
+    "core_nvme_bytes": 122384317828,
+    "engram_sata_bytes": 110595290592,
+    "per_disk_reserve_gib": 40
+  },
+  "metadata": {
+    "general.architecture": "deepseek41",
+    "general.name": "DeepSeek-V4.1-Flash-1017",
+    "split.count": 5,
+    "split.tensors.count": 1043,
+    "deepseek41.block_count": 40,
+    "deepseek41.embedding_length": 5120,
+    "deepseek41.expert_count": 384,
+    "deepseek41.expert_used_count": 6
+  },
+  "core_tensors": {
+    "other_bytes": 7150453184,
+    "tensors": 1042,
+    "expert_bytes": 115228016640
+  },
+  "runtime": {
+    "source_commit": "caa8191df159f764fb0160e3d2fc6be008948aee",
+    "binary_sha256": "eed3e9ba6633c1d3ef2f835a0ebb265c6453680e08daca0f1cdd2c6d37c1b86f",
+    "required_flags": [
+      "--load-mode",
+      "--lazy-mode",
+      "--cpu-moe",
+      "--no-warmup",
+      "--fit-target",
+      "--api-key-file",
+      "--override-tensor",
+      "--metrics"
+    ]
+  },
+  "download": {
+    "phase": "complete",
+    "verified_files": 5,
+    "verified_bytes": 232979608420,
+    "initial_failure": "Installed HF client rejects final 110.6GB file in regular HTTP mode; four prior shard hashes passed",
+    "remedy": "Existing hf_xet1.7.0, fixed download concurrency2 and bounded buffers; no package installation"
+  },
+  "trial": {
+    "phase": "failed",
+    "context": 2048,
+    "cpu_moe": true,
+    "lazy_engram_cpu": true,
+    "main_pair_only": true,
+    "worker_high_gib": 46,
+    "worker_max_gib": 48,
+    "host_reserve_gib": 2,
+    "gpu_reserve_mib": 512,
+    "temperature_limit_c": 82,
+    "loading_pressure_pct": 15,
+    "inference_pressure_pct": 10,
+    "inference_swap_write_mib_s": 1,
+    "inference_swap_combined_mib_s": 8,
+    "swap_window_s": 30,
+    "load_seconds": 248.45535111427307,
+    "math": "pass",
+    "guard_stop": "Sustained owned-worker swap churn during inference",
+    "resource_summary": {
+      "samples": 137,
+      "peak_worker_gib": 46.00144958496094,
+      "peak_full_pressure_pct": 20.02,
+      "peak_worker_swap_gib": 0.19638824462890625,
+      "min_host_available_gib": 54.604042053222656,
+      "min_gpu_free_mib": 5811.0,
+      "max_gpu_temperature_c": 37.0
+    }
+  },
+  "selected": false
+}

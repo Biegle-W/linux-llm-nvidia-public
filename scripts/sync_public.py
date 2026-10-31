@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/DEEPSEEK-DYNAMIC31-20261031.md',
+    'docs/validation-results/20261031-deepseek-dynamic31.json',
     'config/bolt-offload-runtime.json',
     'scripts/bolt_runtime.py',
     'scripts/supervise_bolt.py',

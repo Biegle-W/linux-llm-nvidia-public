@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Latest: Unsloth Dynamic3.1 DeepSeek bounded trial — October 31
+
+The pinned UD-IQ1_S candidate did not achieve a completed basic-quality pass; maintained selections are unchanged. The report records pinned sizes/hashes, the final-shard HTTP failure and Xet recovery, actual outcome and unchanged guards. [Results and limits](DEEPSEEK-DYNAMIC31-20261031.md).
+
 ## Latest: Bolt installed and verified through the normal router — October 31
 
 Bolt AWQ INT4 is available at 8K text-only through its independent vLLM runtime. Two fresh normal-router loads passed JSON/arithmetic, near-window retrieval, sustained streaming, authentication and actual busy-unload protection. The final loader reclaims only verified clean checkpoint mappings once per consumed shard; 303 CPU tests passed and resource guards are unchanged. DeepSeek/Maya retains its qualified 32K bounded-residency setup. Bolt generation remains slow; see [measurements and scope](BOLT-MAYA-RELIABILITY-20261031.md).

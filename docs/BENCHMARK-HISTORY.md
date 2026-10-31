@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Latest: Unsloth Dynamic3.1 DeepSeek bounded trial — October 31
+
+The pinned UD-IQ1_S candidate did not achieve a completed basic-quality pass; maintained selections are unchanged. The report records pinned sizes/hashes, the final-shard HTTP failure and Xet recovery, actual outcome and unchanged guards. [Results and limits](DEEPSEEK-DYNAMIC31-20261031.md).
+
 ## October 31: installed Bolt normal-router verification
 
 Two fresh loads passed at 8K with exact near-window retrieval and sustained generation. The final shard-level clean mapping reclaim follows measured pressure and per-tensor scan failures. Normal and isolated speed observations remain separate from Maya’s three-request median. [Report](BOLT-MAYA-RELIABILITY-20261031.md).
