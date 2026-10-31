@@ -1,15 +1,31 @@
-# Scoped PEX ACS/routing diagnosis — October 31, 2026
+# Scoped PEX ACS/routing correction — October 31, 2026
 
-Status: prepared; administrator-authenticated audit/trial pending. No ACS correction has passed yet. Preserve the verified automatic tensor unlock on all three cards independently.
+Status: **PASS in the current boot**, with a root-owned boot policy enabled. P2P is limited to RTX 3080 Ti ↔ RTX 3080. The motherboard-connected RTX 3060 has no CUDA peer access in either direction. All three GPUs retain verified pre-NVIDIA tensor unlocks.
 
-CUDA capability inspection confirms that the dynamic driver enables only RTX 3080 Ti ↔ RTX 3080. All four directions involving the motherboard-connected RTX 3060 report no peer access. All three GPUs are in identity IOMMU domains. The two GA102 devices share a Broadcom PEX880xx fabric with multiple nested bridges; the 3060 is on a separate chipset root port.
+## Cause and correction
 
-The prepared audit resolves the actual GA102 pair by model IDs, walks their current sysfs ancestry and selects only Broadcom 1000:c010 bridge functions on those paths. It explicitly rejects overlap with the 3060 path and never writes CPU-root or GPU endpoint registers. It records extended ACS capabilities/control words, memory-window metadata and preimages. It checks for active compute work before testing.
+The extended-configuration audit found 64-bit prefetchable windows throughout the selected switch paths. Four Broadcom downstream bridges had ACS control 0x1d: request and completion redirection were enabled. The scoped trial cleared those bits, leaving control 0x11. Source validation and upstream-forwarding controls were preserved; the broader all-standard-controls-clear trial was unnecessary. The three intervening upstream functions had no ACS capability to change.
 
-Temporary trials clear the standard ACS request/completion redirection and egress-control bits first (mask 0x2c). If necessary, a second trial clears the standard ACS controls (mask 0x7f), following NVIDIA's PLX troubleshooting approach while preserving reserved bits. Every trial restores original controls. A 64 KiB read-only probe must pass before the full 16 MiB bidirectional read/write correctness test is allowed. Both tests expose only the two approved GPU UUIDs to CUDA; the 3060 is excluded.
+Only the Broadcom bridges in the two GA102 devices' shared switch path were modified. CPU-root ports, endpoints and the separate motherboard/3060 path were excluded. All devices use identity IOMMU domains. The first audit stopped before writes because an overly broad work guard counted a terminal on the 3060; the corrected guard filters the two target GPU identities and preserved that unrelated process.
 
-Only a successful full correctness trial permits installation of a root-owned, model-scoped boot service. It re-resolves the same switch path each boot, requires the qualified driver srcversion, leaves the motherboard path alone and restores saved controls on stop. The full test is repeated after enabling that service; failure removes the policy and restores originals. No global ACS override, bridge reset, BIOS update, driver replacement or reboot is part of this trial.
+## Actual verification
 
-Three CPU tests passed: extended-capability traversal, restoring controls after a failed read, and refusing writes to a 3060 endpoint. Actual bridge-control findings and GPU correctness remain pending OS administrator authentication.
+The 64 KiB read-only probe passed, followed by the full 16 MiB seeded remote-read/write test in both directions. The full test passed again after persistent policy activation. Each full run checked three deterministic data patterns per direction, then measured peer-copy throughput.
 
-Source: [NVIDIA NCCL GPU/ACS troubleshooting](https://docs.nvidia.com/deeplearning/nccl/archives/nccl_2312/user-guide/docs/troubleshooting/gpu_troubleshooting.html). The official recommendation discusses ACS and PLX switches; it does not establish the cause on this machine before inspection.
+| Measurement | Scoped trial | Persistent-policy confirmation |
+| --- | ---: | ---: |
+| 3080 Ti to 3080 copy | 13.081 GB/s | 13.084 GB/s |
+| 3080 to 3080 Ti copy | 13.083 GB/s | 13.079 GB/s |
+| Bidirectional remote read/write correctness | PASS | PASS |
+
+These are small-transfer CUDA copy measurements, not LLM token rates or a sustained workload benchmark. Both switched cards remain x8; the motherboard 3060 is x4. Final CUDA capability checks show only the GA102 pair enabled, with all four 3060 peer directions disabled. GPU unlock health reports VERIFIED for all three, and no NVIDIA Xid or PCIe AER error was observed in the checked boot log.
+
+## Persistence and rollback
+
+The root-owned `local-llm-acs-pair.service` is enabled and active. It runs after successful GPU-unlock boot health and before the display manager, resolves the approved pair and its Broadcom ancestry on each boot, and checks the qualified NVIDIA module srcversion. It clears only the tested ACS mask on those paths. Stop/disable restores saved controls for the current boot. The policy does not execute user-writable test code at boot. Private root-owned preimages and reports are retained. No additional reboot was needed; a fresh reboot of the ACS policy has not yet been observed.
+
+The model-ID early-unlock hook remains separate: it requires exactly one approved 3080 Ti, 3080 and 3060 and already passed a real boot with changed PCI addresses. NVIDIA 615.71.09 uses the qualified dynamic BAR1 candidate for the GA102 pair; the 3060 is not opted into that peer path. Model profiles and their existing NCCL settings were not changed by this hardware correction.
+
+Four ACS safety tests passed, including rollback after failed reads, rejecting a 3060 endpoint write, and ignoring unrelated 3060 work. Attention-terminal focus tests also passed; the actual authenticated retry opened in the foreground as requested.
+
+Source: [NVIDIA NCCL GPU/ACS troubleshooting](https://docs.nvidia.com/deeplearning/nccl/archives/nccl_2312/user-guide/docs/troubleshooting/gpu_troubleshooting.html). The correctness and bandwidth results above are local measurements.

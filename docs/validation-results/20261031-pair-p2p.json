@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-31",
+  "driver": "615.71.09",
+  "p2p_pair": [
+    "RTX 3080 Ti 12GB",
+    "RTX 3080 10GB"
+  ],
+  "excluded_from_p2p": "RTX 3060 12GB",
+  "peer_correctness_trial_pass": true,
+  "peer_correctness_persistent_confirmation_pass": true,
+  "trial_gbps": [
+    13.081,
+    13.083
+  ],
+  "persistent_confirmation_gbps": [
+    13.084,
+    13.079
+  ],
+  "all_three_pre_nvidia_tensor_unlocks_verified": true,
+  "cuda_peer_with_3060": false,
+  "pcie_widths": [
+    8,
+    8,
+    4
+  ],
+  "acs_control_before": "0x1d",
+  "acs_control_after": "0x11",
+  "changed_bridge_count": 4,
+  "acs_service_enabled": true,
+  "acs_service_active": true,
+  "acs_policy_fresh_reboot_tested": false,
+  "model_performance_tested": false
+}

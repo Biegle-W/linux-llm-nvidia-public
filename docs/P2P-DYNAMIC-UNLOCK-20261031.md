@@ -1,6 +1,6 @@
 # Dynamic BAR1 and address-independent unlock candidate — October 31, 2026
 
-Status: activated after successful staging. All three tensor unlocks are verified; actual P2P correctness still FAILED. The previous static BAR1 candidate failed a real remote-read correctness check; preserve that failure in P2P-POSTBOOT-20261031.md.
+Status: all three tensor unlocks are verified. The initial dynamic-driver P2P failure was subsequently resolved by the scoped ACS correction; bidirectional correctness now PASSES. See PEX-ACS-PAIR-20261031.md for current measurements and persistence limits. The previous static BAR1 candidate failed a real remote-read correctness check; preserve that failure in P2P-POSTBOOT-20261031.md.
 
 ## P2P candidate
 
@@ -35,3 +35,7 @@ The retry transaction passed exact stripped-module verification and rebooted suc
 **P2P correctness still failed.** CUDA reports peer capability, but the 16 MiB remote-read test exited 4 with a data mismatch. A separate bounded 64 KiB read-only diagnostic confirmed that the source data is locally correct while peer reads return 0xffffffff. It issued no remote writes. No working bandwidth or model-speed result is claimed. Dynamic-driver debug calibration/delta and UVM gate-trip counters remain zero. Expected refusals involving the 3060 indicate it was not opted into this experimental peer path.
 
 The remaining investigation is the inaccessible peer-memory path, including switch routing/ACS and driver mapping. All-ones reads alone do not establish which is responsible. Avoid multi-GPU P2P workloads until the path passes correctness or is disabled; preserve the working identity-based tensor unlock independently.
+
+## Resolution after the recorded failure
+
+The failed peer-read result above is retained as historical evidence. A subsequent scoped ACS trial found request/completion redirection enabled on four bridge functions. Clearing those bits fixed the mismatch; the full bidirectional test passed before and after persistent service activation at approximately 13.08 GB/s each way. The 3060 is excluded and all three tensor unlocks remain verified. See [current ACS results](PEX-ACS-PAIR-20261031.md).

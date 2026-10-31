@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'docs/validation-results/20261031-pair-p2p.json',
     'docs/TERMINAL-ATTENTION-20261031.md',
     'docs/PEX-ACS-PAIR-20261031.md',
     'docs/P2P-DYNAMIC-UNLOCK-20261031.md',

@@ -1,5 +1,10 @@
 # Current takeover state
 
+## Latest: pair-only P2P correctness PASS after scoped ACS fix — October 31
+
+Clearing request/completion redirection on four Broadcom switch bridges fixed the remote-read mismatch. Bidirectional seeded read/write validation passed twice, including after persistent rule activation, with about 13.08 GB/s copy throughput each way. Only 3080 Ti ↔ 3080 advertises peer access; all 3060 peer directions remain disabled. All-three-GPU tensor unlock remains VERIFIED, links are x8/x8 plus motherboard x4, and the root-owned boot rule is enabled. A new reboot of that ACS rule has not yet been observed. See [measurements, scope and rollback](docs/PEX-ACS-PAIR-20261031.md).
+
+
 ## Latest: attention terminals foreground, backends minimized — October 31
 
 User-input/authentication tasks, selectors and test terminals now open and activate in front. Only backend monitors retain minimized startup. Three launcher tests passed and live attention-window activation was confirmed. The pair-only ACS guard also excludes terminal work on the motherboard 3060; its four safety tests passed. See [policy and checks](docs/TERMINAL-ATTENTION-20261031.md).
