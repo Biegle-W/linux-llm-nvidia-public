@@ -1,5 +1,10 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: three-GPU hardware-change preparation — October 30
+
+Prepared read-only next-login inventory and a **Prepare Three GPU Unlock** desktop shortcut for a planned switched 3080 Ti/3080 pair plus motherboard-connected 3060. Current checks pass; the third card is not installed. PCI addresses must be rediscovered after the hardware move, then administrator-authenticated boot preparation and another full power cycle may be needed. P2P, lane sharing and three-GPU model placement remain unqualified; existing profiles are unchanged. See [procedure and limits](docs/THREE-GPU-PREPARATION-20261030.md).
+
+
 ## Latest: Unsloth and Comfy desktop installation — October 30
 
 Official Unsloth Desktop 0.1.913-beta and Comfy Desktop 1.1.8 stable are installed per-user with **Unsloth** and **ComfyUI** Desktop/menu shortcuts. Unsloth's isolated backend setup completed all 17 stages; Python 3.13.17, backend 2026.10.11 and PyTorch 2.13.0+cu130 see both CUDA GPUs. AppImage/native-library/shortcut checks pass. Comfy's installed launcher now uses its documented per-app `--no-sandbox` compatibility option and passed an offscreen 15-second startup check; system-wide sandbox settings are unchanged. The initial sandboxed failure is retained as historical evidence. Existing LLM environments/settings are preserved; no model, training or generation job started. Comfy's ordinary first-run choices remain. See [installation status](docs/UNSLOTH-COMFY-DESKTOP-20261030.md) and [verification](docs/validation-results/20261030-unsloth-comfy-desktop.json).
