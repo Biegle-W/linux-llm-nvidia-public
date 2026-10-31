@@ -57,6 +57,13 @@ class WorkerBudget(unittest.TestCase):
         for name in ['qwen27b-hyperqwen', 'qwen27b-sglang']:
             self.assertEqual(worker_budget(get_profile(name)), {'high': None, 'max': None, 'swap': None})
 
+    def test_all_selected_moe_profiles_use_restored_ram_budget(self):
+        from profile_catalog import load_catalog,host_ram_reserve_gib
+        for p in load_catalog()['profiles']:
+            self.assertEqual(host_ram_reserve_gib(p),2)
+            if not p['id'].startswith('qwen27b-'):
+                self.assertEqual(worker_budget(p),{'high':56,'max':58,'swap':None})
+
     def test_dense_cannot_take_the_larger_moe_budget(self):
         p = deepcopy(get_profile('qwen27b-hyperqwen'))
         p['worker_memory_gib'] = {'high': 44, 'max': 48, 'swap': None}
@@ -65,11 +72,11 @@ class WorkerBudget(unittest.TestCase):
 
     def test_moe_accepts_the_bounded_larger_cache_budget(self):
         p = deepcopy(get_profile('deepseek-strata'))
-        p['worker_memory_gib'] = {'high': 44, 'max': 48, 'swap': None}
-        self.assertEqual(worker_budget(p)['max'], 48)
+        p['worker_memory_gib'] = {'high': 56, 'max': 58, 'swap': None}
+        self.assertEqual(worker_budget(p)['max'], 58)
 
     def test_fixed_swap_caps_or_unbounded_moe_ram_are_refused(self):
-        for b in [{'high': 44, 'max': 48, 'swap': 1}, {'high': 44, 'max': 48, 'swap': 2}, {'high': 48, 'max': 56, 'swap': None}, {'high': 48, 'max': 48, 'swap': None}]:
+        for b in [{'high': 44, 'max': 48, 'swap': 1}, {'high': 44, 'max': 48, 'swap': 2}, {'high': 58, 'max': 60, 'swap': None}, {'high': 48, 'max': 48, 'swap': None}]:
             p = deepcopy(get_profile('deepseek-maya'))
             p['worker_memory_gib'] = b
             with self.assertRaises(ValueError):

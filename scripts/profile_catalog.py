@@ -5,13 +5,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / 'config/maintained-profiles.json'
+MOE_WORKER_HIGH_GIB = 56
+MOE_WORKER_MAX_GIB = 58
 
 
 def worker_budget(profile):
     dense = profile['id'].startswith('qwen27b-')
-    large = profile['id'] in ('flash-next-strata', 'glm-maya')
     default = ({'high': None, 'max': None, 'swap': None} if dense else
-               {'high': 44 if large else 30, 'max': 48 if large else 36, 'swap': None})
+               {'high': MOE_WORKER_HIGH_GIB, 'max': MOE_WORKER_MAX_GIB, 'swap': None})
     budget = profile.get('worker_memory_gib', default)
     if set(budget) != {'high', 'max', 'swap'} or budget['swap'] is not None:
         raise ValueError(f"Invalid guarded worker budget: {profile['id']}")
@@ -21,7 +22,7 @@ def worker_budget(profile):
         return dict(budget)
     if (any(type(budget[k]) is not int for k in ('high', 'max'))
             or not (0 < budget['high'] <= budget['max'] - 2
-                    and budget['max'] <= (36 if dense else 48))):
+                    and budget['max'] <= (36 if dense else MOE_WORKER_MAX_GIB))):
         raise ValueError(f"Invalid bounded worker budget: {profile['id']}")
     return dict(budget)
 

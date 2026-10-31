@@ -748,8 +748,8 @@
         "checkpoint_directory": "models/strata/models/IQ3_XXS"
       },
       "worker_memory_gib": {
-        "high": 44,
-        "max": 48,
+        "high": 56,
+        "max": 58,
         "swap": null
       },
       "context_expansion_assessment": {
@@ -1111,8 +1111,8 @@
         "checkpoint_directory": "models/maya/Maya-S24"
       },
       "worker_memory_gib": {
-        "high": 46,
-        "max": 48,
+        "high": 56,
+        "max": 58,
         "swap": null
       },
       "latest_qualification": {
@@ -1440,8 +1440,8 @@
         "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
       },
       "worker_memory_gib": {
-        "high": 44,
-        "max": 48,
+        "high": 56,
+        "max": 58,
         "swap": null
       },
       "latest_qualification": {
@@ -1718,8 +1718,8 @@
         "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
       },
       "worker_memory_gib": {
-        "high": 46,
-        "max": 48,
+        "high": 56,
+        "max": 58,
         "swap": null
       },
       "selected_settings": {
@@ -2066,8 +2066,8 @@
         "checkpoint_directory": "models/bolt-awq-int4"
       },
       "worker_memory_gib": {
-        "high": 46,
-        "max": 48,
+        "high": 56,
+        "max": 58,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2134,8 +2134,8 @@
         "manifest": "config/deepseek-unsloth-runtime.json"
       },
       "worker_memory_gib": {
-        "high": 46,
-        "max": 48,
+        "high": 56,
+        "max": 58,
         "swap": null
       },
       "host_ram_reserve_gib": 2,

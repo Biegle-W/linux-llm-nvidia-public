@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'docs/WORKER-RAM-64GB-20261031.md', 'docs/validation-results/20261031-worker-ram-64gb.json',
     'config/deepseek-unsloth-runtime.json',
     'scripts/strata_unsloth_runtime.py',
     'tests/test_strata_unsloth_runtime.py',

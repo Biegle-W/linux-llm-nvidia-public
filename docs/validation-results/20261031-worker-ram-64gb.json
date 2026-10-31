@@ -1,0 +1,209 @@
+{
+  "date": "2026-10-31",
+  "usable_ram_gib": 61.30118942260742,
+  "worker_high_gib": 56,
+  "worker_max_gib": 58,
+  "outside_worker_gib": 3.301189422607422,
+  "changes": [
+    {
+      "profile": "flash-next-strata",
+      "before": {
+        "high": 44,
+        "max": 48,
+        "swap": null
+      },
+      "after": {
+        "high": 56,
+        "max": 58,
+        "swap": null
+      }
+    },
+    {
+      "profile": "glm-maya",
+      "before": {
+        "high": 46,
+        "max": 48,
+        "swap": null
+      },
+      "after": {
+        "high": 56,
+        "max": 58,
+        "swap": null
+      }
+    },
+    {
+      "profile": "deepseek-strata",
+      "before": {
+        "high": 44,
+        "max": 48,
+        "swap": null
+      },
+      "after": {
+        "high": 56,
+        "max": 58,
+        "swap": null
+      }
+    },
+    {
+      "profile": "deepseek-maya",
+      "before": {
+        "high": 46,
+        "max": 48,
+        "swap": null
+      },
+      "after": {
+        "high": 56,
+        "max": 58,
+        "swap": null
+      }
+    },
+    {
+      "profile": "bolt-vllm",
+      "before": {
+        "high": 46,
+        "max": 48,
+        "swap": null
+      },
+      "after": {
+        "high": 56,
+        "max": 58,
+        "swap": null
+      }
+    },
+    {
+      "profile": "deepseek-unsloth-strata",
+      "before": {
+        "high": 46,
+        "max": 48,
+        "swap": null
+      },
+      "after": {
+        "high": 56,
+        "max": 58,
+        "swap": null
+      }
+    }
+  ],
+  "live_cgroup_audit": {
+    "status": "pass",
+    "method": "Actual transient cgroups with production budget values; lightweight probe, no model load or memory allocation",
+    "profiles": [
+      {
+        "profile": "qwen27b-hyperqwen",
+        "budget": {
+          "high": null,
+          "max": null,
+          "swap": null
+        },
+        "kernel_verified": true,
+        "properties": {
+          "memory.high": "max",
+          "memory.max": "max",
+          "memory.swap.max": "max"
+        }
+      },
+      {
+        "profile": "qwen27b-sglang",
+        "budget": {
+          "high": null,
+          "max": null,
+          "swap": null
+        },
+        "kernel_verified": true,
+        "properties": {
+          "memory.high": "max",
+          "memory.max": "max",
+          "memory.swap.max": "max"
+        }
+      },
+      {
+        "profile": "flash-next-strata",
+        "budget": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "kernel_verified": true,
+        "properties": {
+          "memory.high": "60129542144",
+          "memory.max": "62277025792",
+          "memory.swap.max": "max"
+        }
+      },
+      {
+        "profile": "glm-maya",
+        "budget": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "kernel_verified": true,
+        "properties": {
+          "memory.high": "60129542144",
+          "memory.max": "62277025792",
+          "memory.swap.max": "max"
+        }
+      },
+      {
+        "profile": "deepseek-strata",
+        "budget": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "kernel_verified": true,
+        "properties": {
+          "memory.high": "60129542144",
+          "memory.max": "62277025792",
+          "memory.swap.max": "max"
+        }
+      },
+      {
+        "profile": "deepseek-maya",
+        "budget": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "kernel_verified": true,
+        "properties": {
+          "memory.high": "60129542144",
+          "memory.max": "62277025792",
+          "memory.swap.max": "max"
+        }
+      },
+      {
+        "profile": "bolt-vllm",
+        "budget": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "kernel_verified": true,
+        "properties": {
+          "memory.high": "60129542144",
+          "memory.max": "62277025792",
+          "memory.swap.max": "max"
+        }
+      },
+      {
+        "profile": "deepseek-unsloth-strata",
+        "budget": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "kernel_verified": true,
+        "properties": {
+          "memory.high": "60129542144",
+          "memory.max": "62277025792",
+          "memory.swap.max": "max"
+        }
+      }
+    ]
+  },
+  "cpu_tests_passed": 321,
+  "host_available_guard_gib": 2,
+  "other_profile_fields_unchanged": true,
+  "model_rebenchmarked": false
+}

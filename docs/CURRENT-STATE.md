@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Latest: restored 64GB worker budgets applied — October 31
+
+All six MoE profiles now use 56 GiB soft / 58 GiB hard worker limits. Both GPU-resident Qwen profiles retain their explicitly uncapped RAM setting. Linux sees 61.3 GiB usable; the independent 2 GiB host-available stop and all VRAM,swap,pressure and temperature guards remain active. Contexts and other model settings are unchanged. All eight actual kernel cgroup settings and 321 CPU tests passed; no inference job was interrupted. [Policy and verification](WORKER-RAM-64GB-20261031.md).
+
 ## Latest: additional Unsloth DeepSeek Strata option at 32K — October 31
 
 The Strata model menu now includes a separate **Unsloth Dynamic3.1 UD-IQ1_S**
