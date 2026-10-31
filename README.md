@@ -1,5 +1,10 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: P2P driver built, installation blocked — October 30
+
+The switch and all three GPUs now enumerate; 3080 Ti/3080 links are x8 each with a Gen4 x16 switch uplink. CUDA peer access remains unavailable under 595.99.02. Matching 615.71.09 P2P modules built successfully after a documented Linux 7 CXL guard correction; bounded correctness verification is prepared. Automatic review rejected the system-wide driver replacement and IOMMU passthrough change; no installation or boot mutation ran. Explicit approval and a subsequent reboot/test remain required. See [status and limits](docs/P2P-DRIVER-PREPARATION-20261030.md).
+
+
 ## Latest: three-GPU hardware-change preparation — October 30
 
 Prepared read-only next-login inventory and a **Prepare Three GPU Unlock** desktop shortcut for a planned switched 3080 Ti/3080 pair plus motherboard-connected 3060. Current checks pass; the third card is not installed. PCI addresses must be rediscovered after the hardware move, then administrator-authenticated boot preparation and another full power cycle may be needed. P2P, lane sharing and three-GPU model placement remain unqualified; existing profiles are unchanged. See [procedure and limits](docs/THREE-GPU-PREPARATION-20261030.md).
