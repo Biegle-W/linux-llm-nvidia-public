@@ -1,5 +1,10 @@
 # Agent entry point
 
+## Latest: all three GPU unlocks verified; P2P still fails — October 31
+
+The dynamic candidate is loaded and the early model-ID hook successfully unlocked the 3080 Ti, 3080 and 3060 before NVIDIA initialized, despite another PCI-address change. Health reports VERIFIED. Switched links remain x8/x8. Actual peer reads still fail: local source data passes validation, while a bounded read-only peer diagnostic returns 0xffffffff. No P2P bandwidth or model improvement is claimed. See [actual results](docs/P2P-DYNAMIC-UNLOCK-20261031.md).
+
+
 ## Latest: dynamic P2P and automatic unlock candidate — October 31
 
 A matching 615.71.09 dynamic BAR1 candidate compiled; 33 CPU tests passed. A model-ID-scoped early hook and health checker now support PCI-address changes for exactly the 3080 Ti, 3080 and 3060. Installation/activation and actual post-boot P2P correctness remain pending. The previous static peer-read mismatch remains a failed result; production settings are unchanged. See [candidate and validation boundary](docs/P2P-DYNAMIC-UNLOCK-20261031.md).

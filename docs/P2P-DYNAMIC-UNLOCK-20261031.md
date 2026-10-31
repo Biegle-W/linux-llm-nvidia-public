@@ -1,6 +1,6 @@
 # Dynamic BAR1 and address-independent unlock candidate — October 31, 2026
 
-Status: built and CPU-tested, not yet activated or GPU-qualified. The previous static BAR1 candidate failed a real remote-read correctness check; preserve that failure in P2P-POSTBOOT-20261031.md.
+Status: activated after successful staging. All three tensor unlocks are verified; actual P2P correctness still FAILED. The previous static BAR1 candidate failed a real remote-read correctness check; preserve that failure in P2P-POSTBOOT-20261031.md.
 
 ## P2P candidate
 
@@ -25,3 +25,13 @@ Sources: [dynamic driver](https://github.com/noon-at-cgn/3080-20g-p2p), [origina
 ## First staging attempt and packaging correction
 
 The first authenticated staging transaction passed automatic-unlock preboot health but failed the final raw embedded-module hash comparison. It restored its preimages and did not reboot. Dracut strips debug data from unsigned modules with `strip -g`; the corrected verifier accepts only the exact original candidate or its exact debug-stripped form and additionally requires the embedded module srcversion to match. A fresh transaction directory is used for the retry. Neither the failed staging attempt nor these packaging checks establish working P2P.
+
+## Actual post-reboot verification
+
+The retry transaction passed exact stripped-module verification and rebooted successfully. The loaded core, modeset and DRM srcversions match the dynamic candidate. NVIDIA 615.71.09 and IOMMU passthrough are active. Both switched GPUs retain x8 links; the 3060 is x4.
+
+**Automatic unlock passed on all three GPUs.** Bus enumeration changed again: the 3080 Ti moved from 0a:00.0 to 09:00.0, while the 3080 was at 12:00.0 and the 3060 at 1c:00.0. The boot hook selected the actual three addresses, and root health recorded successful unlock on all three before NVIDIA initialized (4.285526/4.302585/4.302865 seconds versus NVIDIA initialization at 4.584003 seconds). Health reports VERIFIED with no next-boot pending flag. The two GA102 dynamic BAR1 options also reference their actual discovered addresses.
+
+**P2P correctness still failed.** CUDA reports peer capability, but the 16 MiB remote-read test exited 4 with a data mismatch. A separate bounded 64 KiB read-only diagnostic confirmed that the source data is locally correct while peer reads return 0xffffffff. It issued no remote writes. No working bandwidth or model-speed result is claimed. Dynamic-driver debug calibration/delta and UVM gate-trip counters remain zero. Expected refusals involving the 3060 indicate it was not opted into this experimental peer path.
+
+The remaining investigation is the inaccessible peer-memory path, including switch routing/ACS and driver mapping. All-ones reads alone do not establish which is responsible. Avoid multi-GPU P2P workloads until the path passes correctness or is disabled; preserve the working identity-based tensor unlock independently.
