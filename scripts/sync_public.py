@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'patches/llama-demand-mmap-prefault.patch',
     'docs/DEEPSEEK-DYNAMIC31-20261031.md',
     'docs/validation-results/20261031-deepseek-dynamic31.json',
     'config/bolt-offload-runtime.json',

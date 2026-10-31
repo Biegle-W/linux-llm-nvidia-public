@@ -57,7 +57,7 @@ def write_receipt(path, record):
         temporary.unlink(missing_ok=True)
 
 
-def run_foreground(command, title, receipt):
+def run_foreground(command, title, receipt, starts_minimized=False):
     """Keep a real child PTY, durable output/exit status, and no post-exit prompt."""
     receipt.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     transcript = receipt.with_suffix('.log')
@@ -65,7 +65,7 @@ def run_foreground(command, title, receipt):
     os.close(fd)
     record = {'pid': os.getpid(), 'command': command,
               'visible_tty': os.ttyname(sys.stdout.fileno()),
-              'window_id': os.environ.get('WINDOWID'), 'starts_minimized': False,
+              'window_id': os.environ.get('WINDOWID'), 'starts_minimized': starts_minimized,
               'state': 'running', 'started_at': time.time(), 'transcript': str(transcript)}
     write_receipt(receipt, record)
     print(title, flush=True)
@@ -323,6 +323,9 @@ def main():
     parser.add_argument('--unit')
     parser.add_argument('--receipt', type=Path)
     parser.add_argument('--log', action='append', default=[])
+    presentation = parser.add_mutually_exclusive_group()
+    presentation.add_argument('--attention', action='store_true', help='bring a command requiring input/authentication to the front')
+    presentation.add_argument('--minimized', action='store_true', help='open without taking focus')
     args, args_command = parser.parse_known_args()
     args.command = args_command
     if args.mode in ('open', 'watch'):
@@ -337,18 +340,20 @@ def main():
         if not command:
             parser.error('a command is required after --')
         if args.mode in ('run', 'launch'):
+            minimized = args.minimized or (args.mode == 'run' and not args.attention)
             STATE.mkdir(parents=True, exist_ok=True, mode=0o700)
             receipt = STATE / ('harness-' + uuid.uuid4().hex + '.json')
             launch_terminal(terminal_command(args.title, [
                             '/usr/bin/python3', str(Path(__file__).resolve()),
                             'foreground' if args.mode == 'run' else 'selection',
-                            '--title', args.title, '--receipt', str(receipt), '--', *command]))
+                            '--title', args.title, '--receipt', str(receipt),
+                            *(['--minimized'] if minimized else []), '--', *command], minimized=minimized))
             for _ in range(100):
                 if receipt.exists():
                     record = json.loads(receipt.read_text())
-                    if record.get('state') == 'running':
+                    if record.get('state') == 'running' and not minimized:
                         focus_terminal(record['window_id'])
-                    print('Visible foreground harness started; receipt:', receipt)
+                    print('Visible ' + ('minimized' if minimized else 'attention') + ' harness started; receipt:', receipt)
                     return
                 time.sleep(.1)
             raise RuntimeError('Visible harness terminal did not start')
@@ -356,6 +361,8 @@ def main():
             if not sys.stdout.isatty():
                 raise SystemExit('Harness must run in a visible terminal')
             receipt = args.receipt or STATE / ('harness-' + uuid.uuid4().hex + '.json')
+            if args.minimized:
+                raise SystemExit(run_foreground(command, args.title, receipt, starts_minimized=True))
             raise SystemExit(run_foreground(command, args.title, receipt))
 
 

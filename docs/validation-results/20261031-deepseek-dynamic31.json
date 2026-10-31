@@ -131,5 +131,511 @@
       "router_and_dsh_invocations_preserved": true
     }
   },
-  "selected": false
+  "selected": false,
+  "ssd_streaming_followup": {
+    "date": "2026-10-31",
+    "preferred_experimental_runtime": "Strata 0.2.9 / DeepSeek engine 0.1.55",
+    "scope": "One isolated fresh 2K run; arithmetic, JSON and two complete 256-token streams; not maintained-router promotion or near-window/reload qualification",
+    "qualified_policy": {
+      "window_s": 30,
+      "swap_write_mib_s": 128,
+      "swap_combined_mib_s": 160,
+      "loading_full_pressure_pct": 15,
+      "inference_full_pressure_pct": 15,
+      "pressure_bad_samples": 3,
+      "worker_high_gib": 46,
+      "worker_max_gib": 48,
+      "host_reserve_gib": 2,
+      "gpu_reserve_mib": 512,
+      "internal_engine_gpu_reserve_mib": 768,
+      "temperature_c": 82,
+      "context": 2048,
+      "experts_per_token": 6,
+      "dspark": "none",
+      "cpu_expert_store_decimal_gb": 36
+    },
+    "release": {
+      "release": "v0.2.9",
+      "source_commit": "c62d5e3a15b40ea51c96aae9e8d36928965f53ab",
+      "engine_version": "0.1.55",
+      "asset": "strata-dsv41-0.1.55-linux-x86_64-cuda-cuda13.tar.gz",
+      "asset_bytes": 444779692,
+      "sha256": "8eed51bf333bc3bc381bc3cc4daa7dbca51d612647732e6f2a63c63be4c66124",
+      "url": "https://github.com/Niko1221/Strata/releases/download/v0.2.9/strata-dsv41-0.1.55-linux-x86_64-cuda-cuda13.tar.gz",
+      "sha256sums_verified": true
+    },
+    "package_verification": {
+      "all_file_hashes": true,
+      "signature_verified_against_previous_install_keys": true,
+      "signer": "verified",
+      "engine_version": "0.1.55"
+    },
+    "native_demand_alternative": {
+      "base_source_commit": "caa8191df159f764fb0160e3d2fc6be008948aee",
+      "patch": "patches/llama-demand-mmap-prefault.patch",
+      "patch_sha256": "16f3112d51ca9d0b1abad4f70fa9662051753f8a2e3b76f4c81228206e702b23",
+      "libllama_sha256": "a0d2c9eeac06d8e0143709c941fefc966a8d8db6faae6613aaef0997ee12e37c",
+      "original_binaries_unchanged": true,
+      "build_patch_sha256": "9602cf5574ae994b08153c3b97eb580e230337ca2f63215cc8a80786a10300ee"
+    },
+    "trials": {
+      "trial-ssd8-16": {
+        "phase": "failed",
+        "load_seconds": 202.41173315048218,
+        "guard_stop": "Sustained full-memory pressure during inference",
+        "swap_policy": {
+          "window_s": 30,
+          "write_mib_s": 8,
+          "combined_mib_s": 16,
+          "pressure_pct": 10
+        },
+        "resources": {
+          "samples": 117,
+          "rolling_window_samples": 3,
+          "peak_worker_gib": 46.000240325927734,
+          "peak_worker_swap_gib": 0.20296478271484375,
+          "peak_loading_full_pressure_pct": 15.24,
+          "peak_inference_full_pressure_pct": 14.45,
+          "min_host_available_gib": 55.801170349121094,
+          "min_gpu_free_mib": 5797.0,
+          "max_gpu_temperature_c": 38.0,
+          "peak_swap_rates": {
+            "read_mib_s": 0.4420092031835903,
+            "write_mib_s": 1.8104839300038607,
+            "combined_mib_s": 2.252493133187451
+          },
+          "max_memory_events": {
+            "low": 0,
+            "high": 5769,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 8
+          },
+          "major_fault_count": 0
+        }
+      },
+      "trial-ssd8-16-psi15-p10005": {
+        "phase": "failed",
+        "guard_stop": "Sustained loading full-memory pressure above 15%",
+        "swap_policy": {
+          "window_s": 30,
+          "write_mib_s": 8,
+          "combined_mib_s": 16,
+          "pressure_pct": 15
+        },
+        "resources": {
+          "samples": 7,
+          "rolling_window_samples": 0,
+          "peak_worker_gib": 6.255214691162109,
+          "peak_worker_swap_gib": 0.0,
+          "peak_loading_full_pressure_pct": 24.09,
+          "peak_inference_full_pressure_pct": 0,
+          "min_host_available_gib": 57.5462532043457,
+          "min_gpu_free_mib": 9689.0,
+          "max_gpu_temperature_c": 38.0,
+          "peak_swap_rates": {
+            "read_mib_s": 0,
+            "write_mib_s": 0,
+            "combined_mib_s": 0
+          },
+          "max_memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "major_fault_count": 0
+        }
+      },
+      "trial-demand-ssd8-16-psi15-v2": {
+        "phase": "failed",
+        "load_seconds": 10.443196296691895,
+        "math": "pass",
+        "json": "pass",
+        "guard_stop": "Sustained full-memory pressure during inference",
+        "swap_policy": {
+          "window_s": 30,
+          "write_mib_s": 8,
+          "combined_mib_s": 16,
+          "pressure_pct": 15
+        },
+        "runtime_variant": "demand-mmap-no-eager-prefault",
+        "resources": {
+          "samples": 23,
+          "rolling_window_samples": 3,
+          "peak_worker_gib": 19.760547637939453,
+          "peak_worker_swap_gib": 0.0,
+          "peak_loading_full_pressure_pct": 0.0,
+          "peak_inference_full_pressure_pct": 18.5,
+          "min_host_available_gib": 57.086971282958984,
+          "min_gpu_free_mib": 5781.0,
+          "max_gpu_temperature_c": 39.0,
+          "peak_swap_rates": {
+            "read_mib_s": 0.0,
+            "write_mib_s": 0.0,
+            "combined_mib_s": 0.0
+          },
+          "max_memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "major_fault_count": 0
+        },
+        "math_request": {
+          "elapsed_s": 6.756658031998086,
+          "usage": {
+            "completion_tokens": 2,
+            "prompt_tokens": 17,
+            "total_tokens": 19,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        "json_request": {
+          "elapsed_s": 6.066465517003962,
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 25,
+            "total_tokens": 38,
+            "prompt_tokens_details": {
+              "cached_tokens": 1
+            }
+          }
+        }
+      },
+      "trial-demand-ssd8-16-psi25": {
+        "phase": "json-and-stream-pass-not-production-qualified",
+        "load_seconds": 8.72812795639038,
+        "math": "pass",
+        "json": "pass",
+        "stream": {
+          "completion_tokens": 64,
+          "input_tokens": 22,
+          "ttft_s": 2.0975244069995824,
+          "decode_tps": 3.920705975247876,
+          "generation_s": 16.06853469699854,
+          "wall_s": 18.166245571002946
+        },
+        "guard_stop": null,
+        "swap_policy": {
+          "window_s": 30,
+          "write_mib_s": 8,
+          "combined_mib_s": 16,
+          "pressure_pct": 25
+        },
+        "runtime_variant": "demand-mmap-no-eager-prefault",
+        "resources": {
+          "samples": 17,
+          "rolling_window_samples": 0,
+          "peak_worker_gib": 10.051956176757812,
+          "peak_worker_swap_gib": 0.005596160888671875,
+          "peak_loading_full_pressure_pct": 0.0,
+          "peak_inference_full_pressure_pct": 10.14,
+          "min_host_available_gib": 57.12350082397461,
+          "min_gpu_free_mib": 5781.0,
+          "max_gpu_temperature_c": 40.0,
+          "peak_swap_rates": {
+            "read_mib_s": 0,
+            "write_mib_s": 0,
+            "combined_mib_s": 0
+          },
+          "max_memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "major_fault_count": 0
+        },
+        "math_request": {
+          "elapsed_s": 3.293718093998905,
+          "usage": {
+            "completion_tokens": 2,
+            "prompt_tokens": 17,
+            "total_tokens": 19,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        "json_request": {
+          "elapsed_s": 4.688071992000914,
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 25,
+            "total_tokens": 38,
+            "prompt_tokens_details": {
+              "cached_tokens": 1
+            }
+          }
+        }
+      },
+      "trial-demand-ssd8-16-psi25-cold": {
+        "phase": "failed",
+        "load_seconds": 17.75458860397339,
+        "math": "pass",
+        "json": "pass",
+        "guard_stop": "Sustained owned-worker swap churn during inference",
+        "swap_policy": {
+          "window_s": 30,
+          "write_mib_s": 8,
+          "combined_mib_s": 16,
+          "pressure_pct": 25
+        },
+        "runtime_variant": "demand-mmap-no-eager-prefault",
+        "cache_precondition": "Read-only POSIX_FADV_DONTNEED scoped to all five verified model files before loading; no global cache drop",
+        "resources": {
+          "samples": 52,
+          "rolling_window_samples": 29,
+          "peak_worker_gib": 45.99882507324219,
+          "peak_worker_swap_gib": 0.4315910339355469,
+          "peak_loading_full_pressure_pct": 0.0,
+          "peak_inference_full_pressure_pct": 8.77,
+          "min_host_available_gib": 57.008338928222656,
+          "min_gpu_free_mib": 5797.0,
+          "max_gpu_temperature_c": 45.0,
+          "peak_swap_rates": {
+            "read_mib_s": 0.0022907701887124707,
+            "write_mib_s": 11.820374173756349,
+            "combined_mib_s": 11.822664943945062
+          },
+          "max_memory_events": {
+            "low": 0,
+            "high": 851,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "major_fault_count": 0
+        },
+        "math_request": {
+          "elapsed_s": 23.860093110997695,
+          "usage": {
+            "completion_tokens": 2,
+            "prompt_tokens": 17,
+            "total_tokens": 19,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        "json_request": {
+          "elapsed_s": 29.29447620200517,
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 25,
+            "total_tokens": 38,
+            "prompt_tokens_details": {
+              "cached_tokens": 1
+            }
+          }
+        }
+      },
+      "trial-demand-ssd128-160-cold-v2": {
+        "phase": "json-and-stream-pass-not-production-qualified",
+        "load_seconds": 16.476484298706055,
+        "math": "pass",
+        "json": "pass",
+        "stream": {
+          "completion_tokens": 256,
+          "input_tokens": 22,
+          "ttft_s": 13.95119177900051,
+          "decode_tps": 1.7929806040013205,
+          "generation_s": 142.22128194299876,
+          "wall_s": 156.1732222790015
+        },
+        "guard_stop": null,
+        "swap_policy": {
+          "window_s": 30,
+          "write_mib_s": 128,
+          "combined_mib_s": 160,
+          "pressure_pct": 25
+        },
+        "runtime_variant": "demand-mmap-no-eager-prefault",
+        "cache_precondition": "Read-only POSIX_FADV_DONTNEED scoped to all five verified model files before loading; no global cache drop",
+        "resources": {
+          "samples": 108,
+          "rolling_window_samples": 85,
+          "peak_worker_gib": 46.00019836425781,
+          "peak_worker_swap_gib": 0.5730743408203125,
+          "peak_loading_full_pressure_pct": 0.0,
+          "peak_inference_full_pressure_pct": 12.7,
+          "min_host_available_gib": 56.808258056640625,
+          "min_gpu_free_mib": 5797.0,
+          "max_gpu_temperature_c": 48.0,
+          "peak_swap_rates": {
+            "read_mib_s": 0.5088525306522192,
+            "write_mib_s": 13.11902104800232,
+            "combined_mib_s": 13.157795174362187
+          },
+          "max_memory_events": {
+            "low": 0,
+            "high": 5015,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "major_fault_count": 373033
+        },
+        "math_request": {
+          "elapsed_s": 22.256268092001847,
+          "usage": {
+            "completion_tokens": 2,
+            "prompt_tokens": 17,
+            "total_tokens": 19,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        "json_request": {
+          "elapsed_s": 25.025389098998858,
+          "usage": {
+            "completion_tokens": 13,
+            "prompt_tokens": 25,
+            "total_tokens": 38,
+            "prompt_tokens_details": {
+              "cached_tokens": 1
+            }
+          }
+        }
+      },
+      "trial-strata029-ssd128-v3": {
+        "phase": "json-and-stream-pass-not-production-qualified",
+        "load_seconds": 96.7054078578949,
+        "math": "pass",
+        "json": "pass",
+        "streams": [
+          {
+            "completion_tokens": 256,
+            "input_tokens": 22,
+            "ttft_s": 4.696204988998943,
+            "decode_tps": 5.769032621755325,
+            "generation_s": 44.20151812599943,
+            "wall_s": 48.8979100209981,
+            "usage": {
+              "prompt_tokens": 22,
+              "completion_tokens": 256,
+              "total_tokens": 278,
+              "prompt_tokens_details": {
+                "cached_tokens": 0
+              }
+            }
+          },
+          {
+            "completion_tokens": 256,
+            "input_tokens": 22,
+            "ttft_s": 0.20487685700209113,
+            "decode_tps": 7.744795912405287,
+            "generation_s": 32.92533500999707,
+            "wall_s": 33.130702476002625,
+            "usage": {
+              "prompt_tokens": 22,
+              "completion_tokens": 256,
+              "total_tokens": 278,
+              "prompt_tokens_details": {
+                "cached_tokens": 21
+              }
+            }
+          }
+        ],
+        "guard_stop": null,
+        "swap_policy": {
+          "window_s": 30,
+          "write_mib_s": 128,
+          "combined_mib_s": 160,
+          "pressure_pct": 15
+        },
+        "runtime_variant": "official-Strata-0.2.9-engine-0.1.55",
+        "experts_per_token": 6,
+        "cache_store_decimal_gb": 36,
+        "internal_gpu_reserve_mib": 768,
+        "cache_precondition": "Read-only POSIX_FADV_DONTNEED scoped to all five verified model files before loading; no global cache drop",
+        "resources": {
+          "samples": 101,
+          "rolling_window_samples": 39,
+          "peak_worker_gib": 41.974578857421875,
+          "peak_worker_swap_gib": 0.0,
+          "peak_loading_full_pressure_pct": 0.0,
+          "peak_inference_full_pressure_pct": 0.0,
+          "min_host_available_gib": 23.322277069091797,
+          "min_gpu_free_mib": 745.0,
+          "max_gpu_temperature_c": 51.0,
+          "peak_swap_rates": {
+            "read_mib_s": 0.0,
+            "write_mib_s": 0.0,
+            "combined_mib_s": 0.0
+          },
+          "max_memory_events": {
+            "low": 0,
+            "high": 0,
+            "max": 0,
+            "oom": 0,
+            "oom_kill": 0,
+            "oom_group_kill": 0,
+            "sock_throttled": 0
+          },
+          "major_fault_count": 516
+        },
+        "math_request": {
+          "elapsed_s": 19.855647370997758,
+          "usage": {
+            "prompt_tokens": 17,
+            "completion_tokens": 2,
+            "total_tokens": 19,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        },
+        "json_request": {
+          "elapsed_s": 6.802878978000081,
+          "usage": {
+            "prompt_tokens": 25,
+            "completion_tokens": 10,
+            "total_tokens": 35,
+            "prompt_tokens_details": {
+              "cached_tokens": 0
+            }
+          }
+        }
+      }
+    },
+    "cleanup": {
+      "owned_workers_stopped": true,
+      "reservation_released": true,
+      "router_and_dsh_preserved": true,
+      "maintained_catalog_bytes_preserved": true
+    },
+    "validation": {
+      "repository_cpu_tests": 307,
+      "policy_bound_checks": 19,
+      "targeted_launcher_tests": 7,
+      "live_quiet_terminal": {
+        "native_iconic": true,
+        "did_not_take_focus": true,
+        "automatic_close": true,
+        "exit_code": 0
+      }
+    },
+    "selection": "Working isolated candidate; maintained catalog and current defaults unchanged"
+  }
 }

@@ -1,5 +1,13 @@
 # Agent entry point
 
+## Latest: working Dynamic3.1 SSD candidate and quiet automated terminals — October 31
+
+Strata 0.2.9 / engine 0.1.55 passed isolated 2K arithmetic/JSON and two complete 256-token streams with bounded 128/160 MiB/s swap and 15% pressure guards. Decode observations were 5.769 and 7.745 tok/s (second prompt cached); swap activity and pressure were zero. Existing selections remain unchanged. Automated harnesses now stay minimized; 307 CPU tests and a live no-focus/auto-close check passed. [Settings, evidence and scope](docs/DEEPSEEK-DYNAMIC31-20261031.md).
+
+## Current: automated terminals stay minimized — October 31
+
+Automated tests, runtime inspections and unattended helpers use `visible_terminal.py run`, which now opens minimized and never requests focus. Commands requiring an actual user choice or authentication use `run --attention`; user-invoked selectors retain `launch` attention behavior. Backend monitors stay minimized. Completed command windows still close automatically. This supersedes the earlier blanket foreground-harness policy. Never bring automated test windows forward merely for progress; preserve running jobs. See [verification](docs/TERMINAL-ATTENTION-20261031.md).
+
 ## Latest: Unsloth Dynamic3.1 DeepSeek bounded trial — October 31
 
 All five pinned UD-IQ1_S shard hashes passed. The model loaded at 2K and passed arithmetic, then the unchanged swap-write guard stopped the JSON request; sustained streaming was not reached. Maintained selections are unchanged. The report records pinned sizes/hashes, the final-shard HTTP failure and Xet recovery, actual outcome and unchanged guards. [Results and limits](docs/DEEPSEEK-DYNAMIC31-20261031.md).
@@ -29,7 +37,7 @@ Neither Bolt 74B AWQ INT4 nor Super VL mixed INT4 reached inference in the teste
 Clearing request/completion redirection on four Broadcom switch bridges fixed the remote-read mismatch. Bidirectional seeded read/write validation passed twice, including after persistent rule activation, with about 13.08 GB/s copy throughput each way. Only 3080 Ti ↔ 3080 advertises peer access; all 3060 peer directions remain disabled. All-three-GPU tensor unlock remains VERIFIED, links are x8/x8 plus motherboard x4, and the root-owned boot rule is enabled. A new reboot of that ACS rule has not yet been observed. See [measurements, scope and rollback](docs/PEX-ACS-PAIR-20261031.md).
 
 
-## Latest: attention terminals foreground, backends minimized — October 31
+## Earlier October 31: foreground harness policy (superseded above)
 
 User-input/authentication tasks, selectors and test terminals now open and activate in front. Only backend monitors retain minimized startup. Three launcher tests passed and live attention-window activation was confirmed. The pair-only ACS guard also excludes terminal work on the motherboard 3060; its four safety tests passed. See [policy and checks](docs/TERMINAL-ATTENTION-20261031.md).
 
@@ -531,7 +539,7 @@ router MoE launches, router startup and DSH web startup open consoles automatica
 A failed visible-console handshake must not silently fall back to a hidden launch.
 Closing a console leaves the guarded service running; its stop command is printed.
 
-Run every future benchmark/test coordinator through the visible foreground wrapper:
+Run every future benchmark/test coordinator through the visible minimized wrapper (use `--attention` only for an actual input/authentication step):
 `python3 scripts/visible_terminal.py run --title "Test name" -- /absolute/command args`.
 For custom worker units, open a console with `visible_terminal.py open --title
 "Backend" --unit NAME.service --log /absolute/engine.log` before starting them.

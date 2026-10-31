@@ -1,5 +1,13 @@
 # Terminal attention and backend focus policy — October 31, 2026
 
+## Current: automated commands do not take focus
+
+Automated tests, runtime inspections and unattended helpers now open minimized by default through `visible_terminal.py run`. The launcher supplies native iconic startup and skips its activation function. Actual authentication/input tasks can explicitly use `run --attention`; user-invoked selectors through `launch` still come forward. `--minimized` can explicitly suppress selector focus. Backend monitors remain minimized and completed commands still close automatically.
+
+Seven focused launcher checks passed, including four mode/attention cases. A live automated command was confirmed iconic, absent from the active-window property, and automatically closed after exit. The already-running DeepSeek test window was minimized without stopping its worker. No global desktop focus setting changed.
+
+## Earlier October 31 policy (superseded for automated commands)
+
 The user clarified that terminals needing attention must come to the front; only backend consoles should default to minimized. This supersedes the earlier all-terminal minimization preference.
 
 The shared launcher now omits native-iconic startup for harnesses, installation/authentication tasks and engine selectors. It restores and requests activation of the owned window, then verifies the window manager's active-window property. Backend monitor startup explicitly retains native-iconic mode and does not request focus. The pinned terminal runtime, ownership rules, resource guards and auto-close behavior are unchanged.
