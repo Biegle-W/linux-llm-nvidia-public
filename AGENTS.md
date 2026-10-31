@@ -1,5 +1,10 @@
 # Agent entry point
 
+## Latest: attention terminals foreground, backends minimized — October 31
+
+User-input/authentication tasks, selectors and test terminals now open and activate in front. Only backend monitors retain minimized startup. Three launcher tests passed and live attention-window activation was confirmed. The pair-only ACS guard also excludes terminal work on the motherboard 3060; its four safety tests passed. See [policy and checks](docs/TERMINAL-ATTENTION-20261031.md).
+
+
 ## Latest: pair-only switch ACS diagnosis prepared — October 31
 
 The driver advertises P2P only for the two switched GA102 cards; all 3060 peer directions are disabled. Their IOMMU domains are identity. A scoped Broadcom bridge audit and reversible ACS trial is prepared, with conditional persistence only after full pair-only correctness passes. Three CPU safety checks passed; actual ACS/GPU results await administrator authentication. All-three-GPU tensor unlock remains verified. See [scope and validation](docs/PEX-ACS-PAIR-20261031.md).
@@ -673,17 +678,18 @@ See [engine switching verification](docs/ENGINE-SWITCHING-20261028.md). Next act
 do not repeat completed GPU qualification or restore a fallback automatically.
 
 
-## Latest: all project terminals start minimized — October 28
+## Historical: all-terminal minimization — October 28 (superseded October 31)
 
-The user requires engines, router, DSH/harnesses, selectors and test tasks to remain
-visible in the taskbar but start minimized without taking focus. The shared
-launcher now uses a SHA256-pinned project-local XTerm runtime with native-iconic
-startup. There is no focus-then-minimize race or global desktop focus-policy change.
+The earlier all-terminal minimization preference is superseded: only backend
+monitors default to minimized. Attention/authentication tasks, tests and selectors
+open in front and activate their owned windows. The shared launcher still uses
+the SHA256-pinned project-local XTerm runtime; backend startup remains native-iconic.
+No global desktop focus-policy setting is changed.
 System packages and inference environments were not modified. Setup is reproduced
 with scripts/install_visible_terminal_runtime.py and config/terminal-runtime.json.
 
-All four engine shortcuts use Terminal=false and the shared minimized selector,
-avoiding a foreground default-terminal window. Successful selectors close after
+All four engine shortcuts use Terminal=false and the shared selector. The selector
+now opens in the foreground for user interaction; backend monitors remain minimized. Successful selectors close after
 readiness; failures remain available for inspection. Native engine readiness prints
 a web URL instead of activating a browser. Explicit UI opening remains user-controlled.
 Backend-only auto-close and protected router/harness ownership rules remain.

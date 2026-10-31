@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Visible desktop consoles for guarded workers and foreground test harnesses."""
 import argparse
+import ctypes
 import fcntl
 import hashlib
 import json
@@ -64,7 +65,7 @@ def run_foreground(command, title, receipt):
     os.close(fd)
     record = {'pid': os.getpid(), 'command': command,
               'visible_tty': os.ttyname(sys.stdout.fileno()),
-              'window_id': os.environ.get('WINDOWID'), 'starts_minimized': True,
+              'window_id': os.environ.get('WINDOWID'), 'starts_minimized': False,
               'state': 'running', 'started_at': time.time(), 'transcript': str(transcript)}
     write_receipt(receipt, record)
     print(title, flush=True)
@@ -127,16 +128,74 @@ def desktop_env():
     return env
 
 
-def terminal_command(title, command):
-    """Native iconic startup, before mapping; no focus-and-minimize race."""
+def terminal_command(title, command, minimized=False):
+    """Attention tasks map normally; backend monitors request native iconic startup."""
     config = json.loads((ROOT / 'config/terminal-runtime.json').read_text())
     for relative, expected in config['sha256'].items():
         path = ROOT / relative
         if not path.resolve().is_relative_to(ROOT.resolve()) or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             raise RuntimeError('Minimized terminal runtime changed; verify/reinstall before launch')
-    return [str(ROOT / config['binary']), '-iconic', '-class', 'NvidiaLLMTerminal',
+    return [str(ROOT / config['binary']), *(['-iconic'] if minimized else []), '-class', 'NvidiaLLMTerminal',
             '-T', title, '-geometry', '132x34', '-fa', 'Monospace', '-fs', '11',
             '-e', *command]
+
+
+def focus_terminal(window_id):
+    """Restore and activate an owned attention window; backend monitors never call this."""
+    env = desktop_env()
+    old_auth = os.environ.get('XAUTHORITY')
+    if env.get('XAUTHORITY'):
+        os.environ['XAUTHORITY'] = env['XAUTHORITY']
+    x = ctypes.CDLL('libX11.so.6')
+    x.XOpenDisplay.argtypes = [ctypes.c_char_p]; x.XOpenDisplay.restype = ctypes.c_void_p
+    x.XDefaultRootWindow.argtypes = [ctypes.c_void_p]; x.XDefaultRootWindow.restype = ctypes.c_ulong
+    x.XInternAtom.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_int]; x.XInternAtom.restype = ctypes.c_ulong
+    x.XMapRaised.argtypes = [ctypes.c_void_p, ctypes.c_ulong]
+    x.XFlush.argtypes = [ctypes.c_void_p]; x.XCloseDisplay.argtypes = [ctypes.c_void_p]
+    x.XFree.argtypes = [ctypes.c_void_p]
+    class Data(ctypes.Union):
+        _fields_ = [('l', ctypes.c_long * 5)]
+    class Message(ctypes.Structure):
+        _fields_ = [('type', ctypes.c_int), ('serial', ctypes.c_ulong), ('send_event', ctypes.c_int),
+                    ('display', ctypes.c_void_p), ('window', ctypes.c_ulong), ('message_type', ctypes.c_ulong),
+                    ('format', ctypes.c_int), ('data', Data)]
+    class Event(ctypes.Union):
+        _fields_ = [('message', Message), ('pad', ctypes.c_long * 24)]
+    x.XSendEvent.argtypes = [ctypes.c_void_p, ctypes.c_ulong, ctypes.c_int, ctypes.c_long, ctypes.POINTER(Event)]
+    x.XGetWindowProperty.argtypes = [ctypes.c_void_p, ctypes.c_ulong, ctypes.c_ulong, ctypes.c_long,
+        ctypes.c_long, ctypes.c_int, ctypes.c_ulong, ctypes.POINTER(ctypes.c_ulong), ctypes.POINTER(ctypes.c_int),
+        ctypes.POINTER(ctypes.c_ulong), ctypes.POINTER(ctypes.c_ulong), ctypes.POINTER(ctypes.POINTER(ctypes.c_ubyte))]
+    try:
+        display = x.XOpenDisplay(env.get('DISPLAY', '').encode() or None)
+    finally:
+        if old_auth is None:
+            os.environ.pop('XAUTHORITY', None)
+        else:
+            os.environ['XAUTHORITY'] = old_auth
+    if not display:
+        raise RuntimeError('Cannot activate attention terminal: no X11 display')
+    try:
+        root = x.XDefaultRootWindow(display); window = int(window_id)
+        atom = x.XInternAtom(display, b'_NET_ACTIVE_WINDOW', 0)
+        x.XMapRaised(display, window)
+        event = Event(); event.message.type = 33; event.message.display = display
+        event.message.window = window; event.message.message_type = atom; event.message.format = 32
+        event.message.data.l[0] = 2  # User-requested activation of this owned terminal.
+        x.XSendEvent(display, root, 0, (1 << 20) | (1 << 19), ctypes.byref(event)); x.XFlush(display)
+        for _ in range(40):
+            actual = ctypes.c_ulong(); fmt = ctypes.c_int(); count = ctypes.c_ulong(); left = ctypes.c_ulong()
+            value = ctypes.POINTER(ctypes.c_ubyte)()
+            rc = x.XGetWindowProperty(display, root, atom, 0, 1, 0, 0, ctypes.byref(actual), ctypes.byref(fmt),
+                ctypes.byref(count), ctypes.byref(left), ctypes.byref(value))
+            active = ctypes.cast(value, ctypes.POINTER(ctypes.c_ulong))[0] if rc == 0 and value and count.value else 0
+            if value:
+                x.XFree(value)
+            if active == window:
+                return True
+            time.sleep(.05)
+        raise RuntimeError('Window manager did not confirm attention-terminal activation')
+    finally:
+        x.XCloseDisplay(display)
 
 
 def launch_terminal(command):
@@ -172,7 +231,7 @@ def open_monitor(title, unit, logs=()):
                str(Path(__file__).resolve()), 'watch', '--title', title, '--unit', unit]
     for log in logs:
         command += ['--log', str(log)]
-    launch_terminal(terminal_command(title, command))
+    launch_terminal(terminal_command(title, command, minimized=True))
     for _ in range(100):
         try:
             current = json.loads(marker.read_text())
@@ -269,7 +328,10 @@ def main():
                             '--title', args.title, '--receipt', str(receipt), '--', *command]))
             for _ in range(100):
                 if receipt.exists():
-                    print('Visible harness started; receipt:', receipt)
+                    record = json.loads(receipt.read_text())
+                    if record.get('state') == 'running':
+                        focus_terminal(record['window_id'])
+                    print('Visible foreground harness started; receipt:', receipt)
                     return
                 time.sleep(.1)
             raise RuntimeError('Visible harness terminal did not start')

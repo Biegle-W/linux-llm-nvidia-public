@@ -1,5 +1,10 @@
 # Linux LLM NVIDIA — public reference
 
+## Latest: attention terminals foreground, backends minimized — October 31
+
+User-input/authentication tasks, selectors and test terminals now open and activate in front. Only backend monitors retain minimized startup. Three launcher tests passed and live attention-window activation was confirmed. The pair-only ACS guard also excludes terminal work on the motherboard 3060; its four safety tests passed. See [policy and checks](docs/TERMINAL-ATTENTION-20261031.md).
+
+
 ## Latest: pair-only switch ACS diagnosis prepared — October 31
 
 The driver advertises P2P only for the two switched GA102 cards; all 3060 peer directions are disabled. Their IOMMU domains are identity. A scoped Broadcom bridge audit and reversible ACS trial is prepared, with conditional persistence only after full pair-only correctness passes. Three CPU safety checks passed; actual ACS/GPU results await administrator authentication. All-three-GPU tensor unlock remains verified. See [scope and validation](docs/PEX-ACS-PAIR-20261031.md).
