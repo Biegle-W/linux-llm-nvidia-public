@@ -21,3 +21,7 @@ All 33 CPU tests passed, including shifted PCI addresses, missing/duplicate-mode
 The prepared administrator-authenticated transaction snapshots previous modules, boot files and health configuration, stages the candidate, rebuilds the boot image, verifies preboot health plus the embedded core-module hash, then performs the authorized reboot only after success. Staging failure restores preimages. A visible post-login test checks loaded module srcversions, actual remote reads/writes in both directions, peer-copy timing and all-three-GPU unlock health. Keep model placement and NCCL production settings unchanged until that passes.
 
 Sources: [dynamic driver](https://github.com/noon-at-cgn/3080-20g-p2p), [original tensor unlock](https://github.com/Zagitta/gpu-unlock).
+
+## First staging attempt and packaging correction
+
+The first authenticated staging transaction passed automatic-unlock preboot health but failed the final raw embedded-module hash comparison. It restored its preimages and did not reboot. Dracut strips debug data from unsigned modules with `strip -g`; the corrected verifier accepts only the exact original candidate or its exact debug-stripped form and additionally requires the embedded module srcversion to match. A fresh transaction directory is used for the retry. Neither the failed staging attempt nor these packaging checks establish working P2P.
