@@ -1,8 +1,8 @@
 # Current takeover state
 
-## Latest: P2P driver built, installation blocked — October 30
+## Latest: P2P driver built, authentication pending — October 30
 
-The switch and all three GPUs now enumerate; 3080 Ti/3080 links are x8 each with a Gen4 x16 switch uplink. CUDA peer access remains unavailable under 595.99.02. Matching 615.71.09 P2P modules built successfully after a documented Linux 7 CXL guard correction; bounded correctness verification is prepared. Automatic review rejected the system-wide driver replacement and IOMMU passthrough change; no installation or boot mutation ran. Explicit approval and a subsequent reboot/test remain required. See [status and limits](docs/P2P-DRIVER-PREPARATION-20261030.md).
+The switch and all three GPUs now enumerate; 3080 Ti/3080 links are x8 each with a Gen4 x16 switch uplink. CUDA peer access remains unavailable under 595.99.02. Matching 615.71.09 P2P modules built successfully after a documented Linux 7 CXL guard correction; bounded correctness verification is prepared. Explicit human approval now covers the driver replacement, IOMMU passthrough and all-three-GPU unlock. The installation terminal awaits Linux administrator authentication; no installation or boot mutation has run yet. Post-reboot visible verification is prepared. See [status and limits](docs/P2P-DRIVER-PREPARATION-20261030.md).
 
 
 ## Latest: three-GPU hardware-change preparation — October 30

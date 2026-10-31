@@ -1,6 +1,6 @@
 # P2P driver preparation — October 30, 2026
 
-Status: built, NOT installed; administrator/security approval pending. No driver, GRUB, IOMMU or model setting changed.
+Status: built, NOT installed; explicit approval received for NVIDIA 615.71.09, IOMMU passthrough and all-three-GPU tensor unlock. Installation is waiting for normal Linux administrator authentication in its visible terminal. No driver, GRUB, IOMMU or model setting changed yet.
 
 The current topology exposes the switched RTX 3080 Ti and RTX 3080 at x8 each; the switch uplink is Gen4 x16. The motherboard-connected RTX 3060 is x4. GPU link speeds were sampled idle. Direct CUDA checks return no peer access on NVIDIA 595.99.02; the visible correctness-test baseline exited 3 at the capability check, before transfer allocation.
 
@@ -10,9 +10,9 @@ Ubuntu NVIDIA 615.71.09 userspace and matching aikitoria open kernel modules, pi
 
 The prepared installation uses Ubuntu precompiled stock 615 modules as fallback, places patched modules in a separate kernel-specific directory with explicit depmod selection, updates the tensor-unlock target PCI addresses, rebuilds boot images through the existing transactional helper, and adds Intel IOMMU passthrough. It does not unload the active desktop driver or reboot automatically. Rollback removes the trial module selection and passthrough drop-in, retaining Ubuntu 615 and the corrected tensor-unlock addresses. This is a current-kernel trial, not qualification for future kernel/driver updates.
 
-## Approval blocker
+## Approval and authentication
 
-Automatic approval review rejected installation because it replaces the system-wide 595 stack and enables IOMMU passthrough, reducing DMA isolation. The installation terminal did not start. Explicit human approval of those concrete changes is required before retrying; do not bypass the rejection by indirect execution.
+Automatic approval review initially rejected the system-wide driver replacement and IOMMU passthrough change, which reduces DMA isolation. The human subsequently explicitly approved those changes and requested tensor unlock on all three GPUs. The approved installation terminal is now open and waiting for the normal administrator password. An autostart entry is prepared to launch bounded visible P2P and unlock verification after a new boot; it skips the preparation boot and saves results once per boot. No reboot or completed installation is claimed.
 
 ## Remaining verification
 
