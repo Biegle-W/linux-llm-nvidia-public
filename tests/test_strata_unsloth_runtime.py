@@ -44,6 +44,16 @@ class Runtime(unittest.TestCase):
         with patch('strata_unsloth_runtime.subprocess.check_output',return_value=inventory):
             with self.assertRaisesRegex(ValueError,'GPU identities/order'):rt.prepare_config(self.profile,self.root)
         self.assertFalse((self.root/'data/router/unsloth-source.json').exists())
+    def test_main_pair_with_optional_auxiliary(self):
+        pair='0, NVIDIA GeForce RTX 3080 Ti\n1, NVIDIA GeForce RTX 3080\n'
+        for inventory in [pair,pair+'2, NVIDIA GeForce RTX 3060\n']:
+            with self.subTest(inventory=inventory), patch('strata_unsloth_runtime.subprocess.check_output',return_value=inventory):
+                target=rt.prepare_config(self.profile,self.root)
+                self.assertEqual(json.loads(target.read_text())['gpu'],[0,1])
+    def test_missing_or_reindexed_main_pair_refused(self):
+        for inventory in ['0, NVIDIA GeForce RTX 3080 Ti\n','1, NVIDIA GeForce RTX 3080 Ti\n0, NVIDIA GeForce RTX 3080\n']:
+            with patch('strata_unsloth_runtime.subprocess.check_output',return_value=inventory):
+                with self.assertRaisesRegex(ValueError,'GPU identities/order'):rt.prepare_config(self.profile,self.root)
     def test_guard_policy_bounded(self):
         g=WorkerWatch('/unused',rt.PROFILE,'fixture').guard
         self.assertEqual((g.write_limit,g.combined_limit,g.pressure_limit),(128,160,15))

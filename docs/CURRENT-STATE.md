@@ -1,5 +1,10 @@
 # Current takeover state
 
+## Two-card host after auxiliary GPU removal — October 31
+
+The auxiliary RTX 3060 has been physically removed. The selected inference pair remains GPU 0 RTX 3080 Ti and GPU 1 RTX 3080. Unsloth startup accepts the verified main pair with or without the former auxiliary card; missing or reordered main GPUs still fail closed. Bolt resource telemetry accepts two cards, retaining host RAM, temperature, VRAM, swap and pressure guards; an optional third card remains guarded when present. Contexts, caches and worker budgets are unchanged. CPU regression tests and live two-card telemetry were checked; model loads were not repeated for this compatibility fix.
+
+
 ## Latest: restored 64GB worker budgets applied — October 31
 
 All six MoE profiles now use 56 GiB soft / 58 GiB hard worker limits. Both GPU-resident Qwen profiles retain their explicitly uncapped RAM setting. Linux sees 61.3 GiB usable; the independent 2 GiB host-available stop and all VRAM,swap,pressure and temperature guards remain active. Contexts and other model settings are unchanged. All eight actual kernel cgroup settings and 321 CPU tests passed; no inference job was interrupted. [Policy and verification](WORKER-RAM-64GB-20261031.md).

@@ -11,7 +11,7 @@ from bolt_runtime import build_launch
 def resource_fault(available_kib,cards,floor_kib):
  import math
  if any(not math.isfinite(v) or v<0 for card in cards for v in card):raise ValueError('Invalid GPU telemetry')
- if len(cards)!=3 or any(len(c)!=2 for c in cards):raise ValueError('Three-card telemetry required')
+ if len(cards) not in (2,3) or any(len(c)!=2 for c in cards):raise ValueError('Main-pair telemetry required (optional auxiliary card)')
  return available_kib<floor_kib or any(c[0]>=82 or c[1]<512 for c in cards)
 
 def main():

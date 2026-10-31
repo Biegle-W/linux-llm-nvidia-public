@@ -65,9 +65,10 @@ def prepare_config(profile, root=ROOT):
     runtime = verify(profile, root)
     inventory = subprocess.check_output(
         ['nvidia-smi', '--query-gpu=index,name', '--format=csv,noheader,nounits'], text=True)
-    names = [line.split(',', 1)[1].strip() for line in inventory.splitlines()]
-    if names != ['NVIDIA GeForce RTX 3080 Ti', 'NVIDIA GeForce RTX 3080',
-                 'NVIDIA GeForce RTX 3060']:
+    cards = [tuple(part.strip() for part in line.split(',', 1))
+             for line in inventory.splitlines()]
+    main_pair = [('0', 'NVIDIA GeForce RTX 3080 Ti'), ('1', 'NVIDIA GeForce RTX 3080')]
+    if cards not in [main_pair, main_pair + [('2', 'NVIDIA GeForce RTX 3060')]]:
         raise ValueError('GPU identities/order changed; rediscover the main pair before launch')
     config = build_config(profile, runtime)
     target = root / 'data/router/unsloth-source.json'
