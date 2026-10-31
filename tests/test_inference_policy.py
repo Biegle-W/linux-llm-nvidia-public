@@ -14,8 +14,8 @@ class SharedPolicy(unittest.TestCase):
         for rel in NATIVE_SOURCES.values():
             p=self.root/rel;p.parent.mkdir(parents=True);p.write_text('# Managed NVIDIA idle reservation\nidle_activity_path=None\nidle_lock_path=None\n')
     def save(self):(self.root/'config/inference-policy.json').write_text(json.dumps(self.policy))
-    def test_all_six_profiles_receive_the_same_timeout(self):
-        profiles=json.loads((ROOT/'config/maintained-profiles.json').read_text())['profiles'];self.assertEqual(len(profiles),6)
+    def test_all_maintained_profiles_receive_the_same_timeout(self):
+        profiles=json.loads((ROOT/'config/maintained-profiles.json').read_text())['profiles'];self.assertTrue({'qwen27b-hyperqwen','qwen27b-sglang','flash-next-strata','glm-maya','deepseek-strata','deepseek-maya'} <= {p['id'] for p in profiles})
         for p in profiles:
             with self.subTest(profile=p['id']):
                 if p['engine'] in NATIVE_SOURCES:

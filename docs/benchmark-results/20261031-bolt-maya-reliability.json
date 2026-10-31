@@ -63,9 +63,9 @@
     "weight_bytes": 55332700488,
     "context": 8192,
     "text_only": true,
-    "selected": false,
+    "selected": true,
     "isolated_qualification": "pass",
-    "fresh_loads": 3,
+    "isolated_fresh_loads": 3,
     "quality": {
       "checks": {
         "arithmetic": true,
@@ -161,15 +161,64 @@
     },
     "compact_prefetch_pool_bytes_per_rank": 785256320,
     "original_prefetch_pool_bytes_per_rank": 5615532416,
-    "normal_router_verification": "pending installation/verification",
-    "benchmark_scope": "One 128-output fixed-fixture stream after correctness/retrieval, no dedicated fixed-fixture warmup; not a three-request median"
+    "normal_router_verification": "pass",
+    "benchmark_scope": "One 128-output fixed-fixture stream after correctness/retrieval, no dedicated fixed-fixture warmup; not a three-request median",
+    "normal_router": {
+      "fresh_loads": 2,
+      "authentication": "pass",
+      "busy_unload": "blocked-with-409",
+      "stream_completion_tokens": 32,
+      "guard_samples": 530,
+      "dsh_preserved": true,
+      "quality": {
+        "checks": {
+          "arithmetic": true,
+          "json": true,
+          "near_window": true,
+          "sustained_stream": true
+        },
+        "context": 8192,
+        "retrieval_input_tokens": 7373,
+        "stream": {
+          "native_prefill_tps": 253.65684628114914,
+          "native_prefill_s": 9.229003806998662,
+          "done": true,
+          "usage": {
+            "prompt_tokens": 2341,
+            "total_tokens": 2469,
+            "completion_tokens": 128
+          },
+          "ttft_s": 11.42714927400084,
+          "generation_s": 281.8612519469971,
+          "decode_tps": 0.45057629994449133,
+          "wall_s": 293.2932911300013
+        },
+        "kv_capacity_tokens": [
+          52662
+        ],
+        "status": "pass"
+      },
+      "limits": {
+        "worker_high_gib": 46,
+        "worker_max_gib": 48,
+        "host_reserve_gib": 2,
+        "gpu_reserve_mib": 512,
+        "temperature_c": 82,
+        "inference_swap_write_mib_s": 1,
+        "inference_swap_combined_mib_s": 8,
+        "window_s": 30,
+        "inference_full_pressure_pct": 10,
+        "loading_full_pressure_pct": 15
+      },
+      "peak_sampled_full_pressure_pct": 0.0,
+      "peak_swap_occupancy_gib": 0.0
+    },
+    "normal_router_loading_followup": "Per-consumed-shard clean file-mapping reclamation; exact checkpoint inode; zero anonymous, dirty, swapped or locked pages; current CUDA stream synchronized once per shard"
   },
   "cpu_validation": {
-    "tests": 300,
+    "tests": 303,
     "passed": true,
-    "scope": "Exact workspace deployment bundle using independent runtime, seventh profile, real cleanup hook and updater coverage",
-    "current_live_six_profile_tests": 263,
-    "current_live_six_profile_tests_passed": true
+    "scope": "Installed seven-profile tree with clean-mapping shard reclaim, independent runtime and updater coverage"
   },
   "rejected_variants": [
     {
@@ -179,6 +228,14 @@
     {
       "variant": "postprocessing glibc cleanup only",
       "outcome": "First fresh load passed, second load stopped during shard4 before postprocessing"
+    },
+    {
+      "variant": "Initial normal-router fadvise-only loader",
+      "outcome": "Stopped on sustained loading pressure before inference"
+    },
+    {
+      "variant": "Per-tensor full-file scans",
+      "outcome": "Safe pressure but excessive first-shard loading time; owned worker intentionally stopped"
     }
   ],
   "research_sources": [

@@ -1,8 +1,12 @@
 # Linux LLM NVIDIA — public reference
 
-## Latest: DeepSeek/Maya reliability and Bolt isolated qualification — October 31
+## Latest: Bolt installed and verified through the normal router — October 31
 
-DeepSeek/Maya's 36 GiB file-residency target, 32 GB startup read-ahead cap and 4 GB post-prompt warming passed quality/resource checks and two fresh reloads at the original 32K context. Bolt passed three fresh isolated 8K loads, retrieval and sustained streaming using compact prefetch and checkpoint-scoped cache cleanup. Bolt remains unselected; persistent integration is pending. See [the reliability report](docs/BOLT-MAYA-RELIABILITY-20261031.md) for measured speeds and scope.
+Bolt AWQ INT4 is available at 8K text-only through its independent vLLM runtime. Two fresh normal-router loads passed JSON/arithmetic, near-window retrieval, sustained streaming, authentication and actual busy-unload protection. The final loader reclaims only verified clean checkpoint mappings once per consumed shard; 303 CPU tests passed and resource guards are unchanged. DeepSeek/Maya retains its qualified 32K bounded-residency setup. Bolt generation remains slow; see [measurements and scope](docs/BOLT-MAYA-RELIABILITY-20261031.md).
+
+## Earlier October 31: DeepSeek/Maya and isolated Bolt qualification
+
+DeepSeek/Maya's 36 GiB file-residency target, 32 GB startup read-ahead cap and 4 GB post-prompt warming passed quality/resource checks and two fresh reloads at the original 32K context. Bolt passed three fresh isolated 8K loads, retrieval and sustained streaming using compact prefetch and checkpoint-scoped cache cleanup. At that earlier stage Bolt remained unselected; the installed verification above supersedes that status. See [the reliability report](docs/BOLT-MAYA-RELIABILITY-20261031.md) for measured speeds and scope.
 
 ## Latest: main-pair inference and auxiliary 3060 optimization — October 31
 

@@ -1,6 +1,8 @@
 # Nemotron INT4 offload startup checks — October 31, 2026
 
-Later same-day follow-up: [Bolt/Maya reliability study](BOLT-MAYA-RELIABILITY-20261031.md) passed isolated 8K correctness, sustained streaming and three fresh loads with compact prefetch and checkpoint-scoped cache cleanup. Persistent integration remains pending. The original failures below remain historical.
+Later same-day result: Bolt is now installed and passed two fresh normal-router loads at 8K using its independent runtime and final clean-mapping loader. [Actual verification](BOLT-MAYA-RELIABILITY-20261031.md). Earlier failures below remain historical.
+
+Later same-day follow-up: [Bolt/Maya reliability study](BOLT-MAYA-RELIABILITY-20261031.md) passed isolated 8K correctness, sustained streaming and three fresh loads with compact prefetch and checkpoint-scoped cache cleanup. Integration was pending at that earlier stage; the later normal-router result above supersedes it. The original failures below remain historical.
 
 Later same-day follow-up: a different pageable/no-UVA loading path was evaluated during [the pair/auxiliary optimization](GPU-PAIR-AUX-OPTIMIZATION-20261031.md#existing-bolt-int4-candidate). The initial pinned-memory failures below remain unchanged historical evidence.
 

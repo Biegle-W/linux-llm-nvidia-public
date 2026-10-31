@@ -38,6 +38,18 @@ def unit_property(unit, prop):
                           capture_output=True, text=True).stdout.strip()
 
 
+def vllm_requests_busy(text):
+    import math
+    values = []
+    for name in ('vllm:num_requests_running', 'vllm:num_requests_waiting'):
+        found = [float(line.rsplit(' ', 1)[1]) for line in text.splitlines()
+                 if line.startswith(name + '{') or line.startswith(name + ' ')]
+        if not found or any(not math.isfinite(x) or x < 0 for x in found):
+            raise ValueError('Valid running/queued request gauges required')
+        values.extend(found)
+    return any(x > 0 for x in values)
+
+
 class Workers:
     def __init__(self, key, timeout=1200, idle_timeout=None):
         self.key, self.timeout = key, timeout
@@ -113,7 +125,21 @@ class Workers:
             if not recognized:
                 raise RouterError('An unexpected process owns the inference unit; nothing was stopped.', 'ownership_conflict')
             invocation = unit_property(unit, 'InvocationID')
-            if unit == MOE_UNIT:
+            if unit == MOE_UNIT and getattr(self, 'active', None) == 'bolt-vllm':
+                request = urllib.request.Request('http://127.0.0.1:10000/metrics',
+                          headers={'Authorization': 'Bearer ' + self.key})
+                try:
+                    with OPENER.open(request, timeout=3) as response:
+                        text = response.read(2 * 1024 * 1024 + 1).decode()
+                    if len(text) > 2 * 1024 * 1024:
+                        raise ValueError('Worker telemetry too large')
+                    busy = vllm_requests_busy(text)
+                except (OSError, ValueError) as error:
+                    raise RouterError('Bolt request state unavailable; active work preserved.',
+                                      'backend_state_unknown', 409) from error
+                if busy:
+                    raise RouterError('Bolt is answering or queued; unloading deferred.', 'backend_busy', 409)
+            elif unit == MOE_UNIT:
                 request = urllib.request.Request('http://127.0.0.1:10000/status',
                           headers={'Authorization': 'Bearer ' + self.key})
                 try:
@@ -269,7 +295,7 @@ class Workers:
                        '/usr/bin/python3', str(ROOT / 'scripts/serve_router_moe.py'), profile_id]
                 unit = MOE_UNIT
                 open_monitor('NVIDIA MoE backend', unit, [ROOT / 'data/router' / (p['id'] + '-engine.log')
-                             for p in profiles().values() if p['engine'] in ('Strata', 'Maya')])
+                             for p in profiles().values() if p['engine'] in ('Strata', 'Maya', 'vLLM-offload')])
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
                                     env=dict(os.environ, LOCAL_LLM_ROUTER_WORKER='1'))
             if result.returncode:

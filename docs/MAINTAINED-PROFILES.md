@@ -2,31 +2,31 @@
 
 ## Latest selected speed evidence (composite runs)
 
-The dense profiles and three other SSD-streaming profiles retain the earlier October 31 pair/auxiliary results. DeepSeek/Maya uses the later bounded-residency screen. These separate runs are not a new matched experiment or causal comparison. Each selected row uses one 64-output warmup and three 128-output requests, temperature zero and concurrency one, excluding loading. Native prefill uses request timing and decode uses client SSE first-to-last-content timing. Sustained generation is reported separately in [the reliability report](BOLT-MAYA-RELIABILITY-20261031.md). Bolt's isolated single-stream result is not inserted as a selected benchmark.
+These separate screens are not a matched comparison. Six earlier rows use one warmup and three 128-output requests; Bolt uses one 128-output stream after correctness/retrieval, without a dedicated fixture warmup. Loading is excluded. Native prefill and client SSE first-to-last-content decode methods are retained. See [scope and reliability](BOLT-MAYA-RELIABILITY-20261031.md).
 
 ### VRAM-only models
 
-| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| Model / quant | Engine | Prefill (tok/s) | TTFT (s) | Decode (tok/s) | Context (tokens) | Base weights (GB) | Storage |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 2,516.49 | 0.891 | 112.14 | 56,320 | 15.79 | SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 2,778.24 | 0.804 | 95.86 | 32,768 | 15.79 | SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 2516.49 | 0.891 | 112.140 | 56,320 | 15.79 | SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 2778.24 | 0.804 | 95.864 | 32,768 | 15.79 | SATA: models/engine-tests/qwen38-27b-hyperqwen-fast |
 
 ### MoE models with CPU RAM offload
 
-No selected profiles in this category. Bolt passed isolated 8K quality/resource/reload qualification but remains unselected pending persistent integration.
-
-Bolt AWQ INT4 is an isolated qualified candidate: 8,192 context, three fresh loads and 7,373-input marker retrieval passed; one 128-output stream measured 254.35 native prefill tok/s, 11.682 s TTFT and 0.452 SSE decode tok/s. It remains unselected and is excluded from the maintained tables. No dedicated fixed-fixture warmup or three-request speed median was measured for Bolt.
+| Model / quant | Engine | Prefill (tok/s) | TTFT (s) | Decode (tok/s) | Context (tokens) | Base weights (GB) | Storage |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| NVIDIA-Nemotron-3.5-Bolt-74B-A9B / AWQ-INT4 | vLLM-offload | 253.66 | 11.427 | 0.451 | 8,192 | 55.33 | SATA: models/bolt-awq-int4 |
 
 ### MoE models with SSD streaming
 
-| Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
+| Model / quant | Engine | Prefill (tok/s) | TTFT (s) | Decode (tok/s) | Context (tokens) | Base weights (GB) | Storage |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 695.20 | 3.199 | 98.42 | 32,768 | 75.84 | NVME: models/strata/models/IQ3_XXS |
-| GLM-5.3-Flash / Maya-S24 | Maya | 74.10 | 29.837 | 6.39 | 65,536 | 94.70 | NVME: models/maya/Maya-S24 |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 30.80 | 70.845 | 3.27 | 131,072 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 46.70 | 46.835 | 1.89 | 32,768 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 695.20 | 3.199 | 98.416 | 32,768 | 75.84 | NVME: models/strata/models/IQ3_XXS |
+| GLM-5.3-Flash / Maya-S24 | Maya | 74.10 | 29.837 | 6.389 | 65,536 | 94.70 | NVME: models/maya/Maya-S24 |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 30.80 | 70.845 | 3.271 | 131,072 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 46.70 | 46.835 | 1.887 | 32,768 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
 
-Storage is decimal GB of base weights. The Qwen engines share base weights; the DeepSeek engines share base weights. Count each base once. Prepared packs and caches are excluded. Prior measurements remain historical.
+Storage uses decimal GB of base weights. Qwen engines share base weights, as do the two maintained DeepSeek engines; count each base once. Prepared packs/caches are excluded. Earlier evidence remains historical.
 
 ## Latest: qualified bounded DeepSeek/Maya cache — October 29
 

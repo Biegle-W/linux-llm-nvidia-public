@@ -1,8 +1,12 @@
 # Benchmark ledger
 
+## October 31: installed Bolt normal-router verification
+
+Two fresh loads passed at 8K with exact near-window retrieval and sustained generation. The final shard-level clean mapping reclaim follows measured pressure and per-tensor scan failures. Normal and isolated speed observations remain separate from Maya’s three-request median. [Report](BOLT-MAYA-RELIABILITY-20261031.md).
+
 ## October 31: DeepSeek/Maya bounded residency and Bolt isolated qualification
 
-DeepSeek/Maya passed its repeated speed screen, near-window checks, sustained generation and two reloads with explicit file residency and warming bounds. Bolt passed three fresh isolated 8K loads, JSON/arithmetic, 7,373-input retrieval and a sustained stream. Bolt remains unselected pending persistent integration. Earlier failures remain historical evidence. [Report](BOLT-MAYA-RELIABILITY-20261031.md), [numeric evidence](benchmark-results/20261031-bolt-maya-reliability.json).
+DeepSeek/Maya passed its repeated speed screen, near-window checks, sustained generation and two reloads with explicit file residency and warming bounds. Bolt passed three fresh isolated 8K loads, JSON/arithmetic, 7,373-input retrieval and a sustained stream. Bolt was then unselected pending integration; the later normal-router result above supersedes that status. Earlier failures remain historical evidence. [Report](BOLT-MAYA-RELIABILITY-20261031.md), [numeric evidence](benchmark-results/20261031-bolt-maya-reliability.json).
 
 ## October 31: main-pair P2P optimization and auxiliary draft comparison
 

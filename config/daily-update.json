@@ -5,11 +5,59 @@
   "admission_deadline": "06:30",
   "publication": "reviewed ledger and version pins, independent private/public repositories",
   "components": [
-    {"id":"hyperqwen","profiles":["qwen27b-hyperqwen"],"upstream":"https://github.com/syv-ai/HyperQwen.git","builder":"hyperqwen"},
-    {"id":"sglang","profiles":["qwen27b-sglang"],"upstream":"https://github.com/efschu/htsglang.git","builder":"sglang"},
-    {"id":"strata-qwen","profiles":["flash-next-strata"],"upstream":"https://github.com/Niko1221/Strata.git","builder":"strata"},
-    {"id":"maya-glm","profiles":["glm-maya"],"upstream":"https://github.com/mw00/project-maya.git","builder":"maya"},
-    {"id":"maya-deepseek","profiles":["deepseek-maya"],"upstream":"https://github.com/mw00/project-maya.git","builder":"maya-ds4"},
-    {"id":"strata-deepseek","profiles":["deepseek-strata"],"upstream":"https://github.com/Niko1221/Strata.git","builder":"strata-ds4"}
+    {
+      "id": "hyperqwen",
+      "profiles": [
+        "qwen27b-hyperqwen"
+      ],
+      "upstream": "https://github.com/syv-ai/HyperQwen.git",
+      "builder": "hyperqwen"
+    },
+    {
+      "id": "sglang",
+      "profiles": [
+        "qwen27b-sglang"
+      ],
+      "upstream": "https://github.com/efschu/htsglang.git",
+      "builder": "sglang"
+    },
+    {
+      "id": "strata-qwen",
+      "profiles": [
+        "flash-next-strata"
+      ],
+      "upstream": "https://github.com/Niko1221/Strata.git",
+      "builder": "strata"
+    },
+    {
+      "id": "maya-glm",
+      "profiles": [
+        "glm-maya"
+      ],
+      "upstream": "https://github.com/mw00/project-maya.git",
+      "builder": "maya"
+    },
+    {
+      "id": "maya-deepseek",
+      "profiles": [
+        "deepseek-maya"
+      ],
+      "upstream": "https://github.com/mw00/project-maya.git",
+      "builder": "maya-ds4"
+    },
+    {
+      "id": "strata-deepseek",
+      "profiles": [
+        "deepseek-strata"
+      ],
+      "upstream": "https://github.com/Niko1221/Strata.git",
+      "builder": "strata-ds4"
+    }
+  ],
+  "pinned_profiles": [
+    {
+      "profile": "bolt-vllm",
+      "reason": "Custom compact-prefetch adapter uses an independent pinned runtime snapshot; changes require explicit local requalification."
+    }
   ]
 }

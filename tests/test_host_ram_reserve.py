@@ -9,8 +9,8 @@ import serve_router_moe as supervisor
 import supervise_dense as dense_supervisor
 
 class HostRamReserve(unittest.TestCase):
-    def test_all_six_select_two(self):
-        profiles=load_catalog()['profiles'];self.assertEqual(len(profiles),6)
+    def test_all_maintained_profiles_select_two(self):
+        profiles=load_catalog()['profiles'];self.assertTrue(profiles)
         for p in profiles:
             self.assertEqual(p['host_ram_reserve_gib'],2)
             self.assertEqual(host_ram_reserve_gib(p),2)

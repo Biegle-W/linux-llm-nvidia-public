@@ -1,6 +1,6 @@
 # Bolt and DeepSeek/Maya reliability — October 31, 2026
 
-DeepSeek/Maya is selected at its original 32K context. Bolt is **qualified in isolated tests; persistent deployment and normal-router verification remain pending** at 8K text-only. Existing weights, the RTX 3080 Ti/3080 main pair, the auxiliary RTX 3060 role, client defaults and independent resource guards are preserved. No model download or reboot was needed.
+DeepSeek/Maya is selected at its original 32K context. Bolt is **selected and verified through the normal router** at 8K text-only. Existing weights, the RTX 3080 Ti/3080 main pair, the auxiliary RTX 3060 role, client defaults and independent resource guards are preserved. Bolt reused its existing weights and needed no reboot. The separately requested new DeepSeek trial has its own pinned download and qualification record.
 
 ## DeepSeek/Maya selected bounded residency
 
@@ -26,11 +26,21 @@ The one measured stream used 2,341 input tokens and gave **0.452 client SSE deco
 
 Across the three loads, peak loading full-memory pressure was **5.07%**, peak inference pressure **0.00%**, and sampled worker memory about **46.001 GiB** against 46/48 GiB soft/hard limits. Loading swap occupancy reached **7.98 GiB**; occupancy is distinct from active churn. Peak measured 30-second inference swap writes were **zero** and combined I/O **0.074 MiB/s**, below the existing 1/8 MiB/s limits. Minimum sampled GPU free memory was **503 MiB** during loading; the existing reserve guard stops only after three consecutive bad samples and did not trip. The 512 MiB threshold was not relaxed. Maximum main-GPU temperature was **56 C**, below 82 C.
 
+## Actual normal-router verification and final loader follow-up
+
+The initial installed normal-router load stopped before inference on sustained loading pressure. A per-tensor whole-file scan kept pressure low but took roughly five minutes for only its first shard; that owned attempt was intentionally stopped. These failures are retained separately from the earlier isolated successes.
+
+The final loader synchronizes the current CUDA stream once per consumed shard, then reclaims only mappings of that exact checkpoint inode whose anonymous, private/shared dirty, swapped and locked byte counts are all zero. Clean private writable file mappings are eligible only under those checks; private COW data and live anonymous weight tensors remain intact. File advice follows once per shard. This avoids repeated whole-file scans. Three real-file CPU tests verified clean refaulted bytes, private dirty data and unrelated mapping preservation.
+
+The final installed adapter passed **two fresh normal-router loads**, authenticated API checks, arithmetic/JSON, exact three-marker retrieval in **7,373 input tokens**, and a **128-token sustained stream**. A separate direct-backend 32-token stream completed while an unload request was rejected with **HTTP 409 backend_busy**, preserving its worker invocation. DSH remained running. There were **530 guard samples with no guard stop**, peak sampled full-memory pressure **0.00%** and peak swap occupancy **0.000 GiB**. Guard thresholds were unchanged.
+
+The final normal stream measured **0.451 SSE decode tok/s**, **253.66 native prefill tok/s**, **11.427 s TTFT**, and **281.86 s** of continuous generation. This is another single observation after correctness/retrieval, without a dedicated fixed-fixture warmup; it is not a median or a matched Maya comparison. The earlier isolated timing remains above as dated evidence. Both loads unloaded cleanly afterward.
+
 ## Runtime integration and validation
 
-The deployment proposal gives Bolt an independent copy of the same qualified runtime packages, with checked package origins, runtime and model-code/metadata hashes, weight-file sizes and relocatable command-line entry points. It does not replace Qwen's environment. The existing nightly update coverage remains complete for its six managed profiles; Bolt's custom adapter/runtime is explicitly pinned for manual requalification, so Qwen promotion cannot invalidate it.
+The installed deployment gives Bolt an independent copy of the same qualified runtime packages, with checked package origins, runtime and model-code/metadata hashes, weight-file sizes and relocatable command-line entry points. It does not replace Qwen's environment. The existing nightly update coverage remains complete for its six managed profiles; Bolt's custom adapter/runtime is explicitly pinned for manual requalification, so Qwen promotion cannot invalidate it.
 
-**300 CPU tests passed** for the exact seven-profile deployment bundle using the independent runtime. The current live six-profile repository separately passed **263 CPU tests**. These include numerical prefetch layout/slot checks, live-tensor preservation, shard order/identity and read-only cache advice, authentication/placement/pin contracts, managed busy/queued unload protection, CLI alias handling and updater coverage. Persistent installation and normal-router verification status: **pending**. No normal-router success is inferred from isolated tests.
+**303 CPU tests passed** for the installed seven-profile tree, including the shard mapping follow-up. These include numerical prefetch layout/slot checks, live-tensor preservation, shard order/identity and read-only cache advice, authentication/placement/pin contracts, managed busy/queued unload protection, CLI alias handling and updater coverage. Persistent installation and normal-router verification status: **passed; two fresh loads, authentication and actual busy-unload protection verified**. No normal-router success is inferred from isolated tests.
 
 These are bounded quality, telemetry and reload checks, not a multi-hour or every-prompt guarantee. Historical benchmark results and rejected variants remain historical. [Numeric evidence](benchmark-results/20261031-bolt-maya-reliability.json).
 

@@ -19,6 +19,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     os.umask(0o077)
+    if sys.argv[1] == 'bolt-vllm':
+        from supervise_bolt import main as bolt_main
+        return bolt_main()
     group = next(line.split('::', 1)[1] for line in Path('/proc/self/cgroup').read_text().splitlines()
                  if line.startswith('0::'))
     limit = (Path('/sys/fs/cgroup') / group.lstrip('/') / 'memory.max').read_text().strip()

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-10-27",
+  "updated": "2026-10-31",
   "scope": "Current Linux NVIDIA workstation only",
   "selection_policy": {
     "group_by": [
@@ -2045,6 +2045,77 @@
         "scope": "Three fixed-fixture speed requests, JSON/arithmetic/image, near-window retrieval, 512-token continuous generation and two fresh normal reloads; no multi-hour soak",
         "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
         "numeric_results": "docs/benchmark-results/20261031-bolt-maya-reliability.json"
+      }
+    },
+    {
+      "id": "bolt-vllm",
+      "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+      "weight_quant": "AWQ-INT4",
+      "engine": "vLLM-offload",
+      "status": "selected",
+      "launch": [
+        "bolt"
+      ],
+      "allocated_context": 8192,
+      "tested_retrieval_input": 7373,
+      "context_validation": "Two fresh normal-router 8K loads passed authentication, JSON/arithmetic, three-marker retrieval, 128-token sustained streaming and actual busy-unload protection. Final clean-mapping shard reclaim; unchanged resource guards.",
+      "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
+      "storage": {
+        "access": "ram-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/bolt-awq-int4"
+      },
+      "worker_memory_gib": {
+        "high": 46,
+        "max": 48,
+        "swap": null
+      },
+      "host_ram_reserve_gib": 2,
+      "capabilities": {
+        "text": true,
+        "vision": false,
+        "tools_qualified": false
+      },
+      "runtime_manifest": "config/bolt-offload-runtime.json",
+      "benchmark_context": 8192,
+      "latest_benchmark": {
+        "run": "20261031-bolt-maya-reliability",
+        "variant": "bolt-8k-normal-clean-mapping-shard-reclaim",
+        "date": "2026-10-31",
+        "context": 8192,
+        "physical_ram_gb": 64,
+        "repetitions": 1,
+        "input_tokens": 2341,
+        "output_tokens": 128,
+        "ttft_s": 11.42714927400084,
+        "prefill_tps": 253.65684628114914,
+        "decode_tps": 0.45057629994449133,
+        "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
+        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+        "warmup": "No dedicated speed-fixture warmup; preceded by correctness and retrieval requests",
+        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-bolt-maya-reliability.json"
+      },
+      "latest_qualification": {
+        "date": "2026-10-31",
+        "context": 8192,
+        "retrieval_input_tokens": 7373,
+        "checks": {
+          "arithmetic": true,
+          "json": true,
+          "near_window": true,
+          "sustained_stream": true
+        },
+        "sustained_output_tokens": 128,
+        "continuous_generation_s": 281.2668593599992,
+        "fresh_loads": 3,
+        "normal_router_reloads": 2,
+        "normal_router_verification": "pass",
+        "resources_passed": true,
+        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
+        "normal_router_guard_samples": 530,
+        "normal_router_sustained_output_tokens": 128,
+        "normal_router_generation_s": 281.8612519469971
       }
     }
   ],

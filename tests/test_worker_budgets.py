@@ -47,7 +47,8 @@ class WorkerBudget(unittest.TestCase):
             shell.write_text((root / 'scripts/start_model.sh').read_text())
             (temp / 'scripts/router_client.py').write_text('import sys; print(" ".join(sys.argv[1:]))')
             for command, model in [('qwen', 'flash-next-strata'), ('glm', 'glm-maya'),
-                                   ('strata-deepseek', 'deepseek-strata'), ('maya-deepseek', 'deepseek-maya')]:
+                                   ('strata-deepseek', 'deepseek-strata'), ('maya-deepseek', 'deepseek-maya'),
+                                   ('bolt', 'bolt-vllm')]:
                 with self.subTest(command=command):
                     result = subprocess.check_output(['bash', str(shell), command], text=True).strip()
                     self.assertEqual(result, '--model ' + model)

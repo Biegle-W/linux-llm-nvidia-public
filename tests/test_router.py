@@ -93,7 +93,10 @@ class RouterTest(unittest.TestCase):
             self.assertEqual(self.request('/v1/models',key=key)[0],401)
     def test_catalog(self):
         status,data=self.request('/v1/models');self.assertEqual(status,200)
-        models=json.loads(data)['data'];self.assertEqual(len(models),7)
+        models=json.loads(data)['data']
+        expected=set(router.profiles()) | set(router.WEB_SEARCH_ALIASES)
+        self.assertEqual({m['id'] for m in models},expected)
+        self.assertEqual(len(models),len(expected))
         self.assertEqual(next(m for m in models if m['id']=='deepseek-strata')['context_window'],router.profiles()['deepseek-strata']['allocated_context'])
     def test_explicit_selection_requests_guard_reload(self):
         status,_=self.request('/router/select',{'model':'qwen27b-hyperqwen'})

@@ -6,6 +6,18 @@ import re
 import subprocess
 
 FILES = (
+    'config/bolt-offload-runtime.json',
+    'scripts/bolt_runtime.py',
+    'scripts/supervise_bolt.py',
+    'scripts/bolt_offload_hook/sitecustomize.py',
+    'scripts/bolt_offload_hook/compact_pool.py',
+    'scripts/bolt_offload_hook/host_trim.py',
+    'scripts/bolt_offload_hook/checkpoint_cache.py',
+    'tests/test_bolt_runtime.py',
+    'tests/test_bolt_pool_torch.py',
+    'tests/test_bolt_loading_cleanup.py',
+    'tests/test_bolt_request_state.py',
+    'tests/test_bolt_readonly_cache.py',
     'docs/BOLT-MAYA-RELIABILITY-20261031.md',
     'docs/benchmark-results/20261031-bolt-maya-reliability.json',
     'docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md',

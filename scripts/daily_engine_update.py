@@ -38,6 +38,26 @@ def release_owner(path, owner):
         path.unlink()
 
 
+def validate_update_coverage(catalog, policy):
+    profiles = {p['id']: p for p in catalog['profiles']}
+    listed = [p for c in policy['components'] for p in c['profiles']]
+    pinned = policy.get('pinned_profiles', [])
+    if not isinstance(pinned, list):
+        raise RuntimeError('Pinned updater profiles must be a list')
+    for entry in pinned:
+        if not isinstance(entry, dict) or set(entry) != {'profile', 'reason'}:
+            raise RuntimeError('Pinned updater profile needs an explicit reason')
+        name = entry['profile']
+        if (not isinstance(name, str) or name not in profiles
+                or profiles[name]['engine'] != 'vLLM-offload'
+                or not profiles[name].get('runtime_manifest')
+                or not isinstance(entry['reason'], str) or not entry['reason'].strip()):
+            raise RuntimeError('Only explicitly pinned custom runtimes may skip automatic updates')
+        listed.append(name)
+    if set(profiles) != set(listed) or len(profiles) != len(listed):
+        raise RuntimeError('Updater catalog coverage differs from maintained profiles')
+
+
 class Updater:
     def __init__(self, root=ROOT):
         self.root = Path(root); self.base = self.root / 'data/daily-update'
@@ -267,9 +287,7 @@ class Updater:
             raise RuntimeError('Recovery required before read-only discovery')
         if not check_only: self.recover()
         from profile_catalog import load_catalog
-        ids = {p['id'] for p in load_catalog()['profiles']}
-        listed = [p for c in self.policy['components'] for p in c['profiles']]
-        if ids != set(listed) or len(ids) != len(listed): raise RuntimeError('Updater catalog coverage differs from maintained profiles')
+        validate_update_coverage(load_catalog(), self.policy)
         versions = json.loads((self.root/'config/daily-update-versions.json').read_text())
         stamp = datetime.now().strftime('%Y%m%d-%H%M%S')
         self.run_dir = self.base/stamp; self.run_dir.mkdir(mode=0o700)

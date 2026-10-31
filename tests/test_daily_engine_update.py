@@ -327,4 +327,29 @@ class NativeCheckpointCountingTests(unittest.TestCase):
                 with self.assertRaises(subprocess.CalledProcessError):
                     checkpoint_token_count(root,directory,'archive')
 
+
+class CatalogCoverageTests(unittest.TestCase):
+    def fixture(self):
+        catalog={'profiles':[{'id':'dense','engine':'HyperQwen-vLLM'}, {'id':'bolt-vllm','engine':'vLLM-offload','runtime_manifest':'config/bolt-offload-runtime.json'}]}
+        policy={'components':[{'profiles':['dense']}], 'pinned_profiles':[{'profile':'bolt-vllm','reason':'Independent qualified runtime snapshot'}]}
+        return catalog,policy
+    def test_pinned_custom_profile_preserves_managed_coverage(self):
+        from daily_engine_update import validate_update_coverage
+        catalog,policy=self.fixture();validate_update_coverage(catalog,policy)
+        policy.pop('pinned_profiles');catalog['profiles'].pop();validate_update_coverage(catalog,policy)
+    def test_missing_duplicate_unknown_and_empty_reasons_fail_closed(self):
+        from daily_engine_update import validate_update_coverage
+        for change in ['missing','duplicate','unknown','reason','managed']:
+            catalog,policy=self.fixture()
+            if change=='missing':policy['pinned_profiles']=[]
+            if change=='duplicate':policy['components'][0]['profiles'].append('bolt-vllm')
+            if change=='unknown':policy['pinned_profiles'][0]['profile']='unknown'
+            if change=='reason':policy['pinned_profiles'][0]['reason']=' '
+            if change=='managed':catalog['profiles'][1]['engine']='Maya'
+            with self.subTest(change=change),self.assertRaises(RuntimeError):validate_update_coverage(catalog,policy)
+    def test_review_catalog_policy_pair_has_complete_coverage(self):
+        from daily_engine_update import validate_update_coverage
+        root=Path(__file__).resolve().parents[1]
+        validate_update_coverage(json.loads((root/'config/maintained-profiles.json').read_text()),json.loads((root/'config/daily-update.json').read_text()))
+
 if __name__=='__main__':unittest.main()

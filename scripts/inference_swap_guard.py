@@ -128,7 +128,7 @@ class WorkerWatch:
             if phase in ('loading', 'warmup', 'idle'):
                 return 'loading' if phase == 'warmup' else phase
         try:
-            if self.profile.startswith('qwen27b-'):
+            if self.profile.startswith('qwen27b-') or self.profile == 'bolt-vllm':
                 text = self.get('/metrics')
                 name = ('sglang:num_running_reqs' if self.profile.endswith('sglang')
                         else 'vllm:num_requests_running')
