@@ -1,5 +1,10 @@
 # Agent entry point
 
+## Latest: P2P post-boot correctness FAILED — October 31
+
+615.71.09 and IOMMU passthrough are active; the switched cards are x8/x8. Advertised CUDA P2P support is insufficient: the actual remote-read test failed data validation, so working P2P is not established. Only the 3060 has verified tensor unlock; switch enumeration moved both 3080 PCI addresses and their explicit unlock targets missed. Avoid multi-GPU workloads until corrected or the peer path is disabled. See [actual verification](docs/P2P-POSTBOOT-20261031.md).
+
+
 ## Latest: P2P packages installed, boot completion pending — October 30
 
 The switch and all three GPUs now enumerate; 3080 Ti/3080 links are x8 each with a Gen4 x16 switch uplink. CUDA peer access remains unavailable under 595.99.02. Matching 615.71.09 P2P modules built successfully after a documented Linux 7 CXL guard correction; bounded correctness verification is prepared. Explicit human approval now covers the driver replacement, IOMMU passthrough and all-three-GPU unlock. 615 packages and patched module files are installed, but final unlock boot preparation stopped at the expected live 595/615 library mismatch. A validated preboot completion terminal awaits administrator authentication; do not reboot until it passes. Post-reboot P2P and three-GPU unlock verification remains pending. See [status and limits](docs/P2P-DRIVER-PREPARATION-20261030.md).

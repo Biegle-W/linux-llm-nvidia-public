@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'docs/P2P-POSTBOOT-20261031.md',
     'docs/P2P-DRIVER-PREPARATION-20261030.md',
     'docs/THREE-GPU-PREPARATION-20261030.md',
     'docs/UNSLOTH-COMFY-DESKTOP-20261030.md',
