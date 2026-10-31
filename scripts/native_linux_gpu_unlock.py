@@ -14,10 +14,10 @@ import shutil
 import subprocess
 import sys
 
-PIN = "af28cbbfd3d922a659227ecfb7369adfd924cf03"
+PIN = "7eb51bccae0a0b7e599e084d971170e9a1e82d0c"
 UPSTREAM = "https://github.com/Zagitta/gpu-unlock.git"
 PROJECT = Path(__file__).resolve().parents[1]
-SOURCE = PROJECT / "runtimes/gpu-unlock-native"
+SOURCE = PROJECT / "runtimes/gpu-unlock-native-2.0"
 SUPPORTED = {"2503": "RTX 3060 12GB (GA106)", "2206": "RTX 3080 10GB (GA102)",
              "2208": "RTX 3080 Ti 12GB (GA102)"}
 MARKER = "# Managed by Local-LLM native_linux_gpu_unlock.py\n"
@@ -253,8 +253,8 @@ def enable(value):
     selection = targets(value, devices())
     # Check installed version and reviewed source; post-boot proof is still required.
     version = run("modinfo", "-F", "version", "gpu_unlock", capture=True)
-    if version != "1.0.0":
-        raise RuntimeError("The current kernel lacks the expected gpu_unlock 1.0.0; run install first.")
+    if version != "2.0.0":
+        raise RuntimeError("The current kernel lacks the expected gpu_unlock 2.0.0; run install first.")
     verify_source()
     for path in (Path("/etc/default/grub"), *Path("/etc/default/grub.d").glob("*.cfg")):
         if path != GRUB and "gpu_unlock.targets=" in path.read_text():

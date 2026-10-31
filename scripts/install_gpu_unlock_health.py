@@ -125,8 +125,8 @@ def configuration():
     if not targets or len({x['bdf'] for x in targets}) != len(targets):
         raise ValueError('Empty or duplicate targets')
     return {'managed_by': 'linux-llm-nvidia-gpu-unlock-health', 'schema': 1,
-            'target_kernel': 'auto', 'targets': targets, 'unlock_version': '1.0.0',
-            'reviewed_source': 'af28cbbfd3d922a659227ecfb7369adfd924cf03',
+            'target_kernel': 'auto', 'targets': targets, 'unlock_version': '2.0.0',
+            'reviewed_source': '7eb51bccae0a0b7e599e084d971170e9a1e82d0c',
             'grub_dropin': '/etc/default/grub.d/99-local-llm-gpu-unlock.cfg',
             'dracut_dropin': '/etc/dracut.conf.d/99-local-llm-gpu-unlock.conf'}
 

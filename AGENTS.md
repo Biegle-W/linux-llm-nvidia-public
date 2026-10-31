@@ -1,5 +1,19 @@
 # Agent entry point
 
+## Latest: GPU unlock 2.0 staged for all three cards — October 31
+
+The requested upgrade installed gpu-unlock 2.0.0 from reviewed upstream commit
+`7eb51bccae0a0b7e599e084d971170e9a1e82d0c`. DKMS built successfully for
+7.0.0-42-generic; the target initramfs contains the matching 2.0 module/srcversion,
+all declared firmware, and the unchanged model-ID-scoped pre-udev hook. Health
+reports **PENDING REBOOT VERIFICATION**. The loaded module remains 1.0.0 until
+the user chooses to reboot; successful 2.0 unlock on hardware is not yet claimed.
+The 3080 Ti (2208), 3080 (2206), and 3060 (2503) remain the only selected targets.
+NVIDIA 615.71.09, dynamic BAR1/P2P modules, early-selection hooks and boot options
+were preserved; protected file hashes matched. Old 1.0 packages and boot/config
+preimages are retained privately for rollback. No live GPU reload or reboot ran.
+No additional performance gain over the verified 1.0 unlock is claimed.
+
 ## Latest: working Dynamic3.1 SSD candidate and quiet automated terminals — October 31
 
 Strata 0.2.9 / engine 0.1.55 passed isolated 2K arithmetic/JSON and two complete 256-token streams with bounded 128/160 MiB/s swap and 15% pressure guards. Decode observations were 5.769 and 7.745 tok/s (second prompt cached); swap activity and pressure were zero. Existing selections remain unchanged. Automated harnesses now stay minimized; 307 CPU tests and a live no-focus/auto-close check passed. [Settings, evidence and scope](docs/DEEPSEEK-DYNAMIC31-20261031.md).

@@ -1,5 +1,19 @@
 # Two-card unlock preparation — October 26, 2026
 
+## Latest: GPU unlock 2.0 staged for all three cards — October 31
+
+The requested upgrade installed gpu-unlock 2.0.0 from reviewed upstream commit
+`7eb51bccae0a0b7e599e084d971170e9a1e82d0c`. DKMS built successfully for
+7.0.0-42-generic; the target initramfs contains the matching 2.0 module/srcversion,
+all declared firmware, and the unchanged model-ID-scoped pre-udev hook. Health
+reports **PENDING REBOOT VERIFICATION**. The loaded module remains 1.0.0 until
+the user chooses to reboot; successful 2.0 unlock on hardware is not yet claimed.
+The 3080 Ti (2208), 3080 (2206), and 3060 (2503) remain the only selected targets.
+NVIDIA 615.71.09, dynamic BAR1/P2P modules, early-selection hooks and boot options
+were preserved; protected file hashes matched. Old 1.0 packages and boot/config
+preimages are retained privately for rollback. No live GPU reload or reboot ran.
+No additional performance gain over the verified 1.0 unlock is claimed.
+
 The pinned [Zagitta gpu-unlock source](https://github.com/Zagitta/gpu-unlock/tree/af28cbbfd3d922a659227ecfb7369adfd924cf03)
 (version 1.0.0) was built and installed through DKMS for kernel 7.0.0-38-generic.
 Only the detected RTX 3080 Ti and RTX 3080 were selected. After a user-controlled restart, both selected cards reported successful unlock
