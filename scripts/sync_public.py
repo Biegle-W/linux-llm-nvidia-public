@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/BOLT-MAYA-RELIABILITY-20261031.md',
+    'docs/benchmark-results/20261031-bolt-maya-reliability.json',
     'docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md',
     'docs/benchmark-results/20261031-pair-main-aux.json',
     'docs/NEMOTRON-INT4-OFFLOAD-20261031.md',

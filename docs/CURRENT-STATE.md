@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Latest: DeepSeek/Maya reliability and Bolt isolated qualification — October 31
+
+DeepSeek/Maya's 36 GiB file-residency target, 32 GB startup read-ahead cap and 4 GB post-prompt warming passed quality/resource checks and two fresh reloads at the original 32K context. Bolt passed three fresh isolated 8K loads, retrieval and sustained streaming using compact prefetch and checkpoint-scoped cache cleanup. Bolt remains unselected; persistent integration is pending. See [the reliability report](BOLT-MAYA-RELIABILITY-20261031.md) for measured speeds and scope.
+
 ## Latest: main-pair inference and auxiliary 3060 optimization — October 31
 
 Main inference uses the RTX 3080 Ti/3080 pair; the RTX 3060 is reserved for auxiliary work. Qualified NCCL P2P settings are selected for both Qwen 27B engines, with custom all-reduce enabled only in HyperQwen. Fresh controls, tools, near-window retrieval, sustained generation and two normal-router reloads per engine passed. The dedicated 3060 GGUF drafter worked but was slower than main-pair MTP and was not selected. Existing native model caches/contexts and all guards are preserved. See [measurements and scope](GPU-PAIR-AUX-OPTIMIZATION-20261031.md).

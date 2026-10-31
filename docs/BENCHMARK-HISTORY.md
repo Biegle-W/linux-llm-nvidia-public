@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## October 31: DeepSeek/Maya bounded residency and Bolt isolated qualification
+
+DeepSeek/Maya passed its repeated speed screen, near-window checks, sustained generation and two reloads with explicit file residency and warming bounds. Bolt passed three fresh isolated 8K loads, JSON/arithmetic, 7,373-input retrieval and a sustained stream. Bolt remains unselected pending persistent integration. Earlier failures remain historical evidence. [Report](BOLT-MAYA-RELIABILITY-20261031.md), [numeric evidence](benchmark-results/20261031-bolt-maya-reliability.json).
+
 ## October 31: main-pair P2P optimization and auxiliary draft comparison
 
 Both dense Qwen profiles now use qualified P2P communication. Fresh confirmation, near-window quality/resource checks and normal reloads passed. Three native profiles completed fresh fixed-fixture short measurements without cache/context retuning. DeepSeek/Maya stopped on its existing memory-pressure guard during repetition three; its partial two-repetition result did not replace the prior selected benchmark. Dedicated 3060 drafting was slower in the tested GGUF setup and was not selected. Prior records remain historical; native differences against older dates are not causal estimates. [Report](GPU-PAIR-AUX-OPTIMIZATION-20261031.md), [numeric evidence](benchmark-results/20261031-pair-main-aux.json).

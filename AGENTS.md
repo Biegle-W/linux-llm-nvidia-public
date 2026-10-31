@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Latest: DeepSeek/Maya reliability and Bolt isolated qualification — October 31
+
+DeepSeek/Maya's 36 GiB file-residency target, 32 GB startup read-ahead cap and 4 GB post-prompt warming passed quality/resource checks and two fresh reloads at the original 32K context. Bolt passed three fresh isolated 8K loads, retrieval and sustained streaming using compact prefetch and checkpoint-scoped cache cleanup. Bolt remains unselected; persistent integration is pending. See [the reliability report](docs/BOLT-MAYA-RELIABILITY-20261031.md) for measured speeds and scope.
+
 ## Main and auxiliary GPU roles — October 31
 
 Use the RTX 3080 Ti 12 GB and RTX 3080 10 GB for main inference. Reserve the RTX 3060 12 GB for auxiliary work. A separate drafter requires explicit engine placement support and a measured benefit before selection; the tested Qwen GGUF 3060 drafter was slower and remains experimental. Preserve the verified pair-only P2P setup, independent resource/ownership guards, unrelated workloads and existing client defaults. Rediscover device identities before changing placement after hardware changes.

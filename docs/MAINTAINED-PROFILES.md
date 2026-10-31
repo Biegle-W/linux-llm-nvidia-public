@@ -1,9 +1,8 @@
 # Maintained model, quantization and engine settings
 
-## Latest matched speed evidence
+## Latest selected speed evidence (composite runs)
 
-
-Protocol: same fixed synthetic prompts across the six profiles, one warmup (64 output tokens), three requested measured requests (128 output tokens), temperature zero, concurrency one; medians of complete three-repetition runs. DeepSeek/Maya completed two repetitions before its existing sustained-memory-pressure guard stopped the third; its partial result is not selected as a new benchmark. Model loading is excluded. Models and expert caches are warm/adaptive; conversation cached-token counts are checked. Prefill uses the native per-request counter/timing; decode is client SSE `(completion_tokens - 1)/(last_content - first_content)`. Token counts vary by tokenizer. Dense rows use the selected fresh confirmation; native rows use unchanged selected settings on current hardware. The native rows are fresh short screens; their earlier full-context qualifications are retained and are not relabeled as newly repeated.
+The dense profiles and three other SSD-streaming profiles retain the earlier October 31 pair/auxiliary results. DeepSeek/Maya uses the later bounded-residency screen. These separate runs are not a new matched experiment or causal comparison. Each selected row uses one 64-output warmup and three 128-output requests, temperature zero and concurrency one, excluding loading. Native prefill uses request timing and decode uses client SSE first-to-last-content timing. Sustained generation is reported separately in [the reliability report](BOLT-MAYA-RELIABILITY-20261031.md). Bolt's isolated single-stream result is not inserted as a selected benchmark.
 
 ### VRAM-only models
 
@@ -14,7 +13,9 @@ Protocol: same fixed synthetic prompts across the six profiles, one warmup (64 o
 
 ### MoE models with CPU RAM offload
 
-None currently maintained as fully RAM-resident offload. Bolt remains an experimental candidate described below; expert caches in the next section are part of SSD-streaming profiles.
+No selected profiles in this category. Bolt passed isolated 8K quality/resource/reload qualification but remains unselected pending persistent integration.
+
+Bolt AWQ INT4 is an isolated qualified candidate: 8,192 context, three fresh loads and 7,373-input marker retrieval passed; one 128-output stream measured 254.35 native prefill tok/s, 11.682 s TTFT and 0.452 SSE decode tok/s. It remains unselected and is excluded from the maintained tables. No dedicated fixed-fixture warmup or three-request speed median was measured for Bolt.
 
 ### MoE models with SSD streaming
 
@@ -23,15 +24,9 @@ None currently maintained as fully RAM-resident offload. Bolt remains an experim
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | 695.20 | 3.199 | 98.42 | 32,768 | 75.84 | NVME: models/strata/models/IQ3_XXS |
 | GLM-5.3-Flash / Maya-S24 | Maya | 74.10 | 29.837 | 6.39 | 65,536 | 94.70 | NVME: models/maya/Maya-S24 |
 | DeepSeek-V4.1-Flash-1017 / Maya-S | Strata | 30.80 | 70.845 | 3.27 | 131,072 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
-| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | Incomplete | Incomplete | Incomplete | 32,768 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
+| DeepSeek-V4.1-Flash-1017 / Maya-S | Maya | 46.70 | 46.835 | 1.89 | 32,768 | 339.48 | NVME: models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S |
 
-DeepSeek/Maya: incomplete. Two measured requests completed (49.4 prefill tok/s, 2.58 decode tok/s median); the third stopped on sustained full-memory pressure. The previous selected benchmark remains historical and unchanged. No guard was relaxed and the run was not repeated.
-
-Measured prompt-token ranges: qwen27b-hyperqwen [2212, 2222], qwen27b-sglang [2212, 2222], flash-next-strata [2212, 2222], glm-maya [2199, 2209], deepseek-strata [2179, 2198].
-
-Storage counts decimal GB of base checkpoint weights. Qwen's safetensors are shared between its two engines, and DeepSeek's base weights are shared between its two engines; count each shared base once. Derived packs/caches and the separate GGUF trial assets are excluded from those base sizes. No native cache, context or worker budget was changed. Differences against older dated runs are not causal P2P estimates.
-
-See [the optimization report](GPU-PAIR-AUX-OPTIMIZATION-20261031.md) for matched controls and selection limits.
+Storage is decimal GB of base weights. The Qwen engines share base weights; the DeepSeek engines share base weights. Count each base once. Prepared packs and caches are excluded. Prior measurements remain historical.
 
 ## Latest: qualified bounded DeepSeek/Maya cache — October 29
 

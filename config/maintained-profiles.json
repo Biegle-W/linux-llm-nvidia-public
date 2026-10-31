@@ -1676,7 +1676,7 @@
         "maya-deepseek"
       ],
       "allocated_context": 32768,
-      "context_validation": "32K allocation retained; three-marker retrieval passed at 9674 input tokens with the optimized setting; full window not tested.",
+      "context_validation": "32K allocation retained; fresh three-marker retrieval passed at 29456 input tokens, with sustained generation and two fresh normal reloads; not an exact full-window or multi-hour guarantee.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 3.4,
@@ -1690,30 +1690,27 @@
       },
       "evidence": "docs/MOE-OPTIMIZATION-20261027.md",
       "latest_benchmark": {
-        "run": "20261029-pressure-guard",
-        "variant": "deepseek-maya-64gb-pressure15",
-        "date": "2026-10-29",
+        "run": "20261031-bolt-maya-reliability",
+        "variant": "deepseek-maya-file36-warm4-startup32",
+        "date": "2026-10-31",
         "context": 32768,
         "physical_ram_gb": 64,
         "physical_ram_usable_gib": 61.30133056640625,
-        "configured_ram_speed_mt_s": 4200,
         "repetitions": 3,
-        "output_tokens": 128,
         "host_vm_swappiness": 60,
-        "swap_policy": "128 MiB/s writes /160 MiB/s combined over30seconds",
-        "pressure_policy": "15% full-memory pressure for3 samples after30s active window",
-        "prefill_tps": 45.9,
-        "ttft_s": 47.534375536999505,
-        "decode_tps": 3.302121733483711,
         "input_tokens_range": [
-          2173,
-          2192
+          2179,
+          2198
         ],
+        "output_tokens": 128,
+        "ttft_s": 46.83540905100017,
+        "prefill_tps": 46.7,
+        "decode_tps": 1.8872357209019988,
         "prefill_method": "native prompt_n / native prompt time",
         "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json",
-        "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
+        "fixture_sha256": "1b228aa28e5fa3e1409a98609789a924efdd72da109b965cc22bbdac0e808b2f",
+        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-bolt-maya-reliability.json"
       },
       "storage": {
         "access": "ssd-streaming",
@@ -1727,7 +1724,9 @@
       },
       "selected_settings": {
         "environment": {
-          "DS4_WARM_GB": "8"
+          "DS4_WARM_GB": "4",
+          "DS4_FILE_CACHE_MIB": "36864",
+          "DS4_WARM_CAP_GB": "32"
         },
         "expert_profile": "data/deepseek-maya-expert-profile.bin",
         "tp_requested": 2,
@@ -1740,8 +1739,8 @@
         "reserve_mib_per_gpu": 512,
         "parallel": 1,
         "reasoning_effort": "none",
-        "reason": "Saved full-RAM cache settings restored after explicit hardware confirmation and Linux capacity verification; later runtime pins, VRAM reserve and guards preserved.",
-        "decode_expert_warm_gb": 8.0,
+        "reason": "Qualified bounded model-file residency and explicit startup read-ahead; existing full-RAM hardware, runtime pins, context and independent guards preserved.",
+        "decode_expert_warm_gb": 4.0,
         "vram_reserve_args": {
           "--reserve-mib": 512
         },
@@ -1753,24 +1752,34 @@
           "preimage_reference": "20261028-reduced-ram",
           "normal_guarded_verification": "passed"
         },
-        "optional_file_controller_active": false,
+        "optional_file_controller_active": true,
         "swap_guard": {
           "window_s": 30,
           "write_mib_s": 128,
           "combined_mib_s": 160,
           "pressure_pct": 15
-        }
+        },
+        "model_file_cache_target_mib": 36864,
+        "startup_expert_warm_cap_gb": 32
       },
       "latest_qualification": {
-        "run": "20261027-moe-optimized",
+        "run": "20261031-bolt-maya-reliability",
+        "date": "2026-10-31",
         "context": 32768,
-        "retrieval_input_tokens": 9674,
+        "retrieval_input_tokens": 29456,
         "three_markers_passed": true,
         "json_arithmetic_passed": true,
         "image_passed": true,
-        "full_window_retested": false
+        "full_window_retested": false,
+        "near_window_retested": true,
+        "sustained_output_tokens": 512,
+        "sustained_generation_s": 373.47791552799936,
+        "normal_fresh_reloads": 2,
+        "resources_passed": true,
+        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-bolt-maya-reliability.json"
       },
-      "tested_retrieval_input": 9674,
+      "tested_retrieval_input": 29456,
       "context_expansion_assessment": {
         "run": "20261027-context-expansion",
         "status": "unresolved-active-swap-guard",
@@ -1814,6 +1823,32 @@
           "host_ram_reserve_gib": 2,
           "host_vm_swappiness": 60,
           "method": "Saved fixed fixture; native prefill/client SSE TTFT and decode; prior comparison is historical, not paired"
+        },
+        {
+          "run": "20261029-pressure-guard",
+          "variant": "deepseek-maya-64gb-pressure15",
+          "date": "2026-10-29",
+          "context": 32768,
+          "physical_ram_gb": 64,
+          "physical_ram_usable_gib": 61.30133056640625,
+          "configured_ram_speed_mt_s": 4200,
+          "repetitions": 3,
+          "output_tokens": 128,
+          "host_vm_swappiness": 60,
+          "swap_policy": "128 MiB/s writes /160 MiB/s combined over30seconds",
+          "pressure_policy": "15% full-memory pressure for3 samples after30s active window",
+          "prefill_tps": 45.9,
+          "ttft_s": 47.534375536999505,
+          "decode_tps": 3.302121733483711,
+          "input_tokens_range": [
+            2173,
+            2192
+          ],
+          "prefill_method": "native prompt_n / native prompt time",
+          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+          "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json",
+          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
         }
       ],
       "vram512_qualification": {
@@ -1834,9 +1869,9 @@
         "evidence": "docs/MAYA-DEMAND-CACHE-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "incomplete: existing sustained-memory-pressure guard stopped repetition 3 after two completed requests; prior latest benchmark retained",
+        "status": "passed three-request speed screen and bounded quality/resource/reload qualification with model-file residency control",
         "date": "2026-10-31",
-        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
+        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md"
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -1863,13 +1898,12 @@
         "historical_benchmarks_unchanged": true
       },
       "latest_benchmark_attempt": {
-        "date": "2026-10-29",
+        "date": "2026-10-31",
         "passed": true,
         "physical_ram_gb": 64,
-        "pressure_pct": 15,
         "repetitions": 3,
-        "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json"
+        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-bolt-maya-reliability.json"
       },
       "guard_validation_history": [
         {
@@ -1943,6 +1977,24 @@
           "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
           "scope": "three fixed requests with SSD swap128/160 policy",
           "reason": "Sustained full-memory pressure during inference"
+        },
+        {
+          "date": "2026-10-31",
+          "run": "20261031-pair-main-aux",
+          "passed": false,
+          "completed_repetitions": 2,
+          "requested_repetitions": 3,
+          "reason": "Sustained full-memory pressure during inference",
+          "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
+        },
+        {
+          "date": "2026-10-29",
+          "passed": true,
+          "physical_ram_gb": 64,
+          "pressure_pct": 15,
+          "repetitions": 3,
+          "evidence": "docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md",
+          "numeric_results": "docs/benchmark-results/20261029-pressure-guard.json"
         }
       ],
       "pressure_policy_selection": {
@@ -1966,7 +2018,34 @@
           "other_guards": "unchanged",
           "benchmark_status": "failed or incomplete"
         }
-      ]
+      ],
+      "qualification_history": [
+        {
+          "run": "20261027-moe-optimized",
+          "context": 32768,
+          "retrieval_input_tokens": 9674,
+          "three_markers_passed": true,
+          "json_arithmetic_passed": true,
+          "image_passed": true,
+          "full_window_retested": false
+        }
+      ],
+      "reliability_qualification": {
+        "date": "2026-10-31",
+        "status": "bounded tests passed",
+        "checks": [
+          "json",
+          "arithmetic",
+          "image",
+          "near-window-retrieval",
+          "sustained512",
+          "two-fresh-normal-reloads"
+        ],
+        "telemetry_samples": 408,
+        "scope": "Three fixed-fixture speed requests, JSON/arithmetic/image, near-window retrieval, 512-token continuous generation and two fresh normal reloads; no multi-hour soak",
+        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
+        "numeric_results": "docs/benchmark-results/20261031-bolt-maya-reliability.json"
+      }
     }
   ],
   "host_reclaim_policy": {

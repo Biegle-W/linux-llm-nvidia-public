@@ -1,0 +1,227 @@
+{
+  "date": "2026-10-31",
+  "hardware": {
+    "physical_ram_gb": 64,
+    "usable_ram_gib": 61.3013,
+    "main_gpus": [
+      "RTX 3080 Ti 12GB",
+      "RTX 3080 10GB"
+    ],
+    "auxiliary_gpu": "RTX 3060 12GB"
+  },
+  "maya": {
+    "selected": true,
+    "context": 32768,
+    "file_cache_mib": 36864,
+    "warm_cap_decimal_gb": 32,
+    "post_prompt_warm_decimal_gb": 4,
+    "qualification": {
+      "checks": [
+        "json",
+        "arithmetic",
+        "image",
+        "near-window-retrieval",
+        "sustained512",
+        "two-fresh-normal-reloads"
+      ],
+      "retrieval_tokens": 29456,
+      "sustained_generation_s": 373.47791552799936,
+      "telemetry_samples": 408,
+      "worker_invocations": 3
+    },
+    "snapshot_preimages_restored": true,
+    "resources": {
+      "peak_worker_gib": 42.800071716308594,
+      "peak_worker_swap_bytes": 0,
+      "peak_full_pressure_pct": 0.25,
+      "max_memory_events": {
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0
+      }
+    },
+    "speed": {
+      "repetitions": 3,
+      "ttft_s": 46.83540905100017,
+      "prefill_tps": 46.7,
+      "client_decode_tps": 1.8872357209019988,
+      "prompt_tokens_range": [
+        2179,
+        2198
+      ],
+      "output_tokens_range": [
+        128,
+        128
+      ],
+      "prefill_method": "native prompt_n / native prompt time"
+    }
+  },
+  "bolt": {
+    "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+    "weight_quant": "AWQ-INT4",
+    "checkpoint_revision": "3df8bd99af5d58abe5f052ef81127dff092f26b4",
+    "weight_bytes": 55332700488,
+    "context": 8192,
+    "text_only": true,
+    "selected": false,
+    "isolated_qualification": "pass",
+    "fresh_loads": 3,
+    "quality": {
+      "checks": {
+        "arithmetic": true,
+        "json": true,
+        "near_window": true,
+        "sustained_stream": true
+      },
+      "context": 8192,
+      "retrieval_input_tokens": 7373,
+      "stream": {
+        "native_prefill_tps": 254.35022178673216,
+        "native_prefill_s": 9.203844933002983,
+        "done": true,
+        "usage": {
+          "prompt_tokens": 2341,
+          "total_tokens": 2469,
+          "completion_tokens": 128
+        },
+        "ttft_s": 11.681946739001432,
+        "generation_s": 281.2668593599992,
+        "decode_tps": 0.4515284889552171,
+        "wall_s": 292.95384244300294
+      },
+      "kv_capacity_tokens": [
+        52662
+      ],
+      "status": "pass"
+    },
+    "resources": {
+      "reload1": {
+        "status": "qualification-pass",
+        "load_seconds": 232.09515953063965,
+        "guard_samples": 158,
+        "guard_violations": 0,
+        "peak_loading_full_pressure_pct": 5.07,
+        "peak_inference_full_pressure_pct": 0.0,
+        "peak_worker_gib": 45.99980926513672,
+        "peak_swap_occupancy_gib": 7.347084045410156,
+        "minimum_host_available_gib": 12.737319946289062,
+        "minimum_main_gpu_free_mib": [
+          2767,
+          503
+        ],
+        "maximum_main_gpu_temperature_c": [
+          51,
+          55
+        ],
+        "peak_30s_inference_swap_write_mib_s": 0.0,
+        "peak_30s_inference_swap_combined_mib_s": 0.04055015676897345
+      },
+      "reload2": {
+        "status": "qualification-pass",
+        "load_seconds": 236.09328889846802,
+        "guard_samples": 160,
+        "guard_violations": 0,
+        "peak_loading_full_pressure_pct": 1.87,
+        "peak_inference_full_pressure_pct": 0.0,
+        "peak_worker_gib": 46.00043487548828,
+        "peak_swap_occupancy_gib": 7.975608825683594,
+        "minimum_host_available_gib": 12.896644592285156,
+        "minimum_main_gpu_free_mib": [
+          2935,
+          503
+        ],
+        "maximum_main_gpu_temperature_c": [
+          52,
+          55
+        ],
+        "peak_30s_inference_swap_write_mib_s": 0.0,
+        "peak_30s_inference_swap_combined_mib_s": 0.03199897275123128
+      },
+      "primary": {
+        "status": "qualification-pass",
+        "load_seconds": 238.0925874710083,
+        "guard_samples": 369,
+        "guard_violations": 0,
+        "peak_loading_full_pressure_pct": 1.62,
+        "peak_inference_full_pressure_pct": 0.0,
+        "peak_worker_gib": 46.00055694580078,
+        "peak_swap_occupancy_gib": 7.975635528564453,
+        "minimum_host_available_gib": 13.086200714111328,
+        "minimum_main_gpu_free_mib": [
+          2767,
+          503
+        ],
+        "maximum_main_gpu_temperature_c": [
+          53,
+          56
+        ],
+        "peak_30s_inference_swap_write_mib_s": 0.0,
+        "peak_30s_inference_swap_combined_mib_s": 0.07382386906135477
+      }
+    },
+    "compact_prefetch_pool_bytes_per_rank": 785256320,
+    "original_prefetch_pool_bytes_per_rank": 5615532416,
+    "normal_router_verification": "pending installation/verification",
+    "benchmark_scope": "One 128-output fixed-fixture stream after correctness/retrieval, no dedicated fixed-fixture warmup; not a three-request median"
+  },
+  "cpu_validation": {
+    "tests": 300,
+    "passed": true,
+    "scope": "Exact workspace deployment bundle using independent runtime, seventh profile, real cleanup hook and updater coverage",
+    "current_live_six_profile_tests": 263,
+    "current_live_six_profile_tests_passed": true
+  },
+  "rejected_variants": [
+    {
+      "variant": "compact-prefetch without host/shard cleanup",
+      "outcome": "Primary 8K inference passed, first fresh reload stopped on sustained loading pressure"
+    },
+    {
+      "variant": "postprocessing glibc cleanup only",
+      "outcome": "First fresh load passed, second load stopped during shard4 before postprocessing"
+    }
+  ],
+  "research_sources": [
+    {
+      "url": "https://github.com/vllm-project/vllm/issues/56410",
+      "finding": "Pinned host allocator rounding can make offload host bytes exceed requested; current trial retains pageable memory."
+    },
+    {
+      "url": "https://github.com/vllm-project/vllm/issues/57008",
+      "finding": "XPU-specific WNA16 postprocess materialization; hypothesis only for CUDA, not evidence CUDA shares exact root cause."
+    },
+    {
+      "url": "https://github.com/bjk110/spark_vllm_docker/blob/main/docs/diagnostics/dgx-spark-uma-memory-freeze.md",
+      "finding": "Opt-in cache release after MoE postprocessing; inspect local CUDA allocator before inferring transferability from UMA."
+    },
+    {
+      "url": "https://github.com/mw00/project-maya/blob/main/docs/SETTINGS.md",
+      "finding": "Documented RAM tier/cache and Linux direct reclaim pressure; local binary has opt-in bounded clean-file residency controller."
+    },
+    {
+      "url": "https://github.com/mw00/project-maya/issues/280",
+      "finding": "Prefill/decode behavior depends on mmap and cache state; compare measured local outcomes rather than other hardware claims."
+    },
+    {
+      "url": "https://www.reddit.com/r/LocalLLaMA/comments/1xbqir0/ran_deepseek_v41_flash_1017_on_a_single_rtx_5090/",
+      "finding": "64GB systems can stream from SSD; community claim is a hypothesis, not a local speed/reliability guarantee."
+    },
+    {
+      "url": "https://github.com/mw00/project-maya/issues/77",
+      "finding": "Maintainer/community discussion of RAM headroom on multi-GPU Linux; other model/hardware, so use as motivation for explicit bounded memory sizing, not predicted speed."
+    },
+    {
+      "url": "https://docs.vllm.ai/en/latest/configuration/engine_args/",
+      "finding": "Official distinction between generic byte-budget UVA offload and group-based prefetch; installed code checked for parameter-selection and buffer behavior."
+    },
+    {
+      "url": "https://man7.org/linux/man-pages/man3/malloc_trim.3.html",
+      "finding": "glibc malloc_trim attempts to return free whole heap pages across arenas; MT-safe. The separate isolated postprocessing trial calls it only after CPU-storage synchronization and preserves live tensors."
+    },
+    {
+      "url": "https://www.man7.org/linux/man-pages/man2/posix_fadvise.2.html",
+      "finding": "Read-only checkpoint-scoped DONTNEED advice before/during/after lazy loading was CPU-tested and passed three isolated 8K loads with unchanged guards; file-backed worker charge fell before postprocessing."
+    }
+  ],
+  "qualification_scope": "Bounded correctness/resource/reload qualification, not every-prompt or multi-hour reliability"
+}
