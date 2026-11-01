@@ -1,5 +1,23 @@
 # NVIDIA daily engine updates
 
+## 2026-11-01T04:35:57
+
+- hyperqwen: **rejected-revision-not-retried**; upstream `f382342d7496`.
+- sglang: **rejected-revision-not-retried**; upstream `d61ded5b9e2d`.
+- strata-qwen: **rejected-production-preserved**; upstream `c62d5e3a15b4`.
+- maya-glm: **rejected-production-preserved**; upstream `3589d6f12a3f`.
+- maya-deepseek: **rejected-production-preserved**; upstream `3589d6f12a3f`.
+- strata-deepseek: **production-failed-skipped**; upstream `c62d5e3a15b4`.
+
+## 2026-10-31T04:22:50
+
+- hyperqwen: **rejected-production-preserved**; upstream `f382342d7496`.
+- sglang: **rejected-production-preserved**; upstream `d61ded5b9e2d`.
+- strata-qwen: **production-failed-skipped**; upstream `870aedd9e1eb`.
+- maya-glm: **rejected-production-preserved**; upstream `cd48762b6d48`.
+- maya-deepseek: **rejected-production-preserved**; upstream `cd48762b6d48`.
+- strata-deepseek: **production-failed-skipped**; upstream `870aedd9e1eb`.
+
 ## 2026-10-30T06:30:08
 
 - hyperqwen: **unchanged**; upstream `ce9615c4f230`.
