@@ -36,7 +36,8 @@ def build_launch(profile,key,root=ROOT):
        '--max-num-batched-tokens',str(m['prefill_batch_tokens']),'--tensor-parallel-size','2',
        '--pipeline-parallel-size','1','--gpu-memory-utilization','0.85',
        '--kv-cache-memory-bytes',str(2**30),'--enforce-eager',
-       '--served-model-name','bolt','--offload-backend','prefetch','--offload-group-size','1',
+       '--served-model-name','bolt','--enable-auto-tool-choice','--tool-call-parser','qwen3_coder',
+       '--offload-backend','prefetch','--offload-group-size','1',
        '--offload-num-in-group','1','--offload-prefetch-step','1','--offload-params','experts','out_proj','in_proj',
        '--hf-overrides',json.dumps({'quantization_config':quant})]
  env=dict(os.environ,CUDA_VISIBLE_DEVICES='0,1',CUDA_DEVICE_ORDER='PCI_BUS_ID',NCCL_P2P_DISABLE='0',NCCL_P2P_LEVEL='SYS',

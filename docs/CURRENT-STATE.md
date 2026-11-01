@@ -1,5 +1,10 @@
 # Current takeover state
 
+## Bolt automatic tool calling verified — October 31
+
+Bolt enables automatic tool choice with `qwen3_coder`, as specified by its model card. A fresh normal-router load passed parsed auto tool calls, a local fixture result round trip and streamed tool arguments with reasoning disabled. All 325 CPU regressions passed; the two-GPU loading policy, 8K context and resource guards remain intact. [Tool-calling settings and scope](BOLT-TOOL-CALLING-20261031.md).
+
+
 ## Bolt verified on the two-card host — October 31
 
 Bolt now offloads Mamba input projections as well as experts/output projections and caps KV cache at 1GiB per GPU. Two fresh normal-router loads on the RTX 3080 Ti/3080 passed arithmetic/JSON; near-8K retrieval and a 32-token stream also passed. All 325 CPU tests passed; resource guards and 8K context remain unchanged. [Loading fix and validation](BOLT-TWO-GPU-LOADING-20261031.md).

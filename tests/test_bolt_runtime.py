@@ -20,6 +20,8 @@ class Runtime(unittest.TestCase):
   start=args.index('--offload-params')+1;end=args.index('--hf-overrides')
   self.assertEqual(args[start:end],['experts','out_proj','in_proj'])
   self.assertEqual(int(args[args.index('--kv-cache-memory-bytes')+1]),2**30)
+  self.assertIn('--enable-auto-tool-choice',args)
+  self.assertEqual(args[args.index('--tool-call-parser')+1],'qwen3_coder')
  def test_runtime_drift_fails_closed(self):
   (self.r/'runtimes/bin/vllm').write_text('changed')
   with self.assertRaises(ValueError):verify(self.p,self.r)

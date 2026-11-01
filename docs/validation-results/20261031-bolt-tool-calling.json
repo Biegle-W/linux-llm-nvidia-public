@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-31",
+  "status": "pass",
+  "engine": "vLLM 0.31.0",
+  "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-AWQ-INT4",
+  "parser": "qwen3_coder",
+  "enable_auto_tool_choice": true,
+  "chat_template_kwargs": {
+    "enable_thinking": false
+  },
+  "cpu_tests": 325,
+  "fresh_normal_router_loads": 1,
+  "load_seconds": 222.47735489000115,
+  "checks": {
+    "auto_tool_call": true,
+    "local_tool_result_roundtrip": true,
+    "streamed_tool_call": true
+  },
+  "fixture": {
+    "function": "get_inventory",
+    "nonstream_arguments": {
+      "product": "keyboard"
+    },
+    "local_tool_result": {
+      "product": "keyboard",
+      "count": 12
+    },
+    "stream_arguments": {
+      "product": "monitor"
+    }
+  },
+  "context": 8192,
+  "kv_cache_bytes_per_gpu": 1073741824,
+  "offload_params": [
+    "experts",
+    "out_proj",
+    "in_proj"
+  ],
+  "guards_unchanged": true,
+  "guard_samples": 185,
+  "guard_violations": 0,
+  "max_worker_swap_bytes": 0,
+  "peak_worker_memory_gib": 49.72481155395508,
+  "gpu_telemetry": {
+    "NVIDIA GeForce RTX 3080 Ti": {
+      "min_free_mib": 5705.0,
+      "max_temperature_c": 52.0
+    },
+    "NVIDIA GeForce RTX 3080": {
+      "min_free_mib": 2872.0,
+      "max_temperature_c": 50.0
+    }
+  },
+  "scope": "Chat Completions auto choice, local fixture result and streamed tool arguments with reasoning disabled. No external tools or side effects were executed; no throughput benchmark was run."
+}

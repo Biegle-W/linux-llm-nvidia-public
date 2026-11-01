@@ -2074,7 +2074,7 @@
       "capabilities": {
         "text": true,
         "vision": false,
-        "tools_qualified": false
+        "tools_qualified": true
       },
       "runtime_manifest": "config/bolt-offload-runtime.json",
       "benchmark_context": 8192,
@@ -2137,6 +2137,18 @@
         "guards_unchanged": true,
         "evidence": "docs/BOLT-TWO-GPU-LOADING-20261031.md",
         "numeric_results": "docs/validation-results/20261031-bolt-two-gpu-loading.json"
+      },
+      "tool_call_verification": {
+        "date": "2026-10-31",
+        "parser": "qwen3_coder",
+        "checks": {
+          "auto_tool_call": true,
+          "local_tool_result_roundtrip": true,
+          "streamed_tool_call": true
+        },
+        "request_mode": "Chat Completions; enable_thinking=false",
+        "evidence": "docs/BOLT-TOOL-CALLING-20261031.md",
+        "numeric_results": "docs/validation-results/20261031-bolt-tool-calling.json"
       }
     },
     {

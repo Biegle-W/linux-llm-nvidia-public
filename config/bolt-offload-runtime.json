@@ -30,7 +30,12 @@
     "scripts/bolt_offload_hook/host_trim.py": "c5e4b3d841327a125e53d06e8a0b9cacb8b6d9b9472deaf614fae3dc81509894",
     "scripts/bolt_offload_hook/checkpoint_cache.py": "0d767a8ad5abdfe60ab51543439cd76e38e900e21df061e1713c2c01a235cc9c",
     "runtimes/env-bolt-vllm-031/lib/python3.12/site-packages/vllm/model_executor/model_loader/weight_utils.py": "7d2573931b9684147b17018c1f6de318eea1c105556ffea03154201a72418afd",
-    "runtimes/env-bolt-vllm-031/pyvenv.cfg": "bb5b66c51799ec4154a4caf8b50bbc084597c59429258e3da3ef2ed4c9d67f00"
+    "runtimes/env-bolt-vllm-031/pyvenv.cfg": "bb5b66c51799ec4154a4caf8b50bbc084597c59429258e3da3ef2ed4c9d67f00",
+    "runtimes/env-bolt-vllm-031/lib/python3.12/site-packages/vllm/tool_parsers/__init__.py": "dce4b4d6c68f3b3a0ec4ed6ae9dc5b07b55d1ce004530bc2d958a25170ff71a5",
+    "runtimes/env-bolt-vllm-031/lib/python3.12/site-packages/vllm/tool_parsers/qwen3_engine_tool_parser.py": "3cf83a2a9408d72c79082825464b2c4dea1147ff390289dfb8936c5501114be9",
+    "runtimes/env-bolt-vllm-031/lib/python3.12/site-packages/vllm/parser/engine/registered_adapters.py": "76ba5b45ddec1b85b3a1bb0543fb4b5cecaeca2013090e3df904fdda4ad5fde4",
+    "runtimes/env-bolt-vllm-031/lib/python3.12/site-packages/vllm/parser/qwen3.py": "2fa80f910f0da453c2134027564a3859cb1f2ec01035198b40f11da37fe0ac0a",
+    "runtimes/env-bolt-vllm-031/lib/python3.12/site-packages/vllm/parser/engine/adapters.py": "7a77bcb86e2129762f4199ee726398a4850b9e207893fc4295f2b759bcfeeb36"
   },
   "model_source_sha256": {
     "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -48,7 +53,8 @@
     "config.json": "c3351f56f007db8f67d5a779526ce1159d0062982288c4c873f6cdbe33c904c8",
     "tokenizer_config.json": "c6067a79d81c7bf7b1485588b2a407ac9fe124056f4f759f09fc211d7114d123",
     "tokenizer.json": "d0432ad8b1c2984a2e2dca82e1933e3fd5628df6e95c51fba4c3ee9950dce299",
-    "model.safetensors.index.json": "35beb82c7ac2a1a86eabdb1b8234d2843b79deeb0c1daec3a3ec78b4d77e76eb"
+    "model.safetensors.index.json": "35beb82c7ac2a1a86eabdb1b8234d2843b79deeb0c1daec3a3ec78b4d77e76eb",
+    "chat_template.jinja": "6521afc75afb0661e3558e7e6dee5f2d15de8be1c4dece8171935e778ea283f4"
   },
   "weight_sizes": {
     "model-00003.safetensors": 2148349560,
