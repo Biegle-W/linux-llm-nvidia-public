@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'docs/DSH-HYPERQWEN-SEARCH-20261101.md',
     'docs/BOLT-CONTEXT-20261101.md',
     'docs/validation-results/20261101-bolt-context.json',
     'tests/test_dsh_registration.py',
