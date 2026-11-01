@@ -28,13 +28,16 @@ def build_launch(profile,key,root=ROOT):
  for group in quant['config_groups'].values():
   targets=group['targets'];updated=[x.replace('(?:up_proj|down_proj)','(?:gate_proj|up_proj|down_proj)') for x in targets];changed+=updated!=targets;group['targets']=updated
  if not changed:raise ValueError('Unreviewed Bolt quantization target mapping')
+ # Offload Mamba input projections to leave repack headroom on the 10GB card.
+ # Bound KV cache so automatic sizing cannot consume the 512MiB GPU reserve.
  args=[str(relative(root,m['binary'])),'serve',str(model),
        '--host','127.0.0.1','--port','10000','--trust-remote-code','--language-model-only',
        '--dtype','bfloat16','--max-model-len',str(m['context']),'--max-num-seqs','1',
        '--max-num-batched-tokens',str(m['prefill_batch_tokens']),'--tensor-parallel-size','2',
-       '--pipeline-parallel-size','1','--gpu-memory-utilization','0.85','--enforce-eager',
+       '--pipeline-parallel-size','1','--gpu-memory-utilization','0.85',
+       '--kv-cache-memory-bytes',str(2**30),'--enforce-eager',
        '--served-model-name','bolt','--offload-backend','prefetch','--offload-group-size','1',
-       '--offload-num-in-group','1','--offload-prefetch-step','1','--offload-params','experts','out_proj',
+       '--offload-num-in-group','1','--offload-prefetch-step','1','--offload-params','experts','out_proj','in_proj',
        '--hf-overrides',json.dumps({'quantization_config':quant})]
  env=dict(os.environ,CUDA_VISIBLE_DEVICES='0,1',CUDA_DEVICE_ORDER='PCI_BUS_ID',NCCL_P2P_DISABLE='0',NCCL_P2P_LEVEL='SYS',
           VLLM_WEIGHT_OFFLOADING_DISABLE_PIN_MEMORY='1',VLLM_WEIGHT_OFFLOADING_DISABLE_UVA='1',

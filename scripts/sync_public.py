@@ -6,6 +6,8 @@ import re
 import subprocess
 
 FILES = (
+    'docs/BOLT-TWO-GPU-LOADING-20261031.md',
+    'docs/validation-results/20261031-bolt-two-gpu-loading.json',
     'docs/WORKER-RAM-64GB-20261031.md', 'docs/validation-results/20261031-worker-ram-64gb.json',
     'config/deepseek-unsloth-runtime.json',
     'scripts/strata_unsloth_runtime.py',

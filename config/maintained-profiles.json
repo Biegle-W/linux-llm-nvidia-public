@@ -2116,6 +2116,27 @@
         "normal_router_guard_samples": 530,
         "normal_router_sustained_output_tokens": 128,
         "normal_router_generation_s": 281.8612519469971
+      },
+      "loading_vram_verification": {
+        "date": "2026-10-31",
+        "context": 8192,
+        "gpu_pair": [
+          "RTX 3080 Ti",
+          "RTX 3080"
+        ],
+        "offload_params": [
+          "experts",
+          "out_proj",
+          "in_proj"
+        ],
+        "kv_cache_bytes_per_gpu": 1073741824,
+        "normal_router_reloads": 2,
+        "arithmetic_json_passes": 2,
+        "retrieval_input_tokens": 7373,
+        "stream_output_tokens": 32,
+        "guards_unchanged": true,
+        "evidence": "docs/BOLT-TWO-GPU-LOADING-20261031.md",
+        "numeric_results": "docs/validation-results/20261031-bolt-two-gpu-loading.json"
       }
     },
     {

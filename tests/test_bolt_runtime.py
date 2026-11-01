@@ -15,6 +15,11 @@ class Runtime(unittest.TestCase):
  def save(self):(self.r/'config/bolt-offload-runtime.json').write_text(json.dumps(self.manifest))
  def test_scoped_placement_offline_auth_and_context(self):
   args,env=build_launch(self.p,'fixture',self.r);self.assertEqual(args[args.index('--max-model-len')+1],'8192');self.assertEqual(args[args.index('--max-num-batched-tokens')+1],'1024');self.assertEqual(env['CUDA_VISIBLE_DEVICES'],'0,1');self.assertEqual(env['HF_HUB_OFFLINE'],'1');self.assertEqual(env['VLLM_API_KEY'],'fixture');self.assertEqual(env['BOLT_CHECKPOINT_DIRECTORY'],str(self.r/'models/bolt'));self.assertNotIn('--api-key',args);self.assertNotIn('--cpu-offload-gb',args);self.assertIn('--enforce-eager',args)
+ def test_offload_leaves_repack_headroom_on_smaller_gpu(self):
+  args,_=build_launch(self.p,'fixture',self.r)
+  start=args.index('--offload-params')+1;end=args.index('--hf-overrides')
+  self.assertEqual(args[start:end],['experts','out_proj','in_proj'])
+  self.assertEqual(int(args[args.index('--kv-cache-memory-bytes')+1]),2**30)
  def test_runtime_drift_fails_closed(self):
   (self.r/'runtimes/bin/vllm').write_text('changed')
   with self.assertRaises(ValueError):verify(self.p,self.r)

@@ -1,5 +1,10 @@
 # Agent entry point
 
+## Bolt verified on the two-card host — October 31
+
+Bolt now offloads Mamba input projections as well as experts/output projections and caps KV cache at 1GiB per GPU. Two fresh normal-router loads on the RTX 3080 Ti/3080 passed arithmetic/JSON; near-8K retrieval and a 32-token stream also passed. All 325 CPU tests passed; resource guards and 8K context remain unchanged. [Loading fix and validation](docs/BOLT-TWO-GPU-LOADING-20261031.md).
+
+
 ## Latest: restored 64GB worker budgets applied — October 31
 
 All six MoE profiles now use 56 GiB soft / 58 GiB hard worker limits. Both GPU-resident Qwen profiles retain their explicitly uncapped RAM setting. Linux sees 61.3 GiB usable; the independent 2 GiB host-available stop and all VRAM,swap,pressure and temperature guards remain active. Contexts and other model settings are unchanged. All eight actual kernel cgroup settings and 321 CPU tests passed; no inference job was interrupted. [Policy and verification](docs/WORKER-RAM-64GB-20261031.md).

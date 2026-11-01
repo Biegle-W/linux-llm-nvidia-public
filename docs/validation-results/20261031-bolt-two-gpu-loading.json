@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-31",
+  "status": "pass",
+  "gpu_pair": [
+    "RTX 3080 Ti 12GB",
+    "RTX 3080 10GB"
+  ],
+  "context": 8192,
+  "kv_cache_bytes_per_gpu": 1073741824,
+  "offload_params": [
+    "experts",
+    "out_proj",
+    "in_proj"
+  ],
+  "worker_memory_gib": {
+    "high": 56,
+    "max": 58
+  },
+  "guards_unchanged": true,
+  "cpu_tests": 325,
+  "fresh_normal_router_loads": 2,
+  "load_seconds": [
+    224.5363302230835,
+    223.443860804
+  ],
+  "arithmetic_json_passes": 2,
+  "retrieval_input_tokens": 7373,
+  "stream": {
+    "done": true,
+    "usage": {
+      "prompt_tokens": 29,
+      "total_tokens": 61,
+      "completion_tokens": 32
+    },
+    "wall_s": 84.26869416099998
+  },
+  "gpu_telemetry": {
+    "NVIDIA GeForce RTX 3080 Ti": {
+      "min_free_mib": 5627.0,
+      "max_temperature_c": 53.0
+    },
+    "NVIDIA GeForce RTX 3080": {
+      "min_free_mib": 2708.0,
+      "max_temperature_c": 51.0
+    }
+  },
+  "guard_samples": 394,
+  "guard_violations": 0,
+  "max_full_pressure_pct": 0,
+  "max_worker_swap_bytes": 0,
+  "peak_worker_memory_gib": 49.748653411865234,
+  "min_host_available_gib": 4.8609161376953125,
+  "historical_rejections": [
+    {
+      "variant": "prior selected experts+out_proj offload",
+      "result": "CUDA OOM during expert repack on RTX 3080; requested 310 MiB with 191.69 MiB free"
+    },
+    {
+      "variant": "added in_proj offload with automatic KV cache",
+      "result": "weights loaded, API became ready, then unchanged 512MiB VRAM reserve guard stopped worker; 331 MiB free sampled on RTX 3080"
+    }
+  ],
+  "limitations": "Two bounded loads and smoke/retrieval/stream checks, not a speed benchmark or multi-hour stress test. Historical performance measurements remain dated evidence."
+}

@@ -1,5 +1,10 @@
 # Current takeover state
 
+## Bolt verified on the two-card host — October 31
+
+Bolt now offloads Mamba input projections as well as experts/output projections and caps KV cache at 1GiB per GPU. Two fresh normal-router loads on the RTX 3080 Ti/3080 passed arithmetic/JSON; near-8K retrieval and a 32-token stream also passed. All 325 CPU tests passed; resource guards and 8K context remain unchanged. [Loading fix and validation](BOLT-TWO-GPU-LOADING-20261031.md).
+
+
 ## Two-card host after auxiliary GPU removal — October 31
 
 The auxiliary RTX 3060 has been physically removed. The selected inference pair remains GPU 0 RTX 3080 Ti and GPU 1 RTX 3080. Unsloth startup accepts the verified main pair with or without the former auxiliary card; missing or reordered main GPUs still fail closed. Bolt resource telemetry accepts two cards, retaining host RAM, temperature, VRAM, swap and pressure guards; an optional third card remains guarded when present. Contexts, caches and worker budgets are unchanged. CPU regression tests and live two-card telemetry were checked; model loads were not repeated for this compatibility fix.
