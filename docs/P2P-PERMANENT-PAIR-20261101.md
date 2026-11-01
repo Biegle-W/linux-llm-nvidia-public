@@ -11,3 +11,9 @@ After early-unlock health and ACS succeed, a root-owned boot checker runs the bo
 All 356 CPU tests passed in 2.957 seconds, including two-card discovery, shifted addresses, duplicate/missing-card refusal, early-hook execution without a 3060, stale proof and proof ownership checks. These are preparation tests, not post-reboot hardware proof. No model or full-context benchmark was run.
 
 Administrator staging retains root-owned preimages of the changed integration files and boot image, rebuilds the current kernel's initramfs and requires successful next-boot health. It never reloads the live display driver or reboots automatically. Actual peer correctness must be confirmed after the user-controlled reboot; until then the repair is pending activation.
+
+## Post-reboot result
+
+**PASS after the November 1 reboot.** The early hook selected only the discovered RTX 3080 Ti and RTX 3080. GPU unlock health is VERIFIED. The scoped ACS service applied its policy and completed the seeded 16 MiB remote-read/write check with three patterns in both directions. Each direction passed correctness and measured 13.082 GB/s peer-copy throughput. NVIDIA reports peer reads and writes OK for both directions.
+
+The root-owned proof is mode 0644 and matches the current boot and loaded NVIDIA module. Running the same proof gate used by the maintained workers succeeded. No model was loaded, no full-context test ran, and both worker services remained inactive. This verifies hardware peer access and boot persistence; it does not claim that every engine selected a particular collective or establish new model-speed results.

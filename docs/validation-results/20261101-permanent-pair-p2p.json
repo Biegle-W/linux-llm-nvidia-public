@@ -1,0 +1,27 @@
+{
+  "date": "2026-11-01",
+  "hardware": [
+    "RTX 3080 Ti",
+    "RTX 3080"
+  ],
+  "rtx3060": "permanently removed",
+  "post_reboot": true,
+  "unlock_health": "VERIFIED",
+  "acs_service": "active",
+  "seeded_peer_read_write": {
+    "directions": 2,
+    "patterns_per_direction": 3,
+    "bytes": 16777216,
+    "passed": true,
+    "copy_gb_s": [
+      13.082,
+      13.082
+    ]
+  },
+  "nvidia_peer_read_write": "OK both directions",
+  "root_owned_current_boot_model_gate": "pass",
+  "model_workers": "inactive",
+  "full_context_tests": false,
+  "cpu_tests": 356,
+  "scope": "Hardware correctness and boot persistence; no new model speed or engine-collective verification."
+}

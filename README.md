@@ -2,7 +2,7 @@
 
 ## Permanent GPU pair — November 1
 
-The 3060 is permanently removed. Pair-only boot repair and current-boot peer correctness gating are prepared; administrator installation and reboot activation must be verified before claiming working P2P. [Status and safeguards](docs/P2P-PERMANENT-PAIR-20261101.md).
+The 3060 is permanently removed. Pair-only boot repair is verified after reboot: seeded peer reads/writes passed both directions at 13.082 GB/s, unlock health is VERIFIED, and the current-boot model startup gate passes. [Status and safeguards](docs/P2P-PERMANENT-PAIR-20261101.md).
 
 ## NVIDIA models and DSH — November 1
 

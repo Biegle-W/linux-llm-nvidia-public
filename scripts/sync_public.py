@@ -6,6 +6,7 @@ import re
 import subprocess
 
 FILES = (
+    'docs/validation-results/20261101-permanent-pair-p2p.json',
     'docs/P2P-PERMANENT-PAIR-20261101.md',
     'scripts/boot_peer_verify.py',
     'scripts/pair_p2p_health.py',

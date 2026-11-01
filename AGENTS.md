@@ -2,7 +2,7 @@
 
 ## Current hardware — November 1, 2026
 
-The RTX 3060 is permanently removed. Maintain only the RTX 3080 Ti / RTX 3080 pair. Early unlock and scoped switch ACS routing must not require the removed card. Before any maintained model starts, require a root-owned current-boot seeded bidirectional peer-read/write proof. A configuration flag alone does not establish working P2P. Preserve resource guards and running jobs; no full-context tests are authorized by this hardware repair.
+The RTX 3060 is permanently removed. Maintain only the RTX 3080 Ti / RTX 3080 pair. The November 1 reboot verified pair-only early unlock, scoped ACS and seeded bidirectional P2P correctness at 13.082 GB/s each way. The current-boot proof gate passes. Early unlock and scoped switch ACS routing must not require the removed card. Before any maintained model starts, require a root-owned current-boot seeded bidirectional peer-read/write proof. A configuration flag alone does not establish working P2P. Preserve resource guards and running jobs; no full-context tests are authorized by this hardware repair.
 
 ## NVIDIA models and DSH — November 1
 
