@@ -2226,7 +2226,6 @@
           0,
           1
         ],
-        "auxiliary_gpu_index": 2,
         "experts": 6,
         "cpu_store_decimal_gb": 36,
         "internal_gpu_reserve_mib": 768,
@@ -2414,5 +2413,14 @@
   "host_reclaim_policy": {
     "vm_swappiness": 60,
     "scope": "User-directed unchanged host swappiness60; worker unlimited swap occupancy with active churn protection."
+  },
+  "hardware": {
+    "main_gpu_models": [
+      "NVIDIA GeForce RTX 3080 Ti",
+      "NVIDIA GeForce RTX 3080"
+    ],
+    "auxiliary_gpu_present": false,
+    "rtx_3060": "permanently removed",
+    "updated": "2026-11-01"
   }
 }

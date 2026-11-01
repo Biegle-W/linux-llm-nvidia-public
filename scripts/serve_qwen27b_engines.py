@@ -49,6 +49,8 @@ def preflight(profile):
             or (base / 'memory.high').read_text().strip() != expected_high):
         sys.exit('Use scripts/start_model.sh qwen27b [hyperqwen|sglang].')
     verify_storage(profile)
+    from pair_p2p_health import require_verified_pair
+    require_verified_pair()
     if not KEY.is_file() or KEY.stat().st_mode & 0o077:
         sys.exit('The local API-key file must exist and be readable only by its owner.')
     if not KEY.read_text().strip():
@@ -93,7 +95,7 @@ def main():
                PYTORCH_CUDA_ALLOC_CONF='expandable_segments:False',
                SGLANG_ENABLE_TP_MEMORY_INBALANCE_CHECK='1',
                CC='gcc-13', CXX='g++-13')
-    # Main inference stays on the 3080 pair; the 3060 is reserved for auxiliary work.
+    # Main inference uses the permanent RTX 3080 Ti / RTX 3080 pair.
     env.update(profile.get('environment') or {})
     env['PATH'] = str(cuda / 'bin') + ':' + env['PATH']
     if engine == 'sglang':

@@ -9,6 +9,11 @@ import serve_router_moe as supervisor
 import supervise_dense as dense_supervisor
 
 class HostRamReserve(unittest.TestCase):
+    def setUp(self):
+        from unittest.mock import patch
+        proof=patch('pair_p2p_health.require_verified_pair', return_value={'passed':True})
+        proof.start();self.addCleanup(proof.stop)
+
     def test_all_maintained_profiles_select_two(self):
         profiles=load_catalog()['profiles'];self.assertTrue(profiles)
         for p in profiles:

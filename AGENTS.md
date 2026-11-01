@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Current hardware — November 1, 2026
+
+The RTX 3060 is permanently removed. Maintain only the RTX 3080 Ti / RTX 3080 pair. Early unlock and scoped switch ACS routing must not require the removed card. Before any maintained model starts, require a root-owned current-boot seeded bidirectional peer-read/write proof. A configuration flag alone does not establish working P2P. Preserve resource guards and running jobs; no full-context tests are authorized by this hardware repair.
+
 ## NVIDIA models and DSH — November 1
 
 Super is configured at 64K from calculated KV/RAM/VRAM capacity and passed guarded short math plus a real DSH read tool/result check and unload. All nine maintained models share NVIDIA Server Router; no new full-context quality claim is made. [Setup and scope](docs/NEMOTRON-CONTEXT-20261101.md).

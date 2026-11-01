@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Permanent GPU pair — November 1
+
+The 3060 is permanently removed. Pair-only boot repair and current-boot peer correctness gating are prepared; administrator installation and reboot activation must be verified before claiming working P2P. [Status and safeguards](P2P-PERMANENT-PAIR-20261101.md).
+
 ## NVIDIA models and DSH — November 1
 
 Super is configured at 64K from calculated KV/RAM/VRAM capacity and passed guarded short math plus a real DSH read tool/result check and unload. All nine maintained models share NVIDIA Server Router; no new full-context quality claim is made. [Setup and scope](NEMOTRON-CONTEXT-20261101.md).

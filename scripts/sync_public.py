@@ -6,6 +6,11 @@ import re
 import subprocess
 
 FILES = (
+    'docs/P2P-PERMANENT-PAIR-20261101.md',
+    'scripts/boot_peer_verify.py',
+    'scripts/pair_p2p_health.py',
+    'scripts/verify_pair_p2p.cu',
+    'tests/test_pair_p2p_health.py',
     'config/super-offload-runtime.json',
     'docs/CONTEXT-VALIDATION-POLICY-20261101.md',
     'docs/DSH-ROUTER-CLEANUP-20261101.md',

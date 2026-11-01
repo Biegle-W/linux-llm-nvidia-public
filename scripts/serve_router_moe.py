@@ -20,6 +20,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     os.umask(0o077)
+    from pair_p2p_health import require_verified_pair
+    require_verified_pair()
     if sys.argv[1] == 'super-vllm':
         from supervise_super import main as super_main
         return super_main()

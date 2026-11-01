@@ -11,6 +11,11 @@ import serve_router_moe as supervisor
 
 
 class MoeSupervisor(unittest.TestCase):
+    def setUp(self):
+        from unittest.mock import patch
+        proof=patch('pair_p2p_health.require_verified_pair', return_value={'passed':True})
+        proof.start();self.addCleanup(proof.stop)
+
     def test_maya_monitor_keeps_owned_cgroup_separate_from_runtime_path(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

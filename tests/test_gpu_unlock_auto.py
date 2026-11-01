@@ -22,6 +22,21 @@ class AutoUnlock(unittest.TestCase):
    with tempfile.TemporaryDirectory() as d:
     base=Path(d);self.setup_tree(base);(base/'0000:1c:00.0/device').write_text(model)
     with self.assertRaises(ValueError):health.resolve_config(self.config(),base)
+ def test_permanent_pair_without_3060(self):
+  with tempfile.TemporaryDirectory() as d:
+   base=Path(d);self.setup_tree(base,4)
+   import shutil
+   shutil.rmtree(base/'0000:1c:00.0')
+   c=self.config();c['approved_device_ids']=['0x2206','0x2208']
+   self.assertEqual(len(health.resolve_config(c,base)['targets']),2)
+   (base/'0000:0e:00.0/device').write_text('0xffff')
+   with self.assertRaises(ValueError):health.resolve_config(c,base)
+ def test_pair_rejects_duplicate(self):
+  with tempfile.TemporaryDirectory() as d:
+   base=Path(d);self.setup_tree(base)
+   c=self.config();c['approved_device_ids']=['0x2206','0x2208']
+   (base/'0000:1c:00.0/device').write_text('0x2206')
+   with self.assertRaises(ValueError):health.resolve_config(c,base)
  def test_auto_fingerprint_ignores_bus_renumbering(self):
   from unittest.mock import patch
   c=self.config();c.update(grub_dropin='/tmp/nonexistent-grub',dracut_dropin='/tmp/nonexistent-dracut',auto_hook='/tmp/no-hook',auto_module_setup='/tmp/no-setup')
@@ -29,6 +44,13 @@ class AutoUnlock(unittest.TestCase):
    self.setup_tree(Path(a),0);self.setup_tree(Path(b),4)
    with patch.object(health,'run',return_value='/tmp/no-module'):
     self.assertEqual(health.fingerprint(health.resolve_config(c,Path(a)),'test',[]),health.fingerprint(health.resolve_config(c,Path(b)),'test',[]))
+ def test_hook_without_removed_3060(self):
+  from unittest.mock import patch
+  import shutil
+  original=self.setup_tree
+  def pair(base,shift=0):
+   original(base,shift);shutil.rmtree(base/'0000:1c:00.0')
+  with patch.object(self,'setup_tree',side_effect=pair):self.test_hook_passes_current_addresses_before_driver()
  def test_hook_passes_current_addresses_before_driver(self):
   with tempfile.TemporaryDirectory() as d:
    p=Path(d);base=p/'pci';base.mkdir();self.setup_tree(base,3)
@@ -39,6 +61,6 @@ class AutoUnlock(unittest.TestCase):
    hook=p/'hook.sh';hook.write_text(text)
    subprocess.run(['/bin/sh',str(hook)],env=dict(os.environ,PATH=str(bin)+':'+os.environ['PATH'],TEST_CAPTURE=str(capture)),check=True,capture_output=True)
    self.assertEqual(capture.read_text().splitlines()[0],'gpu_unlock')
-   args=capture.read_text();self.assertIn('0000:0d:00.0',args);self.assertIn('0000:15:00.0',args);self.assertIn('0000:1c:00.0',args)
+   args=capture.read_text();self.assertIn('0000:0d:00.0',args);self.assertIn('0000:15:00.0',args);self.assertNotIn('0000:1c:00.0',args)
    opts=(run/'modprobe.d/local-llm-dynamic-bar1.conf').read_text();self.assertIn('RMForceStaticBar1=0',opts);self.assertNotIn('pci=0000:1c:00.0',opts)
 if __name__=='__main__':unittest.main()

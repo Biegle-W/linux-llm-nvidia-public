@@ -188,9 +188,9 @@ def fingerprint(config, kernel, packages):
 def resolve_config(config, base=Path('/sys/bus/pci/devices')):
     if config.get('selection_mode') != 'boot-model-ids':
         return config
-    approved = {'0x2206', '0x2208', '0x2503'}
-    if set(config.get('approved_device_ids', [])) != approved:
-        raise ValueError('Auto selection must retain exactly the approved three models')
+    approved = set(config.get('approved_device_ids', []))
+    if approved not in ({'0x2206', '0x2208'}, {'0x2206', '0x2208', '0x2503'}):
+        raise ValueError('Auto selection requires the approved GA102 pair, optionally with the historical 3060')
     found = []
     for device in sorted(base.glob('*')):
         if (device / 'vendor').read_text().strip() != '0x10de':
@@ -202,7 +202,7 @@ def resolve_config(config, base=Path('/sys/bus/pci/devices')):
             if not BDF.fullmatch(device.name):
                 raise ValueError('Invalid discovered GPU address')
             found.append({'bdf': device.name, 'vendor': '0x10de', 'device': model})
-    if len(found) != 3 or {x['device'] for x in found} != approved:
+    if len(found) != len(approved) or {x['device'] for x in found} != approved:
         raise ValueError('Expected exactly one GPU of each approved model')
     return dict(config, targets=found)
 

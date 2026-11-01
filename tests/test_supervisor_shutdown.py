@@ -13,6 +13,11 @@ import serve_router_moe
 
 
 class ShutdownTest(unittest.TestCase):
+    def setUp(self):
+        from unittest.mock import patch
+        proof=patch('pair_p2p_health.require_verified_pair', return_value={'passed':True})
+        proof.start();self.addCleanup(proof.stop)
+
     def exercise(self, module, intentional):
         dense = module is supervise_dense
         with tempfile.TemporaryDirectory() as directory:
