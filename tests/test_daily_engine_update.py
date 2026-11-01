@@ -353,3 +353,12 @@ class CatalogCoverageTests(unittest.TestCase):
         validate_update_coverage(json.loads((root/'config/maintained-profiles.json').read_text()),json.loads((root/'config/daily-update.json').read_text()))
 
 if __name__=='__main__':unittest.main()
+
+class ShortHarnessPolicy(unittest.TestCase):
+    def test_long_gpu_qualification_requires_explicit_opt_in(self):
+        from types import SimpleNamespace
+        from daily_engine_update import validate_qualification_policy
+        policy={'validation':{'full_context_stress_requires_explicit_user_request':True}}
+        with self.assertRaises(RuntimeError):validate_qualification_policy(SimpleNamespace(recover_only=False,check_only=False,allow_full_context_tests=False),policy)
+        for recover,check,allow in [(True,False,False),(False,True,False),(False,False,True)]:
+            validate_qualification_policy(SimpleNamespace(recover_only=recover,check_only=check,allow_full_context_tests=allow),policy)

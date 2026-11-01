@@ -29,9 +29,9 @@
         "qwen27b",
         "hyperqwen"
       ],
-      "allocated_context": 56320,
+      "allocated_context": 20480,
       "tested_retrieval_input": 50627,
-      "context_validation": "Context expansion passed three-marker retrieval at 50627 input tokens plus JSON/arithmetic and resource checks; see dated context report.",
+      "context_validation": "Calculated 20,480-token context with 256 MiB KV per rank and no optional MTP draft. Short actual DSH search passed and worker unloaded; full-context quality and current decode speed not retested.",
       "benchmark_context": 32768,
       "benchmark": {
         "short_decode_tps": 112.06417287975118,
@@ -54,9 +54,9 @@
         "--gpu-memory-utilization",
         "0.76",
         "--kv-cache-memory-bytes",
-        "738197504",
+        "268435456",
         "--max-model-len",
-        "56320",
+        "20480",
         "--max-num-seqs",
         "1",
         "--max-num-batched-tokens",
@@ -75,8 +75,6 @@
         "--no-enable-prefix-caching",
         "--default-chat-template-kwargs",
         "{\"enable_thinking\":false}",
-        "--speculative-config",
-        "{\"method\": \"mtp\", \"num_speculative_tokens\": 3, \"draft_sample_method\": \"probabilistic\"}",
         "--compilation-config",
         "{\"max_cudagraph_capture_size\": 4, \"custom_ops\": [\"+rms_norm\", \"+silu_and_mul\"]}",
         "--enable-auto-tool-choice",
@@ -88,9 +86,6 @@
         "VLLM_USE_FLASHINFER_SAMPLER": "0",
         "VLLM_EMBED_UVA": "0",
         "VLLM_LOCAL_DFLASH_META_SHARE": "0",
-        "MTP_DRAFT_VOCAB": "1",
-        "VLLM_SPEC_DECODE_ATTN": "1",
-        "VLLM_SPEC_DECODE_ATTN_QMAX": "4",
         "VLLM_MARLIN_INPUT_DTYPE": "int8",
         "VLLM_MARLIN_INT8_INCLUDE_RE": "mlp",
         "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp",
@@ -218,9 +213,8 @@
         }
       ],
       "current_configuration_benchmark": {
-        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
-        "date": "2026-10-31",
-        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
+        "status": "Not benchmarked after disabling optional MTP; historical speculative decoding speeds remain dated.",
+        "date": "2026-11-01"
       },
       "p2p_optimization": {
         "date": "2026-10-31",
@@ -252,6 +246,39 @@
         },
         "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
         "normal_fresh_loads_verified": 2
+      },
+      "startup_gpu_free_mib": [
+        9728,
+        8960
+      ],
+      "desktop_memory_adjustment": {
+        "date": "2026-11-01",
+        "previous_context": 56320,
+        "previous_kv_mib": 704,
+        "kv_mib": 256,
+        "calculated_kv_bytes_per_token": 13107.2,
+        "historical_gpu_peak_used_mib": [
+          9478,
+          8841
+        ],
+        "estimated_peak_reduction_mib": 448,
+        "minimum_free_before_load_mib": [
+          9728,
+          8960
+        ],
+        "gpu_reserve_mib": 512,
+        "scope": "Calculated capacity; no full-context stress test.",
+        "reason": "Main model loaded at 7.21 GiB; OOM occurred specifically in optional MTP draft weight repacking. Disable draft to fit desktop and reserves without CPU weight offload.",
+        "speculative_draft_enabled": false,
+        "engine_kv_capacity_tokens": 24094
+      },
+      "actual_dsh_search_smoke": {
+        "date": "2026-11-01",
+        "result": "pass",
+        "source_url_returned": true,
+        "unloaded": true,
+        "full_context_stress": false,
+        "evidence": "docs/DSH-ROUTER-CLEANUP-20261101.md"
       }
     },
     {
@@ -2159,6 +2186,18 @@
         "resources_passed": true,
         "dsh_context_window": 65536,
         "dsh_max_output_tokens": 4096
+      },
+      "actual_dsh_short_tool_smoke": {
+        "date": "2026-11-01",
+        "result": "pass",
+        "actual_harness": true,
+        "tool": "read",
+        "tool_results_completed": 1,
+        "unloaded": true,
+        "assistant_followup_required": false,
+        "output_cap": 128,
+        "full_context_stress": false,
+        "observed_wall_s": 134.66455235500325
       }
     },
     {
@@ -2224,6 +2263,152 @@
         "context": 32768,
         "status": "single-stream observation; not a matched speed comparison"
       }
+    },
+    {
+      "id": "super-vllm",
+      "model": "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B",
+      "weight_quant": "W4A16-Merlin",
+      "engine": "vLLM-offload",
+      "status": "selected",
+      "launch": [
+        "super"
+      ],
+      "allocated_context": 65536,
+      "tested_retrieval_input": 58985,
+      "context_validation": "65536 configured below engine-calculated 81477-token KV capacity with 384 MiB BF16 KV per GPU; guarded load, arithmetic/JSON and short actual DSH read tool/result/unload passed. No new full-context stress qualification.",
+      "evidence": "docs/NEMOTRON-CONTEXT-20261101.md",
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/nemotron-super-int4",
+        "file_transports": {
+          "model-00001-of-00063.safetensors": "sata",
+          "model-00002-of-00063.safetensors": "sata",
+          "model-00003-of-00063.safetensors": "sata",
+          "model-00004-of-00063.safetensors": "sata",
+          "model-00005-of-00063.safetensors": "sata",
+          "model-00006-of-00063.safetensors": "sata",
+          "model-00007-of-00063.safetensors": "sata",
+          "model-00008-of-00063.safetensors": "sata",
+          "model-00009-of-00063.safetensors": "sata",
+          "model-00010-of-00063.safetensors": "sata",
+          "model-00011-of-00063.safetensors": "sata",
+          "model-00012-of-00063.safetensors": "sata",
+          "model-00013-of-00063.safetensors": "sata",
+          "model-00014-of-00063.safetensors": "sata",
+          "model-00015-of-00063.safetensors": "sata",
+          "model-00016-of-00063.safetensors": "sata",
+          "model-00017-of-00063.safetensors": "sata",
+          "model-00018-of-00063.safetensors": "sata",
+          "model-00019-of-00063.safetensors": "sata",
+          "model-00021-of-00063.safetensors": "sata",
+          "model-00020-of-00063.safetensors": "sata",
+          "model-00023-of-00063.safetensors": "sata",
+          "model-00022-of-00063.safetensors": "sata",
+          "model-00024-of-00063.safetensors": "sata",
+          "model-00025-of-00063.safetensors": "sata",
+          "model-00026-of-00063.safetensors": "sata",
+          "model-00027-of-00063.safetensors": "sata",
+          "model-00028-of-00063.safetensors": "sata",
+          "model-00029-of-00063.safetensors": "sata",
+          "model-00030-of-00063.safetensors": "sata",
+          "model-00031-of-00063.safetensors": "sata",
+          "model-00032-of-00063.safetensors": "sata",
+          "model-00033-of-00063.safetensors": "sata",
+          "model-00034-of-00063.safetensors": "sata",
+          "model-00035-of-00063.safetensors": "sata",
+          "model-00036-of-00063.safetensors": "sata",
+          "model-00037-of-00063.safetensors": "sata",
+          "model-00038-of-00063.safetensors": "sata",
+          "model-00039-of-00063.safetensors": "sata",
+          "model-00040-of-00063.safetensors": "sata",
+          "model-00041-of-00063.safetensors": "sata",
+          "model-00042-of-00063.safetensors": "sata",
+          "model-00043-of-00063.safetensors": "sata",
+          "model-00045-of-00063.safetensors": "sata",
+          "model-00044-of-00063.safetensors": "sata",
+          "model-00046-of-00063.safetensors": "sata",
+          "model-00047-of-00063.safetensors": "sata",
+          "model-00048-of-00063.safetensors": "sata",
+          "model-00049-of-00063.safetensors": "sata",
+          "model-00051-of-00063.safetensors": "sata",
+          "model-00050-of-00063.safetensors": "sata",
+          "model-00052-of-00063.safetensors": "sata",
+          "model-00053-of-00063.safetensors": "sata",
+          "model-00054-of-00063.safetensors": "sata",
+          "model-00055-of-00063.safetensors": "sata",
+          "model-00056-of-00063.safetensors": "sata",
+          "model-00057-of-00063.safetensors": "sata",
+          "model-00058-of-00063.safetensors": "sata",
+          "model-00059-of-00063.safetensors": "sata",
+          "model-00060-of-00063.safetensors": "sata",
+          "model-00062-of-00063.safetensors": "sata",
+          "model-00063-of-00063.safetensors": "sata",
+          "model-summary-idxs.safetensors": "sata",
+          "model-00061-of-00063.safetensors": "sata"
+        },
+        "processed_backing_directory": "data/super-processed-offload",
+        "processed_backing_transport": "nvme"
+      },
+      "worker_memory_gib": {
+        "high": 56,
+        "max": 58,
+        "swap": null
+      },
+      "host_ram_reserve_gib": 2,
+      "capabilities": {
+        "text": true,
+        "vision": false,
+        "tools_qualified": true
+      },
+      "runtime_manifest": "config/super-offload-runtime.json",
+      "selected_settings": {
+        "kv_cache_mib_per_gpu": 384,
+        "prefill_batch_tokens": 256,
+        "resident_expert_layers": "6,1",
+        "cpu_input_projection_counts": "12,20",
+        "gpu_output_projection_counts": "0,40",
+        "file_backing_mib_per_rank": 2048,
+        "swap_write_mib_s": 64,
+        "swap_combined_mib_s": 96,
+        "swap_window_s": 30,
+        "pressure_pct": 10
+      },
+      "latest_qualification": {
+        "date": "2026-11-01",
+        "context": 65536,
+        "mode": "memory-estimate-and-short-harness-tool",
+        "calculated_kv_tokens": 81477,
+        "normal_router_short_math": "pass",
+        "actual_dsh_read_tool": "pass",
+        "tool_result": "pass",
+        "unload": "pass",
+        "full_context_stress": "not run under current policy",
+        "evidence": "docs/NEMOTRON-CONTEXT-20261101.md"
+      },
+      "qualification_history": [
+        {
+          "scope": "historical isolated32/64 full suite; later normal long test cancelled",
+          "data": {
+            "date": "2026-11-01",
+            "context": 65536,
+            "retrieval_input_tokens": 58985,
+            "checks": {
+              "arithmetic": true,
+              "json": true,
+              "near_window": true,
+              "sustained_stream": true,
+              "auto_tool_call": true,
+              "tool_roundtrip": true,
+              "streamed_tool_call": true
+            },
+            "fresh_loads": 1,
+            "normal_router_verification": "pending",
+            "resources_passed": true,
+            "evidence": "docs/NEMOTRON-CONTEXT-20261101.md"
+          }
+        }
+      ]
     }
   ],
   "host_reclaim_policy": {

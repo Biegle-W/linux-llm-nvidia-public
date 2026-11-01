@@ -1,5 +1,9 @@
 # NVIDIA daily engine updates
 
+## Paused — November 1, 2026
+
+The daily-update timer is disabled and inactive. Resume only on an explicit request. The existing recovery safeguards remain installed; the historical run results below are unchanged.
+
 ## 2026-11-01T04:35:57
 
 - hyperqwen: **rejected-revision-not-retried**; upstream `f382342d7496`.

@@ -67,8 +67,11 @@ def preflight(profile):
     inventory = subprocess.check_output([
         'nvidia-smi', '--query-gpu=name,memory.free', '--format=csv,noheader,nounits'], text=True)
     cards = list(csv.reader(inventory.splitlines()))
-    requirements = [('NVIDIA GeForce RTX 3080 Ti', 10240),
-                    ('NVIDIA GeForce RTX 3080', 9728)]
+    minimum_free = profile.get('startup_gpu_free_mib', [10240, 9728])
+    if len(minimum_free) != 2 or any(not isinstance(v, int) or v < 512 for v in minimum_free):
+        sys.exit('Invalid calculated startup GPU memory budget.')
+    requirements = list(zip(['NVIDIA GeForce RTX 3080 Ti',
+                             'NVIDIA GeForce RTX 3080'], minimum_free))
     if len(cards) < 2:
         sys.exit('Both qualified NVIDIA cards are required.')
     for index, (name, minimum) in enumerate(requirements):

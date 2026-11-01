@@ -1,5 +1,14 @@
 # Agent entry point
 
+## NVIDIA models and DSH — November 1
+
+Super is configured at 64K from calculated KV/RAM/VRAM capacity and passed guarded short math plus a real DSH read tool/result check and unload. All nine maintained models share NVIDIA Server Router; no new full-context quality claim is made. [Setup and scope](docs/NEMOTRON-CONTEXT-20261101.md).
+
+## Current validation policy — November 1, 2026
+
+Calculate context limits from engine KV capacity and available RAM/VRAM while preserving all resource guards. Default verification is a short actual DSH tool-call round trip followed by owned unload. Do not run full-context retrieval, sustained stress, repeated reload or timed idle-validation suites unless the user explicitly requests them. Historical long-context results remain dated evidence; calculated limits must not be described as newly stress-qualified. Daily updates remain paused until the user asks to resume.
+
+
 ## Bolt 64K context qualified — November 1
 
 Bolt is selected at 64K after two fresh normal-router loads, arithmetic/JSON, 58,893-input-token retrieval and streaming. The 1GiB KV pool, precision and resource guards remain intact. Live DSH advertises 65,536 context / 4,096 output; custom entries are preserved and omitted client thinking defaults off. Actual DSH marker retrieval passed at 33,517 measured input tokens after selecting the supported native sampler; the answer included extra analysis text. All 333 CPU regressions passed. [Results and DSH scope](docs/BOLT-CONTEXT-20261101.md).

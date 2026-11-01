@@ -142,7 +142,7 @@ class RouterTest(unittest.TestCase):
                 self.assertEqual(json.loads(raw)['output'][0]['type'], 'message')
         search.assert_not_called()
 
-    def test_search_alias_requires_responses_before_worker_acquisition(self):
+    def test_search_alias_rejects_empty_chat_before_worker_acquisition(self):
         with patch.object(self.server.workers, 'acquire') as acquire:
             status, _ = self.request('/v1/chat/completions', {'model': 'qwen27b-hyperqwen-search', 'messages': []})
         self.assertEqual(status, 400)

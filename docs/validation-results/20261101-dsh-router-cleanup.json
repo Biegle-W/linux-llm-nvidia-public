@@ -1,0 +1,46 @@
+{
+  "date": "2026-11-01",
+  "provider": "NVIDIA Server Router",
+  "provider_id": "nvidia-strata",
+  "models": 9,
+  "output_cap": 4096,
+  "api": "openai-completions",
+  "chat_search_alias_supported": true,
+  "responses_search_preserved": true,
+  "provider_selection_migration": "pass",
+  "cpu_regressions": 350,
+  "nvidia_tools": {
+    "super-vllm": {
+      "result": "pass",
+      "actual_harness": true,
+      "tool": "read",
+      "tool_results_completed": 1,
+      "unloaded": true,
+      "assistant_followup_required": false,
+      "output_cap": 128,
+      "full_context_stress": false,
+      "observed_wall_s": 426.24165749549866
+    },
+    "bolt-vllm": {
+      "result": "pass",
+      "actual_harness": true,
+      "tool": "read",
+      "tool_results_completed": 1,
+      "unloaded": true,
+      "assistant_followup_required": false,
+      "output_cap": 128,
+      "full_context_stress": false,
+      "observed_wall_s": 134.66455235500325
+    }
+  },
+  "hyperqwen_search": {
+    "phase": "pass",
+    "wall_s": null,
+    "source_url_returned": true,
+    "search_answer_returned": true,
+    "unloaded": true,
+    "output_cap": 512,
+    "output_capped": true,
+    "scope": "Search transport and source URL only; no completeness or factual-quality claim."
+  }
+}

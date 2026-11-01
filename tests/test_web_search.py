@@ -17,6 +17,15 @@ ROWS = [{'url': 'https://science.nasa.gov/mars/facts/', 'title': 'Mars facts',
 
 
 class SearchTests(unittest.TestCase):
+    def test_chat_search_uses_human_question_before_dsh_runtime_snapshot(self):
+        messages=[{'role':'user','content':'Mars red iron oxide NASA'},
+                  {'role':'user','content':'Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent working directory: private-path'}]
+        self.assertEqual(ws.chat_plan({'messages':messages})['query'],'Mars red iron oxide NASA')
+        self.assertEqual(len(messages),2)
+
+    def test_chat_title_generation_does_not_search(self):
+        self.assertIsNone(ws.chat_plan({'messages':[{'role':'user','content':'Generate the session title from this JSON array of human messages:\n[]'}]}))
+
     def body(self, **kw):
         return dict({'model': 'qwen27b-hyperqwen', 'input': 'NASA Mars red',
                      'tools': [{'type': 'web_search'}]}, **kw)
@@ -251,6 +260,25 @@ class SearchHTTPTests(unittest.TestCase):
     def body(self, **kw):
         return dict({'model': 'qwen27b-hyperqwen', 'input': 'NASA Mars red',
                      'tools': [{'type': 'web_search_preview'}], 'include': ['web_search_call.action.sources']}, **kw)
+
+    def test_chat_search_alias_stream_and_tools_keep_chat_contract(self):
+        fixture=test_router.RouterTest()
+        tools=[{'type':'function','function':{'name':'read_file','parameters':{'type':'object'}}}]
+        for stream in [False,True]:
+            with self.subTest(stream=stream),patch.object(ws,'search',return_value=ROWS) as search:
+                status,raw=fixture.request('/v1/chat/completions',{'model':'qwen27b-hyperqwen-search','messages':[{'role':'system','content':'Preserve instructions.'},{'role':'user','content':'Why is Mars red?'}],'tools':tools,'stream':stream,'max_tokens':64})
+            self.assertEqual(status,200);search.assert_called_once_with('Why is Mars red?',[],5)
+            body=test_router.RouterTest.backend.body;self.assertEqual(body['tools'],tools);self.assertEqual(body['max_tokens'],64);self.assertIn('Preserve instructions.',body['messages'][0]['content']);self.assertIn('UNTRUSTED',body['messages'][0]['content']);self.assertIn(ROWS[0]['url'],body['messages'][0]['content']);self.assertEqual(test_router.RouterTest.backend.path,'/v1/chat/completions')
+            if stream:self.assertIn(b'[DONE]',raw);self.assertIn(b'tool_calls',raw)
+            else:self.assertEqual(json.loads(raw)['model'],'qwen27b-hyperqwen-search')
+
+    def test_chat_search_opt_out_and_failure(self):
+        fixture=test_router.RouterTest();body={'model':'qwen27b-hyperqwen-search','messages':[{'role':'user','content':'Mars'}],'tool_choice':'none'}
+        with patch.object(ws,'search') as search:status,raw=fixture.request('/v1/chat/completions',body)
+        self.assertEqual(status,200);search.assert_not_called()
+        body.pop('tool_choice')
+        with patch.object(ws,'search',side_effect=RouterError('Search unavailable','web_search_unavailable',503)):status,raw=fixture.request('/v1/chat/completions',body)
+        self.assertEqual(status,503);self.assertEqual(json.loads(raw)['error']['code'],'web_search_unavailable')
 
     def test_nonstream_search_grounding_sources_and_citations(self):
         with patch.object(ws, 'search', return_value=ROWS) as search:

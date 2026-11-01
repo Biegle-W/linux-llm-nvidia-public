@@ -28,8 +28,10 @@ def request_model(data, path):
     if name not in profiles():
         raise RouterError('Choose an ID from GET /v1/models.', 'model_not_found', 404)
     if alias in WEB_SEARCH_ALIASES and path != '/router/select':
+        if path == '/v1/chat/completions':
+            return name, alias, data
         if path != '/v1/responses':
-            raise RouterError('The Web Search model entry requires the Responses API.', 'unsupported_endpoint', 400)
+            raise RouterError('The Web Search model entry requires Chat Completions or Responses.', 'unsupported_endpoint', 400)
         tools = data.get('tools', [])
         if not isinstance(tools, list):
             raise RouterError('tools must be an array.', 'bad_request', 400)
@@ -199,6 +201,8 @@ class Handler(BaseHTTPRequestHandler):
             if 'stream' in data and not isinstance(data['stream'], bool):
                 raise RouterError('stream must be a boolean.', 'bad_request', 400)
             search_options = web_search.plan(data) if path == '/v1/responses' else None
+            if path == '/v1/chat/completions' and alias in WEB_SEARCH_ALIASES:
+                search_options = web_search.chat_plan(data)
             if search_options and search_options.get('disabled'):
                 data = web_search.strip_tools(data)
                 search_options = None
@@ -231,6 +235,9 @@ class Handler(BaseHTTPRequestHandler):
         return self.proxy().open(path, data)
 
     def forward(self, name, path, data, search_options=None):
+        if search_options and search_options.get('protocol') == 'chat':
+            data = web_search.prepare_chat(data, search_options)
+            search_options = None
         if search_options:
             return self.reply(200, web_search.execute(data, name, self.proxy(), search_options))
         conn = self.open_backend(path, data)
@@ -286,6 +293,9 @@ class Handler(BaseHTTPRequestHandler):
             write(b': local inference router\n\n')
             self.server.workers.acquire(name, progress)
             acquired = True
+            if search_options and search_options.get('protocol') == 'chat':
+                data = web_search.prepare_chat(data, search_options)
+                search_options = None
             if search_options:
                 web_search.execute(data, alias, self.proxy(), search_options, emit_event, progress)
                 return

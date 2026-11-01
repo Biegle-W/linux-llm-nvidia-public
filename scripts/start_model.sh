@@ -4,7 +4,7 @@ project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 model="${1:-qwen}"
 engine="${2:-hyperqwen}"
 if [[ $# -gt 2 || ( $# -gt 1 && "$model" != qwen27b ) ]]; then
-    echo 'Usage: start_model.sh qwen|qwen27b [hyperqwen|sglang]|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt' >&2
+    echo 'Usage: start_model.sh qwen|qwen27b [hyperqwen|sglang]|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt|super' >&2
     exit 2
 fi
 if [[ "$model" == qwen27b && "$engine" != hyperqwen && "$engine" != sglang ]]; then
@@ -12,8 +12,8 @@ if [[ "$model" == qwen27b && "$engine" != hyperqwen && "$engine" != sglang ]]; t
     exit 2
 fi
 case "$model" in
-    qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt) ;;
-    *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt' >&2; exit 2 ;;
+    qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt|super) ;;
+    *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt|super' >&2; exit 2 ;;
 esac
 # Normal CLI calls use router ownership; only its internal worker path runs preflight below.
 case "$model" in
@@ -24,6 +24,7 @@ case "$model" in
     qwen27b) route_model="qwen27b-$engine" ;;
     strata-unsloth) route_model="deepseek-unsloth-strata" ;;
     bolt) route_model="bolt-vllm" ;;
+    super) route_model="super-vllm" ;;
 esac
 if [[ "$model" != qwen27b || "${LOCAL_LLM_ROUTER_WORKER:-}" != 1 ]]; then
     exec /usr/bin/python3 "$project_dir/scripts/router_client.py" --model "$route_model"

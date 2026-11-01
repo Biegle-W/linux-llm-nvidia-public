@@ -1,0 +1,66 @@
+"""Short real DSH tool round trip, then owned unload. No context stress."""
+from pathlib import Path
+import argparse,json,os,time,uuid,tempfile,subprocess,urllib.request,urllib.error,shutil
+p=argparse.ArgumentParser();p.add_argument('--model',required=True);p.add_argument('--output',type=Path);a=p.parse_args();os.umask(0o077)
+R=Path(__file__).resolve().parents[1];H=R/'data/harness-smoke';O=a.output or H/(str(time.time_ns())+'-'+a.model);O.mkdir(parents=True,exist_ok=False);state={'phase':'preflight','model':a.model,'pid':os.getpid(),'started':time.time()};owned=None
+k=(R/'data/local-api-key').read_text().strip();opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
+def save():(O/'state.json').write_text(json.dumps(state,indent=2)+'\n')
+def req(path,body=None):
+ q=urllib.request.Request('http://127.0.0.1:10100'+path,data=None if body is None else json.dumps(body).encode(),headers={'Authorization':'Bearer '+k,'Content-Type':'application/json'})
+ with opener.open(q,timeout=1200) as f:return json.load(f)
+def prop(n):return subprocess.check_output(['systemctl','--user','show',('llm-test-qwen27b.service' if a.model.startswith('qwen27b-') else 'llm-router-worker.service'),'-p',n,'--value'],text=True).strip()
+def walk(x):
+ if isinstance(x,dict):
+  yield x
+  for v in x.values():yield from walk(v)
+ elif isinstance(x,list):
+  for v in x:yield from walk(v)
+save()
+try:
+ health=req('/health');assert not (R/'data/GPU-LOCK').exists();assert not any(health.get(x) for x in ['busy','inflight','queued','loading_model','idle_unloading_model']),health
+ state['phase']='selecting';save();req('/router/select',{'model':a.model});owned=prop('InvocationID');assert owned;state['invocation']=owned
+ workspace=Path(tempfile.mkdtemp(prefix='nvidia-dsh-short-'));nonce='NVIDIA_TOOL_OK_'+uuid.uuid4().hex;file=workspace/'proof.txt';file.write_text(nonce+'\n');file.chmod(0o600)
+ import yaml
+ entries=yaml.safe_load((R/'data/dsh/profiles/headless/cordis.patch.yml').read_text());provider=next(x['config']['providers']['nvidia-strata'] for x in entries if x['id']=='llm-pi-ai');m=next(x for x in provider['models'] if x['id']==a.model);provider=dict(provider,models=[dict(m,maxTokens=128)]);overlay=O/'selection.yml';overlay.write_text(yaml.safe_dump([{'id':'llm-pi-ai','config':{'providers':{'nvidia-strata':provider}}},{'id':'agent-default-model','config':{'provider':'nvidia-strata','model':a.model}}],sort_keys=False))
+ task=f'Use the read tool to read {file}. Then reply with only the exact file contents. Do not use bash or any other tools. Do not modify any files.'
+ state.update(phase='short-harness-tool',workspace=str(workspace));save();t=time.monotonic()
+ stopped_after_tool=False
+ with (O/'events.jsonl').open('w') as out,(O/'stderr.txt').open('w') as err:
+  run=subprocess.Popen([str(R/'dsh/run'),'--profile','headless','--patch',str(overlay),'--json',task],cwd=workspace,stdout=out,stderr=err)
+  deadline=time.monotonic()+600
+  while run.poll() is None:
+   observed=[]
+   for line in (O/'events.jsonl').read_text().splitlines():
+    try:observed.append(json.loads(line))
+    except ValueError:pass
+   ids={e['callId'] for e in observed if e.get('type')=='tool_call' and e.get('tool')=='read'}
+   if any(e.get('type')=='tool_result' and e.get('status')=='completed' and e.get('callId') in ids and nonce in str(e.get('result','')) for e in observed):
+    stopped_after_tool=True;run.terminate();break
+   if time.monotonic()>deadline:run.terminate();raise TimeoutError('Short harness tool call exceeded600s')
+   time.sleep(.2)
+  try:run.wait(timeout=15)
+  except subprocess.TimeoutExpired:run.kill();run.wait(timeout=10)
+
+ raw=(O/'events.jsonl').read_text();events=[]
+ for line in raw.splitlines():
+  try:events.append(json.loads(line))
+  except ValueError:pass
+ read_records=[d for e in events for d in walk(e) if any(d.get(key)=='read' for key in ['name','toolName','tool_name','tool'])]
+ calls=[e for e in events if e.get('type')=='tool_call' and e.get('tool')=='read']
+ results=[e for e in events if e.get('type')=='tool_result' and e.get('status')=='completed' and e.get('callId') in {c['callId'] for c in calls} and nonce in str(e.get('result',''))]
+ final=next((e.get('text','') for e in reversed(events) if e.get('type')=='final'),'')
+ assert run.returncode==0 or stopped_after_tool,(run.returncode,(O/'stderr.txt').read_text()[-500:]);assert calls and results,'No completed actual read tool round trip';assert prop('InvocationID')==owned
+ state.update(phase='pass',wall_s=time.monotonic()-t,structured_read_records=len(calls),completed_tool_results=len(results),assistant_reply_not_required=True,stopped_after_tool_success=stopped_after_tool,final_marker_returned=nonce in final,strict_final_format=final.strip()==nonce if final else None,event_types=sorted({str(e.get('type')) for e in events if isinstance(e,dict)}),nonce_returned=True,output_cap=128,full_context_stress=False);save()
+except BaseException as e:state.update(phase='failed',error=repr(e));save();raise
+finally:
+ if owned and prop('InvocationID')==owned:
+  deadline=time.monotonic()+90
+  while True:
+   try:
+    if prop('InvocationID')!=owned:state['unload_deferred']='Worker ownership changed; preserved';break
+    req('/router/unload',{});state['unloaded']=True;break
+   except urllib.error.HTTPError as e:
+    if e.code!=409 or time.monotonic()>deadline:state['unload_deferred']=str(e);break
+    time.sleep(2)
+   except Exception as e:state['unload_error']=repr(e);break
+ state['finished']=time.time();save()

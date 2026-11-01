@@ -350,12 +350,23 @@ class Updater:
         print(json.dumps({'results':results,'gpu_work_performed':bool(candidates and self.manager)}))
 
 
+def validate_qualification_policy(args,policy):
+    if (policy.get('validation',{}).get('full_context_stress_requires_explicit_user_request')
+            and not args.recover_only and not args.check_only
+            and not getattr(args,'allow_full_context_tests',False)):
+        raise RuntimeError('Full-context engine qualification is disabled by the short-harness policy. Use short DSH tool checks; full tests require an explicit request and --allow-full-context-tests.')
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--recover-only',action='store_true')
     parser.add_argument('--check-only',action='store_true',help='Read upstream revisions; no build, GPU use, publication or promotion')
     parser.add_argument('--manual',action='store_true',help='Permit admission outside the nightly window; still requires idle and ownership checks')
-    args = parser.parse_args(); os.umask(0o077); os.environ['GIT_TERMINAL_PROMPT']='0'
+    parser.add_argument('--allow-full-context-tests',action='store_true',help='Explicit opt-in for the legacy long qualification suite; never enabled by default')
+    args = parser.parse_args()
+    from inference_policy import load_policy
+    validate_qualification_policy(args,load_policy())
+    os.umask(0o077); os.environ['GIT_TERMINAL_PROMPT']='0'
     updater = Updater()
     def interrupted(*_): raise Interrupted('Updater interrupted; preserve or restore production')
     signal.signal(signal.SIGTERM,interrupted); signal.signal(signal.SIGINT,interrupted)

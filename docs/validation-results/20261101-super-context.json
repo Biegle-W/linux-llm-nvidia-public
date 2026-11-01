@@ -1,0 +1,110 @@
+{
+  "date": "2026-11-01",
+  "model": "NVIDIA-Nemotron-3.5-Super-VL-120B-A12B W4A16-Merlin",
+  "context": 65536,
+  "gpu_pair": [
+    "RTX3080Ti",
+    "RTX3080"
+  ],
+  "physical_ram_gb": 64,
+  "kv_cache_mib_per_gpu": 384,
+  "cpu_input_projection_counts": "12,20",
+  "gpu_output_projection_counts": "0,40",
+  "resident_expert_layers": "6,1",
+  "file_backing_mib_per_rank": 2048,
+  "weight_precision_changed": false,
+  "input_truncation_used": false,
+  "isolated_real_weight_qualification": {
+    "result": "real-full-quality-pass",
+    "load_s": 284.0642870209995,
+    "arithmetic_json": "pass",
+    "quality": {
+      "retrieval": {
+        "input_tokens": 58985,
+        "wall_s": 1138.7093921889973
+      },
+      "stream": {
+        "usage": {
+          "prompt_tokens": 35,
+          "total_tokens": 99,
+          "completion_tokens": 64
+        },
+        "wall_s": 261.12424084899976,
+        "decode_span_s": 253.087216685999
+      },
+      "tool_call": "pass",
+      "tool_roundtrip": "pass",
+      "streamed_tool_call": "pass"
+    },
+    "guard_samples": 1020,
+    "guard_violations": 0,
+    "minimum_inference_host_available_gib": 5.109737396240234,
+    "minimum_inference_gpu_free_mib": [
+      723.0,
+      942.0
+    ],
+    "maximum_inference_pressure_pct": 0.0,
+    "maximum_inference_swap_write_mib_s": 5.5977225139648175,
+    "maximum_inference_swap_combined_mib_s": 5.605681665343463,
+    "swap_policy": {
+      "write_mib_s": 32,
+      "combined_mib_s": 64,
+      "window_s": 30,
+      "pressure_pct": 10
+    },
+    "historical": true
+  },
+  "limits": {
+    "host_ram_gib": 2,
+    "gpu_free_mib": 512,
+    "temperature_c": 82,
+    "worker_high_gib": 56,
+    "worker_max_gib": 58,
+    "swap_write_mib_s": 64,
+    "swap_combined_mib_s": 96,
+    "swap_window_s": 30,
+    "active_pressure_pct": 10,
+    "loading_pressure_pct": 15,
+    "idle_s": 600,
+    "swappiness": 60
+  },
+  "normal_router": {
+    "greedy_arithmetic_json": "pass",
+    "native_temperature_06_arithmetic_json": "pass",
+    "load_s": 305.0175745020024,
+    "full_suite": "cancelled by user; not claimed as complete"
+  },
+  "actual_dsh": {
+    "result": "pass",
+    "actual_harness": true,
+    "tool": "read",
+    "tool_results_completed": 1,
+    "unloaded": true,
+    "assistant_followup_required": false,
+    "output_cap": 128,
+    "full_context_stress": false,
+    "observed_wall_s": 426.24165749549866
+  },
+  "failed_normal_router_policy32_64": {
+    "write_mib_s": 32.62885628989262,
+    "combined_mib_s": 64.98011013154041,
+    "minimum_host_available_gib": 5.31414794921875,
+    "minimum_gpu_free_mib": [
+      727,
+      995
+    ],
+    "maximum_gpu_temperature_c": 54,
+    "maximum_pressure_pct": 0.18,
+    "greedy_and_native_arithmetic": "pass",
+    "near_window": "guard_stopped"
+  },
+  "qualification_mode": "calculated-memory-capacity-and-short-actual-harness-tool",
+  "engine_calculated_kv_tokens": 81477,
+  "context_quality_scope": "65536 configured below calculated 81477-token KV capacity; no new full-context stress qualification",
+  "cpu_regressions": {
+    "passed": 350,
+    "seconds": 2.992,
+    "focused_provider_migration_tests": 2,
+    "cuda_hidden": true
+  }
+}

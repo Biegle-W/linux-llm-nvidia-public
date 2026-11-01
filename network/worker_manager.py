@@ -125,7 +125,7 @@ class Workers:
             if not recognized:
                 raise RouterError('An unexpected process owns the inference unit; nothing was stopped.', 'ownership_conflict')
             invocation = unit_property(unit, 'InvocationID')
-            if unit == MOE_UNIT and getattr(self, 'active', None) == 'bolt-vllm':
+            if unit == MOE_UNIT and getattr(self, 'active', None) in ('bolt-vllm', 'super-vllm'):
                 request = urllib.request.Request('http://127.0.0.1:10000/metrics',
                           headers={'Authorization': 'Bearer ' + self.key})
                 try:
@@ -135,10 +135,10 @@ class Workers:
                         raise ValueError('Worker telemetry too large')
                     busy = vllm_requests_busy(text)
                 except (OSError, ValueError) as error:
-                    raise RouterError('Bolt request state unavailable; active work preserved.',
+                    raise RouterError('vLLM request state unavailable; active work preserved.',
                                       'backend_state_unknown', 409) from error
                 if busy:
-                    raise RouterError('Bolt is answering or queued; unloading deferred.', 'backend_busy', 409)
+                    raise RouterError('vLLM is answering or queued; unloading deferred.', 'backend_busy', 409)
             elif unit == MOE_UNIT:
                 request = urllib.request.Request('http://127.0.0.1:10000/status',
                           headers={'Authorization': 'Bearer ' + self.key})

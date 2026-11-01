@@ -20,6 +20,9 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main():
     os.umask(0o077)
+    if sys.argv[1] == 'super-vllm':
+        from supervise_super import main as super_main
+        return super_main()
     if sys.argv[1] == 'bolt-vllm':
         from supervise_bolt import main as bolt_main
         return bolt_main()

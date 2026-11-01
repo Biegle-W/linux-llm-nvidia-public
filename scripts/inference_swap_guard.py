@@ -105,6 +105,8 @@ class WorkerWatch:
         # warm. Keep their bounded I/O policy separate from dense defaults.
         self.policy = ({'write_mib_s': 128, 'combined_mib_s': 160}
                        if profile in SSD_STREAMING_PROFILES else {})
+        if profile == 'super-vllm':
+            self.policy = {'write_mib_s': 64, 'combined_mib_s': 96}
         if profile in PRESSURE_15_PROFILES:
             self.policy['pressure_pct'] = 15
         self.guard, self.ready = SwapGuard(**self.policy), False
@@ -129,7 +131,7 @@ class WorkerWatch:
             if phase in ('loading', 'warmup', 'idle'):
                 return 'loading' if phase == 'warmup' else phase
         try:
-            if self.profile.startswith('qwen27b-') or self.profile == 'bolt-vllm':
+            if self.profile.startswith('qwen27b-') or self.profile in ('bolt-vllm', 'super-vllm'):
                 text = self.get('/metrics')
                 name = ('sglang:num_running_reqs' if self.profile.endswith('sglang')
                         else 'vllm:num_requests_running')
