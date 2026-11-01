@@ -2,7 +2,7 @@
 
 ## Bolt 64K context qualified — November 1
 
-Bolt is selected at 64K after two fresh normal-router loads, arithmetic/JSON, 58,893-input-token retrieval and streaming. The 1GiB KV pool, precision and resource guards remain intact. Live DSH advertises 65,536 context / 4,096 output; custom entries are preserved and omitted client thinking defaults off. Actual 64K DSH generation remains pending behind the GPU qualification queue. All 333 CPU regressions passed. [Results and DSH scope](docs/BOLT-CONTEXT-20261101.md).
+Bolt is selected at 64K after two fresh normal-router loads, arithmetic/JSON, 58,893-input-token retrieval and streaming. The 1GiB KV pool, precision and resource guards remain intact. Live DSH advertises 65,536 context / 4,096 output; custom entries are preserved and omitted client thinking defaults off. Actual DSH marker retrieval passed at 33,517 measured input tokens after selecting the supported native sampler; the answer included extra analysis text. All 333 CPU regressions passed. [Results and DSH scope](docs/BOLT-CONTEXT-20261101.md).
 
 ## Latest: restored 64GB worker budgets applied — October 31
 

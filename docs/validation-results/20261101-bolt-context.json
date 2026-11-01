@@ -77,13 +77,26 @@
     "server_default_enable_thinking": false,
     "registration_preserves_custom_entries": true,
     "live_settings_verified": true,
-    "actual_harness_generation_at_64k": "pending GPU qualification queue",
+    "actual_harness_generation_at_64k": "marker/content pass; strict output format failed",
     "measured_test_request_input_tokens": 33534,
-    "request_sizing_used_local_stub_not_model_inference": true
+    "request_sizing_used_local_stub_not_model_inference": true,
+    "actual_harness_prompt_tokens": 33517.0,
+    "actual_harness_wall_s": 822.4577755309947,
+    "authentication": "pass",
+    "direct_backend_busy_unload": "pass",
+    "native_sampler": true,
+    "cgroup": {
+      "MemoryHigh": "60129542144",
+      "MemoryMax": "62277025792",
+      "MemoryPeak": "53903122432",
+      "MemorySwapPeak": "0"
+    },
+    "strict_output_format": "failed: marker returned with analysis prose and stray closing think tag"
   },
   "cpu_regressions": {
     "passed": 333,
-    "seconds": 3.281,
-    "cuda_hidden": true
+    "seconds": 2.934,
+    "cuda_hidden": true,
+    "first_run_note": "One transient web-search HTTP teardown busy assertion failed; the complete recheck passed."
   }
 }
