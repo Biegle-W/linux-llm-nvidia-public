@@ -1,5 +1,15 @@
 # Agent entry point
 
+## Current short-tool observations — November 1
+
+The eight retained profiles now have prefill, TTFT and decode observations measured during actual short DSH read calls, with successful matching tool results and owned unload. DeepSeek/Maya and DeepSeek/Strata share the existing Unsloth UD-IQ1_S checkpoint; the older Maya-S Strata profile is retired. Current configured contexts are 40K HyperQwen, 32K SGLang, 128K Flash-Next, 64K GLM, 32K both DeepSeek engines, 160K Bolt and 64K Super. These calculated windows were not subjected to a new full-context test. [Table, cache state and measurement limits](docs/SHORT-TOOL-BENCHMARKS-20261101.md).
+
+## Default short-tool benchmarks and reporting
+
+Standing user instruction reaffirmed November 1: collect the default benchmark metrics DURING the same short real DSH tool-call round trip, then unload. Do not substitute whole tool-check wall time for prefill throughput, time to first generated token, or decode throughput. Instrument the short tool check to capture request-scoped token counts, timestamps, native timing/counter evidence, and cache reuse; exclude model loading and any follow-up answer from the first tool-call measurement. Include generated tool-call argument tokens, not only assistant prose. Account for parser/SSE buffering; do not infer token speed from chunk counts or invent missing timing. If a metric cannot be measured reliably, explain the instrumentation gap and fix measurement rather than launching a separate long benchmark.
+
+Always report: Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location. Use decimal GB for weights. Keep tool success, total tool duration, load/unload results and measurement method alongside the table. Label single short-call observations, cache state and historical results honestly; never attribute old Maya-S speeds to Unsloth. No extra full-context, sustained, repeated-reload or timed-idle suite is implied. A request to remember this protocol does not itself authorize replaying all models.
+
 ## Current hardware — November 1, 2026
 
 The RTX 3060 is permanently removed. Maintain only the RTX 3080 Ti / RTX 3080 pair. The November 1 reboot verified pair-only early unlock, scoped ACS and seeded bidirectional P2P correctness at 13.082 GB/s each way. The current-boot proof gate passes. Early unlock and scoped switch ACS routing must not require the removed card. Before any maintained model starts, require a root-owned current-boot seeded bidirectional peer-read/write proof. A configuration flag alone does not establish working P2P. Preserve resource guards and running jobs; no full-context tests are authorized by this hardware repair.

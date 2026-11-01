@@ -19,7 +19,7 @@ esac
 case "$model" in
     qwen) route_model="flash-next-strata" ;;
     glm) route_model="glm-maya" ;;
-    strata-deepseek) route_model="deepseek-strata" ;;
+    strata-deepseek) route_model="deepseek-unsloth-strata" ;;
     maya-deepseek) route_model="deepseek-maya" ;;
     qwen27b) route_model="qwen27b-$engine" ;;
     strata-unsloth) route_model="deepseek-unsloth-strata" ;;

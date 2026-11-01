@@ -97,7 +97,7 @@ class RouterTest(unittest.TestCase):
         expected=set(router.profiles()) | set(router.WEB_SEARCH_ALIASES)
         self.assertEqual({m['id'] for m in models},expected)
         self.assertEqual(len(models),len(expected))
-        self.assertEqual(next(m for m in models if m['id']=='deepseek-strata')['context_window'],router.profiles()['deepseek-strata']['allocated_context'])
+        self.assertEqual(next(m for m in models if m['id']=='deepseek-unsloth-strata')['context_window'],router.profiles()['deepseek-unsloth-strata']['allocated_context'])
     def test_explicit_selection_requests_guard_reload(self):
         status,_=self.request('/router/select',{'model':'qwen27b-hyperqwen'})
         self.assertEqual(status,200)
@@ -174,16 +174,20 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(self.backend.body['tools'][0]['function']['name'],'read_file')
         self.assertFalse(self.server.workers.busy)
     def test_unsupported_completion(self):
-        self.assertEqual(self.request('/v1/completions',{'model':'deepseek-strata','prompt':'x'})[0],400)
+        self.assertEqual(self.request('/v1/completions',{'model':'deepseek-unsloth-strata','prompt':'x'})[0],400)
 
     def test_sglang_profile_applies_non_thinking_default(self):
         status,_=self.request('/v1/chat/completions',{'model':'qwen27b-sglang','messages':[]})
         self.assertEqual(status,200)
         self.assertEqual(self.backend.body['chat_template_kwargs']['enable_thinking'],False)
+        self.assertEqual(self.backend.body['temperature'],0.0)
+        self.assertEqual(self.backend.body['top_p'],1.0)
     def test_explicit_thinking_override_survives_streaming(self):
-        status,_=self.request('/v1/chat/completions',{'model':'qwen27b-sglang','messages':[],'stream':True,'chat_template_kwargs':{'enable_thinking':True,'custom':'preserved'}})
+        status,_=self.request('/v1/chat/completions',{'model':'qwen27b-sglang','messages':[],'stream':True,'temperature':0.7,'top_p':0.9,'chat_template_kwargs':{'enable_thinking':True,'custom':'preserved'}})
         self.assertEqual(status,200)
         self.assertEqual(self.backend.body['chat_template_kwargs'],{'enable_thinking':True,'custom':'preserved'})
+        self.assertEqual(self.backend.body['temperature'],0.7)
+        self.assertEqual(self.backend.body['top_p'],0.9)
     def test_bad_template_options_rejected_before_forwarding(self):
         self.assertEqual(self.request('/v1/chat/completions',{'model':'qwen27b-sglang','messages':[],'chat_template_kwargs':[]})[0],400)
 

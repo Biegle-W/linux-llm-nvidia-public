@@ -17,6 +17,12 @@ ROWS = [{'url': 'https://science.nasa.gov/mars/facts/', 'title': 'Mars facts',
 
 
 class SearchTests(unittest.TestCase):
+    def test_search_alias_preserves_local_tools_without_external_query(self):
+        for question in ['Use the read tool to read proof.txt','Inspect /tmp/private-fixture/proof.txt', 'Inspect `\"/opt/example/proof.txt\"`', 'Open file:///tmp/proof.txt','Read C:\\Users\\example\\proof.txt']:
+            with self.subTest(question=question):
+                self.assertIsNone(ws.chat_plan({'messages':[{'role':'user','content':question}], 'tools':[{'type':'function','function':{'name':'read'}}]}))
+        self.assertEqual(ws.chat_plan({'messages':[{'role':'user','content':'NASA Mars facts'}]})['query'],'NASA Mars facts')
+
     def test_chat_search_uses_human_question_before_dsh_runtime_snapshot(self):
         messages=[{'role':'user','content':'Mars red iron oxide NASA'},
                   {'role':'user','content':'Current runtime context. This snapshot supersedes earlier runtime-context snapshots.\n\nCurrent working directory: private-path'}]

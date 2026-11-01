@@ -17,6 +17,8 @@ class ShutdownTest(unittest.TestCase):
         from unittest.mock import patch
         proof=patch('pair_p2p_health.require_verified_pair', return_value={'passed':True})
         proof.start();self.addCleanup(proof.stop)
+        transport=patch('context_capacity.read_engine_log',return_value='0[0] -> 1[1] via P2P/CUMEM\n1[1] -> 0[0] via P2P/CUMEM')
+        transport.start();self.addCleanup(transport.stop)
 
     def exercise(self, module, intentional):
         dense = module is supervise_dense

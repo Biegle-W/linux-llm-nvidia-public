@@ -34,6 +34,7 @@ def main():
   if lifecycle:lifecycle.set_phase('stopping')
   if child.poll() is None:os.killpg(child.pid,signal.SIGTERM)
  signal.signal(signal.SIGTERM,stop);signal.signal(signal.SIGINT,stop)
+ transport_checked=False
  bad=loading_bad=missing=0;floor=host_ram_reserve_gib(profile)*2**20
  try:
   while child.poll() is None and not stopping:
@@ -46,6 +47,12 @@ def main():
     counters=read_cgroup(base);loading_bad=loading_bad+1 if watch.last_phase=='loading' and counters['pressure_pct']>15 else 0;missing=0
    except (OSError,ValueError,subprocess.SubprocessError):
     missing+=1
+   if watch.ready and not transport_checked and not reason:
+    from context_capacity import require_p2p_transport,read_engine_log
+    try:
+     require_p2p_transport(read_engine_log(log));transport_checked=True
+    except (OSError,ValueError) as error:
+     reason='Super P2P transport guard: '+str(error)
    if reason or bad>=3 or loading_bad>=3 or missing>=3:
     reason=reason or ('Super resource telemetry unavailable' if missing>=3 else 'Super sustained loading pressure' if loading_bad>=3 else 'Super host/temperature/VRAM reserve guard')
     print(reason,flush=True);stop();raise SystemExit(1)

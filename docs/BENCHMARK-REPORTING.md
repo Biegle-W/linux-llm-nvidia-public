@@ -50,14 +50,9 @@ and the shared-weight relationship; keep live user/mount details private.
 
 ## Current classification
 
-- VRAM-only: Qwen3.8-27B AutoRound INT4/INT8 on HyperQwen/vLLM and SGLang;
-  shared checkpoint on SATA.
-- MoE with CPU RAM offload: none currently kept as a fully RAM-resident offload
-  configuration.
-- MoE with SSD streaming: Qwen3.8-Flash-Next IQ3_XXS on Strata, GLM-5.3-Flash
-  Maya-S24 on Maya, and shared DeepSeek-V4.1-Flash-1017 Maya-S on Strata and Maya;
-  streaming weights on NVMe. GLM's selected RAM tier is a cache within its streaming
-  profile, not evidence that all experts are RAM-resident.
+- VRAM-only: shared Qwen3.8-27B AutoRound INT4/INT8 on HyperQwen/vLLM and SGLang, checkpoint on SATA.
+- CPU RAM offload: Bolt AWQ INT4, host weights supplied to GPU kernels, checkpoint on SATA.
+- SSD streaming: Flash-Next IQ3_XXS and GLM Maya-S24 on NVMe; shared Unsloth UD-IQ1_S DeepSeek on Strata and Maya, core on NVMe and Engram on SATA; Super W4A16 with SATA checkpoint and bounded NVMe working cache.
 
 The [maintained result tables](MAINTAINED-PROFILES.md#latest-matched-speed-evidence)
 use this format. The [storage policy](STORAGE-POLICY.md) reserves NVMe for
@@ -67,3 +62,7 @@ must update both repositories while preserving dated benchmark evidence.
 ## Repeating exact prompts with persistent conversation KV
 
 A fresh process may still restore a saved conversation prefix from disk. Reusing exact fixtures therefore requires checking native cached-token counts, not just restarting the worker. Reject cached-prefill attempts. For an uncached repeat, preserve and temporarily isolate only the conversation-KV snapshots while workers are idle, retain expert-cache settings and exact prompts, then restore the snapshots byte-for-byte after owned-worker cleanup. Preserve rejected attempts separately. The October 29 SSD-policy report records this correction; it does not turn a rejected cached response into a speed result.
+
+## Short actual-tool observations
+
+The current default measures prefill, TTFT and decode during the same short actual DSH read call and then unloads. Report token/cache counts and parser buffering explicitly. This differs from historical controlled uncached repeat suites below: no extra replay or cache-isolation suite is implied. [November 1 evidence](SHORT-TOOL-BENCHMARKS-20261101.md).

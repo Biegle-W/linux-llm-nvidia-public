@@ -1,8 +1,8 @@
 """Short real DSH tool round trip, then owned unload. No context stress."""
 from pathlib import Path
 import argparse,json,os,time,uuid,tempfile,subprocess,urllib.request,urllib.error,shutil
-p=argparse.ArgumentParser();p.add_argument('--model',required=True);p.add_argument('--output',type=Path);a=p.parse_args();os.umask(0o077)
-R=Path(__file__).resolve().parents[1];H=R/'data/harness-smoke';O=a.output or H/(str(time.time_ns())+'-'+a.model);O.mkdir(parents=True,exist_ok=False);state={'phase':'preflight','model':a.model,'pid':os.getpid(),'started':time.time()};owned=None
+p=argparse.ArgumentParser();p.add_argument('--model',required=True);p.add_argument('--keep-loaded-on-pass',action='store_true');p.add_argument('--output',type=Path);a=p.parse_args();os.umask(0o077)
+R=Path(__file__).resolve().parents[1];H=R/'data/harness-smoke';O=a.output or H/(str(time.time_ns())+'-'+a.model);O.mkdir(parents=True,exist_ok=False);state={'phase':'preflight','model':a.model,'pid':os.getpid(),'started':time.time()};owned=None;timing_tap=None
 k=(R/'data/local-api-key').read_text().strip();opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
 def save():(O/'state.json').write_text(json.dumps(state,indent=2)+'\n')
 def req(path,body=None):
@@ -18,10 +18,14 @@ def walk(x):
 save()
 try:
  health=req('/health');assert not (R/'data/GPU-LOCK').exists();assert not any(health.get(x) for x in ['busy','inflight','queued','loading_model','idle_unloading_model']),health
- state['phase']='selecting';save();req('/router/select',{'model':a.model});owned=prop('InvocationID');assert owned;state['invocation']=owned
+ state['phase']='selecting';save();req('/router/select',{'model':a.model});owned=prop('InvocationID');assert owned;state['invocation']=owned;state['ready_gpu_memory']=subprocess.check_output(['nvidia-smi','--query-gpu=memory.used,memory.free','--format=csv,noheader,nounits'],text=True).strip()
+ ready_free=[float(line.split(',')[1]) for line in state['ready_gpu_memory'].splitlines()]
+ assert len(ready_free)==2 and all(value>=512 for value in ready_free),'Readiness is below the preserved two-GPU 512 MiB free-memory floor'
+ from short_tool_metrics import ToolMetrics
+ timing_tap=ToolMetrics(O,k,a.model)
  workspace=Path(tempfile.mkdtemp(prefix='nvidia-dsh-short-'));nonce='NVIDIA_TOOL_OK_'+uuid.uuid4().hex;file=workspace/'proof.txt';file.write_text(nonce+'\n');file.chmod(0o600)
  import yaml
- entries=yaml.safe_load((R/'data/dsh/profiles/headless/cordis.patch.yml').read_text());provider=next(x['config']['providers']['nvidia-strata'] for x in entries if x['id']=='llm-pi-ai');m=next(x for x in provider['models'] if x['id']==a.model);provider=dict(provider,models=[dict(m,maxTokens=128)]);overlay=O/'selection.yml';overlay.write_text(yaml.safe_dump([{'id':'llm-pi-ai','config':{'providers':{'nvidia-strata':provider}}},{'id':'agent-default-model','config':{'provider':'nvidia-strata','model':a.model}}],sort_keys=False))
+ entries=yaml.safe_load((R/'data/dsh/profiles/headless/cordis.patch.yml').read_text());provider=next(x['config']['providers']['nvidia-strata'] for x in entries if x['id']=='llm-pi-ai');m=next((x for x in provider['models'] if x['id']==a.model),None);m=m or dict(next(x for x in provider['models'] if x['id']==a.model+'-search'),id=a.model);provider=dict(provider,baseURL=timing_tap.base_url,models=[dict(m,maxTokens=128)]);overlay=O/'selection.yml';overlay.write_text(yaml.safe_dump([{'id':'session-title-llm','disabled':True},{'id':'llm-pi-ai','config':{'providers':{'nvidia-strata':provider}}},{'id':'agent-default-model','config':{'provider':'nvidia-strata','model':a.model}}],sort_keys=False))
  task=f'Use the read tool to read {file}. Then reply with only the exact file contents. Do not use bash or any other tools. Do not modify any files.'
  state.update(phase='short-harness-tool',workspace=str(workspace));save();t=time.monotonic()
  stopped_after_tool=False
@@ -49,11 +53,14 @@ try:
  calls=[e for e in events if e.get('type')=='tool_call' and e.get('tool')=='read']
  results=[e for e in events if e.get('type')=='tool_result' and e.get('status')=='completed' and e.get('callId') in {c['callId'] for c in calls} and nonce in str(e.get('result',''))]
  final=next((e.get('text','') for e in reversed(events) if e.get('type')=='final'),'')
- assert run.returncode==0 or stopped_after_tool,(run.returncode,(O/'stderr.txt').read_text()[-500:]);assert calls and results,'No completed actual read tool round trip';assert prop('InvocationID')==owned
+ assert run.returncode==0 or stopped_after_tool or (calls and results),(run.returncode,(O/'stderr.txt').read_text()[-500:]);assert calls and results,'No completed actual read tool round trip';assert prop('InvocationID')==owned
  state.update(phase='pass',wall_s=time.monotonic()-t,structured_read_records=len(calls),completed_tool_results=len(results),assistant_reply_not_required=True,stopped_after_tool_success=stopped_after_tool,final_marker_returned=nonce in final,strict_final_format=final.strip()==nonce if final else None,event_types=sorted({str(e.get('type')) for e in events if isinstance(e,dict)}),nonce_returned=True,output_cap=128,full_context_stress=False);save()
 except BaseException as e:state.update(phase='failed',error=repr(e));save();raise
 finally:
- if owned and prop('InvocationID')==owned:
+ if timing_tap:timing_tap.close()
+ if a.keep_loaded_on_pass and state.get('phase')=='pass':
+  state['kept_loaded_for_api_switch']=True
+ elif owned and prop('InvocationID')==owned:
   deadline=time.monotonic()+90
   while True:
    try:

@@ -18,6 +18,13 @@ from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def pair_gpu_free_values(raw):
+    values = [float(x) for x in raw.splitlines()]
+    if len(values) != 2 or any(not math.isfinite(x) or x < 0 for x in values):
+        raise RuntimeError('Expected valid GPU telemetry for the permanent 3080 pair')
+    return values
+
+
 def main():
     os.umask(0o077)
     from pair_p2p_health import require_verified_pair
@@ -123,9 +130,7 @@ def main():
                 raise SystemExit(1)
             if profile['id'] == 'deepseek-unsloth-strata':
                 free = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits'], text=True)
-                free_values = [float(x) for x in free.splitlines()]
-                if len(free_values) != 3 or any(not math.isfinite(x) or x < 0 for x in free_values):
-                    raise RuntimeError('Unsloth GPU telemetry unavailable')
+                free_values = pair_gpu_free_values(free)
                 gpu_bad = gpu_bad + 1 if any(x < 512 for x in free_values) else 0
                 from inference_swap_guard import read_cgroup
                 pressure = read_cgroup(cgroup_base)['pressure_pct']

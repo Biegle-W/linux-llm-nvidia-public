@@ -424,6 +424,10 @@ def chat_plan(data):
             "Generate the session title from this JSON array of human messages:\n"):
         return None
     options=plan({"input":query_messages,"tools":[{"type":"web_search"}]})
+    # Local tool work is not a web query. Keep private file paths and tool
+    # instructions out of the external search provider, and preserve tools.
+    if re.search(r'(?i)\b(?:read|bash|edit|write)\s+tool\b|(?<![A-Za-z0-9:/.])/(?:home|tmp|var|etc|Users|mnt|media|usr|opt|private)/|\bfile://|(?:^|\s)[A-Z]:\\',options["query"]):
+        return None
     options["protocol"]="chat"
     return options
 

@@ -13,6 +13,8 @@ class HostRamReserve(unittest.TestCase):
         from unittest.mock import patch
         proof=patch('pair_p2p_health.require_verified_pair', return_value={'passed':True})
         proof.start();self.addCleanup(proof.stop)
+        evidence=patch('context_capacity.read_engine_log',return_value='0[0] -> 1[1] via P2P/CUMEM\n1[1] -> 0[0] via P2P/CUMEM\nmax_total_num_tokens=131072')
+        evidence.start();self.addCleanup(evidence.stop)
 
     def test_all_maintained_profiles_select_two(self):
         profiles=load_catalog()['profiles'];self.assertTrue(profiles)

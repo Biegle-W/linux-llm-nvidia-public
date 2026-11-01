@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "profile": "deepseek-maya",
+  "source_commit": "3589d6f12a3f77e813b184b51a586f8fc3de2185",
+  "binary": {
+    "path": "runtimes/maya-unsloth-v1146/maya-ds4",
+    "sha256": "a610b972fdb671da8c1b28acaa491014f65afd8362a029fbf69b676dfe1cfefe"
+  },
+  "bounded_cache_cpu_test": "pass",
+  "status": "actual DSH read tool/result passed at32K"
+}

@@ -41,7 +41,7 @@ def build_launch(profile,key,root=ROOT):
        '--offload-num-in-group','1','--offload-prefetch-step','1','--offload-params','experts','out_proj','in_proj',
        '--hf-overrides',json.dumps({'quantization_config':quant})]
  # Native sampling avoids FlashInfer JIT flags unsupported by the host nvcc.
- env=dict(os.environ,VLLM_USE_FLASHINFER_SAMPLER='0',CUDA_VISIBLE_DEVICES='0,1',CUDA_DEVICE_ORDER='PCI_BUS_ID',NCCL_P2P_DISABLE='0',NCCL_P2P_LEVEL='SYS',
+ env=dict(os.environ,VLLM_USE_FLASHINFER_SAMPLER='0',CUDA_VISIBLE_DEVICES='0,1',CUDA_DEVICE_ORDER='PCI_BUS_ID',NCCL_P2P_DISABLE='0',NCCL_P2P_LEVEL='SYS',NCCL_DEBUG='INFO',NCCL_DEBUG_SUBSYS='INIT,GRAPH,P2P,SHM',
           VLLM_WEIGHT_OFFLOADING_DISABLE_PIN_MEMORY='1',VLLM_WEIGHT_OFFLOADING_DISABLE_UVA='1',
           OMP_NUM_THREADS='2',HF_HUB_OFFLINE='1',TRANSFORMERS_OFFLINE='1',VLLM_ALLOW_LONG_MAX_MODEL_LEN='0',
           BOLT_POSTLOAD_CACHE_TRIM='1',BOLT_PREFETCH_EARLY_SYNC='1',BOLT_CHECKPOINT_DIRECTORY=str(model),PYTHONPATH=str(root/'scripts/bolt_offload_hook'),VLLM_API_KEY=key)

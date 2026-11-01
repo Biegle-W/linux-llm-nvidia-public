@@ -16,7 +16,7 @@ class Registration(unittest.TestCase):
    selected={'provider':'existing','model':'custom-search'}
    path=self.fixture(folder,[{'id':'bolt-vllm','engine':'vLLM-offload','model':'Nemotron Bolt','allocated_context':65536},{'id':'super-vllm','engine':'vLLM-offload','model':'Nemotron Super','allocated_context':65536}],[{'id':'llm-pi-ai','config':{'providers':{'existing':custom}}},{'id':'agent-default-model','config':selected}])
    registration.configure('web');entries=yaml.safe_load(path.read_text());providers=entries[0]['config']['providers'];self.assertEqual(providers['existing']['models'],[alias]);self.assertEqual(providers['existing']['apiKeyEnv'],'CUSTOM_KEY_ENV');self.assertEqual(entries[1]['config'],selected)
-   router=providers['nvidia-strata'];self.assertEqual(router['displayName'],'NVIDIA Server Router');self.assertEqual(router['api'],'openai-completions');self.assertEqual([x['id'] for x in router['models']],['bolt-vllm','super-vllm']);self.assertTrue(all(m['maxTokens']==4096 and m['reasoningEfforts'] is False for m in router['models']))
+   self.assertTrue(next(x for x in entries if x['id']=='session-title-llm')['disabled']);router=providers['nvidia-strata'];self.assertEqual(router['displayName'],'NVIDIA Server Router');self.assertEqual(router['api'],'openai-completions');self.assertEqual([x['id'] for x in router['models']],['bolt-vllm','super-vllm']);self.assertTrue(all(m['maxTokens']==4096 and m['reasoningEfforts'] is False for m in router['models']))
    registration.configure('web');self.assertEqual(yaml.safe_load(path.read_text()),entries);self.assertEqual(path.stat().st_mode&0o777,0o600)
  def test_one_provider_search_alias_and_old_selection_migration(self):
   with tempfile.TemporaryDirectory() as folder:

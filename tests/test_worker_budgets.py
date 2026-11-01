@@ -47,7 +47,7 @@ class WorkerBudget(unittest.TestCase):
             shell.write_text((root / 'scripts/start_model.sh').read_text())
             (temp / 'scripts/router_client.py').write_text('import sys; print(" ".join(sys.argv[1:]))')
             for command, model in [('qwen', 'flash-next-strata'), ('glm', 'glm-maya'),
-                                   ('strata-deepseek', 'deepseek-strata'), ('maya-deepseek', 'deepseek-maya'),
+                                   ('strata-deepseek', 'deepseek-unsloth-strata'), ('maya-deepseek', 'deepseek-maya'),
                                    ('bolt', 'bolt-vllm')]:
                 with self.subTest(command=command):
                     result = subprocess.check_output(['bash', str(shell), command], text=True).strip()
@@ -71,7 +71,7 @@ class WorkerBudget(unittest.TestCase):
             worker_budget(p)
 
     def test_moe_accepts_the_bounded_larger_cache_budget(self):
-        p = deepcopy(get_profile('deepseek-strata'))
+        p = deepcopy(get_profile('deepseek-unsloth-strata'))
         p['worker_memory_gib'] = {'high': 56, 'max': 58, 'swap': None}
         self.assertEqual(worker_budget(p)['max'], 58)
 
@@ -106,7 +106,7 @@ class DenseNativeGuard(unittest.TestCase):
                     self.assertEqual(verify.call_count,1 if accepted else 0)
     def test_unbounded_or_half_unbounded_moe_budgets_are_rejected(self):
         for b in [{'high':None,'max':None,'swap':None},{'high':30,'max':None,'swap':None},{'high':None,'max':36,'swap':None}]:
-            for name in ['glm-maya','deepseek-strata','deepseek-maya','flash-next-strata']:
+            for name in ['glm-maya','deepseek-unsloth-strata','deepseek-maya','flash-next-strata']:
                 p=deepcopy(get_profile(name));p['worker_memory_gib']=b
                 with self.subTest(profile=name,budget=b),self.assertRaises(ValueError):worker_budget(p)
 

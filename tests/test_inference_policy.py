@@ -15,7 +15,7 @@ class SharedPolicy(unittest.TestCase):
             p=self.root/rel;p.parent.mkdir(parents=True);p.write_text('# Managed NVIDIA idle reservation\nidle_activity_path=None\nidle_lock_path=None\n')
     def save(self):(self.root/'config/inference-policy.json').write_text(json.dumps(self.policy))
     def test_all_maintained_profiles_receive_the_same_timeout(self):
-        profiles=json.loads((ROOT/'config/maintained-profiles.json').read_text())['profiles'];self.assertTrue({'qwen27b-hyperqwen','qwen27b-sglang','flash-next-strata','glm-maya','deepseek-strata','deepseek-maya'} <= {p['id'] for p in profiles})
+        profiles=json.loads((ROOT/'config/maintained-profiles.json').read_text())['profiles'];self.assertTrue({'qwen27b-hyperqwen','qwen27b-sglang','flash-next-strata','glm-maya','deepseek-unsloth-strata','deepseek-maya'} <= {p['id'] for p in profiles})
         for p in profiles:
             with self.subTest(profile=p['id']):
                 if p['engine'] in NATIVE_SOURCES:
@@ -29,7 +29,7 @@ class SharedPolicy(unittest.TestCase):
         (self.root/NATIVE_SOURCES['Maya']).write_text('unpatched')
         with self.assertRaises(RuntimeError):apply_native_idle({}, {'id':'glm-maya','engine':'Maya'}, self.root)
     def test_native_policy_overrides_stale_disabled_config(self):
-        result=apply_native_idle({'idle_unload_s':0},{'id':'deepseek-strata','engine':'Strata'},self.root)
+        result=apply_native_idle({'idle_unload_s':0},{'id':'deepseek-unsloth-strata','engine':'Strata'},self.root)
         self.assertEqual(result['idle_unload_s'],600)
 
     def test_worker_manager_defaults_to_shared_policy_and_cannot_disable_it(self):

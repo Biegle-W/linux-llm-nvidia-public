@@ -48,6 +48,9 @@ def main():
     signal.signal(signal.SIGTERM, stop)
     signal.signal(signal.SIGINT, stop)
     bad = 0
+    capacity_checked = False
+    transport_checked = False
+    transport_wait_started = None
     reason = None
     try:
         while child.poll() is None and not stopping:
@@ -63,8 +66,27 @@ def main():
             cards = [[float(value) for value in line.split(',')] for line in raw.splitlines()]
             bad = bad + 1 if (available < host_floor_kib or any(card[0] >= 82 for card in cards)
                              or (watch.ready and any(card[1] < DENSE_GPU_FREE_MIB for card in cards))) else 0
+            if watch.ready and not transport_checked and not reason:
+                from context_capacity import check_p2p_progress, read_engine_log
+                try:
+                    transport_checked, transport_wait_started, fault = check_p2p_progress(
+                        read_engine_log(ROOT / 'data/qwen27b-server.log'), watch.last_phase,
+                        time.monotonic(), transport_wait_started, allow_lazy=engine=='sglang')
+                    if fault:
+                        reason = 'Dense P2P transport guard: ' + fault
+                except OSError as error:
+                    reason = 'Dense P2P transport telemetry: ' + str(error)
+            if engine == 'sglang' and watch.ready and not capacity_checked and not reason:
+                from context_capacity import require_sglang_context
+                try:
+                    require_sglang_context(profile['allocated_context'], read_engine_log(ROOT / 'data/qwen27b-server.log'))
+                    capacity_checked = True
+                except (OSError, ValueError) as error:
+                    reason = 'Dense context-capacity guard: ' + str(error)
             if reason or bad >= 3:
-                reason = reason or 'Dense host/temperature/GPU-headroom guard reached.'
+                reason = reason or ('Dense host/temperature/GPU-headroom guard reached: '
+                                    f'MemAvailable_kib={available}, host_floor_kib={host_floor_kib}, '
+                                    f'GPU_temp_C_and_free_MiB={cards}, free_floor_MiB={DENSE_GPU_FREE_MIB}')
                 print(reason, flush=True)
                 stop()
                 raise SystemExit(1)

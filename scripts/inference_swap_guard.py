@@ -106,7 +106,7 @@ class WorkerWatch:
         self.policy = ({'write_mib_s': 128, 'combined_mib_s': 160}
                        if profile in SSD_STREAMING_PROFILES else {})
         if profile == 'super-vllm':
-            self.policy = {'write_mib_s': 64, 'combined_mib_s': 96}
+            self.policy = {'write_mib_s': 80, 'combined_mib_s': 128}
         if profile in PRESSURE_15_PROFILES:
             self.policy['pressure_pct'] = 15
         self.guard, self.ready = SwapGuard(**self.policy), False

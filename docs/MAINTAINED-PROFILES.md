@@ -1,5 +1,9 @@
 # Maintained model, quantization and engine settings
 
+## Current short-tool observations — November 1
+
+The eight retained profiles now have prefill, TTFT and decode observations measured during actual short DSH read calls, with successful matching tool results and owned unload. DeepSeek/Maya and DeepSeek/Strata share the existing Unsloth UD-IQ1_S checkpoint; the older Maya-S Strata profile is retired. Current configured contexts are 40K HyperQwen, 32K SGLang, 128K Flash-Next, 64K GLM, 32K both DeepSeek engines, 160K Bolt and 64K Super. These calculated windows were not subjected to a new full-context test. [Table, cache state and measurement limits](SHORT-TOOL-BENCHMARKS-20261101.md).
+
 ## Latest: restored 64GB worker budgets applied — October 31
 
 All six MoE profiles now use 56 GiB soft / 58 GiB hard worker limits. Both GPU-resident Qwen profiles retain their explicitly uncapped RAM setting. Linux sees 61.3 GiB usable; the independent 2 GiB host-available stop and all VRAM,swap,pressure and temperature guards remain active. Contexts and other model settings are unchanged. All eight actual kernel cgroup settings and 321 CPU tests passed; no inference job was interrupted. [Policy and verification](WORKER-RAM-64GB-20261031.md).
@@ -11,7 +15,7 @@ It reuses the already downloaded 232.98 GB GGUF, with core shards on NVMe and En
 on SATA. Its context screen and stream observations are not a matched benchmark
 against the older Maya-S quant; see [the qualification](DEEPSEEK-UNSLOTH-CONTEXT-20261031.md).
 
-## Latest selected speed evidence (composite runs)
+## Historical selected speed evidence (October 31 composite runs)
 
 These separate screens are not a matched comparison. Six earlier rows use one warmup and three 128-output requests; Bolt uses one 128-output stream after correctness/retrieval, without a dedicated fixture warmup. Loading is excluded. Native prefill and client SSE first-to-last-content decode methods are retained. See [scope and reliability](BOLT-MAYA-RELIABILITY-20261031.md).
 

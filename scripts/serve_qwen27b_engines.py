@@ -7,6 +7,7 @@ from pathlib import Path
 import socket
 import subprocess
 import sys
+import time
 from profile_catalog import get_profile, worker_budget
 from storage_policy import verify_storage
 
@@ -66,21 +67,36 @@ def preflight(profile):
     with socket.socket() as probe:
         if probe.connect_ex(('127.0.0.1', 10000)) == 0:
             sys.exit('Port 10000 is occupied; stop the current model first.')
-    inventory = subprocess.check_output([
-        'nvidia-smi', '--query-gpu=name,memory.free', '--format=csv,noheader,nounits'], text=True)
-    cards = list(csv.reader(inventory.splitlines()))
+    wait_for_gpu_memory(profile)
+
+
+def wait_for_gpu_memory(profile, timeout=20, clock=time.monotonic, sleep=time.sleep):
+    """Allow a stopped worker's VRAM to settle without relaxing its startup budget."""
     minimum_free = profile.get('startup_gpu_free_mib', [10240, 9728])
-    if len(minimum_free) != 2 or any(not isinstance(v, int) or v < 512 for v in minimum_free):
+    if len(minimum_free) != 2 or any(type(v) is not int or v < 512 for v in minimum_free):
         sys.exit('Invalid calculated startup GPU memory budget.')
-    requirements = list(zip(['NVIDIA GeForce RTX 3080 Ti',
-                             'NVIDIA GeForce RTX 3080'], minimum_free))
-    if len(cards) < 2:
-        sys.exit('Both qualified NVIDIA cards are required.')
-    for index, (name, minimum) in enumerate(requirements):
-        actual, free = (value.strip() for value in cards[index])
-        if actual != name or int(free) < minimum:
-            sys.exit(f'GPU {index} needs {name} with at least {minimum} MiB free. '
-                     'Preserve other applications; retry when sufficient VRAM is available.')
+    names = ['NVIDIA GeForce RTX 3080 Ti', 'NVIDIA GeForce RTX 3080']
+    deadline = clock() + timeout
+    while True:
+        inventory = subprocess.check_output([
+            'nvidia-smi', '--query-gpu=name,memory.free', '--format=csv,noheader,nounits'], text=True, timeout=5)
+        cards = list(csv.reader(inventory.splitlines()))
+        if len(cards) != 2:
+            sys.exit('Both qualified NVIDIA cards are required.')
+        failures = []
+        for index, (name, minimum) in enumerate(zip(names, minimum_free)):
+            actual, free = (value.strip() for value in cards[index])
+            if actual != name:
+                sys.exit(f'GPU {index} identity changed; expected {name}.')
+            available = int(free)
+            if available < minimum:
+                failures.append(f'GPU {index}: {available} MiB free, {minimum} MiB required')
+        if not failures:
+            return
+        if clock() >= deadline:
+            sys.exit('Startup VRAM budget unavailable after settling: ' + '; '.join(failures) +
+                     '. Other applications preserved; no memory guard was relaxed.')
+        sleep(min(1, max(0, deadline - clock())))
 
 
 def main():
@@ -121,7 +137,7 @@ def main():
         import sglang
         from sglang_runtime import verify_loaded_runtime
         verify_loaded_runtime(sglang_runtime, sglang.__file__)
-        print('[SGLANG-RUNTIME] source=' + sglang_runtime['source_commit'] + ' W4A8=True TP2 MTP3', flush=True)
+        print('[SGLANG-RUNTIME] source=' + sglang_runtime['source_commit'] + ' W4A8=True TP2 speculative=' + str(profile['server_args'].get('speculative_algorithm') or 'none'), flush=True)
         audit = Path(env['LOCAL_GPU_WEIGHT_AUDIT_DIR'])
         audit.mkdir(parents=True, exist_ok=True)
         (audit / 'runtime.json').write_text(json.dumps({'source_commit': sglang_runtime['source_commit'], 'package_tree_sha256': sglang_runtime['package_tree_sha256'], 'package_file': sglang.__file__, 'versions': sglang_runtime['runtime_versions']}, indent=2))
@@ -130,7 +146,7 @@ def main():
         launch_server(ServerArgs(
             model_path=str(MODEL), host='127.0.0.1', port=10000,
             api_key=RedactedKey(KEY.read_text().strip()), served_model_name='qwen3.8-27b',
-            **dict(profile['server_args'], speculative_draft_model_path=str(MODEL)),
+            **dict(profile['server_args']),
         ))
         return
     env['VLLM_API_KEY'] = KEY.read_text().strip()

@@ -57,6 +57,21 @@ class DenseIdleTest(unittest.TestCase):
         self.assertTrue(self.worker.idle_tick(600))
         self.assertEqual(self.stops[0]['only_unit'],'llm-test-qwen27b.service')
         self.assertFalse((self.root/'data/GPU-LOCK').exists())
+    def test_all_moe_profiles_use_owned_moe_unit(self):
+        for profile in ('super-vllm', 'bolt-vllm', 'flash-next-strata', 'glm-maya', 'deepseek-strata', 'deepseek-maya', 'deepseek-unsloth-strata'):
+            self.worker.active=profile
+            self.worker._idle_probe.profile=profile
+            self.assertTrue(self.worker.idle_tick(600))
+            self.assertEqual(self.stops[-1]['only_unit'],'llm-router-worker.service')
+
+    def test_every_profile_defers_for_direct_inference(self):
+        for profile in ('qwen27b-hyperqwen','qwen27b-sglang','super-vllm','bolt-vllm','flash-next-strata','glm-maya','deepseek-strata','deepseek-maya','deepseek-unsloth-strata'):
+            self.worker.active=profile
+            self.worker._idle_probe.profile=profile
+            self.phase='inference'
+            self.assertFalse(self.worker.idle_tick(1000))
+            self.assertFalse(self.stops)
+
     def test_busy_loading_and_existing_reservation_defer(self):
         for field in ['busy','loading']:
             setattr(self.worker,field,True)

@@ -29,9 +29,9 @@
         "qwen27b",
         "hyperqwen"
       ],
-      "allocated_context": 20480,
+      "allocated_context": 40960,
       "tested_retrieval_input": 50627,
-      "context_validation": "Calculated 20,480-token context with 256 MiB KV per rank and no optional MTP draft. Short actual DSH search passed and worker unloaded; full-context quality and current decode speed not retested.",
+      "context_validation": "40960-token calculated bounded allocation; actual short DSH read and matching tool result passed, native KV capacity checked and owned unload confirmed. No full-context or sustained qualification.",
       "benchmark_context": 32768,
       "benchmark": {
         "short_decode_tps": 112.06417287975118,
@@ -54,9 +54,9 @@
         "--gpu-memory-utilization",
         "0.76",
         "--kv-cache-memory-bytes",
-        "268435456",
+        "469762048",
         "--max-model-len",
-        "20480",
+        "40960",
         "--max-num-seqs",
         "1",
         "--max-num-batched-tokens",
@@ -90,7 +90,9 @@
         "VLLM_MARLIN_INT8_INCLUDE_RE": "mlp",
         "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp",
         "NCCL_P2P_DISABLE": "0",
-        "NCCL_P2P_LEVEL": "SYS"
+        "NCCL_P2P_LEVEL": "SYS",
+        "NCCL_DEBUG": "INFO",
+        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM"
       },
       "latest_benchmark": {
         "run": "20261031-pair-main-aux",
@@ -213,8 +215,18 @@
         }
       ],
       "current_configuration_benchmark": {
-        "status": "Not benchmarked after disabling optional MTP; historical speculative decoding speeds remain dated.",
-        "date": "2026-11-01"
+        "date": "2026-11-01",
+        "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
+        "source": "docs/benchmark-results/20261101-short-tool.json",
+        "prefill_tps": 2342.6413236726394,
+        "ttft_s": 2.494786500930786,
+        "decode_tps": 64.79822854393157,
+        "prompt_tokens": 5820,
+        "output_tokens": 38,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
       },
       "p2p_optimization": {
         "date": "2026-10-31",
@@ -279,7 +291,25 @@
         "unloaded": true,
         "full_context_stress": false,
         "evidence": "docs/DSH-ROUTER-CLEANUP-20261101.md"
-      }
+      },
+      "calculated_context_history": [
+        {
+          "date": "2026-11-01",
+          "previous_context": 65536,
+          "new_context": 65536,
+          "status": "candidate awaiting short actual DSH tool and native memory check",
+          "full_context_stress": false
+        },
+        {
+          "date": "2026-11-01",
+          "previous_context": 65536,
+          "new_context": 40960,
+          "kv_cache_mib_per_gpu": 448,
+          "reason": "64K/768 MiB KV setting left only 368 MiB free on GPU1 at readiness, below unchanged 512 MiB floor; reduce allocation with headroom, preserve guards",
+          "full_context_stress": false,
+          "status": "short actual tool/result passed and unloaded; native allocation verified"
+        }
+      ]
     },
     {
       "id": "qwen27b-sglang",
@@ -293,7 +323,7 @@
       ],
       "allocated_context": 32768,
       "tested_retrieval_input": 29434,
-      "context_validation": "Deployed TP2 MTP3 W4A8 at 32K passed router streaming JSON, parsed tool call and 29434-input retrieval; a 4096-output, 39.62-second check exercised four active 30-second swap windows with zero swap I/O.",
+      "context_validation": "Calculated 32K with native96:40 MLP balance,11008/8448MiB budgets and no optional draft. Awaiting pool capacity and short DSH tool check.",
       "benchmark_context": 32768,
       "benchmark": {
         "prefill_tps": 1667.8703781763365,
@@ -326,23 +356,18 @@
         ],
         "rank_gpu_memory_mib": [
           11008,
-          8960
+          8448
         ],
         "rank_tp_ratio": [
           9,
           8
         ],
         "rank_mlp_ratio": [
-          10,
-          7
+          96,
+          40
         ],
         "max_total_tokens": 32768,
         "disable_overlap_schedule": false,
-        "speculative_algorithm": "NEXTN",
-        "speculative_draft_model_path": "models/engine-tests/qwen38-27b-hyperqwen-fast",
-        "speculative_num_steps": 3,
-        "speculative_eagle_topk": 1,
-        "speculative_num_draft_tokens": 4,
         "disable_prefill_cuda_graph": true
       },
       "latest_benchmark": {
@@ -595,7 +620,9 @@
       "request_defaults": {
         "chat_template_kwargs": {
           "enable_thinking": false
-        }
+        },
+        "temperature": 0.0,
+        "top_p": 1.0
       },
       "retired_previous_configuration": {
         "date": "2026-10-28",
@@ -687,13 +714,24 @@
         "historical_benchmarks_unchanged": true
       },
       "current_configuration_benchmark": {
-        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
-        "date": "2026-10-31",
-        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
+        "date": "2026-11-01",
+        "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
+        "source": "docs/benchmark-results/20261101-short-tool.json",
+        "prefill_tps": 2470.0216311419267,
+        "ttft_s": 2.501768785999957,
+        "decode_tps": 59.36063138765988,
+        "prompt_tokens": 6095,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
       },
       "environment": {
         "NCCL_P2P_DISABLE": "0",
-        "NCCL_P2P_LEVEL": "SYS"
+        "NCCL_P2P_LEVEL": "SYS",
+        "NCCL_DEBUG": "INFO",
+        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM"
       },
       "p2p_optimization": {
         "date": "2026-10-31",
@@ -724,6 +762,34 @@
         },
         "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
         "normal_fresh_loads_verified": 2
+      },
+      "calculated_context_history": [
+        {
+          "date": "2026-11-01",
+          "previous_context": 32768,
+          "new_context": 32768,
+          "status": "40K rejected by native allocated pool31441; final engine-recommended96:40 balance calculated to back32K; short retry pending",
+          "full_context_stress": false,
+          "first_loader_kv_tokens": 14915,
+          "engine_suggested_mlp_ratio": [
+            96,
+            40
+          ],
+          "second_loader_kv_tokens": 31441
+        }
+      ],
+      "startup_gpu_free_mib": [
+        11520,
+        8960
+      ],
+      "latest_short_tool_check": {
+        "date": "2026-11-01",
+        "actual_dsh_read_tool": "pass",
+        "matching_tool_result": "pass",
+        "wall_s": 5.041565481999896,
+        "output_cap": 128,
+        "full_context_test": false,
+        "evidence": "docs/SGLANG-SUPER-SHORT-FIXES-20261101.md"
       }
     },
     {
@@ -735,8 +801,8 @@
       "launch": [
         "qwen"
       ],
-      "allocated_context": 32768,
-      "context_validation": "Resident experts across both GPUs at32768 passed JSON/arithmetic/image,29435-input uncached retrieval,sustained generation and fresh reload with unchanged resource guards.",
+      "allocated_context": 131072,
+      "context_validation": "131072-token calculated memory allocation; short actual DSH read/result passed and unloaded. No new full-context quality or speed qualification; older retrieval/benchmark evidence remains dated.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 98.8,
@@ -826,7 +892,11 @@
         "plain_mmap_experts": false,
         "expert_memory_mode": "resident_non_gpu_cache_complement",
         "observed_native_reserve_mib": 700,
-        "reason": "Resident expert mode passed matched performance, JSON/arithmetic/image, near-window retrieval, sustained generation and fresh reload under unchanged guards."
+        "reason": "Resident expert mode passed matched performance, JSON/arithmetic/image, near-window retrieval, sustained generation and fresh reload under unchanged guards.",
+        "reserve_mib_per_gpu": 1024,
+        "vram_reserve_args": {
+          "--vram-reserve-mib": 1024
+        }
       },
       "guard_validation_history": [
         {
@@ -992,9 +1062,18 @@
         }
       ],
       "current_configuration_benchmark": {
-        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
-        "date": "2026-10-31",
-        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
+        "date": "2026-11-01",
+        "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
+        "source": "docs/benchmark-results/20261101-short-tool.json",
+        "prefill_tps": 792.4,
+        "ttft_s": 7.582404663000489,
+        "decode_tps": 61.7,
+        "prompt_tokens": 5597,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
       },
       "swap_policy_selection": {
         "date": "2026-10-29",
@@ -1055,6 +1134,15 @@
           "other_guards": "unchanged",
           "benchmark_status": "failed or incomplete"
         }
+      ],
+      "calculated_context_history": [
+        {
+          "date": "2026-11-01",
+          "previous_context": 32768,
+          "new_context": 131072,
+          "status": "candidate awaiting short actual DSH tool and native memory check",
+          "full_context_stress": false
+        }
       ]
     },
     {
@@ -1067,7 +1155,7 @@
         "glm"
       ],
       "allocated_context": 65536,
-      "context_validation": "Context expansion passed three-marker retrieval at 58986 input tokens plus JSON/arithmetic and resource checks; see dated context report.",
+      "context_validation": "64K retained; candidate disables speculative MTP and uses greedy default sampling after malformed short tool response; verification pending.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 7.2,
@@ -1083,15 +1171,16 @@
       "selected_settings": {
         "expert_ram_gib": 40,
         "environment": {
-          "MAYA_GLM_RAM_GB": "40"
+          "MAYA_GLM_RAM_GB": "40",
+          "MAYA_GLM_NO_MTP": "1"
         },
         "reason": "Saved full-RAM cache settings restored after explicit hardware confirmation and Linux capacity verification; later runtime pins, VRAM reserve and guards preserved.",
         "expert_profile": "data/glm-maya-expert-profile.bin",
         "prefill": "auto",
         "kv_streaming": true,
-        "mtp": true,
+        "mtp": false,
         "cpu_vision": "on-demand fallback; released after image encoding",
-        "reserve_mib_per_gpu": 512,
+        "reserve_mib_per_gpu": 1024,
         "context_trial_args": {},
         "temporary_reduced_ram": {
           "temporary": false,
@@ -1101,7 +1190,7 @@
           "normal_guarded_verification": "passed"
         },
         "vram_reserve_args": {
-          "--vram-reserve-mib": 512
+          "--vram-reserve-mib": 1024
         },
         "swap_guard": {
           "window_s": 30,
@@ -1310,9 +1399,18 @@
         "evidence": "docs/MOE-VRAM512-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
-        "date": "2026-10-31",
-        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
+        "date": "2026-11-01",
+        "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
+        "source": "docs/benchmark-results/20261101-short-tool.json",
+        "prefill_tps": 107.1,
+        "ttft_s": 51.95723991900013,
+        "decode_tps": 2.5,
+        "prompt_tokens": 5437,
+        "output_tokens": 25,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -1363,347 +1461,31 @@
           "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
           "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
         }
-      ]
-    },
-    {
-      "id": "deepseek-strata",
-      "model": "DeepSeek-V4.1-Flash-1017",
-      "weight_quant": "Maya-S",
-      "engine": "Strata",
-      "status": "selected",
-      "launch": [
-        "strata-deepseek"
       ],
-      "allocated_context": 131072,
-      "context_validation": "Context expansion passed three-marker retrieval at 117866 input tokens plus JSON/arithmetic and resource checks; see dated context report.",
-      "benchmark_context": 8192,
-      "benchmark": {
-        "short_decode_tps": 2.7,
-        "long_decode_tps": 2.7,
-        "long_prompt_tps": 34.8,
-        "long_ttft_s": 62.58
-      },
-      "runtime_selector": {
-        "kind": "strata-runtime-profile",
-        "name": "deepseek-maya-s"
-      },
-      "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
-      "tested_retrieval_input": 117866,
-      "benchmark_evidence": "docs/BENCHMARK-UNLOCK-20261026.md",
-      "context_qualification": {
-        "date": "2026-10-27",
-        "configured_context": 65536,
-        "input_tokens": 58969,
-        "output_tokens": 43,
-        "retrieval_passed": true,
-        "repetitions": 1,
-        "prefill_tps": 60.6,
-        "decode_tps": 1.5,
-        "ttft_s": 972.5352302909996,
-        "wall_s": 1000.682838015,
-        "cached_tokens": 0
-      },
-      "selected_settings": {
-        "tp_requested": 2,
-        "actual_gpu_route": "layer groups",
-        "experts": 6,
-        "drafting": "none",
-        "vision": false,
-        "cpu_threads": 14,
-        "prefill_chunk": 4096,
-        "mmap_experts": true,
-        "reserve_mib_per_gpu": 512,
-        "parallel": 1,
-        "reasoning_effort": "none",
-        "environment": {
-          "DS4_STORE_GB": "42",
-          "DS4_STORE_POLICY": "1"
-        },
-        "expert_profile": "data/deepseek-strata-expert-profile.bin",
-        "expert_ram_store_gb": 42.0,
-        "expert_cache_policy": "LFU",
-        "reason": "Saved full-RAM cache settings restored after explicit hardware confirmation and Linux capacity verification; later runtime pins, VRAM reserve and guards preserved.",
-        "context_trial_args": {},
-        "temporary_reduced_ram": {
-          "temporary": false,
-          "restored_on": "2026-10-29",
-          "verified_memtotal_kib": 64279104,
-          "preimage_reference": "20261028-reduced-ram",
-          "normal_guarded_verification": "passed"
-        },
-        "vram_reserve_args": {
-          "--reserve-mib": 512
-        },
-        "swap_guard": {
-          "window_s": 30,
-          "write_mib_s": 128,
-          "combined_mib_s": 160,
-          "pressure_pct": 10
-        }
-      },
-      "latest_benchmark": {
-        "run": "20261031-pair-main-aux",
-        "variant": "deepseek-strata-selected-pair",
-        "date": "2026-10-31",
-        "context": 131072,
-        "physical_ram_gb": 64,
-        "physical_ram_usable_gib": 61.30133056640625,
-        "repetitions": 3,
-        "host_vm_swappiness": 60,
-        "input_tokens": 2188,
-        "output_tokens": 128,
-        "ttft_s": 70.84524688199963,
-        "prefill_tps": 30.8,
-        "decode_tps": 3.2712231863921586,
-        "prefill_method": "native prompt_n / native prompt time",
-        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "fixture_sha256": "1b228aa28e5fa3e1409a98609789a924efdd72da109b965cc22bbdac0e808b2f",
-        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
-        "numeric_results": "docs/benchmark-results/20261031-pair-main-aux.json"
-      },
-      "storage": {
-        "access": "ssd-streaming",
-        "required_transport": "nvme",
-        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
-      },
-      "worker_memory_gib": {
-        "high": 56,
-        "max": 58,
-        "swap": null
-      },
-      "latest_qualification": {
-        "run": "20261027-context-expansion",
-        "variant": "deepseek-strata-131072-accepted-confirmed",
-        "host_vm_swappiness": 60,
-        "context": 131072,
-        "retrieval_input_tokens": 117866,
-        "three_markers_passed": true,
-        "json_arithmetic_passed": true,
-        "image_passed": null,
-        "full_window_retested": false,
-        "near_window_retested": true,
-        "retrieval_ttft_s": 1722.8755479999963,
-        "retrieval_decode_tps": 2.0890711468552707
-      },
-      "context_expansion_assessment": {
-        "run": "20261027-context-expansion",
-        "status": "increased",
-        "control": "deepseek-strata-65536-control",
-        "selected_variant": "deepseek-strata-131072-accepted-confirmed",
-        "evidence": "docs/CONTEXT-EXPANSION-20261027.md"
-      },
-      "benchmark_history": [
+      "calculated_context_history": [
         {
-          "run": "20261027-context-expansion",
-          "variant": "deepseek-strata-131072-accepted-confirmed",
-          "date": "2026-10-27",
-          "context": 131072,
-          "repetitions": 3,
-          "host_vm_swappiness": 60,
-          "swap_policy": "bounded-1GiB legacy",
-          "input_tokens_range": [
-            2179,
-            2198
-          ],
-          "output_tokens": 128,
-          "ttft_s": 65.79570539899578,
-          "prefill_tps": 33.3,
-          "decode_tps": 2.954827446086253,
-          "prefill_method": "native prompt timing or dense per-request prefill counter delta",
-          "decode_method": "client SSE (output tokens - 1) / first-to-last-content interval",
-          "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
-          "numeric_results": "docs/benchmark-results/20261027-context-expansion.json"
-        },
-        {
-          "run": "20261028-reduced-ram",
-          "variant": "deepseek-strata-store24",
-          "date": "2026-10-28",
-          "context": 131072,
-          "physical_ram_usable_gib": 45.55,
-          "repetitions": 3,
-          "input_tokens_range": [
-            2179,
-            2198
-          ],
-          "output_tokens": 128,
-          "prefill_tps": 32.2,
-          "ttft_s": 68.04903762399044,
-          "decode_tps": 1.7953964876237218,
-          "prefill_method": "native engine prompt timing",
-          "decode_method": "client SSE (completion_tokens - 1) / first-to-last-content interval",
-          "evidence": "docs/REDUCED-RAM-20261028.md",
-          "numeric_results": "docs/benchmark-results/20261028-reduced-ram.json",
-          "host_vm_swappiness": 60,
-          "swap_policy": "unlimited occupancy; unchanged active owned-worker swap/churn/pressure/telemetry guards"
-        },
-        {
-          "run": "20261029-moe-vram512",
-          "variant": "deepseek-strata-vram512-routerfix",
-          "date": "2026-10-29",
-          "context": 131072,
-          "prefill_tps": 33.6,
-          "ttft_s": 65.21959592099302,
-          "decode_tps": 1.8793914172189028,
-          "repetitions": 3,
-          "output_tokens": 128,
-          "evidence": "docs/MOE-VRAM512-20261029.md",
-          "numeric_results": "docs/benchmark-results/20261029-moe-vram512.json",
-          "host_ram_reserve_gib": 2,
-          "host_vm_swappiness": 60,
-          "method": "Savedfixedfixture/nativeprefill/clientSSETTFTanddecode;historicalpriorcontrolonly"
-        },
-        {
-          "run": "20261029-full-ram",
-          "variant": "deepseek-strata-64gb-fixed-fixture",
-          "date": "2026-10-29",
-          "context": 131072,
-          "physical_ram_gb": 64,
-          "physical_ram_usable_gib": 61.30133056640625,
-          "configured_ram_speed_mt_s": 4200,
-          "repetitions": 3,
-          "host_vm_swappiness": 60,
-          "swap_policy": "Owned active swap 1 MiB/s writes / 8 MiB/s combined over 30 seconds",
-          "input_tokens_range": [
-            2173,
-            2192
-          ],
-          "output_tokens": 128,
-          "ttft_s": 67.29431004299977,
-          "prefill_tps": 32.6,
-          "decode_tps": 3.1206183602624455,
-          "prefill_method": "native prompt_n / native prompt time",
-          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-          "evidence": "docs/BENCHMARK-64GB-20261029.md",
-          "numeric_results": "docs/benchmark-results/20261029-full-ram.json",
-          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c"
-        },
-        {
-          "run": "20261029-ssd-relaxed-swap",
-          "variant": "deepseek-strata-64gb-ssd128-160",
-          "date": "2026-10-29",
-          "context": 131072,
-          "physical_ram_gb": 64,
-          "physical_ram_usable_gib": 61.30133056640625,
-          "configured_ram_speed_mt_s": 4200,
-          "repetitions": 3,
-          "host_vm_swappiness": 60,
-          "swap_policy": "SSD-streaming128 MiB/s writes /160 MiB/s combined over30s",
-          "output_tokens": 128,
-          "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
-          "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
-          "fixture_sha256": "33a05efdfcb7aa60c0dd422d8266fd0374c11f43a739b8b0b310ec6f38cbd39c",
-          "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-          "prefill_tps": 34.2,
-          "ttft_s": 63.86864420999973,
-          "decode_tps": 2.7538217587589835,
-          "input_tokens_range": [
-            2173,
-            2192
-          ],
-          "prefill_method": "native prompt_n / native prompt time"
-        }
-      ],
-      "reduced_ram_qualification": {
-        "run": "20261028-reduced-ram",
-        "variant": "deepseek-strata-store24",
-        "context": 131072,
-        "physical_ram_usable_gib": 45.55,
-        "retrieval_input_tokens": 117866,
-        "three_markers_passed": true,
-        "json_arithmetic_passed": true,
-        "image_passed": null,
-        "continuous_generation_s": 381.13710950899986,
-        "fresh_process_reload_passed": true,
-        "full_window_retested": false,
-        "near_window_retested": true,
-        "evidence": "docs/REDUCED-RAM-20261028.md"
-      },
-      "retired_full_ram_cache_reference": {
-        "repository": "Biegle-W/retired-llm-setting",
-        "commit": "38d70cda3860da0576222987b4677b993467f4b1",
-        "manifest": "linux-nvidia/20261028-reduced-ram/MANIFEST.json",
-        "credentials": "Redacted from Git preimages; original owner-only local credentials are retained"
-      },
-      "host_ram_reserve_gib": 2,
-      "vram512_qualification": {
-        "date": "2026-10-29",
-        "reserve_mib_per_gpu": 512,
-        "context_unchanged": 131072,
-        "cache_environment_unchanged": true,
-        "quality_passed": true,
-        "near_window_passed": true,
-        "sustained_generation_s": 316.3172094949987,
-        "fresh_process_reload_passed": true,
-        "normal_route_passed": true,
-        "evidence": "docs/MOE-VRAM512-20261029.md"
-      },
-      "current_configuration_benchmark": {
-        "status": "measured on current 64GB hardware with main inference on the 3080 pair",
-        "date": "2026-10-31",
-        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md"
-      },
-      "current_guard_validation": {
-        "date": "2026-10-29",
-        "physical_ram_usable_gib": 61.30133056640625,
-        "normal_router_profile": true,
-        "passed": true,
-        "stage": "fixed-fixture speed benchmark",
-        "scope": "Fixed saved approximately 2.2K-input prompts, one 64-output warmup and three 128-output measured requests. No fresh full-window, image, tool, fresh-reload or long-duration qualification. OS page cache not flushed; loading excluded.",
-        "host_floor_gib": 2,
-        "only_policy_change": "Four SSD profiles 128/160 MiB/s; independent guards unchanged",
-        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json"
-      },
-      "full_ram_restoration": {
-        "confirmed_on": "2026-10-29",
-        "linux_memtotal_kib": 64279104,
-        "cache_settings_restored": true,
-        "normal_guarded_load_passed": true,
-        "historical_benchmarks_unchanged": true
-      },
-      "swap_policy_selection": {
-        "date": "2026-10-29",
-        "scope": "Four maintained SSD-streaming profiles; dense and unknown profiles retain 1/8 MiB/s",
-        "evidence": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
-        "other_guards": "unchanged",
-        "benchmark_status": "three measured requests passed"
-      },
-      "latest_benchmark_attempt": {
-        "date": "2026-10-29",
-        "passed": true,
-        "physical_ram_gb": 64,
-        "configured_ram_speed_mt_s": 4200,
-        "evidence": "docs/BENCHMARK-SSD-SWAP-64GB-20261029.md",
-        "numeric_results": "docs/benchmark-results/20261029-ssd-relaxed-swap.json",
-        "scope": "three fixed requests with SSD swap128/160 policy"
-      },
-      "guard_validation_history": [
-        {
-          "date": "2026-10-29",
-          "physical_ram_usable_gib": 61.30133056640625,
-          "normal_router_profile": true,
-          "passed": true,
-          "stage": "normal-startup-json-and-fresh-reload",
-          "scope": "No new speed, image, near-window retrieval or sustained-generation qualification was performed after RAM restoration.",
-          "host_floor_gib": 2,
-          "source_settings_unchanged": false,
-          "benchmark_repeated": false,
-          "evidence": "docs/FULL-RAM-RESTORATION-20261029.md",
-          "numeric_results": "docs/validation-results/20261029-full-ram-restoration.json"
+          "date": "2026-11-01",
+          "previous_context": 65536,
+          "new_context": 65536,
+          "status": "Larger candidate rejected by short-harness check; previous context restored pending one short check",
+          "full_context_stress": false,
+          "host_kv_upper_bound_gib": 3.25,
+          "geometry": "13 latent-attention layers *512 channels *2bytes *262144 tokens; fixed GPU streaming window",
+          "memory_candidate_context": 262144
         }
       ]
     },
     {
       "id": "deepseek-maya",
       "model": "DeepSeek-V4.1-Flash-1017",
-      "weight_quant": "Maya-S",
+      "weight_quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
       "engine": "Maya",
       "status": "selected",
       "launch": [
         "maya-deepseek"
       ],
       "allocated_context": 32768,
-      "context_validation": "32K allocation retained; fresh three-marker retrieval passed at 29456 input tokens, with sustained generation and two fresh normal reloads; not an exact full-window or multi-hour guarantee.",
+      "context_validation": "32768; separate Maya v1.1.46 completed actual DSH read tool/result; no full-context qualification.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 3.4,
@@ -1741,8 +1523,17 @@
       },
       "storage": {
         "access": "ssd-streaming",
+        "checkpoint_directory": "models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S",
         "required_transport": "nvme",
-        "checkpoint_directory": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S"
+        "file_transports": {
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00001-of-00005.gguf": "nvme",
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00002-of-00005.gguf": "nvme",
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00003-of-00005.gguf": "nvme",
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00004-of-00005.gguf": "nvme",
+          "DeepSeek-V4.1-Flash-1017-UD-IQ1_S-00005-of-00005.gguf": "sata"
+        },
+        "base_weight_bytes": 232979608420,
+        "base_weight_gb": 232.97960842
       },
       "worker_memory_gib": {
         "high": 56,
@@ -1755,7 +1546,7 @@
           "DS4_FILE_CACHE_MIB": "36864",
           "DS4_WARM_CAP_GB": "32"
         },
-        "expert_profile": "data/deepseek-maya-expert-profile.bin",
+        "expert_profile": "data/maya-unsloth-expert-profile.bin",
         "tp_requested": 2,
         "actual_gpu_route": "layer groups",
         "drafting": "none",
@@ -1763,13 +1554,13 @@
         "cpu_threads": 14,
         "prefill_chunk": 4096,
         "mmap_experts": true,
-        "reserve_mib_per_gpu": 512,
+        "reserve_mib_per_gpu": 1024,
         "parallel": 1,
         "reasoning_effort": "none",
         "reason": "Qualified bounded model-file residency and explicit startup read-ahead; existing full-RAM hardware, runtime pins, context and independent guards preserved.",
         "decode_expert_warm_gb": 4.0,
         "vram_reserve_args": {
-          "--reserve-mib": 512
+          "--reserve-mib": 1024
         },
         "runtime_manifest": "config/maya-cachebound-runtime.json",
         "temporary_reduced_ram": {
@@ -1790,21 +1581,12 @@
         "startup_expert_warm_cap_gb": 32
       },
       "latest_qualification": {
-        "run": "20261031-bolt-maya-reliability",
-        "date": "2026-10-31",
+        "date": "2026-11-01",
         "context": 32768,
-        "retrieval_input_tokens": 29456,
-        "three_markers_passed": true,
-        "json_arithmetic_passed": true,
-        "image_passed": true,
-        "full_window_retested": false,
-        "near_window_retested": true,
-        "sustained_output_tokens": 512,
-        "sustained_generation_s": 373.47791552799936,
-        "normal_fresh_reloads": 2,
-        "resources_passed": true,
-        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
-        "numeric_results": "docs/benchmark-results/20261031-bolt-maya-reliability.json"
+        "actual_dsh_read_tool": "pass",
+        "tool_result": "pass",
+        "wall_s": 142.20126158900166,
+        "full_context_stress": false
       },
       "tested_retrieval_input": 29456,
       "context_expansion_assessment": {
@@ -1896,9 +1678,18 @@
         "evidence": "docs/MAYA-DEMAND-CACHE-20261029.md"
       },
       "current_configuration_benchmark": {
-        "status": "passed three-request speed screen and bounded quality/resource/reload qualification with model-file residency control",
-        "date": "2026-10-31",
-        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md"
+        "date": "2026-11-01",
+        "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
+        "source": "docs/benchmark-results/20261101-short-tool.json",
+        "prefill_tps": 56.8,
+        "ttft_s": 101.24362219999966,
+        "decode_tps": 1.6,
+        "prompt_tokens": 5704,
+        "output_tokens": 60,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -2072,7 +1863,19 @@
         "scope": "Three fixed-fixture speed requests, JSON/arithmetic/image, near-window retrieval, 512-token continuous generation and two fresh normal reloads; no multi-hour soak",
         "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
         "numeric_results": "docs/benchmark-results/20261031-bolt-maya-reliability.json"
-      }
+      },
+      "calculated_context_history": [
+        {
+          "date": "2026-11-01",
+          "previous_context": 32768,
+          "new_context": 1048576,
+          "status": "candidate awaiting short actual DSH tool and native memory check",
+          "full_context_stress": false,
+          "model_context_cap": 1048576,
+          "compressed_cache_upper_bound_mib_per_gpu": 921,
+          "calculation": "Four compressed sources at ratios2,2,2,1; row288B KV +80B index; worst-case all sources duplicated on each GPU. Fixed window/prefill scratch and auto expert-cache allocation retain1024MiB reserve."
+        }
+      ]
     },
     {
       "id": "bolt-vllm",
@@ -2083,9 +1886,9 @@
       "launch": [
         "bolt"
       ],
-      "allocated_context": 65536,
+      "allocated_context": 163840,
       "tested_retrieval_input": 58893,
-      "context_validation": "64K: two fresh normal-router loads passed arithmetic/JSON; near-window three-marker retrieval and sustained streaming passed. Guards and 1GiB KV pool unchanged.",
+      "context_validation": "163840-token calculated memory allocation; short actual DSH tool check pending. No new full-context quality or speed qualification; older retrieval/benchmark evidence remains dated.",
       "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
       "storage": {
         "access": "ram-resident",
@@ -2198,6 +2001,29 @@
         "output_cap": 128,
         "full_context_stress": false,
         "observed_wall_s": 134.66455235500325
+      },
+      "calculated_context_history": [
+        {
+          "date": "2026-11-01",
+          "previous_context": 65536,
+          "new_context": 163840,
+          "status": "candidate awaiting short actual DSH tool and native memory check",
+          "full_context_stress": false
+        }
+      ],
+      "current_configuration_benchmark": {
+        "date": "2026-11-01",
+        "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
+        "source": "docs/benchmark-results/20261101-short-tool.json",
+        "prefill_tps": 235.6006192621003,
+        "ttft_s": 27.032111406326294,
+        "decode_tps": 0.3883599851215817,
+        "prompt_tokens": 6366,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
       }
     },
     {
@@ -2210,7 +2036,7 @@
         "strata-unsloth"
       ],
       "allocated_context": 32768,
-      "context_validation": "Arithmetic, JSON, three-marker retrieval at 29446 actual input tokens, and 256-token stream passed under unchanged guards; normal router verification recorded separately.",
+      "context_validation": "Previous context restored after the larger memory-fitting candidate failed its short DSH tool check. Awaiting restored-setting short check; no full-context test.",
       "runtime_selector": {
         "kind": "pinned-strata029",
         "manifest": "config/deepseek-unsloth-runtime.json"
@@ -2228,7 +2054,7 @@
         ],
         "experts": 6,
         "cpu_store_decimal_gb": 36,
-        "internal_gpu_reserve_mib": 768,
+        "internal_gpu_reserve_mib": 1024,
         "mmap_experts": true,
         "drafting": "none",
         "prefill_chunk": 128,
@@ -2261,6 +2087,33 @@
         "short_decode_tps": 5.79684787067062,
         "context": 32768,
         "status": "single-stream observation; not a matched speed comparison"
+      },
+      "calculated_context_history": [
+        {
+          "date": "2026-11-01",
+          "previous_context": 32768,
+          "new_context": 32768,
+          "status": "Larger candidate rejected by short-harness check; previous context restored pending one short check",
+          "full_context_stress": false,
+          "model_context_cap": 1048576,
+          "compressed_cache_upper_bound_mib_per_gpu": 921,
+          "calculation": "Four compressed sources at ratios2,2,2,1; row288B KV +80B index; worst-case all sources duplicated on each GPU. Fixed window/prefill scratch and auto expert-cache allocation retain1024MiB reserve.",
+          "memory_candidate_context": 1048576
+        }
+      ],
+      "current_configuration_benchmark": {
+        "date": "2026-11-01",
+        "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
+        "source": "docs/benchmark-results/20261101-short-tool.json",
+        "prefill_tps": 7.3,
+        "ttft_s": 23.12762732200099,
+        "decode_tps": 3.6,
+        "prompt_tokens": 5707,
+        "output_tokens": 60,
+        "cached_tokens": 5539,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
       }
     },
     {
@@ -2274,7 +2127,7 @@
       ],
       "allocated_context": 65536,
       "tested_retrieval_input": 58985,
-      "context_validation": "65536 configured below engine-calculated 81477-token KV capacity with 384 MiB BF16 KV per GPU; guarded load, arithmetic/JSON and short actual DSH read tool/result/unload passed. No new full-context stress qualification.",
+      "context_validation": "Restored 64K/384 MiB KV after 96K candidate triggered resource guard during actual inference; short DSH recheck pending.",
       "evidence": "docs/NEMOTRON-CONTEXT-20261101.md",
       "storage": {
         "access": "ssd-streaming",
@@ -2368,8 +2221,8 @@
         "cpu_input_projection_counts": "12,20",
         "gpu_output_projection_counts": "0,40",
         "file_backing_mib_per_rank": 2048,
-        "swap_write_mib_s": 64,
-        "swap_combined_mib_s": 96,
+        "swap_write_mib_s": 80,
+        "swap_combined_mib_s": 128,
         "swap_window_s": 30,
         "pressure_pct": 10
       },
@@ -2407,7 +2260,39 @@
             "evidence": "docs/NEMOTRON-CONTEXT-20261101.md"
           }
         }
-      ]
+      ],
+      "calculated_context_history": [
+        {
+          "date": "2026-11-01",
+          "previous_context": 65536,
+          "new_context": 98304,
+          "status": "candidate awaiting short actual DSH tool and native memory check",
+          "full_context_stress": false
+        }
+      ],
+      "current_configuration_benchmark": {
+        "date": "2026-11-01",
+        "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
+        "source": "docs/benchmark-results/20261101-short-tool.json",
+        "prefill_tps": 60.0564900872161,
+        "ttft_s": 106.15982270240784,
+        "decode_tps": 0.2494823016646086,
+        "prompt_tokens": 6366,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "latest_short_tool_check": {
+        "date": "2026-11-01",
+        "actual_dsh_read_tool": "pass",
+        "matching_tool_result": "pass",
+        "wall_s": 334.43437700399954,
+        "output_cap": 128,
+        "full_context_test": false,
+        "evidence": "docs/SGLANG-SUPER-SHORT-FIXES-20261101.md"
+      }
     }
   ],
   "host_reclaim_policy": {

@@ -19,8 +19,8 @@
   "file_backing_mib_per_rank": 2048,
   "processed_backing_directory": "data/super-processed-offload",
   "swap_policy": {
-    "write_mib_s": 64,
-    "combined_mib_s": 96,
+    "write_mib_s": 80,
+    "combined_mib_s": 128,
     "window_s": 30,
     "pressure_pct": 10
   },
@@ -47,9 +47,9 @@
     "runtimes/env-super-vllm-031/lib/python3.12/site-packages/vllm/parser/qwen3.py": "2fa80f910f0da453c2134027564a3859cb1f2ec01035198b40f11da37fe0ac0a",
     "runtimes/env-super-vllm-031/lib/python3.12/site-packages/vllm/parser/engine/adapters.py": "7a77bcb86e2129762f4199ee726398a4850b9e207893fc4295f2b759bcfeeb36",
     "runtimes/env-super-vllm-031/bin/python": "fa67443527ed9647f760d807e2a38f26340757123e643c4639cf273ed15d5ea7",
-    "scripts/super_runtime.py": "f378df1c9ff38919a9f9fa1a331fcb471fd4553310e6e3facac78551221b8509",
-    "scripts/supervise_super.py": "a5a8f782f05492d46e0764f08d613bd80d9c73adf967fba9b77e5cab3b35f9fb",
-    "scripts/inference_swap_guard.py": "bfdfd36531dd42d5012e1b26bcfff216bd9d83d2140de859172aff0f4c38e0c2",
+    "scripts/super_runtime.py": "265d1030087cd891ac63d24a9c4f4b4ee6c724066aaee32f6d11538edfe0bec0",
+    "scripts/supervise_super.py": "db3e6311837ecbf3b446cc390bc2e6511a13089c196216cea011581e952d110f",
+    "scripts/inference_swap_guard.py": "7e283af8616d76891d3608a20835bac37076de1793eb5b34ce611c40f9bb3f91",
     "scripts/super_offload_hook/sitecustomize.py": "2bad8941bccea431aa49ba31f208efdf4bc33c33d98092c43c472cdfec6822c0",
     "scripts/super_offload_hook/placement.py": "5ec9b45b475188db47d131ee831b5412d58b9a5ba9c0d830ed6fe821983f40d7",
     "scripts/super_offload_hook/repack.py": "711f42464b3d5526b8b2029a17625e4b8ffa05cff9475b039994fc666a5082bb",
@@ -57,7 +57,8 @@
     "scripts/super_offload_hook/compact_pool.py": "3a93cf120a20125aa6b178bbff656a729a4e84121857a79581938d410c6a67da",
     "scripts/super_offload_hook/checkpoint_cache.py": "36da4a4ef01f180a7822ad94d4c664fb052e19aa251bdd0b3f4c7e4cd5faf921",
     "scripts/super_offload_hook/host_trim.py": "5f11721a61d22450d2ebe035afb1b72920225e33c791df1d5d1bbe25dcc457ee",
-    "scripts/super_offload_hook/file_backing.py": "d66598b9dbb48ff6724d1d0360e37ffb0d9d1e1db95f850e936879a2c9d36387"
+    "scripts/super_offload_hook/file_backing.py": "d66598b9dbb48ff6724d1d0360e37ffb0d9d1e1db95f850e936879a2c9d36387",
+    "scripts/context_capacity.py": "3b6bf3aad14689829d0f7fb9b72597c3d1c6c6cd9278203a6519af69c87eb58b"
   },
   "model_source_sha256": {
     "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",

@@ -260,14 +260,16 @@ class Workers:
                 return
         # Native Strata/Maya pages call their worker directly, outside this router lock.
         # Observe their status as well before starting a switch.
-        if self.active and profiles().get(self.active, {}).get('engine') in ('Strata', 'Maya'):
+        vllm_active = self.active in ('bolt-vllm', 'super-vllm')
+        if self.active and (vllm_active or profiles().get(self.active, {}).get('engine') in ('Strata', 'Maya')):
             deadline = time.monotonic() + 7200
             while True:
-                req = urllib.request.Request('http://127.0.0.1:10000/status',
+                req = urllib.request.Request('http://127.0.0.1:10000' + ('/metrics' if vllm_active else '/status'),
                       headers={'Authorization': 'Bearer ' + self.key})
                 try:
                     with OPENER.open(req, timeout=3) as response:
-                        status = json.load(response)
+                        status = ({'busy': vllm_requests_busy(response.read(2 * 1024 * 1024 + 1).decode())}
+                                  if vllm_active else json.load(response))
                 except (OSError, ValueError):
                     break
                 if (not status.get('busy') and not status.get('queued')
@@ -275,7 +277,7 @@ class Workers:
                     break
                 progress()
                 if time.monotonic() >= deadline:
-                    raise RouterError('The native web app is still answering.', 'backend_busy')
+                    raise RouterError('The previous model is still answering or queued.', 'backend_busy')
                 time.sleep(1)
         self.stop_owned(allowed_lock=allowed_lock)
         profile = profiles()[profile_id]
@@ -379,10 +381,9 @@ class Workers:
             pass
 
     def idle_tick(self, now=None):
-        """Dense engines use the router lock; native engines use their FIFO adapter."""
+        """All managed profiles share the router idle deadline and ownership guards."""
         now = time.monotonic() if now is None else now
-        if (not getattr(self, 'idle_timeout', 0) or not self.active
-                or not self.active.startswith('qwen27b-')):
+        if not getattr(self, 'idle_timeout', 0) or not self.active:
             return False
         if not self.lock.acquire(blocking=False):
             return False
@@ -406,7 +407,7 @@ class Workers:
                 self.last_activity = now
                 return False
             self.idle_unloading = profile
-            self.stop_owned(allowed_lock=owner, only_unit=DENSE_UNIT)
+            self.stop_owned(allowed_lock=owner, only_unit=(DENSE_UNIT if profile.startswith('qwen27b-') else MOE_UNIT))
             record = ROOT / 'data/router/idle-events.jsonl'
             record.parent.mkdir(parents=True, exist_ok=True)
             with record.open('a') as stream:

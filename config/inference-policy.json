@@ -8,6 +8,26 @@
     "default": "short-actual-harness-tool-call-then-unload",
     "full_context_stress_requires_explicit_user_request": true,
     "calculate_context_from_memory": true,
-    "unload_after_smoke": true
+    "unload_after_smoke": true,
+    "benchmark_during_short_tool_call": true,
+    "benchmark_metrics": [
+      "prefill_tps",
+      "ttft_s",
+      "decode_tps"
+    ],
+    "benchmark_excludes": [
+      "model_loading",
+      "followup_answer"
+    ],
+    "benchmark_output_format": [
+      "model_quant",
+      "engine",
+      "prefill_tps",
+      "ttft_s",
+      "decode_tps",
+      "context_limit_tokens",
+      "storage_size_decimal_gb",
+      "storage_location"
+    ]
   }
 }

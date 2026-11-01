@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Current short-tool observations — November 1
+
+The eight retained profiles now have prefill, TTFT and decode observations measured during actual short DSH read calls, with successful matching tool results and owned unload. DeepSeek/Maya and DeepSeek/Strata share the existing Unsloth UD-IQ1_S checkpoint; the older Maya-S Strata profile is retired. Current configured contexts are 40K HyperQwen, 32K SGLang, 128K Flash-Next, 64K GLM, 32K both DeepSeek engines, 160K Bolt and 64K Super. These calculated windows were not subjected to a new full-context test. [Table, cache state and measurement limits](docs/SHORT-TOOL-BENCHMARKS-20261101.md).
+
 ## Permanent GPU pair — November 1
 
 The 3060 is permanently removed. Pair-only boot repair is verified after reboot: seeded peer reads/writes passed both directions at 13.082 GB/s, unlock health is VERIFIED, and the current-boot model startup gate passes. [Status and safeguards](docs/P2P-PERMANENT-PAIR-20261101.md).

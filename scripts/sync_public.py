@@ -6,6 +6,22 @@ import re
 import subprocess
 
 FILES = (
+    'docs/SHORT-TOOL-BENCHMARKS-20261101.md',
+    'docs/benchmark-results/20261101-short-tool.json',
+    'config/maya-unsloth-runtime.json',
+    'docs/API-SWITCH-CHECKS-20261101.md',
+    'docs/API-SWITCH-VRAM-20261101.md',
+    'docs/MAYA-UNSLOTH-20261101.md',
+    'docs/SGLANG-SUPER-SHORT-FIXES-20261101.md',
+    'scripts/context_capacity.py',
+    'scripts/short_tool_metrics.py',
+    'tests/test_context_capacity.py',
+    'tests/test_metrics_stream_completion.py',
+    'tests/test_pair_gpu_telemetry.py',
+    'tests/test_qwen_vram_settle.py',
+    'tests/test_short_tool_metrics.py',
+    'tests/test_super_bounded_policy.py',
+    'tests/test_vllm_switch_wait.py',
     'docs/validation-results/20261101-permanent-pair-p2p.json',
     'docs/P2P-PERMANENT-PAIR-20261101.md',
     'scripts/boot_peer_verify.py',

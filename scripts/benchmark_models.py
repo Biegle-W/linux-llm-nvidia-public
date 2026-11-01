@@ -24,9 +24,13 @@ VOCAB = 'river stone market lantern copper winter garden signal harbor needle or
 def metric_rows(text, metric, stage=None):
     rows = []
     for line in text.splitlines():
+        line = line.strip()
         if line.startswith('#') or not line:
             continue
-        name = line.split('{', 1)[0].split()[0]
+        fields = line.split('{', 1)[0].split()
+        if not fields:
+            continue
+        name = fields[0]
         if name != metric:
             continue
         labels = dict(re.findall(r'(\w+)="([^"\n]*)"', line))

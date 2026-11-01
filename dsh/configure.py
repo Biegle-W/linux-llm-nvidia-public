@@ -97,6 +97,10 @@ def configure(profile='web'):
         if e.get('id')!='llm-pi-ai':e['config']=migrate_selection(e.get('config',{}),routes=routes)
     selected=next((x for x in entries if x.get('id')=='agent-default-model'),None)
     if selected is None:entries.append({'id':'agent-default-model','config':{'provider':ROUTER_ID,'model':SEARCH}})
+    # Auxiliary title inference can switch the sole GPU worker away from an agent.
+    title=next((x for x in entries if x.get('id')=='session-title-llm'),None)
+    if title is None:entries.append({'id':'session-title-llm','disabled':True,'config':{}})
+    else:title['disabled']=True
     temp=path.with_suffix('.tmp');temp.write_text(yaml.safe_dump(entries,sort_keys=False));temp.chmod(0o600);temp.replace(path)
     print(f'DSH registered {len(profiles)} maintained models under NVIDIA Server Router; unrelated routes preserved.')
 
