@@ -31,7 +31,7 @@ def main():
         if not path.resolve().is_relative_to(ROOT.resolve()) or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             raise RuntimeError('Installed terminal runtime hash mismatch')
     env = dict(os.environ, LD_LIBRARY_PATH=str(ROOT / config['library_directory']))
-    libraries = subprocess.check_output(['ldd', str(ROOT / config['binary'])], text=True, env=env)
+    libraries = subprocess.check_output(['ldd', str(ROOT / config.get('native_binary', config['binary']))], text=True, env=env)
     if 'not found' in libraries:
         raise RuntimeError('Terminal runtime has unresolved dependencies')
     print('Verified project-local minimized terminal runtime; system packages unchanged.')

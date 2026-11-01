@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Background terminal focus protection — November 1
+
+Automated test/viewer windows now use a verified execution-boundary wrapper, iconic non-input hints and zero user time; bell/output raising and inherited activation tokens are blocked. This covers cached launcher imports without stopping inference. Explicit attention/authentication and selectors still map and activate normally. Live current/legacy no-focus tests and 27 focused regressions passed. [Implementation and evidence](docs/BACKGROUND-TERMINALS-20261101.md).
+
 ## Bolt automatic tool calling verified — October 31
 
 Bolt enables automatic tool choice with `qwen3_coder`, as specified by its model card. A fresh normal-router load passed parsed auto tool calls, a local fixture result round trip and streamed tool arguments with reasoning disabled. All 325 CPU regressions passed; the two-GPU loading policy, 8K context and resource guards remain intact. [Tool-calling settings and scope](docs/BOLT-TOOL-CALLING-20261031.md).

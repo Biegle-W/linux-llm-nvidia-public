@@ -67,6 +67,8 @@ def run_foreground(command, title, receipt, starts_minimized=False):
               'visible_tty': os.ttyname(sys.stdout.fileno()),
               'window_id': os.environ.get('WINDOWID'), 'starts_minimized': starts_minimized,
               'state': 'running', 'started_at': time.time(), 'transcript': str(transcript)}
+    if starts_minimized:
+        background_terminal(record['window_id'])
     write_receipt(receipt, record)
     print(title, flush=True)
     code = 127
@@ -135,9 +137,63 @@ def terminal_command(title, command, minimized=False):
         path = ROOT / relative
         if not path.resolve().is_relative_to(ROOT.resolve()) or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
             raise RuntimeError('Minimized terminal runtime changed; verify/reinstall before launch')
-    return [str(ROOT / config['binary']), *(['-iconic'] if minimized else []), '-class', 'NvidiaLLMTerminal',
+    background = (['-iconic', '-xrm', '*popOnBell: false', '-xrm', '*bellIsUrgent: false',
+                   '-xrm', '*zIconBeep: 0', '-xrm', '*allowWindowOps: false', '-xrm', '*input: false']
+                  if minimized else [])
+    return [str(ROOT / config['binary']), *background, '-class', 'NvidiaLLMTerminal',
             '-T', title, '-geometry', '132x34', '-fa', 'Monospace', '-fs', '11',
             '-e', *command]
+
+
+
+def background_terminal(window_id):
+    """Make an owned background viewer non-input and iconic; never request focus."""
+    env = desktop_env(); old_auth = os.environ.get('XAUTHORITY')
+    if env.get('XAUTHORITY'): os.environ['XAUTHORITY'] = env['XAUTHORITY']
+    x = ctypes.CDLL('libX11.so.6'); D = ctypes.c_void_p; W = ctypes.c_ulong
+    x.XOpenDisplay.argtypes = [ctypes.c_char_p]; x.XOpenDisplay.restype = D
+    x.XDefaultScreen.argtypes = [D]; x.XDefaultScreen.restype = ctypes.c_int
+    x.XCloseDisplay.argtypes = [D]; x.XFlush.argtypes = [D]; x.XFree.argtypes = [D]
+    class ClassHint(ctypes.Structure):
+        _fields_ = [('name', D), ('klass', D)]
+    class Hints(ctypes.Structure):
+        _fields_ = [('flags', ctypes.c_long), ('input', ctypes.c_int), ('initial_state', ctypes.c_int),
+                    ('icon_pixmap', W), ('icon_window', W), ('icon_x', ctypes.c_int), ('icon_y', ctypes.c_int),
+                    ('icon_mask', W), ('window_group', W)]
+    x.XGetClassHint.argtypes = [D, W, ctypes.POINTER(ClassHint)]
+    x.XGetWMHints.argtypes = [D, W]; x.XGetWMHints.restype = ctypes.POINTER(Hints)
+    x.XSetWMHints.argtypes = [D, W, ctypes.POINTER(Hints)]
+    x.XIconifyWindow.argtypes = [D, W, ctypes.c_int]
+    x.XInternAtom.argtypes = [D, ctypes.c_char_p, ctypes.c_int]; x.XInternAtom.restype = W
+    x.XChangeProperty.argtypes = [D, W, W, W, ctypes.c_int, ctypes.c_int, ctypes.POINTER(ctypes.c_ubyte), ctypes.c_int]
+    try: display = x.XOpenDisplay(env.get('DISPLAY', '').encode() or None)
+    finally:
+        if old_auth is None: os.environ.pop('XAUTHORITY', None)
+        else: os.environ['XAUTHORITY'] = old_auth
+    if not display: raise RuntimeError('Cannot enforce background terminal policy: no X11 display')
+    try:
+        window = int(window_id); klass = ClassHint()
+        if not x.XGetClassHint(display, window, ctypes.byref(klass)):
+            raise RuntimeError('Cannot verify owned background terminal class')
+        try:
+            if not klass.klass or ctypes.string_at(klass.klass) != b'NvidiaLLMTerminal':
+                raise RuntimeError('Refusing background policy on an unrelated window')
+        finally:
+            if klass.name: x.XFree(klass.name)
+            if klass.klass: x.XFree(klass.klass)
+        hints = x.XGetWMHints(display, window)
+        value = hints.contents if hints else Hints()
+        value.flags = (value.flags | 1 | 2) & ~(1 << 8)
+        value.input = 0; value.initial_state = 3
+        x.XSetWMHints(display, window, ctypes.byref(value))
+        if hints: x.XFree(hints)
+        zero = W(0)
+        x.XChangeProperty(display, window, x.XInternAtom(display, b'_NET_WM_USER_TIME', 0),
+                          x.XInternAtom(display, b'CARDINAL', 0), 32, 0,
+                          ctypes.cast(ctypes.byref(zero), ctypes.POINTER(ctypes.c_ubyte)), 1)
+        x.XIconifyWindow(display, window, x.XDefaultScreen(display)); x.XFlush(display)
+        return True
+    finally: x.XCloseDisplay(display)
 
 
 def focus_terminal(window_id):
@@ -221,10 +277,14 @@ def launch_terminal(command):
     config = json.loads((ROOT / 'config/terminal-runtime.json').read_text())
     env['LD_LIBRARY_PATH'] = str(ROOT / config['library_directory']) + (':' + env['LD_LIBRARY_PATH'] if env.get('LD_LIBRARY_PATH') else '')
     env['XAPPLRESDIR'] = str(ROOT / config['app_defaults_directory'])
+    if '-iconic' in command[:command.index('-e')]:
+        env['DESKTOP_STARTUP_ID'] = ''; env['XDG_ACTIVATION_TOKEN'] = ''
     launcher = ['systemd-run', '--user', '--collect', '--quiet', '--unit=llm-terminal-' + uuid.uuid4().hex]
     for key in ('DISPLAY', 'WAYLAND_DISPLAY', 'XDG_RUNTIME_DIR', 'DBUS_SESSION_BUS_ADDRESS', 'XAUTHORITY', 'LD_LIBRARY_PATH', 'XAPPLRESDIR'):
         if key in env:
             launcher.append('--setenv=' + key + '=' + env[key])
+    if '-iconic' in command[:command.index('-e')]:
+        launcher += ['--setenv=DESKTOP_STARTUP_ID=', '--setenv=XDG_ACTIVATION_TOKEN=']
     subprocess.Popen([*launcher, *command], env=env, start_new_session=True,
                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
@@ -269,6 +329,7 @@ def watch(args):
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except BlockingIOError:
             return
+        background_terminal(os.environ.get('WINDOWID'))
         marker.write_text(json.dumps({'pid': os.getpid(), 'unit': args.unit,
                                      'window_id': os.environ.get('WINDOWID'),
                                      'starts_minimized': True}))

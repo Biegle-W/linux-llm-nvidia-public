@@ -168,3 +168,28 @@ class StopOwnership(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+
+class BackgroundPolicy(unittest.TestCase):
+    def test_background_disables_output_raise_bells_and_input(self):
+        command=console.terminal_command('Fixture',['/bin/true'],minimized=True)
+        self.assertIn('-iconic',command)
+        for resource in ['*popOnBell: false','*bellIsUrgent: false','*zIconBeep: 0','*allowWindowOps: false','*input: false']:
+            self.assertIn(resource,command)
+        attention=console.terminal_command('Attention',['/bin/true'],minimized=False)
+        self.assertNotIn('-iconic',attention);self.assertNotIn('*input: false',attention)
+    def test_background_activation_tokens_are_cleared(self):
+        env={'DISPLAY':':fixture','DESKTOP_STARTUP_ID':'old-token','XDG_ACTIVATION_TOKEN':'old-token'}
+        with patch.object(console,'desktop_env',return_value=env),patch.object(console.subprocess,'Popen') as popen:
+            console.launch_terminal(['xterm','-iconic','-e','/bin/true'])
+        argv=popen.call_args.args[0];actual=popen.call_args.kwargs['env']
+        self.assertIn('--setenv=DESKTOP_STARTUP_ID=',argv);self.assertIn('--setenv=XDG_ACTIVATION_TOKEN=',argv)
+        self.assertEqual(actual['DESKTOP_STARTUP_ID'],'');self.assertEqual(actual['XDG_ACTIVATION_TOKEN'],'')
+    def test_minimized_receipt_follows_background_protection(self):
+        with tempfile.TemporaryDirectory() as directory:
+            receipt=Path(directory)/'receipt.json'
+            def protect(window):
+                self.assertEqual(window,'123');self.assertFalse(receipt.exists());return True
+            with patch.dict(console.os.environ,{'WINDOWID':'123'}),patch.object(console.os,'ttyname',return_value='/dev/pts/fixture'),patch.object(console,'background_terminal',side_effect=protect),patch.object(console.subprocess,'run',return_value=Mock(returncode=0)),patch.object(console,'focus_terminal') as focus:
+                self.assertEqual(console.run_foreground(['/bin/true'],'Fixture',receipt,starts_minimized=True),0)
+                focus.assert_not_called()

@@ -6,6 +6,10 @@ import re
 import subprocess
 
 FILES = (
+    'scripts/terminal_exec.py',
+    'tests/test_terminal_exec.py',
+    'docs/BACKGROUND-TERMINALS-20261101.md',
+    'docs/validation-results/20261101-background-terminals.json',
     'docs/BOLT-TOOL-CALLING-20261031.md',
     'docs/validation-results/20261031-bolt-tool-calling.json',
     'docs/BOLT-TWO-GPU-LOADING-20261031.md',

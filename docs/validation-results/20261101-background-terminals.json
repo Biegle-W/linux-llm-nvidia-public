@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-01",
+  "scope": "Project-owned automated/background terminal windows only",
+  "current_launcher": {
+    "phase": "pass",
+    "samples": 24,
+    "stimulus": "BEL, deiconify and raise escape sequences repeated12times",
+    "iconic_all_samples": true,
+    "inactive_all_samples": true,
+    "input_disabled": true,
+    "user_time_zero": true,
+    "completed_exit_code": 0
+  },
+  "legacy_launcher": {
+    "phase": "pass",
+    "legacy_launcher_samples": 25,
+    "iconic_all_samples": true,
+    "inactive_all_samples": true,
+    "input_disabled": true,
+    "output_raise_attempts": 12,
+    "normal_exit_observed": true
+  },
+  "focused_regressions": {
+    "backend_console": 16,
+    "terminal_execution": 4,
+    "presentation": 7
+  },
+  "attention_mode": "Explicit attention/selectors retain ordinary mapped windows and confirmed activation; no live attention probe was performed during user work.",
+  "system_terminal_or_window_manager_settings_changed": false,
+  "inference_jobs_stopped_for_terminal_fix": false
+}
