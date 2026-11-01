@@ -1,0 +1,89 @@
+{
+  "date": "2026-11-01",
+  "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B AWQ INT4",
+  "selected_context": 65536,
+  "gpu_pair": [
+    "RTX3080Ti",
+    "RTX3080"
+  ],
+  "physical_ram_gb": 64,
+  "kv_cache_mib_per_gpu": 1024,
+  "weight_precision_changed": false,
+  "input_truncation_used": false,
+  "fresh_normal_router_loads": [
+    {
+      "load": 1,
+      "load_s": 222.595536300003,
+      "arithmetic_json": "pass",
+      "memory_peak_bytes": 53353607168,
+      "swap_peak_bytes": 0,
+      "readiness_gpu_free_mib": [
+        5731,
+        2896
+      ],
+      "unloaded": true
+    },
+    {
+      "load": 2,
+      "load_s": 222.57367710200197,
+      "arithmetic_json": "pass",
+      "memory_peak_bytes": 53256613888,
+      "swap_peak_bytes": 0,
+      "readiness_gpu_free_mib": [
+        5731,
+        2869
+      ],
+      "unloaded": true
+    }
+  ],
+  "retrieval_input_tokens": 58893,
+  "three_marker_retrieval": "pass",
+  "stream": {
+    "done": true,
+    "usage": {
+      "prompt_tokens": 29,
+      "total_tokens": 61,
+      "completion_tokens": 32
+    },
+    "wall_s": 84.53002356999787
+  },
+  "guard_samples": 490,
+  "guard_violations": 0,
+  "maximum_pressure_pct": 0.0,
+  "maximum_swap_write_mib_s": 0.0,
+  "maximum_swap_combined_mib_s": 0.0,
+  "limits": {
+    "host_ram_gib": 2,
+    "gpu_free_mib": 512,
+    "temperature_c": 82,
+    "worker_high_gib": 56,
+    "worker_max_gib": 58,
+    "swap_write_mib_s": 1,
+    "swap_combined_mib_s": 8,
+    "swap_window_s": 30,
+    "active_pressure_pct": 10,
+    "loading_pressure_pct": 15,
+    "idle_s": 600,
+    "swappiness": 60
+  },
+  "previous_32k_qualification": {
+    "retrieval_input_tokens": 29374,
+    "fresh_loads": 2,
+    "stream": "pass"
+  },
+  "dsh": {
+    "live_context_window": 65536,
+    "max_output_tokens": 4096,
+    "server_default_enable_thinking": false,
+    "registration_preserves_custom_entries": true,
+    "live_settings_verified": true,
+    "actual_harness_generation_at_64k": "pending GPU qualification queue",
+    "measured_test_request_input_tokens": 33534,
+    "request_sizing_used_local_stub_not_model_inference": true
+  },
+  "cpu_regressions": {
+    "passed": 333,
+    "seconds": 3.281,
+    "cuda_hidden": true
+  }
+}

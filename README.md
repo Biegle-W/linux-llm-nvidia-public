@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Bolt 64K context qualified — November 1
+
+Bolt is selected at 64K after two fresh normal-router loads, arithmetic/JSON, 58,893-input-token retrieval and streaming. The 1GiB KV pool, precision and resource guards remain intact. Live DSH advertises 65,536 context / 4,096 output; custom entries are preserved and omitted client thinking defaults off. Actual 64K DSH generation remains pending behind the GPU qualification queue. All 333 CPU regressions passed. [Results and DSH scope](docs/BOLT-CONTEXT-20261101.md).
+
 ## Latest: restored 64GB worker budgets applied — October 31
 
 All six MoE profiles now use 56 GiB soft / 58 GiB hard worker limits. Both GPU-resident Qwen profiles retain their explicitly uncapped RAM setting. Linux sees 61.3 GiB usable; the independent 2 GiB host-available stop and all VRAM,swap,pressure and temperature guards remain active. Contexts and other model settings are unchanged. All eight actual kernel cgroup settings and 321 CPU tests passed; no inference job was interrupted. [Policy and verification](docs/WORKER-RAM-64GB-20261031.md).

@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Bolt 64K context qualified — November 1
+
+Bolt is selected at 64K after two fresh normal-router loads, arithmetic/JSON, 58,893-input-token retrieval and streaming. The 1GiB KV pool, precision and resource guards remain intact. Live DSH advertises 65,536 context / 4,096 output; custom entries are preserved and omitted client thinking defaults off. Actual 64K DSH generation remains pending behind the GPU qualification queue. All 333 CPU regressions passed. [Results and DSH scope](BOLT-CONTEXT-20261101.md).
+
 ## Bolt automatic tool calling verified — October 31
 
 Bolt enables automatic tool choice with `qwen3_coder`, as specified by its model card. A fresh normal-router load passed parsed auto tool calls, a local fixture result round trip and streamed tool arguments with reasoning disabled. All 325 CPU regressions passed; the two-GPU loading policy, 8K context and resource guards remain intact. [Tool-calling settings and scope](BOLT-TOOL-CALLING-20261031.md).

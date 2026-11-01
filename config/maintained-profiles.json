@@ -2056,9 +2056,9 @@
       "launch": [
         "bolt"
       ],
-      "allocated_context": 8192,
-      "tested_retrieval_input": 7373,
-      "context_validation": "Two fresh normal-router 8K loads passed authentication, JSON/arithmetic, three-marker retrieval, 128-token sustained streaming and actual busy-unload protection. Final clean-mapping shard reclaim; unchanged resource guards.",
+      "allocated_context": 65536,
+      "tested_retrieval_input": 58893,
+      "context_validation": "64K: two fresh normal-router loads passed arithmetic/JSON; near-window three-marker retrieval and sustained streaming passed. Guards and 1GiB KV pool unchanged.",
       "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
       "storage": {
         "access": "ram-resident",
@@ -2149,6 +2149,16 @@
         "request_mode": "Chat Completions; enable_thinking=false",
         "evidence": "docs/BOLT-TOOL-CALLING-20261031.md",
         "numeric_results": "docs/validation-results/20261031-bolt-tool-calling.json"
+      },
+      "context_expansion": {
+        "date": "2026-11-01",
+        "from": 32768,
+        "to": 65536,
+        "retrieval_input_tokens": 58893,
+        "normal_router_reloads": 2,
+        "resources_passed": true,
+        "dsh_context_window": 65536,
+        "dsh_max_output_tokens": 4096
       }
     },
     {

@@ -4,7 +4,7 @@
   "model_revision": "3df8bd99af5d58abe5f052ef81127dff092f26b4",
   "model_directory": "models/bolt-awq-int4",
   "binary": "runtimes/env-bolt-vllm-031/bin/vllm",
-  "context": 8192,
+  "context": 65536,
   "prefill_batch_tokens": 1024,
   "gpu_indices": [
     0,

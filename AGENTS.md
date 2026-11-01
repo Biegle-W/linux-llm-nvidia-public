@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Bolt 64K context qualified — November 1
+
+Bolt is selected at 64K after two fresh normal-router loads, arithmetic/JSON, 58,893-input-token retrieval and streaming. The 1GiB KV pool, precision and resource guards remain intact. Live DSH advertises 65,536 context / 4,096 output; custom entries are preserved and omitted client thinking defaults off. Actual 64K DSH generation remains pending behind the GPU qualification queue. All 333 CPU regressions passed. [Results and DSH scope](docs/BOLT-CONTEXT-20261101.md).
+
 ## Background terminal focus protection — November 1
 
 Automated test/viewer windows now use a verified execution-boundary wrapper, iconic non-input hints and zero user time; bell/output raising and inherited activation tokens are blocked. This covers cached launcher imports without stopping inference. Explicit attention/authentication and selectors still map and activate normally. Live current/legacy no-focus tests and 27 focused regressions passed. [Implementation and evidence](docs/BACKGROUND-TERMINALS-20261101.md).

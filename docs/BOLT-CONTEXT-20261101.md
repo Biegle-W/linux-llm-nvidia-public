@@ -1,0 +1,11 @@
+# Bolt 64K context and DSH registration — November 1, 2026
+
+Bolt's selected context is now **65,536 tokens**, up from 8,192. Two fresh normal-router loads on the RTX3080Ti/3080 passed arithmetic/JSON. Three-marker retrieval passed at **58,893 actual input tokens**, followed by a complete 32-token SSE stream. The intermediate 32K setting had separately passed retrieval at 29,374 input tokens. Existing 8K benchmark and tool-calling evidence remains dated history.
+
+The existing 1GiB KV pool per GPU was retained. No weight precision, model-file position limit or input truncation changed. Normal loads took 222.60 and 222.57 seconds. The 64K stream took 84.53 seconds; this is a qualification observation, not a controlled speed comparison. The 2GiB host reserve, 512MiB GPU reserve, 82C stop, 56/58GiB worker budget, strict 1/8MiB/s swap limits, pressure guards, swappiness60 and idle600s remain in force. Guard samples recorded no violations. All 333 local CPU regressions passed with CUDA hidden.
+
+DSH's live web entry and persisted web/headless entries now advertise 65,536 context tokens and a 4,096-token output cap. Input, system/tool context, history and output share the window: a full 4K output budget leaves at most 61,440 tokens for input. A local sizing-only capture measured 33,534 input tokens for the real harness prompt plus a test document, explaining why that request exceeded 32K. The sizing stub is not model-quality evidence. An actual 64K DSH generation check is still pending behind the serialized GPU qualification queue.
+
+The server defaults `enable_thinking` to false when clients omit that template option, matching the qualified tool-call mode; explicit request overrides remain supported. DSH registration supports the vLLM offload engine while preserving existing custom providers, search aliases and default selections. The live configuration was applied without restarting DSH. Super remains experimental and is undergoing separate larger-context qualification; it is not yet a maintained DSH profile.
+
+[Machine-readable qualification](validation-results/20261101-bolt-context.json). [Earlier tool-calling scope](BOLT-TOOL-CALLING-20261031.md). [Earlier 8K benchmark scope](BOLT-MAYA-RELIABILITY-20261031.md).

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Register the selected NVIDIA models in DSH without storing the API key in YAML."""
+"""Register maintained NVIDIA models while preserving custom DSH routes and aliases."""
 import json
 from pathlib import Path
 import sys
@@ -23,21 +23,31 @@ def configure(profile='web'):
             entries.append(existing)
         return existing.setdefault('config', {})
     providers = entry('llm-pi-ai').setdefault('providers', {})
-    groups = {}
-    for p in load_catalog()['profiles']:
-        key = {'HyperQwen-vLLM': 'hyperqwen', 'SGLang': 'sglang', 'Strata': 'strata', 'Maya': 'maya'}[p['engine']]
-        groups.setdefault(key, []).append(p)
-    for key, profiles in groups.items():
-        providers['nvidia-' + key] = {
-            'displayName': 'NVIDIA ' + profiles[0]['engine'], 'api': 'openai-completions',
-            'baseURL': 'http://127.0.0.1:10100/v1', 'apiKeyEnv': 'LOCAL_LLM_API_KEY',
-            'timeoutMs': 7200000, 'streamIdleTimeoutMs': 7200000,
-            'compat': {'supportsDeveloperRole': False, 'maxTokensField': 'max_tokens',
-                       'supportsStore': False, 'supportsStrictMode': False,
-                       'supportsReasoningEffort': False},
-            'models': [{'id': p['id'], 'name': p['model'] + ' / ' + p['engine'],
-                        'contextWindow': p['allocated_context'], 'maxTokens': 4096,
-                        'input': ['text'], 'reasoningEfforts': False} for p in profiles]}
+    profiles = load_catalog()['profiles']
+    engine_keys = {'HyperQwen-vLLM': 'hyperqwen', 'SGLang': 'sglang',
+                   'Strata': 'strata', 'Maya': 'maya', 'vLLM-offload': 'vllm-offload', 'vLLM-offload': 'vllm-offload'}
+    for selected in profiles:
+        matches = [model for provider in providers.values() for model in provider.get('models', [])
+                   if model.get('id') == selected['id']]
+        if not matches:
+            key = 'nvidia-' + engine_keys[selected['engine']]
+            provider = providers.setdefault(key, {
+                'displayName': 'NVIDIA ' + selected['engine'], 'api': 'openai-completions',
+                'baseURL': 'http://127.0.0.1:10100/v1', 'apiKeyEnv': 'LOCAL_LLM_API_KEY',
+                'timeoutMs': 7200000, 'streamIdleTimeoutMs': 7200000,
+                'compat': {'supportsDeveloperRole': False, 'maxTokensField': 'max_tokens',
+                           'supportsStore': False, 'supportsStrictMode': False,
+                           'supportsReasoningEffort': False}, 'models': []})
+            model = {'id': selected['id'], 'name': selected['model'] + ' / ' + selected['engine'],
+                     'input': ['text'], 'reasoningEfforts': False}
+            provider.setdefault('models', []).append(model)
+            matches = [model]
+        for model in matches:
+            model['contextWindow'] = selected['allocated_context']
+            if selected['engine'] == 'vLLM-offload':
+                model['maxTokens'] = 4096
+            else:
+                model.setdefault('maxTokens', 4096)
     selected = entry('agent-default-model')
     if not selected:
         selected.update(provider='nvidia-hyperqwen', model='qwen27b-hyperqwen')
@@ -45,7 +55,7 @@ def configure(profile='web'):
     temp.write_text(yaml.safe_dump(entries, sort_keys=False))
     temp.chmod(0o600)
     temp.replace(path)
-    print('DSH registered six profiles in four NVIDIA engine providers.')
+    print(f'DSH registered {len(profiles)} maintained profiles; custom routes and aliases preserved.')
 
 
 if __name__ == '__main__':

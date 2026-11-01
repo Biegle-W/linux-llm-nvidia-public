@@ -6,6 +6,9 @@ import re
 import subprocess
 
 FILES = (
+    'docs/BOLT-CONTEXT-20261101.md',
+    'docs/validation-results/20261101-bolt-context.json',
+    'tests/test_dsh_registration.py',
     'scripts/terminal_exec.py',
     'tests/test_terminal_exec.py',
     'docs/BACKGROUND-TERMINALS-20261101.md',
