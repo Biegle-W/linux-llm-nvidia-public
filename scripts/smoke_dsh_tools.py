@@ -20,7 +20,9 @@ try:
  health=req('/health');assert not (R/'data/GPU-LOCK').exists();assert not any(health.get(x) for x in ['busy','inflight','queued','loading_model','idle_unloading_model']),health
  state['phase']='selecting';save();req('/router/select',{'model':a.model});owned=prop('InvocationID');assert owned;state['invocation']=owned;state['ready_gpu_memory']=subprocess.check_output(['nvidia-smi','--query-gpu=memory.used,memory.free','--format=csv,noheader,nounits'],text=True).strip()
  ready_free=[float(line.split(',')[1]) for line in state['ready_gpu_memory'].splitlines()]
- assert len(ready_free)==2 and all(value>=512 for value in ready_free),'Readiness is below the preserved two-GPU 512 MiB free-memory floor'
+ from inference_swap_guard import dense_gpu_free_mib
+ gpu_floor=dense_gpu_free_mib(a.model)
+ assert len(ready_free)==2 and all(value>=gpu_floor for value in ready_free),f'Readiness is below the selected two-GPU {gpu_floor} MiB free-memory floor'
  from short_tool_metrics import ToolMetrics
  timing_tap=ToolMetrics(O,k,a.model)
  workspace=Path(tempfile.mkdtemp(prefix='nvidia-dsh-short-'));nonce='NVIDIA_TOOL_OK_'+uuid.uuid4().hex;file=workspace/'proof.txt';file.write_text(nonce+'\n');file.chmod(0o600)

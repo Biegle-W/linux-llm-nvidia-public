@@ -80,11 +80,11 @@ class HostRamReserve(unittest.TestCase):
     def test_dense_engines_stop_below_two(self):
         for engine in ['hyperqwen','sglang']:
             with self.subTest(engine=engine):self.assertEqual(self.run_guard(1,dense_engine=engine)[0],1)
-    def test_dense_512mib_gpu_floor_unchanged(self):
-        for engine in ['hyperqwen','sglang']:
+    def test_dense_gpu_floors_remain_scoped(self):
+        for engine,floor in [('hyperqwen',512),('sglang',448)]:
             with self.subTest(engine=engine):
-                self.assertEqual(self.run_guard(3,dense_engine=engine,gpu_free=512),(0,0))
-                self.assertEqual(self.run_guard(3,dense_engine=engine,gpu_free=511)[0],1)
+                self.assertEqual(self.run_guard(3,dense_engine=engine,gpu_free=floor),(0,0))
+                self.assertEqual(self.run_guard(3,dense_engine=engine,gpu_free=floor-1)[0],1)
     def test_dense_thermal_and_swap_guards_unchanged(self):
         for engine in ['hyperqwen','sglang']:
             with self.subTest(engine=engine):

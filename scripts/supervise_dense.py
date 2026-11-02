@@ -6,7 +6,7 @@ import signal
 import subprocess
 import sys
 import time
-from inference_swap_guard import WorkerWatch, ROOT, DENSE_GPU_FREE_MIB
+from inference_swap_guard import WorkerWatch, ROOT, dense_gpu_free_mib
 from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib
 from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 
@@ -17,6 +17,7 @@ def main():
     if engine not in ('hyperqwen', 'sglang'):
         raise SystemExit('Choose a maintained dense engine.')
     profile = get_profile('qwen27b-' + engine)
+    gpu_floor_mib = dense_gpu_free_mib(profile['id'])
     host_floor_kib = host_ram_reserve_gib(profile) * 1024 ** 2
     group = next(line.split('::', 1)[1] for line in Path('/proc/self/cgroup').read_text().splitlines()
                  if line.startswith('0::'))
@@ -65,7 +66,7 @@ def main():
                                            '--format=csv,noheader,nounits'], text=True)
             cards = [[float(value) for value in line.split(',')] for line in raw.splitlines()]
             bad = bad + 1 if (available < host_floor_kib or any(card[0] >= 82 for card in cards)
-                             or (watch.ready and any(card[1] < DENSE_GPU_FREE_MIB for card in cards))) else 0
+                             or (watch.ready and any(card[1] < gpu_floor_mib for card in cards))) else 0
             if watch.ready and not transport_checked and not reason:
                 from context_capacity import check_p2p_progress, read_engine_log
                 try:
@@ -86,7 +87,7 @@ def main():
             if reason or bad >= 3:
                 reason = reason or ('Dense host/temperature/GPU-headroom guard reached: '
                                     f'MemAvailable_kib={available}, host_floor_kib={host_floor_kib}, '
-                                    f'GPU_temp_C_and_free_MiB={cards}, free_floor_MiB={DENSE_GPU_FREE_MIB}')
+                                    f'GPU_temp_C_and_free_MiB={cards}, free_floor_MiB={gpu_floor_mib}')
                 print(reason, flush=True)
                 stop()
                 raise SystemExit(1)

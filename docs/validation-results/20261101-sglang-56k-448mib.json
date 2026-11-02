@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-01",
+  "profile": "qwen27b-sglang",
+  "context": 57344,
+  "native_kv_capacity_each_rank": 57344,
+  "gpu_free_floor_mib": 448,
+  "hyperqwen_gpu_free_floor_mib": 512,
+  "readiness_gpu_memory_used_free_mib": [
+    [
+      11382,
+      583
+    ],
+    [
+      8626,
+      1300
+    ]
+  ],
+  "minimum_sampled_free_mib": [
+    469,
+    1206
+  ],
+  "sampling_interval_s": 0.5,
+  "actual_dsh_read_tool_passed": true,
+  "owned_unloaded": true,
+  "full_context_test": false,
+  "benchmark": {
+    "model": "qwen27b-sglang",
+    "measurement": "first actual DSH tool-call generation",
+    "loading_excluded": true,
+    "prompt_tokens": 6101,
+    "output_tokens": 41,
+    "cached_tokens": 0,
+    "native_timings": {},
+    "client_ttft_s": 2.5997799190008664,
+    "client_last_token_s": 3.1312849410005583,
+    "meaningful_sse_chunks": 4,
+    "generation_wall_s": 3.196145494999655,
+    "usage": {
+      "prompt_tokens": 6101,
+      "total_tokens": 6142,
+      "completion_tokens": 41,
+      "prompt_tokens_details": null,
+      "reasoning_tokens": 0
+    },
+    "prefill_tps": 2467.2120200308314,
+    "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+    "ttft_s": 2.50672811000004,
+    "ttft_method": "engine first-token counter",
+    "decode_tps": 60.17341548067849,
+    "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+  }
+}

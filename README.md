@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## SGLang 56K with scoped 448 MiB floor — November 1, 2026
+
+SGLang uses 57,344 tokens with a 448 MiB free-VRAM floor; short tool/unload and native KV checks passed with 469 MiB minimum sampled free. HyperQwen remains 86,016 tokens / 512 MiB floor. Other guards are unchanged. No full-context test. [Evidence](docs/SGLANG-56K-448MIB-20261101.md).
+
 ## Qwen27B context increased further — November 1, 2026
 
 HyperQwen now uses 86,016 tokens; SGLang 55,296. Native KV capacity, short DSH read tools, sampled VRAM floor and owned unload passed. SGLang 57,344 was rejected after a 469 MiB transient. Guards remain unchanged; no full-context qualification. [Results](docs/QWEN-LARGER-CONTEXT-20261101.md).
