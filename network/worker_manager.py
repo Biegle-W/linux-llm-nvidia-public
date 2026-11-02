@@ -213,10 +213,10 @@ class Workers:
                         raise RouterError('GPUs are reserved by another task; existing work was preserved.', 'gpu_reserved')
                 if (ROOT / 'data/router/guard-stops' / (profile_id + '.json')).exists():
                     raise RouterError('The worker was stopped by a safety guard; explicitly select it after reviewing its log.', 'safety_guard_latched')
+                if unit_property(unit, 'ActiveState') not in ('active', 'activating'):
+                    raise RouterError('Worker stopped during loading; inspect its journal for a resource-guard or runtime failure.', 'launch_failed')
                 if invocation != unit_property(unit, 'InvocationID'):
                     raise RouterError('Worker ownership changed while waiting; existing work was preserved.', 'ownership_conflict')
-                if unit_property(unit, 'ActiveState') not in ('active', 'activating'):
-                    raise RouterError('Worker stopped during loading; inspect its journal.', 'launch_failed')
                 if unit == MOE_UNIT:
                     try:
                         state = json.loads(STATE.read_text())
