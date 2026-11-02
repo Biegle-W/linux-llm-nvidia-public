@@ -1,5 +1,9 @@
 # Current takeover state
 
+## API-only router all-model check — November 1, 2026
+
+Seven maintained profiles passed measured short DSH read-tool calls and owned unload. Super/vLLM failed its unchanged loading-pressure guard before readiness; no new speed result. Final workers inactive, no GPU reservation; current-boot unlock/P2P checks pass. See [new-router results](NEW-ROUTER-BENCHMARKS-20261101.md). Older successful measurements remain historical.
+
 ## Current short-tool observations — November 1
 
 The eight retained profiles now have prefill, TTFT and decode observations measured during actual short DSH read calls, with successful matching tool results and owned unload. DeepSeek/Maya and DeepSeek/Strata share the existing Unsloth UD-IQ1_S checkpoint; the older Maya-S Strata profile is retired. Current configured contexts are 40K HyperQwen, 32K SGLang, 128K Flash-Next, 64K GLM, 32K both DeepSeek engines, 160K Bolt and 64K Super. These calculated windows were not subjected to a new full-context test. [Table, cache state and measurement limits](SHORT-TOOL-BENCHMARKS-20261101.md).
