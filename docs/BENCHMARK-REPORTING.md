@@ -81,3 +81,7 @@ A fresh process may still restore a saved conversation prefix from disk. Reusing
 ## Short actual-tool observations
 
 The current default measures prefill, TTFT and decode during the same short actual DSH read call and then unloads. Report token/cache counts and parser buffering explicitly. This differs from historical controlled uncached repeat suites below: no extra replay or cache-isolation suite is implied. [November 1 evidence](SHORT-TOOL-BENCHMARKS-20261101.md).
+
+## Future model test sequence
+
+Use the [future model short harness test plan](FUTURE-MODEL-TEST-PLAN.md): guarded load, short actual tool/result round trip with request-scoped metrics, owned unload and verified resource release, then switch to the next requested profile. Include both performance and resource-guard tables.

@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Future model short harness test plan — November 2, 2026
+
+For future requested profiles, follow [the reusable plan](docs/FUTURE-MODEL-TEST-PLAN.md): guarded load, one short real harness tool/result round trip with benchmark capture, owned unload and resource-release verification, then switch models. Every result list includes the existing performance columns plus per-profile RAM, VRAM and swap guardrails. Preserve independent work and all guards; no extra full-context or sustained suite is implied.
+
 ## Benchmark reports include resource guards — November 1, 2026
 
 Every future model benchmark list must include a companion per-profile RAM, VRAM and swap guard table alongside the performance table. Report worker RAM high/max and host reserve; per-GPU free-VRAM floors and exceptions; swap occupancy, write/combined I/O limits, averaging windows and pressure/hysteresis rules. Distinguish effective limits from measured usage. Use current deployed settings, preserve historical guard attribution, and mark unavailable measurements explicitly. See [reporting conventions](docs/BENCHMARK-REPORTING.md). This reporting requirement does not request new benchmark runs or guard changes.
