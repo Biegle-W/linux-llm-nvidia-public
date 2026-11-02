@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Benchmark reports include resource guards — November 1, 2026
+
+Every future model benchmark list must include a companion per-profile RAM, VRAM and swap guard table alongside the performance table. Report worker RAM high/max and host reserve; per-GPU free-VRAM floors and exceptions; swap occupancy, write/combined I/O limits, averaging windows and pressure/hysteresis rules. Distinguish effective limits from measured usage. Use current deployed settings, preserve historical guard attribution, and mark unavailable measurements explicitly. See [reporting conventions](docs/BENCHMARK-REPORTING.md). This reporting requirement does not request new benchmark runs or guard changes.
+
 ## SGLang 56K with scoped 448 MiB floor — November 1, 2026
 
 SGLang uses 57,344 tokens with a 448 MiB free-VRAM floor; short tool/unload and native KV checks passed with 469 MiB minimum sampled free. HyperQwen remains 86,016 tokens / 512 MiB floor. Other guards are unchanged. No full-context test. [Evidence](docs/SGLANG-56K-448MIB-20261101.md).

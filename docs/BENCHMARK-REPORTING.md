@@ -48,6 +48,21 @@ and folder. In local chat, provide the resolved path or a clickable path with th
 mount mapping. In public exports, use sanitized relative paths plus drive type
 and the shared-weight relationship; keep live user/mount details private.
 
+## Required resource-guard table
+
+Standing reporting instruction, November 1: every future benchmark result list must include each reported profile's RAM, VRAM and swap guards alongside its performance results. Keep the existing performance columns in order and add a companion guard table keyed by profile/model and engine. Include it in chat summaries, saved reports and machine-readable benchmark evidence. Do not rerun models merely to document configured guards.
+
+| Model / quant | Engine | RAM guards | VRAM guards | Swap guards |
+| --- | --- | --- | --- | --- |
+
+RAM guards: worker soft/high and hard/max limits in GiB, plus the minimum host MemAvailable reserve. State explicitly when a worker limit is unlimited. Include loading/inference memory-pressure thresholds and their sustained-sample rules where enforced; distinguish cgroup PSI from host-available RAM.
+
+VRAM guards: minimum free MiB on each GPU, any model-specific exception, and consecutive-sample stop rule. Report startup admission requirements separately from the active/readiness floor if they differ. Use current deployed policy; for example, SGLang's 448 MiB floor must not be replaced by HyperQwen's 512 MiB default.
+
+Swap guards: worker occupancy cap (including explicitly unlimited), maximum write MiB/s and combined read+write MiB/s, averaging window, and sustained-violation rule. Unlimited occupancy does not mean unlimited swap I/O. Note any different loading/inference/idle enforcement rather than implying one threshold applies in every phase.
+
+Read effective guard values from the selected configuration, kernel cgroup settings and supervisor policy used for the observation. Keep configured limits separate from measured RAM/VRAM/swap consumption. If usage peaks or transient minima were not measured, say so; never invent them from the limits or call a readiness snapshot a full-run peak. Record guard-triggered failures with the actual trigger and threshold, without presenting the run as a qualified operating benchmark. Historical runs retain the guard policy that applied when measured.
+
 ## Current classification
 
 - VRAM-only: shared Qwen3.8-27B AutoRound INT4/INT8 on HyperQwen/vLLM and SGLang, checkpoint on SATA.
