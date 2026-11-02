@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-01",
+  "scope": "one short DSH read tool per engine; native KV capacity checked; loading excluded; no full-context stress",
+  "rows": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "previous_context": 40960,
+      "context": 49152,
+      "native_kv_capacity": 56173,
+      "used_vram_mib": [
+        8457,
+        8986
+      ],
+      "free_vram_mib": [
+        3507,
+        941
+      ],
+      "tool_passed": true,
+      "owned_unloaded": true,
+      "prefill_tps": 2370.313814830502,
+      "ttft_s": 2.4684579372406006,
+      "decode_tps": 65.82538905130406,
+      "prompt_tokens": 5826,
+      "output_tokens": 40,
+      "cached_tokens": 0,
+      "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+      "ttft_method": "engine first-token counter",
+      "decode_method": "vLLM one-request decode counter"
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "previous_context": 32768,
+      "context": 49152,
+      "native_kv_capacity": 49152,
+      "used_vram_mib": [
+        11122,
+        8360
+      ],
+      "free_vram_mib": [
+        843,
+        1566
+      ],
+      "tool_passed": true,
+      "owned_unloaded": true,
+      "prefill_tps": 2496.4345047931215,
+      "ttft_s": 2.4756987569999183,
+      "decode_tps": 60.04269446365847,
+      "prompt_tokens": 6095,
+      "output_tokens": 39,
+      "cached_tokens": 0,
+      "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+      "ttft_method": "engine first-token counter",
+      "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+    }
+  ]
+}

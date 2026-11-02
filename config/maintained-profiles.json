@@ -29,9 +29,9 @@
         "qwen27b",
         "hyperqwen"
       ],
-      "allocated_context": 40960,
+      "allocated_context": 49152,
       "tested_retrieval_input": 50627,
-      "context_validation": "40960-token calculated bounded allocation; actual short DSH read and matching tool result passed, native KV capacity checked and owned unload confirmed. No full-context or sustained qualification.",
+      "context_validation": "Calculated 49,152-token allocation backed by native KV capacity; actual short DSH read-tool result and owned unload passed. No new full-context or sustained quality test.",
       "benchmark_context": 32768,
       "benchmark": {
         "short_decode_tps": 112.06417287975118,
@@ -54,9 +54,9 @@
         "--gpu-memory-utilization",
         "0.76",
         "--kv-cache-memory-bytes",
-        "469762048",
+        "536870912",
         "--max-model-len",
-        "40960",
+        "49152",
         "--max-num-seqs",
         "1",
         "--max-num-batched-tokens",
@@ -216,14 +216,14 @@
       ],
       "current_configuration_benchmark": {
         "date": "2026-11-01",
-        "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
-        "prefill_tps": 2297.6648581214217,
-        "ttft_s": 2.546988010406494,
-        "decode_tps": 64.07367102639049,
+        "status": "single short DSH tool observation at 49,152 context; no full-window quality qualification",
+        "source": "docs/validation-results/20261101-qwen-48k.json",
+        "prefill_tps": 2370.313814830502,
+        "ttft_s": 2.4684579372406006,
+        "decode_tps": 65.82538905130406,
         "prompt_tokens": 5826,
-        "cached_tokens": 0,
         "output_tokens": 40,
+        "cached_tokens": 0,
         "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
         "ttft_method": "engine first-token counter",
         "decode_method": "vLLM one-request decode counter"
@@ -308,14 +308,24 @@
           "reason": "64K/768 MiB KV setting left only 368 MiB free on GPU1 at readiness, below unchanged 512 MiB floor; reduce allocation with headroom, preserve guards",
           "full_context_stress": false,
           "status": "short actual tool/result passed and unloaded; native allocation verified"
+        },
+        {
+          "date": "2026-11-01",
+          "previous_context": 40960,
+          "new_context": 49152,
+          "native_kv_capacity": 56173,
+          "actual_dsh_read_tool": "pass",
+          "matching_tool_result": "pass",
+          "owned_unload": true,
+          "source": "docs/validation-results/20261101-qwen-48k.json",
+          "full_context_stress": false
         }
       ],
       "latest_router_validation": {
         "date": "2026-11-01",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
+        "source": "docs/validation-results/20261101-qwen-48k.json",
         "tool_success": true,
-        "worker_inactive_verified": true,
-        "failure": null
+        "worker_inactive_verified": true
       },
       "short_tool_benchmark_history": [
         {
@@ -328,6 +338,20 @@
           "prompt_tokens": 5820,
           "output_tokens": 38,
           "cached_tokens": 0,
+          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "vLLM one-request decode counter"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
+          "source": "docs/benchmark-results/20261101-new-router-all-models.json",
+          "prefill_tps": 2297.6648581214217,
+          "ttft_s": 2.546988010406494,
+          "decode_tps": 64.07367102639049,
+          "prompt_tokens": 5826,
+          "cached_tokens": 0,
+          "output_tokens": 40,
           "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
           "ttft_method": "engine first-token counter",
           "decode_method": "vLLM one-request decode counter"
@@ -344,9 +368,9 @@
         "qwen27b",
         "sglang"
       ],
-      "allocated_context": 32768,
+      "allocated_context": 49152,
       "tested_retrieval_input": 29434,
-      "context_validation": "Calculated 32K with native96:40 MLP balance,11008/8448MiB budgets and no optional draft. Awaiting pool capacity and short DSH tool check.",
+      "context_validation": "Calculated 49,152-token allocation backed by native KV capacity; actual short DSH read-tool result and owned unload passed. No new full-context or sustained quality test.",
       "benchmark_context": 32768,
       "benchmark": {
         "prefill_tps": 1667.8703781763365,
@@ -359,7 +383,7 @@
         "pp_size": 1,
         "disable_custom_all_reduce": true,
         "mem_fraction_static": null,
-        "context_length": 32768,
+        "context_length": 49152,
         "max_running_requests": 1,
         "chunked_prefill_size": 384,
         "disable_cuda_graph": false,
@@ -378,8 +402,8 @@
           1
         ],
         "rank_gpu_memory_mib": [
-          11008,
-          8448
+          11520,
+          8960
         ],
         "rank_tp_ratio": [
           9,
@@ -389,7 +413,7 @@
           96,
           40
         ],
-        "max_total_tokens": 32768,
+        "max_total_tokens": 49152,
         "disable_overlap_schedule": false,
         "disable_prefill_cuda_graph": true
       },
@@ -738,14 +762,14 @@
       },
       "current_configuration_benchmark": {
         "date": "2026-11-01",
-        "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
-        "prefill_tps": 2331.763753544368,
-        "ttft_s": 2.6461910039997747,
-        "decode_tps": 58.80082114894577,
-        "prompt_tokens": 6089,
+        "status": "single short DSH tool observation at 49,152 context; no full-window quality qualification",
+        "source": "docs/validation-results/20261101-qwen-48k.json",
+        "prefill_tps": 2496.4345047931215,
+        "ttft_s": 2.4756987569999183,
+        "decode_tps": 60.04269446365847,
+        "prompt_tokens": 6095,
+        "output_tokens": 39,
         "cached_tokens": 0,
-        "output_tokens": 37,
         "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
         "ttft_method": "engine first-token counter",
         "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
@@ -799,6 +823,17 @@
             40
           ],
           "second_loader_kv_tokens": 31441
+        },
+        {
+          "date": "2026-11-01",
+          "previous_context": 32768,
+          "new_context": 49152,
+          "native_kv_capacity": 49152,
+          "actual_dsh_read_tool": "pass",
+          "matching_tool_result": "pass",
+          "owned_unload": true,
+          "source": "docs/validation-results/20261101-qwen-48k.json",
+          "full_context_stress": false
         }
       ],
       "startup_gpu_free_mib": [
@@ -816,10 +851,9 @@
       },
       "latest_router_validation": {
         "date": "2026-11-01",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
+        "source": "docs/validation-results/20261101-qwen-48k.json",
         "tool_success": true,
-        "worker_inactive_verified": true,
-        "failure": null
+        "worker_inactive_verified": true
       },
       "short_tool_benchmark_history": [
         {
@@ -832,6 +866,20 @@
           "prompt_tokens": 6095,
           "output_tokens": 39,
           "cached_tokens": 0,
+          "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
+          "source": "docs/benchmark-results/20261101-new-router-all-models.json",
+          "prefill_tps": 2331.763753544368,
+          "ttft_s": 2.6461910039997747,
+          "decode_tps": 58.80082114894577,
+          "prompt_tokens": 6089,
+          "cached_tokens": 0,
+          "output_tokens": 37,
           "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
           "ttft_method": "engine first-token counter",
           "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"

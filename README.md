@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Qwen27B engines increased to 48K — November 1, 2026
+
+HyperQwen and SGLang now both use 49,152 tokens, backed by native KV allocation and passing short DSH tool/unload checks. Guards are unchanged; no new full-context quality claim. [Settings, VRAM and timings](docs/QWEN-48K-CONTEXT-20261101.md).
+
 ## Nemotron Super removed — November 1, 2026
 
 All installed Nemotron Super weights, dedicated runtime and active profile/launcher support have been removed at the user’s request. Seven maintained profiles remain, including Bolt. Both retired Super IDs return HTTP 404; workers are idle. Historical Super results below are dated evidence only. [Removal and validation](docs/NEMOTRON-SUPER-REMOVAL-20261101.md).
