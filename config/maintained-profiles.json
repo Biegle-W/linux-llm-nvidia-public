@@ -29,9 +29,9 @@
         "qwen27b",
         "hyperqwen"
       ],
-      "allocated_context": 49152,
+      "allocated_context": 86016,
       "tested_retrieval_input": 50627,
-      "context_validation": "Calculated 49,152-token allocation backed by native KV capacity; actual short DSH read-tool result and owned unload passed. No new full-context or sustained quality test.",
+      "context_validation": "Calculated 86,016-token allocation backed by native KV capacity; short actual DSH read tool and owned unload passed; minimum sampled free VRAM [3245, 679] MiB. No full-window or sustained quality/resource claim.",
       "benchmark_context": 32768,
       "benchmark": {
         "short_decode_tps": 112.06417287975118,
@@ -54,9 +54,9 @@
         "--gpu-memory-utilization",
         "0.76",
         "--kv-cache-memory-bytes",
-        "536870912",
+        "805306368",
         "--max-model-len",
-        "49152",
+        "86016",
         "--max-num-seqs",
         "1",
         "--max-num-batched-tokens",
@@ -216,13 +216,13 @@
       ],
       "current_configuration_benchmark": {
         "date": "2026-11-01",
-        "status": "single short DSH tool observation at 49,152 context; no full-window quality qualification",
-        "source": "docs/validation-results/20261101-qwen-48k.json",
-        "prefill_tps": 2370.313814830502,
-        "ttft_s": 2.4684579372406006,
-        "decode_tps": 65.82538905130406,
-        "prompt_tokens": 5826,
-        "output_tokens": 40,
+        "status": "one short tool-call observation at larger context; native KV checked; loading excluded; no full-context qualification",
+        "source": "docs/validation-results/20261101-qwen-larger-context.json",
+        "prefill_tps": 2372.8401487550204,
+        "ttft_s": 2.467179536819458,
+        "decode_tps": 65.60006830076297,
+        "prompt_tokens": 5820,
+        "output_tokens": 38,
         "cached_tokens": 0,
         "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
         "ttft_method": "engine first-token counter",
@@ -319,11 +319,25 @@
           "owned_unload": true,
           "source": "docs/validation-results/20261101-qwen-48k.json",
           "full_context_stress": false
+        },
+        {
+          "date": "2026-11-01",
+          "previous_context": 49152,
+          "new_context": 86016,
+          "native_kv_capacity": 88931,
+          "tool_passed": true,
+          "owned_unloaded": true,
+          "minimum_sampled_free_mib": [
+            3245,
+            679
+          ],
+          "source": "docs/validation-results/20261101-qwen-larger-context.json",
+          "full_context_stress": false
         }
       ],
       "latest_router_validation": {
         "date": "2026-11-01",
-        "source": "docs/validation-results/20261101-qwen-48k.json",
+        "source": "docs/validation-results/20261101-qwen-larger-context.json",
         "tool_success": true,
         "worker_inactive_verified": true
       },
@@ -355,6 +369,20 @@
           "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
           "ttft_method": "engine first-token counter",
           "decode_method": "vLLM one-request decode counter"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "single short DSH tool observation at 49,152 context; no full-window quality qualification",
+          "source": "docs/validation-results/20261101-qwen-48k.json",
+          "prefill_tps": 2370.313814830502,
+          "ttft_s": 2.4684579372406006,
+          "decode_tps": 65.82538905130406,
+          "prompt_tokens": 5826,
+          "output_tokens": 40,
+          "cached_tokens": 0,
+          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "vLLM one-request decode counter"
         }
       ]
     },
@@ -368,9 +396,9 @@
         "qwen27b",
         "sglang"
       ],
-      "allocated_context": 49152,
+      "allocated_context": 55296,
       "tested_retrieval_input": 29434,
-      "context_validation": "Calculated 49,152-token allocation backed by native KV capacity; actual short DSH read-tool result and owned unload passed. No new full-context or sustained quality test.",
+      "context_validation": "Calculated 55,296-token allocation backed by native KV capacity; short actual DSH read tool and owned unload passed; minimum sampled free VRAM [533, 1274] MiB. No full-window or sustained quality/resource claim.",
       "benchmark_context": 32768,
       "benchmark": {
         "prefill_tps": 1667.8703781763365,
@@ -383,7 +411,7 @@
         "pp_size": 1,
         "disable_custom_all_reduce": true,
         "mem_fraction_static": null,
-        "context_length": 49152,
+        "context_length": 55296,
         "max_running_requests": 1,
         "chunked_prefill_size": 384,
         "disable_cuda_graph": false,
@@ -402,8 +430,8 @@
           1
         ],
         "rank_gpu_memory_mib": [
-          11520,
-          8960
+          11712,
+          9152
         ],
         "rank_tp_ratio": [
           9,
@@ -413,7 +441,7 @@
           96,
           40
         ],
-        "max_total_tokens": 49152,
+        "max_total_tokens": 55296,
         "disable_overlap_schedule": false,
         "disable_prefill_cuda_graph": true
       },
@@ -762,13 +790,13 @@
       },
       "current_configuration_benchmark": {
         "date": "2026-11-01",
-        "status": "single short DSH tool observation at 49,152 context; no full-window quality qualification",
-        "source": "docs/validation-results/20261101-qwen-48k.json",
-        "prefill_tps": 2496.4345047931215,
-        "ttft_s": 2.4756987569999183,
-        "decode_tps": 60.04269446365847,
-        "prompt_tokens": 6095,
-        "output_tokens": 39,
+        "status": "one short tool-call observation at larger context; native KV checked; loading excluded; no full-context qualification",
+        "source": "docs/validation-results/20261101-qwen-larger-context.json",
+        "prefill_tps": 2508.851203801843,
+        "ttft_s": 2.4649590860008175,
+        "decode_tps": 60.0908537659116,
+        "prompt_tokens": 6098,
+        "output_tokens": 40,
         "cached_tokens": 0,
         "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
         "ttft_method": "engine first-token counter",
@@ -834,6 +862,20 @@
           "owned_unload": true,
           "source": "docs/validation-results/20261101-qwen-48k.json",
           "full_context_stress": false
+        },
+        {
+          "date": "2026-11-01",
+          "previous_context": 49152,
+          "new_context": 55296,
+          "native_kv_capacity": 55296,
+          "tool_passed": true,
+          "owned_unloaded": true,
+          "minimum_sampled_free_mib": [
+            533,
+            1274
+          ],
+          "source": "docs/validation-results/20261101-qwen-larger-context.json",
+          "full_context_stress": false
         }
       ],
       "startup_gpu_free_mib": [
@@ -851,7 +893,7 @@
       },
       "latest_router_validation": {
         "date": "2026-11-01",
-        "source": "docs/validation-results/20261101-qwen-48k.json",
+        "source": "docs/validation-results/20261101-qwen-larger-context.json",
         "tool_success": true,
         "worker_inactive_verified": true
       },
@@ -880,6 +922,20 @@
           "prompt_tokens": 6089,
           "cached_tokens": 0,
           "output_tokens": 37,
+          "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "single short DSH tool observation at 49,152 context; no full-window quality qualification",
+          "source": "docs/validation-results/20261101-qwen-48k.json",
+          "prefill_tps": 2496.4345047931215,
+          "ttft_s": 2.4756987569999183,
+          "decode_tps": 60.04269446365847,
+          "prompt_tokens": 6095,
+          "output_tokens": 39,
+          "cached_tokens": 0,
           "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
           "ttft_method": "engine first-token counter",
           "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"

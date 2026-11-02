@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-01",
+  "scope": "short actual DSH read-tool calls, native KV allocation, readiness VRAM and approximately 0.5-second GPU sampling; no full-context or sustained test",
+  "rows": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "previous_context": 49152,
+      "context": 86016,
+      "native_kv_capacity": 88931,
+      "readiness_used_vram_mib": [
+        8719,
+        9248
+      ],
+      "readiness_free_vram_mib": [
+        3245,
+        679
+      ],
+      "minimum_sampled_free_mib": [
+        3245,
+        679
+      ],
+      "sampling_interval_s": 0.5,
+      "actual_read_tool_passed": true,
+      "owned_unloaded": true,
+      "prefill_tps": 2372.8401487550204,
+      "ttft_s": 2.467179536819458,
+      "decode_tps": 65.60006830076297,
+      "prompt_tokens": 5820,
+      "output_tokens": 38,
+      "cached_tokens": 0,
+      "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+      "ttft_method": "engine first-token counter",
+      "decode_method": "vLLM one-request decode counter"
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "previous_context": 49152,
+      "context": 55296,
+      "native_kv_capacity": 55296,
+      "readiness_used_vram_mib": [
+        11314,
+        8554
+      ],
+      "readiness_free_vram_mib": [
+        651,
+        1372
+      ],
+      "minimum_sampled_free_mib": [
+        533,
+        1274
+      ],
+      "sampling_interval_s": 0.5,
+      "actual_read_tool_passed": true,
+      "owned_unloaded": true,
+      "prefill_tps": 2508.851203801843,
+      "ttft_s": 2.4649590860008175,
+      "decode_tps": 60.0908537659116,
+      "prompt_tokens": 6098,
+      "output_tokens": 40,
+      "cached_tokens": 0,
+      "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+      "ttft_method": "engine first-token counter",
+      "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+    }
+  ],
+  "rejected_candidates": [
+    {
+      "profile": "qwen27b-sglang",
+      "context": 57344,
+      "tool_passed": true,
+      "selected": false,
+      "readiness_free_mib": [
+        587,
+        1308
+      ],
+      "minimum_sampled_free_mib": [
+        469,
+        1210
+      ],
+      "reason": "Transient GPU0 free VRAM below unchanged 512 MiB floor"
+    }
+  ]
+}

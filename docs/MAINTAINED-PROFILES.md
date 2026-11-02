@@ -1,5 +1,9 @@
 # Maintained model, quantization and engine settings
 
+## Qwen27B context increased further — November 1, 2026
+
+HyperQwen now uses 86,016 tokens; SGLang 55,296. Native KV capacity, short DSH read tools, sampled VRAM floor and owned unload passed. SGLang 57,344 was rejected after a 469 MiB transient. Guards remain unchanged; no full-context qualification. [Results](QWEN-LARGER-CONTEXT-20261101.md).
+
 ## Qwen27B engines increased to 48K — November 1, 2026
 
 HyperQwen and SGLang now both use 49,152 tokens, backed by native KV allocation and passing short DSH tool/unload checks. Guards are unchanged; no new full-context quality claim. [Settings, VRAM and timings](QWEN-48K-CONTEXT-20261101.md).

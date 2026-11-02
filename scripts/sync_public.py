@@ -9,6 +9,8 @@ RETIRED_FILES = (
     'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
 
 FILES = (
+    'docs/QWEN-LARGER-CONTEXT-20261101.md',
+    'docs/validation-results/20261101-qwen-larger-context.json',
     'docs/QWEN-48K-CONTEXT-20261101.md',
     'docs/validation-results/20261101-qwen-48k.json',
     'docs/NEMOTRON-SUPER-REMOVAL-20261101.md',
