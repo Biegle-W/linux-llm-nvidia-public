@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Foreground Codex CLI model tests — November 2, 2026
+
+A user-visible foreground CLI TTY satisfies harness visibility when the user chooses terminal execution. Use `visible_terminal.py foreground` with `scripts/cli_short_models.py`; no desktop chat/window is required. All service/GPU/localhost permissions, ownership/resource/P2P guards, short real tool/benchmark metrics, verified unload, serial selection and privacy/reporting rules still apply. A restricted agent must request approved host access to the exact command; it must not disable checks or require switching to a desktop chat. See [CLI short-test instructions](docs/CLI-SHORT-MODEL-TESTS.md).
+
 ## Future model short harness test plan — November 2, 2026
 
 For future requested profiles, follow [the reusable plan](docs/FUTURE-MODEL-TEST-PLAN.md): guarded load, one short real harness tool/result round trip with benchmark capture, owned unload and resource-release verification, then switch models. Every result list includes the existing performance columns plus per-profile RAM, VRAM and swap guardrails. Preserve independent work and all guards; no extra full-context or sustained suite is implied.

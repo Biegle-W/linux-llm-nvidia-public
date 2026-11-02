@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Foreground Codex CLI model tests — November 2, 2026
+
+A user-visible foreground CLI TTY satisfies harness visibility when the user chooses terminal execution. Use `visible_terminal.py foreground` with `scripts/cli_short_models.py`; no desktop chat/window is required. All service/GPU/localhost permissions, ownership/resource/P2P guards, short real tool/benchmark metrics, verified unload, serial selection and privacy/reporting rules still apply. A restricted agent must request approved host access to the exact command; it must not disable checks or require switching to a desktop chat. See [CLI short-test instructions](docs/CLI-SHORT-MODEL-TESTS.md).
+
 ## Benchmark reports include resource guards — November 1, 2026
 
 Every future model benchmark list must include a companion per-profile RAM, VRAM and swap guard table alongside the performance table. Report worker RAM high/max and host reserve; per-GPU free-VRAM floors and exceptions; swap occupancy, write/combined I/O limits, averaging windows and pressure/hysteresis rules. Distinguish effective limits from measured usage. Use current deployed settings, preserve historical guard attribution, and mark unavailable measurements explicitly. See [reporting conventions](docs/BENCHMARK-REPORTING.md). This reporting requirement does not request new benchmark runs or guard changes.

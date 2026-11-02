@@ -9,6 +9,9 @@ RETIRED_FILES = (
     'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
 
 FILES = (
+    'scripts/cli_short_models.py',
+    'docs/CLI-SHORT-MODEL-TESTS.md',
+    'tests/test_cli_short_models.py',
     'docs/HYPERQWEN-STARTUP-REATTACH-FIX.md',
     'tests/test_worker_reattach_exit.py',
     'docs/SGLANG-56K-448MIB-20261101.md',
