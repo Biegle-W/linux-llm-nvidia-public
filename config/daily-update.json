@@ -62,10 +62,6 @@
     {
       "profile": "deepseek-unsloth-strata",
       "reason": "Independent signed Strata 0.2.9/engine 0.1.55 package with pinned serving adapter and context qualification; automatic source builds must not overwrite it."
-    },
-    {
-      "profile": "super-vllm",
-      "reason": "Independent pinned vLLM runtime and bit-preserving compact/file-backed offload adapter require explicit local quality and resource requalification; automatic source builds must not overwrite it."
     }
   ]
 }

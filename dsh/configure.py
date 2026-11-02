@@ -11,6 +11,7 @@ ROUTER_URL='http://127.0.0.1:10100/v1'
 LEGACY_ROUTER_IDS={'nvidia-hyperqwen','nvidia-sglang','nvidia-router','nvidia-maya','nvidia-vllm-offload'}
 PLAIN='qwen27b-hyperqwen'
 SEARCH=PLAIN+'-search'
+RETIRED={'super-vllm','super-strata-trial'}
 
 def exposed_id(identifier):return PLAIN if identifier==SEARCH else identifier
 
@@ -22,6 +23,7 @@ def router_providers(providers,profiles):
     base=copy.deepcopy(result[preferred]) if preferred else {}
     models={}
     def add_model(model):
+        if model.get('id') in RETIRED:return
         m=copy.deepcopy(model);original=m['id'];m['id']=exposed_id(original)
         if original==SEARCH:models[PLAIN]={**models.get(PLAIN,{}),**m}
         else:models.setdefault(m['id'],m)
@@ -59,7 +61,9 @@ def migrate_selection(value,field='',routes=None):
     if isinstance(value,dict):
         result={k:migrate_selection(v,k,routes) for k,v in value.items()}
         pair=(value.get('provider'),value.get('model'))
-        if routes and all(isinstance(x,str) for x in pair) and pair in routes:
+        if isinstance(pair[0],str) and pair[0] in LEGACY_ROUTER_IDS|{ROUTER_ID} and isinstance(pair[1],str) and pair[1] in RETIRED:
+            result.update(provider=ROUTER_ID,model=PLAIN)
+        elif routes and all(isinstance(x,str) for x in pair) and pair in routes:
             result.update(provider=ROUTER_ID,model=routes[pair])
         elif isinstance(pair[0],str) and pair[0] in LEGACY_ROUTER_IDS|{ROUTER_ID} and pair[1]==SEARCH:
             result.update(provider=ROUTER_ID,model=PLAIN)

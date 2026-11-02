@@ -1,5 +1,9 @@
 # Maintained model, quantization and engine settings
 
+## Nemotron Super removed — November 1, 2026
+
+All installed Nemotron Super weights, dedicated runtime and active profile/launcher support have been removed at the user’s request. Seven maintained profiles remain, including Bolt. Both retired Super IDs return HTTP 404; workers are idle. Historical Super results below are dated evidence only. [Removal and validation](NEMOTRON-SUPER-REMOVAL-20261101.md).
+
 ## API-only router all-model check — November 1, 2026
 
 Seven maintained profiles passed measured short DSH read-tool calls and owned unload. Super/vLLM failed its unchanged loading-pressure guard before readiness; no new speed result. Final workers inactive, no GPU reservation; current-boot unlock/P2P checks pass. See [new-router results](NEW-ROUTER-BENCHMARKS-20261101.md). Older successful measurements remain historical.

@@ -6,7 +6,7 @@ sys.path[:0]=[str(ROOT/'network'),str(ROOT/'scripts')]
 import worker_manager as m
 class Wait(unittest.TestCase):
  def test_switch_waits_for_vllm_before_stopping(self):
-  for profile in ['bolt-vllm','super-vllm']:
+  for profile in ['bolt-vllm']:
    with self.subTest(profile=profile),tempfile.TemporaryDirectory() as tmp:
     w=m.Workers.__new__(m.Workers);w.active=profile;w.key='fixture';w.wait_native_idle=lambda progress:None;w.detect=lambda:None;progress=[];stopped=[]
     class Done(Exception):pass

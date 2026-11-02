@@ -125,7 +125,7 @@ class Workers:
             if not recognized:
                 raise RouterError('An unexpected process owns the inference unit; nothing was stopped.', 'ownership_conflict')
             invocation = unit_property(unit, 'InvocationID')
-            if unit == MOE_UNIT and getattr(self, 'active', None) in ('bolt-vllm', 'super-vllm'):
+            if unit == MOE_UNIT and getattr(self, 'active', None) == 'bolt-vllm':
                 request = urllib.request.Request('http://127.0.0.1:10000/metrics',
                           headers={'Authorization': 'Bearer ' + self.key})
                 try:
@@ -260,7 +260,7 @@ class Workers:
                 return
         # Native Strata/Maya pages call their worker directly, outside this router lock.
         # Observe their status as well before starting a switch.
-        vllm_active = self.active in ('bolt-vllm', 'super-vllm')
+        vllm_active = self.active == 'bolt-vllm'
         if self.active and (vllm_active or profiles().get(self.active, {}).get('engine') in ('Strata', 'Maya')):
             deadline = time.monotonic() + 7200
             while True:

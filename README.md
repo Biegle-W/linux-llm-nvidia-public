@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Nemotron Super removed — November 1, 2026
+
+All installed Nemotron Super weights, dedicated runtime and active profile/launcher support have been removed at the user’s request. Seven maintained profiles remain, including Bolt. Both retired Super IDs return HTTP 404; workers are idle. Historical Super results below are dated evidence only. [Removal and validation](docs/NEMOTRON-SUPER-REMOVAL-20261101.md).
+
 ## NVIDIA API-only server — November 1, 2026
 
 The authenticated client API remains on port **10100** with the existing key. It forwards to a separate private model hub on **127.0.0.1:10101**; guarded model backends retain their private port and launch paths. The hub owns model selection, FIFO admission and the 600-second idle policy. Restarting the API does not restart the hub or its model workers.
