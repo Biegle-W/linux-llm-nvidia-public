@@ -5,7 +5,11 @@ from pathlib import Path
 import re
 import subprocess
 
+RETIRED_FILES = (
+    'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
+
 FILES = (
+    'docs/NEMOTRON-SUPER-REMOVAL-20261101.md',
     'docs/SHORT-TOOL-BENCHMARKS-20261101.md',
     'docs/benchmark-results/20261101-short-tool.json',
     'config/maya-unsloth-runtime.json',
@@ -20,7 +24,6 @@ FILES = (
     'tests/test_pair_gpu_telemetry.py',
     'tests/test_qwen_vram_settle.py',
     'tests/test_short_tool_metrics.py',
-    'tests/test_super_bounded_policy.py',
     'tests/test_vllm_switch_wait.py',
     'docs/validation-results/20261101-permanent-pair-p2p.json',
     'docs/P2P-PERMANENT-PAIR-20261101.md',
@@ -28,25 +31,12 @@ FILES = (
     'scripts/pair_p2p_health.py',
     'scripts/verify_pair_p2p.cu',
     'tests/test_pair_p2p_health.py',
-    'config/super-offload-runtime.json',
     'docs/CONTEXT-VALIDATION-POLICY-20261101.md',
     'docs/DSH-ROUTER-CLEANUP-20261101.md',
     'docs/NEMOTRON-CONTEXT-20261101.md',
     'docs/validation-results/20261101-dsh-router-cleanup.json',
     'docs/validation-results/20261101-super-context.json',
     'scripts/smoke_dsh_tools.py',
-    'scripts/super_offload_hook/checkpoint_cache.py',
-    'scripts/super_offload_hook/compact_pool.py',
-    'scripts/super_offload_hook/file_backing.py',
-    'scripts/super_offload_hook/host_trim.py',
-    'scripts/super_offload_hook/placement.py',
-    'scripts/super_offload_hook/repack.py',
-    'scripts/super_offload_hook/reuse.py',
-    'scripts/super_offload_hook/sitecustomize.py',
-    'scripts/super_runtime.py',
-    'scripts/supervise_super.py',
-    'tests/test_super_request_state.py',
-    'tests/test_super_runtime.py',
     'docs/DSH-HYPERQWEN-SEARCH-20261101.md',
     'docs/BOLT-CONTEXT-20261101.md',
     'docs/validation-results/20261101-bolt-context.json',
@@ -176,12 +166,12 @@ FILES = (
     'docs/DEEPSEEK-STRATA-CONTEXT-20261027.md',
     'network/backend_proxy.py', 'network/request_admission.py', 'tests/test_request_admission.py',
     'docs/ROUTER-IMPROVEMENTS-20261028.md', 'docs/validation-results/20261028-router-improvements.json',
-    'network/router.py', 'network/worker_manager.py', 'network/install.py', 'network/README.md',
+    'network/api.py', 'network/hub.py', 'network/hub_transport.py', 'network/router.py', 'network/worker_manager.py', 'network/install.py', 'network/README.md',
     'scripts/serve_router_moe.py', 'scripts/router_client.py', 'scripts/open_dsh.py',
     'dsh/configure.py', 'dsh/run', 'dsh/package.json', 'dsh/package-lock.json',
     'config/terminal-runtime.json', 'scripts/install_visible_terminal_runtime.py', 'tests/test_minimized_terminals.py',
     'tests/test_backend_console.py', 'docs/ENGINE-SWITCHING-20261028.md', 'docs/validation-results/20261028-engine-switching.json',
-    'tests/test_router.py', 'docs/ROUTER-DEPLOYMENT-20261027.md',
+    'tests/test_router.py', 'tests/test_api_gateway.py', 'docs/ROUTER-DEPLOYMENT-20261027.md',
     'assets/icons/README.md', 'assets/icons/strata.svg', 'assets/icons/maya.svg',
     'assets/icons/sglang.svg', 'assets/icons/dsh.svg', 'assets/icons/hyperqwen.png',
     'scripts/benchmark_models.py', 'tests/test_benchmark_metrics.py', 'scripts/visible_terminal.py',
@@ -270,6 +260,10 @@ def main():
         if not binary and BLOCK.search(privacy_scan_text(relative, content)):
             raise SystemExit(f'Privacy check failed for {relative}; review locally.')
         exports[relative] = content
+    for relative in RETIRED_FILES:
+        retired = target / relative
+        if retired.is_symlink():raise SystemExit('Refusing retired symlink: '+relative)
+        retired.unlink(missing_ok=True)
     for relative, content in exports.items():
         destination = target / relative
         if destination.is_symlink() or any(parent.is_symlink() for parent in destination.parents if parent != target.parent):

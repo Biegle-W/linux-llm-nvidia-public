@@ -1,5 +1,13 @@
 # NVIDIA model router, Tailscale and DeepSeek Harness
 
+## NVIDIA API-only server — November 1, 2026
+
+The authenticated client API remains on port **10100** with the existing key. It forwards to a separate private model hub on **127.0.0.1:10101**; guarded model backends retain their private port and launch paths. The hub owns model selection, FIFO admission and the 600-second idle policy. Restarting the API does not restart the hub or its model workers.
+
+API services and API-launched backends are headless. DSH is a separate client under **NVIDIA server**; optional desktop/client installation uses `network/install.py --with-clients`. Plain HyperQwen and explicit Responses/function-tool support are retained. RAM, VRAM, swap, temperature, P2P and telemetry guards remain enforced.
+
+All **130 focused API/transport/launch-policy checks passed**, including chat/Responses streams, tool forwarding, disconnections and authentication. The full Torch-enabled CPU run passed **415/417**; two unchanged baseline checks still fail (updater catalog coverage and an obsolete Super swap-limit expectation). Live authentication/catalog/context checks passed and the active worker invocation was preserved.
+
 ## Latest: Unsloth and Comfy desktop installation — October 30
 
 Official Unsloth Desktop 0.1.913-beta and Comfy Desktop 1.1.8 stable are installed per-user with **Unsloth** and **ComfyUI** Desktop/menu shortcuts. Unsloth's isolated backend setup completed all 17 stages; Python 3.13.17, backend 2026.10.11 and PyTorch 2.13.0+cu130 see both CUDA GPUs. AppImage/native-library/shortcut checks pass. Comfy's installed launcher now uses its documented per-app `--no-sandbox` compatibility option and passed an offscreen 15-second startup check; system-wide sandbox settings are unchanged. The initial sandboxed failure is retained as historical evidence. Existing LLM environments/settings are preserved; no model, training or generation job started. Comfy's ordinary first-run choices remain. See [installation status](../docs/UNSLOTH-COMFY-DESKTOP-20261030.md) and [verification](../docs/validation-results/20261030-unsloth-comfy-desktop.json).

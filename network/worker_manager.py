@@ -293,11 +293,12 @@ class Workers:
                        '--property=MemoryHigh=' + str(budget['high']) + 'G',
                        '--property=MemoryMax=' + str(budget['max']) + 'G',
                        '--property=MemorySwapMax=infinity', '--property=OOMPolicy=kill',
-                       '--property=LimitRTTIME=infinity', '--working-directory=' + str(ROOT),
+                       '--property=LimitRTTIME=infinity', '--setenv=NVIDIA_API_ONLY=' + ('1' if os.environ.get('NVIDIA_API_ONLY') == '1' else '0'), '--working-directory=' + str(ROOT),
                        '/usr/bin/python3', str(ROOT / 'scripts/serve_router_moe.py'), profile_id]
                 unit = MOE_UNIT
-                open_monitor('NVIDIA MoE backend', unit, [ROOT / 'data/router' / (p['id'] + '-engine.log')
-                             for p in profiles().values() if p['engine'] in ('Strata', 'Maya', 'vLLM-offload')])
+                if os.environ.get('NVIDIA_API_ONLY') != '1':
+                    open_monitor('NVIDIA MoE backend', unit, [ROOT / 'data/router' / (p['id'] + '-engine.log')
+                                 for p in profiles().values() if p['engine'] in ('Strata', 'Maya', 'vLLM-offload')])
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
                                     env=dict(os.environ, LOCAL_LLM_ROUTER_WORKER='1'))
             if result.returncode:

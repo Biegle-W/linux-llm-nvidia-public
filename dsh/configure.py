@@ -12,26 +12,7 @@ LEGACY_ROUTER_IDS={'nvidia-hyperqwen','nvidia-sglang','nvidia-router','nvidia-ma
 PLAIN='qwen27b-hyperqwen'
 SEARCH=PLAIN+'-search'
 
-def exposed_id(identifier):return SEARCH if identifier==PLAIN else identifier
-
-def hyperqwen_search_only(providers):
-    target=next((k for k,p in providers.items() if any(m.get('id')==SEARCH for m in p.get('models',[]))),None)
-    if target is None:
-        target=next((k for k,p in providers.items() if any(m.get('id')==PLAIN for m in p.get('models',[]))),None)
-        if target is not None:
-            m=next(m for m in providers[target]['models'] if m.get('id')==PLAIN);m.update(id=SEARCH,name='Qwen3.8-27B / HyperQwen-vLLM + Web Search (free)')
-    kept=False
-    for key,p in providers.items():
-        if 'models' not in p:continue
-        models=[]
-        for m in p['models']:
-            if m.get('id')==PLAIN:continue
-            if m.get('id')==SEARCH:
-                if key!=target or kept:continue
-                kept=True
-            models.append(m)
-        p['models']=models
-    return target
+def exposed_id(identifier):return PLAIN if identifier==SEARCH else identifier
 
 def router_providers(providers,profiles):
     result=copy.deepcopy(providers);managed={p['id'] for p in profiles}|{SEARCH}
@@ -42,7 +23,7 @@ def router_providers(providers,profiles):
     models={}
     def add_model(model):
         m=copy.deepcopy(model);original=m['id'];m['id']=exposed_id(original)
-        if original==SEARCH:models[SEARCH]={**models.get(SEARCH,{}),**m}
+        if original==SEARCH:models[PLAIN]={**models.get(PLAIN,{}),**m}
         else:models.setdefault(m['id'],m)
     for key in ([preferred] if preferred else [])+[k for k in keys if k!=preferred]:
         for model in result[key].get('models',[]):
@@ -58,11 +39,11 @@ def router_providers(providers,profiles):
         if 'models' in p:p['models']=remaining
     for p in profiles:
         identifier=exposed_id(p['id']);m=models.setdefault(identifier,{'id':identifier})
-        m.setdefault('name',p.get('display_name') or p['model']+' / '+p['engine']+(' + Web Search (free)' if identifier==SEARCH else ''))
-        if identifier==SEARCH and 'search' not in m['name'].lower():m['name']+=' + Web Search (free)'
+        m.setdefault('name',p.get('display_name') or p['model']+' / '+p['engine'])
+        if identifier==PLAIN and 'web search' in m['name'].lower():m['name']=p.get('display_name') or p['model']+' / '+p['engine']
         m.update(contextWindow=p['allocated_context'],maxTokens=4096,reasoningEfforts=False)
         m.setdefault('input',['text'])
-    base.update(displayName='NVIDIA Server Router',api='openai-completions',baseURL=ROUTER_URL,defaultMaxTokens=4096,timeoutMs=7200000,streamIdleTimeoutMs=7200000,models=list(models.values()))
+    base.update(displayName='NVIDIA server',api='openai-completions',baseURL=ROUTER_URL,defaultMaxTokens=4096,timeoutMs=7200000,streamIdleTimeoutMs=7200000,models=list(models.values()))
     base.setdefault('apiKeyEnv','LOCAL_LLM_API_KEY')
     base['compat']={**base.get('compat',{}),'supportsDeveloperRole':False,'maxTokensField':'max_tokens','supportsStore':False,'supportsStrictMode':False,'supportsReasoningEffort':False}
     result[ROUTER_ID]=base
@@ -80,10 +61,11 @@ def migrate_selection(value,field='',routes=None):
         pair=(value.get('provider'),value.get('model'))
         if routes and all(isinstance(x,str) for x in pair) and pair in routes:
             result.update(provider=ROUTER_ID,model=routes[pair])
+        elif isinstance(pair[0],str) and pair[0] in LEGACY_ROUTER_IDS|{ROUTER_ID} and pair[1]==SEARCH:
+            result.update(provider=ROUTER_ID,model=PLAIN)
         return result
     if isinstance(value,list):return [migrate_selection(v,field,routes) for v in value]
     if field=='provider' and value in LEGACY_ROUTER_IDS:return ROUTER_ID
-    if field in ('model','models') and value==PLAIN:return SEARCH
     return value
 
 def configure(profile='web'):
@@ -96,7 +78,7 @@ def configure(profile='web'):
     for e in entries:
         if e.get('id')!='llm-pi-ai':e['config']=migrate_selection(e.get('config',{}),routes=routes)
     selected=next((x for x in entries if x.get('id')=='agent-default-model'),None)
-    if selected is None:entries.append({'id':'agent-default-model','config':{'provider':ROUTER_ID,'model':SEARCH}})
+    if selected is None:entries.append({'id':'agent-default-model','config':{'provider':ROUTER_ID,'model':PLAIN}})
     # Auxiliary title inference can switch the sole GPU worker away from an agent.
     title=next((x for x in entries if x.get('id')=='session-title-llm'),None)
     if title is None:entries.append({'id':'session-title-llm','disabled':True,'config':{}})

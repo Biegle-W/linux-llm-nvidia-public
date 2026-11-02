@@ -1,5 +1,19 @@
 # Agent entry point
 
+## NVIDIA API-only server — November 1, 2026
+
+The authenticated client API remains on port **10100** with the existing key. It forwards to a separate private model hub on **127.0.0.1:10101**; guarded model backends retain their private port and launch paths. The hub owns model selection, FIFO admission and the 600-second idle policy. Restarting the API does not restart the hub or its model workers.
+
+API services and API-launched backends are headless. DSH is a separate client under **NVIDIA server**; optional desktop/client installation uses `network/install.py --with-clients`. Plain HyperQwen and explicit Responses/function-tool support are retained. RAM, VRAM, swap, temperature, P2P and telemetry guards remain enforced.
+
+All **130 focused API/transport/launch-policy checks passed**, including chat/Responses streams, tool forwarding, disconnections and authentication. The full Torch-enabled CPU run passed **415/417**; two unchanged baseline checks still fail (updater catalog coverage and an obsolete Super swap-limit expectation). Live authentication/catalog/context checks passed and the active worker invocation was preserved.
+
+## HyperQwen uses plain chat — November 1, 2026
+
+HyperQwen is listed as `qwen27b-hyperqwen` without forced web search. Saved `qwen27b-hyperqwen-search` selections remain accepted as plain HyperQwen, and DSH migrates that saved selection to the canonical model while preserving unrelated providers. Web search remains available when explicitly requested through the Responses harness and its `web_search` tool.
+
+All 83 focused router, web-search and DSH registration checks passed, covering ordinary and streaming chat, cached selections, local function tools and explicit Responses search. Weights, context limits and resource guards are unchanged.
+
 ## Current short-tool observations — November 1
 
 The eight retained profiles now have prefill, TTFT and decode observations measured during actual short DSH read calls, with successful matching tool results and owned unload. DeepSeek/Maya and DeepSeek/Strata share the existing Unsloth UD-IQ1_S checkpoint; the older Maya-S Strata profile is retired. Current configured contexts are 40K HyperQwen, 32K SGLang, 128K Flash-Next, 64K GLM, 32K both DeepSeek engines, 160K Bolt and 64K Super. These calculated windows were not subjected to a new full-context test. [Table, cache state and measurement limits](docs/SHORT-TOOL-BENCHMARKS-20261101.md).

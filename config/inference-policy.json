@@ -29,5 +29,7 @@
       "storage_size_decimal_gb",
       "storage_location"
     ]
-  }
+  },
+  "api_only": true,
+  "api_worker_terminals": false
 }

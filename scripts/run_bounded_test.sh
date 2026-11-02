@@ -31,8 +31,10 @@ if [[ "$name" == qwen27b ]]; then
   fi
   monitor_args+=(--log "$root/data/qwen27b-server.log")
 fi
-/usr/bin/python3 "$root/scripts/visible_terminal.py" open "${monitor_args[@]}"
+if [[ "${NVIDIA_API_ONLY:-0}" != 1 ]]; then
+  /usr/bin/python3 "$root/scripts/visible_terminal.py" open "${monitor_args[@]}"
+fi
 exec systemd-run --user --unit="llm-test-${name}" --collect --service-type=exec \
   --property="MemoryHigh=$ram_high" --property="MemoryMax=$ram_max" \
-  --property="MemorySwapMax=$swap_limit" --property=OOMPolicy=kill \
+  --property="MemorySwapMax=$swap_limit" --property=OOMPolicy=kill --setenv="NVIDIA_API_ONLY=${NVIDIA_API_ONLY:-0}" \
   --working-directory="$root" "$@"

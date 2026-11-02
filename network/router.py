@@ -5,6 +5,7 @@ import hmac
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import ipaddress
 import json
+import os
 import signal
 import threading
 import time
@@ -16,15 +17,17 @@ from backend_proxy import BackendProxy, rewrite_model_alias
 import web_search
 
 MAX_BODY = 32 * 1024 * 1024
-WEB_SEARCH_ALIASES = {'qwen27b-hyperqwen-search': 'qwen27b-hyperqwen'}
+# Old saved selections remain usable, but never opt a request into search.
+LEGACY_MODEL_ALIASES = {'qwen27b-hyperqwen-search': 'qwen27b-hyperqwen'}
+WEB_SEARCH_ALIASES = {}
 
 
 def request_model(data, path):
-    """Resolve an explicit search catalog alias without adding a worker/profile."""
+    """Resolve saved legacy selections without forcing web search."""
     alias = data.get('model')
     if not isinstance(alias, str):
         raise RouterError('Choose an ID from GET /v1/models.', 'model_not_found', 404)
-    name = WEB_SEARCH_ALIASES.get(alias, alias)
+    name = LEGACY_MODEL_ALIASES.get(alias, WEB_SEARCH_ALIASES.get(alias, alias))
     if name not in profiles():
         raise RouterError('Choose an ID from GET /v1/models.', 'model_not_found', 404)
     if alias in WEB_SEARCH_ALIASES and path != '/router/select':
@@ -154,7 +157,8 @@ class Handler(BaseHTTPRequestHandler):
         if path == '/v1/models':
             return self.reply(200, {'object': 'list', 'data': list(models.values())})
         if path.startswith('/v1/models/'):
-            model = models.get(unquote(path[len('/v1/models/'):]))
+            identifier = unquote(path[len('/v1/models/'):])
+            model = models.get(LEGACY_MODEL_ALIASES.get(identifier, identifier))
             return self.reply(200, model) if model else self.error(404, 'Unknown model.', 'model_not_found')
         self.error(404, 'Unknown endpoint.', 'not_found')
 
@@ -333,13 +337,14 @@ class Handler(BaseHTTPRequestHandler):
                 self.server.workers.release()
 
 
-def main():
-    from visible_terminal import open_monitor
-    open_monitor("NVIDIA model router", "nvidia-model-router.service")
+def hub_main():
+    """Run only on loopback; the separate gateway owns client authentication/bindings."""
+    os.environ["NVIDIA_API_ONLY"] = "1"
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--config', type=Path, default=ROOT / 'data/router/access.json')
     args = parser.parse_args()
     cfg = json.loads(args.config.read_text())
+    cfg = dict(cfg, listen=['127.0.0.1'], port=cfg.get('hub_port', 10101))
     key_file = Path(cfg['key_file'])
     if key_file.stat().st_mode & 0o077:
         raise SystemExit('API key must be owner-only.')
@@ -377,6 +382,11 @@ def main():
             server.shutdown()
             server.server_close()
 
+
+def main():
+    # Preserve old service/CLI entry points as the thin API, not another model owner.
+    from api import main as api_main
+    api_main()
 
 if __name__ == '__main__':
     main()

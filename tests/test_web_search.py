@@ -267,24 +267,23 @@ class SearchHTTPTests(unittest.TestCase):
         return dict({'model': 'qwen27b-hyperqwen', 'input': 'NASA Mars red',
                      'tools': [{'type': 'web_search_preview'}], 'include': ['web_search_call.action.sources']}, **kw)
 
-    def test_chat_search_alias_stream_and_tools_keep_chat_contract(self):
+    def test_saved_search_alias_preserves_plain_chat_and_local_tools(self):
         fixture=test_router.RouterTest()
         tools=[{'type':'function','function':{'name':'read_file','parameters':{'type':'object'}}}]
         for stream in [False,True]:
-            with self.subTest(stream=stream),patch.object(ws,'search',return_value=ROWS) as search:
+            with self.subTest(stream=stream),patch.object(ws,'search',side_effect=AssertionError('No implicit search')) as search:
                 status,raw=fixture.request('/v1/chat/completions',{'model':'qwen27b-hyperqwen-search','messages':[{'role':'system','content':'Preserve instructions.'},{'role':'user','content':'Why is Mars red?'}],'tools':tools,'stream':stream,'max_tokens':64})
-            self.assertEqual(status,200);search.assert_called_once_with('Why is Mars red?',[],5)
-            body=test_router.RouterTest.backend.body;self.assertEqual(body['tools'],tools);self.assertEqual(body['max_tokens'],64);self.assertIn('Preserve instructions.',body['messages'][0]['content']);self.assertIn('UNTRUSTED',body['messages'][0]['content']);self.assertIn(ROWS[0]['url'],body['messages'][0]['content']);self.assertEqual(test_router.RouterTest.backend.path,'/v1/chat/completions')
+            self.assertEqual(status,200);search.assert_not_called()
+            body=test_router.RouterTest.backend.body;self.assertEqual(body['tools'],tools);self.assertEqual(body['max_tokens'],64);self.assertIn('Preserve instructions.',body['messages'][0]['content']);self.assertNotIn('UNTRUSTED',body['messages'][0]['content']);self.assertEqual(test_router.RouterTest.backend.path,'/v1/chat/completions')
             if stream:self.assertIn(b'[DONE]',raw);self.assertIn(b'tool_calls',raw)
             else:self.assertEqual(json.loads(raw)['model'],'qwen27b-hyperqwen-search')
 
-    def test_chat_search_opt_out_and_failure(self):
-        fixture=test_router.RouterTest();body={'model':'qwen27b-hyperqwen-search','messages':[{'role':'user','content':'Mars'}],'tool_choice':'none'}
-        with patch.object(ws,'search') as search:status,raw=fixture.request('/v1/chat/completions',body)
-        self.assertEqual(status,200);search.assert_not_called()
-        body.pop('tool_choice')
-        with patch.object(ws,'search',side_effect=RouterError('Search unavailable','web_search_unavailable',503)):status,raw=fixture.request('/v1/chat/completions',body)
-        self.assertEqual(status,503);self.assertEqual(json.loads(raw)['error']['code'],'web_search_unavailable')
+    def test_plain_model_works_when_search_provider_is_unavailable(self):
+        fixture=test_router.RouterTest()
+        for model in ['qwen27b-hyperqwen','qwen27b-hyperqwen-search']:
+            with patch.object(ws,'search',side_effect=RouterError('Search unavailable','web_search_unavailable',503)) as search:
+                status,raw=fixture.request('/v1/chat/completions',{'model':model,'messages':[{'role':'user','content':'Mars'}]})
+            self.assertEqual(status,200);search.assert_not_called()
 
     def test_nonstream_search_grounding_sources_and_citations(self):
         with patch.object(ws, 'search', return_value=ROWS) as search:
