@@ -9,6 +9,9 @@ RETIRED_FILES = (
     'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
 
 FILES = (
+    'docs/VRAM256-OPTIMIZATION-20261103.md',
+    'docs/benchmark-results/20261103-vram256-optimization.json',
+    'config/maya-glm-runtime.json',
     'docs/HEADLESS-VRAM256-20261102.md',
     'docs/COMMUNITY-OPTIMIZATION-20261102.md',
     'docs/benchmark-results/20261102-community-screens.json',

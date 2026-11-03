@@ -1,5 +1,9 @@
 # Agent entry point
 
+## GLM engine 1.1.50 selected; 256 MiB reruns — November 3, 2026
+
+GLM selects the normal 1.1.50 engine at unchanged 65,536 context after two passing short matched pairs: tool-call decode improved 17–24%, with mixed prefill. Versioned binary/profile/hash pin and normal-router tool/unload passed; 19 focused CPU checks passed. HyperQwen and SGLang MTP remain memory-blocked under the 256 MiB floor; Bolt pinning still hits oomd and prefetch-two offered no material gain; DeepSeek retains 1.1.46 because new arms did not improve overall and its quant prevents new P2P all-reduce. Other guards and Strata prefill 512 remain unchanged. [Full evidence and limits](docs/VRAM256-OPTIMIZATION-20261103.md).
+
 ## Headless-server VRAM floor — November 2, 2026
 
 The selected free-VRAM stop floor is now **256 MiB per card**, including SGLang. Other guards, contexts and native cache allocations remain unchanged.54 focused CPU checks passed; no new inference qualification. Earlier448/512 MiB results retain their historical guard attribution. [Policy and validation](docs/HEADLESS-VRAM256-20261102.md).

@@ -1697,7 +1697,14 @@
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
         }
-      ]
+      ],
+      "qualified_engine_runtime": {
+        "release": "1.1.50",
+        "source_commit": "10e69a0eb11541004abb24f9fa47147e9002326f",
+        "manifest": "config/maya-glm-runtime.json",
+        "evidence": "docs/benchmark-results/20261103-vram256-optimization.json",
+        "scope": "Two short matched baseline/candidate pairs and normal-router tool/result/unload passed; context 65,536 unchanged; no full-window or sustained qualification."
+      }
     },
     {
       "id": "deepseek-maya",

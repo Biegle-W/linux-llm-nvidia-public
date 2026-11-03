@@ -107,6 +107,21 @@ def build(root, component, revision, directory):
             # This selected controller intentionally verifies one fixed project
             # path. Preserve it with a durable binary+manifest transaction.
             receipt['files'].append({'target':cfg['exe'],'candidate':str(binary)})
+        elif kind == 'maya' and cfg.get('pinned_runtime'):
+            if cfg['pinned_runtime'] != {'manifest': 'config/maya-glm-runtime.json'}:
+                raise RuntimeError('Unreviewed pinned GLM runtime selection')
+            manifest_path = root / 'config/maya-glm-runtime.json'
+            manifest = json.loads(manifest_path.read_text())
+            if manifest.get('profile') != 'glm-maya' or manifest['binary']['path'] != 'runtimes/maya-glm-v1150/maya':
+                raise RuntimeError('Pinned GLM runtime identity changed')
+            if Path(cfg['exe']).resolve() != (root / manifest['binary']['path']).resolve():
+                raise RuntimeError('Pinned GLM executable path changed')
+            receipt['files'].append({'target': cfg['exe'], 'candidate': str(binary)})
+            if revision != '10e69a0eb11541004abb24f9fa47147e9002326f':manifest.pop('release', None)
+            manifest.update(source_commit=revision, status='candidate; pending qualification')
+            manifest['binary']['sha256'] = sha(binary)
+            candidate_manifest = directory / 'maya-glm-runtime.json'; write_json(candidate_manifest, manifest)
+            receipt['files'].append({'target': str(manifest_path), 'candidate': str(candidate_manifest)})
         else:
             # Never overwrite shared Strata component-package files. Select this
             # immutable project-local build through the normal canonical preset.
