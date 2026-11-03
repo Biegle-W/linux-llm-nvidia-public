@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Confirmed Strata prefill improvement — November 2, 2026
+
+DeepSeek/Strata selects prefill chunk512 at unchanged32K context after two guarded baseline/candidate pairs: uncached prefill improved25.6%/27.5%, with passing tool/result/follow-up and unload. Normal-router tool/unload and15 focused tests passed. Other settings remain selected; negative confirmations and guarded startup failures are retained. All guards remain unchanged. [Results and limits](COMMUNITY-OPTIMIZATION-20261102.md).
+
 ## SGLang 56K with scoped 448 MiB floor — November 1, 2026
 
 SGLang uses 57,344 tokens with a 448 MiB free-VRAM floor; short tool/unload and native KV checks passed with 469 MiB minimum sampled free. HyperQwen remains 86,016 tokens / 512 MiB floor. Other guards are unchanged. No full-context test. [Evidence](SGLANG-56K-448MIB-20261101.md).

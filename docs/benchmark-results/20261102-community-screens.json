@@ -1,0 +1,1324 @@
+{
+  "date": "2026-11-02",
+  "hardware": "RTX3080Ti12GB + RTX308010GB;64GB RAM",
+  "selected_change": {
+    "profile": "deepseek-unsloth-strata",
+    "prefill_chunk": 512,
+    "context": 32768,
+    "full_context_test": false
+  },
+  "trials": [
+    {
+      "run": "glm-20261102-215604",
+      "phase": "glm",
+      "trial": "baseline",
+      "profile": "glm-maya",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 65536,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 30.518048167000074,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 299.2,
+        "ttft_s": 18.62778374300001,
+        "decode_tps": 5.9,
+        "prompt_tokens": 5432,
+        "output_tokens": 26,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 17.2,
+          "ttft_s": 2.441910118999999,
+          "native_decode_tps": 8.2
+        },
+        {
+          "prefill_tps": 13.9,
+          "ttft_s": 2.7278589840000222,
+          "native_decode_tps": 6.3
+        }
+      ]
+    },
+    {
+      "run": "glm-20261102-215604",
+      "phase": "glm",
+      "trial": "pcie-quarter",
+      "profile": "glm-maya",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 65536,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 32.61701899800005,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 290.3,
+        "ttft_s": 19.206558640000026,
+        "decode_tps": 5.6,
+        "prompt_tokens": 5435,
+        "output_tokens": 27,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 17.1,
+          "ttft_s": 2.4636948610000218,
+          "native_decode_tps": 8.2
+        },
+        {
+          "prefill_tps": 13.3,
+          "ttft_s": 2.8543752729999596,
+          "native_decode_tps": 6.0
+        }
+      ]
+    },
+    {
+      "run": "ds-cache-20261102-220453",
+      "phase": "ds-cache",
+      "trial": "baseline",
+      "profile": "deepseek-maya",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 32768,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 52.75021085600008,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 184.6,
+        "ttft_s": 30.91047812699992,
+        "decode_tps": 4.7,
+        "prompt_tokens": 5702,
+        "output_tokens": 65,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 11.4,
+          "ttft_s": 2.8101384899999857,
+          "native_decode_tps": 6.8
+        },
+        {
+          "prefill_tps": 11.1,
+          "ttft_s": 2.6093143320000536,
+          "native_decode_tps": 6.0
+        }
+      ]
+    },
+    {
+      "run": "ds-cache-20261102-220453",
+      "phase": "ds-cache",
+      "trial": "rebuilt-75",
+      "profile": "deepseek-maya",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 32768,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 50.39560601799985,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 188.0,
+        "ttft_s": 30.308289094999964,
+        "decode_tps": 4.7,
+        "prompt_tokens": 5696,
+        "output_tokens": 63,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 11.6,
+          "ttft_s": 2.7595321149999563,
+          "native_decode_tps": 6.7
+        },
+        {
+          "prefill_tps": 11.3,
+          "ttft_s": 2.558822801999895,
+          "native_decode_tps": 5.8
+        }
+      ]
+    },
+    {
+      "run": "ds-cache-20261102-220453",
+      "phase": "ds-cache",
+      "trial": "reclaim-90",
+      "profile": "deepseek-maya",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 32768,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 49.24433133000002,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 196.7,
+        "ttft_s": 29.0080917329999,
+        "decode_tps": 4.9,
+        "prompt_tokens": 5702,
+        "output_tokens": 65,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 11.0,
+          "ttft_s": 2.9094647309998436,
+          "native_decode_tps": 7.0
+        },
+        {
+          "prefill_tps": 11.3,
+          "ttft_s": 2.5694928860000346,
+          "native_decode_tps": 6.0
+        }
+      ]
+    },
+    {
+      "run": "ds-cache-20261102-223927",
+      "phase": "ds-cache",
+      "trial": "baseline",
+      "profile": "deepseek-maya",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 32768,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 48.244901964999826,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 196.9,
+        "ttft_s": 28.957442363000155,
+        "decode_tps": 5.1,
+        "prompt_tokens": 5699,
+        "output_tokens": 61,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 11.4,
+          "ttft_s": 2.81066385899976,
+          "native_decode_tps": 7.2
+        },
+        {
+          "prefill_tps": 11.1,
+          "ttft_s": 2.608751212000243,
+          "native_decode_tps": 5.9
+        }
+      ]
+    },
+    {
+      "run": "ds-cache-20261102-223927",
+      "phase": "ds-cache",
+      "trial": "reclaim-90",
+      "profile": "deepseek-maya",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 32768,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 49.89584290399989,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 193.9,
+        "ttft_s": 29.4130990929998,
+        "decode_tps": 4.5,
+        "prompt_tokens": 5699,
+        "output_tokens": 61,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 11.4,
+          "ttft_s": 2.8115607899999304,
+          "native_decode_tps": 7.4
+        },
+        {
+          "prefill_tps": 11.1,
+          "ttft_s": 2.610715911999705,
+          "native_decode_tps": 6.4
+        }
+      ]
+    },
+    {
+      "run": "hyperqwen-20261102-221003",
+      "phase": "hyperqwen",
+      "trial": "baseline",
+      "profile": "qwen27b-hyperqwen",
+      "passed": false,
+      "error": "Dense GPU headroom below 512 MiB",
+      "restored": true,
+      "unloaded": true,
+      "context": 86016,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": null,
+          "max": null,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 512,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          9728,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "tool": null,
+      "benchmark": {
+        "prefill_tps": null,
+        "ttft_s": null,
+        "decode_tps": null,
+        "prompt_tokens": null,
+        "output_tokens": null,
+        "cached_tokens": null,
+        "prefill_method": null,
+        "ttft_method": null,
+        "decode_method": null
+      },
+      "chat": []
+    },
+    {
+      "run": "sglang-20261102-221156",
+      "phase": "sglang",
+      "trial": "baseline",
+      "profile": "qwen27b-sglang",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 57344,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": null,
+          "max": null,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 448,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 9.078754245000027,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 2373.514318694835,
+        "ttft_s": 2.602855042000101,
+        "decode_tps": 59.089507028959126,
+        "prompt_tokens": 6126,
+        "output_tokens": 84,
+        "cached_tokens": 0,
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+      },
+      "chat": [
+        {
+          "prefill_tps": null,
+          "ttft_s": 0.29580285500014725,
+          "native_decode_tps": 65.10990321194821
+        },
+        {
+          "prefill_tps": null,
+          "ttft_s": 0.10977780600001097,
+          "native_decode_tps": 64.93430007292748
+        }
+      ]
+    },
+    {
+      "run": "sglang-20261102-221156",
+      "phase": "sglang",
+      "trial": "mtp3",
+      "profile": "qwen27b-sglang",
+      "passed": false,
+      "error": "Worker stopped during loading; inspect its journal.",
+      "restored": true,
+      "unloaded": true,
+      "context": 57344,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": null,
+          "max": null,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 448,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "tool": null,
+      "benchmark": {
+        "prefill_tps": null,
+        "ttft_s": null,
+        "decode_tps": null,
+        "prompt_tokens": null,
+        "output_tokens": null,
+        "cached_tokens": null,
+        "prefill_method": null,
+        "ttft_method": null,
+        "decode_method": null
+      },
+      "chat": []
+    },
+    {
+      "run": "flash-20261102-221344",
+      "phase": "flash",
+      "trial": "async-adaptation",
+      "profile": "flash-next-strata",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 131072,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 9.583045181999978,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 903.9,
+        "ttft_s": 6.600574550000147,
+        "decode_tps": 78.6,
+        "prompt_tokens": 5589,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 75.2,
+          "ttft_s": 0.6726517429999603,
+          "native_decode_tps": 59.8
+        },
+        {
+          "prefill_tps": 82.8,
+          "ttft_s": 0.5274646799998663,
+          "native_decode_tps": 78.5
+        }
+      ]
+    },
+    {
+      "run": "flash-20261102-221344",
+      "phase": "flash",
+      "trial": "baseline",
+      "profile": "flash-next-strata",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 131072,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 10.531578145999902,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 872.7,
+        "ttft_s": 6.82720367800016,
+        "decode_tps": 69.4,
+        "prompt_tokens": 5583,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 81.3,
+          "ttft_s": 0.6243628189999981,
+          "native_decode_tps": 62.2
+        },
+        {
+          "prefill_tps": 81.8,
+          "ttft_s": 0.5346784360001493,
+          "native_decode_tps": 76.3
+        }
+      ]
+    },
+    {
+      "run": "flash-20261102-221344",
+      "phase": "flash",
+      "trial": "split-17",
+      "profile": "flash-next-strata",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 131072,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 14.339204140999982,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 527.3,
+        "ttft_s": 11.371107854999991,
+        "decode_tps": 66.7,
+        "prompt_tokens": 5580,
+        "output_tokens": 38,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 59.6,
+          "ttft_s": 0.8363848859999052,
+          "native_decode_tps": 54.7
+        },
+        {
+          "prefill_tps": 61.5,
+          "ttft_s": 0.7036763809999229,
+          "native_decode_tps": 73.8
+        }
+      ]
+    },
+    {
+      "run": "flash-20261102-224310",
+      "phase": "flash",
+      "trial": "async-adaptation",
+      "profile": "flash-next-strata",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 131072,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 9.57871765200025,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 906.8,
+        "ttft_s": 6.571601211000143,
+        "decode_tps": 73.8,
+        "prompt_tokens": 5586,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 74.4,
+          "ttft_s": 0.6788503499997205,
+          "native_decode_tps": 62.5
+        },
+        {
+          "prefill_tps": 82.6,
+          "ttft_s": 0.5293057799999588,
+          "native_decode_tps": 79.8
+        }
+      ]
+    },
+    {
+      "run": "flash-20261102-224310",
+      "phase": "flash",
+      "trial": "baseline",
+      "profile": "flash-next-strata",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 131072,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 10.080351092,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 909.4,
+        "ttft_s": 6.563076602000365,
+        "decode_tps": 74.1,
+        "prompt_tokens": 5589,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 54.3,
+          "ttft_s": 0.9129959480001162,
+          "native_decode_tps": 68.2
+        },
+        {
+          "prefill_tps": 86.7,
+          "ttft_s": 0.5053666730000259,
+          "native_decode_tps": 77.2
+        }
+      ]
+    },
+    {
+      "run": "ds-strata-20261102-221707",
+      "phase": "ds-strata",
+      "trial": "baseline",
+      "profile": "deepseek-unsloth-strata",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 32768,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 512,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 26.306130351000093,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 23.2,
+        "ttft_s": 7.057894360000091,
+        "decode_tps": 6.8,
+        "prompt_tokens": 5702,
+        "output_tokens": 61,
+        "cached_tokens": 5539,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 14.3,
+          "ttft_s": 2.2392205690000537,
+          "native_decode_tps": 11.0
+        },
+        {
+          "prefill_tps": 14.5,
+          "ttft_s": 1.9978010130000712,
+          "native_decode_tps": 8.3
+        },
+        {
+          "prefill_tps": 87.1,
+          "ttft_s": 12.221290949999911,
+          "native_decode_tps": 8.9
+        }
+      ]
+    },
+    {
+      "run": "ds-strata-20261102-221707",
+      "phase": "ds-strata",
+      "trial": "prefill-512",
+      "profile": "deepseek-unsloth-strata",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 32768,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 512,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 24.4039010649999,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 23.3,
+        "ttft_s": 6.902072384000121,
+        "decode_tps": 6.8,
+        "prompt_tokens": 5699,
+        "output_tokens": 60,
+        "cached_tokens": 5539,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 14.4,
+          "ttft_s": 2.229033214000083,
+          "native_decode_tps": 10.8
+        },
+        {
+          "prefill_tps": 14.1,
+          "ttft_s": 2.0621980759999587,
+          "native_decode_tps": 8.1
+        },
+        {
+          "prefill_tps": 109.4,
+          "ttft_s": 9.718645772000173,
+          "native_decode_tps": 8.8
+        }
+      ]
+    },
+    {
+      "run": "ds-strata-20261102-224549",
+      "phase": "ds-strata",
+      "trial": "baseline",
+      "profile": "deepseek-unsloth-strata",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 32768,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 512,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 24.60379854799976,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 23.7,
+        "ttft_s": 6.920527309000136,
+        "decode_tps": 6.8,
+        "prompt_tokens": 5702,
+        "output_tokens": 61,
+        "cached_tokens": 5539,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 14.1,
+          "ttft_s": 2.272037776999696,
+          "native_decode_tps": 10.9
+        },
+        {
+          "prefill_tps": 14.4,
+          "ttft_s": 2.019697795999946,
+          "native_decode_tps": 8.2
+        },
+        {
+          "prefill_tps": 85.1,
+          "ttft_s": 12.522813226999915,
+          "native_decode_tps": 8.1
+        }
+      ]
+    },
+    {
+      "run": "ds-strata-20261102-224549",
+      "phase": "ds-strata",
+      "trial": "prefill-512",
+      "profile": "deepseek-unsloth-strata",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 32768,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 512,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 24.603213736999805,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 23.9,
+        "ttft_s": 6.735354712000117,
+        "decode_tps": 7.0,
+        "prompt_tokens": 5699,
+        "output_tokens": 63,
+        "cached_tokens": 5539,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "chat": [
+        {
+          "prefill_tps": 14.3,
+          "ttft_s": 2.247350079000171,
+          "native_decode_tps": 11.3
+        },
+        {
+          "prefill_tps": 14.4,
+          "ttft_s": 2.0196222750000743,
+          "native_decode_tps": 8.3
+        },
+        {
+          "prefill_tps": 108.5,
+          "ttft_s": 9.816559775000314,
+          "native_decode_tps": 8.5
+        }
+      ]
+    },
+    {
+      "run": "bolt-20261102-221950",
+      "phase": "bolt",
+      "trial": "baseline",
+      "profile": "bolt-vllm",
+      "passed": false,
+      "error": "Actual DSH tool/result/follow-up did not pass",
+      "restored": true,
+      "unloaded": true,
+      "context": 163840,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 512,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": false,
+        "followup_pass": false,
+        "wall_s": 1.6162779269998282,
+        "exit_code": 1
+      },
+      "benchmark": {
+        "prefill_tps": null,
+        "ttft_s": null,
+        "decode_tps": null,
+        "prompt_tokens": null,
+        "output_tokens": null,
+        "cached_tokens": 0,
+        "prefill_method": null,
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": null
+      },
+      "chat": [
+        {
+          "prefill_tps": null,
+          "ttft_s": 2.594444330999977,
+          "native_decode_tps": 0.3926997747215127
+        },
+        {
+          "prefill_tps": null,
+          "ttft_s": 2.548245738999867,
+          "native_decode_tps": 0.3911806232898619
+        }
+      ]
+    },
+    {
+      "run": "bolt-20261102-222625",
+      "phase": "bolt",
+      "trial": "baseline",
+      "profile": "bolt-vllm",
+      "passed": true,
+      "error": null,
+      "restored": true,
+      "unloaded": true,
+      "context": 163840,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 512,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "tool": {
+        "execution_result_pass": true,
+        "followup_pass": true,
+        "wall_s": 303.5144398860002,
+        "exit_code": 0
+      },
+      "benchmark": {
+        "prefill_tps": 237.51953711759853,
+        "ttft_s": 26.780867099761963,
+        "decode_tps": 0.38918924636402397,
+        "prompt_tokens": 6358,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "chat": [
+        {
+          "prefill_tps": null,
+          "ttft_s": 2.5764281429997027,
+          "native_decode_tps": 0.38913660102156217
+        },
+        {
+          "prefill_tps": null,
+          "ttft_s": 2.596720457000174,
+          "native_decode_tps": 0.3893043031164483
+        }
+      ]
+    },
+    {
+      "run": "bolt-20261102-222625",
+      "phase": "bolt",
+      "trial": "pinned-host-offload",
+      "profile": "bolt-vllm",
+      "passed": false,
+      "error": "systemd-oomd killed worker during loading; journal peak56GiB RAM and3.1GiB swap; no inference result",
+      "restored": true,
+      "unloaded": true,
+      "context": 163840,
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 512,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "tool": null,
+      "benchmark": {
+        "prefill_tps": null,
+        "ttft_s": null,
+        "decode_tps": null,
+        "prompt_tokens": null,
+        "output_tokens": null,
+        "cached_tokens": null,
+        "prefill_method": null,
+        "ttft_method": null,
+        "decode_method": null
+      },
+      "chat": []
+    }
+  ],
+  "normal_router_validation": {
+    "passed": true,
+    "unloaded": true,
+    "benchmark": {
+      "prefill_tps": 24.0,
+      "ttft_s": 6.930145025999991,
+      "decode_tps": 9.5,
+      "prompt_tokens": 5704,
+      "cached_tokens": 5539,
+      "output_tokens": 59,
+      "ttft_method": "client first delivered content/tool delta; parser buffering included",
+      "decode_method": "native request timings"
+    },
+    "guards": {
+      "worker_RAM_GiB": {
+        "high": 56,
+        "max": 58,
+        "swap": null
+      },
+      "host_available_reserve_GiB": 2,
+      "explicit_GPU_free_floor_MiB": 512,
+      "native_cache_reserve_MiB": 1024,
+      "startup_free_MiB": null,
+      "loading_PSI_percent": 15,
+      "resource_bad_samples": 3,
+      "swap_occupancy": "unlimited",
+      "swap_write_MiB_s": 128,
+      "swap_read_plus_write_MiB_s": 160,
+      "swap_window_s": 30,
+      "active_PSI_percent": 15,
+      "PSI_bad_samples": 3
+    }
+  }
+}

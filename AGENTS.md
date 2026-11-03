@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Confirmed Strata prefill improvement — November 2, 2026
+
+DeepSeek/Strata selects prefill chunk512 at unchanged32K context after two guarded baseline/candidate pairs: uncached prefill improved25.6%/27.5%, with passing tool/result/follow-up and unload. Normal-router tool/unload and15 focused tests passed. Other settings remain selected; negative confirmations and guarded startup failures are retained. All guards remain unchanged. [Results and limits](docs/COMMUNITY-OPTIMIZATION-20261102.md).
+
 ## Foreground Codex CLI model tests — November 2, 2026
 
 A user-visible foreground CLI TTY satisfies harness visibility when the user chooses terminal execution. Use `visible_terminal.py foreground` with `scripts/cli_short_models.py`; no desktop chat/window is required. All service/GPU/localhost permissions, ownership/resource/P2P guards, short real tool/benchmark metrics, verified unload, serial selection and privacy/reporting rules still apply. A restricted agent must request approved host access to the exact command; it must not disable checks or require switching to a desktop chat. See [CLI short-test instructions](docs/CLI-SHORT-MODEL-TESTS.md).

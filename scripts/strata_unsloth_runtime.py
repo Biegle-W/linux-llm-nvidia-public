@@ -49,7 +49,7 @@ def build_config(profile, runtime):
         raise ValueError('Unqualified Unsloth placement/expert/cache setting')
     args = ['--pack', str(runtime / 'pack'), '--max-context', str(profile['allocated_context']),
             '--eos', '1', '--dspark', 'none', '--tp', '2', '--reserve-mib', str(selected.get('internal_gpu_reserve_mib',768)),
-            '--experts', '6', '--vision', 'off', '--cpu-threads', '14', '--prefill-chunk', '128',
+            '--experts', '6', '--vision', 'off', '--cpu-threads', '14', '--prefill-chunk', '512',
             '--mmap-experts', 'on', '--expert-profile', str(runtime / 'profile-2.00.bin'),
             '--profile-readonly']
     return {'exe': str(runtime / 'engine/strata-dsv41'), 'args': args,

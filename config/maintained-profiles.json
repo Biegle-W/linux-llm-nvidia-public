@@ -2306,7 +2306,7 @@
         "strata-unsloth"
       ],
       "allocated_context": 32768,
-      "context_validation": "Previous context restored after the larger memory-fitting candidate failed its short DSH tool check. Awaiting restored-setting short check; no full-context test.",
+      "context_validation": "32K retained. Two guarded short baseline/512 prefill pairs passed tool/result/follow-up and unload; uncached1064-token prefill improved25.6%/27.5%; no full-context test.",
       "runtime_selector": {
         "kind": "pinned-strata029",
         "manifest": "config/deepseek-unsloth-runtime.json"
@@ -2327,14 +2327,15 @@
         "internal_gpu_reserve_mib": 1024,
         "mmap_experts": true,
         "drafting": "none",
-        "prefill_chunk": 128,
+        "prefill_chunk": 512,
         "swap_guard": {
           "window_s": 30,
           "write_mib_s": 128,
           "combined_mib_s": 160,
           "pressure_pct": 15
         },
-        "effective_prefill_chunk_observed": 256
+        "effective_prefill_chunk_observed": 512,
+        "prefill_evidence": "docs/benchmark-results/20261102-community-screens.json"
       },
       "storage": {
         "access": "ssd-streaming",
