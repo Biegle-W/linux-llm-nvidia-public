@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Requested enabled-model checks passed — November 3, 2026
+
+After the user confirmed RAM is not yet upgraded, HyperQwen and SGLang each passed one short actual DSH read/tool-result/exact-follow-up, normal owned unload and GPU release. Fresh single-call prefill/TTFT/decode observations are 2077.9 tok/s / 2.821 s / 62.53 tok/s and 2137.9 tok/s / 3.044 s / 60.20 tok/s respectively. Tool calls and follow-ups passed; both test workers are inactive and both GPUs returned to 1 MiB used. API/hub/DSH remain active; no GPU reservation remains. Settings/guards are unchanged; all five RAM/offload profiles remain disabled. No full-context or sustained test. See [results, guard tables and loading-transient limits](REQUESTED-TWO-MODEL-CHECKS-20261103.md).
+
 ## Current evidence and scope — November 3, 2026
 
 The latest current-host short observations are in [unlocked VRAM-only results](UNLOCKED-VRAM-ONLY-20261103.md). [DSH startup repair](DSH-STARTUP-REPAIR-20261103.md) changes no model settings and adds no speed measurement. Temporary 32 GB availability and current 256 MiB guards do not relabel the older results below. RAM/offload profiles remain disabled.

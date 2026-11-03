@@ -410,6 +410,16 @@
         "ttft_s": 2.8097872734069824,
         "decode_tps": 62.52335946750423,
         "full_context_tested": false
+      },
+      "latest_requested_short_check": {
+        "date": "2026-11-03",
+        "tool_result_followup": "pass",
+        "owned_unload_GPU_release": "pass",
+        "prefill_tps": 2077.9233905103497,
+        "ttft_s": 2.8208792209625244,
+        "decode_tps": 62.52509679225351,
+        "evidence": "docs/REQUESTED-TWO-MODEL-CHECKS-20261103.md",
+        "scope": "Single uncached short call; no full-context or sustained qualification; selected settings unchanged"
       }
     },
     {
@@ -1019,6 +1029,16 @@
         "ttft_s": 2.8880070600000067,
         "decode_tps": 60.17193296938454,
         "full_context_tested": false
+      },
+      "latest_requested_short_check": {
+        "date": "2026-11-03",
+        "tool_result_followup": "pass",
+        "owned_unload_GPU_release": "pass",
+        "prefill_tps": 2137.886256760879,
+        "ttft_s": 3.0438507569997455,
+        "decode_tps": 60.20142998209217,
+        "evidence": "docs/REQUESTED-TWO-MODEL-CHECKS-20261103.md",
+        "scope": "Single uncached short call; no full-context or sustained qualification; selected settings unchanged"
       }
     },
     {

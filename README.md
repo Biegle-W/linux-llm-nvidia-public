@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Requested enabled-model checks passed — November 3, 2026
+
+After the user confirmed RAM is not yet upgraded, HyperQwen and SGLang each passed one short actual DSH read/tool-result/exact-follow-up, normal owned unload and GPU release. Fresh single-call prefill/TTFT/decode observations are 2077.9 tok/s / 2.821 s / 62.53 tok/s and 2137.9 tok/s / 3.044 s / 60.20 tok/s respectively. Tool calls and follow-ups passed; both test workers are inactive and both GPUs returned to 1 MiB used. API/hub/DSH remain active; no GPU reservation remains. Settings/guards are unchanged; all five RAM/offload profiles remain disabled. No full-context or sustained test. See [results, guard tables and loading-transient limits](docs/REQUESTED-TWO-MODEL-CHECKS-20261103.md).
+
 ## Current operation and DSH repair — November 3, 2026
 
 DSH uses an explicit headless service mode; desktop launches retain their required visible monitor. The API and private hub remain independent. The current host has **temporary 32 GB RAM**; only **HyperQwen 86,016** and **SGLang 57,344** are enabled. Both retain 24/26 GiB worker budgets, the 2 GiB host reserve, **256 MiB per-GPU free-VRAM floor**, swappiness 60 and idle 600 seconds. Unlock and current-boot host-staged transport are verified; the native-output buffering repair remains deployed. RAM/offload profiles remain disabled until explicit hardware confirmation, measured capacity and guarded requalification. Daily updates remain paused.

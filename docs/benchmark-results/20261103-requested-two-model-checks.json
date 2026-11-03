@@ -1,0 +1,242 @@
+{
+  "date": "2026-11-03",
+  "hardware": {
+    "board": "MSI MPG Z690 Carbon WiFi DDR5",
+    "cpu": "Intel Core i9-13900KS",
+    "ram_gib": 32,
+    "ram_temporary": true,
+    "display": "Intel UHD 770 / i915",
+    "gpus": [
+      "RTX 3080 Ti 12 GB",
+      "RTX 3080 10 GB"
+    ],
+    "links": "direct CPU PCIe4 x8/x8",
+    "driver": "stock NVIDIA 615.71.09",
+    "unlock": "verified before NVIDIA initialization in current boot",
+    "cuda_peer_access": [
+      0,
+      0
+    ],
+    "runtime_transport": "NCCL SHM both directions; P2P/custom all-reduce disabled"
+  },
+  "scope": "User confirmed no RAM upgrade; one requested short actual DSH read/tool-result/follow-up per enabled VRAM-only engine, then owned unload and sampled GPU release. No sustained/full-context/reload suite.",
+  "disabled_profiles": [
+    "flash-next-strata",
+    "glm-maya",
+    "deepseek-maya",
+    "bolt-vllm",
+    "deepseek-unsloth-strata"
+  ],
+  "profiles": {
+    "qwen27b-hyperqwen": {
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "engine_version_or_commit": "vLLM 0.31.0",
+      "checkpoint_bytes": 15791777864,
+      "checkpoint_location": "Samsung SATA: models/engine-tests/qwen38-27b-hyperqwen-fast",
+      "shared_checkpoint": true,
+      "configured_context": 86016,
+      "native_KV_capacity_tokens": null,
+      "native_KV_note": "Not separately archived this run; prior88931-token evidence remains historical. Normal guarded context admission passed.",
+      "tool_passed": true,
+      "followup_passed": true,
+      "strict_final_format": true,
+      "owned_unload_and_GPU_release_passed": true,
+      "tool_roundtrip_wall_s": 8.01287269400018,
+      "unload_duration_s": null,
+      "unload_duration_note": "Not separately timed; inactivity and return to baseline within64MiB verified before next selection.",
+      "metrics": {
+        "model": "qwen27b-hyperqwen",
+        "measurement": "first actual DSH tool-call generation",
+        "loading_excluded": true,
+        "prompt_tokens": 5829,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "client_ttft_s": 2.9314915260001726,
+        "client_last_token_s": 3.4274389290003455,
+        "meaningful_sse_chunks": 20,
+        "generation_wall_s": 3.48429996699997,
+        "usage": {
+          "prompt_tokens": 5829,
+          "total_tokens": 5870,
+          "completion_tokens": 41,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "prefill_tps": 2077.9233905103497,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_s": 2.8208792209625244,
+        "ttft_method": "engine first-token counter",
+        "decode_tps": 62.52509679225351,
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 24,
+          "max": 26,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          9728,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "effective_kernel_limits": {
+        "memory.high": [
+          "25769803776"
+        ],
+        "memory.max": [
+          "27917287424"
+        ],
+        "memory.swap.max": [
+          "max"
+        ]
+      },
+      "sampled_usage": {
+        "samples": 84,
+        "median_interval_s": 1.0473551750183105,
+        "worker_RAM_peak_GiB": 22.126895904541016,
+        "worker_swap_peak_MiB": 0.0,
+        "host_min_available_GiB": 20.621089935302734,
+        "all_phase_gpu_min_free_MiB": [
+          1887.0,
+          28.0
+        ],
+        "after_first_nonloading_lifecycle_sample_gpu_min_free_MiB": [
+          3301.0,
+          1312.0
+        ],
+        "gpu_max_temperature_C": [
+          50.0,
+          41.0
+        ],
+        "host_swap_in_pages_delta": 0,
+        "host_swap_out_pages_delta": 0
+      }
+    },
+    "qwen27b-sglang": {
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "engine_version_or_commit": "SGLang source 62271fd7c8aa8fe9edebf04e00a414b7fbf64388",
+      "checkpoint_bytes": 15791777864,
+      "checkpoint_location": "Samsung SATA: models/engine-tests/qwen38-27b-hyperqwen-fast",
+      "shared_checkpoint": true,
+      "configured_context": 57344,
+      "native_KV_capacity_tokens": 57344,
+      "native_KV_note": "Both rank pools logged57344 tokens this run",
+      "tool_passed": true,
+      "followup_passed": true,
+      "strict_final_format": true,
+      "owned_unload_and_GPU_release_passed": true,
+      "tool_roundtrip_wall_s": 8.01360567599977,
+      "unload_duration_s": null,
+      "unload_duration_note": "Not separately timed; inactivity and return to baseline within64MiB verified before next selection.",
+      "metrics": {
+        "model": "qwen27b-sglang",
+        "measurement": "first actual DSH tool-call generation",
+        "loading_excluded": true,
+        "prompt_tokens": 6092,
+        "output_tokens": 38,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "client_ttft_s": 3.0438507569997455,
+        "client_last_token_s": 3.5263266249999106,
+        "meaningful_sse_chunks": 4,
+        "generation_wall_s": 3.59010566500001,
+        "usage": {
+          "prompt_tokens": 6092,
+          "total_tokens": 6130,
+          "completion_tokens": 38,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "prefill_tps": 2137.886256760879,
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_s": 3.0438507569997455,
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_tps": 60.20142998209217,
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 24,
+          "max": 26,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "effective_kernel_limits": {
+        "memory.high": [
+          "25769803776"
+        ],
+        "memory.max": [
+          "27917287424"
+        ],
+        "memory.swap.max": [
+          "max"
+        ]
+      },
+      "sampled_usage": {
+        "samples": 34,
+        "median_interval_s": 1.0338683128356934,
+        "worker_RAM_peak_GiB": 8.746475219726562,
+        "worker_swap_peak_MiB": 0.0,
+        "host_min_available_GiB": 19.748252868652344,
+        "all_phase_gpu_min_free_MiB": [
+          528.0,
+          1847.0
+        ],
+        "after_first_nonloading_lifecycle_sample_gpu_min_free_MiB": [
+          528.0,
+          1847.0
+        ],
+        "gpu_max_temperature_C": [
+          54.0,
+          42.0
+        ],
+        "host_swap_in_pages_delta": 0,
+        "host_swap_out_pages_delta": 0
+      }
+    }
+  },
+  "final_state": {
+    "workers": "inactive",
+    "api_hub_dsh": "active",
+    "gpu_used_MiB": [
+      1,
+      1
+    ],
+    "gpu_lock": false
+  },
+  "sampling_limits": "Approximately1-second samples across loading/tool/follow-up/unload; extrema are sampled, not guaranteed peaks. Post-readiness subset starts at first nonloading lifecycle sample. Short requests do not exercise full30-second inference swap/PSI window.",
+  "loading_transient": "HyperQwen sampled28MiB free on RTX3080 while surrounding lifecycle samples reported loading. The256MiB stop floor applies after readiness; ready API measured1316MiB free and sampled post-readiness minimum1312MiB. No guard changed."
+}

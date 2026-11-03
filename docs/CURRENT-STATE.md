@@ -1,6 +1,10 @@
 # Current takeover state
 
-## Current takeover — November 3, 2026
+## Requested enabled-model checks passed — November 3, 2026
+
+After the user confirmed RAM is not yet upgraded, HyperQwen and SGLang each passed one short actual DSH read/tool-result/exact-follow-up, normal owned unload and GPU release. Fresh single-call prefill/TTFT/decode observations are 2077.9 tok/s / 2.821 s / 62.53 tok/s and 2137.9 tok/s / 3.044 s / 60.20 tok/s respectively. Tool calls and follow-ups passed; both test workers are inactive and both GPUs returned to 1 MiB used. API/hub/DSH remain active; no GPU reservation remains. Settings/guards are unchanged; all five RAM/offload profiles remain disabled. No full-context or sustained test. See [results, guard tables and loading-transient limits](REQUESTED-TWO-MODEL-CHECKS-20261103.md).
+
+## Earlier DSH repair takeover — November 3, 2026
 
 Objective: repair DSH startup and reconcile conflicting operational records. Selected configuration: temporary 32 GB RAM, HyperQwen 86,016 / SGLang 57,344 enabled; all five RAM/offload profiles disabled. No candidate model or engine setting is being promoted. Current guards and transport are described in [the repair record](DSH-STARTUP-REPAIR-20261103.md).
 
@@ -9,6 +13,8 @@ DSH's managed unit explicitly runs headlessly and preserves its private startup 
 Remaining work: after explicit RAM-upgrade confirmation, measure capacity and requalify disabled profiles before restoration. Daily updates remain paused. The old SGLang 38K reload blocker and earlier GLM/Bolt pending checks are historical or deferred; they do not request immediate model tests. Desktop portal failures observed in the audit are separate desktop issues, not a reason to alter inference services.
 
 Active work: API, hub and DSH services; no test worker or GPU reservation was created by this repair. Both GPUs remain idle and no GPU-LOCK exists. The DSH repair and reconciled records are published independently in both repositories after GitHub authentication was restored. Normal non-force pushes preserved both histories and the maintenance commit identity. The publication-blocker note is resolved; exact final commit IDs and remote-head verification receipts are retained in the private publication checkpoint. Next action: use the restored DSH client; investigate a new failure only against its exact service/worker invocation.
+
+Next action after the requested checks: use either enabled model through normal selection; leave the test-owned workers unloaded and defer disabled-profile restoration until explicit RAM-upgrade confirmation and guarded qualification.
 
 ## Dated evidence and standing instructions
 
