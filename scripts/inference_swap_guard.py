@@ -11,12 +11,11 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 PAGE_BYTES = os.sysconf('SC_PAGE_SIZE')
 MIB = 1024 ** 2
-# User-approved dense GPU free-memory floor; independent of swap thresholds.
-DENSE_GPU_FREE_MIB = 512
-SGLANG_GPU_FREE_MIB = 448
+# User-approved headless-server free-memory floor per card; swap limits are separate.
+GPU_FREE_MIB = 256
 
 def dense_gpu_free_mib(profile_id):
-    return SGLANG_GPU_FREE_MIB if profile_id == 'qwen27b-sglang' else DENSE_GPU_FREE_MIB
+    return GPU_FREE_MIB
 
 # Explicit maintained SSD-streaming profiles; unknown/dense profiles fail closed.
 SSD_STREAMING_PROFILES = frozenset({

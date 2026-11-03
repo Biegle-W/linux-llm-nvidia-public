@@ -26,7 +26,7 @@
     "runtimes/env-bolt-vllm-031/lib/python3.12/site-packages/vllm/model_executor/models/nemotron_h_mtp.py": "315fc505ed17d7df3d7e2c668755dcc1c261e0a138615d614569d03bf609ed4b",
     "runtimes/env-bolt-vllm-031/lib/python3.12/site-packages/vllm/_C_stable_libtorch.abi3.so": "c5b2ba47283119cf12b3bdbc8cb79a940fecb4fed38ba71c70cccd84b27e20c5",
     "scripts/bolt_offload_hook/sitecustomize.py": "ccd90e5c4f85ccc47269d4d68cdd42b0694ccd48a7376e29a50f0c7121d23bcc",
-    "scripts/bolt_offload_hook/compact_pool.py": "c30b8134faddb810669d15c23d5bc65eced2f58c675d896b7f7a6542d562cb97",
+    "scripts/bolt_offload_hook/compact_pool.py": "a4c9d12d4148e26133c694cb19cdc9938654bf7ce6792123f0e4f5a19a107faf",
     "scripts/bolt_offload_hook/host_trim.py": "c5e4b3d841327a125e53d06e8a0b9cacb8b6d9b9472deaf614fae3dc81509894",
     "scripts/bolt_offload_hook/checkpoint_cache.py": "0d767a8ad5abdfe60ab51543439cd76e38e900e21df061e1713c2c01a235cc9c",
     "runtimes/env-bolt-vllm-031/lib/python3.12/site-packages/vllm/model_executor/model_loader/weight_utils.py": "7d2573931b9684147b17018c1f6de318eea1c105556ffea03154201a72418afd",

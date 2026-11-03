@@ -1,5 +1,9 @@
 # Maintained model, quantization and engine settings
 
+## Headless-server VRAM floor — November 2, 2026
+
+The selected free-VRAM stop floor is now **256 MiB per card**, including SGLang. Other guards, contexts and native cache allocations remain unchanged.54 focused CPU checks passed; no new inference qualification. Earlier448/512 MiB results retain their historical guard attribution. [Policy and validation](HEADLESS-VRAM256-20261102.md).
+
 ## Confirmed Strata prefill improvement — November 2, 2026
 
 DeepSeek/Strata selects prefill chunk512 at unchanged32K context after two guarded baseline/candidate pairs: uncached prefill improved25.6%/27.5%, with passing tool/result/follow-up and unload. Normal-router tool/unload and15 focused tests passed. Other settings remain selected; negative confirmations and guarded startup failures are retained. All guards remain unchanged. [Results and limits](COMMUNITY-OPTIMIZATION-20261102.md).

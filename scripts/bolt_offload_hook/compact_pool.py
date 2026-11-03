@@ -17,7 +17,7 @@ def initialize(pool, param_infos, slot_capacity, device):
  if device.type=='cuda':
   torch.cuda.empty_cache();free,_=torch.cuda.mem_get_info(device)
   print('BOLT_COMPACT_PREFETCH_POOL','device',device,'shape_classes',len(unique),'storage_groups',len(groups),'required_bytes',needed,'free_bytes',free,flush=True)
-  if needed>free-512*2**20:raise RuntimeError('Compact prefetch buffers exceed GPU budget with 512MiB reserve')
+  if needed>free-256*2**20:raise RuntimeError('Compact prefetch buffers exceed GPU budget with 256MiB reserve')
  pool.slot_capacity=slot_capacity;pool._device=device;pool.total_bytes=needed;pool._backings={};pool._buffers={}
  for group,n in groups.items():pool._backings[group]=[torch.empty(n,dtype=group[1],device=device) for _ in range(slot_capacity)]
  for key,info in unique.items():pool._buffers[key]=[t.as_strided(info.shape,info.stride) for t in pool._backings[(info.name,info.dtype)]]

@@ -15,6 +15,7 @@ import time
 import urllib.request
 import zlib
 from update_transaction import write_json
+from inference_swap_guard import dense_gpu_free_mib
 
 VOCAB = 'river stone market lantern copper winter garden signal harbor needle orbit velvet canyon ember ledger quartz meadow anchor violet thunder'.split()
 
@@ -183,8 +184,8 @@ class Qualification:
                     gpus = subprocess.check_output(['nvidia-smi', '--query-gpu=index,temperature.gpu,memory.free', '--format=csv,noheader,nounits'], text=True, timeout=5)
                     row['gpus'] = [[float(x.strip()) for x in line.split(',')] for line in gpus.splitlines()]
                     if len(row['gpus']) != 2 or any(x[1] >= 82 for x in row['gpus']): raise RuntimeError('GPU inventory/temperature guard')
-                    if self.p['id'].startswith('qwen27b-') and any(x[2] < 512 for x in row['gpus']):
-                        raise RuntimeError('Dense GPU headroom below 512 MiB')
+                    if self.p['id'].startswith('qwen27b-') and any(x[2] < dense_gpu_free_mib(self.p['id']) for x in row['gpus']):
+                        raise RuntimeError(f"Dense GPU headroom below {dense_gpu_free_mib(self.p['id'])} MiB")
                     reason = watch.step()
                     if reason: raise RuntimeError(reason)
                     self.samples += 1

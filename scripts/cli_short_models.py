@@ -5,7 +5,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
 from profile_catalog import load_catalog,worker_budget,host_ram_reserve_gib
-from inference_swap_guard import WorkerWatch,dense_gpu_free_mib
+from inference_swap_guard import WorkerWatch,dense_gpu_free_mib,GPU_FREE_MIB
 from pair_p2p_health import require_verified_pair
 UNITS=('llm-test-qwen27b.service','llm-router-worker.service')
 def property_of(unit,name):
@@ -17,7 +17,7 @@ def property_of(unit,name):
 def inactive():return all(property_of(u,'ActiveState') in ('inactive','failed') for u in UNITS)
 def guards(profile):
  watch=WorkerWatch('/unused',profile['id'],'not-used',latch=False);g=watch.guard
- return {'worker_RAM_GiB':worker_budget(profile),'host_available_reserve_GiB':host_ram_reserve_gib(profile),'explicit_GPU_free_floor_MiB':dense_gpu_free_mib(profile['id']) if profile['id'].startswith('qwen27b-') else 512 if profile['id'] in ('bolt-vllm','deepseek-unsloth-strata') else None,'native_cache_reserve_MiB':1024 if profile['id'] in ('flash-next-strata','glm-maya','deepseek-maya','deepseek-unsloth-strata') else None,'startup_free_MiB':profile.get('startup_gpu_free_mib'),'loading_PSI_percent':15 if profile['id'] in ('bolt-vllm','deepseek-unsloth-strata') else None,'resource_bad_samples':3,'swap_occupancy':'unlimited','swap_write_MiB_s':g.write_limit,'swap_read_plus_write_MiB_s':g.combined_limit,'swap_window_s':g.window_s,'active_PSI_percent':g.pressure_limit,'PSI_bad_samples':g.bad_samples}
+ return {'worker_RAM_GiB':worker_budget(profile),'host_available_reserve_GiB':host_ram_reserve_gib(profile),'explicit_GPU_free_floor_MiB':dense_gpu_free_mib(profile['id']) if profile['id'].startswith('qwen27b-') else GPU_FREE_MIB if profile['id'] in ('bolt-vllm','deepseek-unsloth-strata') else None,'native_cache_reserve_MiB':1024 if profile['id'] in ('flash-next-strata','glm-maya','deepseek-maya','deepseek-unsloth-strata') else None,'startup_free_MiB':profile.get('startup_gpu_free_mib'),'loading_PSI_percent':15 if profile['id'] in ('bolt-vllm','deepseek-unsloth-strata') else None,'resource_bad_samples':3,'swap_occupancy':'unlimited','swap_write_MiB_s':g.write_limit,'swap_read_plus_write_MiB_s':g.combined_limit,'swap_window_s':g.window_s,'active_PSI_percent':g.pressure_limit,'PSI_bad_samples':g.bad_samples}
 def main():
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--profiles',nargs='+');parser.add_argument('--output',type=Path);args=parser.parse_args()
  if not sys.stdin.isatty() or not sys.stdout.isatty():raise RuntimeError('Run in your foreground terminal using visible_terminal.py foreground. No hidden fallback.')

@@ -968,7 +968,7 @@
           "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
         }
       ],
-      "gpu_free_floor_mib": 448
+      "gpu_free_floor_mib": 256
     },
     {
       "id": "flash-next-strata",

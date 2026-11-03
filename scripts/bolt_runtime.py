@@ -29,7 +29,7 @@ def build_launch(profile,key,root=ROOT):
   targets=group['targets'];updated=[x.replace('(?:up_proj|down_proj)','(?:gate_proj|up_proj|down_proj)') for x in targets];changed+=updated!=targets;group['targets']=updated
  if not changed:raise ValueError('Unreviewed Bolt quantization target mapping')
  # Offload Mamba input projections to leave repack headroom on the 10GB card.
- # Bound KV cache so automatic sizing cannot consume the 512MiB GPU reserve.
+ # Bound KV cache so automatic sizing cannot consume the headless-server free-VRAM reserve.
  args=[str(relative(root,m['binary'])),'serve',str(model),
        '--host','127.0.0.1','--port','10000','--trust-remote-code','--language-model-only',
        '--dtype','bfloat16','--max-model-len',str(m['context']),'--max-num-seqs','1',

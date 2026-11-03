@@ -4,7 +4,7 @@ import os,signal,subprocess,time
 from pathlib import Path
 from profile_catalog import get_profile,worker_budget,host_ram_reserve_gib
 from storage_policy import verify_storage
-from inference_swap_guard import WorkerWatch,read_cgroup,ROOT
+from inference_swap_guard import WorkerWatch,read_cgroup,ROOT,GPU_FREE_MIB
 from lifecycle_telemetry import LifecycleLog,enabled as telemetry_enabled
 from bolt_runtime import build_launch
 
@@ -12,7 +12,7 @@ def resource_fault(available_kib,cards,floor_kib):
  import math
  if any(not math.isfinite(v) or v<0 for card in cards for v in card):raise ValueError('Invalid GPU telemetry')
  if len(cards) not in (2,3) or any(len(c)!=2 for c in cards):raise ValueError('Main-pair telemetry required (optional auxiliary card)')
- return available_kib<floor_kib or any(c[0]>=82 or c[1]<512 for c in cards)
+ return available_kib<floor_kib or any(c[0]>=82 or c[1]<GPU_FREE_MIB for c in cards)
 
 def main():
  os.umask(0o077);profile=get_profile('bolt-vllm');budget=worker_budget(profile)

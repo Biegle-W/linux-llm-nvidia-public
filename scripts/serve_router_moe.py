@@ -12,7 +12,7 @@ from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib
 from storage_policy import verify_storage
 from maya_cachebound_runtime import verify as verify_cachebound_runtime
 from inference_policy import apply_native_idle
-from inference_swap_guard import WorkerWatch
+from inference_swap_guard import WorkerWatch, GPU_FREE_MIB
 from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -128,7 +128,7 @@ def main():
             if profile['id'] == 'deepseek-unsloth-strata':
                 free = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits'], text=True)
                 free_values = pair_gpu_free_values(free)
-                gpu_bad = gpu_bad + 1 if any(x < 512 for x in free_values) else 0
+                gpu_bad = gpu_bad + 1 if any(x < GPU_FREE_MIB for x in free_values) else 0
                 from inference_swap_guard import read_cgroup
                 pressure = read_cgroup(cgroup_base)['pressure_pct']
                 loading_bad = loading_bad + 1 if watch.last_phase == 'loading' and pressure > 15 else 0

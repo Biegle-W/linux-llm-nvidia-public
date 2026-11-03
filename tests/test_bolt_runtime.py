@@ -41,7 +41,7 @@ class Runtime(unittest.TestCase):
   with self.assertRaises(ValueError):verify(self.p,self.r)
 class Guards(unittest.TestCase):
  def test_reserve_and_temperature_boundaries(self):
-  c=[[81,512],[81,512]];self.assertFalse(resource_fault(2**21,c,2**21));self.assertTrue(resource_fault(2**21-1,c,2**21));c[1][1]=511;self.assertTrue(resource_fault(2**21,c,2**21));c[1]=[82,1024];self.assertTrue(resource_fault(2**21,c,2**21))
+  c=[[81,256],[81,256]];self.assertFalse(resource_fault(2**21,c,2**21));self.assertTrue(resource_fault(2**21-1,c,2**21));c[1][1]=255;self.assertTrue(resource_fault(2**21,c,2**21));c[1]=[82,1024];self.assertTrue(resource_fault(2**21,c,2**21))
  def test_optional_auxiliary_still_guarded(self):
   self.assertFalse(resource_fault(2**21,[[30,1000]]*3,2**21))
   self.assertTrue(resource_fault(2**21,[[30,1000],[30,1000],[82,1000]],2**21))

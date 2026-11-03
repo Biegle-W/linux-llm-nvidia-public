@@ -27,6 +27,18 @@ class Tests(unittest.TestCase):
   a=Info('w',(2,4),(4,1));b=Info('w',(2,4),(4,1),torch.float16);p=Pool([a,b]);self.assertEqual(p.total_bytes,48);self.assertNotEqual(p.get(a).data_ptr(),p.get(b).data_ptr())
  def test_empty_and_scalar(self):
   a=Info('empty',(0,3),(3,1));b=Info('scalar',(),());p=Pool([a,b]);self.assertEqual(p.total_bytes,4);self.assertEqual(p.get(a).numel(),0);p.get(b).fill_(7);self.assertEqual(p.get(b).item(),7)
+ def test_headless_cuda_reserve_boundary(self):
+  from unittest.mock import patch
+  original_empty=torch.empty
+  def cpu_storage(*args,**kwargs):
+   kwargs['device']='cpu'
+   return original_empty(*args,**kwargs)
+  info=Info('w',(2,4),(4,1));needed=32;reserve=256*2**20
+  with patch.object(torch.cuda,'empty_cache'),patch.object(torch,'empty',side_effect=cpu_storage):
+   with patch.object(torch.cuda,'mem_get_info',return_value=(reserve+needed,reserve+needed)):
+    pool=types.SimpleNamespace();initialize(pool,[info],1,'cuda');self.assertEqual(pool.total_bytes,needed)
+   with patch.object(torch.cuda,'mem_get_info',return_value=(reserve+needed-1,reserve+needed)):
+    with self.assertRaisesRegex(RuntimeError,'256MiB reserve'):initialize(types.SimpleNamespace(),[info],1,'cuda')
  def test_invalid_geometry_or_slots_rejected(self):
   for info in [Info('w',(2,),(-1,)),Info('w',(2,3),(1,))]:
    with self.assertRaises(ValueError):Pool([info])
