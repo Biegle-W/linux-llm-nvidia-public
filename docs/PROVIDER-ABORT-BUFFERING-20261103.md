@@ -1,0 +1,13 @@
+# Provider abort repair: buffered native channel logs — November 3, 2026
+
+Normal client use exposed another false transport-guard stop after the earlier short observations. The backend stopped with missing bidirectional shared-memory log evidence; clients surfaced `Provider finish_reason: abort` or `Model hub stream interrupted` as `PI_AI_ERROR`. The earlier broad all-fixed statement was premature.
+
+The dense supervisor and engine interpreters lacked PYTHONUNBUFFERED. One rank's native NCCL channel messages stayed in C stdout buffers and became visible at process exit. The transport was actually SHM, but the guard could not establish both directions within its existing 30-second startup window. The short tool checks could finish before that deadline and did not establish longer live-log reliability.
+
+The supervisor now sets PYTHONUNBUFFERED=1 for its child, and the final dense engine environment forces it after profile overrides. This reaches vLLM/SGLang and spawned rank interpreters. CPython unbuffered initialization disables C stdout buffering, making native channel lines visible while ranks are alive. A deterministic CPU regression uses the real supervisor environment, emits an unflushed libc printf marker, and requires the parent to receive it before the child is allowed to exit. [Python output-buffering controls](https://docs.python.org/3.14/using/cmdline.html#envvar-PYTHONUNBUFFERED), [CPython C-stdio initialization](https://github.com/python/cpython/blob/main/Python/initconfig.c).
+
+No RAM, VRAM, swap, temperature, telemetry or ownership guard was relaxed. The root-owned current-boot no-P2P proof, both native SHM directions, immediate actual-P2P rejection and bounded 30-second log-evidence window remain enforced.
+
+The repaired HyperQwen worker was selected through the normal guarded API after the failed request ended. Its engine environment was verified unbuffered, and both SHM directions were visible in the live log before process exit. One short SSE request returned the expected marker, finish_reason stop and [DONE]. The same invocation remained active for another 36.17 seconds, beyond the previous failure window, and a second short SSE request also completed normally. All 98 focused CPU checks pass. [Sanitized validation evidence](validation-results/20261103-provider-abort-buffering.json).
+
+The user's selected HyperQwen worker remains loaded for their client; no fallback engine was selected. API/hub/DSH services are preserved, GPU unlock remains verified and RAM/offload profiles remain temporarily blocked. The repair streams are correctness checks, not new speed observations or full-context/sustained qualification. Earlier benchmark numbers and failed attempts remain dated evidence.

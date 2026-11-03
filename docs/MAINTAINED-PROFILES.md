@@ -1,5 +1,10 @@
 # Maintained model, quantization and engine settings
 
+## Provider abort repaired: unbuffered native channel evidence — November 3, 2026
+
+Longer normal client use exposed a remaining false transport-guard stop: one NCCL rank buffered SHM channel logs until exit. Dense launchers now force PYTHONUNBUFFERED=1 through engine/rank startup; the transport deadline and all resource guards remain unchanged. Live SHM proof and two normal completed SSE responses from the same invocation, separated by 36 seconds, pass. 98 focused CPU checks include a real C-stdout visibility regression. Earlier short speed observations do not establish sustained behavior. The user's selected HyperQwen worker remains loaded; RAM/offload profiles remain temporarily disabled. [Repair evidence](PROVIDER-ABORT-BUFFERING-20261103.md).
+
+
 ## Verified unlocked VRAM-only operation; RAM models temporarily disabled — November 3, 2026
 
 After reboot, Secure Boot is disabled, ordered GPU unlock is VERIFIED, and the direct CPU PCIe4 x8/x8 host-staged proof passes with CUDA peers unavailable both ways. The iGPU runs the desktop. Only Qwen3.8-27B HyperQwen/vLLM and SGLang remain enabled; both pass real tool/result/follow-up and owned unload on temporary 32 GB RAM. Bolt and all four streaming/offload profiles are temporarily blocked pending the RAM upgrade, with definitions/weights preserved. The overlooked P2P-only runtime guards are corrected to require disabled P2P and bidirectional SHM with bounded startup-log grace; all memory/swap/temperature guards remain. 97 focused CPU checks pass. Do not restore RAM profiles/caches until explicit hardware confirmation, capacity measurement and guarded qualification. [Current evidence](UNLOCKED-VRAM-ONLY-20261103.md).

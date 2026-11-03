@@ -1,5 +1,7 @@
 # Unlocked VRAM-only results — November 3, 2026
 
+Subsequent normal-use correction: native output buffering could still cause a false guard stop after a short test ended. See the [buffering repair and beyond-deadline streaming verification](PROVIDER-ABORT-BUFFERING-20261103.md). The speed observations below remain valid short observations, not a sustained-runtime qualification.
+
 Both maintained VRAM-only engines pass one short actual DSH read/tool-result/assistant-follow-up and owned unload/resource-release check on the Z690 Carbon WiFi DDR5 / i9-13900KS / temporary 32 GB host. Intel UHD 770 runs the desktop. Both RTX cards use direct CPU PCIe4 x8/x8. Secure Boot is disabled and ordered early GPU unlock is VERIFIED. Stock NVIDIA 615.71.09 and the root-owned current-boot host-staged proof verify no CUDA peer capability; native NCCL logs confirm shared-memory channels both directions. No P2P driver or switch ACS routing was restored.
 
 ## VRAM-only observations

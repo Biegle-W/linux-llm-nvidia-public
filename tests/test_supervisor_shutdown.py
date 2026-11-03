@@ -65,7 +65,7 @@ class ShutdownTest(unittest.TestCase):
                  patch.object(module, 'get_profile', return_value=profile), \
                  patch.object(module, 'worker_budget', return_value={'high': high, 'max': hard, 'swap': None}), \
                  patch.object(module, 'telemetry_enabled', return_value=False), \
-                 patch.object(module.subprocess, 'Popen', return_value=child), \
+                 patch.object(module.subprocess, 'Popen', return_value=child) as spawned, \
                  patch.object(module.subprocess, 'check_output', return_value='45, 2048\n' if dense else '45\n'), \
                  patch.object(module, 'WorkerWatch', return_value=watch), \
                  patch.object(module.signal, 'signal', side_effect=register), \
@@ -74,8 +74,10 @@ class ShutdownTest(unittest.TestCase):
                 with self.assertRaises(SystemExit) as result:
                     module.main()
             self.assertEqual(result.exception.code, 0 if intentional else 1)
+            if dense:self.assertEqual(spawned.call_args.kwargs['env']['PYTHONUNBUFFERED'],'1')
             watch.step.assert_called_once()
             child.wait.assert_called()
+            return spawned.call_args.kwargs.get('env')
 
     def test_dense_intentional_slow_shutdown_stops_monitoring(self):
         self.exercise(supervise_dense, True)
@@ -89,6 +91,21 @@ class ShutdownTest(unittest.TestCase):
     def test_moe_unexpected_telemetry_loss_still_fails_closed(self):
         self.exercise(serve_router_moe, False)
 
+
+
+class NativeLogFlush(unittest.TestCase):
+    setUp=ShutdownTest.setUp
+    exercise=ShutdownTest.exercise
+    def test_real_c_stdout_is_visible_before_worker_exit(self):
+        import os,select,subprocess
+        env=self.exercise(supervise_dense,True)
+        marker=b'NATIVE_CHANNEL_VISIBLE'
+        code="import ctypes,sys;ctypes.CDLL(None).printf(b'NATIVE_CHANNEL_VISIBLE');sys.stdin.buffer.read(1)"
+        child=subprocess.Popen([sys.executable,'-c',code],stdin=subprocess.PIPE,stdout=subprocess.PIPE,env=env)
+        try:
+            self.assertTrue(select.select([child.stdout],[],[],2)[0], 'Native output buffered until worker exit')
+            self.assertEqual(os.read(child.stdout.fileno(),len(marker)),marker)
+        finally:child.communicate(b'x',timeout=3)
 
 if __name__ == '__main__':
     unittest.main()

@@ -37,7 +37,7 @@ def main():
     lifecycle = LifecycleLog(profile['id']) if telemetry_enabled() else None
     if lifecycle:
         lifecycle.start()
-    env = dict(os.environ, LOCAL_LLM_GUARDED_WORKER='1')
+    env = dict(os.environ, LOCAL_LLM_GUARDED_WORKER='1', PYTHONUNBUFFERED='1')
     child = subprocess.Popen(['/usr/bin/python3', str(ROOT / 'scripts/serve_qwen27b_engines.py'), engine],
                              start_new_session=True, env=env)
     stopping = False

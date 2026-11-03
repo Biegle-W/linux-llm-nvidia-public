@@ -1,0 +1,50 @@
+{
+  "date": "2026-11-03",
+  "cause": "NCCL C stdout buffered in dense engine/rank interpreters; one direction missing until process exit falsely tripped unchanged 30-second transport-proof guard",
+  "repair": "PYTHONUNBUFFERED=1 forced in supervisor child environment and final engine environment after profile overrides",
+  "guards": "No thresholds or transport-proof requirements changed",
+  "validation": {
+    "focused_CPU_checks": 98,
+    "native_C_output_visible_before_exit": true,
+    "unbuffered_engine_verified": true,
+    "live_transport_before": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "live_transport_after": [
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        0
+      ]
+    ],
+    "stream_before": {
+      "done": true,
+      "finish_reasons": [
+        "stop"
+      ],
+      "marker_passed": true
+    },
+    "stream_after": {
+      "done": true,
+      "finish_reasons": [
+        "stop"
+      ],
+      "marker_passed": true
+    },
+    "same_worker_observed_alive_s": 36.17457034599988,
+    "worker_remained_active": true,
+    "user_selected_profile": "qwen27b-hyperqwen",
+    "other_profiles": "five RAM/offload profiles remain temporarily disabled"
+  },
+  "scope": "Two short repair streams across the existing transport deadline; no new performance benchmark or sustained/full-context qualification"
+}
