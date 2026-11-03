@@ -81,6 +81,19 @@ def load_catalog():
     return validate_catalog(json.loads(CATALOG.read_text()))
 
 
+def profile_enabled(profile):
+    availability = profile.get('availability', {'enabled': True})
+    if not isinstance(availability, dict) or type(availability.get('enabled')) is not bool:
+        raise ValueError('Invalid profile availability policy')
+    return availability['enabled']
+
+
+def require_enabled(profile):
+    if not profile_enabled(profile):
+        raise ValueError('Model temporarily disabled: ' + profile['id'] + '. ' + profile['availability'].get('reason', 'Unavailable'))
+    return profile
+
+
 def get_profile(identifier):
     for profile in load_catalog()['profiles']:
         if profile['id'] == identifier:

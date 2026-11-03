@@ -8,7 +8,7 @@ import socket
 import subprocess
 import sys
 import time
-from profile_catalog import get_profile, worker_budget
+from profile_catalog import require_enabled, get_profile, worker_budget
 from storage_policy import verify_storage
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -103,7 +103,7 @@ def main():
     engine = sys.argv[1] if len(sys.argv) == 2 else 'hyperqwen'
     if engine not in ('hyperqwen', 'sglang') or len(sys.argv) > 2:
         sys.exit('Usage: serve_qwen27b_engines.py hyperqwen|sglang')
-    profile = get_profile('qwen27b-' + engine)
+    profile = require_enabled(get_profile('qwen27b-' + engine))
     preflight(profile)
     cuda = ROOT / 'runtimes/engine-tools/lib/python3.12/site-packages/nvidia/cu13'
     env = dict(os.environ, CUDA_HOME=str(cuda), CUDA_DEVICE_ORDER='PCI_BUS_ID',

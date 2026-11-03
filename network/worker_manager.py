@@ -10,7 +10,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from profile_catalog import load_catalog, worker_budget
+from profile_catalog import load_catalog, worker_budget, profile_enabled
 from inference_policy import load_policy
 from visible_terminal import open_monitor, close_backend_monitor
 from inference_swap_guard import WorkerWatch
@@ -29,8 +29,12 @@ class RouterError(Exception):
         self.code, self.status = code, status
 
 
-def profiles():
+def all_profiles():
     return {p['id']: p for p in load_catalog()['profiles']}
+
+
+def profiles():
+    return {name: p for name, p in all_profiles().items() if profile_enabled(p)}
 
 
 def unit_property(unit, prop):
@@ -91,7 +95,7 @@ class Workers:
                 pass
         try:
             state = json.loads(STATE.read_text())
-            if (state.get('profile') in profiles() and state.get('unit') == MOE_UNIT
+            if (state.get('profile') in all_profiles() and state.get('unit') == MOE_UNIT
                     and state.get('invocation')
                     and state['invocation'] == unit_property(MOE_UNIT, 'InvocationID')
                     and unit_property(MOE_UNIT, 'ActiveState') == 'active'
@@ -261,7 +265,7 @@ class Workers:
         # Native Strata/Maya pages call their worker directly, outside this router lock.
         # Observe their status as well before starting a switch.
         vllm_active = self.active == 'bolt-vllm'
-        if self.active and (vllm_active or profiles().get(self.active, {}).get('engine') in ('Strata', 'Maya')):
+        if self.active and (vllm_active or all_profiles().get(self.active, {}).get('engine') in ('Strata', 'Maya')):
             deadline = time.monotonic() + 7200
             while True:
                 req = urllib.request.Request('http://127.0.0.1:10000' + ('/metrics' if vllm_active else '/status'),

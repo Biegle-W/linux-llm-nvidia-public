@@ -48,11 +48,11 @@ def main():
    except (OSError,ValueError,subprocess.SubprocessError):
     missing+=1
    if watch.ready and not transport_checked and not reason:
-    from context_capacity import require_p2p_transport,read_engine_log
+    from context_capacity import require_runtime_transport,configured_transport_mode,read_engine_log
     try:
-     require_p2p_transport(read_engine_log(log));transport_checked=True
+     require_runtime_transport(read_engine_log(log),configured_transport_mode());transport_checked=True
     except (OSError,ValueError) as error:
-     reason='Bolt P2P transport guard: '+str(error)
+     reason='Bolt GPU transport guard: '+str(error)
    if reason or bad>=3 or loading_bad>=3 or missing>=3:
     reason=reason or ('Bolt resource telemetry unavailable' if missing>=3 else 'Bolt sustained loading pressure' if loading_bad>=3 else 'Bolt host/temperature/VRAM reserve guard')
     print(reason,flush=True);stop();raise SystemExit(1)

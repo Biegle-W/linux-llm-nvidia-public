@@ -8,7 +8,7 @@ import sys
 import subprocess
 import signal
 import time
-from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib
+from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib, require_enabled
 from storage_policy import verify_storage
 from maya_cachebound_runtime import verify as verify_cachebound_runtime
 from inference_policy import apply_native_idle
@@ -29,6 +29,7 @@ def main():
     os.umask(0o077)
     from pair_p2p_health import require_verified_pair
     require_verified_pair()
+    require_enabled(get_profile(sys.argv[1]))
     if sys.argv[1] == 'bolt-vllm':
         from supervise_bolt import main as bolt_main
         return bolt_main()

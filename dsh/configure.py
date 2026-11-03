@@ -45,6 +45,8 @@ def router_providers(providers,profiles):
         if identifier==PLAIN and 'web search' in m['name'].lower():m['name']=p.get('display_name') or p['model']+' / '+p['engine']
         m.update(contextWindow=p['allocated_context'],maxTokens=4096,reasoningEfforts=False)
         m.setdefault('input',['text'])
+    disabled={p['id'] for p in profiles if p.get('availability',{}).get('enabled',True) is False}
+    models={k:v for k,v in models.items() if k not in disabled}
     base.update(displayName='NVIDIA server',api='openai-completions',baseURL=ROUTER_URL,defaultMaxTokens=4096,timeoutMs=7200000,streamIdleTimeoutMs=7200000,models=list(models.values()))
     base.setdefault('apiKeyEnv','LOCAL_LLM_API_KEY')
     base['compat']={**base.get('compat',{}),'supportsDeveloperRole':False,'maxTokensField':'max_tokens','supportsStore':False,'supportsStrictMode':False,'supportsReasoningEffort':False}
@@ -83,11 +85,12 @@ def configure(profile='web'):
         if e.get('id')!='llm-pi-ai':e['config']=migrate_selection(e.get('config',{}),routes=routes)
     selected=next((x for x in entries if x.get('id')=='agent-default-model'),None)
     if selected is None:entries.append({'id':'agent-default-model','config':{'provider':ROUTER_ID,'model':PLAIN}})
+    elif selected.get('config',{}).get('model') in {p['id'] for p in profiles if p.get('availability',{}).get('enabled',True) is False}:selected['config']={'provider':ROUTER_ID,'model':PLAIN}
     # Auxiliary title inference can switch the sole GPU worker away from an agent.
     title=next((x for x in entries if x.get('id')=='session-title-llm'),None)
     if title is None:entries.append({'id':'session-title-llm','disabled':True,'config':{}})
     else:title['disabled']=True
     temp=path.with_suffix('.tmp');temp.write_text(yaml.safe_dump(entries,sort_keys=False));temp.chmod(0o600);temp.replace(path)
-    print(f'DSH registered {len(profiles)} maintained models under NVIDIA Server Router; unrelated routes preserved.')
+    print(f'DSH registered {sum(p.get("availability",{}).get("enabled",True) for p in profiles)} enabled models under NVIDIA Server Router; unrelated routes preserved.')
 
 if __name__=='__main__':configure('web');configure('headless')

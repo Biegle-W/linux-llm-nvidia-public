@@ -1,0 +1,186 @@
+{
+  "date": "2026-11-03",
+  "hardware": {
+    "board": "MSI MPG Z690 Carbon WiFi DDR5",
+    "cpu": "Intel Core i9-13900KS",
+    "ram_gib": 32,
+    "ram_temporary": true,
+    "display": "Intel UHD 770 / i915",
+    "gpus": [
+      "RTX 3080 Ti 12 GB",
+      "RTX 3080 10 GB"
+    ],
+    "links": "direct CPU PCIe4 x8/x8",
+    "driver": "stock NVIDIA 615.71.09",
+    "unlock": "verified before NVIDIA initialization in current boot",
+    "cuda_peer_access": [
+      0,
+      0
+    ],
+    "runtime_transport": "NCCL SHM both directions; P2P/custom all-reduce disabled"
+  },
+  "scope": "one successful short actual DSH read/tool-result/assistant-follow-up per enabled engine; loading and follow-up excluded from speed metrics; no matched locked baseline, full-context or sustained qualification",
+  "disabled_profiles": [
+    "flash-next-strata",
+    "glm-maya",
+    "deepseek-maya",
+    "bolt-vllm",
+    "deepseek-unsloth-strata"
+  ],
+  "restoration": "After explicit RAM-installation confirmation, measured capacity and guarded requalification; retain weights/configurations and all guards",
+  "profiles": {
+    "qwen27b-hyperqwen": {
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "engine_version_or_commit": "vLLM 0.31.0",
+      "configured_context": 86016,
+      "native_KV_capacity_tokens": 88931,
+      "checkpoint_bytes": 15791777864,
+      "checkpoint_location": "Samsung SATA: models/engine-tests/qwen38-27b-hyperqwen-fast",
+      "shared_checkpoint": true,
+      "tool_passed": true,
+      "assistant_followup_passed": true,
+      "owned_unload_and_release_passed": true,
+      "actual_read_calls": 1,
+      "tool_roundtrip_wall_s": 8.417110975000014,
+      "metrics": {
+        "prompt_tokens": 5823,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "prefill_tps": 2082.5857888723017,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_s": 2.8097872734069824,
+        "ttft_method": "engine first-token counter",
+        "decode_tps": 62.52335946750423,
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 24,
+          "max": 26,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          9728,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "sampled_usage": {
+        "samples": 44,
+        "sample_interval_median_s": 1.0335149765014648,
+        "sampled_worker_memory_peak_GiB": 7.4275360107421875,
+        "sampled_worker_swap_peak_MiB": 0.0,
+        "all_phase_gpu_min_free_MiB": [
+          1876.0,
+          143.0
+        ],
+        "after_first_ready_telemetry_gpu_min_free_MiB": [
+          3288.0,
+          1299.0
+        ],
+        "gpu_max_temperature_C": [
+          54.0,
+          45.0
+        ],
+        "host_min_available_GiB": 17.276641845703125,
+        "host_swap_in_pages_delta": 0,
+        "host_swap_out_pages_delta": 0
+      }
+    },
+    "qwen27b-sglang": {
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "engine_version_or_commit": "SGLang source 62271fd7c8aa8fe9edebf04e00a414b7fbf64388",
+      "configured_context": 57344,
+      "native_KV_capacity_tokens": 57344,
+      "checkpoint_bytes": 15791777864,
+      "checkpoint_location": "Samsung SATA: models/engine-tests/qwen38-27b-hyperqwen-fast",
+      "shared_checkpoint": true,
+      "tool_passed": true,
+      "assistant_followup_passed": true,
+      "owned_unload_and_release_passed": true,
+      "actual_read_calls": 1,
+      "tool_roundtrip_wall_s": 8.013233517000003,
+      "metrics": {
+        "prompt_tokens": 6095,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "prefill_tps": 2210.141082196582,
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_s": 2.8880070600000067,
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_tps": 60.17193296938454,
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 24,
+          "max": 26,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "sampled_usage": {
+        "samples": 34,
+        "sample_interval_median_s": 1.031984806060791,
+        "sampled_worker_memory_peak_GiB": 8.721294403076172,
+        "sampled_worker_swap_peak_MiB": 0.0,
+        "all_phase_gpu_min_free_MiB": [
+          515.0,
+          1835.0
+        ],
+        "after_first_ready_telemetry_gpu_min_free_MiB": [
+          515.0,
+          1835.0
+        ],
+        "gpu_max_temperature_C": [
+          52.0,
+          42.0
+        ],
+        "host_min_available_GiB": 16.184654235839844,
+        "host_swap_in_pages_delta": 0,
+        "host_swap_out_pages_delta": 0
+      }
+    }
+  },
+  "failed_attempts": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "attempt": 1,
+      "reason": "obsolete P2P-only supervisor guard; owned worker released"
+    },
+    {
+      "profile": "qwen27b-hyperqwen",
+      "attempt": 2,
+      "reason": "shared-memory channel logs arrived after metrics readiness; bounded 30-second verification grace corrected the false stop; owned worker released"
+    }
+  ],
+  "cpu_checks_passed": 97
+}

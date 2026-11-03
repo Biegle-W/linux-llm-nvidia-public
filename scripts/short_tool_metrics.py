@@ -13,8 +13,17 @@ class ToolMetrics:
     if self.path!='/v1/chat/completions' or self.headers.get('Authorization')!='Bearer '+tap.key:
      self.send_error(403);return
     with tap.lock:
-     if tap.claimed:self.send_error(409,'Short tool benchmark ends after first call');return
+     first_request=not tap.claimed
      tap.claimed=True
+    if not first_request:
+     body=self.rfile.read(int(self.headers['Content-Length']))
+     conn=http.client.HTTPConnection('127.0.0.1',10100,timeout=1200)
+     try:
+      conn.request('POST',self.path,body,{'Authorization':'Bearer '+tap.key,'Content-Type':'application/json'})
+      response=conn.getresponse();self.send_response(response.status);self.send_header('Content-Type',response.getheader('Content-Type','text/event-stream'));self.end_headers()
+      while line:=response.readline():self.wfile.write(line);self.wfile.flush()
+     finally:conn.close()
+     return
     body=json.loads(self.rfile.read(int(self.headers['Content-Length'])));body['stream_options']={'include_usage':True};before=tap.metrics();record={'model':tap.model,'measurement':'first actual DSH tool-call generation','loading_excluded':True};usage={};native={};first=last=None;chunks=0;started=time.perf_counter();conn=http.client.HTTPConnection('127.0.0.1',10100,timeout=1200)
     try:
      conn.request('POST',self.path,json.dumps(body),{'Authorization':'Bearer '+tap.key,'Content-Type':'application/json'});response=conn.getresponse();self.send_response(response.status);self.send_header('Content-Type',response.getheader('Content-Type','text/event-stream'));self.end_headers()

@@ -68,6 +68,9 @@ class FakeWorkers:
 class RouterTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+        # Protocol fixtures exercise the complete maintained catalog independent of host availability.
+        availability=patch('worker_manager.profile_enabled',return_value=True)
+        availability.start();cls.addClassCleanup(availability.stop)
         cls.backend=ThreadingHTTPServer(('127.0.0.1',0),Backend)
         threading.Thread(target=cls.backend.serve_forever,daemon=True).start()
         cls.server=ThreadingHTTPServer(('127.0.0.1',0),router.Handler)
@@ -200,6 +203,8 @@ class RouterTest(unittest.TestCase):
         status,data=self.request('/v1/chat/completions',{'model':'qwen27b-sglang','mock_error':True})
         self.assertEqual(status,503);self.assertIn(b'backend overloaded',data)
         self.assertNotIn(KEY.encode(),data);self.assertIn(b'[redacted]',data)
+        deadline=time.monotonic()+1
+        while self.server.workers.busy and time.monotonic()<deadline:time.sleep(.005)
         self.assertFalse(self.server.workers.busy)
 
     def test_stream_backend_error_carries_original_status(self):

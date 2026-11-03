@@ -361,7 +361,8 @@
         "cpu": "13900KS",
         "installed_ram_gib": 32,
         "transport": "host-staged, no CUDA P2P",
-        "status": "prepared; short GPU qualification pending unlock reboot"
+        "status": "current-boot unlock/no-P2P proof and short tool/follow-up/owned unload passed",
+        "installed_ram_status": "temporary 32 GB; more RAM planned"
       },
       "historical_p2p_optimization": {
         "date": "2026-10-31",
@@ -393,6 +394,22 @@
         },
         "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
         "normal_fresh_loads_verified": 2
+      },
+      "availability": {
+        "enabled": true,
+        "temporary": false,
+        "reason": "VRAM-only profile enabled for unlocked current-host qualification",
+        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
+      },
+      "current_hardware_short_observation": {
+        "date": "2026-11-03",
+        "evidence": "docs/benchmark-results/20261103-unlocked-vram-only.json",
+        "prompt_tokens": 5823,
+        "output_tokens": 39,
+        "prefill_tps": 2082.5857888723017,
+        "ttft_s": 2.8097872734069824,
+        "decode_tps": 62.52335946750423,
+        "full_context_tested": false
       }
     },
     {
@@ -954,7 +971,8 @@
         "cpu": "13900KS",
         "installed_ram_gib": 32,
         "transport": "host-staged, no CUDA P2P",
-        "status": "prepared; short GPU qualification pending unlock reboot"
+        "status": "current-boot unlock/no-P2P proof and short tool/follow-up/owned unload passed",
+        "installed_ram_status": "temporary 32 GB; more RAM planned"
       },
       "historical_p2p_optimization": {
         "date": "2026-10-31",
@@ -985,6 +1003,22 @@
         },
         "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
         "normal_fresh_loads_verified": 2
+      },
+      "availability": {
+        "enabled": true,
+        "temporary": false,
+        "reason": "VRAM-only profile enabled for unlocked current-host qualification",
+        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
+      },
+      "current_hardware_short_observation": {
+        "date": "2026-11-03",
+        "evidence": "docs/benchmark-results/20261103-unlocked-vram-only.json",
+        "prompt_tokens": 6095,
+        "output_tokens": 39,
+        "prefill_tps": 2210.141082196582,
+        "ttft_s": 2.8880070600000067,
+        "decode_tps": 60.17193296938454,
+        "full_context_tested": false
       }
     },
     {
@@ -1367,7 +1401,14 @@
         "cpu": "13900KS",
         "installed_ram_gib": 32,
         "transport": "host-staged, no CUDA P2P",
-        "status": "prepared; short GPU qualification pending unlock reboot"
+        "status": "temporarily disabled awaiting RAM upgrade; no new-host model qualification",
+        "installed_ram_status": "temporary 32 GB; more RAM planned"
+      },
+      "availability": {
+        "enabled": false,
+        "temporary": true,
+        "reason": "VRAM-only operation while awaiting RAM upgrade",
+        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
       }
     },
     {
@@ -1728,7 +1769,14 @@
         "cpu": "13900KS",
         "installed_ram_gib": 32,
         "transport": "host-staged, no CUDA P2P",
-        "status": "prepared; short GPU qualification pending unlock reboot"
+        "status": "temporarily disabled awaiting RAM upgrade; no new-host model qualification",
+        "installed_ram_status": "temporary 32 GB; more RAM planned"
+      },
+      "availability": {
+        "enabled": false,
+        "temporary": true,
+        "reason": "VRAM-only operation while awaiting RAM upgrade",
+        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
       }
     },
     {
@@ -2154,7 +2202,14 @@
         "cpu": "13900KS",
         "installed_ram_gib": 32,
         "transport": "host-staged, no CUDA P2P",
-        "status": "prepared; short GPU qualification pending unlock reboot"
+        "status": "temporarily disabled awaiting RAM upgrade; no new-host model qualification",
+        "installed_ram_status": "temporary 32 GB; more RAM planned"
+      },
+      "availability": {
+        "enabled": false,
+        "temporary": true,
+        "reason": "VRAM-only operation while awaiting RAM upgrade",
+        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
       }
     },
     {
@@ -2334,7 +2389,14 @@
         "cpu": "13900KS",
         "installed_ram_gib": 32,
         "transport": "host-staged, no CUDA P2P",
-        "status": "prepared; short GPU qualification pending unlock reboot"
+        "status": "temporarily disabled awaiting RAM upgrade; no new-host model qualification",
+        "installed_ram_status": "temporary 32 GB; more RAM planned"
+      },
+      "availability": {
+        "enabled": false,
+        "temporary": true,
+        "reason": "VRAM-only operation while awaiting RAM upgrade",
+        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
       }
     },
     {
@@ -2457,7 +2519,14 @@
         "cpu": "13900KS",
         "installed_ram_gib": 32,
         "transport": "host-staged, no CUDA P2P",
-        "status": "prepared; short GPU qualification pending unlock reboot"
+        "status": "temporarily disabled awaiting RAM upgrade; no new-host model qualification",
+        "installed_ram_status": "temporary 32 GB; more RAM planned"
+      },
+      "availability": {
+        "enabled": false,
+        "temporary": true,
+        "reason": "VRAM-only operation while awaiting RAM upgrade",
+        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
       }
     }
   ],
@@ -2473,5 +2542,10 @@
     "auxiliary_gpu_present": false,
     "rtx_3060": "permanently removed",
     "updated": "2026-11-01"
+  },
+  "hardware_capacity": {
+    "installed_ram_gib": 32,
+    "temporary": true,
+    "ram_upgrade_pending": true
   }
 }

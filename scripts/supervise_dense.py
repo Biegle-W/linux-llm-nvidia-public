@@ -17,6 +17,8 @@ def main():
     if engine not in ('hyperqwen', 'sglang'):
         raise SystemExit('Choose a maintained dense engine.')
     profile = get_profile('qwen27b-' + engine)
+    from context_capacity import configured_transport_mode
+    transport_mode = configured_transport_mode()
     gpu_floor_mib = dense_gpu_free_mib(profile['id'])
     host_floor_kib = host_ram_reserve_gib(profile) * 1024 ** 2
     group = next(line.split('::', 1)[1] for line in Path('/proc/self/cgroup').read_text().splitlines()
@@ -72,11 +74,11 @@ def main():
                 try:
                     transport_checked, transport_wait_started, fault = check_p2p_progress(
                         read_engine_log(ROOT / 'data/qwen27b-server.log'), watch.last_phase,
-                        time.monotonic(), transport_wait_started, allow_lazy=engine=='sglang')
+                        time.monotonic(), transport_wait_started, allow_lazy=engine=='sglang', mode=transport_mode)
                     if fault:
-                        reason = 'Dense P2P transport guard: ' + fault
+                        reason = 'Dense GPU transport guard: ' + fault
                 except OSError as error:
-                    reason = 'Dense P2P transport telemetry: ' + str(error)
+                    reason = 'Dense GPU transport telemetry: ' + str(error)
             if engine == 'sglang' and watch.ready and not capacity_checked and not reason:
                 from context_capacity import require_sglang_context
                 try:

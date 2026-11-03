@@ -33,3 +33,24 @@ class LazyTransport(unittest.TestCase):
  def test_nonlazy_engine_requires_evidence_at_readiness(self):
   from context_capacity import check_p2p_progress
   self.assertIsNotNone(check_p2p_progress('', 'idle',100)[2])
+
+class HostStagedTransport(unittest.TestCase):
+ def log(self):return 'NCCL_P2P_DISABLE set by environment to 1\n0[0] -> 1[1] via SHM/direct/direct\n1[1] -> 0[0] via SHM/direct/direct'
+ def test_bidirectional_shm_with_p2p_disabled(self):
+  from context_capacity import require_runtime_transport
+  self.assertEqual(require_runtime_transport(self.log(),'host-staged'),[(0,1),(1,0)])
+ def test_flags_alone_missing_direction_or_peer_channel_fail(self):
+  from context_capacity import require_runtime_transport
+  for log in ['NCCL_P2P_DISABLE set by environment to 1',self.log().split('1[1] ->')[0],self.log()+'\n0[0] -> 1[1] via P2P/IPC',self.log().replace('environment to 1','environment to 0')]:
+   with self.assertRaises(ValueError):require_runtime_transport(log,'host-staged')
+ def test_progress_uses_selected_mode(self):
+  from context_capacity import check_p2p_progress
+  self.assertEqual(check_p2p_progress(self.log(),'idle',100,mode='host-staged'),(True,None,None))
+
+ def test_host_channel_logging_gets_bounded_startup_grace(self):
+  from context_capacity import check_p2p_progress
+  self.assertEqual(check_p2p_progress('NCCL_P2P_DISABLE set by environment to 1','idle',100,mode='host-staged'),(False,100,None))
+  self.assertIsNotNone(check_p2p_progress('', 'idle',131,100,mode='host-staged')[2])
+ def test_actual_peer_channel_is_never_graced(self):
+  from context_capacity import check_p2p_progress
+  self.assertIsNotNone(check_p2p_progress(self.log()+'\n0[0] -> 1[1] via P2P/IPC','idle',100,mode='host-staged')[2])

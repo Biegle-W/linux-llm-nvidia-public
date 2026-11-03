@@ -1,7 +1,7 @@
 """Short real DSH tool round trip, then owned unload. No context stress."""
 from pathlib import Path
 import argparse,json,os,time,uuid,tempfile,subprocess,urllib.request,urllib.error,shutil
-p=argparse.ArgumentParser();p.add_argument('--model',required=True);p.add_argument('--keep-loaded-on-pass',action='store_true');p.add_argument('--output',type=Path);a=p.parse_args();os.umask(0o077)
+p=argparse.ArgumentParser();p.add_argument('--model',required=True);p.add_argument('--require-followup',action='store_true');p.add_argument('--keep-loaded-on-pass',action='store_true');p.add_argument('--output',type=Path);a=p.parse_args();os.umask(0o077)
 R=Path(__file__).resolve().parents[1];H=R/'data/harness-smoke';O=a.output or H/(str(time.time_ns())+'-'+a.model);O.mkdir(parents=True,exist_ok=False);state={'phase':'preflight','model':a.model,'pid':os.getpid(),'started':time.time()};owned=None;timing_tap=None
 k=(R/'data/local-api-key').read_text().strip();opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
 def save():(O/'state.json').write_text(json.dumps(state,indent=2)+'\n')
@@ -40,7 +40,7 @@ try:
     try:observed.append(json.loads(line))
     except ValueError:pass
    ids={e['callId'] for e in observed if e.get('type')=='tool_call' and e.get('tool')=='read'}
-   if any(e.get('type')=='tool_result' and e.get('status')=='completed' and e.get('callId') in ids and nonce in str(e.get('result','')) for e in observed):
+   if not a.require_followup and any(e.get('type')=='tool_result' and e.get('status')=='completed' and e.get('callId') in ids and nonce in str(e.get('result','')) for e in observed):
     stopped_after_tool=True;run.terminate();break
    if time.monotonic()>deadline:run.terminate();raise TimeoutError('Short harness tool call exceeded600s')
    time.sleep(.2)
@@ -56,6 +56,8 @@ try:
  results=[e for e in events if e.get('type')=='tool_result' and e.get('status')=='completed' and e.get('callId') in {c['callId'] for c in calls} and nonce in str(e.get('result',''))]
  final=next((e.get('text','') for e in reversed(events) if e.get('type')=='final'),'')
  assert run.returncode==0 or stopped_after_tool or (calls and results),(run.returncode,(O/'stderr.txt').read_text()[-500:]);assert calls and results,'No completed actual read tool round trip';assert prop('InvocationID')==owned
+ if a.require_followup:assert nonce in final, 'Missing assistant follow-up using actual tool result'
+ state.update(followup_required=a.require_followup,followup_passed=nonce in final)
  state.update(phase='pass',wall_s=time.monotonic()-t,structured_read_records=len(calls),completed_tool_results=len(results),assistant_reply_not_required=True,stopped_after_tool_success=stopped_after_tool,final_marker_returned=nonce in final,strict_final_format=final.strip()==nonce if final else None,event_types=sorted({str(e.get('type')) for e in events if isinstance(e,dict)}),nonce_returned=True,output_cap=128,full_context_stress=False);save()
 except BaseException as e:state.update(phase='failed',error=repr(e));save();raise
 finally:

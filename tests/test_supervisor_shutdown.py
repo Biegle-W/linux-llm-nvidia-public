@@ -19,6 +19,8 @@ class ShutdownTest(unittest.TestCase):
         proof.start();self.addCleanup(proof.stop)
         transport=patch('context_capacity.read_engine_log',return_value='0[0] -> 1[1] via P2P/CUMEM\n1[1] -> 0[0] via P2P/CUMEM')
         transport.start();self.addCleanup(transport.stop)
+        mode=patch('context_capacity.configured_transport_mode',return_value='p2p')
+        mode.start();self.addCleanup(mode.stop)
 
     def exercise(self, module, intentional):
         dense = module is supervise_dense

@@ -4,7 +4,7 @@ import argparse,fcntl,json,os,subprocess,sys,time,urllib.request
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'scripts'))
-from profile_catalog import load_catalog,worker_budget,host_ram_reserve_gib
+from profile_catalog import load_catalog,worker_budget,host_ram_reserve_gib,profile_enabled
 from inference_swap_guard import WorkerWatch,dense_gpu_free_mib,GPU_FREE_MIB
 from pair_p2p_health import require_verified_pair
 UNITS=('llm-test-qwen27b.service','llm-router-worker.service')
@@ -21,7 +21,7 @@ def guards(profile):
 def main():
  parser=argparse.ArgumentParser(description=__doc__);parser.add_argument('--profiles',nargs='+');parser.add_argument('--output',type=Path);args=parser.parse_args()
  if not sys.stdin.isatty() or not sys.stdout.isatty():raise RuntimeError('Run in your foreground terminal using visible_terminal.py foreground. No hidden fallback.')
- os.umask(0o077);profiles=load_catalog()['profiles'];known={p['id'] for p in profiles}
+ os.umask(0o077);profiles=[p for p in load_catalog()['profiles'] if profile_enabled(p)];known={p['id'] for p in profiles}
  if args.profiles and (len(args.profiles)!=len(set(args.profiles)) or not set(args.profiles)<=known):raise RuntimeError('Use distinct currently maintained profile IDs.')
  profiles=[p for p in profiles if not args.profiles or p['id'] in args.profiles]
  output=(args.output or ROOT/'data/short-cli-tests'/time.strftime('%Y%m%d-%H%M%S')).resolve();output.mkdir(parents=True,exist_ok=False)
@@ -47,7 +47,7 @@ def main():
    if not inactive() or (ROOT/'data/GPU-LOCK').exists() or not admission_idle():raise RuntimeError('New independent work preserved; sequence stopped before model selection.')
    print('\nTesting '+model+'; guards='+json.dumps(guards(p)),flush=True)
    with (output/(model+'.log')).open('x') as log:
-    child=subprocess.run(['/usr/bin/python3',str(ROOT/'scripts/smoke_dsh_tools.py'),'--model',model,'--output',str(output/model)],stdout=log,stderr=subprocess.STDOUT)
+    child=subprocess.run(['/usr/bin/python3',str(ROOT/'scripts/smoke_dsh_tools.py'),'--require-followup','--model',model,'--output',str(output/model)],stdout=log,stderr=subprocess.STDOUT)
    folder=output/model;check=json.loads((folder/'state.json').read_text());bench=json.loads((folder/'tool-benchmark.json').read_text()) if (folder/'tool-benchmark.json').exists() else None
    state['results'][model]={'exit_code':child.returncode,'check':check,'benchmark':bench,'guards':guards(p),'configured_context':p['allocated_context'],'worker_inactive_verified':inactive()};save()
    if child.returncode or check.get('phase')!='pass' or check.get('unloaded') is not True or not inactive():raise RuntimeError('Tool/unload check did not pass. Evidence retained; do not auto-retry or force-stop unknown work.')
