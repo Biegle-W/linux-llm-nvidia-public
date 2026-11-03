@@ -1,5 +1,19 @@
 # Current takeover state
 
+## Current takeover — November 3, 2026
+
+Objective: repair DSH startup and reconcile conflicting operational records. Selected configuration: temporary 32 GB RAM, HyperQwen 86,016 / SGLang 57,344 enabled; all five RAM/offload profiles disabled. No candidate model or engine setting is being promoted. Current guards and transport are described in [the repair record](DSH-STARTUP-REPAIR-20261103.md).
+
+DSH's managed unit explicitly runs headlessly and preserves its private startup log. All 19 focused CPU startup/registration, launch-policy, inference-policy and availability checks pass. Live browser-token/cookie authentication returns HTTP 200, unauthenticated access returns 401, and DSH has zero restarts since the final deployment. Endpoint and service stability verification is recorded in the linked sanitized result. API/hub invocations are preserved. No GPU model was loaded or benchmark repeated. The earlier provider-abort buffering repair remains complete; older statements that its worker remains loaded describe that verification only, not current ownership.
+
+Remaining work: after explicit RAM-upgrade confirmation, measure capacity and requalify disabled profiles before restoration. Daily updates remain paused. The old SGLang 38K reload blocker and earlier GLM/Bolt pending checks are historical or deferred; they do not request immediate model tests. Desktop portal failures observed in the audit are separate desktop issues, not a reason to alter inference services.
+
+Active work: API, hub and DSH services; no test worker or GPU reservation was created by this repair. Both GPUs remain idle and no GPU-LOCK exists. Reviewed changes are prepared independently in both repositories. Remote publication is pending GitHub CLI reauthentication: the existing credential returns HTTP 401. After authentication, fetch each main branch, preserve any intervening work, push normally and verify both remote heads. Exact commit IDs and sync receipts belong in the private publication checkpoint. Next action: use the restored DSH client; investigate a new failure only against its exact service/worker invocation.
+
+## Dated evidence and standing instructions
+
+Earlier status snapshots below are historical where superseded above. Their original measurements and standing user instructions remain preserved.
+
 ## GLM engine 1.1.50 selected; 256 MiB reruns — November 3, 2026
 
 GLM selects the normal 1.1.50 engine at unchanged 65,536 context after two passing short matched pairs: tool-call decode improved 17–24%, with mixed prefill. Versioned binary/profile/hash pin and normal-router tool/unload passed; 19 focused CPU checks passed. HyperQwen and SGLang MTP remain memory-blocked under the 256 MiB floor; Bolt pinning still hits oomd and prefetch-two offered no material gain; DeepSeek retains 1.1.46 because new arms did not improve overall and its quant prevents new P2P all-reduce. Other guards and Strata prefill 512 remain unchanged. [Full evidence and limits](VRAM256-OPTIMIZATION-20261103.md).

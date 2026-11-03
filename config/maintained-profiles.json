@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-10-31",
+  "updated": "2026-11-03",
   "scope": "Current Linux NVIDIA workstation only",
   "selection_policy": {
     "group_by": [
@@ -31,7 +31,7 @@
       ],
       "allocated_context": 86016,
       "tested_retrieval_input": 50627,
-      "context_validation": "Calculated 86,016-token allocation backed by native KV capacity; short actual DSH read tool and owned unload passed; minimum sampled free VRAM [3245, 679] MiB. No full-window or sustained quality/resource claim.",
+      "context_validation": "86,016-token allocation backed by 88,931 native KV tokens on the temporary 32 GB host; short actual DSH read/tool-result/follow-up and owned unload passed at the current 256 MiB free-VRAM floor. No full-window or sustained qualification. See docs/UNLOCKED-VRAM-ONLY-20261103.md.",
       "benchmark_context": 32768,
       "benchmark": {
         "short_decode_tps": 112.06417287975118,
@@ -424,7 +424,7 @@
       ],
       "allocated_context": 57344,
       "tested_retrieval_input": 29434,
-      "context_validation": "57,344 tokens allocated on both native KV ranks; short actual DSH read tool and owned unload passed under SGLang-only 448 MiB free-VRAM floor. Minimum sampled free 469/1206 MiB. No full-window or sustained qualification.",
+      "context_validation": "57,344 tokens backed on both native KV ranks on the temporary 32 GB host; short actual DSH read/tool-result/follow-up and owned unload passed at the current 256 MiB free-VRAM floor. The earlier 448 MiB qualification remains historical. No full-window or sustained qualification. See docs/UNLOCKED-VRAM-ONLY-20261103.md.",
       "benchmark_context": 32768,
       "benchmark": {
         "prefill_tps": 1667.8703781763365,
@@ -1031,7 +1031,7 @@
         "qwen"
       ],
       "allocated_context": 131072,
-      "context_validation": "131072-token calculated memory allocation; short actual DSH read/result passed and unloaded. No new full-context quality or speed qualification; older retrieval/benchmark evidence remains dated.",
+      "context_validation": "Deferred while temporarily disabled pending RAM upgrade and guarded requalification. Prior-host record: 131072-token calculated memory allocation; short actual DSH read/result passed and unloaded. No new full-context quality or speed qualification; older retrieval/benchmark evidence remains dated.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 98.8,
@@ -1120,7 +1120,7 @@
         "plain_mmap_experts": true,
         "expert_memory_mode": "plain mmap for 32 GB host",
         "observed_native_reserve_mib": 700,
-        "reason": "Permanent 32 GB hardware migration; bounded cache preparation, GPU qualification pending.",
+        "reason": "Temporary 32 GB host; profile disabled pending explicit RAM-upgrade confirmation, measured capacity and guarded requalification.",
         "reserve_mib_per_gpu": 1024,
         "vram_reserve_args": {
           "--vram-reserve-mib": 1024
@@ -1421,7 +1421,7 @@
         "glm"
       ],
       "allocated_context": 65536,
-      "context_validation": "64K retained; candidate disables speculative MTP and uses greedy default sampling after malformed short tool response; verification pending.",
+      "context_validation": "Deferred while temporarily disabled pending RAM upgrade and guarded requalification. Prior-host record: 64K retained; candidate disables speculative MTP and uses greedy default sampling after malformed short tool response; verification pending.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 7.2,
@@ -1440,7 +1440,7 @@
           "MAYA_GLM_RAM_GB": "16",
           "MAYA_GLM_NO_MTP": "1"
         },
-        "reason": "Permanent 32 GB hardware migration; bounded cache preparation, GPU qualification pending.",
+        "reason": "Temporary 32 GB host; profile disabled pending explicit RAM-upgrade confirmation, measured capacity and guarded requalification.",
         "expert_profile": "data/glm-maya-expert-profile.bin",
         "prefill": "auto",
         "kv_streaming": true,
@@ -1789,7 +1789,7 @@
         "maya-deepseek"
       ],
       "allocated_context": 32768,
-      "context_validation": "32768; separate Maya v1.1.46 completed actual DSH read tool/result; no full-context qualification.",
+      "context_validation": "Deferred while temporarily disabled pending RAM upgrade and guarded requalification. Prior-host record: 32768; separate Maya v1.1.46 completed actual DSH read tool/result; no full-context qualification.",
       "benchmark_context": 8192,
       "benchmark": {
         "short_decode_tps": 3.4,
@@ -1861,7 +1861,7 @@
         "reserve_mib_per_gpu": 1024,
         "parallel": 1,
         "reasoning_effort": "none",
-        "reason": "Permanent 32 GB hardware migration; bounded cache preparation, GPU qualification pending.",
+        "reason": "Temporary 32 GB host; profile disabled pending explicit RAM-upgrade confirmation, measured capacity and guarded requalification.",
         "decode_expert_warm_gb": 2.0,
         "vram_reserve_args": {
           "--reserve-mib": 1024
@@ -2223,7 +2223,7 @@
       ],
       "allocated_context": 163840,
       "tested_retrieval_input": 58893,
-      "context_validation": "163840-token calculated memory allocation; short actual DSH tool check pending. No new full-context quality or speed qualification; older retrieval/benchmark evidence remains dated.",
+      "context_validation": "Deferred while temporarily disabled pending RAM upgrade and guarded requalification. Prior-host record: 163840-token calculated memory allocation; short actual DSH tool check pending. No new full-context quality or speed qualification; older retrieval/benchmark evidence remains dated.",
       "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
       "storage": {
         "access": "ram-resident",
@@ -2409,7 +2409,7 @@
         "strata-unsloth"
       ],
       "allocated_context": 32768,
-      "context_validation": "32K retained. Two guarded short baseline/512 prefill pairs passed tool/result/follow-up and unload; uncached1064-token prefill improved25.6%/27.5%; no full-context test.",
+      "context_validation": "Deferred while temporarily disabled pending RAM upgrade and guarded requalification. Prior-host record: 32K retained. Two guarded short baseline/512 prefill pairs passed tool/result/follow-up and unload; uncached1064-token prefill improved25.6%/27.5%; no full-context test.",
       "runtime_selector": {
         "kind": "pinned-strata029",
         "manifest": "config/deepseek-unsloth-runtime.json"
@@ -2439,7 +2439,7 @@
         },
         "effective_prefill_chunk_observed": 512,
         "prefill_evidence": "docs/benchmark-results/20261102-community-screens.json",
-        "reason": "Permanent 32 GB hardware migration; bounded cache preparation, GPU qualification pending."
+        "reason": "Temporary 32 GB host; profile disabled pending explicit RAM-upgrade confirmation, measured capacity and guarded requalification."
       },
       "storage": {
         "access": "ssd-streaming",
@@ -2547,5 +2547,6 @@
     "installed_ram_gib": 32,
     "temporary": true,
     "ram_upgrade_pending": true
-  }
+  },
+  "historical_evidence_policy": "Dated nested trials retain their original settings, failures and pending flags; enabled availability and current context_validation are authoritative. Disabled profiles require RAM-upgrade confirmation, measured capacity and guarded requalification."
 }

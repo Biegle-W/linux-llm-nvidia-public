@@ -1,5 +1,11 @@
 # NVIDIA model router, Tailscale and DeepSeek Harness
 
+## Current operation and DSH repair — November 3, 2026
+
+DSH uses an explicit headless service mode; desktop launches retain their required visible monitor. The API and private hub remain independent. The current host has **temporary 32 GB RAM**; only **HyperQwen 86,016** and **SGLang 57,344** are enabled. Both retain 24/26 GiB worker budgets, the 2 GiB host reserve, **256 MiB per-GPU free-VRAM floor**, swappiness 60 and idle 600 seconds. Unlock and current-boot host-staged transport are verified; the native-output buffering repair remains deployed. RAM/offload profiles remain disabled until explicit hardware confirmation, measured capacity and guarded requalification. Daily updates remain paused.
+
+See [the current repair and remaining work](../docs/DSH-STARTUP-REPAIR-20261103.md). Older dated status paragraphs and benchmark numbers retain their historical hardware/guard scope; they do not override this current state. Standing instructions remain applicable. No new model benchmark was run.
+
 ## NVIDIA API-only server — November 1, 2026
 
 The authenticated client API remains on port **10100** with the existing key. It forwards to a separate private model hub on **127.0.0.1:10101**; guarded model backends retain their private port and launch paths. The hub owns model selection, FIFO admission and the 600-second idle policy. Restarting the API does not restart the hub or its model workers.
@@ -38,13 +44,7 @@ The router now exposes native POST /v1/responses alongside Chat Completions, fix
 The router now reuses a verified running worker and waits for its existing cold load after a client disconnect, avoiding repeated reloads and the reported “Native worker state is unavailable” error. Ownership, active-work and resource guards remain intact. All 224 CPU tests passed. Live loopback streaming/non-streaming and Tailscale requests completed in under half a second without restarting the worker. Only the router was restarted; the loaded worker and DSH were preserved. See [repair](../docs/API-RELIABILITY-20261030.md) and [verification](../docs/validation-results/20261030-api-reliability.json).
 
 
-The [daily gated updater](../docs/DAILY-ENGINE-UPDATE-POLICY.md) is enabled at 03:00 local time. It preserves normal request admission and reserves only idle GPUs. Current resource settings are the maintained registry: dense worker RAM is uncapped, all host floors are 2 GiB, swap occupancy is allowed, and the four maintained SSD-streaming profiles use 128/160 MiB/s active-swap limits over 30 seconds. Dense and unknown profiles retain 1/8 MiB/s. Only Qwen/Strata and DeepSeek/Maya use 15% full-memory pressure; other profiles remain 10%, with the same 30-second window/three samples. Every other guard is unchanged. Current benchmark outcomes are in [the pressure-policy report](../docs/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md). Older dated budget/qualification paragraphs below remain historical.
-
-The deployment follows the AMD repository's catalog/on-demand switching design,
-adapted to the six selected NVIDIA profiles. Only one inference worker runs at a
-time. The authenticated router listens on loopback and this computer's explicit
-Tailscale IPv4 address at port **10100**, preserving the original worker's private
-loopback port **10000**. DSH remains a separate loopback service at **3080**.
+The authenticated API listens on loopback and the configured Tailscale address at port **10100**, with the private model hub on **127.0.0.1:10101** and guarded workers on their private port. DSH is an optional separate loopback client at **3080**. Install it with `network/install.py --with-clients`; its explicit headless service mode needs no graphical session. The desktop shortcut still opens its monitor and private startup URL when the user activates the desktop. Daily engine updates are paused; resume only on an explicit request.
 
 ## Select a model and engine
 
@@ -54,14 +54,12 @@ require `Authorization: Bearer <local-key>`. The existing owner-only key is in
 `data/local-api-key`; it is never published. `/v1/models` is the authoritative
 catalog. Requesting its ID selects the model, quantization and engine together:
 
-| API model ID | Engine | Context allocation |
+| Enabled API model ID | Engine | Context allocation |
 | --- | --- | ---: |
-| `qwen27b-hyperqwen` | HyperQwen/vLLM | 56,320 |
-| `qwen27b-sglang` | SGLang | 32,768 |
-| `flash-next-strata` | Strata | 32,768 |
-| `glm-maya` | Maya | 65,536 |
-| `deepseek-strata` | Strata | 131,072 |
-| `deepseek-maya` | Maya | 32,768 |
+| `qwen27b-hyperqwen` | HyperQwen/vLLM | 86,016 |
+| `qwen27b-sglang` | SGLang | 57,344 |
+
+The other five retained profiles are temporarily disabled and hidden from the picker pending the RAM upgrade and guarded qualification. `/v1/models` is authoritative for enabled choices. Context allocations are not new full-window qualification claims.
 
 ```python
 import os
@@ -116,7 +114,7 @@ Desktop shortcuts are installed for:
 - **Maya**: select GLM or DeepSeek, then open Maya's own Chat/Monitor web app
   at the same worker address.
 - **DeepSeek Harness (DSH)**: reopen the separately running DSH web app using its
-  private startup URL. It lists four engine providers and all six profiles.
+  private startup URL. It lists the two enabled profiles under NVIDIA server.
 
 Strata/Maya selection happens in the launcher terminal; closing it leaves the
 managed worker running. Their web apps may request the existing local API key

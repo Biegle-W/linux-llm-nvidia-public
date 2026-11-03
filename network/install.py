@@ -51,6 +51,18 @@ def api_service_units(root=ROOT):
     return result
 
 
+def dsh_service_unit(root=ROOT):
+    """The optional loopback client service runs without a desktop session."""
+    root = Path(root)
+    return (MARKER+'\n[Unit]\nDescription=DeepSeek Harness client for NVIDIA API\n'
+            'After=nvidia-model-router.service\nWants=nvidia-model-router.service\n\n[Service]\nType=simple\n'
+            'ExecStart="'+str(root/'dsh/run')+'" web --host 127.0.0.1 --port 3080 --no-open\nWorkingDirectory='+str(root/'data/dsh-workspace')+'\n'
+            'Environment=PYTHONUNBUFFERED=1\nEnvironment=NVIDIA_DSH_HEADLESS=1\nUMask=0077\nRestart=on-failure\nRestartSec=5\nNoNewPrivileges=true\nMemoryMax=2G\n'
+            'StandardOutput=append:'+str(root/'data/dsh-web.log')+'\n'
+            'StandardError=append:'+str(root/'data/dsh-web.log')+'\n'
+            '\n[Install]\nWantedBy=default.target\n')
+
+
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--with-clients',action='store_true',help='also install/start the optional DSH client and desktop selectors')
@@ -71,11 +83,7 @@ def main():
         raise SystemExit('A strong owner-only local API key is required.')
     units=api_service_units()
     if args.with_clients:
-        units['nvidia-dsh']=(MARKER+'\n[Unit]\nDescription=DeepSeek Harness client for NVIDIA API\n'
-            'After=nvidia-model-router.service\nWants=nvidia-model-router.service\n\n[Service]\nType=simple\n'
-            'ExecStart="'+str(ROOT/'dsh/run')+'" web --host 127.0.0.1 --port 3080 --no-open\nWorkingDirectory='+str(ROOT/'data/dsh-workspace')+'\n'
-            'Environment=PYTHONUNBUFFERED=1\nUMask=0077\nRestart=on-failure\nRestartSec=5\nNoNewPrivileges=true\nMemoryMax=2G\n'
-            '\n[Install]\nWantedBy=default.target\n')
+        units['nvidia-dsh'] = dsh_service_unit()
     for name,text in units.items():
         write_managed(Path.home()/'.config/systemd/user'/(name+'.service'),text)
     if not args.with_clients:

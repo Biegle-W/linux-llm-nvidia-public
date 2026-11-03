@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Current evidence and scope — November 3, 2026
+
+The latest current-host short observations are in [unlocked VRAM-only results](UNLOCKED-VRAM-ONLY-20261103.md). [DSH startup repair](DSH-STARTUP-REPAIR-20261103.md) changes no model settings and adds no speed measurement. Temporary 32 GB availability and current 256 MiB guards do not relabel the older results below. RAM/offload profiles remain disabled.
+
 ## Latest: additional Unsloth DeepSeek Strata option at 32K — October 31
 
 The Strata model menu now includes a separate **Unsloth Dynamic3.1 UD-IQ1_S**

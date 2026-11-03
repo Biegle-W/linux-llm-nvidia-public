@@ -1,0 +1,36 @@
+{
+  "date": "2026-11-03",
+  "change": "Explicit headless optional DSH service; desktop monitor still required for ordinary desktop web launches",
+  "cpu_checks": {
+    "passed": 19,
+    "suites": [
+      "DSH startup",
+      "DSH provider registration",
+      "headless API service policy",
+      "inference policy",
+      "model availability"
+    ]
+  },
+  "live": {
+    "authenticated_browser_http_status": 200,
+    "unauthenticated_http_status": 401,
+    "dsh_restarts_since_final_deployment": 0,
+    "stable_dsh_invocation": true,
+    "api_hub_invocations_preserved": true,
+    "private_startup_log_preserved": true,
+    "gpus_idle": true,
+    "test_gpu_reservation_created": false
+  },
+  "model_settings_changed": false,
+  "inference_or_benchmark_run": false,
+  "limits": "HTTP/browser authentication and service stability checks only; no model inference or full-context qualification",
+  "retained_state": {
+    "temporary_ram_gib": 32,
+    "enabled_profiles": [
+      "qwen27b-hyperqwen",
+      "qwen27b-sglang"
+    ],
+    "disabled_profiles_require_ram_upgrade_and_qualification": true,
+    "daily_updates": "paused"
+  }
+}
