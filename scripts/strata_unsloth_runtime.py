@@ -45,7 +45,7 @@ def verify(profile, root=ROOT):
 def build_config(profile, runtime):
     selected = profile['selected_settings']
     if (selected.get('gpu') != [0, 1] or selected.get('experts') != 6
-            or selected.get('cpu_store_decimal_gb') != 36):
+            or selected.get('cpu_store_decimal_gb') not in (16, 36)):
         raise ValueError('Unqualified Unsloth placement/expert/cache setting')
     args = ['--pack', str(runtime / 'pack'), '--max-context', str(profile['allocated_context']),
             '--eos', '1', '--dspark', 'none', '--tp', '2', '--reserve-mib', str(selected.get('internal_gpu_reserve_mib',768)),
@@ -57,7 +57,7 @@ def build_config(profile, runtime):
             'model_name': PROFILE, 'arch': 'deepseek41', 'lib_dirs': [str(runtime / 'engine')],
             'engine_ready_s': 900, 'gpu': [0, 1], 'gpus_asked': True, 'host': '127.0.0.1',
             'open_browser': False, 'layer_split': 'auto', 'reasoning_effort': 'none', 'parallel': 1,
-            'env': {'DS4_STORE_GB': '36', 'DS4_STORE_POLICY': '1', 'DS4_NO_VIEW': '1',
+            'env': {'DS4_STORE_GB': str(selected['cpu_store_decimal_gb']), 'DS4_STORE_POLICY': '1', 'DS4_NO_VIEW': '1',
                     'STRATA_DS4_SLOT_DIR': str(runtime.parents[1] / 'data/strata-unsloth/ds4-slots')}}
 
 

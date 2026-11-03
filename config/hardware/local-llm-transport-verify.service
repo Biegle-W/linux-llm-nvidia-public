@@ -1,0 +1,17 @@
+[Unit]
+Description=Verify direct CPU x8/x8 GPUs with CUDA P2P unavailable
+Requires=gpu-unlock-health-boot.service
+After=gpu-unlock-health-boot.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 -I /usr/local/libexec/gpu_transport_health.py boot
+RemainAfterExit=yes
+RuntimeDirectory=local-llm-transport
+RuntimeDirectoryPreserve=yes
+ProtectSystem=strict
+ProtectHome=yes
+NoNewPrivileges=yes
+
+[Install]
+WantedBy=multi-user.target

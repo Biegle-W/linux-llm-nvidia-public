@@ -1,5 +1,10 @@
 # Linux LLM NVIDIA — public reference
 
+## Z690 / 13900KS / permanent 32 GB migration — November 3, 2026
+
+The current host is the MSI Z690 Carbon WiFi DDR5 / i9-13900KS with intentional 32 GB RAM, Intel UHD 770 desktop and direct CPU PCIe4 x8/x8 RTX 3080 Ti/3080. The external PCIe switch and Crucial NVMe are removed. Stock signed NVIDIA 615.71.09 is loaded; actual CUDA peer capability is zero both ways. Maintained launches disable P2P/custom all-reduce, and the switch ACS service is disabled. All worker budgets are 24/26 GiB with bounded cache preparation; other resource guards remain. 77 focused CPU checks pass. **Unlock and model qualification remain pending a normal boot after disabling Secure Boot in BIOS**; preboot GRUB/initramfs/firmware checks pass. Startup requires the new root-owned current-boot host-staged proof and successful early unlock. Do not demand a switched-P2P proof on this host, re-enable the switch driver/ACS policy, restore 64 GB caches, or relabel historical benchmarks as new-host results. Headless physical-input activation remains unchanged. [Status and remaining checks](docs/Z690-13900KS-MIGRATION-20261103.md).
+
+
 ## Foreground Codex CLI model tests — November 2, 2026
 
 A user-visible foreground CLI TTY satisfies harness visibility when the user chooses terminal execution. Use `visible_terminal.py foreground` with `scripts/cli_short_models.py`; no desktop chat/window is required. All service/GPU/localhost permissions, ownership/resource/P2P guards, short real tool/benchmark metrics, verified unload, serial selection and privacy/reporting rules still apply. A restricted agent must request approved host access to the exact command; it must not disable checks or require switching to a desktop chat. See [CLI short-test instructions](docs/CLI-SHORT-MODEL-TESTS.md).

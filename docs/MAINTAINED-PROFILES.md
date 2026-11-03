@@ -1,5 +1,10 @@
 # Maintained model, quantization and engine settings
 
+## Z690 / 13900KS / permanent 32 GB migration — November 3, 2026
+
+The current host is the MSI Z690 Carbon WiFi DDR5 / i9-13900KS with intentional 32 GB RAM, Intel UHD 770 desktop and direct CPU PCIe4 x8/x8 RTX 3080 Ti/3080. The external PCIe switch and Crucial NVMe are removed. Stock signed NVIDIA 615.71.09 is loaded; actual CUDA peer capability is zero both ways. Maintained launches disable P2P/custom all-reduce, and the switch ACS service is disabled. All worker budgets are 24/26 GiB with bounded cache preparation; other resource guards remain. 77 focused CPU checks pass. **Unlock and model qualification remain pending a normal boot after disabling Secure Boot in BIOS**; preboot GRUB/initramfs/firmware checks pass. Startup requires the new root-owned current-boot host-staged proof and successful early unlock. Do not demand a switched-P2P proof on this host, re-enable the switch driver/ACS policy, restore 64 GB caches, or relabel historical benchmarks as new-host results. Headless physical-input activation remains unchanged. [Status and remaining checks](Z690-13900KS-MIGRATION-20261103.md).
+
+
 ## GLM engine 1.1.50 selected; 256 MiB reruns — November 3, 2026
 
 GLM selects the normal 1.1.50 engine at unchanged 65,536 context after two passing short matched pairs: tool-call decode improved 17–24%, with mixed prefill. Versioned binary/profile/hash pin and normal-router tool/unload passed; 19 focused CPU checks passed. HyperQwen and SGLang MTP remain memory-blocked under the 256 MiB floor; Bolt pinning still hits oomd and prefetch-two offered no material gain; DeepSeek retains 1.1.46 because new arms did not improve overall and its quant prevents new P2P all-reduce. Other guards and Strata prefill 512 remain unchanged. [Full evidence and limits](VRAM256-OPTIMIZATION-20261103.md).

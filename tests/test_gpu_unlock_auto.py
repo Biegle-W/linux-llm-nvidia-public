@@ -62,5 +62,5 @@ class AutoUnlock(unittest.TestCase):
    subprocess.run(['/bin/sh',str(hook)],env=dict(os.environ,PATH=str(bin)+':'+os.environ['PATH'],TEST_CAPTURE=str(capture)),check=True,capture_output=True)
    self.assertEqual(capture.read_text().splitlines()[0],'gpu_unlock')
    args=capture.read_text();self.assertIn('0000:0d:00.0',args);self.assertIn('0000:15:00.0',args);self.assertNotIn('0000:1c:00.0',args)
-   opts=(run/'modprobe.d/local-llm-dynamic-bar1.conf').read_text();self.assertIn('RMForceStaticBar1=0',opts);self.assertNotIn('pci=0000:1c:00.0',opts)
+   self.assertFalse((run/'modprobe.d/local-llm-dynamic-bar1.conf').exists());self.assertEqual((run/'local-llm-gpu-unlock-targets').read_text().strip(), '0000:0d:00.0,0000:15:00.0')
 if __name__=='__main__':unittest.main()

@@ -1,5 +1,10 @@
 # Agent entry point
 
+## Z690 / 13900KS / permanent 32 GB migration — November 3, 2026
+
+The current host is the MSI Z690 Carbon WiFi DDR5 / i9-13900KS with intentional 32 GB RAM, Intel UHD 770 desktop and direct CPU PCIe4 x8/x8 RTX 3080 Ti/3080. The external PCIe switch and Crucial NVMe are removed. Stock signed NVIDIA 615.71.09 is loaded; actual CUDA peer capability is zero both ways. Maintained launches disable P2P/custom all-reduce, and the switch ACS service is disabled. All worker budgets are 24/26 GiB with bounded cache preparation; other resource guards remain. 77 focused CPU checks pass. **Unlock and model qualification remain pending a normal boot after disabling Secure Boot in BIOS**; preboot GRUB/initramfs/firmware checks pass. Startup requires the new root-owned current-boot host-staged proof and successful early unlock. Do not demand a switched-P2P proof on this host, re-enable the switch driver/ACS policy, restore 64 GB caches, or relabel historical benchmarks as new-host results. Headless physical-input activation remains unchanged. [Status and remaining checks](docs/Z690-13900KS-MIGRATION-20261103.md).
+
+
 ## GLM engine 1.1.50 selected; 256 MiB reruns — November 3, 2026
 
 GLM selects the normal 1.1.50 engine at unchanged 65,536 context after two passing short matched pairs: tool-call decode improved 17–24%, with mixed prefill. Versioned binary/profile/hash pin and normal-router tool/unload passed; 19 focused CPU checks passed. HyperQwen and SGLang MTP remain memory-blocked under the 256 MiB floor; Bolt pinning still hits oomd and prefetch-two offered no material gain; DeepSeek retains 1.1.46 because new arms did not improve overall and its quant prevents new P2P all-reduce. Other guards and Strata prefill 512 remain unchanged. [Full evidence and limits](docs/VRAM256-OPTIMIZATION-20261103.md).
@@ -64,7 +69,7 @@ Standing user instruction reaffirmed November 1: collect the default benchmark m
 
 Always report: Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location. Use decimal GB for weights. Keep tool success, total tool duration, load/unload results and measurement method alongside the table. Label single short-call observations, cache state and historical results honestly; never attribute old Maya-S speeds to Unsloth. No extra full-context, sustained, repeated-reload or timed-idle suite is implied. A request to remember this protocol does not itself authorize replaying all models.
 
-## Current hardware — November 1, 2026
+## Historical switched hardware — November 1, 2026
 
 The RTX 3060 is permanently removed. Maintain only the RTX 3080 Ti / RTX 3080 pair. The November 1 reboot verified pair-only early unlock, scoped ACS and seeded bidirectional P2P correctness at 13.082 GB/s each way. The current-boot proof gate passes. Early unlock and scoped switch ACS routing must not require the removed card. Before any maintained model starts, require a root-owned current-boot seeded bidirectional peer-read/write proof. A configuration flag alone does not establish working P2P. Preserve resource guards and running jobs; no full-context tests are authorized by this hardware repair.
 

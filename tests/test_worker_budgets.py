@@ -36,8 +36,8 @@ class WorkerBudget(unittest.TestCase):
                 result=subprocess.check_output(['bash',str(script),name,'/usr/bin/python3',command,engine],text=True,env=env)
                 self.assertIn('fixture-console-opened',result)
                 self.assertIn('--property=MemorySwapMax='+limit,result)
-                self.assertIn('--property=MemoryHigh='+('infinity' if limit=='infinity' else '30G'),result)
-                self.assertIn('--property=MemoryMax='+('infinity' if limit=='infinity' else '36G'),result)
+                self.assertIn('--property=MemoryHigh='+'24G',result)
+                self.assertIn('--property=MemoryMax='+'26G',result)
     def test_moe_shell_commands_use_managed_router_selection(self):
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as directory:
@@ -53,16 +53,16 @@ class WorkerBudget(unittest.TestCase):
                     result = subprocess.check_output(['bash', str(shell), command], text=True).strip()
                     self.assertEqual(result, '--model ' + model)
 
-    def test_dense_models_have_no_per_worker_ram_caps(self):
+    def test_dense_models_have_32gb_worker_ram_caps(self):
         for name in ['qwen27b-hyperqwen', 'qwen27b-sglang']:
-            self.assertEqual(worker_budget(get_profile(name)), {'high': None, 'max': None, 'swap': None})
+            self.assertEqual(worker_budget(get_profile(name)), {'high': 24, 'max': 26, 'swap': None})
 
-    def test_all_selected_moe_profiles_use_restored_ram_budget(self):
+    def test_all_selected_moe_profiles_use_32gb_ram_budget(self):
         from profile_catalog import load_catalog,host_ram_reserve_gib
         for p in load_catalog()['profiles']:
             self.assertEqual(host_ram_reserve_gib(p),2)
             if not p['id'].startswith('qwen27b-'):
-                self.assertEqual(worker_budget(p),{'high':56,'max':58,'swap':None})
+                self.assertEqual(worker_budget(p),{'high':24,'max':26,'swap':None})
 
     def test_dense_cannot_take_the_larger_moe_budget(self):
         p = deepcopy(get_profile('qwen27b-hyperqwen'))
@@ -84,12 +84,12 @@ class WorkerBudget(unittest.TestCase):
 
 
 class DenseNativeGuard(unittest.TestCase):
-    def test_uncapped_dense_preflight_still_requires_exact_owned_cgroup(self):
+    def test_bounded_dense_preflight_still_requires_exact_owned_cgroup(self):
         from unittest.mock import patch,Mock
         import serve_qwen27b_engines as engine
         p=get_profile('qwen27b-hyperqwen')
         for unit,high,hard,accepted in [
-                ('llm-test-qwen27b.service','max','max',True),
+                ('llm-test-qwen27b.service',str(24*1024**3),str(26*1024**3),True),
                 ('foreign.service','max','max',False),
                 ('llm-test-qwen27b.service',str(30*1024**3),'max',False),
                 ('llm-test-qwen27b.service','max',str(36*1024**3),False)]:

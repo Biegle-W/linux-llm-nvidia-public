@@ -1,0 +1,2 @@
+# Prefer the Intel UHD 770 for GNOME/Mutter, independent of DRM numbering.
+SUBSYSTEM=="drm", ENV{DEVTYPE}=="drm_minor", KERNEL=="card[0-9]*", SUBSYSTEMS=="pci", ATTRS{vendor}=="0x8086", ATTRS{device}=="0xa780", TAG+="mutter-device-preferred-primary"

@@ -113,6 +113,8 @@ def main():
                CC='gcc-13', CXX='g++-13')
     # Main inference uses the permanent RTX 3080 Ti / RTX 3080 pair.
     env.update(profile.get('environment') or {})
+    env.update(NCCL_P2P_DISABLE='1', GGML_CUDA_P2P='0')
+    env.pop('NCCL_P2P_LEVEL', None)
     env['PATH'] = str(cuda / 'bin') + ':' + env['PATH']
     if engine == 'sglang':
         from sglang_runtime import prepare_environment

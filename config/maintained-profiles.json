@@ -79,7 +79,8 @@
         "{\"max_cudagraph_capture_size\": 4, \"custom_ops\": [\"+rms_norm\", \"+silu_and_mul\"]}",
         "--enable-auto-tool-choice",
         "--tool-call-parser",
-        "qwen3_coder"
+        "qwen3_coder",
+        "--disable-custom-all-reduce"
       ],
       "environment": {
         "VLLM_USE_V2_MODEL_RUNNER": "1",
@@ -89,10 +90,10 @@
         "VLLM_MARLIN_INPUT_DTYPE": "int8",
         "VLLM_MARLIN_INT8_INCLUDE_RE": "mlp",
         "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp",
-        "NCCL_P2P_DISABLE": "0",
-        "NCCL_P2P_LEVEL": "SYS",
+        "NCCL_P2P_DISABLE": "1",
         "NCCL_DEBUG": "INFO",
-        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM"
+        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM",
+        "GGML_CUDA_P2P": "0"
       },
       "latest_benchmark": {
         "run": "20261031-pair-main-aux",
@@ -120,8 +121,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": null,
-        "max": null,
+        "high": 24,
+        "max": 26,
         "swap": null
       },
       "latest_qualification": {
@@ -227,37 +228,6 @@
         "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
         "ttft_method": "engine first-token counter",
         "decode_method": "vLLM one-request decode counter"
-      },
-      "p2p_optimization": {
-        "date": "2026-10-31",
-        "stage": "selected-normal-reload-verified",
-        "main_gpu_indices": [
-          0,
-          1
-        ],
-        "auxiliary_gpu_index": 2,
-        "method": "NCCL P2P + custom all-reduce",
-        "control_decode_tps": 99.85739090807407,
-        "candidate_decode_tps": 112.1396179143124,
-        "control_prefill_tps": 2097.2912216196974,
-        "candidate_prefill_tps": 2516.494042797954,
-        "qualification": {
-          "tool_call": "pass",
-          "tool_roundtrip": "pass",
-          "retrieval_prompt_tokens": 49049,
-          "sustained_usage": {
-            "prompt_tokens": 49106,
-            "total_tokens": 53202,
-            "completion_tokens": 4096,
-            "completion_tokens_details": {
-              "reasoning_tokens": 0
-            }
-          },
-          "continuous_generation_s": 174.25928640499933,
-          "status": "pass"
-        },
-        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
-        "normal_fresh_loads_verified": 2
       },
       "startup_gpu_free_mib": [
         9728,
@@ -384,7 +354,46 @@
           "ttft_method": "engine first-token counter",
           "decode_method": "vLLM one-request decode counter"
         }
-      ]
+      ],
+      "hardware_qualification": {
+        "date": "2026-11-03",
+        "board": "MSI Z690 Carbon WiFi DDR5",
+        "cpu": "13900KS",
+        "installed_ram_gib": 32,
+        "transport": "host-staged, no CUDA P2P",
+        "status": "prepared; short GPU qualification pending unlock reboot"
+      },
+      "historical_p2p_optimization": {
+        "date": "2026-10-31",
+        "stage": "selected-normal-reload-verified",
+        "main_gpu_indices": [
+          0,
+          1
+        ],
+        "auxiliary_gpu_index": 2,
+        "method": "NCCL P2P + custom all-reduce",
+        "control_decode_tps": 99.85739090807407,
+        "candidate_decode_tps": 112.1396179143124,
+        "control_prefill_tps": 2097.2912216196974,
+        "candidate_prefill_tps": 2516.494042797954,
+        "qualification": {
+          "tool_call": "pass",
+          "tool_roundtrip": "pass",
+          "retrieval_prompt_tokens": 49049,
+          "sustained_usage": {
+            "prompt_tokens": 49106,
+            "total_tokens": 53202,
+            "completion_tokens": 4096,
+            "completion_tokens_details": {
+              "reasoning_tokens": 0
+            }
+          },
+          "continuous_generation_s": 174.25928640499933,
+          "status": "pass"
+        },
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
+        "normal_fresh_loads_verified": 2
+      }
     },
     {
       "id": "qwen27b-sglang",
@@ -471,8 +480,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": null,
-        "max": null,
+        "high": 24,
+        "max": 26,
         "swap": null
       },
       "latest_qualification": {
@@ -803,40 +812,10 @@
         "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
       },
       "environment": {
-        "NCCL_P2P_DISABLE": "0",
-        "NCCL_P2P_LEVEL": "SYS",
+        "NCCL_P2P_DISABLE": "1",
         "NCCL_DEBUG": "INFO",
-        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM"
-      },
-      "p2p_optimization": {
-        "date": "2026-10-31",
-        "stage": "selected-normal-reload-verified",
-        "main_gpu_indices": [
-          0,
-          1
-        ],
-        "auxiliary_gpu_index": 2,
-        "method": "NCCL P2P, custom all-reduce disabled",
-        "control_decode_tps": 92.94738787028051,
-        "candidate_decode_tps": 95.86370696575719,
-        "control_prefill_tps": 2349.8915828025933,
-        "candidate_prefill_tps": 2778.2402805422134,
-        "qualification": {
-          "tool_call": "pass",
-          "tool_roundtrip": "pass",
-          "retrieval_prompt_tokens": 27049,
-          "sustained_usage": {
-            "prompt_tokens": 27106,
-            "total_tokens": 31202,
-            "completion_tokens": 4096,
-            "prompt_tokens_details": null,
-            "reasoning_tokens": 0
-          },
-          "continuous_generation_s": 153.80048644,
-          "status": "pass"
-        },
-        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
-        "normal_fresh_loads_verified": 2
+        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM",
+        "GGML_CUDA_P2P": "0"
       },
       "calculated_context_history": [
         {
@@ -968,7 +947,45 @@
           "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
         }
       ],
-      "gpu_free_floor_mib": 256
+      "gpu_free_floor_mib": 256,
+      "hardware_qualification": {
+        "date": "2026-11-03",
+        "board": "MSI Z690 Carbon WiFi DDR5",
+        "cpu": "13900KS",
+        "installed_ram_gib": 32,
+        "transport": "host-staged, no CUDA P2P",
+        "status": "prepared; short GPU qualification pending unlock reboot"
+      },
+      "historical_p2p_optimization": {
+        "date": "2026-10-31",
+        "stage": "selected-normal-reload-verified",
+        "main_gpu_indices": [
+          0,
+          1
+        ],
+        "auxiliary_gpu_index": 2,
+        "method": "NCCL P2P, custom all-reduce disabled",
+        "control_decode_tps": 92.94738787028051,
+        "candidate_decode_tps": 95.86370696575719,
+        "control_prefill_tps": 2349.8915828025933,
+        "candidate_prefill_tps": 2778.2402805422134,
+        "qualification": {
+          "tool_call": "pass",
+          "tool_roundtrip": "pass",
+          "retrieval_prompt_tokens": 27049,
+          "sustained_usage": {
+            "prompt_tokens": 27106,
+            "total_tokens": 31202,
+            "completion_tokens": 4096,
+            "prompt_tokens_details": null,
+            "reasoning_tokens": 0
+          },
+          "continuous_generation_s": 153.80048644,
+          "status": "pass"
+        },
+        "evidence": "docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md",
+        "normal_fresh_loads_verified": 2
+      }
     },
     {
       "id": "flash-next-strata",
@@ -1019,8 +1036,8 @@
         "checkpoint_directory": "models/strata/models/IQ3_XXS"
       },
       "worker_memory_gib": {
-        "high": 56,
-        "max": 58,
+        "high": 24,
+        "max": 26,
         "swap": null
       },
       "context_expansion_assessment": {
@@ -1065,12 +1082,11 @@
           "combined_mib_s": 160,
           "pressure_pct": 15
         },
-        "temporary_reduced_ram": false,
-        "resident_experts": true,
-        "plain_mmap_experts": false,
-        "expert_memory_mode": "resident_non_gpu_cache_complement",
+        "resident_experts": false,
+        "plain_mmap_experts": true,
+        "expert_memory_mode": "plain mmap for 32 GB host",
         "observed_native_reserve_mib": 700,
-        "reason": "Resident expert mode passed matched performance, JSON/arithmetic/image, near-window retrieval, sustained generation and fresh reload under unchanged guards.",
+        "reason": "Permanent 32 GB hardware migration; bounded cache preparation, GPU qualification pending.",
         "reserve_mib_per_gpu": 1024,
         "vram_reserve_args": {
           "--vram-reserve-mib": 1024
@@ -1344,7 +1360,15 @@
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
         }
-      ]
+      ],
+      "hardware_qualification": {
+        "date": "2026-11-03",
+        "board": "MSI Z690 Carbon WiFi DDR5",
+        "cpu": "13900KS",
+        "installed_ram_gib": 32,
+        "transport": "host-staged, no CUDA P2P",
+        "status": "prepared; short GPU qualification pending unlock reboot"
+      }
     },
     {
       "id": "glm-maya",
@@ -1370,12 +1394,12 @@
       },
       "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
       "selected_settings": {
-        "expert_ram_gib": 40,
+        "expert_ram_gib": 16,
         "environment": {
-          "MAYA_GLM_RAM_GB": "40",
+          "MAYA_GLM_RAM_GB": "16",
           "MAYA_GLM_NO_MTP": "1"
         },
-        "reason": "Saved full-RAM cache settings restored after explicit hardware confirmation and Linux capacity verification; later runtime pins, VRAM reserve and guards preserved.",
+        "reason": "Permanent 32 GB hardware migration; bounded cache preparation, GPU qualification pending.",
         "expert_profile": "data/glm-maya-expert-profile.bin",
         "prefill": "auto",
         "kv_streaming": true,
@@ -1383,13 +1407,6 @@
         "cpu_vision": "on-demand fallback; released after image encoding",
         "reserve_mib_per_gpu": 1024,
         "context_trial_args": {},
-        "temporary_reduced_ram": {
-          "temporary": false,
-          "restored_on": "2026-10-29",
-          "verified_memtotal_kib": 64279104,
-          "preimage_reference": "20261028-reduced-ram",
-          "normal_guarded_verification": "passed"
-        },
         "vram_reserve_args": {
           "--vram-reserve-mib": 1024
         },
@@ -1428,8 +1445,8 @@
         "checkpoint_directory": "models/maya/Maya-S24"
       },
       "worker_memory_gib": {
-        "high": 56,
-        "max": 58,
+        "high": 24,
+        "max": 26,
         "swap": null
       },
       "latest_qualification": {
@@ -1704,6 +1721,14 @@
         "manifest": "config/maya-glm-runtime.json",
         "evidence": "docs/benchmark-results/20261103-vram256-optimization.json",
         "scope": "Two short matched baseline/candidate pairs and normal-router tool/result/unload passed; context 65,536 unchanged; no full-window or sustained qualification."
+      },
+      "hardware_qualification": {
+        "date": "2026-11-03",
+        "board": "MSI Z690 Carbon WiFi DDR5",
+        "cpu": "13900KS",
+        "installed_ram_gib": 32,
+        "transport": "host-staged, no CUDA P2P",
+        "status": "prepared; short GPU qualification pending unlock reboot"
       }
     },
     {
@@ -1767,15 +1792,15 @@
         "base_weight_gb": 232.97960842
       },
       "worker_memory_gib": {
-        "high": 56,
-        "max": 58,
+        "high": 24,
+        "max": 26,
         "swap": null
       },
       "selected_settings": {
         "environment": {
-          "DS4_WARM_GB": "4",
-          "DS4_FILE_CACHE_MIB": "36864",
-          "DS4_WARM_CAP_GB": "32"
+          "DS4_WARM_GB": "2",
+          "DS4_FILE_CACHE_MIB": "12288",
+          "DS4_WARM_CAP_GB": "12"
         },
         "expert_profile": "data/maya-unsloth-expert-profile.bin",
         "tp_requested": 2,
@@ -1788,19 +1813,12 @@
         "reserve_mib_per_gpu": 1024,
         "parallel": 1,
         "reasoning_effort": "none",
-        "reason": "Qualified bounded model-file residency and explicit startup read-ahead; existing full-RAM hardware, runtime pins, context and independent guards preserved.",
-        "decode_expert_warm_gb": 4.0,
+        "reason": "Permanent 32 GB hardware migration; bounded cache preparation, GPU qualification pending.",
+        "decode_expert_warm_gb": 2.0,
         "vram_reserve_args": {
           "--reserve-mib": 1024
         },
         "runtime_manifest": "config/maya-cachebound-runtime.json",
-        "temporary_reduced_ram": {
-          "temporary": false,
-          "restored_on": "2026-10-29",
-          "verified_memtotal_kib": 64279104,
-          "preimage_reference": "20261028-reduced-ram",
-          "normal_guarded_verification": "passed"
-        },
         "optional_file_controller_active": true,
         "swap_guard": {
           "window_s": 30,
@@ -1808,8 +1826,8 @@
           "combined_mib_s": 160,
           "pressure_pct": 15
         },
-        "model_file_cache_target_mib": 36864,
-        "startup_expert_warm_cap_gb": 32
+        "model_file_cache_target_mib": 12288,
+        "startup_expert_warm_cap_gb": 12
       },
       "latest_qualification": {
         "date": "2026-11-01",
@@ -2129,7 +2147,15 @@
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
         }
-      ]
+      ],
+      "hardware_qualification": {
+        "date": "2026-11-03",
+        "board": "MSI Z690 Carbon WiFi DDR5",
+        "cpu": "13900KS",
+        "installed_ram_gib": 32,
+        "transport": "host-staged, no CUDA P2P",
+        "status": "prepared; short GPU qualification pending unlock reboot"
+      }
     },
     {
       "id": "bolt-vllm",
@@ -2150,8 +2176,8 @@
         "checkpoint_directory": "models/bolt-awq-int4"
       },
       "worker_memory_gib": {
-        "high": 56,
-        "max": 58,
+        "high": 24,
+        "max": 26,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2301,7 +2327,15 @@
           "ttft_method": "engine first-token counter",
           "decode_method": "vLLM one-request decode counter"
         }
-      ]
+      ],
+      "hardware_qualification": {
+        "date": "2026-11-03",
+        "board": "MSI Z690 Carbon WiFi DDR5",
+        "cpu": "13900KS",
+        "installed_ram_gib": 32,
+        "transport": "host-staged, no CUDA P2P",
+        "status": "prepared; short GPU qualification pending unlock reboot"
+      }
     },
     {
       "id": "deepseek-unsloth-strata",
@@ -2319,8 +2353,8 @@
         "manifest": "config/deepseek-unsloth-runtime.json"
       },
       "worker_memory_gib": {
-        "high": 56,
-        "max": 58,
+        "high": 24,
+        "max": 26,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2330,7 +2364,7 @@
           1
         ],
         "experts": 6,
-        "cpu_store_decimal_gb": 36,
+        "cpu_store_decimal_gb": 16,
         "internal_gpu_reserve_mib": 1024,
         "mmap_experts": true,
         "drafting": "none",
@@ -2342,7 +2376,8 @@
           "pressure_pct": 15
         },
         "effective_prefill_chunk_observed": 512,
-        "prefill_evidence": "docs/benchmark-results/20261102-community-screens.json"
+        "prefill_evidence": "docs/benchmark-results/20261102-community-screens.json",
+        "reason": "Permanent 32 GB hardware migration; bounded cache preparation, GPU qualification pending."
       },
       "storage": {
         "access": "ssd-streaming",
@@ -2415,7 +2450,15 @@
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
         }
-      ]
+      ],
+      "hardware_qualification": {
+        "date": "2026-11-03",
+        "board": "MSI Z690 Carbon WiFi DDR5",
+        "cpu": "13900KS",
+        "installed_ram_gib": 32,
+        "transport": "host-staged, no CUDA P2P",
+        "status": "prepared; short GPU qualification pending unlock reboot"
+      }
     }
   ],
   "host_reclaim_policy": {

@@ -5,6 +5,12 @@ from pathlib import Path
 
 REPORT=Path('/run/local-llm-p2p/verified.json')
 def require_verified_pair(report=REPORT,boot_path=Path('/proc/sys/kernel/random/boot_id'),module_path=Path('/sys/module/nvidia/srcversion')):
+    if report == REPORT and Path('/etc/local-llm-gpu-transport.json').exists():
+        from gpu_transport_health import require_host_staged
+        try:
+            return require_host_staged()
+        except (OSError, ValueError, KeyError) as e:
+            raise RuntimeError('GPU host-staged startup check failed; verify unlock and local-llm-transport-verify.service: '+str(e)) from e
     try:
         info=report.stat()
         if info.st_uid!=0 or info.st_mode & 0o022:

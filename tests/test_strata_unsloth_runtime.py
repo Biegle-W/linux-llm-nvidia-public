@@ -18,6 +18,9 @@ class Runtime(unittest.TestCase):
         self.manifest={'schema':1,'profile':rt.PROFILE,'runtime_directory':rt.RUNTIME,'engine_version':'0.1.55','signature_verified':True,'sha256':self.hashes}
         (self.root/'config').mkdir();self.save()
     def save(self):(self.root/'config/deepseek-unsloth-runtime.json').write_text(json.dumps(self.manifest))
+    def test_32gb_store_is_bounded(self):
+        self.profile['selected_settings']['cpu_store_decimal_gb']=16
+        self.assertEqual(rt.build_config(self.profile,self.root/rt.RUNTIME)['env']['DS4_STORE_GB'],'16')
     def test_pinned_fixture(self):self.assertEqual(rt.verify(self.profile,self.root),self.root/rt.RUNTIME)
     def test_changed_runtime_refused(self):
         (self.root/rt.RUNTIME/'engine/strata-dsv41').write_bytes(b'changed')

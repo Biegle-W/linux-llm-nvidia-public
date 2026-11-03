@@ -13,14 +13,14 @@ if [[ "$1" != /* ]]; then
 fi
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 swap_limit=1G
-ram_high=30G
-ram_max=36G
+ram_high=24G
+ram_max=26G
 if [[ "$name" == qwen27b && $# -eq 3 && "$1" == /usr/bin/python3 &&
       "$2" == "$root/scripts/supervise_dense.py" &&
       ( "$3" == hyperqwen || "$3" == sglang ) ]]; then
   swap_limit=infinity
-  ram_high=infinity
-  ram_max=infinity
+  ram_high=24G
+  ram_max=26G
 fi
 monitor_args=(--title "LLM: $name" --unit "llm-test-${name}.service")
 if [[ "$name" == qwen27b ]]; then
