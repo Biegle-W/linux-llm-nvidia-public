@@ -1,0 +1,88 @@
+{
+  "tensorfold": {
+    "date": "2026-11-04",
+    "profile": "qwen27b-tensorfold",
+    "status": "enabled; same tested target and drafter",
+    "engine": "TensorFold1.2.2",
+    "target_quant": "Mia EXL3 2.0bpw",
+    "drafter": "DFlash2 runtime4bit + copies",
+    "target_weight_bytes": 9672786556,
+    "drafter_weight_bytes": 3848817896,
+    "checkpoint_storage": "SATA SSD",
+    "context": 12288,
+    "placement": "GPU0 execution with native host-mapped embeddings; GPU1 unused",
+    "performance": {
+      "prefill_tps": 581.9822104273828,
+      "ttft_s": 10.018767,
+      "decode_tps": 183.9249586168843,
+      "prompt_tokens": 5825,
+      "output_tokens": 40,
+      "cached_tokens": 0,
+      "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
+    },
+    "tool": {
+      "phase": "pass",
+      "wall_s": 21.83647124000072,
+      "followup_passed": true,
+      "strict_final_format": true,
+      "unloaded": true
+    },
+    "guards": {
+      "worker_RAM_GiB": {
+        "high": 24,
+        "max": 26,
+        "swap": null
+      },
+      "host_available_reserve_GiB": 2,
+      "explicit_GPU_free_floor_MiB": 256,
+      "native_cache_reserve_MiB": null,
+      "startup_free_MiB": [
+        11000,
+        512
+      ],
+      "loading_PSI_percent": null,
+      "resource_bad_samples": 3,
+      "swap_occupancy": "unlimited",
+      "swap_write_MiB_s": 1,
+      "swap_read_plus_write_MiB_s": 8,
+      "swap_window_s": 30,
+      "active_PSI_percent": 10,
+      "PSI_bad_samples": 3,
+      "native_CUDA_reserve_GiB": 1
+    },
+    "sampled_resources": {
+      "samples": 10,
+      "median_interval_s": 5.076570510864258,
+      "worker_ram_peak_GiB": 3.0105361938476562,
+      "swap_peak_MiB": 0.0,
+      "gpu_free_min_MiB": [
+        1355.0,
+        9928.0
+      ],
+      "gpu_temperature_max_C": [
+        55.0,
+        27.0
+      ],
+      "host_available_min_GiB": 24.381351470947266,
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+      "limits": {
+        "memory.high": "25769803776",
+        "memory.max": "27917287424",
+        "memory.swap.max": "max"
+      }
+    },
+    "limits": "One short actual DSH read/tool/result/exact follow-up and owned unload; no full-context, sustained prose or quality ranking. Page-cache charging depends on prior file ownership; sampled cgroup RAM is not total model working set.",
+    "CPU_checks": {
+      "tensorfold_runtime": 3,
+      "short_tool_metrics": 4,
+      "worker_budgets": 9,
+      "availability": 5,
+      "DSH_registration": 5,
+      "router_host": 52
+    }
+  },
+  "flash_next_iq1s": {
+    "status": "pinned download and isolated trial preparation in progress; no inference result yet",
+    "revision": "d96201194f103c906994f283f504209dc8d2a10c"
+  }
+}

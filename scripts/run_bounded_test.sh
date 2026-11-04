@@ -17,14 +17,16 @@ ram_high=24G
 ram_max=26G
 if [[ "$name" == qwen27b && $# -eq 3 && "$1" == /usr/bin/python3 &&
       "$2" == "$root/scripts/supervise_dense.py" &&
-      ( "$3" == hyperqwen || "$3" == sglang ) ]]; then
+      ( "$3" == hyperqwen || "$3" == sglang || "$3" == tensorfold ) ]]; then
   swap_limit=infinity
   ram_high=24G
   ram_max=26G
 fi
 monitor_args=(--title "LLM: $name" --unit "llm-test-${name}.service")
 if [[ "$name" == qwen27b ]]; then
-  if [[ "${3:-}" == sglang ]]; then
+  if [[ "${3:-}" == tensorfold ]]; then
+    monitor_args=(--title "TensorFold DFlash2 / copies backend" --unit "llm-test-${name}.service")
+  elif [[ "${3:-}" == sglang ]]; then
     monitor_args=(--title "SGLang backend" --unit "llm-test-${name}.service")
   else
     monitor_args=(--title "HyperQwen vLLM backend" --unit "llm-test-${name}.service")

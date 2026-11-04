@@ -1,5 +1,9 @@
 # Agent entry point
 
+## TensorFold DFlash2/copies entry enabled — November 4, 2026
+
+The user-requested `qwen27b-tensorfold` entry is enabled alongside HyperQwen and SGLang, with the same tested EXL3 2.0bpw target, 4-bit DFlash2 drafter, automatic copies and 12,288 context. The normal-router actual DSH tool/result/exact-follow-up and owned unload passed: 581.98 prefill tok/s, 10.019 s TTFT and 183.92 decode tok/s on a short speculative tool burst. Single GPU0 plus host-mapped embeddings; native 1 GiB reserve and all resource guards remain. API/DSH show three entries; defaults are preserved and workers finish idle. The separately requested new Flash-Next IQ1_S / SSD n-gram trial is being prepared; older disabled RAM profiles remain disabled. This update supersedes earlier same-day candidate-only and two-enabled-entry descriptions. [Configuration, guards and results](docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md).
+
 ## TensorFold candidate and Unsloth v3.1 assessed — November 4, 2026
 
 Experimental TensorFold1.2.2 Qwen27B EXL3 2.0bpw passed actual DSH read/result/exact-follow-up and owned unload: plain16K measured584.6 prefill /9.982s TTFT /34.40 decode; DFlash2-4bit12K measured576.6 /10.108s /180.38tok/s on a short tool-argument burst. Single GPU0 and host-mapped embeddings, lower precision/context, no production promotion. Failed8K client-budget and16K drafted-memory admissions are retained; no guard was relaxed. All test workers are stopped, GPUs idle, reservation released, API/hub/DSH preserved. Unsloth's new IQ1_S plus SSD-mapped n-gram table is a plausible separate candidate; no Flash-Next weights downloaded or disabled profile restored. [Evidence and limits](docs/TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md).

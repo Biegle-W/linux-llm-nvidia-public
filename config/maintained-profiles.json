@@ -2548,6 +2548,51 @@
         "reason": "VRAM-only operation while awaiting RAM upgrade",
         "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
       }
+    },
+    {
+      "id": "qwen27b-tensorfold",
+      "model": "Qwen3.8-27B",
+      "display_name": "Qwen27B TensorFold EXL3 2bpw + DFlash2 4bit / copies (12K)",
+      "weight_quant": "EXL3-2.0bpw",
+      "engine": "TensorFold",
+      "status": "selected",
+      "launch": [
+        "qwen27b",
+        "tensorfold"
+      ],
+      "allocated_context": 12288,
+      "worker_memory_gib": {
+        "high": 24,
+        "max": 26,
+        "swap": null
+      },
+      "host_ram_reserve_gib": 2,
+      "storage": {
+        "access": "ram-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw"
+      },
+      "startup_gpu_free_mib": [
+        11000,
+        512
+      ],
+      "availability": {
+        "enabled": true
+      },
+      "evidence": "docs/TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md",
+      "notes": "Single GPU0 execution with native host-mapped embeddings, DFlash2 4-bit and automatic context copies; lower precision and context than AutoRound. Native 1GiB reserve unchanged. Short tool burst is not sustained prose throughput.",
+      "runtime": "runtimes/tensorfold-1.2.2/tensorfold-1.2.2-linux-x86_64/bin/tensorfold-native",
+      "drafter_directory": "models/engine-tests/qwen38-27b-tensorfold-dflash2",
+      "drafter_bits": 4,
+      "current_configuration_benchmark": {
+        "date": "2026-11-04",
+        "prefill_tps": 581.9822104273828,
+        "ttft_s": 10.018767,
+        "decode_tps": 183.9249586168843,
+        "context": 12288,
+        "scope": "one actual DSH read-tool generation; short speculative burst; no sustained/full-context test",
+        "evidence": "docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md"
+      }
     }
   ],
   "host_reclaim_policy": {

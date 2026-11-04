@@ -4,11 +4,11 @@ project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 model="${1:-qwen}"
 engine="${2:-hyperqwen}"
 if [[ $# -gt 2 || ( $# -gt 1 && "$model" != qwen27b ) ]]; then
-    echo 'Usage: start_model.sh qwen|qwen27b [hyperqwen|sglang]|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt' >&2
+    echo 'Usage: start_model.sh qwen|qwen27b [hyperqwen|sglang|tensorfold]|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt' >&2
     exit 2
 fi
-if [[ "$model" == qwen27b && "$engine" != hyperqwen && "$engine" != sglang ]]; then
-    echo 'Dense Qwen engine must be hyperqwen or sglang.' >&2
+if [[ "$model" == qwen27b && "$engine" != hyperqwen && "$engine" != sglang && "$engine" != tensorfold ]]; then
+    echo 'Dense Qwen engine must be hyperqwen, sglang or tensorfold.' >&2
     exit 2
 fi
 case "$model" in

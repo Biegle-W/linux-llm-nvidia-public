@@ -1,5 +1,9 @@
 # NVIDIA model router, Tailscale and DeepSeek Harness
 
+## TensorFold DFlash2/copies entry enabled — November 4, 2026
+
+The user-requested `qwen27b-tensorfold` entry is enabled alongside HyperQwen and SGLang, with the same tested EXL3 2.0bpw target, 4-bit DFlash2 drafter, automatic copies and 12,288 context. The normal-router actual DSH tool/result/exact-follow-up and owned unload passed: 581.98 prefill tok/s, 10.019 s TTFT and 183.92 decode tok/s on a short speculative tool burst. Single GPU0 plus host-mapped embeddings; native 1 GiB reserve and all resource guards remain. API/DSH show three entries; defaults are preserved and workers finish idle. The separately requested new Flash-Next IQ1_S / SSD n-gram trial is being prepared; older disabled RAM profiles remain disabled. This update supersedes earlier same-day candidate-only and two-enabled-entry descriptions. [Configuration, guards and results](../docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md).
+
 ## Current operation and DSH repair — November 3, 2026
 
 DSH uses an explicit headless service mode; desktop launches retain their required visible monitor. The API and private hub remain independent. The current host has **temporary 32 GB RAM**; only **HyperQwen 86,016** and **SGLang 57,344** are enabled. Both retain 24/26 GiB worker budgets, the 2 GiB host reserve, **256 MiB per-GPU free-VRAM floor**, swappiness 60 and idle 600 seconds. Unlock and current-boot host-staged transport are verified; the native-output buffering repair remains deployed. RAM/offload profiles remain disabled until explicit hardware confirmation, measured capacity and guarded requalification. Daily updates remain paused.
@@ -58,6 +62,7 @@ catalog. Requesting its ID selects the model, quantization and engine together:
 | --- | --- | ---: |
 | `qwen27b-hyperqwen` | HyperQwen/vLLM | 86,016 |
 | `qwen27b-sglang` | SGLang | 57,344 |
+| `qwen27b-tensorfold` | TensorFold EXL3 2bpw + DFlash2-4bit/copies | 12,288 |
 
 The other five retained profiles are temporarily disabled and hidden from the picker pending the RAM upgrade and guarded qualification. `/v1/models` is authoritative for enabled choices. Context allocations are not new full-window qualification claims.
 

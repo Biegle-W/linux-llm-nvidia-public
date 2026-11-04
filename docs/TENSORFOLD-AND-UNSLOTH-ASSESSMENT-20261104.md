@@ -1,5 +1,7 @@
 # TensorFold Qwen27B trial and Unsloth Flash-Next assessment — November 4, 2026
 
+Subsequent update: the tested drafted configuration is now a maintained entry; the newly requested IQ1_S trial is separate. See [entry deployment and new trial](TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md). The isolated measurements below retain their original scope.
+
 TensorFold 1.2.2 passed actual DSH read-tool/result/exact-follow-up checks in two isolated configurations, then owned unload and GPU-release verification. The drafted configuration produces a fast short decode burst, but slower cold prefill, lower target precision and much smaller context than the maintained engines. It is an experimental candidate, not a production replacement. Maintained profiles, guards and saved DSH choices are unchanged.
 
 The pinned Linux x86_64 release archive SHA256 is 976c39d01ce0e165d67b7b3ede6e6ff5dad037823b35d1539752707c9a238be5, source commit 00e7dddbdb2dd0c481f3d7e8d850fa3e1f2e80b7. Its real host capability probe reports CUDA sm86 and EXL3 Qwen support. Target: [Mia EXL3 2.0bpw](https://huggingface.co/Mia-AiLab/Qwen3.8-27B-EXL3-2.0bpw/tree/b4925724092da59826c02d25a7201fb272bf4f34), with hash-verified model shards. Drafter: [DFlash2](https://huggingface.co/z-lab/Qwen3.8-27B-DFlash2/tree/50307d4c4cde6860d4eee73e2547cd786fe8e8a4), hash-verified and loaded at 4-bit without rewriting its checkpoint.

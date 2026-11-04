@@ -14,4 +14,11 @@ class Metrics(unittest.TestCase):
  def test_counter_deltas_use_one_request_and_exclude_cached_tokens(self):
   with tempfile.TemporaryDirectory() as p:
    t=self.tap(p);a='vllm:request_prefill_time_seconds_sum 2\nvllm:request_prefill_time_seconds_count 1\nvllm:request_decode_time_seconds_sum 1\nvllm:request_decode_time_seconds_count 1\nvllm:time_to_first_token_seconds_sum 2.5\nvllm:time_to_first_token_seconds_count 1\n';t.finish({}, {'prompt_tokens':100,'completion_tokens':11,'prompt_tokens_details':{'cached_tokens':20}},{},4,5,1,time.perf_counter(),'',a);r=json.loads((Path(p)/'tool-benchmark.json').read_text());self.assertEqual(r['prefill_tps'],40);self.assertEqual(r['ttft_s'],2.5);self.assertEqual(r['decode_tps'],10)
+ def test_tensorfold_speculative_tpot_uses_native_counter(self):
+  with tempfile.TemporaryDirectory() as p:
+   t=self.tap(p);t.model='qwen27b-tensorfold'
+   counters='tensorfold:request_time_per_output_token_seconds_sum 0.005\ntensorfold:request_time_per_output_token_seconds_count 1\n'
+   t.finish({}, {'prompt_tokens':100,'completion_tokens':39},{},10,10.2,1,time.perf_counter(),'',counters)
+   r=json.loads((Path(p)/'tool-benchmark.json').read_text());self.assertEqual(r['decode_tps'],200)
+   self.assertIn('short speculative tool burst',r['decode_method'])
 if __name__=='__main__':unittest.main()

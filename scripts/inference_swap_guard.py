@@ -136,6 +136,7 @@ class WorkerWatch:
             if self.profile.startswith('qwen27b-') or self.profile == 'bolt-vllm':
                 text = self.get('/metrics')
                 name = ('sglang:num_running_reqs' if self.profile.endswith('sglang')
+                        else 'tensorfold:num_requests_running' if self.profile == 'qwen27b-tensorfold'
                         else 'vllm:num_requests_running')
                 values = [float(line.rsplit(' ', 1)[1]) for line in text.splitlines()
                           if line.startswith(name + '{') or line.startswith(name + ' ')]

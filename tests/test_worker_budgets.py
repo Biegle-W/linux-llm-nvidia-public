@@ -30,6 +30,7 @@ class WorkerBudget(unittest.TestCase):
             guarded=str(temp/'scripts/supervise_dense.py')
             cases=[('qwen27b',guarded,'hyperqwen','infinity'),
                    ('qwen27b',guarded,'sglang','infinity'),
+                   ('qwen27b',guarded,'tensorfold','infinity'),
                    ('other',guarded,'hyperqwen','1G'),
                    ('qwen27b','/unrecognized.py','hyperqwen','1G')]
             for name,command,engine,limit in cases:

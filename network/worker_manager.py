@@ -45,7 +45,7 @@ def unit_property(unit, prop):
 def vllm_requests_busy(text):
     import math
     values = []
-    for name in ('vllm:num_requests_running', 'vllm:num_requests_waiting'):
+    for name in ('vllm:num_requests_running', 'vllm:num_requests_waiting', 'tensorfold:num_requests_running'):
         found = [float(line.rsplit(' ', 1)[1]) for line in text.splitlines()
                  if line.startswith(name + '{') or line.startswith(name + ' ')]
         if not found or any(not math.isfinite(x) or x < 0 for x in found):
@@ -83,6 +83,10 @@ class Workers:
         if pid.isdigit() and int(pid) > 0:
             try:
                 cmd = (Path('/proc') / pid / 'cmdline').read_bytes().split(b'\0')
+                if any(b'supervise_dense.py' in x or b'serve_qwen27b_engines.py' in x for x in cmd) and b'tensorfold' in cmd:
+                    return 'qwen27b-tensorfold'
+                if any(b'tensorfold-native' in x for x in cmd):
+                    return 'qwen27b-tensorfold'
                 if any(b'env-hyperqwen/bin/vllm' in x for x in cmd):
                     return 'qwen27b-hyperqwen'
                 if any(b'supervise_dense.py' in x for x in cmd) and b'hyperqwen' in cmd:

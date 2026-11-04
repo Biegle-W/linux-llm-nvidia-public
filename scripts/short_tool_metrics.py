@@ -57,6 +57,8 @@ class ToolMetrics:
    with urllib.request.build_opener(urllib.request.ProxyHandler({})).open(q,timeout=3) as f:return f.read(2*1024*1024).decode()
   except (OSError,ValueError):return ''
  def finish(self,r,u,n,first,last,chunks,start,before,after):
+  if self.model == 'qwen27b-tensorfold':
+   before=before.replace('tensorfold:', 'vllm:');after=after.replace('tensorfold:', 'vllm:')
   # Preserve request evidence before optional backend metric interpretation.
   (self.output/'tool-benchmark-raw.json').write_text(json.dumps(dict(record=r,usage=u,native_timings=n,first=first,last=last,chunks=chunks,generation_wall_s=time.perf_counter()-start),indent=2)+'\n')
   (self.output/'benchmark-metrics-before.txt').write_text(before)
@@ -79,6 +81,9 @@ class ToolMetrics:
   if not r['decode_tps'] and self.model.endswith('sglang') and count and count>1:
    seconds=delta('sglang:inter_token_latency_seconds_sum');intervals=delta('sglang:inter_token_latency_seconds_count')
    if seconds>0 and intervals==count-1:r.update(decode_tps=intervals/seconds,decode_method='SGLang one-request native inter-token intervals; parser buffering excluded')
+  if self.model == 'qwen27b-tensorfold':
+   seconds=delta('vllm:request_time_per_output_token_seconds_sum');requests=delta('vllm:request_time_per_output_token_seconds_count')
+   if seconds>0 and requests==1:r.update(decode_tps=1/seconds,decode_method='TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose')
   if not r['decode_tps']:r['decode_unavailable_reason']='No native decode timing or sufficiently granular client deltas; do not infer from buffered tool-call chunks'
   (self.output/'benchmark-metrics-before.txt').write_text(before);(self.output/'benchmark-metrics-after.txt').write_text(after);(self.output/'tool-benchmark.json').write_text(json.dumps(r,indent=2)+'\n')
   if hasattr(self,'completed'):self.completed.set()

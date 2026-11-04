@@ -14,7 +14,7 @@ from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 def main():
     os.umask(0o077)
     engine = sys.argv[1]
-    if engine not in ('hyperqwen', 'sglang'):
+    if engine not in ('hyperqwen', 'sglang', 'tensorfold'):
         raise SystemExit('Choose a maintained dense engine.')
     profile = get_profile('qwen27b-' + engine)
     from context_capacity import configured_transport_mode
@@ -69,7 +69,9 @@ def main():
             cards = [[float(value) for value in line.split(',')] for line in raw.splitlines()]
             bad = bad + 1 if (available < host_floor_kib or any(card[0] >= 82 for card in cards)
                              or (watch.ready and any(card[1] < gpu_floor_mib for card in cards))) else 0
-            if watch.ready and not transport_checked and not reason:
+            # TensorFold exposes only GPU0; its native admission proof replaces NCCL channel proof.
+            # Root-owned current-boot transport health is still required in its launcher.
+            if engine != 'tensorfold' and watch.ready and not transport_checked and not reason:
                 from context_capacity import check_p2p_progress, read_engine_log
                 try:
                     transport_checked, transport_wait_started, fault = check_p2p_progress(
@@ -79,6 +81,13 @@ def main():
                         reason = 'Dense GPU transport guard: ' + fault
                 except OSError as error:
                     reason = 'Dense GPU transport telemetry: ' + str(error)
+            if engine == 'tensorfold' and watch.ready and not capacity_checked and not reason:
+                from tensorfold_runtime import require_admission
+                try:
+                    require_admission((ROOT / 'data/qwen27b-server.log').read_text())
+                    capacity_checked = True
+                except (OSError, ValueError) as error:
+                    reason = 'TensorFold single-device/context admission guard: ' + str(error)
             if engine == 'sglang' and watch.ready and not capacity_checked and not reason:
                 from context_capacity import require_sglang_context
                 try:

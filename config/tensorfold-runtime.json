@@ -1,0 +1,77 @@
+{
+  "version": "1.2.2",
+  "files": {
+    "runtimes/tensorfold-1.2.2/tensorfold-1.2.2-linux-x86_64/bin/tensorfold-native": {
+      "bytes": 180543368,
+      "sha256": "f38d456092662b719755be55750fe762a6246484860faea105dfb4b5e067d8b4"
+    },
+    "runtimes/tensorfold-1.2.2/tensorfold-1.2.2-linux-x86_64/lib/libtfgrammar.so": {
+      "bytes": 3123360,
+      "sha256": "64a30d23b890d4bfce2854cbb6659fc636cd36dacf0eb1696e2a5b2d732e2e8b"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/chat_template.jinja": {
+      "bytes": 8952,
+      "sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/config.json": {
+      "bytes": 4647,
+      "sha256": "dd800226988cd64f99025617a04ea130562976886c89a23299ee264f0543fef4"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/crc32.txt": {
+      "bytes": 238,
+      "sha256": "b42dd291f5f98b05807e458f5b47849969a9b3326acbf0c97d28b05826740b83"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/generation_config.json": {
+      "bytes": 202,
+      "sha256": "e70c136c1b78ddc1fb0905bac8e733a4dc448d4f852a5dd75143fffc70be550e"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/merges.txt": {
+      "bytes": 3353259,
+      "sha256": "a9d356d7bdf1ef4949e3e748e95b8e10ad9d4e2e838eddc38a0a7b6b94d1db8d"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/model-00001-of-00002.safetensors": {
+      "bytes": 8574469488,
+      "sha256": "c6557d7a8cc61277ecee4582530b138b9c89df3cfc2c00f2a05e30faabfb0c98"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/model.safetensors.index.json": {
+      "bytes": 295619,
+      "sha256": "fe4ad50a61850ee2f159cf113b37761807a2f5be9f84343ffa11d1375871ce69"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/model-00002-of-00002.safetensors": {
+      "bytes": 1098317068,
+      "sha256": "29e7a567199b701ec80688faeaf21f0919cbab569a1903a17f098d40e4096bd3"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/preprocessor_config.json": {
+      "bytes": 390,
+      "sha256": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/quantization_config.json": {
+      "bytes": 628945,
+      "sha256": "bb8649aa7e85b03fbae9e29ec2fb6df63fe71c990c1aace65950d5ee5135706e"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/tokenizer.json": {
+      "bytes": 12809320,
+      "sha256": "0997f410c57a1f4e53b09e4be8f4a172d90edd9564368fb0847030937229b9f3"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/tokenizer_config.json": {
+      "bytes": 17928,
+      "sha256": "b11349aafa7cdc6a320767cf7ceb29ed82f7eda5d65e8e0819e76f0ce947bf27"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/video_preprocessor_config.json": {
+      "bytes": 385,
+      "sha256": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/vocab.json": {
+      "bytes": 6722759,
+      "sha256": "ce99b4cb2983d118806ce0a8b777a35b093e2000a503ebde25853284c9dfa003"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-dflash2/config.json": {
+      "bytes": 1239,
+      "sha256": "873e3556509b0da06e29654ba00d4944888d4b5e8a33afde25f7eb27d321e980"
+    },
+    "models/engine-tests/qwen38-27b-tensorfold-dflash2/model.safetensors": {
+      "bytes": 3848817896,
+      "sha256": "67fc76d68dc5a9415511a4f394ef744d67510cd20e93b37cc2cc7d28e4bab65c"
+    }
+  }
+}

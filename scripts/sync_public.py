@@ -9,6 +9,8 @@ RETIRED_FILES = (
     'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
 
 FILES = (
+    'config/tensorfold-runtime.json', 'scripts/tensorfold_runtime.py', 'tests/test_tensorfold_runtime.py',
+    'docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md', 'docs/benchmark-results/20261104-tensorfold-entry-and-flash-iq1s.json',
     'docs/TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md', 'docs/benchmark-results/20261104-tensorfold-and-unsloth.json',
     'docs/REQUESTED-TWO-MODEL-CHECKS-20261103.md', 'docs/benchmark-results/20261103-requested-two-model-checks.json',
     'docs/DSH-STARTUP-REPAIR-20261103.md', 'docs/validation-results/20261103-dsh-startup.json', 'tests/test_dsh_startup.py',
