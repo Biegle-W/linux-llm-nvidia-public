@@ -1,5 +1,11 @@
 # Current takeover state
 
+## TensorFold candidate and Unsloth v3.1 assessed — November 4, 2026
+
+Experimental TensorFold1.2.2 Qwen27B EXL3 2.0bpw passed actual DSH read/result/exact-follow-up and owned unload: plain16K measured584.6 prefill /9.982s TTFT /34.40 decode; DFlash2-4bit12K measured576.6 /10.108s /180.38tok/s on a short tool-argument burst. Single GPU0 and host-mapped embeddings, lower precision/context, no production promotion. Failed8K client-budget and16K drafted-memory admissions are retained; no guard was relaxed. All test workers are stopped, GPUs idle, reservation released, API/hub/DSH preserved. Unsloth's new IQ1_S plus SSD-mapped n-gram table is a plausible separate candidate; no Flash-Next weights downloaded or disabled profile restored. [Evidence and limits](TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md).
+
+Current objective is complete: test TensorFold Qwen27B and assess the screenshot. Selected HyperQwen/SGLang settings remain; TensorFold is staged only. No active experiment job/lock or remaining cleanup. Next action: follow the user’s next task; an isolated new IQ1_S Flash-Next trial is a distinct study. Repositories receive reviewed sanitized evidence through independent normal pushes; final heads are verified in private publication receipts.
+
 ## Requested enabled-model checks passed — November 3, 2026
 
 After the user confirmed RAM is not yet upgraded, HyperQwen and SGLang each passed one short actual DSH read/tool-result/exact-follow-up, normal owned unload and GPU release. Fresh single-call prefill/TTFT/decode observations are 2077.9 tok/s / 2.821 s / 62.53 tok/s and 2137.9 tok/s / 3.044 s / 60.20 tok/s respectively. Tool calls and follow-ups passed; both test workers are inactive and both GPUs returned to 1 MiB used. API/hub/DSH remain active; no GPU reservation remains. Settings/guards are unchanged; all five RAM/offload profiles remain disabled. No full-context or sustained test. See [results, guard tables and loading-transient limits](REQUESTED-TWO-MODEL-CHECKS-20261103.md).
