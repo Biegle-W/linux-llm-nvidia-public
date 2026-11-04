@@ -330,7 +330,7 @@ class NativeCheckpointCountingTests(unittest.TestCase):
 
 class CatalogCoverageTests(unittest.TestCase):
     def fixture(self):
-        catalog={'profiles':[{'id':'dense','engine':'HyperQwen-vLLM'}, {'id':'bolt-vllm','engine':'vLLM-offload','runtime_manifest':'config/bolt-offload-runtime.json'}]}
+        catalog={'profiles':[{'id':'dense','engine':'HyperQwen-vLLM'}, {'id':'bolt-vllm','engine':'llama.cpp','runtime_manifest':'config/bolt-iq2-runtime.json'}]}
         policy={'components':[{'profiles':['dense']}], 'pinned_profiles':[{'profile':'bolt-vllm','reason':'Independent qualified runtime snapshot'}]}
         return catalog,policy
     def test_pinned_custom_profile_preserves_managed_coverage(self):

@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-04",
+  "status": "deleted at user request",
+  "AWQ_weight_bytes_deleted": 55332700488,
+  "model_inventory_bytes_deleted": 55363013383,
+  "dedicated_runtime_inventory_bytes_deleted": 8359119153,
+  "deleted_assets": [
+    "models/bolt-awq-int4 (symlink and its dedicated SATA target)",
+    "runtimes/env-bolt-vllm-031",
+    "config/bolt-offload-runtime.json",
+    "scripts/bolt_runtime.py",
+    "scripts/supervise_bolt.py",
+    "scripts/bolt_offload_hook/checkpoint_cache.py",
+    "scripts/bolt_offload_hook/compact_pool.py",
+    "scripts/bolt_offload_hook/host_trim.py",
+    "scripts/bolt_offload_hook/sitecustomize.py",
+    "tests/test_bolt_runtime.py",
+    "tests/test_bolt_loading_cleanup.py",
+    "tests/test_bolt_pool_torch.py",
+    "tests/test_bolt_readonly_cache.py"
+  ],
+  "historical_benchmarks_preserved": true,
+  "small_source_config_preimages_preserved": true,
+  "pinned_source_preimages_SHA256_verified": 23,
+  "native_Bolt_profile_runtime_unchanged": true,
+  "API_DSH_models": 9,
+  "CPU_tests_passed": 423,
+  "obsolete_AWQ_tests_removed": 33,
+  "new_model_benchmarks": false,
+  "scope": "No native model, shared runtime/cache, credential, running job, guard or default removed. Inventory byte totals are not a guaranteed filesystem free-space delta."
+}

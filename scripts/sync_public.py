@@ -6,9 +6,21 @@ import re
 import subprocess
 
 RETIRED_FILES = (
+    'config/bolt-offload-runtime.json',
+    'scripts/bolt_runtime.py',
+    'scripts/supervise_bolt.py',
+    'scripts/bolt_offload_hook/checkpoint_cache.py',
+    'scripts/bolt_offload_hook/compact_pool.py',
+    'scripts/bolt_offload_hook/host_trim.py',
+    'scripts/bolt_offload_hook/sitecustomize.py',
+    'tests/test_bolt_runtime.py',
+    'tests/test_bolt_loading_cleanup.py',
+    'tests/test_bolt_pool_torch.py',
+    'tests/test_bolt_readonly_cache.py',
     'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
 
 FILES = (
+    'docs/BOLT-AWQ-REMOVAL-20261104.md', 'docs/validation-results/20261104-bolt-awq-removal.json',
     'config/bolt-iq2-runtime.json', 'scripts/bolt_iq2_runtime.py', 'tests/test_bolt_iq2_runtime.py',
     'docs/BOLT-IQ2-ENTRY-20261104.md', 'docs/benchmark-results/20261104-bolt-iq2-entry.json',
     'docs/ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md',
@@ -100,18 +112,7 @@ FILES = (
     'patches/llama-demand-mmap-prefault.patch',
     'docs/DEEPSEEK-DYNAMIC31-20261031.md',
     'docs/validation-results/20261031-deepseek-dynamic31.json',
-    'config/bolt-offload-runtime.json',
-    'scripts/bolt_runtime.py',
-    'scripts/supervise_bolt.py',
-    'scripts/bolt_offload_hook/sitecustomize.py',
-    'scripts/bolt_offload_hook/compact_pool.py',
-    'scripts/bolt_offload_hook/host_trim.py',
-    'scripts/bolt_offload_hook/checkpoint_cache.py',
-    'tests/test_bolt_runtime.py',
-    'tests/test_bolt_pool_torch.py',
-    'tests/test_bolt_loading_cleanup.py',
     'tests/test_bolt_request_state.py',
-    'tests/test_bolt_readonly_cache.py',
     'docs/BOLT-MAYA-RELIABILITY-20261031.md',
     'docs/benchmark-results/20261031-bolt-maya-reliability.json',
     'docs/GPU-PAIR-AUX-OPTIMIZATION-20261031.md',

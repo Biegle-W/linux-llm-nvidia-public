@@ -16,7 +16,7 @@ The new normal-route decode observation is **188.4x** the same-day AWQ reference
 
 Selected settings are the previously qualified 384 MiB native fit target per card, layer split, Q8_0 K/V cache, mmap/lazy-off, batch/ubatch256/128, eight threads, one slot, reasoning off, no vision projector and no drafter. Native model buffers are 10,123.69/8,634.88 MiB on the GPUs and 2,232.22 MiB (2.180 GiB) CPU-mapped:89.4% of weight-buffer bytes are GPU-resident. The earlier256 MiB arm remains rejected after its independent VRAM guard stop; it was not promoted.
 
-The publisher-hash-verified22.018 GB file stays on SATA. Binary/source/shared-library pins remain unchanged. [Exact maintained runtime manifest](../config/bolt-iq2-runtime.json), [prior fit qualification and provenance](BOLT-NATIVE-IQ2-20261104.md). The old AWQ checkpoint, runtime and dated evidence remain retained for rollback/history, outside the selected launch.
+The publisher-hash-verified22.018 GB file stays on SATA. Binary/source/shared-library pins remain unchanged. [Exact maintained runtime manifest](../config/bolt-iq2-runtime.json), [prior fit qualification and provenance](BOLT-NATIVE-IQ2-20261104.md). The old AWQ checkpoint, dedicated runtime and obsolete adapters were subsequently deleted at the user's request. Dated benchmark records, Git history and small private source/configuration preimages remain. [Removal verification](BOLT-AWQ-REMOVAL-20261104.md).
 
 ## Guards, telemetry and release
 

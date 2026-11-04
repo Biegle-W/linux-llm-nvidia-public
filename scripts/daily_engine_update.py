@@ -49,8 +49,7 @@ def validate_update_coverage(catalog, policy):
             raise RuntimeError('Pinned updater profile needs an explicit reason')
         name = entry['profile']
         if (not isinstance(name, str) or name not in profiles
-                or not (profiles[name]['engine'] == 'vLLM-offload'
-                        or (name == 'deepseek-unsloth-strata'
+                or not ((name == 'deepseek-unsloth-strata'
                             and profiles[name]['engine'] == 'Strata'
                             and profiles[name].get('runtime_manifest') == 'config/deepseek-unsloth-runtime.json')
                         or (name == 'qwen27b-tensorfold'

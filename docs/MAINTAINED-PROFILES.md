@@ -1,5 +1,9 @@
 # Maintained model, quantization and engine settings
 
+## Retired AWQ Bolt assets deleted — November 4, 2026
+
+The user requested deletion of the retired AWQ setup. Its55.33 GB weights, dedicated vLLM environment, manifest, launch/supervision/offload code and AWQ-only tests are removed. Native IQ2 remains selected under compatibility ID`bolt-vllm`; all nine profiles, both DSH modes, defaults, guards and shared runtimes are preserved.423 remaining CPU tests passed;33 obsolete adapter tests were retired. Native runtime hashes/dependencies and API/DSH health passed; no model benchmark was repeated. Historical benchmark records and small private source/configuration preimages remain, but the old checkpoint/runtime are no longer installed. [Removal verification](BOLT-AWQ-REMOVAL-20261104.md).
+
 ## Current: native IQ2 Bolt replaces AWQ in API/DSH — November 4, 2026
 
 Bolt now selects the official native IQ2 text model on pinned llama.cpp11909, both GPUs, 384 MiB fit targets and unchanged 163,840-token allocation. The historical `bolt-vllm` ID remains for compatibility; API metadata and both DSH display names now identify native IQ2/llama.cpp. Normal-router actual DSH read/result/exact follow-up and owned unload passed: 502.58 prefill tok/s, 12.870 s client TTFT and 68.05 decode tok/s. All nine entries remain, with unrelated routes/defaults and all guards preserved. 456 CPU tests passed; workers finish idle and updates stay paused. Older AWQ measurements and candidate-only status below are dated history. [Selected entry, guards and AWQ slowdown research](BOLT-IQ2-ENTRY-20261104.md).

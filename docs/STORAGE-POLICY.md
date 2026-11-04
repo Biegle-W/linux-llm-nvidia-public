@@ -2,7 +2,7 @@
 
 ## Selected native IQ2 Bolt — November 4, 2026
 
-The22.018 GB native text checkpoint on SATA at`models/engine-tests/bolt-iq2` now backs the API/DSH Bolt entry. The former55.333 GB AWQ checkpoint is retained as historical rollback material and is no longer selected. Both storage ancestry and publisher hash were verified. [Current setup](BOLT-IQ2-ENTRY-20261104.md).
+The22.018 GB native text checkpoint on SATA at`models/engine-tests/bolt-iq2` now backs the API/DSH Bolt entry. The former55.333 GB AWQ checkpoint and its dedicated runtime were deleted at the user's request; only dated benchmark/source history remains. [Removal verification](BOLT-AWQ-REMOVAL-20261104.md). Both storage ancestry and publisher hash were verified. [Current setup](BOLT-IQ2-ENTRY-20261104.md).
 
 ## Native IQ2 Bolt candidate — November 4, 2026
 
