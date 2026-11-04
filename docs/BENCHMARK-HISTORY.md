@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Flash-Next IQ1_S entry enabled — November 4, 2026
+
+`flash-next-iq1s-llamacpp` is now the fourth enabled API/DSH entry: the same verified Unsloth v3.1 IQ1_S checkpoint, llama.cpp11909, 12,288 context and lazy NVMe n-gram table. Normal-router actual DSH read/result/exact-follow-up and owned unload passed:88.79 prefill tok/s,66.292 s client TTFT and31.10 decode tok/s. RAM26/28 GiB, host2 GiB, GPU256 MiB/card, swap128/160 MiB/s over30 s,15% active full PSI, thermal82 C and all ownership/telemetry guards remain. All441 CPU checks passed. The five older profiles stay disabled, defaults are preserved and workers finish idle. Earlier isolated-candidate descriptions are dated history; this is the current operational state. [Entry and guard evidence](FLASH-IQ1S-ENTRY-20261104.md); [all current and historical entry benchmarks](ALL-ENTRY-BENCHMARKS-20261104.md).
+
 ## Worker RAM raised to 26/28 GiB; requested reruns passed — November 4, 2026
 
 All eight profile definitions now use 26/28 GiB soft/hard worker limits. HyperQwen, SGLang, TensorFold DFlash2/copies and the isolated Flash-Next IQ1_S SSD-table candidate each passed one fresh actual DSH tool/result/exact-follow-up and owned unload; 438 CPU regressions passed. The other five profiles remain disabled. Host2 GiB, VRAM256 MiB/card, thermal82 C, swap/PSI/transport/ownership guards, contexts, weights and defaults remain unchanged. Flash-Next measured93.35 prefill tok/s,63.238 s client TTFT and 28.23 decode tok/s; sampled swap483 MiB and soft-limit reclaim persisted, so larger limits showed no speed improvement in this single run. All workers are stopped, GPUs1 MiB each, API/hub/DSH active and no reservation remains. This supersedes earlier24/26 GiB operational descriptions; historical results retain their original guards. [Results, comparison and guard tables](RAM26-28-RERUN-20261104.md).

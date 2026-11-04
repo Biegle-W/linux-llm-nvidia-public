@@ -58,6 +58,10 @@
     {
       "profile": "qwen27b-tensorfold",
       "reason": "Independent TensorFold1.2.2 native binary, grammar library, EXL3 target and DFlash2 pins; automatic source builds must not overwrite this qualified runtime."
+    },
+    {
+      "profile": "flash-next-iq1s-llamacpp",
+      "reason": "Qualified llama.cpp build11909 with pinned libraries and UnslothIQ1S lazy SSD table; upgrades require separate guarded requalification."
     }
   ]
 }

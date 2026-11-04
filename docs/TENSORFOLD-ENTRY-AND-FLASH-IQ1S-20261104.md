@@ -1,5 +1,7 @@
 # TensorFold entry and Flash-Next IQ1_S — November 4, 2026
 
+Subsequent operational update: Flash-Next IQ1_S is now a qualified maintained entry. The measurements below retain their original isolated/rerun scope. See [entry deployment](FLASH-IQ1S-ENTRY-20261104.md) and [all entry benchmarks](ALL-ENTRY-BENCHMARKS-20261104.md).
+
 TensorFold is now a separate enabled entry, `qwen27b-tensorfold`, in the normal authenticated API and DSH NVIDIA server provider. It uses the same tested Mia EXL3 2.0bpw target, TensorFold 1.2.2, DFlash2 quantized to 4-bit at runtime and automatic context copies. The HyperQwen/SGLang entries and default selection are preserved. Existing larger RAM/offload profiles remain disabled; the host still has temporary 32 GB RAM.
 
 Select it in DSH, through the router, or with `./scripts/start_model.sh qwen27b tensorfold`. Its display name explicitly identifies the quant, drafter/copies and 12K context. DSH was reloaded for the entry; the API/hub stayed active during that reload. After the short check the worker was unloaded, with no fallback preload.

@@ -2656,6 +2656,67 @@
           "evidence": "docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md"
         }
       ]
+    },
+    {
+      "id": "flash-next-iq1s-llamacpp",
+      "model": "Qwen3.8-Flash-Next",
+      "display_name": "Flash-Next Unsloth v3.1 IQ1_S / llama.cpp + SSD n-gram (12K)",
+      "weight_quant": "Unsloth-Dynamic-v3.1-UD-IQ1_S",
+      "engine": "llama.cpp",
+      "status": "selected",
+      "launch": [
+        "flash-iq1s"
+      ],
+      "allocated_context": 12288,
+      "worker_memory_gib": {
+        "high": 26,
+        "max": 28,
+        "swap": null
+      },
+      "host_ram_reserve_gib": 2,
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/unsloth/flash-next-iq1s-v31"
+      },
+      "availability": {
+        "enabled": true
+      },
+      "runtime_manifest": "config/flash-iq1s-runtime.json",
+      "evidence": "docs/FLASH-IQ1S-ENTRY-20261104.md",
+      "notes": "Both GPUs and CPU-mapped weights;28.8GB IQ4_NL ngram table lazily mapped on NVMe; one short DSH tool qualified; no cold-SSD/full-context/sustained qualification. Native automaticfit1536MiBtargets,256MiBindependentstopfloor.",
+      "startup_gpu_free_mib": [
+        11520,
+        9472
+      ],
+      "current_configuration_benchmark": {
+        "date": "2026-11-04",
+        "source": "docs/benchmark-results/20261104-flash-iq1s-entry.json",
+        "worker_RAM_high_max_GiB": [
+          26,
+          28
+        ],
+        "prefill_tps": 88.7879102576197,
+        "ttft_s": 66.29202104499927,
+        "decode_tps": 31.102086049650392,
+        "prompt_tokens": 5824,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5824,
+          "prompt_ms": 65594.516,
+          "prompt_per_token_ms": 11.262794642857143,
+          "prompt_per_second": 88.7879102576197,
+          "predicted_n": 39,
+          "predicted_ms": 1221.783,
+          "predicted_per_token_ms": 32.152184210526315,
+          "predicted_per_second": 31.102086049650392
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      }
     }
   ],
   "host_reclaim_policy": {

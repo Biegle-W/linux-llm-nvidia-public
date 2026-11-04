@@ -19,15 +19,30 @@ def dense_gpu_free_mib(profile_id):
 
 # Explicit maintained SSD-streaming profiles; unknown/dense profiles fail closed.
 SSD_STREAMING_PROFILES = frozenset({
-    'flash-next-strata', 'glm-maya', 'deepseek-strata', 'deepseek-maya',
+    'flash-next-iq1s-llamacpp', 'flash-next-strata', 'glm-maya', 'deepseek-strata', 'deepseek-maya',
     'deepseek-unsloth-strata',
 })
 # Bounded per-profile allowance above the recorded 12–13% full-PSI peaks.
-PRESSURE_15_PROFILES = frozenset({'flash-next-strata', 'deepseek-maya', 'deepseek-unsloth-strata'})
+PRESSURE_15_PROFILES = frozenset({'flash-next-iq1s-llamacpp', 'flash-next-strata', 'deepseek-maya', 'deepseek-unsloth-strata'})
 
 
 class TelemetryError(RuntimeError):
     pass
+
+
+def llama_requests_busy(text):
+    """Both native processing and deferred gauges are required; other engines stay separate."""
+    import math
+    if len(text) > 2 * 1024 * 1024:
+        raise TelemetryError('Worker telemetry too large')
+    values = []
+    for name in ('llamacpp:requests_processing', 'llamacpp:requests_deferred'):
+        found = [float(line.rsplit(' ', 1)[1]) for line in text.splitlines()
+                 if line.startswith(name + ' ') or line.startswith(name + '{')]
+        if not found or any(not math.isfinite(v) or v < 0 for v in found):
+            raise TelemetryError('Valid llama.cpp processing/deferred gauges required')
+        values.extend(found)
+    return any(v > 0 for v in values)
 
 
 class SwapGuard:
@@ -133,7 +148,9 @@ class WorkerWatch:
             if phase in ('loading', 'warmup', 'idle'):
                 return 'loading' if phase == 'warmup' else phase
         try:
-            if self.profile.startswith('qwen27b-') or self.profile == 'bolt-vllm':
+            if self.profile == 'flash-next-iq1s-llamacpp':
+                busy = llama_requests_busy(self.get('/metrics'))
+            elif self.profile.startswith('qwen27b-') or self.profile == 'bolt-vllm':
                 text = self.get('/metrics')
                 name = ('sglang:num_running_reqs' if self.profile.endswith('sglang')
                         else 'tensorfold:num_requests_running' if self.profile == 'qwen27b-tensorfold'

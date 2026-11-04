@@ -1,0 +1,65 @@
+{
+  "binary": "runtimes/llama.cpp/build/bin/llama-server",
+  "binary_sha256": "eed3e9ba6633c1d3ef2f835a0ebb265c6453680e08daca0f1cdd2c6d37c1b86f",
+  "source_commit": "caa8191df159f764fb0160e3d2fc6be008948aee",
+  "repository": "unsloth/Qwen3.8-Flash-Next-GGUF",
+  "revision": "d96201194f103c906994f283f504209dc8d2a10c",
+  "checkpoint_directory": "models/unsloth/flash-next-iq1s-v31",
+  "first_shard": "Qwen3.8-Flash-Next-UD-IQ1_S-00001-of-00003.gguf",
+  "planned_context": 12288,
+  "ngram_table": "Qwen3.8-Flash-Next-UD-IQ1_S-00003-of-00003.gguf",
+  "storage": "NVMe SSD",
+  "load_mode": "mmap",
+  "lazy_mode": "on",
+  "fit_target_MiB": [
+    1536,
+    1536
+  ],
+  "worker_RAM_high_max_GiB": [
+    26,
+    28
+  ],
+  "host_reserve_GiB": 2,
+  "free_VRAM_floor_MiB": 256,
+  "temperature_stop_C": 82,
+  "swap_write_MiB_s": 128,
+  "swap_combined_MiB_s": 160,
+  "swap_window_s": 30,
+  "PSI_full_percent": 15,
+  "bad_samples": 3,
+  "runtime_files_sha256": {
+    "runtimes/llama.cpp/build/bin/libmtmd.so.0.7.0": "7e13afe0407f325e0c6f09dd26bed2e29baa033e5d4c3e1ba41c5ab07c395d4c",
+    "runtimes/llama.cpp/build/bin/libggml-cpu.so.0.27.0": "4dbd15345d38d8a8f9f501f8754d0b28b5badd53ac3818cc798b9d865523a5e7",
+    "runtimes/llama.cpp/build/bin/libggml.so.0.27.0": "34f93beb000f44fcd0575209bf351dbeb6aba23f8f9dbfdfeda66b8598fcb29f",
+    "runtimes/llama.cpp/build/bin/libggml-cuda.so.0.27.0": "703ab7c8b7eef61b2a23bd826e026004b8e3a74abec9a22f9dac567b381c4cea",
+    "runtimes/llama.cpp/build/bin/libggml-base.so.0.27.0": "dc13255af5a645ab28691d3b415c2ebf5e8cb050e79090e3aa1ebfa63d88d9d5",
+    "runtimes/llama.cpp/build/bin/libllama.so.0.7.0": "6ed0f8f9cef622ae5ae18de0b0379d03cff1ab0569e299a383918888b4b714f7",
+    "runtimes/llama.cpp/build/bin/libllama-common.so.0.7.0": "1b460989281abf4ff670b8bd96d423cdecc9a1c488938c00d4b67da9425d21ac",
+    "runtimes/llama.cpp/build/bin/libllama-cli-impl.so": "1a06c3ff5afaf09fbc4d9dee69a3932bd42dec8550990d419796831dcfc5fca9",
+    "runtimes/llama.cpp/build/bin/libllama-bench-impl.so": "400d9ccbb62c7b58d34a06bea00d17fca83e0f03efc9e647dde0b5cba6203c1a",
+    "runtimes/llama.cpp/build/bin/libllama-server-impl.so": "2826ee1fc754a1852c8fa76a3b1d5092676b6858ea9d8198698e2d04734de219"
+  },
+  "source_worktree_clean": true,
+  "cache_scope": "Publisher SHA256 read precedes loading; OS file cache is not dropped. SSD mapping proof is required, but table residency/cache warmth and cold SSD speed are not established by this short test.",
+  "log_verbosity": 4,
+  "files": [
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ1_S-00001-of-00003.gguf",
+      "bytes": 10946618,
+      "sha256": "df6ba2c00267aa4853231fdb203ba76b67b7eadcfb372df65842760b9efa1a8d",
+      "publisher_sha256_matched": true
+    },
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ1_S-00002-of-00003.gguf",
+      "bytes": 37568095648,
+      "sha256": "7101e65fb6084e65c9e2c678291d8b6b62dfcce89c422958633cf5585a68cbb6",
+      "publisher_sha256_matched": true
+    },
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ1_S-00003-of-00003.gguf",
+      "bytes": 28800138432,
+      "sha256": "05716382c280d999b81afff92b2d527fadbfd926ac225ffdc273f2d1d13331c6",
+      "publisher_sha256_matched": true
+    }
+  ]
+}

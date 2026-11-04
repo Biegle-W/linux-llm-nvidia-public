@@ -1,0 +1,111 @@
+{
+  "date": "2026-11-04",
+  "profile": "flash-next-iq1s-llamacpp",
+  "status": "enabled; normal router DSH passed",
+  "model": "Flash-Next Unsloth v3.1 UD-IQ1_S with IQ4_NL lazy SSD table",
+  "engine": "llama.cpp build11909",
+  "context": 12288,
+  "weight_bytes": 66379180698,
+  "storage": "NVMe SSD",
+  "metrics": {
+    "prefill_tps": 88.7879102576197,
+    "ttft_s": 66.29202104499927,
+    "decode_tps": 31.102086049650392,
+    "prompt_tokens": 5824,
+    "output_tokens": 39,
+    "cached_tokens": 0,
+    "native_timings": {
+      "cache_n": 0,
+      "prompt_n": 5824,
+      "prompt_ms": 65594.516,
+      "prompt_per_token_ms": 11.262794642857143,
+      "prompt_per_second": 88.7879102576197,
+      "predicted_n": 39,
+      "predicted_ms": 1221.783,
+      "predicted_per_token_ms": 32.152184210526315,
+      "predicted_per_second": 31.102086049650392
+    },
+    "prefill_method": "native request timings",
+    "ttft_method": "client first delivered content/tool delta; parser buffering included",
+    "decode_method": "native request timings"
+  },
+  "checks": {
+    "phase": "pass",
+    "followup_passed": true,
+    "strict_final_format": true,
+    "unloaded": true,
+    "wall_s": 71.49707224200029
+  },
+  "guards": {
+    "worker_RAM_GiB": {
+      "high": 26,
+      "max": 28,
+      "swap": null
+    },
+    "host_available_reserve_GiB": 2,
+    "explicit_GPU_free_floor_MiB": 256,
+    "native_cache_reserve_MiB": null,
+    "startup_free_MiB": [
+      11520,
+      9472
+    ],
+    "loading_PSI_percent": null,
+    "resource_bad_samples": 3,
+    "swap_occupancy": "unlimited",
+    "swap_write_MiB_s": 128,
+    "swap_read_plus_write_MiB_s": 160,
+    "swap_window_s": 30,
+    "active_PSI_percent": 15,
+    "PSI_bad_samples": 3
+  },
+  "resources": {
+    "samples": 61,
+    "median_interval_s": 2.0742130279541016,
+    "RAM_peak_GiB": 25.989971160888672,
+    "swap_peak_MiB": 403.578125,
+    "GPU_free_min_MiB": [
+      1593.0,
+      1512.0
+    ],
+    "temperatures_max_C": [
+      56.0,
+      38.0
+    ],
+    "host_available_min_GiB": 27.08856201171875,
+    "memory_events": {
+      "low": "0",
+      "high": "2951",
+      "max": "0",
+      "oom": "0",
+      "oom_kill": "0",
+      "oom_group_kill": "0",
+      "sock_throttled": "75"
+    },
+    "effective_limits": {
+      "memory.high": "27917287424",
+      "memory.max": "30064771072",
+      "memory.swap.max": "max"
+    },
+    "guard_violations": [],
+    "active_complete_windows": 19,
+    "active_write_MiB_s_max": 4.945633074797549,
+    "active_combined_MiB_s_max": 5.271601401910486,
+    "PSI_complete_window_max": 4.51
+  },
+  "table_mapping_proof": {
+    "native_lazy_log": [
+      "0.03.838.794 I add: tensor per_layer_token_embd.weight (size = 27465 MiB) lazy read enabled"
+    ],
+    "mappings": [
+      {
+        "mapped_bytes": 28800139264,
+        "permissions": "r--s",
+        "file_offset": 0,
+        "shard": "Qwen3.8-Flash-Next-UD-IQ1_S-00003-of-00003.gguf"
+      }
+    ],
+    "physical_transport": "nvme verified before launch"
+  },
+  "scope": "One short actual DSH read/result/exact followup and owned unload; no full-context/stress/coldSSD/quality qualification",
+  "CPU_checks": 441
+}
