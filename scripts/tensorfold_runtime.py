@@ -38,6 +38,8 @@ def serve(profile):
             raise RuntimeError('Incorrect worker memory limit: ' + name)
     from gpu_transport_health import require_host_staged
     require_host_staged()  # Current boot/unlock proof still required; one visible GPU needs no NCCL channels.
+    from profile_catalog import require_host_capacity
+    require_host_capacity(profile)
     verify_storage(profile)
     drafter = dict(profile, storage=dict(profile['storage'], checkpoint_directory=profile['drafter_directory']))
     verify_storage(drafter)

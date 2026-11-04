@@ -1,4 +1,4 @@
-"""Keep MoE RAM limits and guarded ownership while allowing uncapped dense host RAM."""
+"""Keep the selected 96GB bounded budgets, swap policy and exact cgroup ownership."""
 from copy import deepcopy
 from pathlib import Path
 import sys
@@ -37,8 +37,8 @@ class WorkerBudget(unittest.TestCase):
                 result=subprocess.check_output(['bash',str(script),name,'/usr/bin/python3',command,engine],text=True,env=env)
                 self.assertIn('fixture-console-opened',result)
                 self.assertIn('--property=MemorySwapMax='+limit,result)
-                self.assertIn('--property=MemoryHigh='+'26G',result)
-                self.assertIn('--property=MemoryMax='+'28G',result)
+                self.assertIn('--property=MemoryHigh='+'32G',result)
+                self.assertIn('--property=MemoryMax='+'36G',result)
     def test_moe_shell_commands_use_managed_router_selection(self):
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as directory:
@@ -54,16 +54,16 @@ class WorkerBudget(unittest.TestCase):
                     result = subprocess.check_output(['bash', str(shell), command], text=True).strip()
                     self.assertEqual(result, '--model ' + model)
 
-    def test_dense_models_have_32gb_worker_ram_caps(self):
+    def test_dense_models_have_selected_bounded_ram_caps(self):
         for name in ['qwen27b-hyperqwen', 'qwen27b-sglang']:
-            self.assertEqual(worker_budget(get_profile(name)), {'high': 26, 'max': 28, 'swap': None})
+            self.assertEqual(worker_budget(get_profile(name)), {'high': 32, 'max': 36, 'swap': None})
 
-    def test_all_selected_moe_profiles_use_32gb_ram_budget(self):
+    def test_all_selected_moe_profiles_use_96gb_ram_budget(self):
         from profile_catalog import load_catalog,host_ram_reserve_gib
         for p in load_catalog()['profiles']:
             self.assertEqual(host_ram_reserve_gib(p),2)
             if not p['id'].startswith('qwen27b-'):
-                self.assertEqual(worker_budget(p),{'high':26,'max':28,'swap':None})
+                self.assertEqual(worker_budget(p),{'high':84,'max':86,'swap':None})
 
     def test_dense_cannot_take_the_larger_moe_budget(self):
         p = deepcopy(get_profile('qwen27b-hyperqwen'))
@@ -77,7 +77,7 @@ class WorkerBudget(unittest.TestCase):
         self.assertEqual(worker_budget(p)['max'], 58)
 
     def test_fixed_swap_caps_or_unbounded_moe_ram_are_refused(self):
-        for b in [{'high': 44, 'max': 48, 'swap': 1}, {'high': 44, 'max': 48, 'swap': 2}, {'high': 58, 'max': 60, 'swap': None}, {'high': 48, 'max': 48, 'swap': None}]:
+        for b in [{'high': 44, 'max': 48, 'swap': 1}, {'high': 44, 'max': 48, 'swap': 2}, {'high': 84, 'max': 88, 'swap': None}, {'high': 48, 'max': 48, 'swap': None}]:
             p = deepcopy(get_profile('deepseek-maya'))
             p['worker_memory_gib'] = b
             with self.assertRaises(ValueError):
@@ -90,7 +90,7 @@ class DenseNativeGuard(unittest.TestCase):
         import serve_qwen27b_engines as engine
         p=get_profile('qwen27b-hyperqwen')
         for unit,high,hard,accepted in [
-                ('llm-test-qwen27b.service',str(26*1024**3),str(28*1024**3),True),
+                ('llm-test-qwen27b.service',str(32*1024**3),str(36*1024**3),True),
                 ('foreign.service','max','max',False),
                 ('llm-test-qwen27b.service',str(30*1024**3),'max',False),
                 ('llm-test-qwen27b.service','max',str(36*1024**3),False)]:

@@ -5,8 +5,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / 'config/maintained-profiles.json'
-MOE_WORKER_HIGH_GIB = 56
-MOE_WORKER_MAX_GIB = 58
+MOE_WORKER_HIGH_GIB = 84
+MOE_WORKER_MAX_GIB = 86
 
 
 def worker_budget(profile):
@@ -25,6 +25,18 @@ def worker_budget(profile):
                     and budget['max'] <= (36 if dense else MOE_WORKER_MAX_GIB))):
         raise ValueError(f"Invalid bounded worker budget: {profile['id']}")
     return dict(budget)
+
+
+def require_host_capacity(profile, meminfo=None):
+    minimum = profile.get('minimum_usable_ram_gib', 0)
+    if type(minimum) is not int or not 0 <= minimum <= 1024:
+        raise ValueError('Invalid required installed RAM capacity')
+    if not minimum:
+        return
+    text = Path('/proc/meminfo').read_text() if meminfo is None else meminfo
+    total = next(int(line.split()[1]) for line in text.splitlines() if line.startswith('MemTotal:'))
+    if total < minimum * 1024**2:
+        raise RuntimeError(f"{profile['id']}: selected96GB setting requires >= {minimum} GiB Linux usable RAM")
 
 
 def host_ram_reserve_gib(profile):

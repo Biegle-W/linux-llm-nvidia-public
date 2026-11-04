@@ -10,9 +10,10 @@ UNIT='llm-router-worker.service';PORT=10000
 def main():
  os.umask(0o077);WORK.mkdir(parents=True,exist_ok=True);require_host_staged();group=next(x.split('::',1)[1] for x in Path('/proc/self/cgroup').read_text().splitlines() if x.startswith('0::'));base=Path('/sys/fs/cgroup')/group.lstrip('/')
  assert group.endswith('/'+UNIT)
- for name,value in [('memory.high',str(26*1024**3)),('memory.max',str(28*1024**3)),('memory.swap.max','max')]:assert (base/name).read_text().strip()==value
- from profile_catalog import require_enabled,get_profile,worker_budget
- profile=require_enabled(get_profile('flash-next-iq1s-llamacpp'));assert profile['allocated_context']==12288 and worker_budget(profile)=={'high':26,'max':28,'swap':None}
+ from profile_catalog import require_enabled,get_profile,worker_budget,require_host_capacity
+ profile=require_enabled(get_profile('flash-next-iq1s-llamacpp'));budget=worker_budget(profile);require_host_capacity(profile)
+ assert profile['allocated_context']==12288
+ for name,value in [('memory.high',str(budget['high']*1024**3)),('memory.max',str(budget['max']*1024**3)),('memory.swap.max','max')]:assert (base/name).read_text().strip()==value
  assert not (ROOT/'data/local-api-key').stat().st_mode & 0o077
  pins=json.loads((ROOT/'config/flash-iq1s-runtime.json').read_text());binary=ROOT/pins['binary'];key=(ROOT/'data/local-api-key').read_text().strip()
  if not key:raise RuntimeError('API key must not be empty')

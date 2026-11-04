@@ -17,6 +17,8 @@ def main():
     if engine not in ('hyperqwen', 'sglang', 'tensorfold'):
         raise SystemExit('Choose a maintained dense engine.')
     profile = get_profile('qwen27b-' + engine)
+    from profile_catalog import require_host_capacity
+    require_host_capacity(profile)
     from context_capacity import configured_transport_mode
     transport_mode = configured_transport_mode()
     gpu_floor_mib = dense_gpu_free_mib(profile['id'])

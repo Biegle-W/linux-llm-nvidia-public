@@ -286,8 +286,16 @@ class SearchHTTPTests(unittest.TestCase):
             self.assertEqual(status,200);search.assert_not_called()
 
     def test_nonstream_search_grounding_sources_and_citations(self):
-        with patch.object(ws, 'search', return_value=ROWS) as search:
+        # Receiving the last response byte may precede the handler's finally block.
+        # Wait for actual release, rather than racing the server thread's cleanup.
+        import threading
+        settled=threading.Event();workers=test_router.RouterTest.server.workers
+        release=workers.release
+        def finish():
+            release();settled.set()
+        with patch.object(workers,'release',side_effect=finish),patch.object(ws, 'search', return_value=ROWS) as search:
             status, raw = self.request(self.body(instructions='Be concise.'))
+            self.assertTrue(settled.wait(2), 'Request admission was not released')
         self.assertEqual(status, 200)
         value = json.loads(raw)
         self.assertEqual(value['model'], 'qwen27b-hyperqwen')

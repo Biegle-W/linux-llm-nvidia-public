@@ -30,6 +30,8 @@ def main():
     from pair_p2p_health import require_verified_pair
     require_verified_pair()
     require_enabled(get_profile(sys.argv[1]))
+    from profile_catalog import require_host_capacity
+    require_host_capacity(get_profile(sys.argv[1]))
     if sys.argv[1] == 'flash-next-iq1s-llamacpp':
         from flash_iq1s_runtime import main as flash_main
         return flash_main()

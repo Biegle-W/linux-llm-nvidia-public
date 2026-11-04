@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Larger RAM verified; restoration prepared, GPU checks awaiting firmware — November 4, 2026
+
+Linux now sees 91.77 GiB usable RAM. Nine larger-RAM candidate definitions and cache configurations are prepared: dense 32/36 GiB worker caps, RAM-heavy 84/86 GiB, and a new 90 GiB minimum measured-capacity gate.445 CPU tests passed. Five paused profiles remain disabled; no GPU benchmark or restoration qualification has run. Secure Boot is enabled again, early GPU unlock health failed and its dependent current-boot transport proof is missing. The human chose preparation first and will correct Secure Boot/reboot later. No guard was bypassed; other policies, engine pins, contexts and defaults are preserved. API/hub/DSH remain healthy and GPU workers are idle. Earlier benchmark rows retain their measured 32/64 GB scope. [Prepared settings, forum/pinning research and continuation](RAM96-PREPARATION-20261104.md).
+
 ## Flash-Next IQ1_S entry enabled — November 4, 2026
 
 `flash-next-iq1s-llamacpp` is now the fourth enabled API/DSH entry: the same verified Unsloth v3.1 IQ1_S checkpoint, llama.cpp11909, 12,288 context and lazy NVMe n-gram table. Normal-router actual DSH read/result/exact-follow-up and owned unload passed:88.79 prefill tok/s,66.292 s client TTFT and31.10 decode tok/s. RAM26/28 GiB, host2 GiB, GPU256 MiB/card, swap128/160 MiB/s over30 s,15% active full PSI, thermal82 C and all ownership/telemetry guards remain. All441 CPU checks passed. The five older profiles stay disabled, defaults are preserved and workers finish idle. Earlier isolated-candidate descriptions are dated history; this is the current operational state. [Entry and guard evidence](FLASH-IQ1S-ENTRY-20261104.md); [all current and historical entry benchmarks](ALL-ENTRY-BENCHMARKS-20261104.md).

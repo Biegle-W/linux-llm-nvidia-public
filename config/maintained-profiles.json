@@ -121,8 +121,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": 26,
-        "max": 28,
+        "high": 32,
+        "max": 36,
         "swap": null
       },
       "latest_qualification": {
@@ -440,7 +440,8 @@
         "decode_tps": 62.52509679225351,
         "evidence": "docs/REQUESTED-TWO-MODEL-CHECKS-20261103.md",
         "scope": "Single uncached short call; no full-context or sustained qualification; selected settings unchanged"
-      }
+      },
+      "minimum_usable_ram_gib": 90
     },
     {
       "id": "qwen27b-sglang",
@@ -527,8 +528,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": 26,
-        "max": 28,
+        "high": 32,
+        "max": 36,
         "swap": null
       },
       "latest_qualification": {
@@ -1079,7 +1080,8 @@
         "decode_tps": 60.20142998209217,
         "evidence": "docs/REQUESTED-TWO-MODEL-CHECKS-20261103.md",
         "scope": "Single uncached short call; no full-context or sustained qualification; selected settings unchanged"
-      }
+      },
+      "minimum_usable_ram_gib": 90
     },
     {
       "id": "flash-next-strata",
@@ -1130,8 +1132,8 @@
         "checkpoint_directory": "models/strata/models/IQ3_XXS"
       },
       "worker_memory_gib": {
-        "high": 26,
-        "max": 28,
+        "high": 84,
+        "max": 86,
         "swap": null
       },
       "context_expansion_assessment": {
@@ -1176,11 +1178,11 @@
           "combined_mib_s": 160,
           "pressure_pct": 15
         },
-        "resident_experts": false,
-        "plain_mmap_experts": true,
-        "expert_memory_mode": "plain mmap for 32 GB host",
+        "resident_experts": true,
+        "plain_mmap_experts": false,
+        "expert_memory_mode": "resident_non_gpu_cache_complement",
         "observed_native_reserve_mib": 700,
-        "reason": "Temporary 32 GB host; profile disabled pending explicit RAM-upgrade confirmation, measured capacity and guarded requalification.",
+        "reason": "96GB RAM user-confirmed; Linux MemTotal96227652KiB verified. Larger cache candidate; guarded qualification pending boot-proof repair.",
         "reserve_mib_per_gpu": 1024,
         "vram_reserve_args": {
           "--vram-reserve-mib": 1024
@@ -1466,10 +1468,9 @@
       },
       "availability": {
         "enabled": false,
-        "temporary": true,
-        "reason": "VRAM-only operation while awaiting RAM upgrade",
-        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
-      }
+        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+      },
+      "minimum_usable_ram_gib": 90
     },
     {
       "id": "glm-maya",
@@ -1495,12 +1496,12 @@
       },
       "evidence": "docs/CONTEXT-EXPANSION-20261027.md",
       "selected_settings": {
-        "expert_ram_gib": 16,
+        "expert_ram_gib": 64,
         "environment": {
-          "MAYA_GLM_RAM_GB": "16",
+          "MAYA_GLM_RAM_GB": "64",
           "MAYA_GLM_NO_MTP": "1"
         },
-        "reason": "Temporary 32 GB host; profile disabled pending explicit RAM-upgrade confirmation, measured capacity and guarded requalification.",
+        "reason": "96GB RAM user-confirmed; Linux MemTotal96227652KiB verified. Larger cache candidate; guarded qualification pending boot-proof repair.",
         "expert_profile": "data/glm-maya-expert-profile.bin",
         "prefill": "auto",
         "kv_streaming": true,
@@ -1546,8 +1547,8 @@
         "checkpoint_directory": "models/maya/Maya-S24"
       },
       "worker_memory_gib": {
-        "high": 26,
-        "max": 28,
+        "high": 84,
+        "max": 86,
         "swap": null
       },
       "latest_qualification": {
@@ -1834,10 +1835,9 @@
       },
       "availability": {
         "enabled": false,
-        "temporary": true,
-        "reason": "VRAM-only operation while awaiting RAM upgrade",
-        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
-      }
+        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+      },
+      "minimum_usable_ram_gib": 90
     },
     {
       "id": "deepseek-maya",
@@ -1900,15 +1900,15 @@
         "base_weight_gb": 232.97960842
       },
       "worker_memory_gib": {
-        "high": 26,
-        "max": 28,
+        "high": 84,
+        "max": 86,
         "swap": null
       },
       "selected_settings": {
         "environment": {
-          "DS4_WARM_GB": "2",
-          "DS4_FILE_CACHE_MIB": "12288",
-          "DS4_WARM_CAP_GB": "12"
+          "DS4_WARM_GB": "8",
+          "DS4_FILE_CACHE_MIB": "65536",
+          "DS4_WARM_CAP_GB": "56"
         },
         "expert_profile": "data/maya-unsloth-expert-profile.bin",
         "tp_requested": 2,
@@ -1921,8 +1921,8 @@
         "reserve_mib_per_gpu": 1024,
         "parallel": 1,
         "reasoning_effort": "none",
-        "reason": "Temporary 32 GB host; profile disabled pending explicit RAM-upgrade confirmation, measured capacity and guarded requalification.",
-        "decode_expert_warm_gb": 2.0,
+        "reason": "96GB RAM user-confirmed; Linux MemTotal96227652KiB verified. Larger cache candidate; guarded qualification pending boot-proof repair.",
+        "decode_expert_warm_gb": 8.0,
         "vram_reserve_args": {
           "--reserve-mib": 1024
         },
@@ -1934,8 +1934,8 @@
           "combined_mib_s": 160,
           "pressure_pct": 15
         },
-        "model_file_cache_target_mib": 12288,
-        "startup_expert_warm_cap_gb": 12
+        "model_file_cache_target_mib": 65536,
+        "startup_expert_warm_cap_gb": 56
       },
       "latest_qualification": {
         "date": "2026-11-01",
@@ -2267,10 +2267,9 @@
       },
       "availability": {
         "enabled": false,
-        "temporary": true,
-        "reason": "VRAM-only operation while awaiting RAM upgrade",
-        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
-      }
+        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+      },
+      "minimum_usable_ram_gib": 90
     },
     {
       "id": "bolt-vllm",
@@ -2291,8 +2290,8 @@
         "checkpoint_directory": "models/bolt-awq-int4"
       },
       "worker_memory_gib": {
-        "high": 26,
-        "max": 28,
+        "high": 84,
+        "max": 86,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2454,10 +2453,9 @@
       },
       "availability": {
         "enabled": false,
-        "temporary": true,
-        "reason": "VRAM-only operation while awaiting RAM upgrade",
-        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
-      }
+        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+      },
+      "minimum_usable_ram_gib": 90
     },
     {
       "id": "deepseek-unsloth-strata",
@@ -2475,8 +2473,8 @@
         "manifest": "config/deepseek-unsloth-runtime.json"
       },
       "worker_memory_gib": {
-        "high": 26,
-        "max": 28,
+        "high": 84,
+        "max": 86,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2486,7 +2484,7 @@
           1
         ],
         "experts": 6,
-        "cpu_store_decimal_gb": 16,
+        "cpu_store_decimal_gb": 64,
         "internal_gpu_reserve_mib": 1024,
         "mmap_experts": true,
         "drafting": "none",
@@ -2499,7 +2497,7 @@
         },
         "effective_prefill_chunk_observed": 512,
         "prefill_evidence": "docs/benchmark-results/20261102-community-screens.json",
-        "reason": "Temporary 32 GB host; profile disabled pending explicit RAM-upgrade confirmation, measured capacity and guarded requalification."
+        "reason": "96GB RAM user-confirmed; Linux MemTotal96227652KiB verified. Larger cache candidate; guarded qualification pending boot-proof repair."
       },
       "storage": {
         "access": "ssd-streaming",
@@ -2584,10 +2582,9 @@
       },
       "availability": {
         "enabled": false,
-        "temporary": true,
-        "reason": "VRAM-only operation while awaiting RAM upgrade",
-        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
-      }
+        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+      },
+      "minimum_usable_ram_gib": 90
     },
     {
       "id": "qwen27b-tensorfold",
@@ -2602,8 +2599,8 @@
       ],
       "allocated_context": 12288,
       "worker_memory_gib": {
-        "high": 26,
-        "max": 28,
+        "high": 32,
+        "max": 36,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2655,7 +2652,8 @@
           "scope": "one actual DSH read-tool generation; short speculative burst; no sustained/full-context test",
           "evidence": "docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md"
         }
-      ]
+      ],
+      "minimum_usable_ram_gib": 90
     },
     {
       "id": "flash-next-iq1s-llamacpp",
@@ -2669,8 +2667,8 @@
       ],
       "allocated_context": 12288,
       "worker_memory_gib": {
-        "high": 26,
-        "max": 28,
+        "high": 84,
+        "max": 86,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2716,7 +2714,8 @@
         "prefill_method": "native request timings",
         "ttft_method": "client first delivered content/tool delta; parser buffering included",
         "decode_method": "native request timings"
-      }
+      },
+      "minimum_usable_ram_gib": 90
     }
   ],
   "host_reclaim_policy": {

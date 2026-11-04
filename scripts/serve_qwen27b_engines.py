@@ -49,6 +49,8 @@ def preflight(profile):
             or limit != expected_max
             or (base / 'memory.high').read_text().strip() != expected_high):
         sys.exit('Use scripts/start_model.sh qwen27b [hyperqwen|sglang|tensorfold].')
+    from profile_catalog import require_host_capacity
+    require_host_capacity(profile)
     verify_storage(profile)
     from pair_p2p_health import require_verified_pair
     require_verified_pair()

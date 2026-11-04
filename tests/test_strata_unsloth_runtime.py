@@ -21,6 +21,11 @@ class Runtime(unittest.TestCase):
     def test_32gb_store_is_bounded(self):
         self.profile['selected_settings']['cpu_store_decimal_gb']=16
         self.assertEqual(rt.build_config(self.profile,self.root/rt.RUNTIME)['env']['DS4_STORE_GB'],'16')
+    def test_96gb_store_is_bounded_and_preserves_six_experts(self):
+        self.profile['selected_settings']['cpu_store_decimal_gb']=64
+        config=rt.build_config(self.profile,self.root/rt.RUNTIME)
+        self.assertEqual(config['env']['DS4_STORE_GB'],'64')
+        self.assertEqual(config['args'][config['args'].index('--experts')+1],'6')
     def test_pinned_fixture(self):self.assertEqual(rt.verify(self.profile,self.root),self.root/rt.RUNTIME)
     def test_changed_runtime_refused(self):
         (self.root/rt.RUNTIME/'engine/strata-dsv41').write_bytes(b'changed')

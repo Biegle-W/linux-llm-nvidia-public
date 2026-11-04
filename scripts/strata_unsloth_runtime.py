@@ -45,7 +45,7 @@ def verify(profile, root=ROOT):
 def build_config(profile, runtime):
     selected = profile['selected_settings']
     if (selected.get('gpu') != [0, 1] or selected.get('experts') != 6
-            or selected.get('cpu_store_decimal_gb') not in (16, 36)):
+            or selected.get('cpu_store_decimal_gb') not in (16, 36, 64)):
         raise ValueError('Unqualified Unsloth placement/expert/cache setting')
     args = ['--pack', str(runtime / 'pack'), '--max-context', str(profile['allocated_context']),
             '--eos', '1', '--dspark', 'none', '--tp', '2', '--reserve-mib', str(selected.get('internal_gpu_reserve_mib',768)),

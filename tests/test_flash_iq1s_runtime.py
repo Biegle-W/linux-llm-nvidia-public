@@ -11,7 +11,7 @@ class FlashEntry(unittest.TestCase):
   for text in ['', 'llamacpp:requests_processing 0','llamacpp:requests_processing nan\nllamacpp:requests_deferred 0','llamacpp:requests_processing 0\nllamacpp:requests_deferred -1','x'*(2*1024*1024+1)]:
    with self.subTest(text=text[:60]),self.assertRaises((ValueError,TelemetryError)):llama_requests_busy(text)
  def test_selected_budget_and_watch_are_scoped(self):
-  p=get_profile('flash-next-iq1s-llamacpp');self.assertEqual(worker_budget(p),{'high':26,'max':28,'swap':None});self.assertEqual(p['allocated_context'],12288)
+  p=get_profile('flash-next-iq1s-llamacpp');self.assertEqual(worker_budget(p),{'high':84,'max':86,'swap':None});self.assertEqual(p['allocated_context'],12288)
   w=WorkerWatch('/unused',p['id'],'fixture',latch=False)
   self.assertEqual((w.guard.write_limit,w.guard.combined_limit,w.guard.pressure_limit),(128,160,15))
   with patch.object(w,'get',return_value='llamacpp:requests_processing 0\nllamacpp:requests_deferred 1'):self.assertEqual(w.phase(),'inference')
