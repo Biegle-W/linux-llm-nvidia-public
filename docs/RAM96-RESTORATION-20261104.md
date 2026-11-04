@@ -1,5 +1,7 @@
 # 96 GB restoration and two-GiB headroom — November 4, 2026
 
+**Later selected-entry update:** native IQ2/llama.cpp has replaced the AWQ Bolt API/DSH entry under compatibility ID`bolt-vllm`. [Current Bolt entry and research](BOLT-IQ2-ENTRY-20261104.md). The AWQ row and nine-model results below retain their earlier restoration-stage configuration and are historical evidence for Bolt.
+
 All nine profiles passed one normal-router actual DSH read/tool-result/exact-follow-up and owned unload on the corrected boot. Five paused profiles are restored in the API and DSH. Early GPU unlock and current-boot host-staged transport proof passed after the user disabled Secure Boot. Linux reports 96,227,660 KiB / 91.76984787 GiB usable RAM; the RTX 3080 Ti / RTX 3080 use CPU PCIe4 x8/x8 without CUDA peer access. This does not establish a P2P comparison.
 
 At the user's request the six RAM-heavy profiles leave **exactly 2 GiB outside the hard worker limit**: MemoryMax 96,389,640,192 bytes (89.76984787 GiB), MemoryHigh 94,242,156,544 bytes (87.76984787 GiB). Reclaim starts 2 GiB before the hard cap. These are fixed measured-boot settings, not an automatic expansion on future hardware. The separate 2 GiB available-host-memory stop remains. Dense GPU-resident profiles retain 32/36 GiB. Every profile requires at least 90 GiB Linux MemTotal before loading these settings. Effective kernel byte limits were verified in every check.

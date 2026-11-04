@@ -36,7 +36,7 @@ def main():
         from flash_iq1s_runtime import main as flash_main
         return flash_main()
     if sys.argv[1] == 'bolt-vllm':
-        from supervise_bolt import main as bolt_main
+        from bolt_iq2_runtime import main as bolt_main
         return bolt_main()
     group = next(line.split('::', 1)[1] for line in Path('/proc/self/cgroup').read_text().splitlines()
                  if line.startswith('0::'))

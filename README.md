@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Current: native IQ2 Bolt replaces AWQ in API/DSH — November 4, 2026
+
+Bolt now selects the official native IQ2 text model on pinned llama.cpp11909, both GPUs, 384 MiB fit targets and unchanged 163,840-token allocation. The historical `bolt-vllm` ID remains for compatibility; API metadata and both DSH display names now identify native IQ2/llama.cpp. Normal-router actual DSH read/result/exact follow-up and owned unload passed: 502.58 prefill tok/s, 12.870 s client TTFT and 68.05 decode tok/s. All nine entries remain, with unrelated routes/defaults and all guards preserved. 456 CPU tests passed; workers finish idle and updates stay paused. Older AWQ measurements and candidate-only status below are dated history. [Selected entry, guards and AWQ slowdown research](docs/BOLT-IQ2-ENTRY-20261104.md).
+
 ## Native IQ2 Bolt tested on both GPUs — November 4, 2026
 
 The isolated official native IQ2 Bolt candidate passed an actual DSH read/result/exact-follow-up and owned unload at163,840 context on pinned llama.cpp11909. The minimum tested passing fit margin384 MiB/card retains89.4% of weight-buffer bytes on the GPUs with2.18 GiB CPU-mapped weights:506.46 prefill tok/s,12.744 s client TTFT and67.49 decode tok/s, versus the retained same-day AWQ217.35 /29.320 /0.361. The256 MiB fit arm hit the unchanged256 MiB VRAM floor during prefill and is rejected;512 MiB also passed. These are short complete-configuration observations, not an equal-quality or sustained-speed claim.451 CPU checks passed. Both GPUs finish idle, no reservation remains and API/hub/DSH are healthy. All nine selected entries and defaults remain; IQ2 is a separate qualified candidate, not a replacement entry. [Results, guard/placement evidence and failed arms](docs/BOLT-NATIVE-IQ2-20261104.md).

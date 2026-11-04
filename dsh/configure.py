@@ -41,6 +41,7 @@ def router_providers(providers,profiles):
         if 'models' in p:p['models']=remaining
     for p in profiles:
         identifier=exposed_id(p['id']);m=models.setdefault(identifier,{'id':identifier})
+        if identifier=='bolt-vllm':m['name']=p.get('display_name') or p['model']+' / '+p['engine']
         m.setdefault('name',p.get('display_name') or p['model']+' / '+p['engine'])
         if identifier==PLAIN and 'web search' in m['name'].lower():m['name']=p.get('display_name') or p['model']+' / '+p['engine']
         m.update(contextWindow=p['allocated_context'],maxTokens=4096,reasoningEfforts=False)

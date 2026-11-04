@@ -1,5 +1,9 @@
 # Model storage policy
 
+## Selected native IQ2 Bolt — November 4, 2026
+
+The22.018 GB native text checkpoint on SATA at`models/engine-tests/bolt-iq2` now backs the API/DSH Bolt entry. The former55.333 GB AWQ checkpoint is retained as historical rollback material and is no longer selected. Both storage ancestry and publisher hash were verified. [Current setup](BOLT-IQ2-ENTRY-20261104.md).
+
 ## Native IQ2 Bolt candidate — November 4, 2026
 
 The22.018 GB official text checkpoint is a mostly GPU/RAM-resident candidate and lives on SATA at`models/engine-tests/bolt-iq2`. Publisher SHA256 and physical SATA ancestry passed. It uses the existing two GPUs with bounded partial CPU-weight placement; it is not an SSD expert-streaming pack. The separate vision projector/drafter were not downloaded. [Measured placement and guards](BOLT-NATIVE-IQ2-20261104.md).

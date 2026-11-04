@@ -49,7 +49,7 @@
   "pinned_profiles": [
     {
       "profile": "bolt-vllm",
-      "reason": "Custom compact-prefetch adapter uses an independent pinned runtime snapshot; changes require explicit local requalification."
+      "reason": "Qualified native IQ2 Bolt on pinned llama.cpp11909 with reviewed fit placement, libraries and tool checks; changes require explicit requalification."
     },
     {
       "profile": "deepseek-unsloth-strata",

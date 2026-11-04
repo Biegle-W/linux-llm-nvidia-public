@@ -148,7 +148,7 @@ class WorkerWatch:
             if phase in ('loading', 'warmup', 'idle'):
                 return 'loading' if phase == 'warmup' else phase
         try:
-            if self.profile == 'flash-next-iq1s-llamacpp':
+            if self.profile in ('flash-next-iq1s-llamacpp','bolt-vllm'):
                 busy = llama_requests_busy(self.get('/metrics'))
             elif self.profile.startswith('qwen27b-') or self.profile == 'bolt-vllm':
                 text = self.get('/metrics')

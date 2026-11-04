@@ -9,6 +9,9 @@ RETIRED_FILES = (
     'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
 
 FILES = (
+    'config/bolt-iq2-runtime.json', 'scripts/bolt_iq2_runtime.py', 'tests/test_bolt_iq2_runtime.py',
+    'docs/BOLT-IQ2-ENTRY-20261104.md', 'docs/benchmark-results/20261104-bolt-iq2-entry.json',
+    'docs/ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md',
     'config/bolt-iq2-trial.json', 'scripts/bolt_iq2_trial.py', 'scripts/bolt_iq2_worker.py', 'tests/test_bolt_iq2_trial.py',
     'docs/BOLT-NATIVE-IQ2-20261104.md', 'docs/benchmark-results/20261104-bolt-native-iq2.json',
     'docs/RAM96-RESTORATION-20261104.md', 'docs/benchmark-results/20261104-ram96-restoration.json', 'docs/BOLT-IQ2-AND-PROMETHEVS-20261104.md',

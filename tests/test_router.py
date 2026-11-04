@@ -61,8 +61,9 @@ class Backend(BaseHTTPRequestHandler):
 class FakeWorkers:
     active=None;loading=None;busy=False;idle_timeout=600;last_activity=time.monotonic()
     def request_status(self):return dict(queued=0,inflight=int(self.busy),max_inflight=1,max_queued=8,same_model_concurrency=False)
-    def acquire(self,name,progress=lambda:None,clear_guard=False):self.active=name;self.busy=True;self.clear_guard=clear_guard
-    def release(self):self.busy=False
+    def __init__(self):self.released=threading.Event();self.released.set()
+    def acquire(self,name,progress=lambda:None,clear_guard=False):self.released.clear();self.active=name;self.busy=True;self.clear_guard=clear_guard
+    def release(self):self.busy=False;self.released.set()
     def backend_models(self):return [{'id':'worker-name'}]
 
 class RouterTest(unittest.TestCase):
@@ -90,7 +91,10 @@ class RouterTest(unittest.TestCase):
         h={'Authorization':'Bearer '+key}
         if headers:h.update(headers)
         c.request('POST' if payload is not None else 'GET',path,payload,h)
-        r=c.getresponse();data=r.read();status=r.status;c.close();return status,data
+        r=c.getresponse();data=r.read();status=r.status;c.close()
+        # Response framing can finish before the server's admission-release finally.
+        if self.server.workers.busy:self.assertTrue(self.server.workers.released.wait(2),'Fixture admission was not released')
+        return status,data
     def test_auth(self):
         for key in ['', 'wrong']:
             self.assertEqual(self.request('/v1/models',key=key)[0],401)

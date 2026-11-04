@@ -1,5 +1,7 @@
 # Native 2-bit Bolt with minimum tested CPU offload — November 4, 2026
 
+**Later selection:** the user requested replacing AWQ. Native IQ2 is now the API/DSH Bolt entry under the compatibility ID`bolt-vllm`, and normal-router verification passed. [Current entry and slowdown diagnosis](BOLT-IQ2-ENTRY-20261104.md). Candidate-only statements below describe the earlier isolated test.
+
 The official native IQ2 Bolt text checkpoint passed on both RTX3080Ti/3080 cards at **163,840 context**, using the existing pinned llama.cpp11909. The least CPU offload that passed among the tested fit targets 256/384/512 MiB uses a **384 MiB fit target per card**: CPU-mapped weight buffers total **2.18 GiB**, with **89.4%** of native weight-buffer bytes on the GPUs. This is a qualified isolated candidate; all nine existing API/DSH entries, AWQ configuration and defaults are preserved. No engine update or automatic promotion ran.
 
 ## Same-day AWQ comparison

@@ -56,6 +56,9 @@ def validate_update_coverage(catalog, policy):
                         or (name == 'qwen27b-tensorfold'
                             and profiles[name]['engine'] == 'TensorFold'
                             and profiles[name].get('runtime_manifest') == 'config/tensorfold-runtime.json')
+                        or (name == 'bolt-vllm'
+                            and profiles[name]['engine'] == 'llama.cpp'
+                            and profiles[name].get('runtime_manifest') == 'config/bolt-iq2-runtime.json')
                         or (name == 'flash-next-iq1s-llamacpp'
                             and profiles[name]['engine'] == 'llama.cpp'
                             and profiles[name].get('runtime_manifest') == 'config/flash-iq1s-runtime.json'))

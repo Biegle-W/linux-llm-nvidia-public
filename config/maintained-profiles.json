@@ -2310,21 +2310,11 @@
     {
       "id": "bolt-vllm",
       "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
-      "weight_quant": "AWQ-INT4",
-      "engine": "vLLM-offload",
       "status": "selected",
       "launch": [
         "bolt"
       ],
       "allocated_context": 163840,
-      "tested_retrieval_input": 58893,
-      "context_validation": "Deferred while temporarily disabled pending RAM upgrade and guarded requalification. Prior-host record: 163840-token calculated memory allocation; short actual DSH tool check pending. No new full-context quality or speed qualification; older retrieval/benchmark evidence remains dated.",
-      "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
-      "storage": {
-        "access": "ram-resident",
-        "required_transport": "sata",
-        "checkpoint_directory": "models/bolt-awq-int4"
-      },
       "worker_memory_gib": {
         "high": 87.76984786987305,
         "max": 89.76984786987305,
@@ -2335,157 +2325,6 @@
         "text": true,
         "vision": false,
         "tools_qualified": true
-      },
-      "runtime_manifest": "config/bolt-offload-runtime.json",
-      "benchmark_context": 8192,
-      "latest_benchmark": {
-        "run": "20261031-bolt-maya-reliability",
-        "variant": "bolt-8k-normal-clean-mapping-shard-reclaim",
-        "date": "2026-10-31",
-        "context": 8192,
-        "physical_ram_gb": 64,
-        "repetitions": 1,
-        "input_tokens": 2341,
-        "output_tokens": 128,
-        "ttft_s": 11.42714927400084,
-        "prefill_tps": 253.65684628114914,
-        "decode_tps": 0.45057629994449133,
-        "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
-        "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
-        "warmup": "No dedicated speed-fixture warmup; preceded by correctness and retrieval requests",
-        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
-        "numeric_results": "docs/benchmark-results/20261031-bolt-maya-reliability.json"
-      },
-      "latest_qualification": {
-        "date": "2026-10-31",
-        "context": 8192,
-        "retrieval_input_tokens": 7373,
-        "checks": {
-          "arithmetic": true,
-          "json": true,
-          "near_window": true,
-          "sustained_stream": true
-        },
-        "sustained_output_tokens": 128,
-        "continuous_generation_s": 281.2668593599992,
-        "fresh_loads": 3,
-        "normal_router_reloads": 2,
-        "normal_router_verification": "pass",
-        "resources_passed": true,
-        "evidence": "docs/BOLT-MAYA-RELIABILITY-20261031.md",
-        "normal_router_guard_samples": 530,
-        "normal_router_sustained_output_tokens": 128,
-        "normal_router_generation_s": 281.8612519469971
-      },
-      "loading_vram_verification": {
-        "date": "2026-10-31",
-        "context": 8192,
-        "gpu_pair": [
-          "RTX 3080 Ti",
-          "RTX 3080"
-        ],
-        "offload_params": [
-          "experts",
-          "out_proj",
-          "in_proj"
-        ],
-        "kv_cache_bytes_per_gpu": 1073741824,
-        "normal_router_reloads": 2,
-        "arithmetic_json_passes": 2,
-        "retrieval_input_tokens": 7373,
-        "stream_output_tokens": 32,
-        "guards_unchanged": true,
-        "evidence": "docs/BOLT-TWO-GPU-LOADING-20261031.md",
-        "numeric_results": "docs/validation-results/20261031-bolt-two-gpu-loading.json"
-      },
-      "tool_call_verification": {
-        "date": "2026-10-31",
-        "parser": "qwen3_coder",
-        "checks": {
-          "auto_tool_call": true,
-          "local_tool_result_roundtrip": true,
-          "streamed_tool_call": true
-        },
-        "request_mode": "Chat Completions; enable_thinking=false",
-        "evidence": "docs/BOLT-TOOL-CALLING-20261031.md",
-        "numeric_results": "docs/validation-results/20261031-bolt-tool-calling.json"
-      },
-      "context_expansion": {
-        "date": "2026-11-01",
-        "from": 32768,
-        "to": 65536,
-        "retrieval_input_tokens": 58893,
-        "normal_router_reloads": 2,
-        "resources_passed": true,
-        "dsh_context_window": 65536,
-        "dsh_max_output_tokens": 4096
-      },
-      "actual_dsh_short_tool_smoke": {
-        "date": "2026-11-01",
-        "result": "pass",
-        "actual_harness": true,
-        "tool": "read",
-        "tool_results_completed": 1,
-        "unloaded": true,
-        "assistant_followup_required": false,
-        "output_cap": 128,
-        "full_context_stress": false,
-        "observed_wall_s": 134.66455235500325
-      },
-      "calculated_context_history": [
-        {
-          "date": "2026-11-01",
-          "previous_context": 65536,
-          "new_context": 163840,
-          "status": "candidate awaiting short actual DSH tool and native memory check",
-          "full_context_stress": false
-        }
-      ],
-      "current_configuration_benchmark": {
-        "date": "2026-11-01",
-        "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
-        "prefill_tps": 234.13699969154735,
-        "ttft_s": 27.200574159622192,
-        "decode_tps": 0.38959527340991257,
-        "prompt_tokens": 6366,
-        "cached_tokens": 0,
-        "output_tokens": 41,
-        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-        "ttft_method": "engine first-token counter",
-        "decode_method": "vLLM one-request decode counter"
-      },
-      "latest_router_validation": {
-        "date": "2026-11-01",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
-        "tool_success": true,
-        "worker_inactive_verified": true,
-        "failure": null
-      },
-      "short_tool_benchmark_history": [
-        {
-          "date": "2026-11-01",
-          "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
-          "source": "docs/benchmark-results/20261101-short-tool.json",
-          "prefill_tps": 235.6006192621003,
-          "ttft_s": 27.032111406326294,
-          "decode_tps": 0.3883599851215817,
-          "prompt_tokens": 6366,
-          "output_tokens": 41,
-          "cached_tokens": 0,
-          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-          "ttft_method": "engine first-token counter",
-          "decode_method": "vLLM one-request decode counter"
-        }
-      ],
-      "hardware_qualification": {
-        "date": "2026-11-03",
-        "board": "MSI Z690 Carbon WiFi DDR5",
-        "cpu": "13900KS",
-        "installed_ram_gib": 32,
-        "transport": "host-staged, no CUDA P2P",
-        "status": "temporarily disabled awaiting RAM upgrade; no new-host model qualification",
-        "installed_ram_status": "temporary 32 GB; more RAM planned"
       },
       "availability": {
         "enabled": true
@@ -2501,6 +2340,57 @@
         "RAM_class": "96GB",
         "short_tool_followup_owned_unload": "passed",
         "full_context_stress": false
+      },
+      "weight_quant": "native-IQ2",
+      "engine": "llama.cpp",
+      "display_name": "NVIDIA Bolt 74B-A9B / native IQ2 / llama.cpp",
+      "tested_retrieval_input": 0,
+      "context_validation": "163840-token native allocation; normal-router actual DSH read/result/exact follow-up and owned unload passed. No new full-context or sustained qualification.",
+      "evidence": "docs/BOLT-IQ2-ENTRY-20261104.md",
+      "storage": {
+        "access": "ram-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/bolt-iq2"
+      },
+      "runtime_manifest": "config/bolt-iq2-runtime.json",
+      "native_request_protocol": "llama.cpp",
+      "api_id_compatibility": "Historical bolt-vllm ID retained; now serves native IQ2 llama.cpp, not AWQ.",
+      "retired_AWQ_evidence": "docs/RAM96-RESTORATION-20261104.md",
+      "selected_settings": {
+        "fit_target_MiB": [
+          384,
+          384
+        ],
+        "cache_type_k": "q8_0",
+        "cache_type_v": "q8_0",
+        "split_mode": "layer",
+        "load_mode": "mmap",
+        "lazy_mode": "off",
+        "batch_size": 256,
+        "ubatch_size": 128,
+        "threads": 8,
+        "speculative_decoding": false
+      },
+      "latest_benchmark": {
+        "date": "2026-11-04",
+        "context": 163840,
+        "prefill_tps": 502.578704582675,
+        "ttft_s": 12.869814672999837,
+        "decode_tps": 68.0458396607666,
+        "prompt_tokens": 6369,
+        "output_tokens": 42,
+        "cached_tokens": 0,
+        "source": "docs/benchmark-results/20261104-bolt-iq2-entry.json",
+        "scope": "Normal-router short actual DSH tool call, loading excluded."
+      },
+      "latest_qualification": {
+        "date": "2026-11-04",
+        "context": 163840,
+        "actual_DSH_read_result_exact_followup": "passed",
+        "owned_unload": "passed",
+        "resources_passed": true,
+        "full_context_stress": false,
+        "source": "docs/benchmark-results/20261104-bolt-iq2-entry.json"
       }
     },
     {

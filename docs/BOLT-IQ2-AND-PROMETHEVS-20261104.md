@@ -1,5 +1,7 @@
 # Bolt low-offload direction and Promethevs — November 4, 2026
 
+**Current operational update:** native IQ2 has replaced the AWQ API/DSH entry following normal-router tool/exact-follow-up/unload verification. [Selected entry and AWQ research](BOLT-IQ2-ENTRY-20261104.md). Earlier assessments below are dated history.
+
 **Later qualification:** native IQ2 Bolt has now been downloaded to SATA, publisher-hash verified and tested on both GPUs. The minimum tested passing offload is2.18 GiB CPU weight buffers at160K allocation,67.49 decode tok/s. [Actual results and failed lower margin](BOLT-NATIVE-IQ2-20261104.md). The earlier assessment below remains dated history; Promethevs was not installed.
 
 The installed Bolt is the 55.33 decimal GB AWQ INT4 checkpoint, not NVIDIA's smaller native 2-bit release. Its two GPUs provide 22 GiB nominal aggregate VRAM; allocation overhead, per-device placement, retained reserves and cache reduce usable weight capacity. Sparse activation does not mean only the active parameters need backing storage. A mostly-GPU configuration needs a different checkpoint or an effective expert cache, not simply removal of the CPU-offload flags.

@@ -39,3 +39,13 @@ class NativeBoltGuards(unittest.TestCase):
    self.assertFalse(worker.native_placement_proof(p,4096))
    p.write_bytes(b'CUDA0 model buffer size = 10000 MiB\nn_ctx = 163840\n')
    self.assertFalse(worker.native_placement_proof(p,163840))
+
+ def test_key_permissions_and_empty_keys_fail_before_launch(self):
+  import tempfile
+  with tempfile.TemporaryDirectory() as d:
+   p=Path(d)/'key';p.write_text('fixture');p.chmod(0o600)
+   self.assertEqual(worker.read_private_key(p),'fixture')
+   p.chmod(0o644)
+   with self.assertRaises(RuntimeError):worker.read_private_key(p)
+   p.chmod(0o600);p.write_text('  ')
+   with self.assertRaises(RuntimeError):worker.read_private_key(p)
