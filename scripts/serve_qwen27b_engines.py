@@ -8,7 +8,7 @@ import socket
 import subprocess
 import sys
 import time
-from profile_catalog import require_enabled, get_profile, worker_budget
+from profile_catalog import require_enabled, get_profile, worker_budget, budget_limit_string
 from storage_policy import verify_storage
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,8 +42,8 @@ def preflight(profile):
                  Path('/proc/self/cgroup').read_text().splitlines() if line.startswith('0::'))
     base = Path('/sys/fs/cgroup') / group.lstrip('/')
     budget = worker_budget(profile)
-    expected_max = 'max' if budget['max'] is None else str(budget['max'] * 1024 ** 3)
-    expected_high = 'max' if budget['high'] is None else str(budget['high'] * 1024 ** 3)
+    expected_max = 'max' if budget['max'] is None else budget_limit_string(budget['max'])
+    expected_high = 'max' if budget['high'] is None else budget_limit_string(budget['high'])
     limit = (base / 'memory.max').read_text().strip()
     if (not group.endswith('/llm-test-qwen27b.service')
             or limit != expected_max

@@ -1,6 +1,7 @@
 """Serve the pinned Flash-Next IQ1_S entry with lazy NVMe table and normal ownership guards."""
 import json,math,os,re,signal,socket,subprocess,sys,time
 from pathlib import Path
+from profile_catalog import budget_limit_string
 ROOT=Path(__file__).resolve().parents[1];WORK=ROOT/'data/router/flash-next-iq1s-llamacpp'
 sys.path.insert(0,str(ROOT/'scripts'))
 from inference_swap_guard import WorkerWatch
@@ -13,7 +14,7 @@ def main():
  from profile_catalog import require_enabled,get_profile,worker_budget,require_host_capacity
  profile=require_enabled(get_profile('flash-next-iq1s-llamacpp'));budget=worker_budget(profile);require_host_capacity(profile)
  assert profile['allocated_context']==12288
- for name,value in [('memory.high',str(budget['high']*1024**3)),('memory.max',str(budget['max']*1024**3)),('memory.swap.max','max')]:assert (base/name).read_text().strip()==value
+ for name,value in [('memory.high',budget_limit_string(budget['high'])),('memory.max',budget_limit_string(budget['max'])),('memory.swap.max','max')]:assert (base/name).read_text().strip()==value
  assert not (ROOT/'data/local-api-key').stat().st_mode & 0o077
  pins=json.loads((ROOT/'config/flash-iq1s-runtime.json').read_text());binary=ROOT/pins['binary'];key=(ROOT/'data/local-api-key').read_text().strip()
  if not key:raise RuntimeError('API key must not be empty')

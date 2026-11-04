@@ -4,7 +4,7 @@ import json
 import os
 from pathlib import Path
 import socket
-from profile_catalog import worker_budget
+from profile_catalog import worker_budget, budget_limit_string
 from storage_policy import verify_storage
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -33,7 +33,7 @@ def serve(profile):
     if not group.endswith('/llm-test-qwen27b.service'):
         raise RuntimeError('Wrong worker cgroup')
     budget = worker_budget(profile)
-    for name, value in [('memory.high', str(budget['high'] * 1024**3)), ('memory.max', str(budget['max'] * 1024**3)), ('memory.swap.max', 'max')]:
+    for name, value in [('memory.high', budget_limit_string(budget['high'])), ('memory.max', budget_limit_string(budget['max'])), ('memory.swap.max', 'max')]:
         if (base / name).read_text().strip() != value:
             raise RuntimeError('Incorrect worker memory limit: ' + name)
     from gpu_transport_health import require_host_staged

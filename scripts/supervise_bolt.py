@@ -2,7 +2,7 @@
 """Run the pinned Bolt profile inside the normal router's bounded owned unit."""
 import os,signal,subprocess,time
 from pathlib import Path
-from profile_catalog import get_profile,worker_budget,host_ram_reserve_gib
+from profile_catalog import get_profile,worker_budget,host_ram_reserve_gib, budget_limit_string
 from storage_policy import verify_storage
 from inference_swap_guard import WorkerWatch,read_cgroup,ROOT,GPU_FREE_MIB
 from lifecycle_telemetry import LifecycleLog,enabled as telemetry_enabled
@@ -18,8 +18,8 @@ def main():
  os.umask(0o077);profile=get_profile('bolt-vllm');budget=worker_budget(profile)
  group=next(x.split('::',1)[1] for x in Path('/proc/self/cgroup').read_text().splitlines() if x.startswith('0::'))
  base=Path('/sys/fs/cgroup')/group.lstrip('/')
- if (not group.endswith('/llm-router-worker.service') or (base/'memory.max').read_text().strip()!=str(budget['max']*2**30)
-     or (base/'memory.high').read_text().strip()!=str(budget['high']*2**30) or (base/'memory.swap.max').read_text().strip()!='max'):raise SystemExit('Start Bolt through the normal bounded model router')
+ if (not group.endswith('/llm-router-worker.service') or (base/'memory.max').read_text().strip()!=budget_limit_string(budget['max'])
+     or (base/'memory.high').read_text().strip()!=budget_limit_string(budget['high']) or (base/'memory.swap.max').read_text().strip()!='max'):raise SystemExit('Start Bolt through the normal bounded model router')
  verify_storage(profile);key_path=ROOT/'data/local-api-key'
  if key_path.stat().st_mode&0o077:raise SystemExit('API key must be owner-only')
  key=key_path.read_text().strip();command,env=build_launch(profile,key)

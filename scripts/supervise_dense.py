@@ -7,7 +7,7 @@ import subprocess
 import sys
 import time
 from inference_swap_guard import WorkerWatch, ROOT, dense_gpu_free_mib
-from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib
+from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib, budget_limit_string
 from lifecycle_telemetry import LifecycleLog, enabled as telemetry_enabled
 
 
@@ -27,8 +27,8 @@ def main():
                  if line.startswith('0::'))
     base = Path('/sys/fs/cgroup') / group.lstrip('/')
     budget = worker_budget(profile)
-    expected_max = 'max' if budget['max'] is None else str(budget['max'] * 1024 ** 3)
-    expected_high = 'max' if budget['high'] is None else str(budget['high'] * 1024 ** 3)
+    expected_max = 'max' if budget['max'] is None else budget_limit_string(budget['max'])
+    expected_high = 'max' if budget['high'] is None else budget_limit_string(budget['high'])
     if (not group.endswith('/llm-test-qwen27b.service')
             or (base / 'memory.max').read_text().strip() != expected_max
             or (base / 'memory.high').read_text().strip() != expected_high

@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Read and validate the single selected setting for each model/quant/engine."""
 import json
+import math
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / 'config/maintained-profiles.json'
-MOE_WORKER_HIGH_GIB = 84
-MOE_WORKER_MAX_GIB = 86
+MOE_WORKER_HIGH_GIB = 88
+MOE_WORKER_MAX_GIB = 90
 
 
 def worker_budget(profile):
@@ -20,11 +21,20 @@ def worker_budget(profile):
         if not dense:
             raise ValueError(f"Unbounded MoE RAM is not approved: {profile['id']}")
         return dict(budget)
-    if (any(type(budget[k]) is not int for k in ('high', 'max'))
+    if (any(type(budget[k]) not in (int, float) or not math.isfinite(budget[k])
+                or budget[k] * 2**30 != int(budget[k] * 2**30) for k in ('high', 'max'))
             or not (0 < budget['high'] <= budget['max'] - 2
                     and budget['max'] <= (36 if dense else MOE_WORKER_MAX_GIB))):
         raise ValueError(f"Invalid bounded worker budget: {profile['id']}")
     return dict(budget)
+
+
+def budget_limit_string(value):
+    """Byte-exact cgroup value, including fractional GiB limits."""
+    return 'max' if value is None else str(int(value * 2**30))
+
+def budget_systemd_size(value):
+    return str(value)+'G' if type(value) is int else budget_limit_string(value)
 
 
 def require_host_capacity(profile, meminfo=None):

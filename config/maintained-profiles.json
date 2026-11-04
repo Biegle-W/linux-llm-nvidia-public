@@ -416,10 +416,7 @@
         "normal_fresh_loads_verified": 2
       },
       "availability": {
-        "enabled": true,
-        "temporary": false,
-        "reason": "VRAM-only profile enabled for unlocked current-host qualification",
-        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
+        "enabled": true
       },
       "current_hardware_short_observation": {
         "date": "2026-11-03",
@@ -441,7 +438,13 @@
         "evidence": "docs/REQUESTED-TWO-MODEL-CHECKS-20261103.md",
         "scope": "Single uncached short call; no full-context or sustained qualification; selected settings unchanged"
       },
-      "minimum_usable_ram_gib": 90
+      "minimum_usable_ram_gib": 90,
+      "ram_upgrade_qualification": {
+        "date": "2026-11-04",
+        "RAM_class": "96GB",
+        "short_tool_followup_owned_unload": "passed",
+        "full_context_stress": false
+      }
     },
     {
       "id": "qwen27b-sglang",
@@ -1056,10 +1059,7 @@
         "normal_fresh_loads_verified": 2
       },
       "availability": {
-        "enabled": true,
-        "temporary": false,
-        "reason": "VRAM-only profile enabled for unlocked current-host qualification",
-        "restore_policy": "Explicit RAM-upgrade confirmation plus measured capacity and guarded requalification; no timer or automatic restoration"
+        "enabled": true
       },
       "current_hardware_short_observation": {
         "date": "2026-11-03",
@@ -1081,7 +1081,13 @@
         "evidence": "docs/REQUESTED-TWO-MODEL-CHECKS-20261103.md",
         "scope": "Single uncached short call; no full-context or sustained qualification; selected settings unchanged"
       },
-      "minimum_usable_ram_gib": 90
+      "minimum_usable_ram_gib": 90,
+      "ram_upgrade_qualification": {
+        "date": "2026-11-04",
+        "RAM_class": "96GB",
+        "short_tool_followup_owned_unload": "passed",
+        "full_context_stress": false
+      }
     },
     {
       "id": "flash-next-strata",
@@ -1132,8 +1138,8 @@
         "checkpoint_directory": "models/strata/models/IQ3_XXS"
       },
       "worker_memory_gib": {
-        "high": 84,
-        "max": 86,
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
         "swap": null
       },
       "context_expansion_assessment": {
@@ -1467,10 +1473,20 @@
         "installed_ram_status": "temporary 32 GB; more RAM planned"
       },
       "availability": {
-        "enabled": false,
-        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+        "enabled": true
       },
-      "minimum_usable_ram_gib": 90
+      "minimum_usable_ram_gib": 90,
+      "worker_ram_headroom": {
+        "hard_outside_bytes": 2147483648,
+        "measured_MemTotal_bytes": 98537123840,
+        "reclaim_before_hard_bytes": 2147483648
+      },
+      "ram_upgrade_qualification": {
+        "date": "2026-11-04",
+        "RAM_class": "96GB",
+        "short_tool_followup_owned_unload": "passed",
+        "full_context_stress": false
+      }
     },
     {
       "id": "glm-maya",
@@ -1547,8 +1563,8 @@
         "checkpoint_directory": "models/maya/Maya-S24"
       },
       "worker_memory_gib": {
-        "high": 84,
-        "max": 86,
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
         "swap": null
       },
       "latest_qualification": {
@@ -1834,10 +1850,20 @@
         "installed_ram_status": "temporary 32 GB; more RAM planned"
       },
       "availability": {
-        "enabled": false,
-        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+        "enabled": true
       },
-      "minimum_usable_ram_gib": 90
+      "minimum_usable_ram_gib": 90,
+      "worker_ram_headroom": {
+        "hard_outside_bytes": 2147483648,
+        "measured_MemTotal_bytes": 98537123840,
+        "reclaim_before_hard_bytes": 2147483648
+      },
+      "ram_upgrade_qualification": {
+        "date": "2026-11-04",
+        "RAM_class": "96GB",
+        "short_tool_followup_owned_unload": "passed",
+        "full_context_stress": false
+      }
     },
     {
       "id": "deepseek-maya",
@@ -1900,8 +1926,8 @@
         "base_weight_gb": 232.97960842
       },
       "worker_memory_gib": {
-        "high": 84,
-        "max": 86,
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
         "swap": null
       },
       "selected_settings": {
@@ -2266,10 +2292,20 @@
         "installed_ram_status": "temporary 32 GB; more RAM planned"
       },
       "availability": {
-        "enabled": false,
-        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+        "enabled": true
       },
-      "minimum_usable_ram_gib": 90
+      "minimum_usable_ram_gib": 90,
+      "worker_ram_headroom": {
+        "hard_outside_bytes": 2147483648,
+        "measured_MemTotal_bytes": 98537123840,
+        "reclaim_before_hard_bytes": 2147483648
+      },
+      "ram_upgrade_qualification": {
+        "date": "2026-11-04",
+        "RAM_class": "96GB",
+        "short_tool_followup_owned_unload": "passed",
+        "full_context_stress": false
+      }
     },
     {
       "id": "bolt-vllm",
@@ -2290,8 +2326,8 @@
         "checkpoint_directory": "models/bolt-awq-int4"
       },
       "worker_memory_gib": {
-        "high": 84,
-        "max": 86,
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2452,10 +2488,20 @@
         "installed_ram_status": "temporary 32 GB; more RAM planned"
       },
       "availability": {
-        "enabled": false,
-        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+        "enabled": true
       },
-      "minimum_usable_ram_gib": 90
+      "minimum_usable_ram_gib": 90,
+      "worker_ram_headroom": {
+        "hard_outside_bytes": 2147483648,
+        "measured_MemTotal_bytes": 98537123840,
+        "reclaim_before_hard_bytes": 2147483648
+      },
+      "ram_upgrade_qualification": {
+        "date": "2026-11-04",
+        "RAM_class": "96GB",
+        "short_tool_followup_owned_unload": "passed",
+        "full_context_stress": false
+      }
     },
     {
       "id": "deepseek-unsloth-strata",
@@ -2473,8 +2519,8 @@
         "manifest": "config/deepseek-unsloth-runtime.json"
       },
       "worker_memory_gib": {
-        "high": 84,
-        "max": 86,
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2581,10 +2627,20 @@
         "installed_ram_status": "temporary 32 GB; more RAM planned"
       },
       "availability": {
-        "enabled": false,
-        "reason": "96GB RAM verified and larger-cache candidate prepared; awaiting restored current-boot unlock/transport proof and guarded requalification."
+        "enabled": true
       },
-      "minimum_usable_ram_gib": 90
+      "minimum_usable_ram_gib": 90,
+      "worker_ram_headroom": {
+        "hard_outside_bytes": 2147483648,
+        "measured_MemTotal_bytes": 98537123840,
+        "reclaim_before_hard_bytes": 2147483648
+      },
+      "ram_upgrade_qualification": {
+        "date": "2026-11-04",
+        "RAM_class": "96GB",
+        "short_tool_followup_owned_unload": "passed",
+        "full_context_stress": false
+      }
     },
     {
       "id": "qwen27b-tensorfold",
@@ -2653,7 +2709,13 @@
           "evidence": "docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md"
         }
       ],
-      "minimum_usable_ram_gib": 90
+      "minimum_usable_ram_gib": 90,
+      "ram_upgrade_qualification": {
+        "date": "2026-11-04",
+        "RAM_class": "96GB",
+        "short_tool_followup_owned_unload": "passed",
+        "full_context_stress": false
+      }
     },
     {
       "id": "flash-next-iq1s-llamacpp",
@@ -2667,8 +2729,8 @@
       ],
       "allocated_context": 12288,
       "worker_memory_gib": {
-        "high": 84,
-        "max": 86,
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2715,7 +2777,18 @@
         "ttft_method": "client first delivered content/tool delta; parser buffering included",
         "decode_method": "native request timings"
       },
-      "minimum_usable_ram_gib": 90
+      "minimum_usable_ram_gib": 90,
+      "worker_ram_headroom": {
+        "hard_outside_bytes": 2147483648,
+        "measured_MemTotal_bytes": 98537123840,
+        "reclaim_before_hard_bytes": 2147483648
+      },
+      "ram_upgrade_qualification": {
+        "date": "2026-11-04",
+        "RAM_class": "96GB",
+        "short_tool_followup_owned_unload": "passed",
+        "full_context_stress": false
+      }
     }
   ],
   "host_reclaim_policy": {

@@ -8,7 +8,7 @@ import sys
 import subprocess
 import signal
 import time
-from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib, require_enabled
+from profile_catalog import get_profile, worker_budget, host_ram_reserve_gib, require_enabled, budget_limit_string
 from storage_policy import verify_storage
 from maya_cachebound_runtime import verify as verify_cachebound_runtime
 from inference_policy import apply_native_idle
@@ -47,7 +47,7 @@ def main():
     cgroup_base = Path('/sys/fs/cgroup') / group.lstrip('/')
     if (not group.endswith('/llm-router-worker.service') or limit == 'max'
             or int(limit) != budget['max'] * 1024 ** 3
-            or (cgroup_base / 'memory.high').read_text().strip() != str(budget['high'] * 1024 ** 3)
+            or (cgroup_base / 'memory.high').read_text().strip() != budget_limit_string(budget['high'])
             or (cgroup_base / 'memory.swap.max').read_text().strip() != 'max'):
         sys.exit('Start MoE workers through the model router with the selected bounded budget.')
     verify_storage(profile)

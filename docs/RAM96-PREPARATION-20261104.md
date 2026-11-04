@@ -1,5 +1,7 @@
 # Larger-RAM restoration preparation — November 4, 2026
 
+**Superseded after reboot:** unlock/transport passed and all nine larger-RAM profiles passed their requested tool/follow-up/unload checks. The user subsequently selected exact 2 GiB hard-limit headroom (87.76984787/89.76984787 GiB); 446 CPU checks passed. [Current restoration and results](RAM96-RESTORATION-20261104.md). The preparation and firmware blocker below are retained as dated history.
+
 Linux now reports **96,227,652 KiB / 91.77 GiB usable RAM**, consistent with a96 GB-class installation. This is measured MemTotal, not merely an increase in free RAM. DIMM sizes/speed were not read because administrative DMI access requires authentication; no memory-frequency, timing or voltage claim is made.
 
 The human requested restoration, larger RAM caches, forum research and benchmarks for all nine profiles, then explicitly chose **prepare the settings first; reboot later** after the firmware issue was identified. Preparation and 445 CPU tests are complete. **No GPU benchmark or restored-profile qualification has run on this installation.** Five paused profiles remain paused. Four previously enabled entries remain in the catalog, but every model start still requires the existing boot proofs.

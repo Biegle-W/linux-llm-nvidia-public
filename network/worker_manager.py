@@ -10,7 +10,7 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from profile_catalog import load_catalog, worker_budget, profile_enabled
+from profile_catalog import load_catalog, worker_budget, profile_enabled, budget_systemd_size
 from inference_policy import load_policy
 from visible_terminal import open_monitor, close_backend_monitor
 from inference_swap_guard import WorkerWatch, llama_requests_busy, TelemetryError
@@ -300,8 +300,8 @@ class Workers:
                 budget = worker_budget(profile)
                 cmd = ['systemd-run', '--user', '--collect', '--service-type=exec',
                        '--unit=' + MOE_UNIT,
-                       '--property=MemoryHigh=' + str(budget['high']) + 'G',
-                       '--property=MemoryMax=' + str(budget['max']) + 'G',
+                       '--property=MemoryHigh=' + budget_systemd_size(budget['high']),
+                       '--property=MemoryMax=' + budget_systemd_size(budget['max']),
                        '--property=MemorySwapMax=infinity', '--property=OOMPolicy=kill',
                        '--property=LimitRTTIME=infinity', '--setenv=NVIDIA_API_ONLY=' + ('1' if os.environ.get('NVIDIA_API_ONLY') == '1' else '0'), '--working-directory=' + str(ROOT),
                        '/usr/bin/python3', str(ROOT / 'scripts/serve_router_moe.py'), profile_id]

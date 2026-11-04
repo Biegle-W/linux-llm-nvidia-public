@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Current: all nine restored with two-GiB headroom — November 4, 2026
+
+The corrected boot passed early GPU unlock and current-boot host-staged transport. Linux sees 91.76984787 GiB usable RAM. All nine normal-router DSH read/result/exact-follow-up and owned-unload checks passed; all entries are enabled and workers finish idle. The six RAM-heavy profiles now use 87.76984787/89.76984787 GiB high/hard limits, leaving exactly 2 GiB outside the hard cap as requested. Dense profiles retain 32/36 GiB; the independent 2 GiB available-memory stop and all other guards remain. 446 CPU tests passed. Larger supported caches are selected; runtime pins, contexts and defaults are preserved, and daily updates remain paused. This supersedes earlier preparation/waiting and temporary 32 GB operational descriptions below; historical measurements retain their dates and hardware. [All nine benchmarks, exact guard tables and resource evidence](RAM96-RESTORATION-20261104.md).
+
 ## Larger RAM verified; restoration prepared, GPU checks awaiting firmware — November 4, 2026
 
 Linux now sees 91.77 GiB usable RAM. Nine larger-RAM candidate definitions and cache configurations are prepared: dense 32/36 GiB worker caps, RAM-heavy 84/86 GiB, and a new 90 GiB minimum measured-capacity gate.445 CPU tests passed. Five paused profiles remain disabled; no GPU benchmark or restoration qualification has run. Secure Boot is enabled again, early GPU unlock health failed and its dependent current-boot transport proof is missing. The human chose preparation first and will correct Secure Boot/reboot later. No guard was bypassed; other policies, engine pins, contexts and defaults are preserved. API/hub/DSH remain healthy and GPU workers are idle. Earlier benchmark rows retain their measured 32/64 GB scope. [Prepared settings, forum/pinning research and continuation](RAM96-PREPARATION-20261104.md).
