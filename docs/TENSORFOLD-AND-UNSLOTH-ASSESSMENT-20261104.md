@@ -1,6 +1,6 @@
 # TensorFold Qwen27B trial and Unsloth Flash-Next assessment — November 4, 2026
 
-Subsequent update: the tested drafted configuration is now a maintained entry; the newly requested IQ1_S trial is separate. See [entry deployment and new trial](TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md). The isolated measurements below retain their original scope.
+Subsequent update: the tested drafted configuration is now a maintained entry; the separately requested IQ1_S SSD-table trial has also passed its short tool/result/follow-up and unload check. See [entry deployment and new trial](TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md). The isolated measurements below retain their original scope.
 
 TensorFold 1.2.2 passed actual DSH read-tool/result/exact-follow-up checks in two isolated configurations, then owned unload and GPU-release verification. The drafted configuration produces a fast short decode burst, but slower cold prefill, lower target precision and much smaller context than the maintained engines. It is an experimental candidate, not a production replacement. Maintained profiles, guards and saved DSH choices are unchanged.
 

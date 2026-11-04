@@ -82,7 +82,176 @@
     }
   },
   "flash_next_iq1s": {
-    "status": "pinned download and isolated trial preparation in progress; no inference result yet",
-    "revision": "d96201194f103c906994f283f504209dc8d2a10c"
+    "status": "isolated guarded actual DSH tool/result/exact followup and owned unload PASS; not added to enabled catalog",
+    "repository": "unsloth/Qwen3.8-Flash-Next-GGUF",
+    "revision": "d96201194f103c906994f283f504209dc8d2a10c",
+    "quant": "Unsloth Dynamic v3.1 UD-IQ1_S with IQ4_NL ngram table",
+    "engine": "llama.cpp build11909",
+    "source_commit": "caa8191df159f764fb0160e3d2fc6be008948aee",
+    "binary_sha256": "eed3e9ba6633c1d3ef2f835a0ebb265c6453680e08daca0f1cdd2c6d37c1b86f",
+    "runtime_files_sha256": {
+      "runtimes/llama.cpp/build/bin/libmtmd.so.0.7.0": "7e13afe0407f325e0c6f09dd26bed2e29baa033e5d4c3e1ba41c5ab07c395d4c",
+      "runtimes/llama.cpp/build/bin/libggml-cpu.so.0.27.0": "4dbd15345d38d8a8f9f501f8754d0b28b5badd53ac3818cc798b9d865523a5e7",
+      "runtimes/llama.cpp/build/bin/libggml.so.0.27.0": "34f93beb000f44fcd0575209bf351dbeb6aba23f8f9dbfdfeda66b8598fcb29f",
+      "runtimes/llama.cpp/build/bin/libggml-cuda.so.0.27.0": "703ab7c8b7eef61b2a23bd826e026004b8e3a74abec9a22f9dac567b381c4cea",
+      "runtimes/llama.cpp/build/bin/libggml-base.so.0.27.0": "dc13255af5a645ab28691d3b415c2ebf5e8cb050e79090e3aa1ebfa63d88d9d5",
+      "runtimes/llama.cpp/build/bin/libllama.so.0.7.0": "6ed0f8f9cef622ae5ae18de0b0379d03cff1ab0569e299a383918888b4b714f7",
+      "runtimes/llama.cpp/build/bin/libllama-common.so.0.7.0": "1b460989281abf4ff670b8bd96d423cdecc9a1c488938c00d4b67da9425d21ac",
+      "runtimes/llama.cpp/build/bin/libllama-cli-impl.so": "1a06c3ff5afaf09fbc4d9dee69a3932bd42dec8550990d419796831dcfc5fca9",
+      "runtimes/llama.cpp/build/bin/libllama-bench-impl.so": "400d9ccbb62c7b58d34a06bea00d17fca83e0f03efc9e647dde0b5cba6203c1a",
+      "runtimes/llama.cpp/build/bin/libllama-server-impl.so": "2826ee1fc754a1852c8fa76a3b1d5092676b6858ea9d8198698e2d04734de219"
+    },
+    "checkpoint_weight_bytes": 66379180698,
+    "ngram_table_bytes": 28800138432,
+    "checkpoint_storage": "NVMe SSD",
+    "hash_receipts": [
+      {
+        "file": "Qwen3.8-Flash-Next-UD-IQ1_S-00001-of-00003.gguf",
+        "bytes": 10946618,
+        "sha256": "df6ba2c00267aa4853231fdb203ba76b67b7eadcfb372df65842760b9efa1a8d",
+        "publisher_sha256_matched": true
+      },
+      {
+        "file": "Qwen3.8-Flash-Next-UD-IQ1_S-00002-of-00003.gguf",
+        "bytes": 37568095648,
+        "sha256": "7101e65fb6084e65c9e2c678291d8b6b62dfcce89c422958633cf5585a68cbb6",
+        "publisher_sha256_matched": true
+      },
+      {
+        "file": "Qwen3.8-Flash-Next-UD-IQ1_S-00003-of-00003.gguf",
+        "bytes": 28800138432,
+        "sha256": "05716382c280d999b81afff92b2d527fadbfd926ac225ffdc273f2d1d13331c6",
+        "publisher_sha256_matched": true
+      }
+    ],
+    "context": 12288,
+    "placement": "Both GPUs plus CPU-mapped weights; ngram table read lazily from SSD-backed mapping",
+    "configuration": {
+      "load_mode": "mmap",
+      "lazy_mode": "on",
+      "fit_target_MiB": [
+        1536,
+        1536
+      ],
+      "log_verbosity": 4
+    },
+    "performance": {
+      "prefill_tps": 101.50091497043279,
+      "ttft_s": 58.11269205499957,
+      "decode_tps": 29.144509138936144,
+      "prompt_tokens": 5831,
+      "output_tokens": 42,
+      "cached_tokens": 0,
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 5831,
+        "prompt_ms": 57447.758,
+        "prompt_per_token_ms": 9.852127936889042,
+        "prompt_per_second": 101.50091497043279,
+        "predicted_n": 42,
+        "predicted_ms": 1406.783,
+        "predicted_per_token_ms": 34.311780487804874,
+        "predicted_per_second": 29.144509138936144
+      },
+      "ttft_method": "client first delivered content/tool delta; parser buffering included",
+      "prefill_method": "native request timings",
+      "decode_method": "native request timings"
+    },
+    "tool": {
+      "phase": "pass",
+      "tool_wall_s": 63.55280066399973,
+      "tool_calls": 1,
+      "matching_tool_results": 1,
+      "followup_passed": true,
+      "strict_final_format": true,
+      "unloaded": true,
+      "unload_duration_s": 1.0117662140000903,
+      "reservation_released": true
+    },
+    "guards": {
+      "worker_RAM_high_max_GiB": [
+        24,
+        26
+      ],
+      "host_reserve_GiB": 2,
+      "free_VRAM_floor_MiB": 256,
+      "temperature_stop_C": 82,
+      "swap_write_MiB_s": 128,
+      "swap_combined_MiB_s": 160,
+      "swap_window_s": 30,
+      "PSI_full_percent": 15,
+      "bad_samples": 3
+    },
+    "sampled_resources": {
+      "samples": 59,
+      "median_interval_s": 2.072940230369568,
+      "worker_ram_peak_GiB": 23.99228286743164,
+      "swap_peak_MiB": 287.23828125,
+      "gpu_free_min_MiB": [
+        1591.0,
+        1510.0
+      ],
+      "gpu_temperature_max_C": [
+        55.0,
+        39.0
+      ],
+      "host_available_min_GiB": 26.978626251220703,
+      "memory_events": "low 0\nhigh 3367\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 61",
+      "limits": {
+        "memory.high": "25769803776",
+        "memory.max": "27917287424",
+        "memory.swap.max": "max"
+      },
+      "guard_violations": [],
+      "sampled_PSI_full_max_percent": 23.58,
+      "swap_in_pages_delta": 31978,
+      "swap_out_pages_delta": 68123,
+      "inference_PSI_full_max_percent": 7.38,
+      "loading_PSI_full_max_percent": 23.58,
+      "complete_window_PSI_full_max_percent": 2.53,
+      "active_complete_windows": 15,
+      "active_write_MiB_s_max": 2.3596338281727878,
+      "active_combined_MiB_s_max": 3.1307149526020313,
+      "guard_policy_profile": "flash-next-strata policy reused for isolated new IQ1S; not the disabled IQ3 worker"
+    },
+    "table_mapping_proof": {
+      "native_lazy_log": [
+        "0.03.847.759 I add: tensor per_layer_token_embd.weight (size = 27465 MiB) lazy read enabled"
+      ],
+      "mappings": [
+        {
+          "mapped_bytes": 28800139264,
+          "permissions": "r--s",
+          "file_offset": 0,
+          "shard": "Qwen3.8-Flash-Next-UD-IQ1_S-00003-of-00003.gguf"
+        }
+      ],
+      "mapping_total_bytes": 28800139264,
+      "physical_transport": "nvme verified by storage_policy before launch",
+      "ready_guard_reason": null,
+      "cache_scope": "Publisher SHA256 read precedes loading; OS file cache is not dropped. SSD mapping proof is required, but table residency/cache warmth and cold SSD speed are not established by this short test."
+    },
+    "table_residency_during_prefill": {
+      "phase": "inference",
+      "table_mappings": [
+        {
+          "Size_KiB": 28125136,
+          "Rss_KiB": 186388,
+          "Pss_KiB": 186388,
+          "Shared_Clean_KiB": 0,
+          "Shared_Dirty_KiB": 0,
+          "Private_Clean_KiB": 186388,
+          "Private_Dirty_KiB": 0,
+          "Swap_KiB": 0
+        }
+      ],
+      "interpretation": "Point-in-time mapped residency, not cold-cache or total system file-cache occupancy."
+    },
+    "retained_attempts": [
+      "attempt1-log-proof-refusal: model loaded but required library-info lazy table log suppressed by default verbosity3; no inference; owned unload/release pass. common/log.cpp maps GGML_INFO toTRACE4; corrected instrumentation only.",
+      "attempt2-port-timewait: preflight bind refused closed port retained in TIME_WAIT, no worker/reservation started; SO_REUSEADDR on preflight probe now ignores TIME_WAIT while still refusing a live listener."
+    ],
+    "cache_scope": "Publisher SHA256 read precedes loading; OS file cache is not dropped. SSD mapping proof is required, but table residency/cache warmth and cold SSD speed are not established by this short test.",
+    "limits": "One short actual DSH call; no full-context, sustained workload, cold-SSD or quality comparison. First proof stop occurred before inference; one closed-port TIME_WAIT preflight launched no worker. No resource guard relaxed."
   }
 }

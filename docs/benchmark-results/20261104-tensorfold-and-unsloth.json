@@ -230,5 +230,11 @@
     "GPU_reservation": false,
     "maintained_settings_changed": false,
     "disabled_profiles_reenabled": false
+  },
+  "subsequent_operational_update": {
+    "evidence": "docs/benchmark-results/20261104-tensorfold-entry-and-flash-iq1s.json",
+    "TensorFold": "same drafted12K target is now an enabled maintained entry; normal-router short DSH check passed",
+    "FlashNext": "new IQ1_S all3publisher hashes and isolated guarded actual DSH tool/result/exact followup/unload passed with lazy NVMe ngram mapping",
+    "historical_scope": "Earlier candidate-only/download-not-started descriptions above refer to the original assessment, not final operational state."
   }
 }
