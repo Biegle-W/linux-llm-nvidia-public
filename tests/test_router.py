@@ -165,7 +165,13 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(status,200);self.assertEqual(json.loads(data)['model'],'qwen27b-hyperqwen')
         self.assertEqual(self.backend.body['model'],'worker-name')
     def test_stream_tool_calls_preserved(self):
-        status,data=self.request('/v1/chat/completions',{'model':'qwen27b-hyperqwen','messages':[],'stream':True,'tools':[{'type':'function','function':{'name':'read_file'}}]})
+        # The final response byte can arrive before the handler's release finally block.
+        settled=threading.Event();release=self.server.workers.release
+        def finish():
+            release();settled.set()
+        with patch.object(self.server.workers,'release',side_effect=finish):
+            status,data=self.request('/v1/chat/completions',{'model':'qwen27b-hyperqwen','messages':[],'stream':True,'tools':[{'type':'function','function':{'name':'read_file'}}]})
+            self.assertTrue(settled.wait(2),'Request admission was not released')
         self.assertEqual(status,200);self.assertIn(b'[DONE]',data)
         events=[json.loads(l[5:]) for l in data.splitlines() if l.startswith(b'data:') and b'[DONE]' not in l]
         self.assertEqual(events[0]['model'],'qwen27b-hyperqwen')

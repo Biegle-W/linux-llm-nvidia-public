@@ -1,5 +1,9 @@
 # Model storage policy
 
+## Native IQ2 Bolt candidate — November 4, 2026
+
+The22.018 GB official text checkpoint is a mostly GPU/RAM-resident candidate and lives on SATA at`models/engine-tests/bolt-iq2`. Publisher SHA256 and physical SATA ancestry passed. It uses the existing two GPUs with bounded partial CPU-weight placement; it is not an SSD expert-streaming pack. The separate vision projector/drafter were not downloaded. [Measured placement and guards](BOLT-NATIVE-IQ2-20261104.md).
+
 ## Unsloth DeepSeek split-storage profile — October 31
 
 The additional `deepseek-unsloth-strata` profile has an explicit per-file policy:

@@ -1,5 +1,16 @@
 # All current entry benchmarks — November 4, 2026
 
+## New isolated native IQ2 Bolt comparison
+
+The maintained nine-entry table below still includes the selected AWQ profile. Native IQ2 passed as a separate candidate at the same163,840 allocation; it is not silently substituted for AWQ. These are single short DSH tool-call measurements, with loading excluded; native2-bit and AWQ differ in quantization, engine and CPU placement.
+
+| Model / quant | Engine | Prefill tok/s | TTFT s | Decode tok/s | Context tokens | Storage GB | Storage location |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Bolt74B-A9B / AWQ INT4 reference | vLLM-offload | 217.35 | 29.320 | 0.361 | 163,840 | 55.333 | SATA SSD |
+| Bolt74B-A9B / native IQ2;384 MiB fit | llama.cpp11909 | 506.46 | 12.744 | 67.49 | 163,840 | 22.018 | SATA SSD |
+
+[All native fit results, guards and comparison limits](BOLT-NATIVE-IQ2-20261104.md).
+
 All nine profiles passed one normal-router actual DSH read/tool-result/exact-follow-up and owned unload on the corrected boot. Five paused profiles are restored in the API and DSH. Early GPU unlock and current-boot host-staged transport proof passed after the user disabled Secure Boot. Linux reports 96,227,660 KiB / 91.76984787 GiB usable RAM; the RTX 3080 Ti / RTX 3080 use CPU PCIe4 x8/x8 without CUDA peer access. This does not establish a P2P comparison.
 
 At the user's request the six RAM-heavy profiles leave **exactly 2 GiB outside the hard worker limit**: MemoryMax 96,389,640,192 bytes (89.76984787 GiB), MemoryHigh 94,242,156,544 bytes (87.76984787 GiB). Reclaim starts 2 GiB before the hard cap. These are fixed measured-boot settings, not an automatic expansion on future hardware. The separate 2 GiB available-host-memory stop remains. Dense GPU-resident profiles retain 32/36 GiB. Every profile requires at least 90 GiB Linux MemTotal before loading these settings. Effective kernel byte limits were verified in every check.

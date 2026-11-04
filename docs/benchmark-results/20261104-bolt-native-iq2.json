@@ -1,0 +1,460 @@
+{
+  "date": "2026-11-04",
+  "hardware": "i9-13900KS / 91.76984787 GiB usable RAM / RTX3080Ti12GiB + RTX308010GiB; direct CPU PCIe4 x8/x8, host-staged/no CUDA peer",
+  "candidate": "Official native IQ2 Bolt text GGUF; no projector or drafter",
+  "pins": {
+    "binary": "runtimes/llama.cpp/build/bin/llama-server",
+    "binary_sha256": "eed3e9ba6633c1d3ef2f835a0ebb265c6453680e08daca0f1cdd2c6d37c1b86f",
+    "source_commit": "caa8191df159f764fb0160e3d2fc6be008948aee",
+    "runtime_files_sha256": {
+      "runtimes/llama.cpp/build/bin/libmtmd.so.0.7.0": "7e13afe0407f325e0c6f09dd26bed2e29baa033e5d4c3e1ba41c5ab07c395d4c",
+      "runtimes/llama.cpp/build/bin/libggml-cpu.so.0.27.0": "4dbd15345d38d8a8f9f501f8754d0b28b5badd53ac3818cc798b9d865523a5e7",
+      "runtimes/llama.cpp/build/bin/libggml.so.0.27.0": "34f93beb000f44fcd0575209bf351dbeb6aba23f8f9dbfdfeda66b8598fcb29f",
+      "runtimes/llama.cpp/build/bin/libggml-cuda.so.0.27.0": "703ab7c8b7eef61b2a23bd826e026004b8e3a74abec9a22f9dac567b381c4cea",
+      "runtimes/llama.cpp/build/bin/libggml-base.so.0.27.0": "dc13255af5a645ab28691d3b415c2ebf5e8cb050e79090e3aa1ebfa63d88d9d5",
+      "runtimes/llama.cpp/build/bin/libllama.so.0.7.0": "6ed0f8f9cef622ae5ae18de0b0379d03cff1ab0569e299a383918888b4b714f7",
+      "runtimes/llama.cpp/build/bin/libllama-common.so.0.7.0": "1b460989281abf4ff670b8bd96d423cdecc9a1c488938c00d4b67da9425d21ac",
+      "runtimes/llama.cpp/build/bin/libllama-cli-impl.so": "1a06c3ff5afaf09fbc4d9dee69a3932bd42dec8550990d419796831dcfc5fca9",
+      "runtimes/llama.cpp/build/bin/libllama-bench-impl.so": "400d9ccbb62c7b58d34a06bea00d17fca83e0f03efc9e647dde0b5cba6203c1a",
+      "runtimes/llama.cpp/build/bin/libllama-server-impl.so": "2826ee1fc754a1852c8fa76a3b1d5092676b6858ea9d8198698e2d04734de219"
+    },
+    "repository": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-GGUF",
+    "revision": "e0fecb69cb3e5e4c5e8a056fa2aec98c78e91246",
+    "checkpoint_directory": "models/engine-tests/bolt-iq2",
+    "first_shard": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf",
+    "planned_context": 163840,
+    "fit_target_MiB": [
+      384,
+      384
+    ],
+    "cache_type": "q8_0",
+    "files": [
+      {
+        "file": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB.gguf",
+        "bytes": 22018326528,
+        "sha256": "91d63363e782c8a3d5f4be42816eba8e0d42dd2530bd07a7d0d2dc440599af75",
+        "publisher_sha256_matched": true
+      }
+    ]
+  },
+  "baseline_AWQ": {
+    "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+    "quant": "AWQ-INT4",
+    "engine": "vLLM-offload",
+    "context": 163840,
+    "weight_gb": 55.332700488,
+    "storage": "SATA SSD",
+    "metrics": {
+      "prefill_tps": 217.35370225526495,
+      "ttft_s": 29.319944143295288,
+      "decode_tps": 0.36112997673219366,
+      "prompt_tokens": 6369,
+      "output_tokens": 41,
+      "cached_tokens": 0,
+      "native_timings": {},
+      "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+      "ttft_method": "engine first-token counter",
+      "decode_method": "vLLM one-request decode counter"
+    },
+    "checks": {
+      "phase": "pass",
+      "followup_passed": true,
+      "strict_final_format": false,
+      "unloaded": true,
+      "wall_s": 257.16456791200017
+    },
+    "guards": {
+      "worker_RAM_GiB": {
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
+        "swap": null
+      },
+      "host_available_reserve_GiB": 2,
+      "explicit_GPU_free_floor_MiB": 256,
+      "native_cache_reserve_MiB": null,
+      "startup_free_MiB": null,
+      "loading_PSI_percent": 15,
+      "resource_bad_samples": 3,
+      "swap_occupancy": "unlimited",
+      "swap_write_MiB_s": 1,
+      "swap_read_plus_write_MiB_s": 8,
+      "swap_window_s": 30,
+      "active_PSI_percent": 10,
+      "PSI_bad_samples": 3
+    },
+    "resources": {
+      "lifecycle_samples": 101,
+      "lifecycle_median_interval_s": 5.081465721130371,
+      "charged_worker_RAM_peak_GiB": 50.516502380371094,
+      "swap_peak_MiB": 0.0,
+      "minimum_host_available_GiB": 38.659263610839844,
+      "GPU_free_min_MiB_all_phases": [
+        5541.0,
+        3654.0
+      ],
+      "GPU_free_min_MiB_nonloading": [
+        5643.0,
+        3654.0
+      ],
+      "GPU_temperature_max_C": [
+        59.0,
+        47.0
+      ],
+      "memory_events": {
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0
+      },
+      "effective_kernel_limits": {
+        "memory.high": "94242156544",
+        "memory.max": "96389640192",
+        "memory.swap.max": "max"
+      },
+      "guard_violations": [],
+      "complete_active_windows": 92,
+      "active_swap_write_MiB_s_max": 0.0,
+      "active_swap_combined_MiB_s_max": 0.0,
+      "complete_window_full_PSI_max_percent": 0.0,
+      "loading_full_PSI_max_percent": 0.0,
+      "inference_full_PSI_max_percent": 0.0
+    },
+    "previous_reference": {
+      "date": "2026-11-03",
+      "hardware": "Core i5-13600KF; RTX3080Ti12GB + RTX308010GB behind existing switch;64GB installed RAM; desktop active on second GPU",
+      "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+      "quant": "AWQ-INT4",
+      "engine": "vLLM-offload",
+      "context": 163840,
+      "weight_gb": 55.332700488,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 240.66212077488655,
+        "ttft_s": 26.452385187149048,
+        "decode_tps": 0.3922516899564806,
+        "prompt_tokens": 6364,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "source": "docs/benchmark-results/20261103-vram256-optimization.json",
+      "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      }
+    },
+    "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+  },
+  "qualified_minimum_tested": {
+    "phase": "pass",
+    "fit_target_MiB": [
+      384,
+      384
+    ],
+    "context": 163840,
+    "metrics": {
+      "measurement": "first actual DSH tool-call generation",
+      "loading_excluded": true,
+      "prompt_tokens": 6380,
+      "output_tokens": 45,
+      "cached_tokens": 0,
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 6380,
+        "prompt_ms": 12597.151,
+        "prompt_per_token_ms": 1.9744750783699059,
+        "prompt_per_second": 506.4637234244473,
+        "predicted_n": 45,
+        "predicted_ms": 651.931,
+        "predicted_per_token_ms": 14.816613636363638,
+        "predicted_per_second": 67.49180511434491
+      },
+      "client_ttft_s": 12.744188373999805,
+      "client_last_token_s": 13.242217170000004,
+      "meaningful_sse_chunks": 25,
+      "generation_wall_s": 13.291547784000159,
+      "usage": {
+        "completion_tokens": 45,
+        "prompt_tokens": 6380,
+        "total_tokens": 6425,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "prefill_tps": 506.4637234244473,
+      "prefill_method": "native request timings",
+      "ttft_s": 12.744188373999805,
+      "ttft_method": "client first delivered content/tool delta; parser buffering included",
+      "decode_tps": 67.49180511434491,
+      "decode_method": "native request timings"
+    },
+    "checks": {
+      "tool_exit_code": 0,
+      "tool_calls": 1,
+      "matching_tool_results": 1,
+      "followup_passed": true,
+      "strict_final_format": true,
+      "unloaded": true,
+      "reservation_released": true,
+      "tool_wall_s": 15.240093820000311,
+      "unload_duration_s": 1.8098514940002133
+    },
+    "native_weight_buffers_MiB": {
+      "CPU_Mapped": 2232.2200000000003,
+      "CUDA0": 10123.69,
+      "CUDA1": 8634.88
+    },
+    "CPU_weight_buffer_GiB": 2.1799023437500002,
+    "GPU_weight_fraction": 0.8936571705972,
+    "resources": {
+      "samples": 13,
+      "median_interval_s": 2.0719549655914307,
+      "effective_cgroup_limits": {
+        "memory.high": "94242156544",
+        "memory.max": "96389640192",
+        "memory.swap.max": "max"
+      },
+      "charged_worker_RAM_peak_GiB": 1.1984443664550781,
+      "swap_peak_MiB": 0.0,
+      "memory_events": {
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0
+      },
+      "minimum_host_available_GiB": 86.38856887817383,
+      "GPU_free_min_MiB_nonloading": [
+        621.0,
+        458.0
+      ],
+      "GPU_temp_max_C": [
+        52.0,
+        38.0
+      ],
+      "complete_active_windows": 0,
+      "observed_guard_violations": []
+    },
+    "sampled_ready_GPU_free_MiB": [
+      655.0,
+      488.0
+    ]
+  },
+  "qualified_conservative": {
+    "phase": "pass",
+    "fit_target_MiB": [
+      512,
+      512
+    ],
+    "context": 163840,
+    "metrics": {
+      "measurement": "first actual DSH tool-call generation",
+      "loading_excluded": true,
+      "prompt_tokens": 6374,
+      "output_tokens": 43,
+      "cached_tokens": 0,
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 6374,
+        "prompt_ms": 13197.504,
+        "prompt_per_token_ms": 2.0705214935676186,
+        "prompt_per_second": 482.97011313654457,
+        "predicted_n": 43,
+        "predicted_ms": 618.697,
+        "predicted_per_token_ms": 14.730880952380952,
+        "predicted_per_second": 67.88460264071104
+      },
+      "client_ttft_s": 13.341244792999987,
+      "client_last_token_s": 13.80724354999984,
+      "meaningful_sse_chunks": 23,
+      "generation_wall_s": 13.853712142999939,
+      "usage": {
+        "completion_tokens": 43,
+        "prompt_tokens": 6374,
+        "total_tokens": 6417,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "prefill_tps": 482.97011313654457,
+      "prefill_method": "native request timings",
+      "ttft_s": 13.341244792999987,
+      "ttft_method": "client first delivered content/tool delta; parser buffering included",
+      "decode_tps": 67.88460264071104,
+      "decode_method": "native request timings"
+    },
+    "checks": {
+      "tool_exit_code": 0,
+      "tool_calls": 1,
+      "matching_tool_results": 1,
+      "followup_passed": true,
+      "strict_final_format": true,
+      "unloaded": true,
+      "reservation_released": true,
+      "tool_wall_s": 15.80324184400024,
+      "unload_duration_s": 1.1687871439999071
+    },
+    "native_weight_buffers_MiB": {
+      "CPU_Mapped": 2498.4900000000002,
+      "CUDA0": 10123.69,
+      "CUDA1": 8368.61
+    },
+    "CPU_weight_buffer_GiB": 2.4399316406250002,
+    "GPU_weight_fraction": 0.8809720834708937,
+    "resources": {
+      "samples": 13,
+      "median_interval_s": 2.066121816635132,
+      "effective_cgroup_limits": {
+        "memory.high": "94242156544",
+        "memory.max": "96389640192",
+        "memory.swap.max": "max"
+      },
+      "charged_worker_RAM_peak_GiB": 1.3866767883300781,
+      "swap_peak_MiB": 0.0,
+      "memory_events": {
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0
+      },
+      "minimum_host_available_GiB": 86.3585090637207,
+      "GPU_free_min_MiB_nonloading": [
+        621.0,
+        724.0
+      ],
+      "GPU_temp_max_C": [
+        49.0,
+        38.0
+      ],
+      "complete_active_windows": 0,
+      "observed_guard_violations": []
+    },
+    "sampled_ready_GPU_free_MiB": [
+      655.0,
+      754.0
+    ]
+  },
+  "rejected_lower_margin": {
+    "phase": "failed",
+    "fit_target_MiB": [
+      256,
+      256
+    ],
+    "context": 163840,
+    "metrics": {
+      "measurement": "first actual DSH tool-call generation",
+      "loading_excluded": true,
+      "prompt_tokens": null,
+      "output_tokens": null,
+      "cached_tokens": 0,
+      "native_timings": {},
+      "client_ttft_s": null,
+      "client_last_token_s": null,
+      "meaningful_sse_chunks": 0,
+      "generation_wall_s": 4.238790917000188,
+      "usage": {},
+      "prefill_tps": null,
+      "prefill_method": null,
+      "ttft_s": null,
+      "ttft_method": "client first delivered content/tool delta; parser buffering included",
+      "decode_tps": null,
+      "decode_method": null,
+      "decode_unavailable_reason": "No native decode timing or sufficiently granular client deltas; do not infer from buffered tool-call chunks"
+    },
+    "checks": {
+      "tool_exit_code": 1,
+      "tool_calls": 0,
+      "matching_tool_results": 0,
+      "followup_passed": false,
+      "strict_final_format": false,
+      "unloaded": true,
+      "reservation_released": true,
+      "tool_wall_s": 21.523588354000367,
+      "unload_duration_s": null
+    },
+    "native_weight_buffers_MiB": {
+      "CPU_Mapped": 1676.3400000000001,
+      "CUDA0": 10516.33,
+      "CUDA1": 8798.11
+    },
+    "CPU_weight_buffer_GiB": 1.6370507812500001,
+    "GPU_weight_fraction": 0.920139223030302,
+    "resources": {
+      "samples": 8,
+      "median_interval_s": 2.0724480152130127,
+      "effective_cgroup_limits": {
+        "memory.high": "94242156544",
+        "memory.max": "96389640192",
+        "memory.swap.max": "max"
+      },
+      "charged_worker_RAM_peak_GiB": 0.562164306640625,
+      "swap_peak_MiB": 0.0,
+      "memory_events": {
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0
+      },
+      "minimum_host_available_GiB": 87.0905647277832,
+      "GPU_free_min_MiB_nonloading": [
+        223.0,
+        304.0
+      ],
+      "GPU_temp_max_C": [
+        50.0,
+        37.0
+      ],
+      "complete_active_windows": 0,
+      "observed_guard_violations": []
+    },
+    "sampled_ready_GPU_free_MiB": [
+      257.0,
+      332.0
+    ]
+  },
+  "decode_ratio": 186.89061961864053,
+  "CPU_regression_tests": 451,
+  "guards": {
+    "worker_RAM_GiB": {
+      "high": 87.76984786987305,
+      "max": 89.76984786987305,
+      "swap": null
+    },
+    "host_available_GiB": 2,
+    "GPU_free_MiB": 256,
+    "temperature_C": 82,
+    "swap_write_combined_MiB_s": [
+      1,
+      8
+    ],
+    "active_PSI_percent": 10,
+    "loading_PSI_percent": 15,
+    "window_s": 30,
+    "bad_samples": 3
+  },
+  "scope": "One actual DSH read/result/exact-follow-up and owned unload per fit setting. Same-day AWQ reference retained rather than replayed. No full-context, sustained throughput, vision or quality equivalence claim.",
+  "minimum_scope": "Least CPU weight offload among tested fit targets256/384/512 MiB per GPU, not proof of a global optimum over arbitrary tensor placement.",
+  "initial_refusals": [
+    "Desktop monitor handshake refused before model load; explicitly selected shared visible foreground log instead.",
+    "Non-UTF8 token log rejected wrapper before inference; fixed log decoding without weakening numeric/proof checks.",
+    "Stopped failed transient unit remained loaded; exact owned inactive unit reset and subsequent units collected."
+  ],
+  "final_state": "Candidate unloaded, reservation released; maintained nine profiles/defaults preserved."
+}

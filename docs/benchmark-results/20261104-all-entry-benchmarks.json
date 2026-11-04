@@ -1975,5 +1975,49 @@
     }
   },
   "current_scope": "All nine enabled following 96 GB restoration; exact 2 GiB headroom for RAM-heavy workers. Earlier 32 GB and disabled historical references are retained under explicitly dated keys.",
-  "current_source": "docs/benchmark-results/20261104-ram96-restoration.json"
+  "current_source": "docs/benchmark-results/20261104-ram96-restoration.json",
+  "isolated_bolt_native_iq2": {
+    "source": "docs/benchmark-results/20261104-bolt-native-iq2.json",
+    "status": "qualified candidate; selected AWQ entry and nine-model catalog preserved",
+    "fit_target_MiB": [
+      384,
+      384
+    ],
+    "metrics": {
+      "measurement": "first actual DSH tool-call generation",
+      "loading_excluded": true,
+      "prompt_tokens": 6380,
+      "output_tokens": 45,
+      "cached_tokens": 0,
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 6380,
+        "prompt_ms": 12597.151,
+        "prompt_per_token_ms": 1.9744750783699059,
+        "prompt_per_second": 506.4637234244473,
+        "predicted_n": 45,
+        "predicted_ms": 651.931,
+        "predicted_per_token_ms": 14.816613636363638,
+        "predicted_per_second": 67.49180511434491
+      },
+      "client_ttft_s": 12.744188373999805,
+      "client_last_token_s": 13.242217170000004,
+      "meaningful_sse_chunks": 25,
+      "generation_wall_s": 13.291547784000159,
+      "usage": {
+        "completion_tokens": 45,
+        "prompt_tokens": 6380,
+        "total_tokens": 6425,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "prefill_tps": 506.4637234244473,
+      "prefill_method": "native request timings",
+      "ttft_s": 12.744188373999805,
+      "ttft_method": "client first delivered content/tool delta; parser buffering included",
+      "decode_tps": 67.49180511434491,
+      "decode_method": "native request timings"
+    }
+  }
 }
