@@ -347,6 +347,13 @@ class CatalogCoverageTests(unittest.TestCase):
             if change=='reason':policy['pinned_profiles'][0]['reason']=' '
             if change=='managed':catalog['profiles'][1]['engine']='Maya'
             with self.subTest(change=change),self.assertRaises(RuntimeError):validate_update_coverage(catalog,policy)
+    def test_tensorfold_pin_requires_its_exact_runtime_manifest(self):
+        from daily_engine_update import validate_update_coverage
+        catalog={'profiles':[{'id':'qwen27b-tensorfold','engine':'TensorFold','runtime_manifest':'config/tensorfold-runtime.json'}]}
+        policy={'components':[], 'pinned_profiles':[{'profile':'qwen27b-tensorfold','reason':'Pinned native EXL3/DFlash2 runtime'}]}
+        validate_update_coverage(catalog,policy)
+        catalog['profiles'][0]['runtime_manifest']='config/unrelated.json'
+        with self.assertRaises(RuntimeError):validate_update_coverage(catalog,policy)
     def test_review_catalog_policy_pair_has_complete_coverage(self):
         from daily_engine_update import validate_update_coverage
         root=Path(__file__).resolve().parents[1]

@@ -1,0 +1,515 @@
+{
+  "date": "2026-11-04",
+  "hardware": "Z690/i9-13900KS;32GB installed/30.566GiB Linux usable;RTX3080Ti12GiB+RTX308010GiB;UHD770desktop;CPU PCIe4x8/x8 host-staged noCUDA P2P",
+  "scope": "one fresh short actualDSHread/result/exactfollowup and ownedunload per3enabledprofiles plus isolatedFlashIQ1S; nofull-context/stress/qualitysuite",
+  "CPU_tests": {
+    "count": 438,
+    "status": "pass",
+    "environment": "installed HyperQwen Torch2.13.0+cu130 Python3.12"
+  },
+  "profiles": {
+    "qwen27b-hyperqwen": {
+      "engine": "HyperQwen-vLLM",
+      "context": 86016,
+      "checkpoint_weight_bytes": 15791777864,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 2065.2388901456025,
+        "ttft_s": 3.072641611099243,
+        "decode_tps": 62.587362329017175,
+        "prompt_tokens": 5826,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "baseline_24_26": {
+        "prefill_tps": 2077.9233905103497,
+        "ttft_s": 2.8208792209625244,
+        "decode_tps": 62.52509679225351
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 9.214708025000618
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 26,
+          "max": 28,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          9728,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "samples": 19,
+        "median_interval_s": 5.090608835220337,
+        "worker_ram_peak_GiB": 19.968055725097656,
+        "swap_peak_MiB": 2673.140625,
+        "gpu_free_min_MiB": [
+          1887.0,
+          28.0
+        ],
+        "gpu_free_min_after_nonloading_MiB": [
+          3305.0,
+          1316.0
+        ],
+        "gpu_temperature_max_C": [
+          51.0,
+          43.0
+        ],
+        "host_available_min_GiB": 22.826969146728516,
+        "memory_events": {
+          "low": "0",
+          "high": "0",
+          "max": "0",
+          "oom": "0",
+          "oom_kill": "0",
+          "oom_group_kill": "0",
+          "sock_throttled": "0"
+        },
+        "effective_limits": {
+          "memory.high": "27917287424",
+          "memory.max": "30064771072",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0,
+        "loading_PSI_full_max_percent": 0.0,
+        "inference_PSI_full_max_percent": 0.0,
+        "complete_window_PSI_full_max_percent": null,
+        "active_write_mib_s_max": null,
+        "active_combined_mib_s_max": null
+      },
+      "change_percent": {
+        "prefill_tps": -0.6104411944480748,
+        "ttft_s": 8.924961702217571,
+        "decode_tps": 0.09958487064889443
+      }
+    },
+    "qwen27b-sglang": {
+      "engine": "SGLang",
+      "context": 57344,
+      "checkpoint_weight_bytes": 15791777864,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 2232.8817853495507,
+        "ttft_s": 2.7673906179998085,
+        "decode_tps": 60.228230664237785,
+        "prompt_tokens": 6095,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+      },
+      "baseline_24_26": {
+        "prefill_tps": 2137.886256760879,
+        "ttft_s": 3.0438507569997455,
+        "decode_tps": 60.20142998209217
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 8.016327491999618
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 26,
+          "max": 28,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "samples": 9,
+        "median_interval_s": 5.080914616584778,
+        "worker_ram_peak_GiB": 8.880001068115234,
+        "swap_peak_MiB": 0.0,
+        "gpu_free_min_MiB": [
+          532.0,
+          1851.0
+        ],
+        "gpu_free_min_after_nonloading_MiB": [
+          532.0,
+          1851.0
+        ],
+        "gpu_temperature_max_C": [
+          54.0,
+          43.0
+        ],
+        "host_available_min_GiB": 20.361927032470703,
+        "memory_events": {
+          "low": "0",
+          "high": "0",
+          "max": "0",
+          "oom": "0",
+          "oom_kill": "0",
+          "oom_group_kill": "0",
+          "sock_throttled": "0"
+        },
+        "effective_limits": {
+          "memory.high": "27917287424",
+          "memory.max": "30064771072",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0,
+        "loading_PSI_full_max_percent": 0.0,
+        "inference_PSI_full_max_percent": null,
+        "complete_window_PSI_full_max_percent": null,
+        "active_write_mib_s_max": null,
+        "active_combined_mib_s_max": null
+      },
+      "change_percent": {
+        "prefill_tps": 4.4434323055427605,
+        "ttft_s": -9.082578650223883,
+        "decode_tps": 0.04451834807508437
+      }
+    },
+    "qwen27b-tensorfold": {
+      "engine": "TensorFold1.2.2 DFlash2-4bit+copies",
+      "context": 12288,
+      "checkpoint_weight_bytes": 13521604452,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 580.9562887769863,
+        "ttft_s": 10.029199,
+        "decode_tps": 180.34265103697027,
+        "prompt_tokens": 5822,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
+      },
+      "baseline_24_26": {
+        "prefill_tps": 581.9822104273828,
+        "ttft_s": 10.018767,
+        "decode_tps": 183.9249586168843
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 22.236075351999716
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 26,
+          "max": 28,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11000,
+          512
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "samples": 20,
+        "median_interval_s": 5.087751150131226,
+        "worker_ram_peak_GiB": 14.795330047607422,
+        "swap_peak_MiB": 0.0,
+        "gpu_free_min_MiB": [
+          1355.0,
+          9928.0
+        ],
+        "gpu_free_min_after_nonloading_MiB": [
+          1355.0,
+          9928.0
+        ],
+        "gpu_temperature_max_C": [
+          61.0,
+          37.0
+        ],
+        "host_available_min_GiB": 24.93010711669922,
+        "memory_events": {
+          "low": "0",
+          "high": "0",
+          "max": "0",
+          "oom": "0",
+          "oom_kill": "0",
+          "oom_group_kill": "0",
+          "sock_throttled": "0"
+        },
+        "effective_limits": {
+          "memory.high": "27917287424",
+          "memory.max": "30064771072",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0,
+        "loading_PSI_full_max_percent": 0.0,
+        "inference_PSI_full_max_percent": 0.0,
+        "complete_window_PSI_full_max_percent": null,
+        "active_write_mib_s_max": null,
+        "active_combined_mib_s_max": null
+      },
+      "change_percent": {
+        "prefill_tps": -0.17628058590367646,
+        "ttft_s": 0.10412458938309221,
+        "decode_tps": -1.9477006311992673
+      }
+    },
+    "flash-next-iq1s-candidate": {
+      "engine": "llama.cpp build11909",
+      "context": 12288,
+      "checkpoint_weight_bytes": 66379180698,
+      "ngram_table_bytes": 28800138432,
+      "storage": "NVMe SSD",
+      "metrics": {
+        "prefill_tps": 93.35129834312474,
+        "ttft_s": 63.23782065499927,
+        "decode_tps": 28.234358005242605,
+        "prompt_tokens": 5840,
+        "output_tokens": 45,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5840,
+          "prompt_ms": 62559.387,
+          "prompt_per_token_ms": 10.712223801369863,
+          "prompt_per_second": 93.35129834312474,
+          "predicted_n": 45,
+          "predicted_ms": 1558.385,
+          "predicted_per_token_ms": 35.417840909090906,
+          "predicted_per_second": 28.234358005242605
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "baseline_24_26": {
+        "prefill_tps": 101.50091497043279,
+        "ttft_s": 58.11269205499957,
+        "decode_tps": 29.144509138936144,
+        "prompt_tokens": 5831,
+        "output_tokens": 42,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5831,
+          "prompt_ms": 57447.758,
+          "prompt_per_token_ms": 9.852127936889042,
+          "prompt_per_second": 101.50091497043279,
+          "predicted_n": 42,
+          "predicted_ms": 1406.783,
+          "predicted_per_token_ms": 34.311780487804874,
+          "predicted_per_second": 29.144509138936144
+        },
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "prefill_method": "native request timings",
+        "decode_method": "native request timings"
+      },
+      "baseline_resources_24_26": {
+        "samples": 59,
+        "median_interval_s": 2.072940230369568,
+        "worker_ram_peak_GiB": 23.99228286743164,
+        "swap_peak_MiB": 287.23828125,
+        "gpu_free_min_MiB": [
+          1591.0,
+          1510.0
+        ],
+        "gpu_temperature_max_C": [
+          55.0,
+          39.0
+        ],
+        "host_available_min_GiB": 26.978626251220703,
+        "memory_events": "low 0\nhigh 3367\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 61",
+        "limits": {
+          "memory.high": "25769803776",
+          "memory.max": "27917287424",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "sampled_PSI_full_max_percent": 23.58,
+        "swap_in_pages_delta": 31978,
+        "swap_out_pages_delta": 68123,
+        "inference_PSI_full_max_percent": 7.38,
+        "loading_PSI_full_max_percent": 23.58,
+        "complete_window_PSI_full_max_percent": 2.53,
+        "active_complete_windows": 15,
+        "active_write_MiB_s_max": 2.3596338281727878,
+        "active_combined_MiB_s_max": 3.1307149526020313,
+        "guard_policy_profile": "flash-next-strata policy reused for isolated new IQ1S; not the disabled IQ3 worker"
+      },
+      "checks": {
+        "phase": "pass",
+        "tool_wall_s": 69.05287155599945,
+        "tool_calls": 1,
+        "matching_tool_results": 1,
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "unload_duration_s": 1.6303632579993064,
+        "reservation_released": true
+      },
+      "guards": {
+        "worker_RAM_high_max_GiB": [
+          26,
+          28
+        ],
+        "host_reserve_GiB": 2,
+        "free_VRAM_floor_MiB": 256,
+        "temperature_stop_C": 82,
+        "swap_write_MiB_s": 128,
+        "swap_combined_MiB_s": 160,
+        "swap_window_s": 30,
+        "PSI_full_percent": 15,
+        "bad_samples": 3
+      },
+      "resources": {
+        "samples": 57,
+        "median_interval_s": 2.0725516080856323,
+        "worker_ram_peak_GiB": 25.984989166259766,
+        "swap_peak_MiB": 483.36328125,
+        "gpu_free_min_MiB": [
+          1591.0,
+          1510.0
+        ],
+        "gpu_free_min_after_nonloading_MiB": [
+          1591.0,
+          1510.0
+        ],
+        "gpu_temperature_max_C": [
+          57.0,
+          40.0
+        ],
+        "host_available_min_GiB": 27.054157257080078,
+        "memory_events": {
+          "low": "0",
+          "high": "3129",
+          "max": "0",
+          "oom": "0",
+          "oom_kill": "0",
+          "oom_group_kill": "0",
+          "sock_throttled": "89"
+        },
+        "effective_limits": {
+          "memory.high": "27917287424",
+          "memory.max": "30064771072",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 18,
+        "loading_PSI_full_max_percent": 5.54,
+        "inference_PSI_full_max_percent": 5.96,
+        "complete_window_PSI_full_max_percent": 5.23,
+        "active_write_mib_s_max": 5.454684758061487,
+        "active_combined_mib_s_max": 6.206408445058296
+      },
+      "table_mapping_proof": {
+        "native_lazy_log": [
+          "0.03.776.701 I add: tensor per_layer_token_embd.weight (size = 27465 MiB) lazy read enabled"
+        ],
+        "mappings": [
+          {
+            "mapped_bytes": 28800139264,
+            "permissions": "r--s",
+            "file_offset": 0,
+            "shard": "Qwen3.8-Flash-Next-UD-IQ1_S-00003-of-00003.gguf"
+          }
+        ],
+        "physical_transport": "nvme verified before launch"
+      },
+      "table_residency_sample": {
+        "phase": "inference",
+        "table_mappings": [
+          {
+            "Size_KiB": 28125136,
+            "Rss_KiB": 8432,
+            "Pss_KiB": 8432,
+            "Swap_KiB": 0
+          }
+        ],
+        "scope": "one point-in-time mapped residency; no cold-cache claim"
+      },
+      "binary_sha256": "eed3e9ba6633c1d3ef2f835a0ebb265c6453680e08daca0f1cdd2c6d37c1b86f",
+      "model_revision": "d96201194f103c906994f283f504209dc8d2a10c",
+      "change_percent": {
+        "prefill_tps": -8.029106564883703,
+        "ttft_s": 8.819293030082175,
+        "decode_tps": -3.1228905910019478
+      }
+    }
+  },
+  "limits": "Single observations; different output lengths and draft acceptance affect rates; OSfilecache not dropped and shared-page charging varies. Changes do not isolate RAM-limit causality. Native versus parser-buffered TTFT methods retained. Historical24/26measurements unchanged.",
+  "maintenance": [
+    "All8catalogworkerbudgets26/28GiB;5disabledprofilesstaydisabled",
+    "Otherguards andcontexts unchanged",
+    "Corrected priorTensorFold integration regression in vLLM/Bolt busy-gauge parser",
+    "Stale guard fixtures updated; retired updater component removed andTensorFold explicitly pinned; updates remainpaused"
+  ],
+  "final_state": {
+    "services": {
+      "nvidia-model-router": "active",
+      "nvidia-model-hub": "active",
+      "nvidia-dsh": "active",
+      "llm-test-qwen27b": "inactive",
+      "llm-router-worker": "inactive",
+      "llm-flash-next-iq1s-ram28-test": "inactive"
+    },
+    "gpu_used_free_MiB": "1, 11963\n1, 9928",
+    "API_idle": true,
+    "reservation_released": true
+  },
+  "engine_alternatives": {
+    "conclusion": "No faster engine proven on this host for the exact newIQ1S checkpoint. No alternateengine installed or modelconverted by this rerun.",
+    "TensorFold": "Installed1.2.2 capabilities list qwen4_exp mlx-q4g32/modelopt-mixed, not GGUF; newer upstream recipes add EXL3/NVFP4 but need differentweights and separatequalification.",
+    "Strata": "Supports FlashNext andIQkernels, but current documented UnslothUD-IQ1S release support is DeepSeek; that does not establish FlashNextIQ1S-v3.1 compatibility.",
+    "Maya": "Official current model list has GLM,DeepSeek,MiniMax, not FlashNext.",
+    "sources": [
+      "https://github.com/ashhart/TensorFold/blob/main/docs/recipes/qwen3.8-flash-next.md",
+      "https://github.com/Niko1221/Strata/releases/tag/v0.2.9",
+      "https://github.com/mw00/project-maya"
+    ]
+  }
+}

@@ -44,14 +44,6 @@
       ],
       "upstream": "https://github.com/mw00/project-maya.git",
       "builder": "maya-ds4"
-    },
-    {
-      "id": "strata-deepseek",
-      "profiles": [
-        "deepseek-strata"
-      ],
-      "upstream": "https://github.com/Niko1221/Strata.git",
-      "builder": "strata-ds4"
     }
   ],
   "pinned_profiles": [
@@ -62,6 +54,10 @@
     {
       "profile": "deepseek-unsloth-strata",
       "reason": "Independent signed Strata 0.2.9/engine 0.1.55 package with pinned serving adapter and context qualification; automatic source builds must not overwrite it."
+    },
+    {
+      "profile": "qwen27b-tensorfold",
+      "reason": "Independent TensorFold1.2.2 native binary, grammar library, EXL3 target and DFlash2 pins; automatic source builds must not overwrite this qualified runtime."
     }
   ]
 }

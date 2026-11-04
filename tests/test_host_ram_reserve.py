@@ -13,7 +13,9 @@ class HostRamReserve(unittest.TestCase):
         from unittest.mock import patch
         proof=patch('pair_p2p_health.require_verified_pair', return_value={'passed':True})
         proof.start();self.addCleanup(proof.stop)
-        evidence=patch('context_capacity.read_engine_log',return_value='0[0] -> 1[1] via P2P/CUMEM\n1[1] -> 0[0] via P2P/CUMEM\nmax_total_num_tokens=131072')
+        mode=patch('context_capacity.configured_transport_mode',return_value='host-staged')
+        mode.start();self.addCleanup(mode.stop)
+        evidence=patch('context_capacity.read_engine_log',return_value='NCCL_P2P_DISABLE set by environment to 1\n0[0] -> 1[1] via SHM/direct/direct\n1[1] -> 0[0] via SHM/direct/direct\nmax_total_num_tokens=131072')
         evidence.start();self.addCleanup(evidence.stop)
 
     def test_all_maintained_profiles_select_two(self):
@@ -34,11 +36,11 @@ class HostRamReserve(unittest.TestCase):
         identifier='qwen27b-'+dense_engine if dense_engine else 'flash-next-strata'
         with tempfile.TemporaryDirectory() as directory:
             root=Path(directory);unit='llm-test-qwen27b.service' if dense_engine else 'llm-router-worker.service';group=root/'cgroups/managed'/unit;group.mkdir(parents=True)
-            for n,v in [('memory.max',('max' if dense_engine else 58*1024**3)),('memory.high',('max' if dense_engine else 56*1024**3)),('memory.swap.max','max')]:
+            for n,v in [('memory.max',28*1024**3),('memory.high',26*1024**3),('memory.swap.max','max')]:
                 (group/n).write_text(str(v))
             (root/'data').mkdir();(root/'data/local-api-key').write_text('test-only-key');(root/'data/local-api-key').chmod(0o600)
             source=root/'.local/state/strata/launch/qwen-flash-next.json';source.parent.mkdir(parents=True);source.write_text(json.dumps({'args':['--max-context','32768']}))
-            profile={'id':identifier,'engine':'Strata','allocated_context':32768,'host_ram_reserve_gib':reserve}
+            profile={'id':identifier,'engine':'Strata','allocated_context':32768,'host_ram_reserve_gib':reserve,'worker_memory_gib':{'high':26,'max':28,'swap':None}}
             cgroup=Mock();cgroup.read_text.return_value='0::/managed/'+unit+'\n'
             mem=Mock();mem.read_text.return_value=f'MemAvailable: {int(available_gib*1024**2)} kB\n'
             def paths(value):
@@ -81,7 +83,7 @@ class HostRamReserve(unittest.TestCase):
         for engine in ['hyperqwen','sglang']:
             with self.subTest(engine=engine):self.assertEqual(self.run_guard(1,dense_engine=engine)[0],1)
     def test_dense_gpu_floors_remain_scoped(self):
-        for engine,floor in [('hyperqwen',512),('sglang',448)]:
+        for engine,floor in [('hyperqwen',256),('sglang',256)]:
             with self.subTest(engine=engine):
                 self.assertEqual(self.run_guard(3,dense_engine=engine,gpu_free=floor),(0,0))
                 self.assertEqual(self.run_guard(3,dense_engine=engine,gpu_free=floor-1)[0],1)

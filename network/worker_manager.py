@@ -45,7 +45,7 @@ def unit_property(unit, prop):
 def vllm_requests_busy(text):
     import math
     values = []
-    for name in ('vllm:num_requests_running', 'vllm:num_requests_waiting', 'tensorfold:num_requests_running'):
+    for name in ('vllm:num_requests_running', 'vllm:num_requests_waiting'):
         found = [float(line.rsplit(' ', 1)[1]) for line in text.splitlines()
                  if line.startswith(name + '{') or line.startswith(name + ' ')]
         if not found or any(not math.isfinite(x) or x < 0 for x in found):

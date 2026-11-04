@@ -121,8 +121,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": 24,
-        "max": 26,
+        "high": 26,
+        "max": 28,
         "swap": null
       },
       "latest_qualification": {
@@ -216,15 +216,21 @@
         }
       ],
       "current_configuration_benchmark": {
-        "date": "2026-11-01",
-        "status": "one short tool-call observation at larger context; native KV checked; loading excluded; no full-context qualification",
-        "source": "docs/validation-results/20261101-qwen-larger-context.json",
-        "prefill_tps": 2372.8401487550204,
-        "ttft_s": 2.467179536819458,
-        "decode_tps": 65.60006830076297,
-        "prompt_tokens": 5820,
-        "output_tokens": 38,
+        "date": "2026-11-04",
+        "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
+        "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
+        "context": 86016,
+        "worker_RAM_high_max_GiB": [
+          26,
+          28
+        ],
+        "prefill_tps": 2065.2388901456025,
+        "ttft_s": 3.072641611099243,
+        "decode_tps": 62.587362329017175,
+        "prompt_tokens": 5826,
+        "output_tokens": 40,
         "cached_tokens": 0,
+        "native_timings": {},
         "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
         "ttft_method": "engine first-token counter",
         "decode_method": "vLLM one-request decode counter"
@@ -349,6 +355,20 @@
           "decode_tps": 65.82538905130406,
           "prompt_tokens": 5826,
           "output_tokens": 40,
+          "cached_tokens": 0,
+          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "vLLM one-request decode counter"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "one short tool-call observation at larger context; native KV checked; loading excluded; no full-context qualification",
+          "source": "docs/validation-results/20261101-qwen-larger-context.json",
+          "prefill_tps": 2372.8401487550204,
+          "ttft_s": 2.467179536819458,
+          "decode_tps": 65.60006830076297,
+          "prompt_tokens": 5820,
+          "output_tokens": 38,
           "cached_tokens": 0,
           "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
           "ttft_method": "engine first-token counter",
@@ -507,8 +527,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": 24,
-        "max": 26,
+        "high": 26,
+        "max": 28,
         "swap": null
       },
       "latest_qualification": {
@@ -825,15 +845,21 @@
         "historical_benchmarks_unchanged": true
       },
       "current_configuration_benchmark": {
-        "date": "2026-11-01",
-        "status": "one short DSH tool call; 57,344 context; SGLang floor 448 MiB; no full-context stress",
-        "source": "docs/validation-results/20261101-sglang-56k-448mib.json",
-        "prefill_tps": 2467.2120200308314,
-        "ttft_s": 2.50672811000004,
-        "decode_tps": 60.17341548067849,
-        "prompt_tokens": 6101,
-        "output_tokens": 41,
+        "date": "2026-11-04",
+        "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
+        "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
+        "context": 57344,
+        "worker_RAM_high_max_GiB": [
+          26,
+          28
+        ],
+        "prefill_tps": 2232.8817853495507,
+        "ttft_s": 2.7673906179998085,
+        "decode_tps": 60.228230664237785,
+        "prompt_tokens": 6095,
+        "output_tokens": 39,
         "cached_tokens": 0,
+        "native_timings": {},
         "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
         "ttft_method": "engine first-token counter",
         "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
@@ -972,6 +998,20 @@
           "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
           "ttft_method": "engine first-token counter",
           "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "one short DSH tool call; 57,344 context; SGLang floor 448 MiB; no full-context stress",
+          "source": "docs/validation-results/20261101-sglang-56k-448mib.json",
+          "prefill_tps": 2467.2120200308314,
+          "ttft_s": 2.50672811000004,
+          "decode_tps": 60.17341548067849,
+          "prompt_tokens": 6101,
+          "output_tokens": 41,
+          "cached_tokens": 0,
+          "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
         }
       ],
       "gpu_free_floor_mib": 256,
@@ -1090,8 +1130,8 @@
         "checkpoint_directory": "models/strata/models/IQ3_XXS"
       },
       "worker_memory_gib": {
-        "high": 24,
-        "max": 26,
+        "high": 26,
+        "max": 28,
         "swap": null
       },
       "context_expansion_assessment": {
@@ -1506,8 +1546,8 @@
         "checkpoint_directory": "models/maya/Maya-S24"
       },
       "worker_memory_gib": {
-        "high": 24,
-        "max": 26,
+        "high": 26,
+        "max": 28,
         "swap": null
       },
       "latest_qualification": {
@@ -1860,8 +1900,8 @@
         "base_weight_gb": 232.97960842
       },
       "worker_memory_gib": {
-        "high": 24,
-        "max": 26,
+        "high": 26,
+        "max": 28,
         "swap": null
       },
       "selected_settings": {
@@ -2251,8 +2291,8 @@
         "checkpoint_directory": "models/bolt-awq-int4"
       },
       "worker_memory_gib": {
-        "high": 24,
-        "max": 26,
+        "high": 26,
+        "max": 28,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2435,8 +2475,8 @@
         "manifest": "config/deepseek-unsloth-runtime.json"
       },
       "worker_memory_gib": {
-        "high": 24,
-        "max": 26,
+        "high": 26,
+        "max": 28,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2562,8 +2602,8 @@
       ],
       "allocated_context": 12288,
       "worker_memory_gib": {
-        "high": 24,
-        "max": 26,
+        "high": 26,
+        "max": 28,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
@@ -2586,13 +2626,36 @@
       "drafter_bits": 4,
       "current_configuration_benchmark": {
         "date": "2026-11-04",
-        "prefill_tps": 581.9822104273828,
-        "ttft_s": 10.018767,
-        "decode_tps": 183.9249586168843,
+        "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
+        "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
         "context": 12288,
-        "scope": "one actual DSH read-tool generation; short speculative burst; no sustained/full-context test",
-        "evidence": "docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md"
-      }
+        "worker_RAM_high_max_GiB": [
+          26,
+          28
+        ],
+        "prefill_tps": 580.9562887769863,
+        "ttft_s": 10.029199,
+        "decode_tps": 180.34265103697027,
+        "prompt_tokens": 5822,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
+      },
+      "runtime_manifest": "config/tensorfold-runtime.json",
+      "short_tool_benchmark_history": [
+        {
+          "date": "2026-11-04",
+          "prefill_tps": 581.9822104273828,
+          "ttft_s": 10.018767,
+          "decode_tps": 183.9249586168843,
+          "context": 12288,
+          "scope": "one actual DSH read-tool generation; short speculative burst; no sustained/full-context test",
+          "evidence": "docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md"
+        }
+      ]
     }
   ],
   "host_reclaim_policy": {

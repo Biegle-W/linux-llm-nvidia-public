@@ -52,7 +52,10 @@ def validate_update_coverage(catalog, policy):
                 or not (profiles[name]['engine'] == 'vLLM-offload'
                         or (name == 'deepseek-unsloth-strata'
                             and profiles[name]['engine'] == 'Strata'
-                            and profiles[name].get('runtime_manifest') == 'config/deepseek-unsloth-runtime.json'))
+                            and profiles[name].get('runtime_manifest') == 'config/deepseek-unsloth-runtime.json')
+                        or (name == 'qwen27b-tensorfold'
+                            and profiles[name]['engine'] == 'TensorFold'
+                            and profiles[name].get('runtime_manifest') == 'config/tensorfold-runtime.json'))
                 or not profiles[name].get('runtime_manifest')
                 or not isinstance(entry['reason'], str) or not entry['reason'].strip()):
             raise RuntimeError('Only explicitly pinned custom runtimes may skip automatic updates')
