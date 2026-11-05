@@ -1,0 +1,104 @@
+{
+  "date": "2026-11-05",
+  "selected_id": "flash-next-iq1m-strata",
+  "retired_id": "flash-next-iq1s-llamacpp",
+  "engine": "Strata0.2.11 / Qwen engine0.1.57",
+  "source_commit": "c3b3f5035506f3e966f1b4b7b188aeaabae92f1d",
+  "model_revision": "d96201194f103c906994f283f504209dc8d2a10c",
+  "context": 131072,
+  "benchmark": {
+    "prefill_tps": 1092.5,
+    "ttft_s": 5.2669785670004785,
+    "decode_tps": 78.2,
+    "prompt_tokens": 5592,
+    "output_tokens": 38,
+    "cached_tokens": 0,
+    "prefill_method": "native request timings",
+    "ttft_method": "client first delivered content/tool delta; parser buffering included",
+    "decode_method": "native request timings",
+    "native_timings": {
+      "cache_n": 0,
+      "prompt_n": 5592,
+      "prompt_ms": 5118.4,
+      "prompt_per_token_ms": 0.915,
+      "prompt_per_second": 1092.5,
+      "predicted_n": 38,
+      "predicted_ms": 485.7,
+      "predicted_per_token_ms": 12.782,
+      "predicted_per_second": 78.2,
+      "draft_n": 35,
+      "draft_n_accepted": 28
+    },
+    "loading_excluded": true
+  },
+  "checks": {
+    "phase": "pass",
+    "followup_passed": true,
+    "final_marker_returned": true,
+    "structured_read_records": 1,
+    "completed_tool_results": 1,
+    "unloaded": true,
+    "strict_final_format": true
+  },
+  "worker_inactive_verified": true,
+  "guards": {
+    "worker_RAM_GiB": {
+      "high": 87.76984786987305,
+      "max": 89.76984786987305,
+      "swap": null
+    },
+    "host_available_reserve_GiB": 2,
+    "explicit_GPU_free_floor_MiB": 256,
+    "native_cache_reserve_MiB": 1024,
+    "startup_free_MiB": null,
+    "loading_PSI_percent": null,
+    "resource_bad_samples": 3,
+    "swap_occupancy": "unlimited",
+    "swap_write_MiB_s": 128,
+    "swap_read_plus_write_MiB_s": 160,
+    "swap_window_s": 30,
+    "active_PSI_percent": 15,
+    "PSI_bad_samples": 3
+  },
+  "observed": {
+    "samples": 9,
+    "median_interval_s": 5.071159015504236,
+    "worker_charged_ram_peak_gib": 56.15180206298828,
+    "worker_swap_peak_bytes": 0,
+    "host_available_min_gib": 50.892398834228516,
+    "gpu_free_min_mib": [
+      730.0,
+      857.0
+    ],
+    "gpu_temperature_max_c": [
+      43.0,
+      37.0
+    ],
+    "memory_high_max_oom_events": 0,
+    "scope": "Sampled extrema, not guaranteed peaks; charged file cache is not total process working set"
+  },
+  "previous_iq1s_observation": {
+    "date": "2026-11-05",
+    "source": "docs/validation-results/20261105-engine-refresh.json",
+    "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+    "context": 12288,
+    "prefill_tps": 120.7329835421291,
+    "ttft_s": 48.46262081999885,
+    "decode_tps": 36.86106675927202,
+    "prompt_tokens": 5824,
+    "output_tokens": 39,
+    "cached_tokens": 0,
+    "prefill_method": "native request timings",
+    "ttft_method": "client first delivered content/tool delta; parser buffering included",
+    "decode_method": "native request timings",
+    "client_ttft_s": 48.46262081999885,
+    "meaningful_sse_chunks": 19
+  },
+  "checkpoint_bytes": 68007094938,
+  "shared_table_bytes": 28800138432,
+  "new_physical_checkpoint_bytes": 39206956506,
+  "shared_table_verified_same_inode": true,
+  "old_checkpoint_deleted": false,
+  "cpu_regressions_passed": 506,
+  "scope": "One actual short DSH tool/result/exact follow-up and owned unload; no sustained/full-context or equal-quality comparison"
+}

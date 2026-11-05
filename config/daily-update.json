@@ -38,7 +38,8 @@
       "id": "strata",
       "profiles": [
         "flash-next-strata",
-        "deepseek-unsloth-strata"
+        "deepseek-unsloth-strata",
+        "flash-next-iq1m-strata"
       ],
       "upstream": "https://github.com/Niko1221/Strata.git",
       "builder": "strata-signed",
@@ -47,8 +48,7 @@
     {
       "id": "llamacpp",
       "profiles": [
-        "bolt-vllm",
-        "flash-next-iq1s-llamacpp"
+        "bolt-vllm"
       ],
       "upstream": "https://github.com/ggml-org/llama.cpp.git",
       "builder": "llamacpp",
@@ -72,11 +72,11 @@
     ],
     "strata": [
       "config/deepseek-unsloth-runtime.json",
-      "scripts/strata_unsloth_runtime.py"
+      "scripts/strata_unsloth_runtime.py",
+      "config/flash-iq1m-strata-runtime.json"
     ],
     "llamacpp": [
-      "config/bolt-iq2-runtime.json",
-      "config/flash-iq1s-runtime.json"
+      "config/bolt-iq2-runtime.json"
     ]
   },
   "monitored_engines": [

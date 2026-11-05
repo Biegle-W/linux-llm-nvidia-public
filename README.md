@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Flash-Next IQ1_M replaces IQ1_S — November5,2026
+
+Qualified `flash-next-iq1m-strata` replaces the IQ1_S llama.cpp entry in API/DSH and the Strata desktop selector, with both GPUs,128K allocation and existing MTP. Actual read/tool-result/exact follow-up, guards and owned unload passed;506 CPU regressions passed. The IQ3_XXS entry and global default remain. All RAM/VRAM/thermal/swap guards are preserved; IQ1_S weights remain inactive for rollback and share the28.8GB table with IQ1_M. Idle API/hub were reloaded to load the previously changed RAM validator, and DSH selections migrated. No active jobs, reservations or pending transaction/publication remain; next action is normal use. [Benchmarks, guards and retirement](docs/FLASH-IQ1M-STRATA-20261105.md).
+
 ## All13 model entries share RAM ceilings — November5,2026
 
 Every maintained text, image and video entry now uses87.77/89.77GiB worker RAM high/max, retaining exactly2GiB outside the hard cap. Dense launchers and shared ComfyUI launch/admission paths use the selected configuration; all other guards, contexts and placement remain unchanged.501 CPU regressions and a real no-GPU systemd cgroup check passed. All inference workers were idle; no model benchmark was repeated. No jobs or locks remain; next action is normal use. [Change and verification](docs/ALL-MODEL-RAM-CEILINGS-20261105.md).

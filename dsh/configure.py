@@ -11,7 +11,8 @@ ROUTER_URL='http://127.0.0.1:10100/v1'
 LEGACY_ROUTER_IDS={'nvidia-hyperqwen','nvidia-sglang','nvidia-router','nvidia-maya','nvidia-vllm-offload'}
 PLAIN='qwen27b-hyperqwen'
 SEARCH=PLAIN+'-search'
-RETIRED={'super-vllm','super-strata-trial'}
+MODEL_REPLACEMENTS={'flash-next-iq1s-llamacpp':'flash-next-iq1m-strata'}
+RETIRED={'super-vllm','super-strata-trial'}|set(MODEL_REPLACEMENTS)
 
 def exposed_id(identifier):return PLAIN if identifier==SEARCH else identifier
 
@@ -65,7 +66,7 @@ def migrate_selection(value,field='',routes=None):
         result={k:migrate_selection(v,k,routes) for k,v in value.items()}
         pair=(value.get('provider'),value.get('model'))
         if isinstance(pair[0],str) and pair[0] in LEGACY_ROUTER_IDS|{ROUTER_ID} and isinstance(pair[1],str) and pair[1] in RETIRED:
-            result.update(provider=ROUTER_ID,model=PLAIN)
+            result.update(provider=ROUTER_ID,model=MODEL_REPLACEMENTS.get(pair[1],PLAIN))
         elif routes and all(isinstance(x,str) for x in pair) and pair in routes:
             result.update(provider=ROUTER_ID,model=routes[pair])
         elif isinstance(pair[0],str) and pair[0] in LEGACY_ROUTER_IDS|{ROUTER_ID} and pair[1]==SEARCH:

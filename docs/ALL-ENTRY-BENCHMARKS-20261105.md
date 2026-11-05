@@ -1,5 +1,7 @@
 # Current entry observations — November 5, 2026
 
+Latest replacement: [Flash-Next IQ1_M /Strata](FLASH-IQ1M-STRATA-20261105.md) supersedes IQ1_S /llama.cpp after a passing guarded short actual DSH check. Retired checkpoint files remain for rollback; the28.8GB table is shared.
+
 Latest Strata selection is0.2.11/engines0.1.57 following the explicit reviewed DeepSeek one-token exception. [Paired observations, acceptance and guards](STRATA-0211-QUALIFICATION-20261105.md); other entries below retain their dated observations.
 
 [Engine versions, sharing audit and cleanup suggestions](ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md). Eight updated text entries passed one short actual DSH read/result/exact followup and owned unload. TensorFold is a carried-forward November4 observation; its engine is unchanged. Loading and follow-up are excluded. No full-context or sustained test.
@@ -11,7 +13,7 @@ Latest Strata selection is0.2.11/engines0.1.57 following the explicit reviewed D
 | glm-maya | 543.70 | 10.218 | 15.200 | 65,536 | 2026-11-05 |
 | deepseek-maya | 186.70 | 31.944 | 7.900 | 32,768 | 2026-11-05 |
 | bolt-vllm | 500.31 | 12.899 | 67.789 | 163,840 | 2026-11-05 |
-| flash-next-iq1s-llamacpp | 120.73 | 48.463 | 36.861 | 12,288 | 2026-11-05 |
+| flash-next-iq1m-strata | 1092.50 | 5.267 | 78.200 | 131,072 | 2026-11-05 |
 | flash-next-strata | 934.20 | 6.460 | 68.400 | 131,072 | 2026-11-05 |
 | deepseek-unsloth-strata | 83.40 | 68.423 | 11.800 | 32,768 | 2026-11-05 |
 | qwen27b-tensorfold | 575.26 | 10.135 | 186.951 | 12,288 | 2026-11-04 |
@@ -29,7 +31,7 @@ All profiles retain2GiB host available, **100C** temperature stops, three bad2-s
 | qwen27b-hyperqwen | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
 | qwen27b-sglang | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
 | qwen27b-tensorfold | 87.77/89.77 | 256 MiB free/card after ready; GPU0; native1024 MiB reserve | 1/8 | 10 / none separately |
-| flash-next-iq1s-llamacpp | 87.77/89.77 | 256 MiB free/card after ready; 1536 MiB fit targets | 128/160 | 15 / none separately |
+| flash-next-iq1m-strata | 87.77/89.77 | 256 MiB free/card; 1024 MiB native reserve/card | 128/160 | 15 / none separately |
 | flash-next-strata | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
 | glm-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 10 / none separately |
 | deepseek-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
@@ -44,4 +46,4 @@ Both ComfyUI images remain unchanged: QwenTurbo1K7.133/4.086s,2K29.360/26.339s; 
 
 Both video entries retain512x288/720p/1080p options. End-to-end HD entry checks: Wan720p67.746s/1080p170.847s; LTX720p50.598s/1080p74.839s. Render-only repetitions,33-frame scope and GPU-only guards remain in the [HD entry report](COMFY-VIDEO-HD-ENTRIES-20261105.md) and [render benchmark report](COMFY-VIDEO-720P1080P-20261105.md). These November5 results were not repeated during the text-engine refresh.
 
-[Machine-readable current text observations](validation-results/20261105-engine-refresh.json). [November4 historical index](ALL-ENTRY-BENCHMARKS-20261104.md).
+[Earlier engine-refresh observations](validation-results/20261105-engine-refresh.json); [selected IQ1_M observations](validation-results/20261105-flash-iq1m-strata.json); [latest IQ3_XXS/DeepSeek Strata pair](validation-results/20261105-strata0211-qualification.json). [November4 historical index](ALL-ENTRY-BENCHMARKS-20261104.md).

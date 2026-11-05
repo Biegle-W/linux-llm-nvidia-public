@@ -13,8 +13,8 @@ The restored timer runs at **03:00 America/Toronto**, skips missed runs (`Persis
 | HyperQwen | `qwen27b-hyperqwen` | Default branch; compatible vLLM pin, complete upstream series and KVarN patches |
 | Heterogeneous SGLang | `qwen27b-sglang` | Default `fix/851-consolidated`; selected dependency pins and current local compatibility patch |
 | Maya | `glm-maya`, `deepseek-maya` | Latest stable tag; grouped control/binaries/manifests, bounded-cache patch |
-| Strata | `flash-next-strata`, `deepseek-unsloth-strata` | Latest stable tag; signed feed, control and CUDA13 engine packages |
-| llama.cpp | `bolt-vllm`, `flash-next-iq1s-llamacpp` | Latest stable tag; one shared runtime, both manifests qualified together |
+| Strata | `flash-next-strata`, `deepseek-unsloth-strata`, `flash-next-iq1m-strata` | Latest stable tag; signed feed/control/CUDA13 engines, both Qwen presets and IQ1_M pins |
+| llama.cpp | `bolt-vllm` | Latest stable tag; native IQ2 Bolt runtime/manifest |
 
 TensorFold remains a hash-pinned native package and receives a daily stable-release check. ComfyUI/Raylight stable releases and Mesh/GGUF default heads are also checked daily; newer versions are reported for separate image/video workflow and GPU-residency qualification. They are not silently installed through the text-model qualifier. No model weights, contexts, precision, driver, kernel, firmware or resource guards are automatically changed.
 

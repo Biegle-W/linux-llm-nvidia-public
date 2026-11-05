@@ -1,5 +1,7 @@
 # Engine refresh and weight sharing — November 5, 2026
 
+Subsequent November5 selection: [IQ1_M /Strata replaces IQ1_S /llama.cpp](FLASH-IQ1M-STRATA-20261105.md). The earlier refresh/audit below is historical. IQ1_S files are retained inactive; its28.8GB table is now actively hardlinked into IQ1_M, so removing the old checkpoint would reclaim only its37.58GB exclusive body/metadata, not66.379GB.
+
 Removed the single abandoned Qwen `.incomplete` download: **3,418,357,760 bytes (3.418 GB)**. Its identity, link count and absence of open owners were checked before removal. No completed checkpoint was deleted and no new model weights were downloaded.
 
 ## Selected versions

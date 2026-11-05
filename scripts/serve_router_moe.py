@@ -56,6 +56,9 @@ def main():
         source = prepare_config(profile)
     elif profile['id'] == 'flash-next-strata':
         source = Path.home() / '.local/state/strata/launch/qwen-flash-next.json'
+    elif profile['id'] == 'flash-next-iq1m-strata':
+        from flash_iq1m_strata_runtime import prepare_config
+        source = prepare_config(profile)
     elif profile['id'] == 'deepseek-strata':
         wrapper = json.loads((Path.home() / '.config/strata/profiles/deepseek-maya-s.json').read_text())
         if wrapper.get('overrides'):
@@ -135,13 +138,13 @@ def main():
                 stop()
                 child.wait(timeout=20)
                 raise SystemExit(1)
-            if profile['id'] == 'deepseek-unsloth-strata':
+            if profile['id'] in ('deepseek-unsloth-strata','flash-next-iq1m-strata'):
                 free = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits'], text=True)
                 free_values = pair_gpu_free_values(free)
                 gpu_bad = gpu_bad + 1 if any(x < GPU_FREE_MIB for x in free_values) else 0
                 from inference_swap_guard import read_cgroup
                 pressure = read_cgroup(cgroup_base)['pressure_pct']
-                loading_bad = loading_bad + 1 if watch.last_phase == 'loading' and pressure > 15 else 0
+                loading_bad = loading_bad + 1 if profile['id']=='deepseek-unsloth-strata' and watch.last_phase == 'loading' and pressure > 15 else 0
                 if gpu_bad >= 3 or loading_bad >= 3:
                     reason = 'Unsloth GPU reserve/loading pressure guard'
                     watch.guard.fail(reason)

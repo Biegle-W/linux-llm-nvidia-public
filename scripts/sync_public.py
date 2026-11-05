@@ -38,6 +38,9 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'scripts/flash_iq1m_strata_runtime.py', 'tests/test_flash_iq1m_strata_runtime.py',
+    'config/flash-iq1m-strata-runtime.json', 'docs/FLASH-IQ1M-STRATA-20261105.md',
+    'docs/validation-results/20261105-flash-iq1m-strata.json',
     'docs/ALL-MODEL-RAM-CEILINGS-20261105.md', 'docs/validation-results/20261105-all-model-ram-ceilings.json',
     'docs/STRATA-0211-QUALIFICATION-20261105.md', 'docs/validation-results/20261105-strata0211-qualification.json',
     'scripts/update_reviewed.py',

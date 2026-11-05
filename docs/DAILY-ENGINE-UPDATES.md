@@ -1,5 +1,9 @@
 # NVIDIA daily engine updates
 
+## November5 manual entry replacement
+
+Flash-Next IQ1_M /Strata qualified through one guarded actual DSH tool/result/exact follow-up and owned unload, replacing IQ1_S /llama.cpp. Engine versions did not change. Future grouped Strata updates now include both Flash-Next quants and DeepSeek; llama.cpp qualifies Bolt only. [Results, guards and lifecycle verification](FLASH-IQ1M-STRATA-20261105.md).
+
 ## 2026-11-05T11:48:40
 
 - strata: **promoted**; upstream `c3b3f5035506`.
