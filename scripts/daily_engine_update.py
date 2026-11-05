@@ -16,10 +16,10 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'network'))
-from update_transaction import Transaction, sha, write_json
+from update_transaction import Transaction, sha, write_json, validate_target_layout
 from update_policy import compare_short
 from update_builders import build, upstream, kernel_tests, latest_release
-from update_short_qualification import ShortQualification
+from update_short_qualification import ShortQualification, stop_owned_with_retry
 
 
 class Interrupted(RuntimeError): pass
@@ -98,15 +98,7 @@ class Updater:
         return watch.phase() == 'idle'
 
     def stop_worker(self,owner):
-        from worker_manager import RouterError
-        deadline=time.monotonic()+120
-        while True:
-            try:
-                self.manager.stop_owned(allowed_lock=owner); return
-            except RouterError as error:
-                if error.code not in ('backend_busy','backend_state_unknown','resources_busy') or time.monotonic()>=deadline:
-                    raise
-                time.sleep(2)
+        stop_owned_with_retry(self.manager,owner)
 
     def recover(self):
         pending = self.state.get('pending')
@@ -223,6 +215,10 @@ class Updater:
         return rows
 
     def process(self, component, revision, receipt):
+        validate_target_layout(
+            [item['target'] for item in receipt['files']]+[
+                self.root/'config/daily-update-versions.json',self.root/'config/maintained-profiles.json'],
+            [item['target'] for item in receipt['directories']])
         cdir = self.run_dir / component['id']; started = time.time()
         print(json.dumps({'component':component['id'],'stage':'production-baseline'}),flush=True)
         journal = cdir / ('activation-'+str(time.time_ns())) / 'transaction.json'; transaction = Transaction(journal)

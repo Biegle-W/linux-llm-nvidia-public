@@ -169,3 +169,62 @@ class RecoveryVisibility(unittest.TestCase):
             with patch('update_short_qualification.sys.stdout',Mock(isatty=Mock(return_value=False))),patch('update_short_qualification.subprocess.run')as run:
                 with self.assertRaisesRegex(RuntimeError,'not authorized'):q.run_tool(['python','candidate'])
             run.assert_not_called()
+
+
+class OwnedCleanupRetry(unittest.TestCase):
+    def test_short_qualification_cleanup_retries_transient_states(self):
+        import daily_engine_update  # Resolve the same guarded worker interface.
+        from worker_manager import RouterError
+        from update_short_qualification import ShortQualification
+        with tempfile.TemporaryDirectory()as tmp:
+            q=ShortQualification.__new__(ShortQualification);q.root=q.out=Path(tmp);q.p={'id':'qwen27b-sglang'};q.owner={'owner':'fixture'};q.manager=Mock()
+            q.manager.start.side_effect=RuntimeError('fixture startup failure')
+            q.manager.stop_owned.side_effect=[RouterError('busy',code)for code in ('backend_busy','resources_busy','backend_state_unknown')]+[None]
+            with patch('daily_update_owner.allowed_reservation',return_value=True),patch('update_short_qualification.time.monotonic',return_value=0),patch('update_short_qualification.time.sleep')as sleep:
+                with self.assertRaisesRegex(RuntimeError,'fixture startup failure'):q.run()
+            self.assertEqual(q.manager.stop_owned.call_count,4)
+            self.assertTrue(all(c.kwargs=={'allowed_lock':q.owner}for c in q.manager.stop_owned.call_args_list))
+            self.assertEqual([c.args for c in sleep.call_args_list],[(2,)]*3)
+    def test_cleanup_deadline_propagates_busy_without_unbounded_retry(self):
+        import daily_engine_update
+        from worker_manager import RouterError
+        from update_short_qualification import stop_owned_with_retry
+        manager=Mock();manager.stop_owned.side_effect=RouterError('busy','backend_busy')
+        with patch('update_short_qualification.time.monotonic',side_effect=[0,120]),patch('update_short_qualification.time.sleep')as sleep:
+            with self.assertRaises(RouterError):stop_owned_with_retry(manager,{'owner':'fixture'})
+        self.assertEqual(manager.stop_owned.call_count,1);sleep.assert_not_called()
+    def test_ownership_conflict_is_not_retried_or_bypassed(self):
+        import daily_engine_update
+        from worker_manager import RouterError
+        from update_short_qualification import stop_owned_with_retry
+        manager=Mock();manager.stop_owned.side_effect=RouterError('foreign owner','ownership_conflict')
+        with patch('update_short_qualification.time.sleep')as sleep:
+            with self.assertRaises(RouterError):stop_owned_with_retry(manager,{'owner':'fixture'})
+        self.assertEqual(manager.stop_owned.call_count,1);sleep.assert_not_called()
+
+
+class TargetLayout(unittest.TestCase):
+    def test_path_aliases_are_rejected_but_similar_sibling_names_are_safe(self):
+        from update_transaction import validate_target_layout
+        with tempfile.TemporaryDirectory()as tmp:
+            root=Path(tmp);bundle=root/'bundle';bundle.mkdir();alias=root/'alias';alias.symlink_to(bundle,target_is_directory=True)
+            with self.assertRaisesRegex(RuntimeError,'overlaps'):validate_target_layout([alias/'engine'],[bundle])
+            with self.assertRaisesRegex(RuntimeError,'overlaps'):validate_target_layout([bundle],[bundle])
+            validate_target_layout([root/'bundle-other/engine'],[bundle])
+    def test_transaction_rejects_nested_targets_in_both_orders_and_can_roll_back(self):
+        from update_transaction import Transaction
+        for file_first in (True,False):
+            with self.subTest(file_first=file_first),tempfile.TemporaryDirectory()as tmp:
+                root=Path(tmp);bundle=root/'bundle';bundle.mkdir();(bundle/'engine').write_bytes(b'original')
+                directory=root/'candidate-directory';directory.mkdir();(directory/'engine').write_bytes(b'directory-version')
+                file=root/'candidate-file';file.write_bytes(b'file-version')
+                tx=Transaction(root/'job/transaction.json');tx.begin('fixture','revision',{})
+                if file_first:
+                    tx.file(bundle/'engine',file)
+                    with self.assertRaisesRegex(RuntimeError,'overlaps'):tx.directory(bundle,directory)
+                    self.assertTrue(directory.exists())
+                else:
+                    tx.directory(bundle,directory)
+                    with self.assertRaisesRegex(RuntimeError,'overlaps'):tx.file(bundle/'engine',file)
+                    self.assertEqual((bundle/'engine').read_bytes(),b'directory-version')
+                tx.rollback();self.assertEqual((bundle/'engine').read_bytes(),b'original')

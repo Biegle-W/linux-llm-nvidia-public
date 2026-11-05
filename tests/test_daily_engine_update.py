@@ -124,6 +124,21 @@ class UpdaterIntegrationTests(unittest.TestCase):
         component={'id':'test','profiles':['test']}
         return u,target,receipt,component
 
+    def test_overlapping_receipt_is_rejected_before_baseline_or_mutation(self):
+        from unittest.mock import Mock
+        with tempfile.TemporaryDirectory()as temp:
+            root=Path(temp);u,target,receipt,component=self.prepare(root)
+            bundle=root/'bundle';bundle.mkdir();nested=bundle/'engine';nested.write_bytes(b'original')
+            replacement=root/'replacement-bundle';replacement.mkdir();(replacement/'engine').write_bytes(b'new-directory')
+            receipt['files'][0]['target']=str(nested)
+            receipt['directories']=[{'target':str(bundle),'candidate':str(replacement)}]
+            u.qualify=Mock()
+            with patch('daily_engine_update.kernel_tests')as kernels:
+                with self.assertRaisesRegex(RuntimeError,'overlaps'):u.process(component,'revision',receipt)
+            u.qualify.assert_not_called();kernels.assert_not_called()
+            self.assertEqual(nested.read_bytes(),b'original');self.assertTrue(replacement.is_dir())
+            self.assertNotIn('pending',u.state);self.assertEqual(list((root/'run').rglob('transaction.json')),[])
+
     def test_success_commits_only_after_all_gates_and_updates_version(self):
         from unittest.mock import Mock
         with tempfile.TemporaryDirectory() as temp:

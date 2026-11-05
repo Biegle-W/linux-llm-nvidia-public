@@ -1,5 +1,9 @@
 # NVIDIA daily engine updates
 
+## Cleanup and transaction-layout review fixes — November5,2026
+
+Review finding#3 is addressed: short qualification cleanup shares the bounded exact-owner retry, and overlapping file/directory targets are rejected before baseline or activation and within transactions.494 CPU tests passed; no model run, resource-policy change or serving restart. The enabled03:00Toronto timer is unchanged. [Details](DAILY-UPDATER-RESTORATION-20261105.md).
+
 ## Recovery review fixes — November5,2026
 
 Headless restored-production verification is now independent of candidate visibility permission, and SIGHUP enters interruption/rollback.488 CPU tests and85 focused public checks passed, including a real provisional-transaction hangup. The timer was paused during repair and restored after verification; next run November6 at03:00EST. No extra GPU benchmark or live runtime rollback was performed. [Details](DAILY-UPDATER-RESTORATION-20261105.md).

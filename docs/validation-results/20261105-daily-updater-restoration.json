@@ -119,5 +119,38 @@
       "result": "pass"
     },
     "next_run": "2026-11-06T03:00:00-05:00"
+  },
+  "minor_review_followup": {
+    "finding_addressed": 3,
+    "cleanup_retry": {
+      "deadline_s": 120,
+      "interval_s": 2,
+      "transient_errors": [
+        "backend_busy",
+        "backend_state_unknown",
+        "resources_busy"
+      ],
+      "ownership_conflict_retry": false,
+      "shared_by_coordinator_and_short_qualification": true
+    },
+    "target_layout": {
+      "resolved_aliases": true,
+      "reject_file_inside_or_equal_to_directory_swap": true,
+      "implicit_metadata_targets_checked": true,
+      "before_baseline_or_mutation": true,
+      "transaction_methods_enforce_both_orders": true
+    },
+    "CPU_tests": {
+      "count": 494,
+      "result": "pass"
+    },
+    "public_focused_tests": {
+      "count": 91,
+      "result": "pass"
+    },
+    "GPU_benchmark": false,
+    "resource_guards_changed": false,
+    "serving_restarted": false,
+    "timer_schedule_changed": false
   }
 }

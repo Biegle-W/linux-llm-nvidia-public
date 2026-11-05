@@ -17,6 +17,20 @@ def fingerprint(value):
     return hashlib.sha256(json.dumps(value,sort_keys=True,separators=(',',':')).encode()).hexdigest()
 
 
+def stop_owned_with_retry(manager,owner,timeout=120):
+    """Wait only for transient owned-worker states; never bypass ownership."""
+    from worker_manager import RouterError
+    deadline=time.monotonic()+timeout
+    while True:
+        try:
+            manager.stop_owned(allowed_lock=owner)
+            return
+        except RouterError as error:
+            if error.code not in ('backend_busy','backend_state_unknown','resources_busy') or time.monotonic()>=deadline:
+                raise
+            time.sleep(2)
+
+
 class ShortQualification:
     def __init__(self,root,profile,output,manager,owner,*,recovery=False):
         self.root,self.p,self.out=Path(root),profile,Path(output)
@@ -101,7 +115,7 @@ class ShortQualification:
             if monitor:monitor.join(timeout=10)
             write_json(self.out/'resource-samples.json',{'samples':samples,'errors':errors})
             # Parent owns unloading/recovery; preserve the reservation on any failure.
-            self.manager.stop_owned(allowed_lock=self.owner)
+            stop_owned_with_retry(self.manager,self.owner)
         result['checks']['unload']=True
         write_json(self.out/'qualification.json',result)
         return result

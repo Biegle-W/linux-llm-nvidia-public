@@ -29,6 +29,8 @@ There is **no full-context retrieval, sustained generation, repeated reload or t
 
 ## Ownership, visibility and guards
 
+Owned-worker cleanup retries only the three recognized transient busy/unknown states, with the existing120-second deadline and2-second interval; ownership errors are never retried or bypassed. Receipt file targets and directory-swap targets must be disjoint after resolving aliases, including metadata targets. Validate before baseline loading and enforce the same rule in both transaction operation orders.
+
 Post-rollback verification always uses private captured logs, independently of candidate visibility permission or a usable terminal. SIGHUP, SIGTERM and SIGINT share the interruption/rollback path; baseline interruption aborts the run rather than continuing to another component.
 
 The updater owns its reservation by exact live PID/start time/nonce. Its DSH child validates that owner and worker invocation on every forwarded request. It connects only to the already selected private backend through a local timing proxy; normal API clients remain blocked by the reservation. This avoids adding a maintenance bypass to the public API. The parent owns unload and reservation release.

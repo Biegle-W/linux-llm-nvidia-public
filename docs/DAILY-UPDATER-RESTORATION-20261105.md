@@ -1,5 +1,13 @@
 # Daily updater restoration — November5,2026
 
+## Cleanup and target-layout review follow-up — November 5
+
+Both parts of review finding **#3** are fixed. Short-check cleanup and the coordinator now share the same exact-owner retry helper: transient `backend_busy`, `resources_busy` and `backend_state_unknown` states use the existing120-second deadline and2-second interval. Ownership conflicts and other errors still propagate immediately; no reservation or guard is bypassed.
+
+Before baseline loading, receipt validation resolves file/directory targets and rejects a file target inside or equal to a swapped directory, including symlink aliases and the updater's metadata targets. The transaction methods repeat the guard in both operation orders. This prevents a later directory swap from hiding an earlier file update. Existing disjoint Maya/Strata/llama.cpp receipts remain supported.
+
+**494 CPU regressions passed**, including transient cleanup during qualification failure, timeout/ownership refusal, preflight rejection without baseline or mutation, and reversible rejection of nested targets in either order. No GPU benchmark or serving restart was needed; the03:00Toronto schedule is unchanged.
+
 ## Recovery review follow-up — November5
 
 Review findings **#1** and **#2** are fixed. Both interrupted-transaction recovery and in-process rollback explicitly mark restored-production verification. That short DSH check always captures private logs without relying on a TTY or scheduled candidate-headless permission. Normal candidate qualification still requires its selected visibility policy, and all ownership/resource guards remain.

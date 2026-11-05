@@ -4,6 +4,8 @@
 
 Restored-production short DSH checks must use explicit recovery mode with private captured logs, independently of candidate visibility permission or terminal availability. SIGHUP, SIGTERM and SIGINT must preserve the interruption/rollback path, including interruption during baseline. Candidate visibility and all resource/ownership guards remain. [Review follow-up](docs/DAILY-UPDATER-RESTORATION-20261105.md).
 
+Owned cleanup must retain the shared bounded retry policy and refuse ownership conflicts. Reject file targets nested in directory swaps before baseline loading and enforce disjoint targets in both transaction operation orders, including resolved aliases.
+
 ## Daily updater restored — November5,2026
 
 Daily engine maintenance is enabled at03:00 America/Toronto, including guarded headless scheduled tests with private logs. Eight text entries use current grouped staging, paired short actual DSH checks and durable rollback; TensorFold and the diffusion stack receive version monitoring. The repaired exact-owner DSH path and485 CPU regressions passed. All resource guards and the20-minute update-admission gate remain. [Restoration, scope and validation](docs/DAILY-UPDATER-RESTORATION-20261105.md). Earlier paused-update and long-suite paragraphs remain dated history.

@@ -12,6 +12,15 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def validate_target_layout(files,directories):
+    """Mixed file/directory targets must be disjoint, including path aliases."""
+    resolved_directories=[Path(path).resolve() for path in directories]
+    for path in files:
+        target=Path(path).resolve()
+        if any(target.is_relative_to(directory) for directory in resolved_directories):
+            raise RuntimeError('File target overlaps a directory swap; split the transaction')
+
+
 def write_json(path, data):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -52,6 +61,7 @@ class Transaction:
 
     def file(self, target, candidate):
         target, candidate = Path(target).resolve(), Path(candidate).resolve()
+        validate_target_layout([target],[a['target'] for a in self.data['actions'] if a['kind']=='directory'])
         backup = self.path.parent / 'preimages' / str(len(self.data['actions']))
         backup.parent.mkdir(mode=0o700, exist_ok=True)
         if backup.exists() or backup.is_symlink():
@@ -66,6 +76,7 @@ class Transaction:
 
     def directory(self, target, candidate):
         target, candidate = Path(target), Path(candidate)
+        validate_target_layout([a['target'] for a in self.data['actions'] if a['kind']=='file'],[target])
         if target.is_symlink() or candidate.is_symlink():
             raise RuntimeError('Environment directory must not be a symlink')
         backup = target.with_name(target.name + '.before-' + self.path.parent.name)
