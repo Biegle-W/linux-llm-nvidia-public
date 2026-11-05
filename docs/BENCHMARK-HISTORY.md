@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Video720p/1080p benchmarks complete — November5,2026
+
+GPU-only33-frame tests passed Wan720p at57.626/58.790s and LTX Mesh720p at27.323/27.322s,1080p at51.575/51.576s. Wan1080p regular stopped at the retained VRAM guard; Raylight asynchronous and synchronous retries hit60-second NCCL collective timeouts and produced no clip. LTX1080p reached246MiB free on GPU1 for two samples, recovering before the three-sample stop. All459 CPU tests pass. No guard or512x288 desktop default changed. Successful metadata-free HD clips are included in the public gallery. [Protocol, resource margins and failures](COMFY-VIDEO-720P1080P-20261105.md).
+
 ## ComfyUI two-GPU video trials complete — November4,2026
 
 Wan2.2TI2V5B passed the GPU-only regular baseline at10.143s first /7.111s warm and Raylight FSDP+Ulysses2 at43.346s /30.539s: distributed latency is about4.3times higher for this512x288x33-frame workload. LTX2.3distilled1.1Q4_0 passed an experimental Mesh28/20-block split at14.259s after server readiness, with valid video/audio and GPU1 denoiser release before VAE decoding; minimum sampled free VRAM1529/1564MiB, zero swap. All442 CPU checks passed. Both physical GPUs were audited, CPU weight execution was forbidden, guards remain, workers stopped and reservations released. Existing LLM/image entries and defaults remain; video candidates are not production entries. [Results, timing scope, patches and limits](COMFY-VIDEO-DUAL-GPU-20261104.md).

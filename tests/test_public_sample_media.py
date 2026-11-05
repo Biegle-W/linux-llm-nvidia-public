@@ -30,7 +30,7 @@ class PublicSampleTests(unittest.TestCase):
         with self.assertRaisesRegex(AssertionError,'content changed'):
             export.validate_sample_media(name,(ROOT/name).read_bytes()+b'changed',self.records())
     def test_png_metadata_rejected_even_with_updated_receipt(self):
-        name=export.SAMPLE_MEDIA[0];original=(ROOT/name).read_bytes();text=b'prompt\x00private workflow'
+        name=next(path for path in export.SAMPLE_MEDIA if path.endswith('.png'));original=(ROOT/name).read_bytes();text=b'prompt\x00private workflow'
         chunk=struct.pack('>I',len(text))+b'tEXt'+text+struct.pack('>I',zlib.crc32(b'tEXt'+text))
         content=original[:-12]+chunk+original[-12:]
         records={name:{'sha256':hashlib.sha256(content).hexdigest(),'bytes':len(content)}}

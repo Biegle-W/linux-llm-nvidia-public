@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "date": "2026-11-04",
-  "description": "AI-generated benchmark samples; one first-request output per tested setup/resolution. No new generation performed.",
+  "description": "AI-generated benchmark samples; selected first-request outputs from November4and5. Embedded workflow metadata removed; no new generation performed for publication.",
   "samples": [
     {
       "id": "qwen-turbo-1k",
@@ -15,7 +15,8 @@
       "original_sha256": "39af7c2d85139fb26097567185b4f33eb71c8bbbbde51a7509d82141a495f4d8",
       "sha256": "08624fece810e9777b10bf9b368fdb3c3bfcb4f7b49e6d40c361e6b8170f8d27",
       "bytes": 1849459,
-      "validation": "Decoded pixels identical; embedded prompt metadata removed"
+      "validation": "Decoded pixels identical; embedded prompt metadata removed",
+      "date": "2026-11-04"
     },
     {
       "id": "flux-klein-1k",
@@ -29,7 +30,8 @@
       "original_sha256": "bcdbf6b32bb7f9a8800b05603b338575085f019d151ba78ccb5e19967ab35c3f",
       "sha256": "72669c7e637593ada69257964021501f54e29d0c33977843d8b4f92c206f4d82",
       "bytes": 1640010,
-      "validation": "Decoded pixels identical; embedded prompt metadata removed"
+      "validation": "Decoded pixels identical; embedded prompt metadata removed",
+      "date": "2026-11-04"
     },
     {
       "id": "qwen-turbo-2k",
@@ -43,7 +45,8 @@
       "original_sha256": "1991eff6a2af9aee4214c67ee254f0cbe208f683e689f9020dec27813a8c6df8",
       "sha256": "9208d58ef62e8ca32cc8f6ca08f72eb220be91cfe7b92d05eaccf6048cdfa484",
       "bytes": 6448123,
-      "validation": "Decoded pixels identical; embedded prompt metadata removed"
+      "validation": "Decoded pixels identical; embedded prompt metadata removed",
+      "date": "2026-11-04"
     },
     {
       "id": "flux-klein-2k",
@@ -57,7 +60,8 @@
       "original_sha256": "dbb3d5e3d62a646a8c208c744f414078dbea67449e93fa6c5f10feb0b0b455e0",
       "sha256": "19b771ef67d25de2eaa2beb00b1eee4ed192fe4091d7e5835c8cf9023f313ec3",
       "bytes": 6009961,
-      "validation": "Decoded pixels identical; embedded prompt metadata removed"
+      "validation": "Decoded pixels identical; embedded prompt metadata removed",
+      "date": "2026-11-04"
     },
     {
       "id": "wan-baseline",
@@ -77,7 +81,8 @@
       "original_sha256": "83413fa054d562cc6bab200dbdea4ccf3f5fb81b26effb4901a84204364eb14b",
       "sha256": "9b3df06a624e56dd7f2f9ee4d20869d6fd285594e005ed7e8858df2b02aea486",
       "bytes": 161542,
-      "validation": "Remux only; decoded RGB frames and audio samples identical; workflow metadata removed"
+      "validation": "Remux only; decoded RGB frames and audio samples identical; workflow metadata removed",
+      "date": "2026-11-04"
     },
     {
       "id": "wan-raylight",
@@ -97,7 +102,8 @@
       "original_sha256": "4e21c6b1874858910f21bc87c42c81737ac4e05d4aed3e1b9e0bf9e9ecdcc070",
       "sha256": "0050c791b6a878f14d94e0e24e0b0c979b1e95b4182a015ef4433b8b3905e633",
       "bytes": 157914,
-      "validation": "Remux only; decoded RGB frames and audio samples identical; workflow metadata removed"
+      "validation": "Remux only; decoded RGB frames and audio samples identical; workflow metadata removed",
+      "date": "2026-11-04"
     },
     {
       "id": "ltx-mesh",
@@ -117,7 +123,72 @@
       "original_sha256": "e9bff509c9e873fb55ef88a5cecf1562479f52ad318b429d2d8423baace72e51",
       "sha256": "1ef1ec2975126ceadcc4e310e22e4f592dfb9462de7acd50b23ffc3eb2a7f3d4",
       "bytes": 179730,
-      "validation": "Remux only; decoded RGB frames and audio samples identical; workflow metadata removed"
+      "validation": "Remux only; decoded RGB frames and audio samples identical; workflow metadata removed",
+      "date": "2026-11-04"
+    },
+    {
+      "id": "wan-baseline-720p",
+      "date": "2026-11-05",
+      "model": "Wan2.2 TI2V5B FP16 regular720p",
+      "file": "wan-baseline-720p.mp4",
+      "poster": "wan-baseline-720p-poster.png",
+      "poster_sha256": "316bb4c7ab92c98781f05070117ec1a6c63926846b11d9675701070a4ac51ece",
+      "poster_bytes": 540757,
+      "kind": "video",
+      "width": 1280,
+      "height": 720,
+      "frames": 33,
+      "fps": 16,
+      "seed": 27001,
+      "audio_samples": 0,
+      "report": "docs/COMFY-VIDEO-720P1080P-20261105.md",
+      "original_sha256": "6c0f36bf29c6814352534bed9521b1895c3ce6b491b67580477a4fad7ba593d2",
+      "sha256": "312476740ae8d07ccc775ef05459b8071eca27cdbee8b28be3794c75fad70122",
+      "bytes": 359777,
+      "validation": "Remux only; decoded RGB frames and audio identical; embedded workflow metadata removed"
+    },
+    {
+      "id": "ltx-mesh-720p",
+      "date": "2026-11-05",
+      "model": "LTX2.3 Q4_0 Mesh720p",
+      "file": "ltx-mesh-720p.mp4",
+      "poster": "ltx-mesh-720p-poster.png",
+      "poster_sha256": "13001fc36876fe719de61202a2c6e8a0cb0aaeeedecb6c887551e7d10628cd95",
+      "poster_bytes": 642421,
+      "kind": "video",
+      "width": 1280,
+      "height": 720,
+      "frames": 33,
+      "fps": 24,
+      "seed": 27001,
+      "audio_samples": 63840,
+      "report": "docs/COMFY-VIDEO-720P1080P-20261105.md",
+      "original_sha256": "6a052e1bac7e3f619d3450226d8fa224549cc7748adde26605c1eb3d970a30f4",
+      "sha256": "483a898989b886686c0ba34702c881e643b3066c1bf4cfc551701cc17d40b65a",
+      "bytes": 626671,
+      "validation": "Remux only; decoded RGB frames and audio identical; embedded workflow metadata removed"
+    },
+    {
+      "id": "ltx-mesh-1080p",
+      "date": "2026-11-05",
+      "model": "LTX2.3 Q4_0 Mesh1080p",
+      "file": "ltx-mesh-1080p.mp4",
+      "poster": "ltx-mesh-1080p-poster.png",
+      "poster_sha256": "27a9f905d92348b91f33496441780004036f6e428a199843fe31668fbcd66a30",
+      "poster_bytes": 1938264,
+      "kind": "video",
+      "width": 1920,
+      "height": 1080,
+      "frames": 33,
+      "fps": 24,
+      "seed": 27001,
+      "audio_samples": 63840,
+      "report": "docs/COMFY-VIDEO-720P1080P-20261105.md",
+      "original_sha256": "023566df8e9c75f08435c105f86a4009ec1fcbe09b7f92d33ec091400b863b65",
+      "sha256": "4c3a6f7841bbe589ad579a9f3fea5bc2db9a96fa08aeaeaeb75f624c45a11b37",
+      "bytes": 1981201,
+      "validation": "Remux only; decoded RGB frames and audio identical; embedded workflow metadata removed"
     }
-  ]
+  ],
+  "updated": "2026-11-05"
 }

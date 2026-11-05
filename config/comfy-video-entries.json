@@ -19,7 +19,12 @@
       "status": "selected-bounded-workflow",
       "workflow": "config/comfy-workflows/wan22-5b.json",
       "api_workflow": "config/comfy-workflows/wan22-5b.api.json",
-      "desktop_launcher": "ComfyUI Wan 2.2 5B.desktop"
+      "desktop_launcher": "ComfyUI Wan 2.2 5B.desktop",
+      "resolution_screen_20261105": {
+        "scope": "Direct render only;33frames; desktop defaults and controls remain512x288",
+        "720p": "passed-two-clips",
+        "1080p": "failed-regular-VRAM-guard-and-Raylight-async-sync-NCCL-timeouts"
+      }
     },
     {
       "id": "ltx23-mesh",
@@ -32,8 +37,14 @@
       "status": "selected-bounded-workflow",
       "workflow": "config/comfy-workflows/ltx23-mesh.json",
       "api_workflow": "config/comfy-workflows/ltx23-mesh.api.json",
-      "desktop_launcher": "ComfyUI LTX 2.3 Mesh.desktop"
+      "desktop_launcher": "ComfyUI LTX 2.3 Mesh.desktop",
+      "resolution_screen_20261105": {
+        "scope": "Direct render only;33frames; desktop defaults and controls remain512x288",
+        "720p": "passed-two-clips",
+        "1080p": "passed-two-clips-near-floor246MiB-two-bad-samples"
+      }
     }
   ],
-  "prompt_max_characters": 4000
+  "prompt_max_characters": 4000,
+  "resolution_benchmark": "docs/benchmark-results/20261105-comfy-video-720p1080p.json"
 }

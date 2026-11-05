@@ -1,5 +1,7 @@
 # Maintained ComfyUI video entries — November4,2026
 
+[November5 HD resolution screens](COMFY-VIDEO-720P1080P-20261105.md) are separate direct-render benchmarks. Desktop controls/defaults remain512x288; the near-limit1080p results are not a preset promotion.
+
 Two video entries and Desktop-only launchers are installed alongside the existing image workflows. The user selected ComfyUI entries and launchers; the nine text API/DSH entries remain unchanged. `config/comfy-runtime.json` points to the selected video registry in `config/comfy-video-entries.json`.
 
 | Entry | Desktop launcher | Selected execution | Clip |

@@ -4,7 +4,23 @@ import json
 from pathlib import Path
 import subprocess
 
-def graph(stage, seed):
+def graph(stage,seed,width=512,height=288,sync_ulysses=False):
+    assert (width,height) in ((512,288),(1280,720),(1920,1080)), 'Unreviewed video benchmark dimensions'
+    assert not sync_ulysses or stage=='raylight','Synchronized Ulysses is a Raylight-only benchmark option'
+    result=_graph(stage,seed)
+    if sync_ulysses:result['11']['inputs']['sync_ulysses']=True
+    if stage in ('prepare','mesh-prepare'):return result
+    render_width=(width+31)//32*32;render_height=(height+31)//32*32
+    result['4']['inputs'].update(width=render_width,height=render_height)
+    if stage=='raylight' and (width,height)!=(512,288):
+        # Keep FSDP weights resident and bound decode workspace on GPU1.
+        result['8']=dict(class_type='VAEDecodeTiled',inputs=dict(samples=['7',0],vae=['3',0],tile_size=256,overlap=64,temporal_size=16,temporal_overlap=4))
+    if (render_width,render_height)!=(width,height):
+        result['23']=dict(class_type='ImageCrop',inputs=dict(image=['8',0],width=width,height=height,x=0,y=0))
+        result['10']['inputs']['images']=['23',0]
+    return result
+
+def _graph(stage, seed):
     def node(class_type,**inputs):return dict(class_type=class_type,inputs=inputs)
     if stage=='mesh-prepare':
         return {'9':node('NvidiaPrepareLTXPrompt',prompt='A red fox standing in snow slowly turns its head toward the camera and blinks. Gentle snowflakes drift through the air. Static camera, natural sunrise light, realistic smooth motion. Quiet winter ambience.')}
@@ -61,7 +77,8 @@ def output(root,work,stage,seed,elapsed):
     image=files[0]
     code="import av,json,sys; c=av.open(sys.argv[1]); frames=list(c.decode(video=0)); print(json.dumps(dict(frames=len(frames),width=frames[0].width,height=frames[0].height)))"
     value=json.loads(subprocess.check_output([str(root/'runtimes/env-comfy-video/bin/python'),'-c',code,str(image)],text=True))
-    assert value==dict(frames=33,width=512,height=288),'Decoded video shape mismatch'
+    settings=json.loads((work/'video-stage.json').read_text())
+    assert value==dict(frames=33,width=settings.get('width',512),height=settings.get('height',288)),'Decoded video shape mismatch'
     if stage=='mesh':
         assert (work/'mesh-server-stopped').exists(),'Mesh denoiser must release GPU1 before decoding'
         audio_code="import av,json,sys; c=av.open(sys.argv[1]); f=list(c.decode(audio=0)); print(json.dumps(dict(audio_samples=sum(x.samples for x in f),audio_sample_rate=f[0].sample_rate)))"

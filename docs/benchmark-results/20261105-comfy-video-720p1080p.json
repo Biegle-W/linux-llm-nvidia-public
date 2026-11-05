@@ -1,0 +1,419 @@
+{
+  "date": "2026-11-05",
+  "scope": "Isolated direct render benchmarks; unchanged512x288 desktop defaults",
+  "CPU_weight_offload": false,
+  "hardware": [
+    "RTX3080Ti12GB",
+    "RTX308010GB"
+  ],
+  "source_manifest": "config/comfy-video-trial.json",
+  "timing_scope": "HTTP submission after backend readiness to saved MP4/history completion; GPU prompt preparation and backend/Mesh server startup excluded; file cache warm from full hash preflight",
+  "crop_policy": "Generate at1280x736 or1920x1088, crop bottom16or8rows to exact1280x720 or1920x1080; no upscaling",
+  "conditioning_provenance": "Reuse original GPU-prepared fox-caption activations from November4 trial; Wan producer Torch2.13, LTX producer Torch2.11; all current renders Torch2.11CUDA13",
+  "attempts": [
+    {
+      "model": "Wan2.2 TI2V5B FP16",
+      "engine": "ComfyUI regular",
+      "width": 1280,
+      "height": 720,
+      "render_width": 1280,
+      "render_height": 736,
+      "frames": 33,
+      "fps": 16,
+      "status": "pass",
+      "requests": [
+        {
+          "seed": 27001,
+          "wall_s": 57.62640937299875,
+          "video_sha256": "6c0f36bf29c6814352534bed9521b1895c3ce6b491b67580477a4fad7ba593d2",
+          "frames": 33,
+          "width": 1280,
+          "height": 720
+        },
+        {
+          "seed": 27002,
+          "wall_s": 58.79044398000042,
+          "video_sha256": "01e9078f82762b41f4826415e899db2c23a18fa9e646212556c69aab81b6cfa6",
+          "frames": 33,
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "synchronized_Ulysses": false,
+      "resources": {
+        "samples": 60,
+        "minimum_host_available_GiB": 85.5258560180664,
+        "minimum_free_GPU_MiB": [
+          800.0,
+          263.0
+        ],
+        "max_temperature_C": [
+          67.0,
+          52.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 0,
+        "max_full_PSI_percent": 0.0
+      },
+      "residency_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 558,
+        "CPU_meta_violation_records": 0,
+        "completed": true
+      },
+      "automatic_GPU_tiled_VAE_retries": 2,
+      "decoder": "Regular GPU VAE with automatic GPU-tiled recovery"
+    },
+    {
+      "model": "Wan2.2 TI2V5B FP16",
+      "engine": "ComfyUI regular",
+      "width": 1920,
+      "height": 1080,
+      "render_width": 1920,
+      "render_height": 1088,
+      "frames": 33,
+      "fps": 16,
+      "status": "failed",
+      "requests": [],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "synchronized_Ulysses": false,
+      "resources": {
+        "samples": 6,
+        "minimum_host_available_GiB": 86.11251449584961,
+        "minimum_free_GPU_MiB": [
+          102.0,
+          8313.0
+        ],
+        "max_temperature_C": [
+          60.0,
+          40.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 3,
+        "max_full_PSI_percent": 0.0
+      },
+      "residency_audit": {
+        "physical_gpu_count": 1,
+        "audited_modules": 488,
+        "CPU_meta_violation_records": 0,
+        "completed": false
+      },
+      "automatic_GPU_tiled_VAE_retries": 0,
+      "decoder": "Regular GPU VAE with automatic GPU-tiled recovery",
+      "failure": "Resource guard stop; free VRAM below256MiB for3consecutive2s samples"
+    },
+    {
+      "model": "LTX2.3 distilled1.1 Q4_0",
+      "engine": "Mesh28/20",
+      "width": 1280,
+      "height": 720,
+      "render_width": 1280,
+      "render_height": 736,
+      "frames": 33,
+      "fps": 24,
+      "status": "pass",
+      "requests": [
+        {
+          "seed": 27001,
+          "wall_s": 27.322762097999657,
+          "video_sha256": "6a052e1bac7e3f619d3450226d8fa224549cc7748adde26605c1eb3d970a30f4",
+          "frames": 33,
+          "width": 1280,
+          "height": 720,
+          "audio_samples": 63840,
+          "audio_sample_rate": 48000
+        }
+      ],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "synchronized_Ulysses": false,
+      "resources": {
+        "samples": 16,
+        "minimum_host_available_GiB": 84.71875762939453,
+        "minimum_free_GPU_MiB": [
+          1514.0,
+          758.0
+        ],
+        "max_temperature_C": [
+          59.0,
+          52.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 0,
+        "max_full_PSI_percent": 0.0
+      },
+      "residency_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 2914,
+        "CPU_meta_violation_records": 0,
+        "completed": true
+      },
+      "automatic_GPU_tiled_VAE_retries": 0,
+      "decoder": "Explicit128px GPU tiles;32overlap;16temporal/4overlap;owned server ends before VAE"
+    },
+    {
+      "model": "LTX2.3 distilled1.1 Q4_0",
+      "engine": "Mesh28/20",
+      "width": 1280,
+      "height": 720,
+      "render_width": 1280,
+      "render_height": 736,
+      "frames": 33,
+      "fps": 24,
+      "status": "preflight-retried",
+      "requests": [],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "synchronized_Ulysses": false,
+      "residency_audit": {
+        "physical_gpu_count": 0,
+        "audited_modules": 0,
+        "CPU_meta_violation_records": 0,
+        "completed": false
+      },
+      "automatic_GPU_tiled_VAE_retries": 0,
+      "decoder": "Explicit128px GPU tiles;32overlap;16temporal/4overlap;owned server ends before VAE",
+      "worker_started": false,
+      "reservation_created": false,
+      "failure": "TIME_WAIT port preflight before GPU ownership; corrected and retried"
+    },
+    {
+      "model": "LTX2.3 distilled1.1 Q4_0",
+      "engine": "Mesh28/20",
+      "width": 1280,
+      "height": 720,
+      "render_width": 1280,
+      "render_height": 736,
+      "frames": 33,
+      "fps": 24,
+      "status": "pass",
+      "requests": [
+        {
+          "seed": 27002,
+          "wall_s": 27.321679314001813,
+          "video_sha256": "06c46261d2d186f29412d298863828ed85394a4939f94a8d1853ad4be577e439",
+          "frames": 33,
+          "width": 1280,
+          "height": 720,
+          "audio_samples": 63840,
+          "audio_sample_rate": 48000
+        }
+      ],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "synchronized_Ulysses": false,
+      "resources": {
+        "samples": 16,
+        "minimum_host_available_GiB": 84.8060302734375,
+        "minimum_free_GPU_MiB": [
+          1514.0,
+          758.0
+        ],
+        "max_temperature_C": [
+          57.0,
+          52.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 0,
+        "max_full_PSI_percent": 0.0
+      },
+      "residency_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 2914,
+        "CPU_meta_violation_records": 0,
+        "completed": true
+      },
+      "automatic_GPU_tiled_VAE_retries": 0,
+      "decoder": "Explicit128px GPU tiles;32overlap;16temporal/4overlap;owned server ends before VAE"
+    },
+    {
+      "model": "LTX2.3 distilled1.1 Q4_0",
+      "engine": "Mesh28/20",
+      "width": 1920,
+      "height": 1080,
+      "render_width": 1920,
+      "render_height": 1088,
+      "frames": 33,
+      "fps": 24,
+      "status": "pass",
+      "requests": [
+        {
+          "seed": 27001,
+          "wall_s": 51.57462832799865,
+          "video_sha256": "023566df8e9c75f08435c105f86a4009ec1fcbe09b7f92d33ec091400b863b65",
+          "frames": 33,
+          "width": 1920,
+          "height": 1080,
+          "audio_samples": 63840,
+          "audio_sample_rate": 48000
+        }
+      ],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "synchronized_Ulysses": false,
+      "resources": {
+        "samples": 28,
+        "minimum_host_available_GiB": 84.58222579956055,
+        "minimum_free_GPU_MiB": [
+          382.0,
+          246.0
+        ],
+        "max_temperature_C": [
+          62.0,
+          57.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 2,
+        "max_full_PSI_percent": 0.0
+      },
+      "residency_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 2914,
+        "CPU_meta_violation_records": 0,
+        "completed": true
+      },
+      "automatic_GPU_tiled_VAE_retries": 0,
+      "decoder": "Explicit128px GPU tiles;32overlap;16temporal/4overlap;owned server ends before VAE"
+    },
+    {
+      "model": "LTX2.3 distilled1.1 Q4_0",
+      "engine": "Mesh28/20",
+      "width": 1920,
+      "height": 1080,
+      "render_width": 1920,
+      "render_height": 1088,
+      "frames": 33,
+      "fps": 24,
+      "status": "pass",
+      "requests": [
+        {
+          "seed": 27002,
+          "wall_s": 51.575869887998124,
+          "video_sha256": "6b7b35cffb90c855718e6e63598ca7440b172568a068c39f4be5afe755a5cb43",
+          "frames": 33,
+          "width": 1920,
+          "height": 1080,
+          "audio_samples": 63840,
+          "audio_sample_rate": 48000
+        }
+      ],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "synchronized_Ulysses": false,
+      "resources": {
+        "samples": 28,
+        "minimum_host_available_GiB": 84.40339279174805,
+        "minimum_free_GPU_MiB": [
+          382.0,
+          246.0
+        ],
+        "max_temperature_C": [
+          63.0,
+          57.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 2,
+        "max_full_PSI_percent": 0.0
+      },
+      "residency_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 2914,
+        "CPU_meta_violation_records": 0,
+        "completed": true
+      },
+      "automatic_GPU_tiled_VAE_retries": 0,
+      "decoder": "Explicit128px GPU tiles;32overlap;16temporal/4overlap;owned server ends before VAE"
+    },
+    {
+      "model": "Wan2.2 TI2V5B FP16",
+      "engine": "Raylight FSDP+Ulysses2",
+      "width": 1920,
+      "height": 1080,
+      "render_width": 1920,
+      "render_height": 1088,
+      "frames": 33,
+      "fps": 16,
+      "status": "failed",
+      "requests": [],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "synchronized_Ulysses": false,
+      "resources": {
+        "samples": 72,
+        "minimum_host_available_GiB": 72.03644561767578,
+        "minimum_free_GPU_MiB": [
+          4386.0,
+          1042.0
+        ],
+        "max_temperature_C": [
+          60.0,
+          48.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 0,
+        "max_full_PSI_percent": 0.0
+      },
+      "residency_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 290,
+        "CPU_meta_violation_records": 0,
+        "completed": false
+      },
+      "automatic_GPU_tiled_VAE_retries": 0,
+      "decoder": "Explicit256px GPU tiles;64overlap;16temporal/4overlap;FSDP weights remain resident",
+      "failure": "NCCL ALLTOALL_BASE collective timeout60000ms; actor exited; no output"
+    },
+    {
+      "model": "Wan2.2 TI2V5B FP16",
+      "engine": "Raylight FSDP+Ulysses2 synchronous",
+      "width": 1920,
+      "height": 1080,
+      "render_width": 1920,
+      "render_height": 1088,
+      "frames": 33,
+      "fps": 16,
+      "status": "failed",
+      "requests": [],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "synchronized_Ulysses": true,
+      "resources": {
+        "samples": 72,
+        "minimum_host_available_GiB": 72.00263595581055,
+        "minimum_free_GPU_MiB": [
+          4386.0,
+          1042.0
+        ],
+        "max_temperature_C": [
+          59.0,
+          47.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 0,
+        "max_full_PSI_percent": 0.0
+      },
+      "residency_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 290,
+        "CPU_meta_violation_records": 0,
+        "completed": false
+      },
+      "automatic_GPU_tiled_VAE_retries": 0,
+      "decoder": "Explicit256px GPU tiles;64overlap;16temporal/4overlap;FSDP weights remain resident",
+      "failure": "NCCL ALLTOALL_BASE collective timeout60000ms; actor exited; no output"
+    }
+  ],
+  "CPU_tests_passed": 459,
+  "final_verification": {
+    "CPU_tests_passed": 459,
+    "API_idle": true,
+    "hub_DSH_healthy": true,
+    "worker_inactive": true,
+    "GPU_reservation_released": true,
+    "public_media_metadata_review_passed": true,
+    "desktop_defaults_changed": false
+  }
+}

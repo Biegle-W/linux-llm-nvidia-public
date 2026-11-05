@@ -59,6 +59,9 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model',choices=['qwen-image-2.1-turbo','flux3-klein','wan22-5b','wan22-5b-raylight','ltx23-mesh'],required=True)
     parser.add_argument('--video-entry',action='store_true',help='Use the selected interactive video workflow')
+    parser.add_argument('--video-resolution',choices=['720p','1080p'],help='Test-only exact video output size; retains33frames and all guards')
+    parser.add_argument('--video-sync-ulysses',action='store_true',help='Explicit synchronized Raylight benchmark retry')
+    parser.add_argument('--video-seed',type=int,help='Single-request video benchmark seed')
     parser.add_argument('--video-stage',choices=['prepare','baseline','raylight','mesh-prepare','mesh'])
     parser.add_argument('--size',type=int,choices=[1024,2048,4096],default=1024,help='Square image width/height in pixels')
     mode=parser.add_mutually_exclusive_group()
@@ -66,6 +69,11 @@ def main():
     mode.add_argument('--check-ui',action='store_true')
     parser.add_argument('--foreground-backend',action='store_true',help='Show backend logs in this same visible foreground terminal')
     args=parser.parse_args()
+    video_dimensions={'720p':(1280,720),'1080p':(1920,1080)}.get(args.video_resolution,(512,288))
+    if args.video_resolution or args.video_seed is not None:
+        assert args.video_stage in ('baseline','raylight','mesh') and not (args.video_entry or args.serve or args.check_ui),'Resolution overrides are isolated video benchmark stages only'
+        assert args.video_seed is None or 0<=args.video_seed<2**64
+    if args.video_sync_ulysses:assert args.video_stage=='raylight' and args.video_resolution,'Synchronized retry requires an isolated Raylight resolution benchmark'
     entry=None
     if args.video_entry:
         from comfy_video_entries import entry as get_entry
@@ -77,7 +85,7 @@ def main():
         assert args.video_stage in expected,'Select a matching experimental video stage'
         assert not args.serve,'Video candidates have no production serving qualification'
         from comfy_video_trial import graph as validate_video_graph
-        validate_video_graph(args.video_stage,27001)
+        validate_video_graph(args.video_stage,27001,*video_dimensions,sync_ulysses=args.video_sync_ulysses)
     else:assert args.video_stage is None and args.model!='wan22-5b','Select video entry mode for this model'
     def interrupted(*_):raise KeyboardInterrupt('Owned ComfyUI coordinator interrupted')
     signal.signal(signal.SIGTERM,interrupted)
@@ -92,12 +100,13 @@ def main():
         config=dict(config,models=models,checkpoint_directory=trial['checkpoint_directory'])
     model=next(x for x in config['models'] if x['id']==args.model)
     base=ROOT/'data/comfy-video-dual-20261104/stages' if args.video_stage else ROOT/'data/comfy-qualification-20261105'
-    work=base/time.strftime('%H%M%S-'+args.model+'-'+(args.video_stage or str(args.size)))
+    if args.video_resolution:base=ROOT/'data/comfy-video-resolutions-20261105/stages'
+    work=base/time.strftime('%H%M%S-'+args.model+'-'+(args.video_stage or str(args.size))+('-'+args.video_resolution if args.video_resolution else '')+('-seed'+str(args.video_seed) if args.video_seed is not None else '')+('-sync' if args.video_sync_ulysses else ''))
     work.mkdir(parents=True,exist_ok=False)
     (work/'user').mkdir()
     (work/'images').mkdir()
     if args.video_stage:
-        (work/'video-stage.json').write_text(json.dumps(dict(stage=args.video_stage)))
+        (work/'video-stage.json').write_text(json.dumps(dict(stage=args.video_stage,width=video_dimensions[0],height=video_dimensions[1],sync_ulysses=args.video_sync_ulysses)))
     if args.serve or (args.check_ui and args.video_entry):(work/'serve').touch()
     if args.serve or args.video_entry:
         folder=ROOT/'data/comfy-user'/args.model/'default/workflows'
@@ -109,7 +118,7 @@ def main():
     if args.video_stage:
         (work/'extra-model-paths.yaml').write_text('nvidia_video:\n  base_path: '+str(ROOT/config['checkpoint_directory'])+'\n  diffusion_models: split_files/diffusion_models\n  text_encoders: .\n  vae: split_files/vae\n')
     state=dict(phase='preflight',model=args.model,width=args.size,height=args.size,started=time.time(),pid=os.getpid(),work=str(work))
-    if args.video_stage:state.update(width=512,height=288,frames=33,fps=24 if args.model=='ltx23-mesh' else 16,stage=args.video_stage)
+    if args.video_stage:state.update(width=video_dimensions[0],height=video_dimensions[1],frames=33,fps=24 if args.model=='ltx23-mesh' else 16,stage=args.video_stage)
     def save():
         temp=work/'state.tmp';temp.write_text(json.dumps(state,indent=2)+'\n');temp.replace(work/'state.json')
     opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -142,7 +151,9 @@ def main():
             probe.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
             probe.bind(('127.0.0.1',8188))
         if args.video_stage=='mesh':
-            with socket.socket() as probe:probe.bind(('127.0.0.1',7777))
+            with socket.socket() as probe:
+                probe.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+                probe.bind(('127.0.0.1',7777))
         lock=dict(owner='comfy-images',pid=os.getpid(),unit=UNIT,nonce=uuid.uuid4().hex,started=time.time())
         fd=os.open(ROOT/'data/GPU-LOCK',os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
         with os.fdopen(fd,'w') as stream:stream.write(json.dumps(lock)+'\n')
@@ -210,13 +221,13 @@ def main():
             while property_of(UNIT,'InvocationID')==owned and property_of(UNIT,'ActiveState')=='active':time.sleep(2)
         else:
             state['runs']=[]
-            for seed in ((27001,) if args.video_stage in ('prepare','mesh-prepare','mesh') else (27001,27002)):
+            for seed in ((args.video_seed,) if args.video_seed is not None else (27001,) if args.video_stage in ('prepare','mesh-prepare','mesh') else (27001,27002)):
                 if args.video_entry:
                     from comfy_video_entries import graph as entry_graph
                     prompt=entry_graph(args.model,seed)
                 elif args.video_stage:
                     from comfy_video_trial import graph as video_graph
-                    prompt=video_graph(args.video_stage,seed)
+                    prompt=video_graph(args.video_stage,seed,*video_dimensions,sync_ulysses=args.video_sync_ulysses)
                 else:prompt=graph(model,seed,args.size)
                 (work/f'workflow-{seed}.json').write_text(json.dumps(prompt,indent=2)+'\n')
                 state.update(phase='generating',seed=seed);save()

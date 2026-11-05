@@ -56,3 +56,33 @@ class VideoGraphTests(unittest.TestCase):
             for node in graph.values():
                 for value in node['inputs'].values():
                     if isinstance(value,list):self.assertIn(value[0],graph)
+
+class VideoResolutionTests(unittest.TestCase):
+    def module(self):
+        spec=importlib.util.spec_from_file_location('video_resolution_test',ROOT/'scripts/comfy_video_trial.py')
+        module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module);return module
+    def test_exact_hd_output_uses_padded_native_latents_and_crop(self):
+        module=self.module()
+        for stage in ('baseline','raylight','mesh'):
+            for width,height,render_height in ((1280,720,736),(1920,1080,1088)):
+                graph=module.graph(stage,27001,width,height)
+                self.assertEqual(graph['4']['inputs']['width'],width)
+                self.assertEqual(graph['4']['inputs']['height'],render_height)
+                self.assertEqual(graph['23']['inputs'],dict(image=['8',0],width=width,height=height,x=0,y=0))
+                self.assertEqual(graph['10']['inputs']['images'],['23',0])
+                if stage=='raylight':
+                    self.assertEqual(graph['8']['class_type'],'VAEDecodeTiled')
+                    self.assertEqual(graph['8']['inputs']['tile_size'],256)
+    def test_selected_low_resolution_graphs_remain_unchanged(self):
+        module=self.module()
+        for stage in ('baseline','raylight','mesh'):
+            self.assertEqual(module.graph(stage,27001),module._graph(stage,27001))
+    def test_unreviewed_benchmark_dimensions_rejected(self):
+        with self.assertRaisesRegex(AssertionError,'Unreviewed'):
+            self.module().graph('mesh',27001,3840,2160)
+
+    def test_synchronized_ray_retry_is_explicit_and_gpu_only(self):
+        module=self.module();graph=module.graph('raylight',27001,1920,1080,sync_ulysses=True)
+        self.assertTrue(graph['11']['inputs']['sync_ulysses'])
+        self.assertFalse(graph['11']['inputs']['FSDP_CPU_OFFLOAD'])
+        self.assertFalse(module.graph('raylight',27001)['11']['inputs']['sync_ulysses'])
