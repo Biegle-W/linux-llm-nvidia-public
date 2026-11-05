@@ -1,5 +1,10 @@
 # Current takeover state
 
+## ComfyUI dual-GPU setup — November 5 UTC / November 4 local, 2026
+
+An isolated ComfyUI0.44.0 / PyTorch2.13.0 CUDA13 environment and Desktop-only **ComfyUI Qwen Turbo** / **ComfyUI FLUX3 Klein** shortcuts are installed. Qwen-Image2.1 Turbo INT8 with its W4A8 encoder passed two1024x1024 images,21 all-resident placement audits and owned unload:7.133s first request /4.086s warm,3.218/3.074s denoising. GPU0 holds the denoiser; GPU1 holds encoder/VAE, with no CPU execution-weight offload. All437 CPU checks passed and existing LLM entries/guards remain unchanged. FLUX3Klein INT8 also passed two1024x1024 images and21 residency audits:7.130s first /5.091s warm,4.181/4.065s denoising; zero sampled swap in both models. Both workers finish idle and reservations are released. Use Ctrl+C before switching image launchers; no remaining test/cleanup is pending. [Setup, guards, benchmark scope and next action](COMFY-DUAL-GPU-20261105.md).
+
+
 ## Unused Qwen GGUF target/drafter deleted — November 4, 2026
 
 The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries, the selected TensorFold DFlash2 drafter and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](UNUSED-QWEN-GGUF-REMOVAL-20261104.md).

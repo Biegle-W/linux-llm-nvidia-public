@@ -20,6 +20,12 @@ RETIRED_FILES = (
     'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
 
 FILES = (
+    'config/comfy-runtime.json', 'config/comfy-requirements.lock',
+    'config/comfy-workflows/qwen-image-2.1-turbo.json', 'config/comfy-workflows/qwen-image-2.1-turbo.api.json',
+    'config/comfy-workflows/flux3-klein.json', 'config/comfy-workflows/flux3-klein.api.json',
+    'scripts/comfy_download.py', 'scripts/comfy_run.py', 'scripts/comfy_worker.py', 'scripts/comfy_nodes/__init__.py',
+    'scripts/install_comfy_shortcut.py', 'tests/test_comfy_residency.py',
+    'docs/COMFY-DUAL-GPU-20261105.md', 'docs/benchmark-results/20261105-comfy-dual-gpu.json',
     'docs/UNUSED-QWEN-GGUF-REMOVAL-20261104.md', 'docs/validation-results/20261104-unused-qwen-gguf-removal.json',
     'docs/BOLT-AWQ-REMOVAL-20261104.md', 'docs/validation-results/20261104-bolt-awq-removal.json',
     'config/bolt-iq2-runtime.json', 'scripts/bolt_iq2_runtime.py', 'tests/test_bolt_iq2_runtime.py',

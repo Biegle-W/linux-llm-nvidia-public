@@ -1,0 +1,99 @@
+{
+  "1": {
+    "class_type": "NvidiaResidentDenoiser",
+    "inputs": {
+      "name": "flux3-image-klein-int8-convrot.safetensors"
+    }
+  },
+  "2": {
+    "class_type": "NvidiaResidentEncoder",
+    "inputs": {
+      "name": "qwen3vl_4b_int8_convrot.safetensors",
+      "type": "flux3"
+    }
+  },
+  "3": {
+    "class_type": "NvidiaResidentVAE",
+    "inputs": {
+      "name": "flux2-vae.safetensors"
+    }
+  },
+  "8": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "samples": [
+        "7",
+        0
+      ],
+      "vae": [
+        "3",
+        0
+      ]
+    }
+  },
+  "9": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "8",
+        0
+      ],
+      "filename_prefix": "flux3-klein-27001"
+    }
+  },
+  "4": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": "A detailed editorial photograph of a small red fox standing in fresh white snow beside a dark green pine tree. The fox faces the camera, with two alert triangular ears, amber eyes, a black nose and a fluffy orange tail curled to its right. Warm sunrise light enters from the left, illuminating individual hairs and tiny snow crystals. A softly blurred forest fills the background. Natural colors, realistic anatomy, no text, square composition."
+    }
+  },
+  "5": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "2",
+        0
+      ],
+      "text": ""
+    }
+  },
+  "6": {
+    "class_type": "EmptyFlux2LatentImage",
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    }
+  },
+  "7": {
+    "class_type": "KSampler",
+    "inputs": {
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "4",
+        0
+      ],
+      "negative": [
+        "5",
+        0
+      ],
+      "latent_image": [
+        "6",
+        0
+      ],
+      "seed": 27001,
+      "steps": 16,
+      "cfg": 1.0,
+      "sampler_name": "er_sde",
+      "scheduler": "simple",
+      "denoise": 1.0
+    }
+  }
+}

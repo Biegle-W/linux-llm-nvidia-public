@@ -1,0 +1,180 @@
+{
+  "schema": 1,
+  "date_UTC": "2026-11-05",
+  "date_local": "2026-11-04",
+  "hardware": {
+    "cpu": "Intel Core i9-13900KS",
+    "RAM_usable_GiB": 91.76984787,
+    "GPUs": [
+      "RTX 3080 Ti 12 GiB",
+      "RTX 3080 10 GiB"
+    ],
+    "PCIe": "CPU PCIe4 x8/x8",
+    "CUDA_P2P": false
+  },
+  "engine": {
+    "name": "ComfyUI",
+    "version": "0.44.0",
+    "commit": "7ad7adb38f6cbb6c2b0713d3bd44c3fb2b9c8ebe",
+    "python": "3.13.17",
+    "torch": "2.13.0+cu130"
+  },
+  "guard_policy": {
+    "worker_ram_high_GiB": 32,
+    "worker_ram_max_GiB": 36,
+    "host_available_min_GiB": 2,
+    "gpu_free_min_MiB": 256,
+    "temperature_max_C": 82,
+    "sample_interval_s": 2,
+    "bad_samples": 3,
+    "swap_occupancy": "unlimited",
+    "swap_write_MiB_s": 1,
+    "swap_combined_MiB_s": 8,
+    "swap_window_s": 30,
+    "active_full_PSI_percent": 10,
+    "loading_full_PSI_percent": 15,
+    "idle_unload_s": 600,
+    "parallel_execution": 1
+  },
+  "models": [
+    {
+      "id": "qwen-image-2.1-turbo",
+      "status": "qualified-short-image-test",
+      "denoiser_quant": "INT8 ConvRot",
+      "encoder_quant": "W4A8",
+      "VAE": "BF16",
+      "width": 1024,
+      "height": 1024,
+      "batch": 1,
+      "steps": 8,
+      "CFG": 1,
+      "sampler": "euler",
+      "schedule": "Official Turbo manual sigmas",
+      "file_cache": "warm; preflight SHA256 reads precede startup",
+      "prompt": "fixed full-scene fox caption",
+      "first_request_wall_s": 7.132798512000591,
+      "warm_request_wall_s": 4.085854332000963,
+      "warm_conditioning_cache": true,
+      "sampling_s": [
+        3.2181450619991665,
+        3.073678700000528
+      ],
+      "vae_decode_s": [
+        0.4573712199999136,
+        0.3871995949994016
+      ],
+      "text_encoding_s": [
+        0.7265631919999578,
+        0.31632274099865754
+      ],
+      "image_sha256": [
+        "39af7c2d85139fb26097567185b4f33eb71c8bbbbde51a7509d82141a495f4d8",
+        "1fdf0f38110ca2232bd11abe3e0e5e80c8f3740c987b716c8d21d8f5797a7b78"
+      ],
+      "storage_size_decimal_GB": 14.244402881,
+      "storage": "SATA /dev/sda1, models/comfy-images/{diffusion_models,text_encoders,vae}",
+      "denoiser_device": "cuda:0",
+      "encoder_vae_device": "cuda:1",
+      "CPU_execution_weight_parameters": 0,
+      "residency_audits": 21,
+      "partial_unload_seen": false,
+      "sampled_peak_GPU_used_MiB": [
+        8153.0,
+        9254.0
+      ],
+      "sampled_peak_temperature_C": [
+        51.0,
+        38.0
+      ],
+      "sampled_min_host_available_GiB": 85.5844955444336,
+      "sampled_peak_worker_swap_bytes": 0,
+      "sampled_max_full_PSI_percent": 0.0,
+      "resource_sample_count": 8,
+      "guard_violation": false,
+      "worker_stopped": true,
+      "reservation_released": true
+    },
+    {
+      "id": "flux3-klein",
+      "status": "qualified-short-image-test",
+      "denoiser_quant": "INT8 ConvRot",
+      "encoder_quant": "INT8 ConvRot",
+      "VAE": "official flux2-vae.safetensors; FP16 execution",
+      "width": 1024,
+      "height": 1024,
+      "batch": 1,
+      "steps": 16,
+      "CFG": 1,
+      "sampler": "er_sde",
+      "schedule": "simple",
+      "file_cache": "warm; preflight SHA256 reads precede startup",
+      "prompt": "same fixed full-scene fox caption as Qwen; no extra prompt-enhancement model",
+      "first_request_wall_s": 7.129669390000345,
+      "warm_request_wall_s": 5.090854080001009,
+      "warm_conditioning_cache": true,
+      "sampling_s": [
+        4.181482354000764,
+        4.064794699999766
+      ],
+      "vae_decode_s": [
+        0.33516273600071145,
+        0.19077750999895216
+      ],
+      "text_encoding_s": [
+        0.5756322239994915,
+        0.12821209100002307
+      ],
+      "image_sha256": [
+        "bcdbf6b32bb7f9a8800b05603b338575085f019d151ba78ccb5e19967ab35c3f",
+        "70dc2aab0a3dd1ee2d12e78910190ac906849b0ab429be7e24a4cf5b16d850ea"
+      ],
+      "storage_size_decimal_GB": 11.022645311,
+      "storage": "SATA /dev/sda1, models/comfy-images/{diffusion_models,text_encoders,vae}",
+      "denoiser_device": "cuda:0",
+      "encoder_vae_device": "cuda:1",
+      "CPU_execution_weight_parameters": 0,
+      "residency_audits": 21,
+      "partial_unload_seen": false,
+      "sampled_peak_GPU_used_MiB": [
+        6649.0,
+        6182.0
+      ],
+      "sampled_peak_temperature_C": [
+        50.0,
+        36.0
+      ],
+      "sampled_min_host_available_GiB": 85.21348190307617,
+      "sampled_peak_worker_swap_bytes": 0,
+      "sampled_max_full_PSI_percent": 0.0,
+      "resource_sample_count": 9,
+      "guard_violation": false,
+      "worker_stopped": true,
+      "reservation_released": true
+    }
+  ],
+  "CPU_tests": {
+    "passed": 437,
+    "failed": 0,
+    "new_residency_ownership_selection_tests": 14
+  },
+  "limitations": [
+    "Two images in the final configuration; no median or sustained stress qualification",
+    "Warm request reuses cached conditioning",
+    "Memory and temperature sampled every2seconds; transient peaks may be missed",
+    "No image-editing or multi-reference workflow tested",
+    "Frontend HTTP/node checks are distinct from interactive GUI verification"
+  ],
+  "setup_failures": [
+    "Desktop login/backend monitor handshake unavailable; foreground terminal used",
+    "Missing initial Comfy user directory corrected before sampling",
+    "Residency audit attribute corrected and CPU rejection tests passed",
+    "Closed-port reuse preflight corrected after verifying no listener"
+  ],
+  "pre_final_trial_note": "An earlier two-image screen kept parameters on GPUs but triggered partial-unload bookkeeping on the same GPU; final keep-resident gate removed this and fresh results above supersede it",
+  "frontend_http_and_workflow_nodes_passed": true,
+  "desktop_shortcuts": [
+    "ComfyUI Qwen Turbo",
+    "ComfyUI FLUX3 Klein"
+  ],
+  "model_switch_policy": "Ctrl+C current owned instance; launch the other model. Per-profile loader gate rejects cross-model weights."
+}

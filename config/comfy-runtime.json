@@ -1,0 +1,79 @@
+{
+  "schema": 1,
+  "source": "https://github.com/Comfy-Org/ComfyUI",
+  "commit": "7ad7adb38f6cbb6c2b0713d3bd44c3fb2b9c8ebe",
+  "runtime": "runtimes/ComfyUI",
+  "python": "runtimes/env-comfy/bin/python",
+  "checkpoint_directory": "models/comfy-images",
+  "cpu_weight_offload": false,
+  "denoiser_device": "cuda:0",
+  "encoder_vae_device": "cuda:1",
+  "models": [
+    {
+      "id": "qwen-image-2.1-turbo",
+      "repo": "Comfy-Org/Qwen-Image-2.1",
+      "revision": "aacf31a6d48e707f352ecba714cee0680da3479b",
+      "files": [
+        {
+          "file": "diffusion_models/qwen_image_2.1_turbo_int8_convrot.safetensors",
+          "bytes": 7256787829,
+          "sha256": "8144a0182964aa8403ad6dbc011db837304167d235161b9aabaa8532e967314c"
+        },
+        {
+          "file": "text_encoders/qwen3vl_8b_w4a8.safetensors",
+          "bytes": 6312105364,
+          "sha256": "7754425e55e7bea2bfde4dde59a4cc236cb44e5ee9c215ea66ef8d47012824eb"
+        },
+        {
+          "file": "vae/qwen_image_2.1_vae_bf16.safetensors",
+          "bytes": 675509688,
+          "sha256": "bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9"
+        }
+      ],
+      "qualification_status": "short-image-test-passed"
+    },
+    {
+      "id": "flux3-klein",
+      "repo": "black-forest-labs/flux-3-image-klein-comfy",
+      "revision": "9d36114cf7a2e03a45c28f5cc4987d20ebfdb6c1",
+      "files": [
+        {
+          "file": "diffusion_models/flux3-image-klein-int8-convrot.safetensors",
+          "bytes": 5827874779,
+          "sha256": "847d8933548afd93df4af2cac2498e70891bf28d9dae06d695f536992e168fe2"
+        },
+        {
+          "file": "text_encoders/qwen3vl_4b_int8_convrot.safetensors",
+          "bytes": 4858559240,
+          "sha256": "32de113cbf8282b02cbff0794b637b9d6676da09314a1db5a30bcea9bf4ee01c"
+        },
+        {
+          "file": "vae/flux2-vae.safetensors",
+          "bytes": 336211292,
+          "sha256": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
+        }
+      ],
+      "qualification_status": "short-image-test-passed"
+    }
+  ],
+  "version": "0.44.0",
+  "torch": "2.13.0+cu130",
+  "python_version": "3.13.17",
+  "guard_policy": {
+    "worker_ram_high_GiB": 32,
+    "worker_ram_max_GiB": 36,
+    "host_available_min_GiB": 2,
+    "gpu_free_min_MiB": 256,
+    "temperature_max_C": 82,
+    "sample_interval_s": 2,
+    "bad_samples": 3,
+    "swap_occupancy": "unlimited",
+    "swap_write_MiB_s": 1,
+    "swap_combined_MiB_s": 8,
+    "swap_window_s": 30,
+    "active_full_PSI_percent": 10,
+    "loading_full_PSI_percent": 15,
+    "idle_unload_s": 600,
+    "parallel_execution": 1
+  }
+}
