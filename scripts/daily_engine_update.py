@@ -69,6 +69,15 @@ def validate_update_coverage(catalog, policy):
         raise RuntimeError('Updater catalog coverage differs from maintained profiles')
 
 
+def select_components(policy,names=None):
+    components=policy['components']
+    if names is None:return components
+    available={component['id']for component in components}
+    if not names or len(set(names))!=len(names) or not set(names)<=available:
+        raise RuntimeError('Choose unique maintained updater component IDs')
+    return [component for component in components if component['id']in names]
+
+
 class Updater:
     def __init__(self, root=ROOT):
         self.root = Path(root); self.base = self.root / 'data/daily-update'
@@ -338,7 +347,7 @@ class Updater:
         publish(self.root,owned)
         self.state.pop('publication_owned',None);self.state.pop('publication_hashes',None);write_json(self.state_path,self.state)
 
-    def run(self, manual=False, check_only=False):
+    def run(self, manual=False, check_only=False, components=None):
         if check_only and (self.state.get('pending') or self.state.get('reservation_owner')):
             raise RuntimeError('Recovery required before read-only discovery')
         if not check_only: self.recover()
@@ -353,11 +362,12 @@ class Updater:
                 raise RuntimeError('Repository edits preserved; automatic engine work deferred until reviewed')
         from profile_catalog import load_catalog
         validate_update_coverage(load_catalog(), self.policy)
+        selected=select_components(self.policy,components)
         versions = json.loads((self.root/'config/daily-update-versions.json').read_text())
         stamp = datetime.now().strftime('%Y%m%d-%H%M%S')+'-'+str(time.time_ns())
         self.run_dir = self.base/stamp; self.run_dir.mkdir(mode=0o700)
         candidates = []; results = []
-        for component in self.policy['components']:
+        for component in selected:
             row = {'component':component['id'],'revision':'unknown'}
             try:
                 revision = upstream(component); row['revision'] = revision
@@ -438,6 +448,7 @@ def main():
     parser.add_argument('--recover-only',action='store_true')
     parser.add_argument('--check-only',action='store_true',help='Read upstream revisions; no build, GPU use, publication or promotion')
     parser.add_argument('--smoke-current',metavar='PROFILE',help='Verify one current engine through the owned short DSH path; no update/publication')
+    parser.add_argument('--components',nargs='+',metavar='ID',help='Qualify only these maintained components; full catalog coverage remains validated')
     parser.add_argument('--manual',action='store_true',help='Permit admission outside the nightly window; still requires idle and ownership checks')
     parser.add_argument('--allow-full-context-tests',action='store_true',help='Retired flag; long suites must be requested and run separately')
     args = parser.parse_args()
@@ -454,7 +465,7 @@ def main():
     install_interrupt_handlers()
     if args.recover_only: updater.recover()
     elif args.smoke_current:updater.smoke_current(args.smoke_current)
-    else: updater.run(args.manual,args.check_only)
+    else: updater.run(args.manual,args.check_only,args.components)
 
 
 if __name__ == '__main__': main()

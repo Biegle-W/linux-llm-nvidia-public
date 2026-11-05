@@ -56,3 +56,5 @@ python3 scripts/daily_engine_update.py --check-only
 Use a foreground terminal for `--manual` or `--smoke-current PROFILE`. Updates retain the20-minute idle gate. The current-only diagnostic requires serving to be idle and already unloaded; it never stages or promotes an update and may verify a repair immediately after cleanup. Both modes retain exclusive ownership and all resource guards. `--check-only` never builds, uses GPUs, promotes or publishes. Installation archives replaced project-owned units, verifies them, reloads systemd and restores the timer without restarting API, hub, DSH or any model.
 
 [Restoration validation](DAILY-UPDATER-RESTORATION-20261105.md). Earlier daily ledger entries retain their original long-suite scope and failures; they do not describe the new scheduled protocol.
+
+A requested single-component comparison can use `--manual --components strata`. This restricts candidate updates to Strata while preserving full catalog-coverage validation,20-minute idle admission, resource guards, paired short DSH checks, rollback and independent publication. The scheduled command without this filter still covers every maintained component.

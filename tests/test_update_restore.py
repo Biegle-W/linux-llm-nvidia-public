@@ -244,3 +244,16 @@ class CUDAHostHeaders(unittest.TestCase):
             verify_cuda_host_headers(root,root,root/'log')
             text=(root/'cuda-host-headers.cpp').read_text();self.assertLess(text.index('cuda_profiler_api.h'),text.index('cuda_runtime.h'))
             self.assertIn('-fsyntax-only',run.call_args.args[0]);self.assertIn(include,run.call_args.args[0])
+
+
+class ComponentSelection(unittest.TestCase):
+    def test_requested_component_excludes_unrelated_updates(self):
+        from daily_engine_update import select_components
+        policy={'components':[{'id':'maya'},{'id':'strata'},{'id':'llamacpp'}]}
+        self.assertEqual(select_components(policy,['strata']),[{'id':'strata'}])
+        self.assertEqual(select_components(policy),policy['components'])
+    def test_empty_duplicate_or_unknown_selection_is_rejected(self):
+        from daily_engine_update import select_components
+        policy={'components':[{'id':'strata'}]}
+        for names in [[],['strata','strata'],['unknown']]:
+            with self.subTest(names=names),self.assertRaises(RuntimeError):select_components(policy,names)
