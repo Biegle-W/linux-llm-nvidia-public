@@ -54,6 +54,8 @@ class Transaction:
         target, candidate = Path(target).resolve(), Path(candidate).resolve()
         backup = self.path.parent / 'preimages' / str(len(self.data['actions']))
         backup.parent.mkdir(mode=0o700, exist_ok=True)
+        if backup.exists() or backup.is_symlink():
+            raise RuntimeError('Preimage slot already exists; use a unique transaction directory')
         shutil.copy2(target, backup)
         with backup.open('rb') as f: os.fsync(f.fileno())
         mode = stat.S_IMODE(target.stat().st_mode)

@@ -1,11 +1,18 @@
 {
   "schema": 1,
   "profile": "deepseek-maya",
-  "source_commit": "3589d6f12a3f77e813b184b51a586f8fc3de2185",
+  "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
   "binary": {
     "path": "runtimes/maya-unsloth-v1146/maya-ds4",
-    "sha256": "a610b972fdb671da8c1b28acaa491014f65afd8362a029fbf69b676dfe1cfefe"
+    "sha256": "2ce34f0899922fb2c9fc9a97e7992de391ceadfea09910c5017b9311859135bf"
   },
   "bounded_cache_cpu_test": "pass",
-  "status": "actual DSH read tool/result passed at32K"
+  "status": "Qualified guarded short actual DSH tool/result/exact followup and owned unload2026-11-05",
+  "release": "1.1.53",
+  "CUDA_toolkit": "13.0.88;matchingCUDA13runtime/cuBLAS",
+  "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+  "cache_controller_patch": {
+    "path": "patches/maya-ds4-file-cache-target-v1153.patch",
+    "sha256": "edad385d4c5fdde4b6797fe0fb021dedcb311166b56bd893e7e5d70fe4d3b580"
+  }
 }

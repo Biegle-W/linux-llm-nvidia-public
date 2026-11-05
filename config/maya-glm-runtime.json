@@ -1,13 +1,15 @@
 {
   "schema": 1,
   "profile": "glm-maya",
-  "release": "1.1.50",
-  "source_commit": "10e69a0eb11541004abb24f9fa47147e9002326f",
+  "release": "1.1.53",
+  "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
   "ggml_commit": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
   "binary": {
     "path": "runtimes/maya-glm-v1150/maya",
-    "sha256": "5db43862f66460fae866f44e11c8d57136fbe75c7dc67d00ce4574c2583435aa"
+    "sha256": "40954ae08d5af0b2d7ae3295edbd85d3d0ff7d4ecef054db52def11df6db859b"
   },
   "mode": "normal; existing weights, context and sampling retained",
-  "evidence": "docs/benchmark-results/20261103-vram256-optimization.json"
+  "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+  "status": "Qualified guarded short actual DSH tool/result/exact followup and owned unload2026-11-05",
+  "CUDA_toolkit": "13.0.88;matchingCUDA13runtime/cuBLAS"
 }

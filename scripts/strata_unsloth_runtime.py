@@ -1,4 +1,4 @@
-"""Pinned, independent Strata 0.2.9 runtime for Unsloth Dynamic3.1 DeepSeek."""
+"""Pinned, independent Strata runtime for Unsloth Dynamic3.1 DeepSeek."""
 import hashlib
 import json
 import subprocess
@@ -14,7 +14,7 @@ def verify(profile, root=ROOT):
     if (profile['id'] != PROFILE or profile.get('engine') != 'Strata'
             or manifest.get('schema') != 1
             or manifest.get('profile') != PROFILE or manifest.get('runtime_directory') != RUNTIME
-            or manifest.get('engine_version') != '0.1.55' or not manifest.get('signature_verified')):
+            or manifest.get('engine_version') != '0.1.56' or not manifest.get('signature_verified')):
         raise ValueError('Unsloth Strata runtime identity mismatch')
     hashes = manifest.get('sha256', {})
     required = {RUNTIME + '/engine/strata-dsv41', RUNTIME + '/source/serve/server.py',

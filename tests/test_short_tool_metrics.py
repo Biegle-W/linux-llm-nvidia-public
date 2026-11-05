@@ -3,6 +3,12 @@ from pathlib import Path
 sys.path[:0]=[str(Path(__file__).resolve().parents[1]/'scripts')]
 from short_tool_metrics import ToolMetrics
 class Metrics(unittest.TestCase):
+ def test_sglang_native_intervals_and_ranked_prefill(self):
+  with tempfile.TemporaryDirectory() as p:
+   t=self.tap(p);t.model='qwen27b-sglang'
+   counters='sglang:per_stage_req_latency_seconds_sum{stage="prefill_forward",tp_rank="0",pp_rank="0"} 2\nsglang:per_stage_req_latency_seconds_count{stage="prefill_forward",tp_rank="0",pp_rank="0"} 1\nsglang:time_to_first_token_seconds_sum 2.1\nsglang:time_to_first_token_seconds_count 1\nsglang:inter_token_latency_seconds_sum 0.5\nsglang:inter_token_latency_seconds_count 10\n'
+   t.finish({}, {'prompt_tokens':100,'completion_tokens':11},{},3,3.5,4,time.perf_counter(),'',counters)
+   r=json.loads((Path(p)/'tool-benchmark.json').read_text());self.assertEqual(r['prefill_tps'],50);self.assertEqual(r['ttft_s'],2.1);self.assertEqual(r['decode_tps'],20)
  def tap(self,p):
   t=ToolMetrics.__new__(ToolMetrics);t.output=Path(p);t.model='qwen27b-hyperqwen';return t
  def test_native_metrics_survive_buffered_tool_output(self):

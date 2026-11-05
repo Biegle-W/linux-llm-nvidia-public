@@ -1,5 +1,7 @@
 # All current entry benchmarks — November 4, 2026
 
+Historical November4 index. [Current November5 engine-refresh observations](ALL-ENTRY-BENCHMARKS-20261105.md).
+
 [Requested ComfyUI native2K/4K results](COMFY-2K4K-20261104.md): both2K profiles passed; native4K failed GPU memory/guard qualification. This is separate from the unchanged nine-entry LLM catalog.
 
 Diffusion image workflows have a [separate ComfyUI benchmark and resource-guard report](COMFY-DUAL-GPU-20261105.md). They do not add text-model IDs to the nine-entry API/DSH catalog.

@@ -15,7 +15,7 @@ class Runtime(unittest.TestCase):
         self.hashes={}
         for n in names:
             rel=rt.RUNTIME+'/'+n;p=self.root/rel;p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(b'pinned fixture');self.hashes[rel]=hashlib.sha256(p.read_bytes()).hexdigest()
-        self.manifest={'schema':1,'profile':rt.PROFILE,'runtime_directory':rt.RUNTIME,'engine_version':'0.1.55','signature_verified':True,'sha256':self.hashes}
+        self.manifest={'schema':1,'profile':rt.PROFILE,'runtime_directory':rt.RUNTIME,'engine_version':'0.1.56','signature_verified':True,'sha256':self.hashes}
         (self.root/'config').mkdir();self.save()
     def save(self):(self.root/'config/deepseek-unsloth-runtime.json').write_text(json.dumps(self.manifest))
     def test_32gb_store_is_bounded(self):

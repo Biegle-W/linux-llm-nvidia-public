@@ -54,6 +54,14 @@ class TransactionTests(unittest.TestCase):
             Transaction(journal).rollback();self.assertEqual(target.read_bytes(),b'old')
             self.assertEqual(target.stat().st_mode & 0o777,0o755)
 
+    def test_distinct_journals_cannot_overwrite_a_shared_preimage_slot(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);first=root/'first';first.write_bytes(b'original-first');second=root/'second';second.write_bytes(b'original-second');candidate=root/'candidate';candidate.write_bytes(b'new')
+            transaction=Transaction(root/'first.json');transaction.begin('first','rev',{});transaction.file(first,candidate);transaction.commit()
+            next_transaction=Transaction(root/'second.json');next_transaction.begin('second','rev',{})
+            with self.assertRaisesRegex(RuntimeError,'Preimage slot already exists'):next_transaction.file(second,candidate)
+            self.assertEqual((root/'preimages/0').read_bytes(),b'original-first');self.assertEqual(second.read_bytes(),b'original-second')
+
     def test_committed_candidate_is_not_rolled_back_on_restart(self):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);target=root/'runtime';target.write_bytes(b'old');candidate=root/'candidate';candidate.write_bytes(b'new')

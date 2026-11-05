@@ -14,7 +14,7 @@ sys.path[:0]=[str(ROOT/'network'),str(ROOT/'scripts')]
 from worker_manager import Workers
 from request_admission import RequestAdmission
 from idle_control import claim,release,owned_native_idle
-from native_idle_policy import transform, vision_phases
+from native_idle_policy import transform, vision_phases, adapt_idle_timer
 
 
 class VisionPhaseTest(unittest.TestCase):
@@ -117,6 +117,27 @@ class DenseIdleTest(unittest.TestCase):
         path=self.root/'data/GPU-LOCK';path.write_text('{"owner":"native-idle","pid":123}')
         self.assertTrue(owned_native_idle(path,lambda _: '0::/user/llm-router-worker.service'))
         self.assertFalse(owned_native_idle(path,lambda _: '0::/unrelated.service'))
+
+
+class NativeKeepAliveTests(unittest.TestCase):
+    def test_managed_deadline_survives_client_keep_alive_disable(self):
+        source = """class Fixture:
+    def loop(self):
+        while True:
+            limit = self.idle_limit()
+            time.sleep(max(1.0, min(30.0, (limit or 120.0) / 4)))
+            limit = self.idle_limit()
+            if limit:
+                self.unload(idle_for=limit)
+"""
+        namespace={'time':SimpleNamespace(sleep=lambda value:sleeps.append(value))}
+        exec(adapt_idle_timer(source),namespace)
+        for managed,client,expected_sleep,expected_limit in [(True,0,5.0,600),(False,7,1.75,7)]:
+            sleeps=[];limits=[];obj=namespace['Fixture']();obj.idle_unload_s=600;obj.idle_lock_path='owned' if managed else None;obj.idle_limit=lambda:client
+            def unload(idle_for):limits.append(idle_for);raise StopIteration()
+            obj.unload=unload
+            with self.assertRaises(StopIteration):obj.loop()
+            self.assertEqual(sleeps,[expected_sleep]);self.assertEqual(limits,[expected_limit])
 
 
 class NativeAdapterTest(unittest.TestCase):

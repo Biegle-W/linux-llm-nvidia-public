@@ -9,8 +9,31 @@ from pathlib import Path
 MARKER = '# Managed NVIDIA idle reservation'
 
 
+def adapt_idle_timer(source):
+    """Keep managed idle deadlines fixed when newer controls add keep_alive."""
+    sleeps = ('time.sleep(max(1.0, min(30.0, self.idle_unload_s / 4)))',
+              'time.sleep(max(1.0, min(30.0, (limit or 120.0) / 4)))')
+    matched = [value for value in sleeps if source.count(value)]
+    assert len(matched) == 1 and source.count(matched[0]) == 1
+    sleep = matched[0]
+    sleep_line = next(line for line in source.splitlines() if line.strip() == sleep)
+    indent = sleep_line[:len(sleep_line)-len(sleep_line.lstrip())]
+    source = source.replace(sleep, sleep.replace('min(30.0,', 'min(5.0 if getattr(self, "idle_lock_path", None) else 30.0,'), 1)
+    if '(limit or 120.0)' in sleep:
+        query = indent + 'limit = self.idle_limit()'
+        assert source.splitlines().count(query) == 2
+        source = source.replace('\n'+query+'\n', '\n'+indent+'limit = self.idle_unload_s if getattr(self, "idle_lock_path", None) else self.idle_limit()\n')
+    return source
+
+
 def vision_phases(source):
     """Observe encoder loading separately from image computation, including errors."""
+    # Newer Maya only releases an on-demand encoder when GPU lending is used.
+    # Preserve this project's request-scoped CPU encoder release as well.
+    release = 'if self.lend is not None and self.proc is not None:'
+    if release in source:
+        assert source.count(release) == 1
+        source = source.replace(release, 'if self.proc is not None:')
     tree = ast.parse(source)
     vision = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'Vision')
     lines = source.splitlines(keepends=True)
@@ -88,9 +111,7 @@ def transform(text, family):
         anchor = '    svc.idle_unload_s = a.idle_unload if a.idle_unload is not None else float(cfg.get("idle_unload_s") or 0)'
     assert source.count(anchor) == 1
     source = source.replace(anchor, anchor + '\n    svc.idle_lock_path = cfg.get("idle_lock_path")\n    svc.idle_activity_path = cfg.get("idle_activity_path")', 1)
-    sleep = 'time.sleep(max(1.0, min(30.0, self.idle_unload_s / 4)))'
-    assert source.count(sleep) == 1
-    source = source.replace(sleep, 'time.sleep(max(1.0, min(5.0 if getattr(self, "idle_lock_path", None) else 30.0, self.idle_unload_s / 4)))', 1)
+    source = adapt_idle_timer(source)
     status_anchor = '                now = time.time()\n                if s.get("busy"):'
     assert source.count(status_anchor) == 1
     loading = ('svc._engine_start.locked() or svc.reloading() or vision_loading or (svc.fifo.locked() and not s.get("busy") and not vision_compute)' if family == 'maya'

@@ -1,18 +1,16 @@
 {
   "binary": "runtimes/llama.cpp/build/bin/llama-server",
-  "binary_sha256": "eed3e9ba6633c1d3ef2f835a0ebb265c6453680e08daca0f1cdd2c6d37c1b86f",
-  "source_commit": "caa8191df159f764fb0160e3d2fc6be008948aee",
+  "binary_sha256": "b0840b6931d7cc15d79165fbe1c2dfa579013ba95f4b667025628fda9ba175bd",
+  "source_commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
   "runtime_files_sha256": {
-    "runtimes/llama.cpp/build/bin/libmtmd.so.0.7.0": "7e13afe0407f325e0c6f09dd26bed2e29baa033e5d4c3e1ba41c5ab07c395d4c",
-    "runtimes/llama.cpp/build/bin/libggml-cpu.so.0.27.0": "4dbd15345d38d8a8f9f501f8754d0b28b5badd53ac3818cc798b9d865523a5e7",
-    "runtimes/llama.cpp/build/bin/libggml.so.0.27.0": "34f93beb000f44fcd0575209bf351dbeb6aba23f8f9dbfdfeda66b8598fcb29f",
-    "runtimes/llama.cpp/build/bin/libggml-cuda.so.0.27.0": "703ab7c8b7eef61b2a23bd826e026004b8e3a74abec9a22f9dac567b381c4cea",
-    "runtimes/llama.cpp/build/bin/libggml-base.so.0.27.0": "dc13255af5a645ab28691d3b415c2ebf5e8cb050e79090e3aa1ebfa63d88d9d5",
-    "runtimes/llama.cpp/build/bin/libllama.so.0.7.0": "6ed0f8f9cef622ae5ae18de0b0379d03cff1ab0569e299a383918888b4b714f7",
-    "runtimes/llama.cpp/build/bin/libllama-common.so.0.7.0": "1b460989281abf4ff670b8bd96d423cdecc9a1c488938c00d4b67da9425d21ac",
-    "runtimes/llama.cpp/build/bin/libllama-cli-impl.so": "1a06c3ff5afaf09fbc4d9dee69a3932bd42dec8550990d419796831dcfc5fca9",
-    "runtimes/llama.cpp/build/bin/libllama-bench-impl.so": "400d9ccbb62c7b58d34a06bea00d17fca83e0f03efc9e647dde0b5cba6203c1a",
-    "runtimes/llama.cpp/build/bin/libllama-server-impl.so": "2826ee1fc754a1852c8fa76a3b1d5092676b6858ea9d8198698e2d04734de219"
+    "runtimes/llama.cpp/build/bin/libggml.so.0.29.0": "05ddc6b363a35f42380f1358ad658ddefc079fdf7c079aa582c39812dcd44a36",
+    "runtimes/llama.cpp/build/bin/libllama.so.0.9.0": "b3cb048aa1d9d62a4cc39130eb0765995da5496a774fc6d04b6e4d394fe6a3ed",
+    "runtimes/llama.cpp/build/bin/libggml-base.so.0.29.0": "fa5fd8c42ad833af701fd908ccb7467712ac7c6d622edde73bb5669be9634398",
+    "runtimes/llama.cpp/build/bin/libggml-cpu.so.0.29.0": "4e50858189c10bd63611a82fca6f2361140ecbf6a4a5abcb725070e0b34d09e4",
+    "runtimes/llama.cpp/build/bin/libllama-common.so.0.9.0": "165ff5c34ecc06443e672a580de297d4a25d15acc23ca412092ed25b559db935",
+    "runtimes/llama.cpp/build/bin/libmtmd.so.0.9.0": "1474c309bb9d616e47dea4c6b646f0de4418811e5706bcbf66e4806a6dc7d400",
+    "runtimes/llama.cpp/build/bin/libllama-server-impl.so": "d6113ab0d566b1188f3fc20715ea65b936434a7c5adc541697080b81654603a6",
+    "runtimes/llama.cpp/build/bin/libggml-cuda.so.0.29.0": "60a6d056caadbad484a44aeb1854e60401f14e67c2c2919e0d3bf5b14c3b2505"
   },
   "repository": "nvidia/NVIDIA-Nemotron-3.5-Bolt-74B-A9B-24GB-GGUF",
   "revision": "e0fecb69cb3e5e4c5e8a056fa2aec98c78e91246",
@@ -31,5 +29,6 @@
       "sha256": "91d63363e782c8a3d5f4be42816eba8e0d42dd2530bd07a7d0d2dc440599af75",
       "publisher_sha256_matched": true
     }
-  ]
+  ],
+  "release": "v0.9.0"
 }

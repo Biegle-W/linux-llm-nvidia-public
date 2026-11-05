@@ -1,0 +1,672 @@
+{
+  "date": "2026-11-05",
+  "scope": "One-time latest-stable/default-fork-head refresh checked November5; no nightly requirement. No new weights, driver or kernel update. Daily schedule remains paused.",
+  "engines": [
+    {
+      "engine": "HyperQwen",
+      "selected": "6ab9bd05cb84 / vLLM0.32.0",
+      "source_commit": "6ab9bd05cb84b538a6595d634f3e337ac8a80856",
+      "action": "updated",
+      "upstream": "https://github.com/syv-ai/HyperQwen"
+    },
+    {
+      "engine": "SGLang heterogeneous fork",
+      "selected": "d61ded5b9e2d / fix/851-consolidated",
+      "source_commit": "d61ded5b9e2dc46453d924a3d4db06ec2c373f54",
+      "action": "updated; retained local W4A8/MTP and fixed Prometheus initialization order",
+      "upstream": "https://github.com/efschu/htsglang"
+    },
+    {
+      "engine": "Maya",
+      "selected": "1.1.53",
+      "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
+      "action": "updated both GLM and DeepSeek; cache controller retained",
+      "upstream": "https://github.com/mw00/project-maya/releases/tag/v1.1.53"
+    },
+    {
+      "engine": "Strata",
+      "selected": "app0.2.10 / control+engines0.1.56",
+      "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+      "action": "updated Qwen and DeepSeek; signed packages verified",
+      "upstream": "https://github.com/Niko1221/Strata/releases/tag/v0.2.10"
+    },
+    {
+      "engine": "llama.cpp",
+      "selected": "stable v0.9.0 / cd959bae99ff",
+      "source_commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
+      "action": "updated shared Bolt/Flash runtime; prerelease nightlies excluded",
+      "upstream": "https://github.com/ggml-org/llama.cpp/releases/tag/v0.9.0"
+    },
+    {
+      "engine": "TensorFold",
+      "selected": "1.2.2",
+      "action": "already latest stable; unchanged",
+      "upstream": "https://github.com/ashhart/TensorFold/releases/tag/v1.2.2"
+    },
+    {
+      "engine": "ComfyUI",
+      "selected": "0.44.0",
+      "action": "already latest stable; unchanged",
+      "upstream": "https://github.com/Comfy-Org/ComfyUI/releases/tag/v0.44.0"
+    },
+    {
+      "engine": "Raylight",
+      "selected": "1.11.0",
+      "action": "already latest stable; unchanged",
+      "upstream": "https://github.com/komikndr/raylight/releases/tag/1.11.0"
+    },
+    {
+      "engine": "ComfyUI Mesh",
+      "selected": "3804156b4b39",
+      "action": "already current default-branch head; unchanged",
+      "upstream": "https://github.com/shootthesound/comfyui-mesh"
+    },
+    {
+      "engine": "ComfyUI GGUF",
+      "selected": "6ea2651e7df6",
+      "action": "already current default-branch head; unchanged",
+      "upstream": "https://github.com/city96/ComfyUI-GGUF"
+    }
+  ],
+  "incomplete_download_removed": {
+    "bytes": 3418357760,
+    "decimal_GB": 3.41835776,
+    "completed_checkpoint_removed": false,
+    "open_file_owners": 0
+  },
+  "weight_audit": {
+    "scope": "Managed NVIDIA stores; completed GGUF/safetensors/bin files>=100MB; inode-alias deduplication and full SHA256 for same-size distinct files",
+    "physical_files": 45,
+    "physical_bytes": 595313129983,
+    "exact_duplicate_groups": [],
+    "alias_not_duplicate_bytes": 110595290592
+  },
+  "sharing": {
+    "HyperQwen_and_SGLang": "same15.792GB AutoRound checkpoint",
+    "Maya_and_Strata_DeepSeek": "same232.980GB Unsloth UD-IQ1_S shards; final110.595GB shard is a storage symlink, not a second allocation",
+    "Wan_native_and_Raylight": "same checkpoint, encoder and VAE",
+    "TensorFold": "EXL3 target9.673GB +DFlash2 drafter3.849GB; incompatible with AutoRound checkpoint",
+    "Flash_Next": "IQ1_S66.379GB and IQ3_XXS75.840GB are different quants, both configured"
+  },
+  "deletion_suggestions": [
+    {
+      "candidate": "Flash-Next IQ1_S",
+      "potential_saving_decimal_GB": 66.379,
+      "condition": "Optional retirement of its configured llama.cpp entry; IQ3_XXS Strata remains. No completed weights deleted.",
+      "duplicate": false
+    }
+  ],
+  "checks": {
+    "changed_entries": 8,
+    "actual_DSH_tool_result_exact_followup_owned_unload": "pass",
+    "CPU_tests": 469,
+    "CPU_result": "pass",
+    "unchanged_engines_rerun": false,
+    "full_context_or_sustained_tests": false,
+    "public_full_discovery": {
+      "tests": 451,
+      "errors": 12,
+      "skipped": 4,
+      "reason": "Installed private Maya/Strata sources and xterm binary intentionally absent from reference checkout"
+    },
+    "public_runtime_integrity_tests": {
+      "tests": 39,
+      "result": "pass"
+    },
+    "public_sample_privacy_tests": {
+      "tests": 5,
+      "result": "pass"
+    },
+    "final_idle": {
+      "API_hub": "healthy and idle",
+      "DSH_HTTP": 200,
+      "GPU_LOCK": false,
+      "GPU_memory_used_MiB": [
+        15,
+        14
+      ],
+      "daily_update_timer": "disabled/inactive"
+    },
+    "public_changed_code_tests": {
+      "tests": 57,
+      "skipped": 2,
+      "result": "pass"
+    }
+  },
+  "profiles": {
+    "qwen27b-hyperqwen": {
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "context": 86016,
+      "date": "2026-11-05",
+      "metrics": {
+        "prefill_tps": 2077.771747991685,
+        "ttft_s": 2.818279981613159,
+        "decode_tps": 62.18563209445497,
+        "prompt_tokens": 5823,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter",
+        "client_ttft_s": 2.9283719190061674,
+        "meaningful_sse_chunks": 18
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 8.620612721002544
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 32,
+          "max": 36,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          9728,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3,
+        "temperature_stop_C": 100
+      },
+      "resources": "Short lifecycle guard telemetry retained privately; no new full-context or sustained qualification."
+    },
+    "qwen27b-sglang": {
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "context": 57344,
+      "date": "2026-11-05",
+      "metrics": {
+        "prefill_tps": 2219.456973445308,
+        "ttft_s": 2.785395831000642,
+        "decode_tps": 60.13452850523579,
+        "prompt_tokens": 6095,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded",
+        "client_ttft_s": 2.882100928,
+        "meaningful_sse_chunks": 4
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 8.015264601002855
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 32,
+          "max": 36,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3,
+        "temperature_stop_C": 100
+      },
+      "resources": "Short lifecycle guard telemetry retained privately; no new full-context or sustained qualification."
+    },
+    "glm-maya": {
+      "model": "GLM-5.3-Flash",
+      "quant": "Maya-S24",
+      "engine": "Maya",
+      "context": 65536,
+      "date": "2026-11-05",
+      "metrics": {
+        "prefill_tps": 543.7,
+        "ttft_s": 10.217764207998698,
+        "decode_tps": 15.2,
+        "prompt_tokens": 5439,
+        "output_tokens": 25,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings",
+        "client_ttft_s": 10.217764207998698,
+        "meaningful_sse_chunks": 21
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 16.026958308000758
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3,
+        "temperature_stop_C": 100
+      },
+      "resources": "Short lifecycle guard telemetry retained privately; no new full-context or sustained qualification."
+    },
+    "deepseek-maya": {
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
+      "engine": "Maya",
+      "context": 32768,
+      "date": "2026-11-05",
+      "metrics": {
+        "prefill_tps": 186.7,
+        "ttft_s": 31.943937379001,
+        "decode_tps": 7.9,
+        "prompt_tokens": 5701,
+        "output_tokens": 59,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings",
+        "client_ttft_s": 31.943937379001,
+        "meaningful_sse_chunks": 29
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 46.862097915996856
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3,
+        "temperature_stop_C": 100
+      },
+      "resources": "Short lifecycle guard telemetry retained privately; no new full-context or sustained qualification."
+    },
+    "bolt-vllm": {
+      "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+      "quant": "native-IQ2",
+      "engine": "llama.cpp",
+      "context": 163840,
+      "date": "2026-11-05",
+      "metrics": {
+        "prefill_tps": 500.31086704910666,
+        "ttft_s": 12.898547648001113,
+        "decode_tps": 67.78868234053985,
+        "prompt_tokens": 6366,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings",
+        "client_ttft_s": 12.898547648001113,
+        "meaningful_sse_chunks": 21
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 15.423439652993693
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3,
+        "temperature_stop_C": 100
+      },
+      "resources": "Short lifecycle guard telemetry retained privately; no new full-context or sustained qualification."
+    },
+    "flash-next-iq1s-llamacpp": {
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "Unsloth-Dynamic-v3.1-UD-IQ1_S",
+      "engine": "llama.cpp",
+      "context": 12288,
+      "date": "2026-11-05",
+      "metrics": {
+        "prefill_tps": 120.7329835421291,
+        "ttft_s": 48.46262081999885,
+        "decode_tps": 36.86106675927202,
+        "prompt_tokens": 5824,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings",
+        "client_ttft_s": 48.46262081999885,
+        "meaningful_sse_chunks": 19
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 52.455352208002296
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          9472
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3,
+        "temperature_stop_C": 100
+      },
+      "resources": "Short lifecycle guard telemetry retained privately; no new full-context or sustained qualification."
+    },
+    "flash-next-strata": {
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "IQ3_XXS",
+      "engine": "Strata",
+      "context": 131072,
+      "date": "2026-11-05",
+      "metrics": {
+        "prefill_tps": 943.8,
+        "ttft_s": 6.395006419996207,
+        "decode_tps": 58.8,
+        "prompt_tokens": 5591,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings",
+        "client_ttft_s": 6.395006419996207,
+        "meaningful_sse_chunks": 21
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 10.220597282997915
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3,
+        "temperature_stop_C": 100
+      },
+      "resources": "Short lifecycle guard telemetry retained privately; no new full-context or sustained qualification."
+    },
+    "deepseek-unsloth-strata": {
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
+      "engine": "Strata",
+      "context": 32768,
+      "date": "2026-11-05",
+      "metrics": {
+        "prefill_tps": 85.7,
+        "ttft_s": 66.69541466100054,
+        "decode_tps": 11.9,
+        "prompt_tokens": 5710,
+        "output_tokens": 62,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings",
+        "client_ttft_s": 66.69541466100054,
+        "meaningful_sse_chunks": 32
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 78.10349784000573
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3,
+        "temperature_stop_C": 100
+      },
+      "resources": "Short lifecycle guard telemetry retained privately; no new full-context or sustained qualification."
+    },
+    "qwen27b-tensorfold": {
+      "model": "Qwen3.8-27B",
+      "quant": "EXL3-2.0bpw",
+      "engine": "TensorFold",
+      "context": 12288,
+      "weight_gb": 13.521604452,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 575.2631890813566,
+        "ttft_s": 10.135117,
+        "decode_tps": 186.95083193120212,
+        "prompt_tokens": 5825,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 22.236469259000046
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 32,
+          "max": 36,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11000,
+          512
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "lifecycle_samples": 22,
+        "lifecycle_median_interval_s": 5.075297117233276,
+        "charged_worker_RAM_peak_GiB": 15.454833984375,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 84.99322891235352,
+        "GPU_free_min_MiB_all_phases": [
+          1359.0,
+          9928.0
+        ],
+        "GPU_free_min_MiB_nonloading": [
+          1489.0,
+          9928.0
+        ],
+        "GPU_temperature_max_C": [
+          65.0,
+          34.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_kernel_limits": {
+          "memory.high": "34359738368",
+          "memory.max": "38654705664",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0,
+        "active_swap_write_MiB_s_max": null,
+        "active_swap_combined_MiB_s_max": null,
+        "complete_window_full_PSI_max_percent": null,
+        "loading_full_PSI_max_percent": 0.0,
+        "inference_full_PSI_max_percent": 0.0
+      },
+      "previous_reference": {
+        "date": "2026-11-04",
+        "model": "Qwen3.8-27B",
+        "quant": "EXL3-2.0bpw",
+        "engine": "TensorFold",
+        "context": 12288,
+        "weight_gb": 13.521604452,
+        "storage": "SATA SSD",
+        "metrics": {
+          "prefill_tps": 580.9562887769863,
+          "ttft_s": 10.029199,
+          "decode_tps": 180.34265103697027,
+          "prompt_tokens": 5822,
+          "output_tokens": 39,
+          "cached_tokens": 0,
+          "native_timings": {},
+          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
+        },
+        "guards": {
+          "worker_RAM_GiB": {
+            "high": 26,
+            "max": 28,
+            "swap": null
+          },
+          "host_available_reserve_GiB": 2,
+          "explicit_GPU_free_floor_MiB": 256,
+          "native_cache_reserve_MiB": null,
+          "startup_free_MiB": [
+            11000,
+            512
+          ],
+          "loading_PSI_percent": null,
+          "resource_bad_samples": 3,
+          "swap_occupancy": "unlimited",
+          "swap_write_MiB_s": 1,
+          "swap_read_plus_write_MiB_s": 8,
+          "swap_window_s": 30,
+          "active_PSI_percent": 10,
+          "PSI_bad_samples": 3
+        },
+        "source": "docs/benchmark-results/20261104-ram26-28-rerun.json"
+      },
+      "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B.",
+      "date": "2026-11-04",
+      "rerun": false,
+      "note": "Unchanged latest stable1.2.2; historical observation carried forward, not rerun."
+    }
+  },
+  "measurement_notes": [
+    "One short first tool-call generation; loading and follow-up excluded. Different quantization/speculation/cache states are not an equal-quality engine ranking.",
+    "SGLang startup warmup completed before baseline; native metrics import moved after multiprocess directory initialization. Earlier contaminated captures retained privately and excluded.",
+    "DeepSeek/Strata now has zero cached tokens; old5.840sTTFT used5539cached tokens, so not a matched regression comparison.",
+    "Failed native relocation/CUDA12-linked attempts rolled back; selected builds use matching CUDA13.0.88 runtime/cuBLAS and passed short checks.",
+    "Private preimages retained; collision-protection regression prevents independent transaction journals overwriting an existing preimage."
+  ]
+}

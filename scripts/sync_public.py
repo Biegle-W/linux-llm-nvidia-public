@@ -38,6 +38,9 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md', 'docs/ALL-ENTRY-BENCHMARKS-20261105.md',
+    'docs/validation-results/20261105-engine-refresh.json',
+    'patches/maya-ds4-file-cache-target-v1153.patch', 'scripts/patches/sglang-hetero-ct-w4a8-mtp-20261105.patch',
     'docs/COMFY-VIDEO-HD-ENTRIES-20261105.md', 'docs/validation-results/20261105-comfy-video-hd-entries.json',
     'config/comfy-workflows/wan22-5b-720p.json', 'config/comfy-workflows/wan22-5b-720p.api.json',
     'config/comfy-workflows/wan22-5b-1080p.json', 'config/comfy-workflows/wan22-5b-1080p.api.json',
@@ -302,6 +305,13 @@ BLOCK = re.compile(r'/(?:home|Users)/[^/\s]+|GPU-[0-9a-fA-F-]{16,}|'
 
 def privacy_scan_text(relative, content):
     text = content.replace('git@github.com:', '')
+    if relative == 'config/deepseek-unsloth-runtime.json':
+        # Reviewed upstream Retina icon filenames are hash-map keys, not emails.
+        # Limit normalization to those exact asset paths and SHA256 entries.
+        icon = (r'("runtimes/strata-unsloth-029/source/apps/desktop/src-tauri/icons/'
+                r'(?:128x128@2x|ios/AppIcon-[0-9.x]+@[123]x(?:-1)?)\.png"'
+                r'\s*:\s*"[0-9a-f]{64}")')
+        text = re.sub(icon, lambda m: m[0].replace('@', '_'), text)
     if relative.endswith('.patch'):
         # Scan the source text, without mistaking diff markers for email characters.
         text = '\n'.join(line[1:] if line[:1] in ('+', '-')

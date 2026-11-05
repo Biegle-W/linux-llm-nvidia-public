@@ -1,5 +1,9 @@
 # NVIDIA daily engine updates
 
+## Engine refresh and weight sharing — November5,2026
+
+Removed the3.418GB incomplete Qwen cache. HyperQwen, SGLang, Maya, Strata and shared llama.cpp are refreshed; TensorFold and ComfyUI/video integrations were already current under the stable/default-branch policy. All eight changed text entries passed guarded actual DSH read/result/exact followup and owned unload. No complete duplicate checkpoints were found; compatible entries already share weights. Daily updates stay paused; all guards and selected contexts remain. [Versions, sharing and optional cleanup](ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md); [current observations](ALL-ENTRY-BENCHMARKS-20261105.md).
+
 ## Paused — November 1, 2026
 
 The daily-update timer is disabled and inactive. Resume only on an explicit request. The existing recovery safeguards remain installed; the historical run results below are unchanged.

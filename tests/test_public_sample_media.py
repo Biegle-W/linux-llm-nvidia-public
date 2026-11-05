@@ -12,6 +12,14 @@ spec=importlib.util.spec_from_file_location('sample_export',ROOT/'scripts/sync_p
 export=importlib.util.module_from_spec(spec);spec.loader.exec_module(export)
 
 class PublicSampleTests(unittest.TestCase):
+    def test_retina_hash_keys_do_not_hide_private_values(self):
+        name='config/deepseek-unsloth-runtime.json'
+        key='runtimes/strata-unsloth-029/source/apps/desktop/src-tauri/icons/ios/AppIcon-20x20@'+'2x.png'
+        safe=json.dumps({key:'a'*64})
+        self.assertIsNone(export.BLOCK.search(export.privacy_scan_text(name,safe)))
+        unsafe=json.dumps({key:'person@'+'private.invalid'})
+        self.assertIsNotNone(export.BLOCK.search(export.privacy_scan_text(name,unsafe)))
+        self.assertIsNotNone(export.BLOCK.search(export.privacy_scan_text('other.json',safe)))
     def records(self):
         rows=json.loads((ROOT/'assets/samples/comfy/manifest.json').read_text())['samples'];records={}
         for row in rows:

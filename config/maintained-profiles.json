@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-03",
+  "updated": "2026-11-05",
   "scope": "Current Linux NVIDIA workstation only",
   "selection_policy": {
     "group_by": [
@@ -216,24 +216,21 @@
         }
       ],
       "current_configuration_benchmark": {
-        "date": "2026-11-04",
-        "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
-        "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
+        "date": "2026-11-05",
+        "source": "docs/validation-results/20261105-engine-refresh.json",
+        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
         "context": 86016,
-        "worker_RAM_high_max_GiB": [
-          26,
-          28
-        ],
-        "prefill_tps": 2065.2388901456025,
-        "ttft_s": 3.072641611099243,
-        "decode_tps": 62.587362329017175,
-        "prompt_tokens": 5826,
-        "output_tokens": 40,
+        "prefill_tps": 2077.771747991685,
+        "ttft_s": 2.818279981613159,
+        "decode_tps": 62.18563209445497,
+        "prompt_tokens": 5823,
+        "output_tokens": 39,
         "cached_tokens": 0,
-        "native_timings": {},
         "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
         "ttft_method": "engine first-token counter",
-        "decode_method": "vLLM one-request decode counter"
+        "decode_method": "vLLM one-request decode counter",
+        "client_ttft_s": 2.9283719190061674,
+        "meaningful_sse_chunks": 18
       },
       "startup_gpu_free_mib": [
         9728,
@@ -373,6 +370,26 @@
           "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
           "ttft_method": "engine first-token counter",
           "decode_method": "vLLM one-request decode counter"
+        },
+        {
+          "date": "2026-11-04",
+          "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
+          "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
+          "context": 86016,
+          "worker_RAM_high_max_GiB": [
+            26,
+            28
+          ],
+          "prefill_tps": 2065.2388901456025,
+          "ttft_s": 3.072641611099243,
+          "decode_tps": 62.587362329017175,
+          "prompt_tokens": 5826,
+          "output_tokens": 40,
+          "cached_tokens": 0,
+          "native_timings": {},
+          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "vLLM one-request decode counter"
         }
       ],
       "hardware_qualification": {
@@ -444,6 +461,12 @@
         "RAM_class": "96GB",
         "short_tool_followup_owned_unload": "passed",
         "full_context_stress": false
+      },
+      "engine_refresh_qualification": {
+        "date": "2026-11-05",
+        "status": "pass",
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
       }
     },
     {
@@ -849,24 +872,21 @@
         "historical_benchmarks_unchanged": true
       },
       "current_configuration_benchmark": {
-        "date": "2026-11-04",
-        "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
-        "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
+        "date": "2026-11-05",
+        "source": "docs/validation-results/20261105-engine-refresh.json",
+        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
         "context": 57344,
-        "worker_RAM_high_max_GiB": [
-          26,
-          28
-        ],
-        "prefill_tps": 2232.8817853495507,
-        "ttft_s": 2.7673906179998085,
-        "decode_tps": 60.228230664237785,
+        "prefill_tps": 2219.456973445308,
+        "ttft_s": 2.785395831000642,
+        "decode_tps": 60.13452850523579,
         "prompt_tokens": 6095,
         "output_tokens": 39,
         "cached_tokens": 0,
-        "native_timings": {},
         "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
         "ttft_method": "engine first-token counter",
-        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded",
+        "client_ttft_s": 2.882100928,
+        "meaningful_sse_chunks": 4
       },
       "environment": {
         "NCCL_P2P_DISABLE": "1",
@@ -1016,6 +1036,26 @@
           "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
           "ttft_method": "engine first-token counter",
           "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+        },
+        {
+          "date": "2026-11-04",
+          "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
+          "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
+          "context": 57344,
+          "worker_RAM_high_max_GiB": [
+            26,
+            28
+          ],
+          "prefill_tps": 2232.8817853495507,
+          "ttft_s": 2.7673906179998085,
+          "decode_tps": 60.228230664237785,
+          "prompt_tokens": 6095,
+          "output_tokens": 39,
+          "cached_tokens": 0,
+          "native_timings": {},
+          "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
         }
       ],
       "gpu_free_floor_mib": 256,
@@ -1087,6 +1127,12 @@
         "RAM_class": "96GB",
         "short_tool_followup_owned_unload": "passed",
         "full_context_stress": false
+      },
+      "engine_refresh_qualification": {
+        "date": "2026-11-05",
+        "status": "pass",
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
       }
     },
     {
@@ -1358,18 +1404,21 @@
         }
       ],
       "current_configuration_benchmark": {
-        "date": "2026-11-01",
-        "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
-        "prefill_tps": 506.2,
-        "ttft_s": 11.679439051000372,
-        "decode_tps": 60.2,
-        "prompt_tokens": 5597,
+        "date": "2026-11-05",
+        "source": "docs/validation-results/20261105-engine-refresh.json",
+        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+        "context": 131072,
+        "prefill_tps": 943.8,
+        "ttft_s": 6.395006419996207,
+        "decode_tps": 58.8,
+        "prompt_tokens": 5591,
+        "output_tokens": 39,
         "cached_tokens": 0,
-        "output_tokens": 41,
         "prefill_method": "native request timings",
         "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings"
+        "decode_method": "native request timings",
+        "client_ttft_s": 6.395006419996207,
+        "meaningful_sse_chunks": 21
       },
       "swap_policy_selection": {
         "date": "2026-10-29",
@@ -1461,6 +1510,20 @@
           "prefill_method": "native request timings",
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
+          "source": "docs/benchmark-results/20261101-new-router-all-models.json",
+          "prefill_tps": 506.2,
+          "ttft_s": 11.679439051000372,
+          "decode_tps": 60.2,
+          "prompt_tokens": 5597,
+          "cached_tokens": 0,
+          "output_tokens": 41,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
         }
       ],
       "hardware_qualification": {
@@ -1486,6 +1549,12 @@
         "RAM_class": "96GB",
         "short_tool_followup_owned_unload": "passed",
         "full_context_stress": false
+      },
+      "engine_refresh_qualification": {
+        "date": "2026-11-05",
+        "status": "pass",
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
       }
     },
     {
@@ -1735,18 +1804,21 @@
         "evidence": "docs/MOE-VRAM512-20261029.md"
       },
       "current_configuration_benchmark": {
-        "date": "2026-11-01",
-        "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
-        "prefill_tps": 74.9,
-        "ttft_s": 74.94298678900122,
-        "decode_tps": 1.7,
-        "prompt_tokens": 5437,
-        "cached_tokens": 0,
+        "date": "2026-11-05",
+        "source": "docs/validation-results/20261105-engine-refresh.json",
+        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+        "context": 65536,
+        "prefill_tps": 543.7,
+        "ttft_s": 10.217764207998698,
+        "decode_tps": 15.2,
+        "prompt_tokens": 5439,
         "output_tokens": 25,
+        "cached_tokens": 0,
         "prefill_method": "native request timings",
         "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings"
+        "decode_method": "native request timings",
+        "client_ttft_s": 10.217764207998698,
+        "meaningful_sse_chunks": 21
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -1831,14 +1903,28 @@
           "prefill_method": "native request timings",
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
+          "source": "docs/benchmark-results/20261101-new-router-all-models.json",
+          "prefill_tps": 74.9,
+          "ttft_s": 74.94298678900122,
+          "decode_tps": 1.7,
+          "prompt_tokens": 5437,
+          "cached_tokens": 0,
+          "output_tokens": 25,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
         }
       ],
       "qualified_engine_runtime": {
-        "release": "1.1.50",
-        "source_commit": "10e69a0eb11541004abb24f9fa47147e9002326f",
+        "release": "1.1.53",
+        "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
         "manifest": "config/maya-glm-runtime.json",
-        "evidence": "docs/benchmark-results/20261103-vram256-optimization.json",
-        "scope": "Two short matched baseline/candidate pairs and normal-router tool/result/unload passed; context 65,536 unchanged; no full-window or sustained qualification."
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "scope": "One short actual DSH read/result/exact followup and owned unload; unchanged65536context; no new full-window qualification."
       },
       "hardware_qualification": {
         "date": "2026-11-03",
@@ -1863,6 +1949,12 @@
         "RAM_class": "96GB",
         "short_tool_followup_owned_unload": "passed",
         "full_context_stress": false
+      },
+      "engine_refresh_qualification": {
+        "date": "2026-11-05",
+        "status": "pass",
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
       }
     },
     {
@@ -2061,18 +2153,21 @@
         "evidence": "docs/MAYA-DEMAND-CACHE-20261029.md"
       },
       "current_configuration_benchmark": {
-        "date": "2026-11-01",
-        "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
-        "prefill_tps": 57.2,
-        "ttft_s": 100.41295938599978,
-        "decode_tps": 1.6,
-        "prompt_tokens": 5704,
+        "date": "2026-11-05",
+        "source": "docs/validation-results/20261105-engine-refresh.json",
+        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+        "context": 32768,
+        "prefill_tps": 186.7,
+        "ttft_s": 31.943937379001,
+        "decode_tps": 7.9,
+        "prompt_tokens": 5701,
+        "output_tokens": 59,
         "cached_tokens": 0,
-        "output_tokens": 60,
         "prefill_method": "native request timings",
         "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings"
+        "decode_method": "native request timings",
+        "client_ttft_s": 31.943937379001,
+        "meaningful_sse_chunks": 29
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -2280,6 +2375,20 @@
           "prefill_method": "native request timings",
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
+          "source": "docs/benchmark-results/20261101-new-router-all-models.json",
+          "prefill_tps": 57.2,
+          "ttft_s": 100.41295938599978,
+          "decode_tps": 1.6,
+          "prompt_tokens": 5704,
+          "cached_tokens": 0,
+          "output_tokens": 60,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
         }
       ],
       "hardware_qualification": {
@@ -2305,6 +2414,12 @@
         "RAM_class": "96GB",
         "short_tool_followup_owned_unload": "passed",
         "full_context_stress": false
+      },
+      "engine_refresh_qualification": {
+        "date": "2026-11-05",
+        "status": "pass",
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
       }
     },
     {
@@ -2372,25 +2487,50 @@
         "speculative_decoding": false
       },
       "latest_benchmark": {
-        "date": "2026-11-04",
+        "date": "2026-11-05",
+        "source": "docs/validation-results/20261105-engine-refresh.json",
+        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
         "context": 163840,
-        "prefill_tps": 502.578704582675,
-        "ttft_s": 12.869814672999837,
-        "decode_tps": 68.0458396607666,
-        "prompt_tokens": 6369,
-        "output_tokens": 42,
+        "prefill_tps": 500.31086704910666,
+        "ttft_s": 12.898547648001113,
+        "decode_tps": 67.78868234053985,
+        "prompt_tokens": 6366,
+        "output_tokens": 41,
         "cached_tokens": 0,
-        "source": "docs/benchmark-results/20261104-bolt-iq2-entry.json",
-        "scope": "Normal-router short actual DSH tool call, loading excluded."
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings",
+        "client_ttft_s": 12.898547648001113,
+        "meaningful_sse_chunks": 21
       },
       "latest_qualification": {
-        "date": "2026-11-04",
+        "date": "2026-11-05",
+        "status": "pass",
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
+      },
+      "current_configuration_benchmark": {
+        "date": "2026-11-05",
+        "source": "docs/validation-results/20261105-engine-refresh.json",
+        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
         "context": 163840,
-        "actual_DSH_read_result_exact_followup": "passed",
-        "owned_unload": "passed",
-        "resources_passed": true,
-        "full_context_stress": false,
-        "source": "docs/benchmark-results/20261104-bolt-iq2-entry.json"
+        "prefill_tps": 500.31086704910666,
+        "ttft_s": 12.898547648001113,
+        "decode_tps": 67.78868234053985,
+        "prompt_tokens": 6366,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings",
+        "client_ttft_s": 12.898547648001113,
+        "meaningful_sse_chunks": 21
+      },
+      "engine_refresh_qualification": {
+        "date": "2026-11-05",
+        "status": "pass",
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
       }
     },
     {
@@ -2471,18 +2611,21 @@
         }
       ],
       "current_configuration_benchmark": {
-        "date": "2026-11-01",
-        "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
-        "source": "docs/benchmark-results/20261101-new-router-all-models.json",
-        "prefill_tps": 7.6,
-        "ttft_s": 22.63140446899888,
-        "decode_tps": 3.7,
+        "date": "2026-11-05",
+        "source": "docs/validation-results/20261105-engine-refresh.json",
+        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+        "context": 32768,
+        "prefill_tps": 85.7,
+        "ttft_s": 66.69541466100054,
+        "decode_tps": 11.9,
         "prompt_tokens": 5710,
-        "cached_tokens": 5539,
-        "output_tokens": 61,
+        "output_tokens": 62,
+        "cached_tokens": 0,
         "prefill_method": "native request timings",
         "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings"
+        "decode_method": "native request timings",
+        "client_ttft_s": 66.69541466100054,
+        "meaningful_sse_chunks": 32
       },
       "latest_router_validation": {
         "date": "2026-11-01",
@@ -2502,6 +2645,20 @@
           "prompt_tokens": 5707,
           "output_tokens": 60,
           "cached_tokens": 5539,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
+        },
+        {
+          "date": "2026-11-01",
+          "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
+          "source": "docs/benchmark-results/20261101-new-router-all-models.json",
+          "prefill_tps": 7.6,
+          "ttft_s": 22.63140446899888,
+          "decode_tps": 3.7,
+          "prompt_tokens": 5710,
+          "cached_tokens": 5539,
+          "output_tokens": 61,
           "prefill_method": "native request timings",
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
@@ -2530,6 +2687,12 @@
         "RAM_class": "96GB",
         "short_tool_followup_owned_unload": "passed",
         "full_context_stress": false
+      },
+      "engine_refresh_qualification": {
+        "date": "2026-11-05",
+        "status": "pass",
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
       }
     },
     {
@@ -2640,32 +2803,21 @@
         9472
       ],
       "current_configuration_benchmark": {
-        "date": "2026-11-04",
-        "source": "docs/benchmark-results/20261104-flash-iq1s-entry.json",
-        "worker_RAM_high_max_GiB": [
-          26,
-          28
-        ],
-        "prefill_tps": 88.7879102576197,
-        "ttft_s": 66.29202104499927,
-        "decode_tps": 31.102086049650392,
+        "date": "2026-11-05",
+        "source": "docs/validation-results/20261105-engine-refresh.json",
+        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+        "context": 12288,
+        "prefill_tps": 120.7329835421291,
+        "ttft_s": 48.46262081999885,
+        "decode_tps": 36.86106675927202,
         "prompt_tokens": 5824,
         "output_tokens": 39,
         "cached_tokens": 0,
-        "native_timings": {
-          "cache_n": 0,
-          "prompt_n": 5824,
-          "prompt_ms": 65594.516,
-          "prompt_per_token_ms": 11.262794642857143,
-          "prompt_per_second": 88.7879102576197,
-          "predicted_n": 39,
-          "predicted_ms": 1221.783,
-          "predicted_per_token_ms": 32.152184210526315,
-          "predicted_per_second": 31.102086049650392
-        },
         "prefill_method": "native request timings",
         "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings"
+        "decode_method": "native request timings",
+        "client_ttft_s": 48.46262081999885,
+        "meaningful_sse_chunks": 19
       },
       "minimum_usable_ram_gib": 90,
       "worker_ram_headroom": {
@@ -2678,6 +2830,42 @@
         "RAM_class": "96GB",
         "short_tool_followup_owned_unload": "passed",
         "full_context_stress": false
+      },
+      "short_tool_benchmark_history": [
+        {
+          "date": "2026-11-04",
+          "source": "docs/benchmark-results/20261104-flash-iq1s-entry.json",
+          "worker_RAM_high_max_GiB": [
+            26,
+            28
+          ],
+          "prefill_tps": 88.7879102576197,
+          "ttft_s": 66.29202104499927,
+          "decode_tps": 31.102086049650392,
+          "prompt_tokens": 5824,
+          "output_tokens": 39,
+          "cached_tokens": 0,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 5824,
+            "prompt_ms": 65594.516,
+            "prompt_per_token_ms": 11.262794642857143,
+            "prompt_per_second": 88.7879102576197,
+            "predicted_n": 39,
+            "predicted_ms": 1221.783,
+            "predicted_per_token_ms": 32.152184210526315,
+            "predicted_per_second": 31.102086049650392
+          },
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
+        }
+      ],
+      "engine_refresh_qualification": {
+        "date": "2026-11-05",
+        "status": "pass",
+        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
       }
     }
   ],

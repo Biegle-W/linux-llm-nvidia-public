@@ -23,6 +23,11 @@ try:
  from inference_swap_guard import dense_gpu_free_mib
  gpu_floor=dense_gpu_free_mib(a.model)
  assert len(ready_free)==2 and all(value>=gpu_floor for value in ready_free),f'Readiness is below the selected two-GPU {gpu_floor} MiB free-memory floor'
+ # Metadata readiness can precede SGLang's native warmup request completion.
+ # Exclude that request before taking the first-tool counter baseline.
+ if a.model=='qwen27b-sglang':
+  from benchmark_models import wait_sglang_warmup
+  wait_sglang_warmup(R/'data/qwen27b-server.log',timeout=60)
  from short_tool_metrics import ToolMetrics
  timing_tap=ToolMetrics(O,k,a.model)
  workspace=Path(tempfile.mkdtemp(prefix='nvidia-dsh-short-'));nonce='NVIDIA_TOOL_OK_'+uuid.uuid4().hex;file=workspace/'proof.txt';file.write_text(nonce+'\n');file.chmod(0o600)
