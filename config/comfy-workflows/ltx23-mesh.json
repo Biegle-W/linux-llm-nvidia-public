@@ -12,7 +12,7 @@
       ],
       "size": [
         490,
-        300
+        340
       ],
       "flags": {},
       "order": 0,
@@ -34,7 +34,8 @@
         "ltx23-mesh",
         "A red fox standing in snow slowly turns its head toward the camera and blinks. Gentle snowflakes drift through the air. Static camera, natural sunrise light, realistic smooth motion.",
         27001,
-        "fixed"
+        "fixed",
+        "512x288"
       ]
     },
     {
@@ -69,13 +70,13 @@
         "Node name for S&R": "SaveVideo"
       },
       "widgets_values": [
-        "ltx23-mesh",
+        "ltx23-mesh-512x288",
         "mp4",
         "auto",
         "auto"
       ],
       "widgets_values_named": {
-        "filename_prefix": "ltx23-mesh",
+        "filename_prefix": "ltx23-mesh-512x288",
         "format": "mp4",
         "format.codec": "auto",
         "codec": "auto"

@@ -210,16 +210,19 @@ class VideoEntry:
     @classmethod
     def INPUT_TYPES(cls):
         entry=os.environ.get('COMFY_VIDEO_ENTRY','wan22-5b')
-        return {'required':{'entry':([entry],),'prompt':('STRING',{'multiline':True,'default':'A red fox standing in snow slowly turns its head toward the camera and blinks. Gentle snowflakes drift through the air. Static camera, natural sunrise light, realistic smooth motion.'}),'seed':('INT',{'default':27001,'min':0,'max':2**64-1,'control_after_generate':True})}}
+        from comfy_video_entries import RESOLUTIONS
+        return {'required':{'entry':([entry],),'prompt':('STRING',{'multiline':True,'default':'A red fox standing in snow slowly turns its head toward the camera and blinks. Gentle snowflakes drift through the air. Static camera, natural sunrise light, realistic smooth motion.'}),'seed':('INT',{'default':27001,'min':0,'max':2**64-1,'control_after_generate':True}),'resolution':(list(RESOLUTIONS),{'default':os.environ.get('COMFY_VIDEO_RESOLUTION','512x288')})}}
     RETURN_TYPES=('VIDEO',)
     FUNCTION='generate'
     CATEGORY='NVIDIA/video'
-    def generate(self,entry,prompt,seed):
+    def generate(self,entry,prompt,seed,resolution="512x288"):
         from comfy_api.latest import InputImpl
         assert os.environ.get('COMFY_VIDEO_ENTRY')==entry and not os.environ.get('COMFY_VIDEO_ENTRY_CHILD'),'Cross-entry generation forbidden'
         assert prompt.strip() and len(prompt)<=4000,'Use a non-empty prompt up to4000 characters'
+        from comfy_video_entries import dimensions
+        dimensions(resolution)
         job=WORK/'jobs'/uuid.uuid4().hex;job.mkdir(parents=True)
-        (job/'request.json').write_text(json.dumps(dict(entry=entry,prompt=prompt,seed=seed))+'\n')
+        (job/'request.json').write_text(json.dumps(dict(entry=entry,prompt=prompt,seed=seed,resolution=resolution))+'\n')
         process=subprocess.Popen([str(ROOT/PINS['python']),str(ROOT/'scripts/comfy_video_job.py'),str(job)],start_new_session=True)
         try:
             while process.poll() is None:

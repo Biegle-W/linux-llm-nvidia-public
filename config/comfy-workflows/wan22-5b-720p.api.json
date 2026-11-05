@@ -1,0 +1,22 @@
+{
+  "1": {
+    "class_type": "NvidiaVideoEntry",
+    "inputs": {
+      "entry": "wan22-5b",
+      "prompt": "A red fox standing in snow slowly turns its head toward the camera and blinks. Gentle snowflakes drift through the air. Static camera, natural sunrise light, realistic smooth motion.",
+      "seed": 27001,
+      "resolution": "720p"
+    }
+  },
+  "9": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "1",
+        0
+      ],
+      "filename_prefix": "wan22-5b-27001",
+      "format": "mp4"
+    }
+  }
+}

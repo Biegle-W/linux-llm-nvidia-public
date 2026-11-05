@@ -38,6 +38,11 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'docs/COMFY-VIDEO-HD-ENTRIES-20261105.md', 'docs/validation-results/20261105-comfy-video-hd-entries.json',
+    'config/comfy-workflows/wan22-5b-720p.json', 'config/comfy-workflows/wan22-5b-720p.api.json',
+    'config/comfy-workflows/wan22-5b-1080p.json', 'config/comfy-workflows/wan22-5b-1080p.api.json',
+    'config/comfy-workflows/ltx23-mesh-720p.json', 'config/comfy-workflows/ltx23-mesh-720p.api.json',
+    'config/comfy-workflows/ltx23-mesh-1080p.json', 'config/comfy-workflows/ltx23-mesh-1080p.api.json',
     'scripts/comfy_wan_memory.py', 'tests/test_comfy_wan_memory.py',
     'docs/WAN1080-FIX-20261105.md', 'docs/benchmark-results/20261105-wan1080-fix.json',
     'docs/COMFY-VIDEO-720P1080P-20261105.md', 'docs/benchmark-results/20261105-comfy-video-720p1080p.json',

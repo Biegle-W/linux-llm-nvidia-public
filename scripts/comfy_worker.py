@@ -45,13 +45,18 @@ if video_trial:
                PYTHONPATH=os.pathsep.join([str(ROOT/'scripts/comfy_video_hook'),str(ROOT/'scripts'),str(ROOT/'runtimes/raylight/src'),str(ROOT/config['runtime'])]),
                RAYLIGHT_RAY_TMPDIR=str(ray_temp),RAY_TMPDIR=str(ray_temp),RAY_USAGE_STATS_ENABLED='0',NCCL_P2P_DISABLE='1',NCCL_DEBUG='INFO',NCCL_LAUNCH_ORDER_IMPLICIT='1')
 if video_trial and json.loads((WORK/'video-stage.json').read_text())['stage']=='raylight' and json.loads((WORK/'video-stage.json').read_text()).get('width',512)>=1920:env['NVIDIA_WAN_SEQUENTIAL_CFG']='1'
-if entry_trial:env['COMFY_VIDEO_ENTRY']=model_id
+if entry_trial:
+    env['COMFY_VIDEO_ENTRY']=model_id
+    settings=json.loads((WORK/'video-stage.json').read_text())
+    env['COMFY_VIDEO_RESOLUTION']={(1280,720):'720p',(1920,1080):'1080p'}.get((settings.get('width'),settings.get('height')),'512x288')
 user_directory = ROOT/'data/comfy-user'/model_id if (WORK/'serve').exists() else WORK/'user'
 output_directory = ROOT/'data/comfy-output'/model_id if (WORK/'serve').exists() else WORK/'images'
 user_directory.mkdir(parents=True,exist_ok=True)
 output_directory.mkdir(parents=True,exist_ok=True)
+# The entry frontend only routes jobs. Avoid spending model VRAM on its CUDA
+# contexts; comfy_video_job launches all model phases with --gpu-only.
 command = [str(ROOT/config['python']), str(ROOT/config['runtime']/'main.py'), '--listen','127.0.0.1',
-           '--port','8188','--disable-auto-launch','--gpu-only','--disable-dynamic-vram',
+           '--port','8188','--disable-auto-launch',('--cpu' if entry_trial else '--gpu-only'),'--disable-dynamic-vram',
            '--disable-async-offload','--use-pytorch-cross-attention','--reserve-vram','0.5',
            '--offline','--disable-all-custom-nodes','--whitelist-custom-nodes',*(['nvidia_video'] if entry_trial else ['nvidia_video','comfyui_mesh'] if mesh_trial else ['nvidia_video','raylight'] if video_trial else ['nvidia_resident']),
            '--extra-model-paths-config',str(WORK/'extra-model-paths.yaml'),

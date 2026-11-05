@@ -9,6 +9,7 @@ import sys
 import time
 import urllib.request
 from comfy_video_trial import graph,output,audit
+from comfy_video_entries import dimensions
 
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -22,6 +23,7 @@ def run(work):
     request=json.loads((work/'request.json').read_text())
     entries=json.loads((ROOT/'config/comfy-video-entries.json').read_text())['models']
     entry=next(x for x in entries if x['id']==request['entry'])
+    width,height=dimensions(request.get('resolution','512x288'))
     pins=json.loads((ROOT/'config/comfy-video-trial.json').read_text())
     assert os.environ.get('COMFY_VIDEO_ENTRY')==entry['id'],'Cross-entry generation forbidden'
     assert len(request['prompt'])<=4000 and request['prompt'].strip()
@@ -39,7 +41,7 @@ def run(work):
         for stage in (entry['prepare_stage'],entry['render_stage']):
             stage_work=work/('prepare' if stage in ('prepare','mesh-prepare') else 'render');stage_work.mkdir()
             (stage_work/'images').mkdir();(stage_work/'user').mkdir()
-            (stage_work/'video-stage.json').write_text(json.dumps({'stage':stage}))
+            (stage_work/'video-stage.json').write_text(json.dumps({'stage':stage,'width':width,'height':height}))
             env=dict(os.environ,COMFY_VIDEO_WORK=str(stage_work),COMFY_VIDEO_AUDIT_DIR=str(stage_work/'forward-audits'),COMFY_VIDEO_ENTRY_CHILD='1')
             if stage=='mesh':
                 weights=next(x['file'] for x in pins['models'][1]['files'] if x['file'].endswith('Q4_0.gguf'))
@@ -58,7 +60,7 @@ def run(work):
                 except OSError:
                     if time.monotonic()>deadline:raise TimeoutError('Video phase startup timed out')
                     time.sleep(0.5)
-            prompt=graph(stage,request['seed'])
+            prompt=graph(stage,request['seed'],width,height)
             if stage in ('prepare','mesh-prepare'):prompt['9']['inputs']['prompt']=request['prompt']
             started=time.monotonic();answer=http('/prompt',{'prompt':prompt});ident=answer['prompt_id'];deadline=started+1200
             while True:

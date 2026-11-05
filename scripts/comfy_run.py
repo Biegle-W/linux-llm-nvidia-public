@@ -59,9 +59,9 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model',choices=['qwen-image-2.1-turbo','flux3-klein','wan22-5b','wan22-5b-raylight','ltx23-mesh'],required=True)
     parser.add_argument('--video-entry',action='store_true',help='Use the selected interactive video workflow')
-    parser.add_argument('--video-resolution',choices=['720p','1080p'],help='Test-only exact video output size; retains33frames and all guards')
+    parser.add_argument('--video-resolution',choices=['720p','1080p'],help='Video entry preset or isolated render size; retains33frames and all guards')
     parser.add_argument('--video-sync-ulysses',action='store_true',help='Explicit synchronized Raylight benchmark retry')
-    parser.add_argument('--video-seed',type=int,help='Single-request video benchmark seed')
+    parser.add_argument('--video-seed',type=int,help='Single-request guarded video verification seed')
     parser.add_argument('--video-stage',choices=['prepare','baseline','raylight','mesh-prepare','mesh'])
     parser.add_argument('--size',type=int,choices=[1024,2048,4096],default=1024,help='Square image width/height in pixels')
     mode=parser.add_mutually_exclusive_group()
@@ -71,9 +71,9 @@ def main():
     args=parser.parse_args()
     video_dimensions={'720p':(1280,720),'1080p':(1920,1080)}.get(args.video_resolution,(512,288))
     if args.video_resolution or args.video_seed is not None:
-        assert args.video_stage in ('baseline','raylight','mesh') and not (args.video_entry or args.serve or args.check_ui),'Resolution overrides are isolated video benchmark stages only'
-        assert args.video_seed is None or 0<=args.video_seed<2**64
-    if args.video_sync_ulysses:assert args.video_stage=='raylight' and args.video_resolution,'Synchronized retry requires an isolated Raylight resolution benchmark'
+        assert args.video_entry or (args.video_stage in ('baseline','raylight','mesh') and not (args.serve or args.check_ui)),'Select video entry mode or an isolated video render stage'
+        assert args.video_seed is None or (not (args.serve or args.check_ui) and 0<=args.video_seed<2**64),'Seed override requires a bounded generation test'
+    if args.video_sync_ulysses:assert not args.video_entry and args.video_stage=='raylight' and args.video_resolution,'Synchronized retry requires an isolated Raylight resolution benchmark'
     entry=None
     if args.video_entry:
         from comfy_video_entries import entry as get_entry
@@ -111,9 +111,12 @@ def main():
     if args.serve or args.video_entry:
         folder=ROOT/'data/comfy-user'/args.model/'default/workflows'
         folder.mkdir(parents=True,exist_ok=True)
-        for source in (ROOT/'config/comfy-workflows').glob('*.json'):
-            if source.name==args.model+'.json' and not (folder/source.name).exists():
-                shutil.copy2(source,folder/source.name)
+        if entry:
+            from comfy_video_entries import install_workflows
+            install_workflows(args.model,folder)
+        else:
+            source=ROOT/'config/comfy-workflows'/(args.model+'.json')
+            if source.exists() and not (folder/source.name).exists():shutil.copy2(source,folder/source.name)
     (work/'extra-model-paths.yaml').write_text('nvidia_images:\n  base_path: '+str(ROOT/config['checkpoint_directory'])+'\n  diffusion_models: diffusion_models\n  text_encoders: text_encoders\n  vae: vae\n')
     if args.video_stage:
         (work/'extra-model-paths.yaml').write_text('nvidia_video:\n  base_path: '+str(ROOT/config['checkpoint_directory'])+'\n  diffusion_models: split_files/diffusion_models\n  text_encoders: .\n  vae: split_files/vae\n')
@@ -199,6 +202,13 @@ def main():
             else:raise TimeoutError('Mesh back-half server did not become ready')
         state.update(phase='ready');save()
         print('ComfyUI ready at http://127.0.0.1:8188; exclusive GPUs reserved.',flush=True)
+        if entry:
+            info=request('/object_info/NvidiaVideoEntry')['NvidiaVideoEntry']['input']['required']
+            assert info['entry'][0]==[args.model]
+            assert info['resolution'][0]==['512x288','720p','1080p']
+            assert info['resolution'][1]['default']==(args.video_resolution or '512x288')
+            state['frontend_resolution_choices']=info['resolution'][0];save()
+            print('Open Workflows preset: '+args.model+('-'+args.video_resolution if args.video_resolution else '')+'; resolution can also be changed in the video node.',flush=True)
         if args.check_ui:
             with opener.open('http://127.0.0.1:8188/',timeout=10) as response:
                 html=response.read().decode()
@@ -207,7 +217,7 @@ def main():
             if args.video_stage:
                 from comfy_video_entries import graph as entry_graph
                 from comfy_video_trial import graph as video_graph
-                candidate=entry_graph(args.model) if entry else video_graph(args.video_stage,27001)
+                candidate=entry_graph(args.model,resolution=args.video_resolution or '512x288') if entry else video_graph(args.video_stage,27001)
                 assert all(node['class_type'] in info for node in candidate.values())
                 if entry:
                     assert info['NvidiaVideoEntry']['input']['required']['entry'][0]==[args.model]
@@ -224,7 +234,7 @@ def main():
             for seed in ((args.video_seed,) if args.video_seed is not None else (27001,) if args.video_stage in ('prepare','mesh-prepare','mesh') else (27001,27002)):
                 if args.video_entry:
                     from comfy_video_entries import graph as entry_graph
-                    prompt=entry_graph(args.model,seed)
+                    prompt=entry_graph(args.model,seed,resolution=args.video_resolution or '512x288')
                 elif args.video_stage:
                     from comfy_video_trial import graph as video_graph
                     prompt=video_graph(args.video_stage,seed,*video_dimensions,sync_ulysses=args.video_sync_ulysses)

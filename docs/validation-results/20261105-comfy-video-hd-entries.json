@@ -1,0 +1,282 @@
+{
+  "date": "2026-11-05",
+  "scope": "One real frontend request for every model/HD resolution;33frames;seed27001",
+  "timing_scope": "Frontend submission to saved MP4/history; includes fresh GPU prompt preparation,phase startup,loading,Mesh startup,sampling,decode and save",
+  "CPU_weight_offload": false,
+  "coordinator": "CPU-mode UI orchestration; no neural weights; no GPU compute context in live process proof",
+  "model_children": "GPU-only; CPU/meta weight forwards rejected by audit",
+  "guards_changed": false,
+  "CPU_tests_passed": 465,
+  "entries": [
+    {
+      "entry": "wan22-5b",
+      "resolution": "720p",
+      "status": "pass",
+      "request": {
+        "seed": 27001,
+        "wall_s": 67.74634661700111,
+        "sha256": "0322565babf3af4b8018583ff7b167748e00a567e6aea71e71d7642d0c9843d6",
+        "frames": 33,
+        "width": 1280,
+        "height": 720,
+        "audio_samples": 0
+      },
+      "frontend_resolution_choices": [
+        "512x288",
+        "720p",
+        "1080p"
+      ],
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 801,
+        "processes": 2,
+        "physical_GPU_assignments": [
+          "0,1"
+        ]
+      },
+      "worker_inactive": true,
+      "reservation_released": true,
+      "phases": [
+        {
+          "seed": 27001,
+          "wall_s": 2.0155659680021927,
+          "prompt_proof": {
+            "encoding_s": 1.7917548769983114,
+            "parameter_devices": [
+              "cuda:0"
+            ],
+            "CPU_weight_offload": false
+          }
+        },
+        {
+          "seed": 27001,
+          "wall_s": 57.44934698400175,
+          "video_sha256": "6c0f36bf29c6814352534bed9521b1895c3ce6b491b67580477a4fad7ba593d2",
+          "frames": 33,
+          "width": 1280,
+          "height": 720
+        }
+      ],
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          1176.0,
+          259.0
+        ],
+        "max_temperature_C": [
+          63.0,
+          49.0
+        ],
+        "max_bad_samples": 0,
+        "max_swap_bytes": 0,
+        "minimum_host_available_GiB": 84.6170768737793,
+        "max_full_PSI_percent": 0.0
+      }
+    },
+    {
+      "entry": "wan22-5b",
+      "resolution": "1080p",
+      "status": "pass",
+      "request": {
+        "seed": 27001,
+        "wall_s": 170.84656858800008,
+        "sha256": "fcfb59e085a4a17f3653464b60bc2fafb2967b860698442fd6f7e8ba1769ef01",
+        "frames": 33,
+        "width": 1920,
+        "height": 1080,
+        "audio_samples": 0
+      },
+      "frontend_resolution_choices": [
+        "512x288",
+        "720p",
+        "1080p"
+      ],
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 801,
+        "processes": 2,
+        "physical_GPU_assignments": [
+          "0,1"
+        ]
+      },
+      "worker_inactive": true,
+      "reservation_released": true,
+      "phases": [
+        {
+          "seed": 27001,
+          "wall_s": 2.016073475999292,
+          "prompt_proof": {
+            "encoding_s": 1.792324080997787,
+            "parameter_devices": [
+              "cuda:0"
+            ],
+            "CPU_weight_offload": false
+          }
+        },
+        {
+          "seed": 27001,
+          "wall_s": 159.71525974699762,
+          "video_sha256": "ba06a0161f275b953f96463ef0e06a8c75ea7c1990bd6995333b568c0af3d883",
+          "frames": 33,
+          "width": 1920,
+          "height": 1080
+        }
+      ],
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          4438.0,
+          2195.0
+        ],
+        "max_temperature_C": [
+          68.0,
+          64.0
+        ],
+        "max_bad_samples": 0,
+        "max_swap_bytes": 0,
+        "minimum_host_available_GiB": 81.35399627685547,
+        "max_full_PSI_percent": 0.0
+      },
+      "GPU_block_split": {
+        "total_blocks": 30,
+        "GPU0_blocks": 16,
+        "GPU1_blocks": 14,
+        "CPU_weight_offload": false
+      }
+    },
+    {
+      "entry": "ltx23-mesh",
+      "resolution": "720p",
+      "status": "pass",
+      "request": {
+        "seed": 27001,
+        "wall_s": 50.59828515099798,
+        "sha256": "f43c1f46d52f4ff0ec81b99e3390b2baef35528423ef6e399270d93fd973f03e",
+        "frames": 33,
+        "width": 1280,
+        "height": 720,
+        "audio_samples": 63840
+      },
+      "frontend_resolution_choices": [
+        "512x288",
+        "720p",
+        "1080p"
+      ],
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 3543,
+        "processes": 3,
+        "physical_GPU_assignments": [
+          "0,1",
+          "1"
+        ]
+      },
+      "worker_inactive": true,
+      "reservation_released": true,
+      "phases": [
+        {
+          "seed": 27001,
+          "wall_s": 13.976986337998824,
+          "prompt_proof": {
+            "encoding_s": 13.732893573000183,
+            "parameter_devices": [
+              "cuda:0",
+              "cuda:1"
+            ],
+            "CPU_weight_offload": false
+          }
+        },
+        {
+          "seed": 27001,
+          "wall_s": 26.931348194000748,
+          "video_sha256": "5828bef76489a2e11fa00554e33262c6d5c1d1c34f6ecbb0ff429678f2a34c3f",
+          "frames": 33,
+          "width": 1280,
+          "height": 720,
+          "audio_samples": 63840,
+          "audio_sample_rate": 48000
+        }
+      ],
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          1514.0,
+          758.0
+        ],
+        "max_temperature_C": [
+          65.0,
+          59.0
+        ],
+        "max_bad_samples": 0,
+        "max_swap_bytes": 0,
+        "minimum_host_available_GiB": 83.54371643066406,
+        "max_full_PSI_percent": 0.0
+      }
+    },
+    {
+      "entry": "ltx23-mesh",
+      "resolution": "1080p",
+      "status": "pass",
+      "request": {
+        "seed": 27001,
+        "wall_s": 74.83887128100105,
+        "sha256": "58ad85862fc5efe0f691bb548a66b27383dc78a051233d961673bf85001f9e96",
+        "frames": 33,
+        "width": 1920,
+        "height": 1080,
+        "audio_samples": 63840
+      },
+      "frontend_resolution_choices": [
+        "512x288",
+        "720p",
+        "1080p"
+      ],
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 3543,
+        "processes": 3,
+        "physical_GPU_assignments": [
+          "0,1",
+          "1"
+        ]
+      },
+      "worker_inactive": true,
+      "reservation_released": true,
+      "phases": [
+        {
+          "seed": 27001,
+          "wall_s": 14.079289518998849,
+          "prompt_proof": {
+            "encoding_s": 13.820779494999442,
+            "parameter_devices": [
+              "cuda:0",
+              "cuda:1"
+            ],
+            "CPU_weight_offload": false
+          }
+        },
+        {
+          "seed": 27001,
+          "wall_s": 50.66744526700131,
+          "video_sha256": "b39b94cb2c59e417c0e8b9fa9aba6ad2944979c5f6adb3950983c4ed6ff58d1c",
+          "frames": 33,
+          "width": 1920,
+          "height": 1080,
+          "audio_samples": 63840,
+          "audio_sample_rate": 48000
+        }
+      ],
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          380.0,
+          246.0
+        ],
+        "max_temperature_C": [
+          67.0,
+          60.0
+        ],
+        "max_bad_samples": 2,
+        "max_swap_bytes": 0,
+        "minimum_host_available_GiB": 83.5249252319336,
+        "max_full_PSI_percent": 0.0
+      }
+    }
+  ]
+}

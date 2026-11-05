@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Both video entries now offer 720p/1080p — November5,2026
+
+Wan and LTX now have resolution dropdowns, separate 720p/1080p Workflows presets and matching desktop right-click actions. Wan selects the faster tested native path, including the 16/14 GPU block split at 1080p. All four end-to-end HD entry requests passed with GPU-only model execution, 465 CPU regressions passed, and guards remain. The UI coordinator uses no GPU compute context; saved workflows, 512x288 defaults, image launchers and text API/DSH entries are preserved. [Usage and validation](docs/COMFY-VIDEO-HD-ENTRIES-20261105.md).
+
 ## Wan1080p VRAM and Raylight timeouts fixed — November5,2026
 
 Native Wan1080p now uses a GPU-resident16/14-block split and sequential guidance: 160.750/158.748s. Raylight passed at174.808/161.973s after deterministic guidance routing, with no timeout increase. Both paths passed two33-frame clips and both-GPU forward audits without CPU weight offload. All462 CPU regressions pass; guards remain unchanged, allowing brief VRAM dips within the existing three-sample grace period. Workers are stopped, reservations released and API/hub/DSH healthy. [Repair, benchmarks and limits](docs/WAN1080-FIX-20261105.md).

@@ -14,7 +14,7 @@
       "trial_id": "wan22-5b-raylight",
       "prepare_stage": "prepare",
       "render_stage": "baseline",
-      "engine": "ComfyUI regular GPU0 denoiser / GPU1 VAE",
+      "engine": "ComfyUI native Wan; GPU0 denoiser at512/720p, GPU-resident16/14block split at1080p; GPU1 VAE",
       "fps": 16,
       "status": "selected-bounded-workflow",
       "workflow": "config/comfy-workflows/wan22-5b.json",
@@ -24,6 +24,15 @@
         "scope": "Direct render only;33frames; desktop defaults and controls remain512x288",
         "720p": "passed-two-clips",
         "1080p": "passed-two-clips-native16/14GPU-split-and-Raylight-sequential-CFG"
+      },
+      "desktop_actions": [
+        "720p",
+        "1080p"
+      ],
+      "resolution_workflows": {
+        "512x288": "config/comfy-workflows/wan22-5b.json",
+        "720p": "config/comfy-workflows/wan22-5b-720p.json",
+        "1080p": "config/comfy-workflows/wan22-5b-1080p.json"
       }
     },
     {
@@ -42,10 +51,34 @@
         "scope": "Direct render only;33frames; desktop defaults and controls remain512x288",
         "720p": "passed-two-clips",
         "1080p": "passed-two-clips-near-floor246MiB-two-bad-samples"
+      },
+      "desktop_actions": [
+        "720p",
+        "1080p"
+      ],
+      "resolution_workflows": {
+        "512x288": "config/comfy-workflows/ltx23-mesh.json",
+        "720p": "config/comfy-workflows/ltx23-mesh-720p.json",
+        "1080p": "config/comfy-workflows/ltx23-mesh-1080p.json"
       }
     }
   ],
   "prompt_max_characters": 4000,
   "resolution_benchmark": "docs/benchmark-results/20261105-comfy-video-720p1080p.json",
-  "resolution_fix_benchmark": "docs/benchmark-results/20261105-wan1080-fix.json"
+  "resolution_fix_benchmark": "docs/benchmark-results/20261105-wan1080-fix.json",
+  "resolutions": {
+    "512x288": {
+      "width": 512,
+      "height": 288
+    },
+    "720p": {
+      "width": 1280,
+      "height": 720
+    },
+    "1080p": {
+      "width": 1920,
+      "height": 1080
+    }
+  },
+  "interactive_resolution_qualification": "docs/validation-results/20261105-comfy-video-hd-entries.json"
 }

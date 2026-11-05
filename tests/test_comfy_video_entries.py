@@ -6,6 +6,8 @@ import os
 from pathlib import Path
 import subprocess
 import sys
+import tempfile
+import shlex
 from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
@@ -28,7 +30,7 @@ class VideoEntryTests(unittest.TestCase):
         entries=load('video_entries_test','scripts/comfy_video_entries.py')
         for name in ('wan22-5b','ltx23-mesh'):
             graph=entries.graph(name,123,'New caption')
-            self.assertEqual(graph['1']['inputs'],dict(entry=name,seed=123,prompt='New caption'))
+            self.assertEqual(graph['1']['inputs'],dict(entry=name,seed=123,prompt='New caption',resolution='512x288'))
             canvas=json.loads((ROOT/f'config/comfy-workflows/{name}.json').read_text())
             self.assertEqual(canvas['nodes'][0]['widgets_values'][0],name)
     def test_video_shortcuts_are_foreground_guarded_servers(self):
@@ -36,6 +38,48 @@ class VideoEntryTests(unittest.TestCase):
         text=installer.content('Video','wan22-5b',True)
         self.assertIn('Terminal=true',text);self.assertIn('--video-entry --serve --foreground-backend',text)
         self.assertIn('visible_terminal.py',text)
+    def test_all_resolution_presets_reach_the_qualified_render_graph(self):
+        entries=load('video_resolution_test','scripts/comfy_video_entries.py')
+        trial=load('video_resolution_graph','scripts/comfy_video_trial.py')
+        for name,stage in [('wan22-5b','baseline'),('ltx23-mesh','mesh')]:
+            for resolution,(width,height) in entries.RESOLUTIONS.items():
+                request=entries.graph(name,resolution=resolution)['1']['inputs']
+                self.assertEqual(request['resolution'],resolution)
+                graph=trial.graph(stage,request['seed'],*entries.dimensions(request['resolution']))
+                self.assertEqual(graph['4']['inputs']['height'],(height+31)//32*32)
+                self.assertEqual(graph['4']['inputs']['width'],width)
+                if resolution!='512x288':
+                    self.assertEqual(graph['23']['inputs']['height'],height)
+                    filename=name+'-'+resolution
+                    canvas=json.loads((ROOT/f'config/comfy-workflows/{filename}.json').read_text())
+                    self.assertEqual(canvas['nodes'][0]['widgets_values'][-1],resolution)
+                    api=json.loads((ROOT/f'config/comfy-workflows/{filename}.api.json').read_text())
+                    self.assertEqual(api['1']['inputs']['resolution'],resolution)
+                if name=='wan22-5b' and resolution=='1080p':self.assertEqual(graph['1']['class_type'],'NvidiaWanSplitDenoiser')
+        for bad in ('4K','1080','1920x1080',None):
+            with self.assertRaises(AssertionError):entries.dimensions(bad)
+
+    def test_desktop_hd_actions_keep_entry_guards_and_model(self):
+        installer=load('video_actions_test','scripts/install_comfy_shortcut.py')
+        for name in ('wan22-5b','ltx23-mesh'):
+            text=installer.content('Video',name,True)
+            for resolution in ('720p','1080p'):
+                section=text.split('[Desktop Action '+resolution+']')[1].split('[Desktop Action ')[0]
+                command=shlex.split(next(line[5:] for line in section.splitlines() if line.startswith('Exec=')))
+                self.assertEqual(command[command.index('--model')+1],name)
+                self.assertEqual(command[command.index('--video-resolution')+1],resolution)
+                for flag in ('--video-entry','--serve','--foreground-backend'):self.assertIn(flag,command)
+
+    def test_new_presets_install_without_overwriting_saved_workflows(self):
+        entries=load('video_preset_install','scripts/comfy_video_entries.py')
+        with tempfile.TemporaryDirectory() as temporary:
+            folder=Path(temporary);existing=folder/'wan22-5b.json';existing.write_text('custom saved workflow')
+            entries.install_workflows('wan22-5b',folder)
+            self.assertEqual(existing.read_text(),'custom saved workflow')
+            self.assertEqual(json.loads((folder/'wan22-5b-1080p.json').read_text())['nodes'][0]['widgets_values'][-1],'1080p')
+            hd=folder/'wan22-5b-720p.json';hd.write_text('custom HD workflow');entries.install_workflows('wan22-5b',folder)
+            self.assertEqual(hd.read_text(),'custom HD workflow')
+
     def test_image_shortcut_content_remains_identical(self):
         installer=load('comfy_shortcut_image_test','scripts/install_comfy_shortcut.py')
         path=Path.home()/'Desktop/ComfyUI Qwen Turbo.desktop'
