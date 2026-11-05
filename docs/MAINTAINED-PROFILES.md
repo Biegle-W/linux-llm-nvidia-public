@@ -1,5 +1,9 @@
 # Maintained model, quantization and engine settings
 
+## Unused Qwen GGUF target/drafter deleted — November 4, 2026
+
+The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries, the selected TensorFold DFlash2 drafter and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
+
 ## Retired AWQ Bolt assets deleted — November 4, 2026
 
 The user requested deletion of the retired AWQ setup. Its55.33 GB weights, dedicated vLLM environment, manifest, launch/supervision/offload code and AWQ-only tests are removed. Native IQ2 remains selected under compatibility ID`bolt-vllm`; all nine profiles, both DSH modes, defaults, guards and shared runtimes are preserved.423 remaining CPU tests passed;33 obsolete adapter tests were retired. Native runtime hashes/dependencies and API/DSH health passed; no model benchmark was repeated. Historical benchmark records and small private source/configuration preimages remain, but the old checkpoint/runtime are no longer installed. [Removal verification](BOLT-AWQ-REMOVAL-20261104.md).

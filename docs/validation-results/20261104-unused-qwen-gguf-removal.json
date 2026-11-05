@@ -1,0 +1,24 @@
+{
+  "date": "2026-11-04",
+  "phase": "deleted",
+  "files": [
+    {
+      "file": "qwen3.8-27b-Q4_K_M.gguf",
+      "bytes": 17442399968,
+      "storage": "SATA SSD"
+    },
+    {
+      "file": "qwen3.8-27b-Q4_K_M-mtp-only.gguf",
+      "bytes": 2008054496,
+      "storage": "SATA SSD"
+    }
+  ],
+  "total_weight_bytes": 19450454464,
+  "no_configured_checkpoint_reference": true,
+  "no_readable_live_process_reference": true,
+  "catalog_sha256": "02551992694243cfedda20e231fa7dbea648df14595db2bd03f74d4e34c6adb2",
+  "configured_entries_preserved": 9,
+  "TensorFold_DFlash2_drafter_preserved": true,
+  "new_inference_benchmarks": false,
+  "source_runtime_changes": false
+}
