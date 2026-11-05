@@ -1,5 +1,15 @@
 # ComfyUI dual-GPU image setup — November 5 UTC / November 4 local, 2026
 
+## Current temperature policy — November 4 local, 2026
+
+The user raised all maintained NVIDIA LLM and ComfyUI temperature stops
+to **100C**, effective on the next owned worker launch. Three bad samples at2s intervals still
+stop the owned worker. The worker now reads the threshold directly from
+`config/comfy-runtime.json`; all other guards remain unchanged. The benchmark
+results and guard table below describe the original **82C** test conditions.
+No model was loaded or benchmark repeated for this policy change. Supporting LLM benchmark/update monitors also use100C; their existing
+sampling/stop timing is preserved.
+
 ## Installed setting
 
 ComfyUI 0.44.0, source commit `7ad7adb38f6cbb6c2b0713d3bd44c3fb2b9c8ebe`,

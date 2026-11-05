@@ -69,7 +69,7 @@ def main():
             raw = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu,memory.free',
                                            '--format=csv,noheader,nounits'], text=True)
             cards = [[float(value) for value in line.split(',')] for line in raw.splitlines()]
-            bad = bad + 1 if (available < host_floor_kib or any(card[0] >= 82 for card in cards)
+            bad = bad + 1 if (available < host_floor_kib or any(card[0] >= 100 for card in cards)
                              or (watch.ready and any(card[1] < gpu_floor_mib for card in cards))) else 0
             # TensorFold exposes only GPU0; its native admission proof replaces NCCL channel proof.
             # Root-owned current-boot transport health is still required in its launcher.

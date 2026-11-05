@@ -21,7 +21,7 @@
   ],
   "host_reserve_GiB": 2,
   "free_VRAM_floor_MiB": 256,
-  "temperature_stop_C": 82,
+  "temperature_stop_C": 100,
   "swap_write_MiB_s": 128,
   "swap_combined_MiB_s": 160,
   "swap_window_s": 30,

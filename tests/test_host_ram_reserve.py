@@ -69,8 +69,13 @@ class HostRamReserve(unittest.TestCase):
         code,kills=self.run_guard(1);self.assertEqual(code,1);self.assertGreater(kills,0)
     def test_eight_gib_setting_still_stops_at_three(self):
         self.assertEqual(self.run_guard(3,reserve=8)[0],1)
-    def test_temperature_guard_is_unchanged(self):
-        self.assertEqual(self.run_guard(3,temp=82)[0],1)
+    def test_temperature_guard_stops_at_100(self):
+        self.assertEqual(self.run_guard(3,temp=100)[0],1)
+    def test_temperatures_below_100_are_accepted(self):
+        for engine in [None,'hyperqwen','sglang']:
+            for temp in [82,99]:
+                with self.subTest(engine=engine,temp=temp):
+                    self.assertEqual(self.run_guard(3,dense_engine=engine,temp=temp)[0],0)
     def test_swap_stop_still_wins_above_floor(self):
         self.assertEqual(self.run_guard(16,swap_reason='swap guard test')[0],1)
 
@@ -87,10 +92,10 @@ class HostRamReserve(unittest.TestCase):
             with self.subTest(engine=engine):
                 self.assertEqual(self.run_guard(3,dense_engine=engine,gpu_free=floor),(0,0))
                 self.assertEqual(self.run_guard(3,dense_engine=engine,gpu_free=floor-1)[0],1)
-    def test_dense_thermal_and_swap_guards_unchanged(self):
+    def test_dense_thermal_100_and_swap_guards(self):
         for engine in ['hyperqwen','sglang']:
             with self.subTest(engine=engine):
-                self.assertEqual(self.run_guard(3,dense_engine=engine,temp=82)[0],1)
+                self.assertEqual(self.run_guard(3,dense_engine=engine,temp=100)[0],1)
                 self.assertEqual(self.run_guard(16,dense_engine=engine,swap_reason='swap guard test')[0],1)
 
 if __name__=='__main__':unittest.main()

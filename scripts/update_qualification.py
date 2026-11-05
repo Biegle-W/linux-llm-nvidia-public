@@ -183,7 +183,7 @@ class Qualification:
                     if row['available_kib'] < self.floor * 1024 ** 2: raise RuntimeError('Host available below selected floor')
                     gpus = subprocess.check_output(['nvidia-smi', '--query-gpu=index,temperature.gpu,memory.free', '--format=csv,noheader,nounits'], text=True, timeout=5)
                     row['gpus'] = [[float(x.strip()) for x in line.split(',')] for line in gpus.splitlines()]
-                    if len(row['gpus']) != 2 or any(x[1] >= 82 for x in row['gpus']): raise RuntimeError('GPU inventory/temperature guard')
+                    if len(row['gpus']) != 2 or any(x[1] >= 100 for x in row['gpus']): raise RuntimeError('GPU inventory/temperature guard')
                     if self.p['id'].startswith('qwen27b-') and any(x[2] < dense_gpu_free_mib(self.p['id']) for x in row['gpus']):
                         raise RuntimeError(f"Dense GPU headroom below {dense_gpu_free_mib(self.p['id'])} MiB")
                     reason = watch.step()

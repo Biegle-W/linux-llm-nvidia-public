@@ -89,7 +89,7 @@ def main(*,work=WORK,unit=UNIT,port=PORT,alias='bolt-iq2-candidate',manifest=Non
    loading_bad=loading_bad+1 if watch.last_phase=='loading' and pressure>15 else 0
    available=next(int(x.split()[1]) for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:'))
    raw=subprocess.check_output(['nvidia-smi','--query-gpu=temperature.gpu,memory.free','--format=csv,noheader,nounits'],text=True,timeout=10);cards=[[float(v) for v in x.split(',')] for x in raw.splitlines()]
-   bad=bad+1 if available<2*1024**2 or any(c[0]>=82 for c in cards) or (manifest is not None or watch.ready) and any(c[1]<256 for c in cards) else 0
+   bad=bad+1 if available<2*1024**2 or any(c[0]>=100 for c in cards) or (manifest is not None or watch.ready) and any(c[1]<256 for c in cards) else 0
    if len(cards)!=2 or any(not math.isfinite(v) for c in cards for v in c):raise ValueError('Invalid pair resource telemetry')
    if watch.ready and not native_placement_proof(work/'engine.log',pins['planned_context']):reason='Native two-GPU placement/configured context proof missing'
    if bad>=3 or loading_bad>=3:reason=reason or ('Bolt sustained loading pressure' if loading_bad>=3 else 'Bolt host/temperature/GPU-headroom guard reached')

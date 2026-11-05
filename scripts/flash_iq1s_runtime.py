@@ -56,7 +56,7 @@ def main():
    available=next(int(x.split()[1]) for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:'))
    raw=subprocess.check_output(['nvidia-smi','--query-gpu=temperature.gpu,memory.free','--format=csv,noheader,nounits'],text=True,timeout=10);cards=[[float(v) for v in x.split(',')] for x in raw.splitlines()]
    if len(cards)!=2 or any(not math.isfinite(v) for card in cards for v in card):raise ValueError('Invalid GPU resource telemetry')
-   bad=bad+1 if available<2*1024**2 or any(c[0]>=82 for c in cards) or watch.ready and any(c[1]<256 for c in cards) else 0
+   bad=bad+1 if available<2*1024**2 or any(c[0]>=100 for c in cards) or watch.ready and any(c[1]<256 for c in cards) else 0
    if watch.ready:
     log=(WORK/'engine.log').read_text()
     if not any('per_layer_token_embd.weight' in line and 'lazy read enabled' in line for line in log.splitlines()) or not re.search(r'n_ctx(?:_slot)?\s*=\s*12288\b',log):reason='Missing native lazy SSD table/context proof'

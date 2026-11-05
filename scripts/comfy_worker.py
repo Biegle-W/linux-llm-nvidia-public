@@ -79,7 +79,7 @@ try:
             available = next(int(x.split()[1]) for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemAvailable:'))
             cards = [[float(v) for v in line.split(',')] for line in subprocess.check_output(['nvidia-smi','--query-gpu=temperature.gpu,memory.free','--format=csv,noheader,nounits'],text=True,timeout=10).splitlines()]
             assert len(cards)==2 and all(math.isfinite(v) for card in cards for v in card)
-            bad = bad+1 if available < 2*1024**2 or any(t>=82 or f<256 for t,f in cards) else 0
+            bad = bad+1 if available < 2*1024**2 or any(t>=config['guard_policy']['temperature_max_C'] or f<256 for t,f in cards) else 0
             loading_bad = loading_bad+1 if phase=='loading' and counters['pressure_pct']>15 else 0
             if bad>=3 or loading_bad>=3:
                 reason = reason or 'Host/VRAM/temperature/loading-pressure guard reached'

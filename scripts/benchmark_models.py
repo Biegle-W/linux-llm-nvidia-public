@@ -153,7 +153,7 @@ def main():
                 'cache': 'Unique early system tags; prefix reuse off in dense profiles; native cached counts checked; OS page cache not flushed.',
                 'reservation': 'Router and DSH stay running. GPU reservation blocks other router generation/switching during measurements.',
                 'host_ram_reserve_gib': {p['id']: host_ram_reserve_gib(p) for p in catalog['profiles']},
-                'safety': 'Existing worker cgroups, model guards and selected RAM budgets remain; monitor aborts below the selected profile host-RAM reserve or at 82 C.'}
+                'safety': 'Existing worker cgroups, model guards and selected RAM budgets remain; monitor aborts below the selected profile host-RAM reserve or at 100 C.'}
     (out / 'protocol.json').write_text(json.dumps(protocol, indent=2))
 
     def monitor():
@@ -167,7 +167,7 @@ def main():
                 except Exception:
                     gpu = ''
                 f.write(json.dumps({'time': time.time(), 'profile': active[0], 'memory_kib': memory, 'gpu_csv': gpu}) + '\n'); f.flush()
-                if memory['MemAvailable'] < host_floors_kib.get(active[0], max(host_floors_kib.values())) or (gpu and any(float(line.split(',')[1]) >= 82 for line in gpu.splitlines())):
+                if memory['MemAvailable'] < host_floors_kib.get(active[0], max(host_floors_kib.values())) or (gpu and any(float(line.split(',')[1]) >= 100 for line in gpu.splitlines())):
                     (out / 'SAFETY-STOP').write_text('Host RAM or GPU temperature guard reached.')
                 stop.wait(5)
 

@@ -151,7 +151,7 @@ def main():
                     raise SystemExit(1)
             available = next(int(line.split()[1]) for line in Path('/proc/meminfo').read_text().splitlines() if line.startswith('MemAvailable:'))
             temps = subprocess.check_output(['nvidia-smi', '--query-gpu=temperature.gpu', '--format=csv,noheader,nounits'], text=True)
-            bad = bad + 1 if available < host_floor_kib or any(float(t) >= 82 for t in temps.splitlines()) else 0
+            bad = bad + 1 if available < host_floor_kib or any(float(t) >= 100 for t in temps.splitlines()) else 0
             if bad >= 3:
                 reason = 'Worker stopped by host-memory/temperature guard.'
                 print('Worker stopped by host-memory/temperature guard.', flush=True)

@@ -1,5 +1,9 @@
 # Current takeover state
 
+## All NVIDIA model temperature stops raised — November 4, 2026
+
+All nine maintained NVIDIA LLM profiles, both ComfyUI image profiles and supporting benchmark/update monitors now use100C temperature stops. Existing sampling/hysteresis, memory, swap and ownership guards remain unchanged. Previous benchmarks retain their original82C attribution; no GPU benchmark was repeated. Effective on the next owned worker launch; no running job was restarted. All438 CPU checks passed, including100C stops and acceptance below100C.
+
 ## ComfyUI dual-GPU setup — November 5 UTC / November 4 local, 2026
 
 An isolated ComfyUI0.44.0 / PyTorch2.13.0 CUDA13 environment and Desktop-only **ComfyUI Qwen Turbo** / **ComfyUI FLUX3 Klein** shortcuts are installed. Qwen-Image2.1 Turbo INT8 with its W4A8 encoder passed two1024x1024 images,21 all-resident placement audits and owned unload:7.133s first request /4.086s warm,3.218/3.074s denoising. GPU0 holds the denoiser; GPU1 holds encoder/VAE, with no CPU execution-weight offload. All437 CPU checks passed and existing LLM entries/guards remain unchanged. FLUX3Klein INT8 also passed two1024x1024 images and21 residency audits:7.130s first /5.091s warm,4.181/4.065s denoising; zero sampled swap in both models. Both workers finish idle and reservations are released. Use Ctrl+C before switching image launchers; no remaining test/cleanup is pending. [Setup, guards, benchmark scope and next action](COMFY-DUAL-GPU-20261105.md).
