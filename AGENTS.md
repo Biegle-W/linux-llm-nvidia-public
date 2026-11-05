@@ -1,5 +1,9 @@
 # Agent entry point
 
+## ComfyUI native2K/4K tests complete — November4,2026
+
+Both models passed two2048x2048 images without CPU weight offload: Qwen Turbo29.360s first /26.339s warm with automatic GPU tiled VAE decoding; FLUX3Klein27.341s /24.279s with regular GPU VAE decoding. Neither native4096 arm produced an image: Qwen GPU0 allocation failed; FLUX GPU0 stayed at41MiB free for three samples and hit the unchanged256MiB guard. All438 CPU checks passed. Workers are stopped, reservations released and1K defaults/LLM profiles remain unchanged. The100C thermal policy and all other guards remain. No benchmark or cleanup remains pending. [Protocol, failures, resource tables and next action](docs/COMFY-2K4K-20261104.md).
+
 ## All NVIDIA model temperature stops raised — November 4, 2026
 
 All nine maintained NVIDIA LLM profiles, both ComfyUI image profiles and supporting benchmark/update monitors now use100C temperature stops. Existing sampling/hysteresis, memory, swap and ownership guards remain unchanged. Previous benchmarks retain their original82C attribution; no GPU benchmark was repeated. Effective on the next owned worker launch; no running job was restarted. All438 CPU checks passed, including100C stops and acceptance below100C.

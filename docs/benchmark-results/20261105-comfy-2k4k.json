@@ -1,0 +1,320 @@
+{
+  "schema": 1,
+  "date_local": "2026-11-04",
+  "timezone": "America/Toronto",
+  "date_UTC": "2026-11-05",
+  "engine": {
+    "version": "0.44.0",
+    "commit": "7ad7adb38f6cbb6c2b0713d3bd44c3fb2b9c8ebe",
+    "torch": "2.13.0+cu130"
+  },
+  "hardware": {
+    "CPU": "i9-13900KS",
+    "RAM_usable_GiB": 91.76984787,
+    "GPUs": [
+      "RTX3080Ti12GiB",
+      "RTX308010GiB"
+    ],
+    "CUDA_P2P": false
+  },
+  "protocol": {
+    "native_square_sizes": [
+      2048,
+      4096
+    ],
+    "upscaling": false,
+    "batch": 1,
+    "seeds": [
+      27001,
+      27002
+    ],
+    "prompt": "same detailed fox/snow/pine/sunrise caption as1K qualification",
+    "first_request": "fresh worker process; includes model/graph execution after readiness; checkpoint and kernel caches warm",
+    "warm_request": "same prompt; new seed; cached text conditioning",
+    "denoiser_device": "cuda:0",
+    "encoder_vae_device": "cuda:1",
+    "CPU_weight_offload": false,
+    "history_poll_interval_s": 1,
+    "automatic_VAE_tiling": "GPU-only built-in OOM recovery; explicitly counted",
+    "failed_arm": "one first-image attempt; no warm request or repeated retry after failure",
+    "VRAM_metric": "total minus free includes driver-reserved memory;2s sampling can miss transient peaks",
+    "worker_RAM_peak": "not separately measured; effective cgroup high/max retained",
+    "aggregation": "individual observations, not medians; no sustained qualification",
+    "baseline_1K": "previous evidence retained separately; not rerun"
+  },
+  "guards": {
+    "worker_ram_high_GiB": 32,
+    "worker_ram_max_GiB": 36,
+    "host_available_min_GiB": 2,
+    "gpu_free_min_MiB": 256,
+    "temperature_max_C": 100,
+    "sample_interval_s": 2,
+    "bad_samples": 3,
+    "swap_occupancy": "unlimited",
+    "swap_write_MiB_s": 1,
+    "swap_combined_MiB_s": 8,
+    "swap_window_s": 30,
+    "active_full_PSI_percent": 10,
+    "loading_full_PSI_percent": 15,
+    "idle_unload_s": 600,
+    "parallel_execution": 1
+  },
+  "models": [
+    {
+      "id": "qwen-image-2.1-turbo",
+      "denoiser_quant": "INT8 ConvRot",
+      "encoder_quant": "W4A8",
+      "steps": 8,
+      "sampler": "euler / official Turbo manual sigmas",
+      "CFG": 1,
+      "storage_decimal_GB": 14.244402881,
+      "storage": "SATA /dev/sda1, models/comfy-images/{diffusion_models,text_encoders,vae}",
+      "sizes": [
+        {
+          "width": 2048,
+          "height": 2048,
+          "status": "passed",
+          "runs": [
+            {
+              "seed": 27001,
+              "wall_s": 29.360330503001023,
+              "width": 2048,
+              "height": 2048,
+              "PNG_sha256": "1991eff6a2af9aee4214c67ee254f0cbe208f683e689f9020dec27813a8c6df8"
+            },
+            {
+              "seed": 27002,
+              "wall_s": 26.33893122200061,
+              "width": 2048,
+              "height": 2048,
+              "PNG_sha256": "05d74576d2d83edff167a07e7525e0dff4fa22b7dbbff7089f042bac37c14a1d"
+            }
+          ],
+          "sampling_s": [
+            16.748850132998996,
+            16.640670519000196
+          ],
+          "vae_decode_s": [
+            8.63650864400006,
+            8.613419735000207
+          ],
+          "text_encoding_s": [
+            0.7300879009999335,
+            0.3222890249999182
+          ],
+          "server_execution_s": [
+            28.97,
+            25.71
+          ],
+          "automatic_GPU_tiled_VAE_fallback_count": 2,
+          "partial_unload_seen": false,
+          "residency_audits": 21,
+          "audited_devices": [
+            "cuda:0",
+            "cuda:1"
+          ],
+          "CPU_execution_weight_parameters": 0,
+          "sampled_min_GPU_free_MiB": [
+            2727.0,
+            986.0
+          ],
+          "sampled_peak_total_minus_free_GPU_MiB": [
+            9561.0,
+            9254.0
+          ],
+          "sampled_peak_temperature_C": [
+            59.0,
+            49.0
+          ],
+          "sampled_min_host_available_GiB": 85.33757400512695,
+          "sampled_peak_worker_swap_bytes": 0,
+          "sampled_peak_full_PSI_percent": 0.0,
+          "resource_samples": 30,
+          "guard_stop": null,
+          "errors": [],
+          "worker_stopped": true,
+          "reservation_released": true
+        },
+        {
+          "width": 4096,
+          "height": 4096,
+          "status": "failed",
+          "runs": [],
+          "sampling_s": [],
+          "vae_decode_s": [],
+          "text_encoding_s": [
+            0.731146747000821,
+            0.3165281049987243
+          ],
+          "server_execution_s": [
+            3.95
+          ],
+          "automatic_GPU_tiled_VAE_fallback_count": 0,
+          "partial_unload_seen": false,
+          "residency_audits": 9,
+          "audited_devices": [
+            "cuda:0",
+            "cuda:1"
+          ],
+          "CPU_execution_weight_parameters": 0,
+          "sampled_min_GPU_free_MiB": [
+            4697.0,
+            1892.0
+          ],
+          "sampled_peak_total_minus_free_GPU_MiB": [
+            7591.0,
+            8348.0
+          ],
+          "sampled_peak_temperature_C": [
+            49.0,
+            38.0
+          ],
+          "sampled_min_host_available_GiB": 85.7589111328125,
+          "sampled_peak_worker_swap_bytes": 0,
+          "sampled_peak_full_PSI_percent": 0.0,
+          "resource_samples": 4,
+          "guard_stop": null,
+          "errors": [
+            {
+              "node_type": "SamplerCustomAdvanced",
+              "exception_type": "torch.OutOfMemoryError",
+              "message": "Allocation on device 0 would exceed allowed memory. (out of memory)"
+            }
+          ],
+          "worker_stopped": true,
+          "reservation_released": true,
+          "allocator_error_detail": {
+            "requested_GiB": 3.0,
+            "allocated_GiB": 8.23,
+            "CUDA_reported_free_MiB": 6.19,
+            "note": "Instant allocator diagnostic;2s resource sampling missed this transient peak"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flux3-klein",
+      "denoiser_quant": "INT8 ConvRot",
+      "encoder_quant": "INT8 ConvRot",
+      "steps": 16,
+      "sampler": "er_sde / simple",
+      "CFG": 1,
+      "storage_decimal_GB": 11.022645311,
+      "storage": "SATA /dev/sda1, models/comfy-images/{diffusion_models,text_encoders,vae}",
+      "sizes": [
+        {
+          "width": 2048,
+          "height": 2048,
+          "status": "passed",
+          "runs": [
+            {
+              "seed": 27001,
+              "wall_s": 27.341035157998704,
+              "width": 2048,
+              "height": 2048,
+              "PNG_sha256": "dbb3d5e3d62a646a8c208c744f414078dbea67449e93fa6c5f10feb0b0b455e0"
+            },
+            {
+              "seed": 27002,
+              "wall_s": 24.278599404000488,
+              "width": 2048,
+              "height": 2048,
+              "PNG_sha256": "4ff20222237fd333312bab9f923f7a18e14502d53c423c1a2dbc7707ee81ba45"
+            }
+          ],
+          "sampling_s": [
+            22.587232482001127,
+            22.651188866000666
+          ],
+          "vae_decode_s": [
+            1.10875419399963,
+            1.002172058000724
+          ],
+          "text_encoding_s": [
+            0.49871187999997346,
+            0.1272862419991725
+          ],
+          "server_execution_s": [
+            26.39,
+            24.08
+          ],
+          "automatic_GPU_tiled_VAE_fallback_count": 0,
+          "partial_unload_seen": false,
+          "residency_audits": 21,
+          "audited_devices": [
+            "cuda:0",
+            "cuda:1"
+          ],
+          "CPU_execution_weight_parameters": 0,
+          "sampled_min_GPU_free_MiB": [
+            4391.0,
+            2010.0
+          ],
+          "sampled_peak_total_minus_free_GPU_MiB": [
+            7897.0,
+            8230.0
+          ],
+          "sampled_peak_temperature_C": [
+            66.0,
+            38.0
+          ],
+          "sampled_min_host_available_GiB": 85.19972229003906,
+          "sampled_peak_worker_swap_bytes": 0,
+          "sampled_peak_full_PSI_percent": 0.0,
+          "resource_samples": 27,
+          "guard_stop": null,
+          "errors": [],
+          "worker_stopped": true,
+          "reservation_released": true
+        },
+        {
+          "width": 4096,
+          "height": 4096,
+          "status": "failed",
+          "runs": [],
+          "sampling_s": [],
+          "vae_decode_s": [],
+          "text_encoding_s": [
+            0.4968111790003604,
+            0.1269603159998951
+          ],
+          "server_execution_s": [],
+          "automatic_GPU_tiled_VAE_fallback_count": 0,
+          "partial_unload_seen": false,
+          "residency_audits": 9,
+          "audited_devices": [
+            "cuda:0",
+            "cuda:1"
+          ],
+          "CPU_execution_weight_parameters": 0,
+          "sampled_min_GPU_free_MiB": [
+            41.0,
+            4644.0
+          ],
+          "sampled_peak_total_minus_free_GPU_MiB": [
+            12247.0,
+            5596.0
+          ],
+          "sampled_peak_temperature_C": [
+            59.0,
+            36.0
+          ],
+          "sampled_min_host_available_GiB": 85.60276412963867,
+          "sampled_peak_worker_swap_bytes": 0,
+          "sampled_peak_full_PSI_percent": 0.0,
+          "resource_samples": 6,
+          "guard_stop": "Host/VRAM/temperature/loading-pressure guard reached",
+          "errors": [],
+          "worker_stopped": true,
+          "reservation_released": true,
+          "guard_stop_detail": "GPU0 free VRAM41MiB for3 consecutive2s samples, below256MiB floor; host RAM and temperature within limits"
+        }
+      ]
+    }
+  ],
+  "CPU_tests": {
+    "passed": 438,
+    "failed": 0
+  },
+  "default_1K_graphs_unchanged": true
+}

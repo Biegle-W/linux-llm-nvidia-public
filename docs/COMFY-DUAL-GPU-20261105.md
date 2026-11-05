@@ -1,5 +1,9 @@
 # ComfyUI dual-GPU image setup — November 5 UTC / November 4 local, 2026
 
+The later [native2K/4K qualification](COMFY-2K4K-20261104.md) passed2K for both
+models and rejected native4K under the current GPU-memory constraints. The1K
+results below remain historical evidence; defaults are unchanged.
+
 ## Current temperature policy — November 4 local, 2026
 
 The user raised all maintained NVIDIA LLM and ComfyUI temperature stops

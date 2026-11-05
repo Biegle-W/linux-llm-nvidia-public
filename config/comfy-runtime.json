@@ -30,7 +30,17 @@
           "sha256": "bb21f7473051e1ac368515dd3f2e15cd44d7a11748ee8823e1ddca3e4876b7c9"
         }
       ],
-      "qualification_status": "short-image-test-passed"
+      "qualification_status": "short-image-test-passed",
+      "validated_square_sizes": [
+        1024,
+        2048
+      ],
+      "resolution_benchmark": {
+        "report": "docs/benchmark-results/20261105-comfy-2k4k.json",
+        "2048": "passed-two-images",
+        "4096": "failed-GPU0-allocation",
+        "default_square_size": 1024
+      }
     },
     {
       "id": "flux3-klein",
@@ -53,7 +63,17 @@
           "sha256": "868fe7b343cc8f3a19dbcfcafbc3d5f888802be3f89bd81b65b3621a066ce8f3"
         }
       ],
-      "qualification_status": "short-image-test-passed"
+      "qualification_status": "short-image-test-passed",
+      "validated_square_sizes": [
+        1024,
+        2048
+      ],
+      "resolution_benchmark": {
+        "report": "docs/benchmark-results/20261105-comfy-2k4k.json",
+        "2048": "passed-two-images",
+        "4096": "stopped-GPU0-free-VRAM-floor",
+        "default_square_size": 1024
+      }
     }
   ],
   "version": "0.44.0",

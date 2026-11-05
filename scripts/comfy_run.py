@@ -8,6 +8,7 @@ import signal
 import socket
 import shutil
 import subprocess
+import struct
 import sys
 import time
 import threading
@@ -30,7 +31,7 @@ def ended_unit(query=property_of):
             and query(UNIT,'MainPID')=='0' and not query(UNIT,'ControlGroup'))
 
 
-def graph(model, seed):
+def graph(model, seed, size=1024):
     qwen = model['id'].startswith('qwen')
     files = {x['file'].split('/')[0]:Path(x['file']).name for x in model['files']}
     def node(kind, **inputs):return dict(class_type=kind,inputs=inputs)
@@ -40,7 +41,7 @@ def graph(model, seed):
          '8':node('VAEDecode',samples=['7',0],vae=['3',0]),
          '9':node('SaveImage',images=['8',0],filename_prefix=model['id']+'-'+str(seed))}
     if qwen:
-        g.update({'4':node('TextEncodeQwenImage21',clip=['2',0],prompt=CAPTION,negative_prompt='',resolution=1024),
+        g.update({'4':node('TextEncodeQwenImage21',clip=['2',0],prompt=CAPTION,negative_prompt='',resolution=size),
                   '10':node('RandomNoise',noise_seed=seed),'11':node('KSamplerSelect',sampler_name='euler'),
                   '12':node('ManualSigmas',sigmas='1.0, 0.978453, 0.95418, 0.926626, 0.89508, 0.845148, 0.704534, 0.414568, 0'),
                   '13':node('CFGGuider',model=['1',0],positive=['4',0],negative=['4',1],cfg=1.0),
@@ -48,7 +49,7 @@ def graph(model, seed):
     else:
         g.update({'4':node('CLIPTextEncode',clip=['2',0],text=CAPTION),
                   '5':node('CLIPTextEncode',clip=['2',0],text=''),
-                  '6':node('EmptyFlux2LatentImage',width=1024,height=1024,batch_size=1),
+                  '6':node('EmptyFlux2LatentImage',width=size,height=size,batch_size=1),
                   '7':node('KSampler',model=['1',0],positive=['4',0],negative=['5',0],latent_image=['6',0],
                            seed=seed,steps=16,cfg=1.0,sampler_name='er_sde',scheduler='simple',denoise=1.0)})
     return g
@@ -57,6 +58,7 @@ def graph(model, seed):
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--model',choices=['qwen-image-2.1-turbo','flux3-klein'],required=True)
+    parser.add_argument('--size',type=int,choices=[1024,2048,4096],default=1024,help='Square image width/height in pixels')
     mode=parser.add_mutually_exclusive_group()
     mode.add_argument('--serve',action='store_true')
     mode.add_argument('--check-ui',action='store_true')
@@ -70,7 +72,7 @@ def main():
     os.umask(0o077)
     config=json.loads((ROOT/'config/comfy-runtime.json').read_text())
     model=next(x for x in config['models'] if x['id']==args.model)
-    work=ROOT/'data/comfy-qualification-20261105'/time.strftime('%H%M%S-'+args.model)
+    work=ROOT/'data/comfy-qualification-20261105'/time.strftime('%H%M%S-'+args.model+'-'+str(args.size))
     work.mkdir(parents=True,exist_ok=False)
     (work/'user').mkdir()
     (work/'images').mkdir()
@@ -82,7 +84,7 @@ def main():
             if source.name==args.model+'.json' and not (folder/source.name).exists():
                 shutil.copy2(source,folder/source.name)
     (work/'extra-model-paths.yaml').write_text('nvidia_images:\n  base_path: '+str(ROOT/config['checkpoint_directory'])+'\n  diffusion_models: diffusion_models\n  text_encoders: text_encoders\n  vae: vae\n')
-    state=dict(phase='preflight',model=args.model,started=time.time(),pid=os.getpid(),work=str(work))
+    state=dict(phase='preflight',model=args.model,width=args.size,height=args.size,started=time.time(),pid=os.getpid(),work=str(work))
     def save():
         temp=work/'state.tmp';temp.write_text(json.dumps(state,indent=2)+'\n');temp.replace(work/'state.json')
     opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -165,7 +167,7 @@ def main():
         else:
             state['runs']=[]
             for seed in (27001,27002):
-                prompt=graph(model,seed);(work/f'workflow-{seed}.json').write_text(json.dumps(prompt,indent=2)+'\n')
+                prompt=graph(model,seed,args.size);(work/f'workflow-{seed}.json').write_text(json.dumps(prompt,indent=2)+'\n')
                 state.update(phase='generating',seed=seed);save()
                 started=time.monotonic();answer=request('/prompt',dict(prompt=prompt,client_id='nvidia-local-qualified'))
                 ident=answer['prompt_id'];deadline=time.monotonic()+1200
@@ -179,8 +181,10 @@ def main():
                 assert result['status']['status_str']=='success',str(result['status'])[:1000]
                 images=result['outputs']['9']['images'];assert len(images)==1
                 image=work/'images'/images[0]['subfolder']/images[0]['filename']
-                assert image.read_bytes()[:8]==b'\x89PNG\r\n\x1a\n'
-                state['runs'].append(dict(seed=seed,wall_s=time.monotonic()-started,image=str(image),image_sha256=hashlib.sha256(image.read_bytes()).hexdigest()))
+                image_data=image.read_bytes()
+                assert image_data[:8]==b'\x89PNG\r\n\x1a\n'
+                assert struct.unpack('>II',image_data[16:24])==(args.size,args.size),'Output dimensions differ from requested benchmark size'
+                state['runs'].append(dict(seed=seed,wall_s=time.monotonic()-started,image=str(image),image_sha256=hashlib.sha256(image_data).hexdigest(),width=args.size,height=args.size))
                 save();print('Image PASS: '+json.dumps(state['runs'][-1]),flush=True)
             placement=[json.loads(x) for x in (work/'placement.jsonl').read_text().splitlines()]
             assert {'cuda:0','cuda:1'}<={x['expected'] for x in placement}

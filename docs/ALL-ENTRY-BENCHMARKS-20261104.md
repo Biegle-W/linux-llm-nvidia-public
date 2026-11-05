@@ -1,5 +1,7 @@
 # All current entry benchmarks — November 4, 2026
 
+[Requested ComfyUI native2K/4K results](COMFY-2K4K-20261104.md): both2K profiles passed; native4K failed GPU memory/guard qualification. This is separate from the unchanged nine-entry LLM catalog.
+
 Diffusion image workflows have a [separate ComfyUI benchmark and resource-guard report](COMFY-DUAL-GPU-20261105.md). They do not add text-model IDs to the nine-entry API/DSH catalog.
 
 Nine entries are enabled on the96 GB-class Z690/13900KS host with RTX3080Ti/3080, CPU PCIe4 x8/x8 and host-staged transport. Bolt now selects native IQ2 on llama.cpp11909 under the historical compatibility ID`bolt-vllm`; the AWQ entry is replaced. Its normal-router check below is newer than the other eight96 GB restoration observations. No CUDA P2P or runtime update was introduced.
