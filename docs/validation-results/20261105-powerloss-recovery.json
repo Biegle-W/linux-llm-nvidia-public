@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-05",
+  "event": "Post-power-loss recovery verification",
+  "kernel": "7.0.0-42-generic",
+  "driver": "615.71.09",
+  "gpu_unlock_verified": true,
+  "next_boot_readiness": {
+    "target_kernel": "7.0.0-42-generic",
+    "unlock_version": "2.0.0",
+    "target_nvidia_version": "615.71.09",
+    "firmware_files_verified": 16,
+    "initramfs_verified": true,
+    "grub_verified": true
+  },
+  "transport": {
+    "mode": "host-staged",
+    "peer_access": [
+      0,
+      0
+    ],
+    "current_boot_verified": true
+  },
+  "checkpoint_integrity": [
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ1_M-00001-of-00003.gguf",
+      "bytes": 10946618,
+      "sha256": "b0d883bb9464021f31074145af74bfc2aa2d4bf0cf506f26f6f5107f4ca6ce17"
+    },
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ1_M-00002-of-00003.gguf",
+      "bytes": 39196009888,
+      "sha256": "bddcd79634ccddbb2e0951345c73c6ae8bd7b12594f55a2a529474701757391e"
+    },
+    {
+      "file": "Qwen3.8-Flash-Next-UD-IQ1_M-00003-of-00003.gguf",
+      "bytes": 28800138432,
+      "sha256": "05716382c280d999b81afff92b2d527fadbfd926ac225ffdc273f2d1d13331c6"
+    }
+  ],
+  "runtime_pack_preset_verified": true,
+  "retired_iq1s_directory_absent": true,
+  "active_table_hardlinks": 1,
+  "selected_model_directories_accessible": {
+    "text": 9,
+    "image_video_stores": 2
+  },
+  "expected_sata_mount_verified": true,
+  "dsh_current_model_counts": {
+    "web": 9,
+    "headless": 9
+  },
+  "profile": "flash-next-iq1m-strata",
+  "context": 131072,
+  "checks": {
+    "phase": "pass",
+    "followup_passed": true,
+    "unloaded": true,
+    "final_marker_returned": true,
+    "structured_read_records": 1,
+    "completed_tool_results": 1
+  },
+  "worker_inactive_verified": true,
+  "benchmark": {
+    "prefill_tps": 1094.5,
+    "ttft_s": 5.283046837999905,
+    "decode_tps": 78.4,
+    "prompt_tokens": 5595,
+    "output_tokens": 39,
+    "cached_tokens": 0,
+    "prefill_method": "native request timings",
+    "ttft_method": "client first delivered content/tool delta; parser buffering included",
+    "decode_method": "native request timings"
+  },
+  "guards": {
+    "worker_RAM_GiB": {
+      "high": 87.76984786987305,
+      "max": 89.76984786987305,
+      "swap": null
+    },
+    "host_available_reserve_GiB": 2,
+    "explicit_GPU_free_floor_MiB": 256,
+    "native_cache_reserve_MiB": 1024,
+    "startup_free_MiB": null,
+    "loading_PSI_percent": null,
+    "resource_bad_samples": 3,
+    "swap_occupancy": "unlimited",
+    "swap_write_MiB_s": 128,
+    "swap_read_plus_write_MiB_s": 160,
+    "swap_window_s": 30,
+    "active_PSI_percent": 15,
+    "PSI_bad_samples": 3
+  },
+  "settings_changed": false,
+  "scope": "One post-boot actual DSH tool/result/exact-follow-up and owned unload; loading excluded; no full-context/sustained test or matched performance comparison; other models not rerun",
+  "power_loss_cause": "Not established by these recovery checks"
+}

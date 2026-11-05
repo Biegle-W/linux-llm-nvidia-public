@@ -2900,6 +2900,14 @@
         },
         "checkpoint_retained_for_rollback": false,
         "checkpoint_cleanup_evidence": "docs/validation-results/20261105-iq1s-weight-removal.json"
+      },
+      "post_boot_recovery_verification": {
+        "date": "2026-11-05",
+        "kernel": "7.0.0-42-generic",
+        "driver": "615.71.09",
+        "status": "passed current-boot unlock/transport, full checkpoint integrity and short actual DSH tool/result/exact-follow-up/owned-unload checks",
+        "evidence": "docs/POWERLOSS-RECOVERY-20261105.md",
+        "settings_changed": false
       }
     }
   ],

@@ -38,6 +38,7 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'docs/POWERLOSS-RECOVERY-20261105.md', 'docs/validation-results/20261105-powerloss-recovery.json',
     'docs/IQ1S-WEIGHT-REMOVAL-20261105.md', 'docs/validation-results/20261105-iq1s-weight-removal.json',
     'scripts/flash_iq1m_strata_runtime.py', 'tests/test_flash_iq1m_strata_runtime.py',
     'config/flash-iq1m-strata-runtime.json', 'docs/FLASH-IQ1M-STRATA-20261105.md',

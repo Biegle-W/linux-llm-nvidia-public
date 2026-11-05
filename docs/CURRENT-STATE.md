@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Post-power-loss recovery verified — November5,2026
+
+The new boot passes GPU unlock/next-boot readiness and current-boot host-staged transport checks. All IQ1_M checkpoint SHA256s and runtime/pack/preset hashes verify; the old IQ1_S files remain deleted and its active IQ1_M table is intact. Expected SATA storage and all selected model directories are accessible. One guarded IQ1_M actual DSH tool/result/exact follow-up and owned unload passed; no model settings or guards changed and other models were not rerun. API/hub/DSH and timer are healthy; no inference workers, stale reservation or pending transaction remain. Next action is normal use. [Recovery evidence and limits](POWERLOSS-RECOVERY-20261105.md).
+
 ## Retired IQ1_S weights deleted; IQ1_M table preserved — November5,2026
 
 At the human's explicit request, removed the old IQ1_S checkpoint and its obsolete n-gram filename, reclaiming37.58GB exclusive storage. The active IQ1_M28.8GB table kept the same inode and full verified SHA256; only its hardlink count changed2to1. No model configuration or guard changed and no inference benchmark was repeated. Post-removal dependency/hash checks,8 focused CPU checks and API health/model listing passed; no cleanup job or reservation remains. Next action is normal IQ1_M use. Prior rollback-retention statements are superseded. [Removal receipt and preserved dependencies](IQ1S-WEIGHT-REMOVAL-20261105.md).
