@@ -2,7 +2,7 @@
 Description=Qualify newer NVIDIA LLM engines daily at 03:00
 
 [Timer]
-OnCalendar=*-*-* 03:00:00
+OnCalendar=*-*-* 03:00:00 America/Toronto
 Persistent=false
 RandomizedDelaySec=0
 Unit=nvidia-daily-engine-update.service

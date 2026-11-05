@@ -1,58 +1,41 @@
 # Daily NVIDIA engine updater
 
-## Schedule and scope
+## Current schedule and coverage — November5,2026
 
-`nvidia-daily-engine-update.timer` runs every day at **03:00 host local time**. This host uses America/Toronto. `Persistent=false` skips missed nights and `RandomizedDelaySec=0` adds no delay. It is a local systemd job, with no model-powered scheduled agent.
+The restored timer runs at **03:00 America/Toronto**, skips missed runs (`Persistent=false`) and adds no random delay. It is a local systemd maintenance job. The current short-test policy supersedes the former long-context/sustained update pipeline.
 
-The six selected model/engine profiles are covered exactly once:
+| Automatic component | API/DSH profiles | Selection |
+| --- | --- | --- |
+| HyperQwen | `qwen27b-hyperqwen` | Default branch; compatible vLLM pin, complete upstream series and KVarN patches |
+| Heterogeneous SGLang | `qwen27b-sglang` | Default `fix/851-consolidated`; selected dependency pins and current local compatibility patch |
+| Maya | `glm-maya`, `deepseek-maya` | Latest stable tag; grouped control/binaries/manifests, bounded-cache patch |
+| Strata | `flash-next-strata`, `deepseek-unsloth-strata` | Latest stable tag; signed feed, control and CUDA13 engine packages |
+| llama.cpp | `bolt-vllm`, `flash-next-iq1s-llamacpp` | Latest stable tag; one shared runtime, both manifests qualified together |
 
-| Component | Selected profile | Upstream | Retained context |
-|---|---|---|---:|
-| HyperQwen/vLLM | qwen27b-hyperqwen | syv-ai/HyperQwen default HEAD, with its pinned vLLM wheel and patch series | 56,320 |
-| Heterogeneous SGLang | qwen27b-sglang | efschu/htsglang default HEAD, with the local CT/W4A8/MTP compatibility patch | 32,768 |
-| Strata Qwen | flash-next-strata | Niko1221/Strata default HEAD | 32,768 |
-| Maya GLM | glm-maya | mw00/project-maya default HEAD | 65,536 |
-| Maya DeepSeek | deepseek-maya | mw00/project-maya default HEAD, retaining the bounded-file-cache patch | 32,768 |
-| Strata DeepSeek | deepseek-strata | Niko1221/Strata separate DeepSeek native target | 131,072 |
+TensorFold remains a hash-pinned native package and receives a daily stable-release check. ComfyUI/Raylight stable releases and Mesh/GGUF default heads are also checked daily; newer versions are reported for separate image/video workflow and GPU-residency qualification. They are not silently installed through the text-model qualifier. No model weights, contexts, precision, driver, kernel, firmware or resource guards are automatically changed.
 
-No model weights, quantization, model coverage, drivers, kernel or firmware are automatically upgraded. Source revisions and initial production provenance references are in `config/daily-update-versions.json`. Runtime binary/environment paths and exact private receipts stay local. HyperQwen follows its own upstream's vLLM pin, not an arbitrary newest vLLM wheel; SGLang follows the selected fork, not a different engine architecture.
+## Admission, staging and promotion
 
-## Nightly procedure
+1. Discover immutable source commits. Stable-tag discovery dereferences annotated tags and excludes prereleases. A changed SGLang default branch requires patch review. Rejected revisions remain recorded; an already installed qualified revision is recognized before that rejection list.
+2. Require **20 minutes idle**, no queued/loading/admitted request and no existing reservation. Normal scheduled admission ends at06:30. Reserve atomically and recheck before stopping only an idle owned worker. Compilation also waits for admission, uses two jobs and retains the updater's6/8GiB systemd budget.
+3. Stage outside production. HyperQwen starts from a clean compatible wheel before applying the full series/KVarN; orphan patched modules cannot survive wheel replacement. SGLang uses the manifest-selected patch, including its timing initialization repair. Maya retains private launch settings and the interpreter; native CUDA headers/runtime/cuBLAS match the installed CUDA13SDK. Strata verifies the signed feed's archive hashes and both engine manifests with upstream trusted keys and safe extraction. No inherited trust override is accepted.
+4. Qualify one fresh production short DSH read/tool-result/exact follow-up per affected entry, capturing metrics during the first tool generation and unloading afterward. Run registered native correctness checks on both cards where applicable. A failed baseline leaves production unchanged.
+5. Write durable preimages, then provisionally select the candidate. Grouped engines update every affected manifest and frontend together. Existing preimage slots cannot be overwritten. File artifacts are installed before a containing staged directory moves, so receipt paths remain valid.
+6. Repeat one short DSH check per affected entry using the **same private workspace/proof fixture**. Require equal model/settings/context/hardware/fixture hashes, prompt/output counts and zero prompt-cache reuse. Missing native metrics, failed tool/follow-up/unload, bad resource evidence or mismatched counts reject promotion. Prefill and decode must each be at least95% of baseline; TTFT must be at mostmax(1.25×baseline,baseline+0.05s). Single short calls are a conservative screen, not a statistical speed study.
+7. Commit selection only after all entries pass. Otherwise restore preimages and verify restored production through the same short DSH protocol before releasing the reservation. Unknown/live owners, external edits, missing telemetry and failed recovery retain blocking evidence. Never clear another task's reservation or force a fallback model.
+8. Save dated observations/source pins and sanitized outcomes; publish explicit owned records through independent private/public commits and normal pushes. Validate the hash-allowlisted binary media without UTF-8 decoding. Unrelated working/staged edits or a dirty public checkout defer publication, and owned publication paths persist for retry.
 
-1. Read upstream immutable commit IDs. A previously rejected revision is not retried until upstream changes. Discovery/network errors leave production untouched.
-2. Wait until the router and native frontends have been idle for at least 20 minutes, with no queued/loading request or existing GPU reservation. Stop waiting for admission at 06:30. Take an exclusive reservation and recheck request state before stopping an idle owned worker. Unrelated processes/reservations are preserved.
-3. Build each candidate in a separate project-local directory. Unlike the AMD reference, NVIDIA also waits for idle **before compilation**, avoiding build RAM pressure on an active inference job. Build processes use two jobs and a separate 6/8 GiB systemd memory budget; model workers retain their existing budgets.
-4. Copy HyperQwen's environment before changing wheels, retain the selected SGLang dependencies and apply the exact compatibility patch, and compile native CUDA targets for both SM86 cards. Patch drift is a failure, not permission to drop a patch. The Maya cache-controller CPU eviction/concurrent-reread test must pass.
-5. Run a fresh production baseline through the normal guarded worker launch path. Failure skips that component; it does not justify installing a candidate. Run registered native correctness tests on each GPU while holding the reservation.
-6. Save durable rollback preimages before provisionally selecting the candidate. Native builds use immutable project-local paths, preserving shared Strata component packages. The fixed-path Maya cache-bound binary and its hash manifest are replaced transactionally together. Candidate SGLang package selection remains hash-pinned; the HyperQwen environment uses a reversible directory swap.
-7. Repeat the same tests and fixed fixtures through the same guarded launch path. Compare only matched hardware, selected settings, context, input/output counts and fixtures.
-8. Commit the runtime selection only after all applicable gates pass. Otherwise restore the old files/environment and require a normal guarded JSON smoke on restored production. Release only this job's reservation; no fallback model is loaded automatically.
-9. Record sanitized outcomes and source pins, then commit and push explicit ledger/pin files and reviewed public exports. Unrelated staged/working changes defer publication. Private/public histories remain independent. Publication failure never turns failed qualification into a promotion.
+There is **no full-context retrieval, sustained generation, repeated reload or timed-idle suite** in scheduled qualification. The legacy long-test flag is rejected; such work needs a separate explicit request. Contexts remain allocated limits with their existing historical qualification scope.
 
-A component already being tested can finish after 06:30; further components are deferred. The oneshot has a ten-hour start timeout and graceful stop/recovery. Preimages and rejected artifacts remain available; staging refuses less than 40 GiB free disk space.
+## Ownership, visibility and guards
 
-## Promotion gates
+The updater owns its reservation by exact live PID/start time/nonce. Its DSH child validates that owner and worker invocation on every forwarded request. It connects only to the already selected private backend through a local timing proxy; normal API clients remain blocked by the reservation. This avoids adding a maintenance bypass to the public API. The parent owns unload and reservation release.
 
-Both production and candidate must pass:
+Scheduled runs are configured for guarded headless qualification when no graphical desktop is available. Their logs remain private and all model/admission/resource guards remain mandatory. A foreground desktop terminal is used when available; operator-driven CLI tests retain their foreground TTY. This scheduled exception does not authorize hidden manual benchmarks.
 
-- One warmup plus three fixed 128-output-token speed requests, with cache reuse checked. Prefill uses native timing/metrics, TTFT uses the client stream and decode uses first-to-last content timestamps.
-- JSON, arithmetic and three-marker retrieval using more than 85% of the selected context. Actual backend input counts must confirm coverage.
-- Supported image checks for the selected native vision profiles and parsed tool-call checks for the dense profiles.
-- At least 90 seconds of continuous generation and a distinct fresh-process reload with JSON arithmetic.
-- Owned worker/cgroup telemetry, expected memory budgets, selected host headroom, GPU inventory/headroom and temperature, no hard-memory-limit/OOM events or active guard stop. Soft `memory.high` throttling is recorded rather than treated as a hard failure; paired performance and active pressure/swap guards still decide acceptance. Missing/invalid evidence blocks promotion.
-- Candidate prefill and decode must each be at least **95% of the fresh production baseline**. TTFT must be no greater than **max(1.25 × baseline, baseline + 0.05 seconds)**, matching the AMD acceptance envelope. Context/settings/model precision cannot be reduced to make a candidate pass.
+Preserved limits:2GiB host available; dense worker32/36GiB and heavy workers87.76984787/89.76984787GiB; per-card free-VRAM256MiB where applicable plus selected native reserves/fit targets;100C temperature stops; existing three-bad-sample2-second hysteresis, fail-closed telemetry, PSI/swap windows, swappiness60, concurrency1 and idle600s. Active swap limits remain1/8MiB/s for dense/Bolt and128/160MiB/s for streaming entries over30s, with unlimited occupancy. [Per-profile guard table](ALL-ENTRY-BENCHMARKS-20261105.md).
 
-The updater preserves the selected guards: host floor 2 GiB, selected native VRAM reserves, dense free-VRAM floor 512 MiB, temperature 82°C, memory-pressure checks (15% for Qwen/Strata and DeepSeek/Maya, 10% for all others; unchanged 30-second window/three samples) and telemetry checks, concurrency one, swappiness 60 and idle 600 seconds. All four maintained SSD-streaming profiles retain 128 MiB/s write / 160 MiB/s combined swap limits over 30 seconds; dense and unknown profiles retain 1/8 MiB/s. These are runtime I/O limits, not SSD-endurance budgets.
-
-RAM restoration was confirmed and verified on October 29: 64GB installed, 61.3013 GiB usable, with the saved full-RAM caches restored. The updater preserves those current settings. Earlier reduced-RAM measurements retain their dated hardware/cache scope; timer expiry or a rise in available RAM does not authorize a future cache change.
-
-## Interruption and recovery
-
-Before activation, the updater writes and fsyncs a private transaction journal and each preimage. A restart restores uncommitted artifacts; committed, fully qualified artifacts remain selected. A user recovery service runs before the router and also after updater shutdown. It preserves foreign/live owners and refuses to overwrite external runtime edits. An unrecoverable preimage, active unknown work or failed restored-runtime smoke leaves a visible failure and reservation rather than silently opening admission.
-
-The router has a recovery dependency and exposes `idle_for_s` on its authenticated health endpoint. Normal clients cannot bypass the reservation. Only the exact live updater PID, process start time and nonce can launch the normal guarded workers inside its reservation. Source/config/runtime changes detected before activation abort the candidate.
-
-## Operations and validation
+## Operations
 
 ```bash
 python3 scripts/install_daily_engine_update.py
@@ -62,6 +45,6 @@ journalctl --user -u nvidia-daily-engine-update.service
 python3 scripts/daily_engine_update.py --check-only
 ```
 
-`--check-only` discovers upstream revisions without builds, GPU use, promotion or publication. `--manual` permits an operator-requested run outside the nightly admission window but still requires idle and ownership checks. Do not run a second updater to bypass a held reservation. Completed GPU qualifications are not repeated merely to write documentation.
+Use a foreground terminal for `--manual` or `--smoke-current PROFILE`. Updates retain the20-minute idle gate. The current-only diagnostic requires serving to be idle and already unloaded; it never stages or promotes an update and may verify a repair immediately after cleanup. Both modes retain exclusive ownership and all resource guards. `--check-only` never builds, uses GPUs, promotes or publishes. Installation archives replaced project-owned units, verifies them, reloads systemd and restores the timer without restarting API, hub, DSH or any model.
 
-Installation validation: all 198 CPU regressions passed, including paired promotion rejection, interrupted file/environment rollback, external-edit preservation, reservation ownership, router admission and existing runtime/resource guards. A read-only six-component upstream discovery completed. No new engine candidate or speed benchmark was run during installation; the first scheduled run performs those gates before any update can be promoted.
+[Restoration validation](DAILY-UPDATER-RESTORATION-20261105.md). Earlier daily ledger entries retain their original long-suite scope and failures; they do not describe the new scheduled protocol.

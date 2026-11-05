@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Install the user's daily 03:00 NVIDIA updater without launching an update now."""
 import json
+import hashlib
+import shutil
 import os
 from pathlib import Path
 import subprocess
@@ -9,6 +11,14 @@ import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 UNITS = ('nvidia-daily-engine-update.service','nvidia-daily-engine-update-recover.service','nvidia-daily-engine-update.timer')
+
+
+
+def managed_preimage(name,text,root=ROOT):
+    if name=='nvidia-daily-engine-update.timer':
+        return '[Timer]'in text and 'Unit=nvidia-daily-engine-update.service'in text
+    if name not in UNITS:return False
+    return 'WorkingDirectory='+str(root)in text and str(root/'scripts/daily_')in text
 
 
 def main():
@@ -23,13 +33,22 @@ def main():
         raise SystemExit('Router must be idle and unloaded for installation; preserve active work and retry later.')
     if (ROOT/'data/GPU-LOCK').exists(): raise SystemExit('Preserve the existing GPU reservation; retry installation later.')
     unit_dir=Path.home()/'.config/systemd/user';unit_dir.mkdir(parents=True,exist_ok=True)
-    backup=ROOT/'data/daily-update/install-preimages';backup.mkdir(mode=0o700,parents=True,exist_ok=True)
-    for name in UNITS:
+    state=subprocess.check_output(['systemctl','--user','show','nvidia-daily-engine-update.service','-p','ActiveState','--value'],text=True).strip()
+    if state in ('active','activating','deactivating'):raise SystemExit('An updater is running; preserve its jobs and retry later.')
+    backup=ROOT/'data/daily-update/install-preimages'/str(time.time_ns());backup.mkdir(mode=0o700,parents=True,exist_ok=False)
+    rendered={name:(ROOT/'network/systemd'/name).read_text().replace('@ROOT@',str(ROOT))for name in UNITS}
+    # Validate the entire replacement set before writing any file.
+    for name,new in rendered.items():
         p=unit_dir/name
-        new=(ROOT/'network/systemd'/name).read_text().replace('@ROOT@',str(ROOT))
-        if p.exists() and p.read_text()!=new:
-            raise SystemExit('An existing different updater unit was preserved: '+name)
-        p.write_text(new)
+        if p.is_symlink():raise SystemExit('An updater unit symlink was preserved: '+name)
+        if p.exists()and p.read_text()!=new and not managed_preimage(name,p.read_text()):
+            raise SystemExit('An unrelated updater unit was preserved: '+name)
+    for name,new in rendered.items():
+        p=unit_dir/name
+        if p.exists()and p.read_text()!=new:
+            shutil.copy2(p,backup/name)
+            (backup/(name+'.sha256')).write_text(hashlib.sha256(p.read_bytes()).hexdigest()+'\n')
+        temporary=p.with_suffix(p.suffix+'.install-tmp');temporary.write_text(new);temporary.replace(p)
     drop=unit_dir/'nvidia-model-router.service.d/30-daily-update-recovery.conf';drop.parent.mkdir(exist_ok=True)
     text='[Unit]\nRequires=nvidia-daily-engine-update-recover.service\nAfter=nvidia-daily-engine-update-recover.service\n'
     if drop.exists() and drop.read_text()!=text: raise SystemExit('An unrelated router drop-in was preserved')
@@ -38,19 +57,11 @@ def main():
     subprocess.run(['systemctl','--user','daemon-reload'],check=True)
     subprocess.run(['systemctl','--user','enable','nvidia-daily-engine-update-recover.service'],check=True)
     subprocess.run(['systemctl','--user','start','nvidia-daily-engine-update-recover.service'],check=True)
-    # This restart loads only the new router idle-age/reservation integration.
-    # Recheck idle immediately before it; no engine or DSH service is restarted.
+    # The existing API/hub already expose idle/reservation telemetry. Installing
+    # updater units does not require restarting either service or resetting age.
     h=health()
-    if any(h.get(k) for k in ('busy','queued','loading_model','active_model','admission_active')):
-        raise SystemExit('A client became active; router reload and timer activation deferred.')
-    subprocess.run(['systemctl','--user','restart','nvidia-model-router.service'],check=True)
-    for _ in range(60):
-        try:
-            h=health()
-            if 'idle_for_s' in h:break
-        except OSError:pass
-        time.sleep(1)
-    else:raise SystemExit('Router idle telemetry did not become ready; timer remains disabled')
+    if 'idle_for_s'not in h or any(h.get(k)for k in ('busy','queued','loading_model','active_model','admission_active')):
+        raise SystemExit('Admission changed; timer activation deferred without restarting serving.')
     subprocess.run(['systemctl','--user','enable','--now','nvidia-daily-engine-update.timer'],check=True)
     details=subprocess.check_output(['systemctl','--user','show','nvidia-daily-engine-update.timer','-p','ActiveState','-p','NextElapseUSecRealtime'],text=True)
     print(details.strip())

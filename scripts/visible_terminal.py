@@ -271,7 +271,7 @@ def focus_terminal(window_id):
         x.XCloseDisplay(display)
 
 
-def launch_terminal(command):
+def launch_terminal(command, unit_properties=()):
     # Keep GUI consoles outside the inference worker's guarded cgroup.
     env = desktop_env()
     config = json.loads((ROOT / 'config/terminal-runtime.json').read_text())
@@ -279,7 +279,9 @@ def launch_terminal(command):
     env['XAPPLRESDIR'] = str(ROOT / config['app_defaults_directory'])
     if '-iconic' in command[:command.index('-e')]:
         env['DESKTOP_STARTUP_ID'] = ''; env['XDG_ACTIVATION_TOKEN'] = ''
-    launcher = ['systemd-run', '--user', '--collect', '--quiet', '--unit=llm-terminal-' + uuid.uuid4().hex]
+    unit='llm-terminal-'+uuid.uuid4().hex+'.service'
+    launcher = ['systemd-run', '--user', '--collect', '--quiet', '--unit='+unit]
+    launcher += ['--property='+value for value in unit_properties]
     for key in ('DISPLAY', 'WAYLAND_DISPLAY', 'XDG_RUNTIME_DIR', 'DBUS_SESSION_BUS_ADDRESS', 'XAUTHORITY', 'LD_LIBRARY_PATH', 'XAPPLRESDIR'):
         if key in env:
             launcher.append('--setenv=' + key + '=' + env[key])
@@ -287,6 +289,7 @@ def launch_terminal(command):
         launcher += ['--setenv=DESKTOP_STARTUP_ID=', '--setenv=XDG_ACTIVATION_TOKEN=']
     subprocess.Popen([*launcher, *command], env=env, start_new_session=True,
                      stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    return unit
 
 
 def open_monitor(title, unit, logs=()):

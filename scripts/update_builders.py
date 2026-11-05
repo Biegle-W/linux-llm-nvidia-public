@@ -14,10 +14,29 @@ def run(command, log, cwd=None, env=None, timeout=10800):
                        stderr=subprocess.STDOUT, check=True, timeout=timeout)
 
 
+def latest_release(component):
+    import urllib.request
+    repo=component['upstream'].removeprefix('https://github.com/').removesuffix('.git')
+    if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+',repo):raise RuntimeError('Unexpected release repository')
+    request=urllib.request.Request('https://api.github.com/repos/'+repo+'/releases/latest',headers={'Accept':'application/vnd.github+json','User-Agent':'NVIDIA-engine-maintenance'})
+    with urllib.request.urlopen(request,timeout=30)as response:release=json.load(response)
+    if release.get('draft') or release.get('prerelease') or not release.get('tag_name'):raise RuntimeError('No stable release')
+    return release
+
+
 def upstream(component):
-    text = subprocess.check_output(['git', 'ls-remote', component['upstream'], 'HEAD'], text=True, timeout=90)
-    revision = text.split()[0]
-    if not re.fullmatch('[0-9a-f]{40}', revision): raise RuntimeError('Invalid upstream revision')
+    ref='HEAD'
+    if component.get('channel')=='stable':
+        ref='refs/tags/'+latest_release(component)['tag_name']
+        text=subprocess.check_output(['git','ls-remote',component['upstream'],ref,ref+'^{}'],text=True,timeout=90)
+        lines=text.splitlines();peeled=[line for line in lines if line.endswith('^{}')]
+        revision=(peeled or lines)[0].split()[0] if lines else ''
+    else:
+        text=subprocess.check_output(['git','ls-remote','--symref',component['upstream'],'HEAD'],text=True,timeout=90)
+        expected=component.get('default_branch')
+        if expected and 'ref: refs/heads/'+expected+'\tHEAD' not in text:raise RuntimeError('Default fork branch changed; patch review required')
+        revision=next((line.split()[0] for line in text.splitlines()if not line.startswith('ref:')),'')
+    if not re.fullmatch('[0-9a-f]{40}',revision):raise RuntimeError('Invalid upstream revision')
     return revision
 
 
@@ -48,11 +67,17 @@ def build(root, component, revision, directory):
         run(['cp', '-a', '--reflink=auto', root / 'runtimes/env-hyperqwen', env], log, timeout=1800)
         py = env / 'bin/python'
         run([py, '-m', 'ensurepip', '--upgrade'], log, timeout=180)
-        run([py, '-m', 'pip', 'install', '-r', source / 'docker/requirements.txt'], log, timeout=3600)
+        run([py, '-m', 'pip', 'install', '--upgrade', '-r', source / 'docker/requirements.txt'], log, timeout=3600)
         package = Path(subprocess.check_output([str(py), '-c', 'import importlib.util; print(importlib.util.find_spec("vllm").origin)'], text=True).strip()).parent
         if not package.resolve().is_relative_to(env.resolve()):
             raise RuntimeError('Candidate package escapes copied environment')
+        import shutil
+        wheel_version=subprocess.check_output([str(py),'-c','import importlib.metadata as m; print(m.version("vllm"))'],text=True).strip()
+        # Copied patched files absent from a new wheel would survive pip uninstall.
+        shutil.rmtree(package)
+        run([py,'-m','pip','install','--force-reinstall','--no-deps','vllm=='+wheel_version],log,timeout=3600)
         run(['bash', source / 'patches/apply.sh', package], log)
+        run(['bash', source / 'patches/apply.sh', '--kvarn', package], log)
         # Keep production's separately qualified KVarN and launcher choices. A changed
         # patch layout fails rather than silently rebuilding different architecture.
         production_env = subprocess.check_output([str(root / 'runtimes/env-hyperqwen/bin/python'), '-c',
@@ -69,7 +94,7 @@ def build(root, component, revision, directory):
                     script.write_bytes(raw.replace(old_prefix, ('#!' + str(root / 'runtimes/env-hyperqwen')).encode(), 1))
         receipt['directories'].append({'target': str(root / 'runtimes/env-hyperqwen'), 'candidate': str(env)})
     elif kind == 'sglang':
-        patch = root / 'scripts/patches/sglang-hetero-ct-w4a8-mtp.patch'
+        patch = root / json.loads((root/'config/sglang-runtime.json').read_text())['patch']
         run(['patch', '--batch', '--fuzz=0', '-p1', '-i', patch], log, source)
         run([sys.executable, '-m', 'compileall', '-q', source / 'python/sglang'], log)
         sys.path.insert(0, str(root / 'scripts'))
@@ -80,65 +105,11 @@ def build(root, component, revision, directory):
                         cache_directory=str((directory / 'cache').relative_to(root)))
         candidate = directory / 'sglang-runtime.json'; write_json(candidate, manifest)
         receipt['files'].append({'target': str(root / 'config/sglang-runtime.json'), 'candidate': str(candidate)})
+    elif kind in ('maya-pair','llamacpp','strata-signed'):
+        from update_native_builders import prepare
+        prepare(root,component,revision,directory,source,log,receipt)
     else:
-        base_model_sha = sha(source / 'src/ds4/ds4_model.cu') if kind == 'maya-ds4' else None
-        if kind == 'maya-ds4':
-            patch = root / 'patches/maya-ds4-file-cache-target.patch'
-            run(['patch', '--batch', '--fuzz=0', '-p1', '-i', patch], log, source)
-            test = directory / 'cache-test'
-            run(['g++', '-O2', '-std=c++20', '-pthread', '-I' + str(source / 'src/ds4'),
-                 root / 'tools/maya-file-cache-bound/test_cache_bound.cpp', '-o', test], log)
-            run([test, directory], log)
-        target = {'strata': 'strata', 'strata-ds4': 'strata-dsv41', 'maya': 'maya', 'maya-ds4': 'maya-ds4'}[kind]
-        build_dir = directory / 'build'
-        nvcc = root / 'runtimes/engine-tools/lib/python3.12/site-packages/nvidia/cu13/bin/nvcc'
-        env = dict(os.environ, CC='gcc-13', CXX='g++-13', MAX_JOBS='2')
-        args = ['cmake', '-S', source, '-B', build_dir, '-G', 'Ninja', '-DCMAKE_BUILD_TYPE=Release',
-                '-DSTRATA_ENABLE_CUDA=ON', '-DCMAKE_CUDA_ARCHITECTURES=86', '-DSTRATA_BUILD_TESTS=ON',
-                '-DCMAKE_CUDA_COMPILER=' + str(nvcc), '-DCMAKE_CUDA_HOST_COMPILER=/usr/bin/g++-13']
-        if kind == 'strata-ds4': args.append('-DSTRATA_BUILD_DSV41=ON')
-        run(args, log, env=env)
-        run(['cmake', '--build', build_dir, '--parallel', '2'], log, env=env)
-        binary = build_dir / target
-        if not binary.is_file(): raise RuntimeError('Missing candidate binary')
-        cfg = json.loads(canonical(root, component['profiles'][0]).read_text())
-        receipt['artifacts'] = [{'path':str(binary),'sha256':sha(binary)}]
-        if kind == 'maya-ds4':
-            # This selected controller intentionally verifies one fixed project
-            # path. Preserve it with a durable binary+manifest transaction.
-            receipt['files'].append({'target':cfg['exe'],'candidate':str(binary)})
-        elif kind == 'maya' and cfg.get('pinned_runtime'):
-            if cfg['pinned_runtime'] != {'manifest': 'config/maya-glm-runtime.json'}:
-                raise RuntimeError('Unreviewed pinned GLM runtime selection')
-            manifest_path = root / 'config/maya-glm-runtime.json'
-            manifest = json.loads(manifest_path.read_text())
-            if manifest.get('profile') != 'glm-maya' or manifest['binary']['path'] != 'runtimes/maya-glm-v1150/maya':
-                raise RuntimeError('Pinned GLM runtime identity changed')
-            if Path(cfg['exe']).resolve() != (root / manifest['binary']['path']).resolve():
-                raise RuntimeError('Pinned GLM executable path changed')
-            receipt['files'].append({'target': cfg['exe'], 'candidate': str(binary)})
-            if revision != '10e69a0eb11541004abb24f9fa47147e9002326f':manifest.pop('release', None)
-            manifest.update(source_commit=revision, status='candidate; pending qualification')
-            manifest['binary']['sha256'] = sha(binary)
-            candidate_manifest = directory / 'maya-glm-runtime.json'; write_json(candidate_manifest, manifest)
-            receipt['files'].append({'target': str(manifest_path), 'candidate': str(candidate_manifest)})
-        else:
-            # Never overwrite shared Strata component-package files. Select this
-            # immutable project-local build through the normal canonical preset.
-            cfg['exe'] = str(binary)
-        # Resolve new shared libraries from the same build as the new executable.
-        # Model/cache/context arguments and the frontend remain unchanged.
-        cfg['lib_dirs'] = [str(build_dir)] + [x for x in cfg.get('lib_dirs',[]) if x != str(build_dir)]
-        candidate_cfg = directory / 'native-runtime-private.json'; write_json(candidate_cfg,cfg)
-        receipt['files'].append({'target':str(canonical(root,component['profiles'][0])),'candidate':str(candidate_cfg)})
-        receipt['ctest'] = str(build_dir)
-        if kind == 'maya-ds4':
-            manifest = json.loads((root / 'config/maya-cachebound-runtime.json').read_text())
-            manifest.update(base_source_commit=revision, base_source_sha256=base_model_sha,
-                            status='daily-update artifact; qualification recorded separately in the daily ledger')
-            manifest['binary']['sha256'] = sha(binary)
-            candidate = directory / 'maya-cachebound-runtime.json'; write_json(candidate, manifest)
-            receipt['files'].append({'target': str(root / 'config/maya-cachebound-runtime.json'), 'candidate': str(candidate)})
+        raise RuntimeError('Retired builder; migrate to current grouped runtime adapter')
     for action in receipt['files']:
         action['sha256'] = sha(action['candidate'])
         action['expected_old_sha256'] = sha(action['target'])

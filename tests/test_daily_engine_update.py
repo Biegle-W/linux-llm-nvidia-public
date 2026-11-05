@@ -22,6 +22,10 @@ def good():
             'sustained_generation_s':120}
 
 
+def short_good():
+    return {'qualification':'short-dsh-v1','profile':'test','context':32768,'fixture_sha256':'fixed','settings_sha256':'settings','hardware_sha256':'hardware','prompt_tokens':6000,'output_tokens':40,'cached_tokens':0,'prefill_tps':100,'decode_tps':50,'ttft_s':2,'checks':dict.fromkeys(['tool','tool_result','followup','unload'],True),'resources_passed':True,'telemetry_samples':2}
+
+
 class PromotionTests(unittest.TestCase):
     def test_matched_passing_candidate_and_inclusive_speed_boundaries(self):
         baseline=good(); candidate=good();candidate.update(prefill_tps=95,decode_tps=47.5,ttft_s=2.5)
@@ -124,22 +128,22 @@ class UpdaterIntegrationTests(unittest.TestCase):
         from unittest.mock import Mock
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp);u,target,receipt,component=self.prepare(root)
-            u.qualify=Mock(side_effect=[{'test':good()},{'test':good()}])
+            u.qualify=Mock(side_effect=[{'test':short_good()},{'test':short_good()}])
             with patch('daily_engine_update.kernel_tests'):
                 result=u.process(component,'new-revision',receipt)
             self.assertEqual(result['status'],'promoted');self.assertEqual(target.read_bytes(),b'new')
             self.assertNotIn('pending',u.state)
             self.assertEqual(json.loads((root/'config/daily-update-versions.json').read_text())['test']['source_commit'],'new-revision')
-            self.assertEqual(json.loads((root/'run/test/transaction.json').read_text())['phase'],'committed')
+            self.assertEqual(json.loads(next((root/'run/test').glob('activation-*/transaction.json')).read_text())['phase'],'committed')
 
     def test_failed_candidate_is_restored_and_smoked_before_pending_clears(self):
         from unittest.mock import Mock
         with tempfile.TemporaryDirectory() as temp:
-            root=Path(temp);u,target,receipt,component=self.prepare(root);bad=good();bad['checks']['retrieval']=False
-            u.qualify=Mock(side_effect=[{'test':good()},{'test':bad}])
-            with patch('daily_engine_update.kernel_tests'),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.Qualification') as q:
+            root=Path(temp);u,target,receipt,component=self.prepare(root);bad=short_good();bad['checks']['tool']=False
+            u.qualify=Mock(side_effect=[{'test':short_good()},{'test':bad}])
+            with patch('daily_engine_update.kernel_tests'),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.ShortQualification') as q:
                 with self.assertRaisesRegex(RuntimeError,'paired'):u.process(component,'bad-revision',receipt)
-                q.return_value.exact_json.assert_called_once()
+                q.return_value.run.assert_called_once()
             self.assertEqual(target.read_bytes(),b'old');self.assertNotIn('pending',u.state)
             self.assertEqual(json.loads((root/'config/daily-update-versions.json').read_text())['test']['source_commit'],'old')
 
@@ -155,8 +159,8 @@ class UpdaterIntegrationTests(unittest.TestCase):
         from unittest.mock import Mock
         from daily_engine_update import Interrupted
         with tempfile.TemporaryDirectory() as temp:
-            root=Path(temp);u,target,receipt,component=self.prepare(root);u.qualify=Mock(side_effect=[{'test':good()},Interrupted('stop')])
-            with patch('daily_engine_update.kernel_tests'),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.Qualification'):
+            root=Path(temp);u,target,receipt,component=self.prepare(root);u.qualify=Mock(side_effect=[{'test':short_good()},Interrupted('stop')])
+            with patch('daily_engine_update.kernel_tests'),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.ShortQualification'):
                 with self.assertRaises(Interrupted):u.process(component,'new-revision',receipt)
             self.assertEqual(target.read_bytes(),b'old');self.assertNotIn('pending',u.state)
 
@@ -196,8 +200,8 @@ class RecoveryIntegrationTests(unittest.TestCase):
     def test_stale_provisional_worker_is_restored_and_smoked_before_release(self):
         with tempfile.TemporaryDirectory() as temp:
             u,target,old=self.pending(Path(temp))
-            with patch('daily_engine_update.owner_valid',return_value=False),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.Qualification') as q:
-                u.recover();q.return_value.exact_json.assert_called_once()
+            with patch('daily_engine_update.owner_valid',return_value=False),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.ShortQualification') as q:
+                u.recover();q.return_value.run.assert_called_once()
             self.assertEqual(target.read_bytes(),b'old');self.assertFalse(u.reservation.exists());self.assertNotIn('pending',u.state)
 
     def test_live_updater_and_foreign_reservation_are_preserved(self):
@@ -214,8 +218,8 @@ class RecoveryIntegrationTests(unittest.TestCase):
     def test_failed_recovery_smoke_keeps_the_reservation(self):
         with tempfile.TemporaryDirectory() as temp:
             u,target,old=self.pending(Path(temp))
-            with patch('daily_engine_update.owner_valid',return_value=False),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.Qualification') as q:
-                q.return_value.exact_json.side_effect=RuntimeError('smoke failed')
+            with patch('daily_engine_update.owner_valid',return_value=False),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.ShortQualification') as q:
+                q.return_value.run.side_effect=RuntimeError('smoke failed')
                 with self.assertRaisesRegex(RuntimeError,'smoke failed'):u.recover()
             self.assertEqual(target.read_bytes(),b'old');self.assertTrue(u.reservation.exists());self.assertIn('pending',u.state)
 
@@ -370,10 +374,12 @@ class CatalogCoverageTests(unittest.TestCase):
 if __name__=='__main__':unittest.main()
 
 class ShortHarnessPolicy(unittest.TestCase):
-    def test_long_gpu_qualification_requires_explicit_opt_in(self):
+    def test_default_short_protocol_is_accepted_and_long_suite_is_separate(self):
         from types import SimpleNamespace
         from daily_engine_update import validate_qualification_policy
-        policy={'validation':{'full_context_stress_requires_explicit_user_request':True}}
-        with self.assertRaises(RuntimeError):validate_qualification_policy(SimpleNamespace(recover_only=False,check_only=False,allow_full_context_tests=False),policy)
-        for recover,check,allow in [(True,False,False),(False,True,False),(False,False,True)]:
-            validate_qualification_policy(SimpleNamespace(recover_only=recover,check_only=check,allow_full_context_tests=allow),policy)
+        policy={'validation':{'default':'short-actual-harness-tool-call-then-unload','full_context_stress_requires_explicit_user_request':True}}
+        validate_qualification_policy(SimpleNamespace(allow_full_context_tests=False),policy)
+        with self.assertRaisesRegex(RuntimeError,'separately'):
+            validate_qualification_policy(SimpleNamespace(allow_full_context_tests=True),policy)
+        with self.assertRaisesRegex(RuntimeError,'short actual DSH'):
+            validate_qualification_policy(SimpleNamespace(allow_full_context_tests=False),{'validation':{}})

@@ -11,7 +11,8 @@
         "qwen27b-hyperqwen"
       ],
       "upstream": "https://github.com/syv-ai/HyperQwen.git",
-      "builder": "hyperqwen"
+      "builder": "hyperqwen",
+      "channel": "default"
     },
     {
       "id": "sglang",
@@ -19,49 +20,101 @@
         "qwen27b-sglang"
       ],
       "upstream": "https://github.com/efschu/htsglang.git",
-      "builder": "sglang"
+      "builder": "sglang",
+      "channel": "default",
+      "default_branch": "fix/851-consolidated"
     },
     {
-      "id": "strata-qwen",
+      "id": "maya",
       "profiles": [
-        "flash-next-strata"
-      ],
-      "upstream": "https://github.com/Niko1221/Strata.git",
-      "builder": "strata"
-    },
-    {
-      "id": "maya-glm",
-      "profiles": [
-        "glm-maya"
-      ],
-      "upstream": "https://github.com/mw00/project-maya.git",
-      "builder": "maya"
-    },
-    {
-      "id": "maya-deepseek",
-      "profiles": [
+        "glm-maya",
         "deepseek-maya"
       ],
       "upstream": "https://github.com/mw00/project-maya.git",
-      "builder": "maya-ds4"
+      "builder": "maya-pair",
+      "channel": "stable"
+    },
+    {
+      "id": "strata",
+      "profiles": [
+        "flash-next-strata",
+        "deepseek-unsloth-strata"
+      ],
+      "upstream": "https://github.com/Niko1221/Strata.git",
+      "builder": "strata-signed",
+      "channel": "stable"
+    },
+    {
+      "id": "llamacpp",
+      "profiles": [
+        "bolt-vllm",
+        "flash-next-iq1s-llamacpp"
+      ],
+      "upstream": "https://github.com/ggml-org/llama.cpp.git",
+      "builder": "llamacpp",
+      "channel": "stable"
     }
   ],
   "pinned_profiles": [
     {
-      "profile": "bolt-vllm",
-      "reason": "Qualified native IQ2 Bolt on pinned llama.cpp11909 with reviewed fit placement, libraries and tool checks; changes require explicit requalification."
-    },
-    {
-      "profile": "deepseek-unsloth-strata",
-      "reason": "Independent signed Strata 0.2.9/engine 0.1.55 package with pinned serving adapter and context qualification; automatic source builds must not overwrite it."
-    },
-    {
       "profile": "qwen27b-tensorfold",
-      "reason": "Independent TensorFold1.2.2 native binary, grammar library, EXL3 target and DFlash2 pins; automatic source builds must not overwrite this qualified runtime."
+      "reason": "Latest stable1.2.2 native binary and grammar-library hashes remain pinned; monitor releases daily. A newer standalone binary needs a reviewed package adapter; never replace the EXL3 target/drafter automatically."
+    }
+  ],
+  "validation": "paired-short-actual-DSH-v1",
+  "publication_files": {
+    "sglang": [
+      "config/sglang-runtime.json"
+    ],
+    "maya": [
+      "config/maya-glm-runtime.json",
+      "config/maya-unsloth-runtime.json"
+    ],
+    "strata": [
+      "config/deepseek-unsloth-runtime.json",
+      "scripts/strata_unsloth_runtime.py"
+    ],
+    "llamacpp": [
+      "config/bolt-iq2-runtime.json",
+      "config/flash-iq1s-runtime.json"
+    ]
+  },
+  "monitored_engines": [
+    {
+      "id": "tensorfold",
+      "upstream": "https://github.com/ashhart/TensorFold.git",
+      "channel": "stable",
+      "installed_release": "v1.2.2",
+      "reason": "Pinned native package; report newer stable releases without automatic replacement."
     },
     {
-      "profile": "flash-next-iq1s-llamacpp",
-      "reason": "Qualified llama.cpp build11909 with pinned libraries and UnslothIQ1S lazy SSD table; upgrades require separate guarded requalification."
+      "id": "comfyui",
+      "upstream": "https://github.com/Comfy-Org/ComfyUI.git",
+      "channel": "stable",
+      "installed_release": "v0.44.0",
+      "reason": "GPU-only image/video stack requires workflow/residency qualification."
+    },
+    {
+      "id": "raylight",
+      "upstream": "https://github.com/komikndr/raylight.git",
+      "channel": "stable",
+      "installed_release": "1.11.0",
+      "reason": "Shared ComfyUI video stack; keep qualified collective/placement patches."
+    },
+    {
+      "id": "mesh",
+      "upstream": "https://github.com/shootthesound/comfyui-mesh.git",
+      "channel": "default",
+      "installed_commit": "3804156b4b39d258fceffc0b55adf9ad2e5aed37",
+      "reason": "Shared ComfyUI video stack; GPU-only workflow validation required."
+    },
+    {
+      "id": "gguf",
+      "upstream": "https://github.com/city96/ComfyUI-GGUF.git",
+      "channel": "default",
+      "installed_commit": "6ea2651e7df66d7585f6ffee804b20e92fb38b8a",
+      "reason": "Shared ComfyUI quant loader; workflow validation required."
     }
-  ]
+  ],
+  "scheduled_visibility": "guarded-headless"
 }

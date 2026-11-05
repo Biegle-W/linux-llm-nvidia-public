@@ -38,6 +38,9 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'scripts/daily_update_terminal.py', 'scripts/update_short_qualification.py', 'scripts/update_native_builders.py',
+    'tests/test_update_restore.py', 'docs/DAILY-UPDATER-RESTORATION-20261105.md',
+    'docs/validation-results/20261105-daily-updater-restoration.json',
     'docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md', 'docs/ALL-ENTRY-BENCHMARKS-20261105.md',
     'docs/validation-results/20261105-engine-refresh.json',
     'patches/maya-ds4-file-cache-target-v1153.patch', 'scripts/patches/sglang-hetero-ct-w4a8-mtp-20261105.patch',

@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-05",
+  "status": "enabled-and-verified",
+  "schedule": "03:00 America/Toronto; missed runs skipped",
+  "automatic_text_entries": 8,
+  "automatic_components": [
+    "hyperqwen",
+    "sglang",
+    "maya",
+    "strata",
+    "llamacpp"
+  ],
+  "monitored_only": [
+    "tensorfold",
+    "comfyui",
+    "raylight",
+    "mesh",
+    "gguf"
+  ],
+  "qualification": "paired short actual DSH read/result/exact followup and owned unload",
+  "full_context_or_sustained_tests": false,
+  "weights_downloaded": false,
+  "guards_relaxed": false,
+  "visibility": "guarded-headless scheduled tests with private logs; manual tests retain foreground TTY",
+  "discovery": {
+    "hyperqwen": "unchanged",
+    "sglang": "unchanged",
+    "maya": "stable1.1.54 update available; not promoted by discovery",
+    "strata": "unchanged",
+    "llamacpp": "unchanged",
+    "other_monitored_engines": "current"
+  },
+  "CPU_tests": {
+    "count": 485,
+    "result": "pass"
+  },
+  "timer": {
+    "enabled": true,
+    "active": true,
+    "OnCalendar": "*-*-* 03:00:00 America/Toronto",
+    "next_run": "2026-11-06T03:00:00-05:00",
+    "Persistent": false,
+    "user_linger": true
+  },
+  "service": {
+    "active": false,
+    "MemoryHigh_bytes": 6442450944,
+    "MemoryMax_bytes": 8589934592
+  },
+  "serving_restarted": false,
+  "production_engine_upgraded": false,
+  "source_of_qualification": "Existing SGLang engine; exact live updater ownership; original router request defaults; fixed fixture outside repository; no build/promotion",
+  "end_to_end_check": {
+    "profile": "qwen27b-sglang",
+    "qualification": "short-dsh-v1",
+    "prefill_tps": 2217.0641552742495,
+    "ttft_s": 2.78350193699589,
+    "decode_tps": 60.210879700015425,
+    "telemetry_samples": 6,
+    "checks": {
+      "tool": true,
+      "tool_result": true,
+      "followup": true,
+      "unload": true
+    },
+    "resources_passed": true,
+    "context": 57344,
+    "prompt_tokens": 6095,
+    "output_tokens": 39,
+    "cached_tokens": 0,
+    "scope": "Single current-runtime diagnostic, not a paired promotion or full-context test"
+  },
+  "public_focused_tests": {
+    "count": 82,
+    "result": "pass",
+    "GPU_inference": false
+  },
+  "final_health": {
+    "10100": {
+      "reachable": true,
+      "idle": true
+    },
+    "10101": {
+      "reachable": true,
+      "idle": true
+    },
+    "DSH_HTTP": 200,
+    "GPU_LOCK_present": false,
+    "GPU_memory_used_MiB": [
+      "15",
+      "14"
+    ],
+    "timer_is-enabled": "enabled",
+    "timer_is-active": "active",
+    "pending_update": false,
+    "reserved_updater_owner": false
+  }
+}

@@ -1,37 +1,47 @@
 {
   "hyperqwen": {
     "source_commit": "6ab9bd05cb84b538a6595d634f3e337ac8a80856",
-    "status": "Manually refreshed and short DSH qualified2026-11-05; daily schedule remains paused",
+    "status": "Qualified existing production; scheduled short DSH updates enabled2026-11-05",
     "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "sglang": {
     "source_commit": "d61ded5b9e2dc46453d924a3d4db06ec2c373f54",
-    "status": "Manually refreshed and short DSH qualified2026-11-05; daily schedule remains paused",
+    "status": "Qualified existing production; scheduled short DSH updates enabled2026-11-05",
     "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "strata-qwen": {
     "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
-    "status": "Manually refreshed and short DSH qualified2026-11-05; daily schedule remains paused",
+    "status": "Historical split-component provenance; superseded by grouped Maya/Strata records2026-11-05",
     "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "maya-glm": {
     "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
-    "status": "Manually refreshed and short DSH qualified2026-11-05; daily schedule remains paused",
+    "status": "Historical split-component provenance; superseded by grouped Maya/Strata records2026-11-05",
     "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "maya-deepseek": {
     "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
-    "status": "Manually refreshed and short DSH qualified2026-11-05; daily schedule remains paused",
+    "status": "Historical split-component provenance; superseded by grouped Maya/Strata records2026-11-05",
     "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "strata-deepseek": {
     "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
-    "status": "Manually refreshed and short DSH qualified2026-11-05; daily schedule remains paused",
+    "status": "Historical split-component provenance; superseded by grouped Maya/Strata records2026-11-05",
     "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "llamacpp": {
     "source_commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
-    "status": "Manually refreshed and short DSH qualified2026-11-05; daily schedule remains paused",
+    "status": "Qualified existing production; scheduled short DSH updates enabled2026-11-05",
+    "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
+  },
+  "maya": {
+    "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
+    "status": "Qualified existing production; scheduled short DSH updates enabled2026-11-05",
+    "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
+  },
+  "strata": {
+    "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
+    "status": "Qualified existing production; scheduled short DSH updates enabled2026-11-05",
     "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   }
 }

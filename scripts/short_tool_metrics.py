@@ -4,9 +4,16 @@ from http.server import ThreadingHTTPServer,BaseHTTPRequestHandler
 from pathlib import Path
 from benchmark_models import metric_delta
 class ToolMetrics:
- def __init__(self,output,key,model):
+ def __init__(self,output,key,model,upstream_port=10100,backend_model=None,ownership_check=None,request_transform=None):
   self.output=Path(output);self.key=key;self.model=model;self.claimed=False;self.lock=threading.Lock();self.completed=threading.Event()
   tap=self
+  def prepare(body):
+   if ownership_check:ownership_check()
+   if backend_model:
+    body=json.loads(body);body['model']=backend_model
+    if request_transform:body=request_transform(body)
+    return json.dumps(body).encode()
+   return body
   class Handler(BaseHTTPRequestHandler):
    def log_message(self,*args):pass
    def do_POST(self):
@@ -16,15 +23,15 @@ class ToolMetrics:
      first_request=not tap.claimed
      tap.claimed=True
     if not first_request:
-     body=self.rfile.read(int(self.headers['Content-Length']))
-     conn=http.client.HTTPConnection('127.0.0.1',10100,timeout=1200)
+     body=prepare(self.rfile.read(int(self.headers['Content-Length'])))
+     conn=http.client.HTTPConnection('127.0.0.1',upstream_port,timeout=1200)
      try:
       conn.request('POST',self.path,body,{'Authorization':'Bearer '+tap.key,'Content-Type':'application/json'})
       response=conn.getresponse();self.send_response(response.status);self.send_header('Content-Type',response.getheader('Content-Type','text/event-stream'));self.end_headers()
       while line:=response.readline():self.wfile.write(line);self.wfile.flush()
      finally:conn.close()
      return
-    body=json.loads(self.rfile.read(int(self.headers['Content-Length'])));body['stream_options']={'include_usage':True};before=tap.metrics();record={'model':tap.model,'measurement':'first actual DSH tool-call generation','loading_excluded':True};usage={};native={};first=last=None;chunks=0;started=time.perf_counter();conn=http.client.HTTPConnection('127.0.0.1',10100,timeout=1200)
+    body=json.loads(prepare(self.rfile.read(int(self.headers['Content-Length']))));body['stream_options']={'include_usage':True};before=tap.metrics();record={'model':tap.model,'measurement':'first actual DSH tool-call generation','loading_excluded':True};usage={};native={};first=last=None;chunks=0;started=time.perf_counter();conn=http.client.HTTPConnection('127.0.0.1',upstream_port,timeout=1200)
     try:
      conn.request('POST',self.path,json.dumps(body),{'Authorization':'Bearer '+tap.key,'Content-Type':'application/json'});response=conn.getresponse();self.send_response(response.status);self.send_header('Content-Type',response.getheader('Content-Type','text/event-stream'));self.end_headers()
      while line:=response.readline():

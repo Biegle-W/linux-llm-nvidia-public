@@ -73,20 +73,11 @@ class GLMUpdaterPin(unittest.TestCase):
         return binary
 
     def build_candidate(self, root):
-        from unittest.mock import patch
-        from update_builders import build
-        revision = '2' * 40
-        def fake_run(command, log, cwd=None, env=None, timeout=None):
-            command = list(map(str, command))
-            if command[:2] == ['git', 'clone']: Path(command[-1]).mkdir()
-            if command[:2] == ['cmake', '--build']:
-                binary = Path(command[2]) / 'maya'
-                binary.parent.mkdir(parents=True); binary.write_bytes(b'new-engine')
-        component = {'id': 'maya-glm', 'profiles': ['glm-maya'], 'builder': 'maya',
-                     'upstream': 'https://github.com/mw00/project-maya.git'}
-        with patch('update_builders.run', side_effect=fake_run), patch(
-                'update_builders.subprocess.check_output', return_value=revision):
-            return build(root, component, revision, root / 'candidate')
+        from update_native_builders import stage_maya_pin
+        directory=root/'candidate';directory.mkdir();binary=directory/'maya';binary.write_bytes(b'new-engine')
+        receipt={'files':[],'directories':[]}
+        stage_maya_pin(root,'glm-maya','2'*40,binary,directory,receipt)
+        return receipt
 
     def test_update_activation_and_rollback_keep_binary_and_manifest_together(self):
         from update_transaction import Transaction

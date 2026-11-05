@@ -9,7 +9,7 @@ Type=oneshot
 WorkingDirectory=@ROOT@
 Environment=PYTHONUNBUFFERED=1 BUILD_JOBS=2
 Environment=PATH=%h/.local/bin:/usr/local/bin:/usr/bin:/bin
-ExecStart=/usr/bin/python3 @ROOT@/scripts/daily_engine_update.py
+ExecStart=/usr/bin/python3 @ROOT@/scripts/daily_update_terminal.py
 ExecStopPost=/usr/bin/python3 @ROOT@/scripts/daily_engine_update.py --recover-only
 TimeoutStartSec=10h
 TimeoutStopSec=10min

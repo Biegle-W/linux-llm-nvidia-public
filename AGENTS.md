@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Daily updater restored — November5,2026
+
+Daily engine maintenance is enabled at03:00 America/Toronto, including guarded headless scheduled tests with private logs. Eight text entries use current grouped staging, paired short actual DSH checks and durable rollback; TensorFold and the diffusion stack receive version monitoring. The repaired exact-owner DSH path and485 CPU regressions passed. All resource guards and the20-minute update-admission gate remain. [Restoration, scope and validation](docs/DAILY-UPDATER-RESTORATION-20261105.md). Earlier paused-update and long-suite paragraphs remain dated history.
+
 ## Engine refresh and weight sharing — November5,2026
 
 Removed the3.418GB incomplete Qwen cache. HyperQwen, SGLang, Maya, Strata and shared llama.cpp are refreshed; TensorFold and ComfyUI/video integrations were already current under the stable/default-branch policy. All eight changed text entries passed guarded actual DSH read/result/exact followup and owned unload. No complete duplicate checkpoints were found; compatible entries already share weights. Daily updates stay paused; all guards and selected contexts remain. [Versions, sharing and optional cleanup](docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md); [current observations](docs/ALL-ENTRY-BENCHMARKS-20261105.md).

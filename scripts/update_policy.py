@@ -31,3 +31,24 @@ def compare(baseline, candidate):
         if candidate['ttft_s'] > max(1.25 * baseline['ttft_s'], baseline['ttft_s'] + .05):
             reasons.append('TTFT regression')
     return {'passed': not reasons, 'reasons': reasons}
+
+
+def compare_short(baseline,candidate):
+    """Fail closed on unmatched short calls; no long-test requirement or claim."""
+    reasons=[]
+    for field in ('profile','context','settings_sha256','hardware_sha256','fixture_sha256','prompt_tokens','output_tokens','cached_tokens'):
+        if baseline.get(field) is None or baseline.get(field)!=candidate.get(field):reasons.append('Unmatched '+field)
+    for label,row in [('production',baseline),('candidate',candidate)]:
+        if row.get('qualification')!='short-dsh-v1':reasons.append(label+': wrong qualification protocol')
+        if any(row.get('checks',{}).get(k)is not True for k in ('tool','tool_result','followup','unload')):
+            reasons.append(label+': incomplete actual DSH/lifecycle check')
+        if row.get('resources_passed')is not True or row.get('telemetry_samples',0)<1:reasons.append(label+': missing resource evidence')
+        if row.get('cached_tokens')!=0:reasons.append(label+': prompt cache reuse prevents matching')
+        for key in ('prefill_tps','decode_tps','ttft_s'):
+            value=row.get(key)
+            if type(value)not in (int,float)or not math.isfinite(value)or value<=0:reasons.append(label+': invalid '+key)
+    if not reasons:
+        for key in ('prefill_tps','decode_tps'):
+            if candidate[key]<.95*baseline[key]:reasons.append('Regression >5%: '+key)
+        if candidate['ttft_s']>max(1.25*baseline['ttft_s'],baseline['ttft_s']+.05):reasons.append('TTFT regression')
+    return {'passed':not reasons,'reasons':reasons,'scope':'Single matched short DSH tool calls; no sustained/full-context claim'}

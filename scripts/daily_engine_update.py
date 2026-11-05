@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Nightly NVIDIA engine updates: stage, paired qualification, promote or recover."""
+"""Daily NVIDIA engine updates: paired short DSH qualification and durable recovery."""
 import argparse
 from datetime import datetime
 import fcntl
@@ -17,9 +17,9 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'network'))
 from update_transaction import Transaction, sha, write_json
-from update_policy import compare
-from update_builders import build, upstream, kernel_tests
-from update_qualification import Qualification
+from update_policy import compare_short
+from update_builders import build, upstream, kernel_tests, latest_release
+from update_short_qualification import ShortQualification
 
 
 class Interrupted(RuntimeError): pass
@@ -137,9 +137,8 @@ class Updater:
             for name in component['profiles']:
                 self.clear_recovery_latch(name,transaction.data['started_unix'])
                 output = self.base/('recovery-'+str(time.time_ns()))/name
-                smoke = Qualification(self.root,get_profile(name),output,self.manager,self.owner)
-                self.manager.start(name,allowed_lock=self.owner)
-                smoke.exact_json('json','Return only JSON with key sum=17+25.',{'sum':42})
+                smoke = ShortQualification(self.root,get_profile(name),output,self.manager,self.owner)
+                smoke.run()
                 self.stop_worker(self.owner)
             owner = self.owner
         self.state.pop('pending',None); self.state.pop('reservation_owner',None)
@@ -154,18 +153,18 @@ class Updater:
                 write_json(self.base/('recovered-guard-'+str(time.time_ns())+'.json'),data)
                 latch.unlink()
 
-    def idle_reserve(self, manual=False):
+    def idle_reserve(self, manual=False, current_only=False):
         idle_since = None
         while manual or datetime.now().hour * 60 + datetime.now().minute < 390:
             h = self.health()
             quiet = (not self.reservation.exists() and not any(h.get(k) for k in ('busy','queued','loading_model','idle_unloading_model','admission_active'))
-                     and h.get('idle_for_s',0) >= self.policy['idle_seconds'] and self.native_idle(h.get('active_model')))
+                     and ((h.get('active_model') is None) if current_only else h.get('idle_for_s',0) >= self.policy['idle_seconds']) and self.native_idle(h.get('active_model')))
             # Also observe the native frontend's direct requests, which bypass router
             # admission but update the existing per-profile activity files.
             now = time.time()
             for p in (self.root / 'data/router/activity').glob('*.txt'):
                 try:
-                    if now - float(p.read_text()) < self.policy['idle_seconds']: quiet = False
+                    if not current_only and now - float(p.read_text()) < self.policy['idle_seconds']: quiet = False
                 except (OSError,ValueError): quiet = False
             if quiet:
                 idle_since = idle_since or time.monotonic()
@@ -219,14 +218,14 @@ class Updater:
         catalog = {p['id']:p for p in load_catalog()['profiles']}
         rows = {}
         for name in component['profiles']:
-            rows[name] = Qualification(self.root,catalog[name],self.run_dir/component['id']/label/name,self.manager,self.owner).run()
+            rows[name] = ShortQualification(self.root,catalog[name],self.run_dir/component['id']/label/name,self.manager,self.owner).run()
             self.stop_worker(self.owner)
         return rows
 
     def process(self, component, revision, receipt):
         cdir = self.run_dir / component['id']; started = time.time()
         print(json.dumps({'component':component['id'],'stage':'production-baseline'}),flush=True)
-        journal = cdir / 'transaction.json'; transaction = Transaction(journal)
+        journal = cdir / ('activation-'+str(time.time_ns())) / 'transaction.json'; transaction = Transaction(journal)
         try:
             baseline = self.qualify(component,'production')
         except Exception as error:
@@ -238,28 +237,47 @@ class Updater:
         self.state['pending'] = {'journal':str(journal),'owner':self.owner}
         write_json(self.state_path,self.state)
         try:
+            for protected in receipt.get('protected_files',[]):
+                if sha(protected['path'])!=protected['sha256']:raise RuntimeError('External private configuration edit preserved')
             for artifact in receipt.get('artifacts',[]):
                 if sha(artifact['path']) != artifact['sha256']: raise RuntimeError('Candidate native artifact changed')
             for item in receipt['files']:
                 if 'expected_old_sha256' in item and sha(item['target']) != item['expected_old_sha256']:
                     raise RuntimeError('External production edit preserved; candidate aborted')
-            for item in receipt['directories']: transaction.directory(item['target'],item['candidate'])
             for item in receipt['files']:
                 if sha(item['candidate']) != item['sha256']: raise RuntimeError('Candidate artifact changed since build')
                 transaction.file(item['target'],item['candidate'])
+            for item in receipt['directories']: transaction.directory(item['target'],item['candidate'])
             print(json.dumps({'component':component['id'],'stage':'provisional-candidate'}),flush=True)
             candidate = self.qualify(component,'candidate')
-            gates = {name:compare(baseline[name],candidate[name]) for name in component['profiles']}
+            gates = {name:compare_short(baseline[name],candidate[name]) for name in component['profiles']}
             write_json(cdir/'comparison.json',gates)
             if not all(g['passed'] for g in gates.values()): raise RuntimeError('Candidate failed paired promotion gates')
             versions_path = self.root/'config/daily-update-versions.json'
             versions = json.loads(versions_path.read_text()); versions[component['id']] = {'source_commit':revision,'qualified_on':datetime.now().isoformat(timespec='seconds')}
             version_candidate = cdir/'versions-candidate.json'; write_json(version_candidate,versions)
             transaction.file(versions_path,version_candidate)
+            catalog_path=self.root/'config/maintained-profiles.json'
+            if catalog_path.exists():
+                catalog=json.loads(catalog_path.read_text())
+                for profile in catalog['profiles']:
+                    if profile['id'] not in candidate:continue
+                    row=candidate[profile['id']]
+                    previous=profile.get('current_configuration_benchmark')
+                    if previous:profile.setdefault('short_tool_benchmark_history',[]).append(previous)
+                    metrics={key:row[key]for key in ('prefill_tps','decode_tps','ttft_s','prompt_tokens','output_tokens','cached_tokens')}
+                    profile['current_configuration_benchmark']=dict(metrics,date=datetime.now().date().isoformat(),context=row['context'],source='docs/DAILY-ENGINE-UPDATES.md',scope='Single paired short DSH qualification; no full-context or sustained claim')
+                    profile['engine_refresh_qualification']={'source_commit':revision,'status':'passed paired short DSH qualification','evidence':'docs/DAILY-ENGINE-UPDATES.md'}
+                    if 'qualified_engine_runtime'in profile:
+                        profile['qualified_engine_runtime'].pop('release',None)
+                        profile['qualified_engine_runtime'].update(source_commit=revision,evidence='docs/DAILY-ENGINE-UPDATES.md')
+                catalog['updated']=datetime.now().date().isoformat()
+                candidate_catalog=cdir/'catalog-candidate.json';write_json(candidate_catalog,catalog)
+                transaction.file(catalog_path,candidate_catalog)
             transaction.commit()
             self.state.pop('pending',None); write_json(self.state_path,self.state)
             return {'component':component['id'],'revision':revision,'status':'promoted','gates':gates,
-                    'candidate_metrics':{name:{k:row[k] for k in ('context','prefill_tps','decode_tps','ttft_s','retrieval_input_tokens','sustained_generation_s')} for name,row in candidate.items()}}
+                    'candidate_metrics':{name:{k:row[k] for k in ('context','prefill_tps','decode_tps','ttft_s')} for name,row in candidate.items()}}
         except BaseException:
             self.stop_worker(self.owner)
             transaction.rollback()
@@ -267,12 +285,26 @@ class Updater:
             # Verify a distinct normal restored worker answers before any lock release.
             for name in component['profiles']:
                 from profile_catalog import get_profile
-                smoke = Qualification(self.root,get_profile(name),cdir/'rollback-smoke'/name,self.manager,self.owner)
-                self.manager.start(name,allowed_lock=self.owner)
-                smoke.exact_json('json','Return only JSON with key sum=17+25.',{'sum':42})
+                smoke = ShortQualification(self.root,get_profile(name),cdir/'rollback-smoke'/name,self.manager,self.owner)
+                smoke.run()
                 self.stop_worker(self.owner)
             self.state.pop('pending',None); write_json(self.state_path,self.state)
             raise
+
+    def smoke_current(self,name):
+        """One current-engine end-to-end qualification; no build or promotion."""
+        self.recover()
+        from profile_catalog import get_profile
+        if name not in [p for component in self.policy['components']for p in component['profiles']]:raise RuntimeError('Profile is not automatically maintained')
+        self.run_dir=self.base/('current-smoke-'+str(time.time_ns()));self.run_dir.mkdir(mode=0o700)
+        if not self.idle_reserve(manual=True,current_only=True):raise RuntimeError('Current-engine diagnostic requires idle and unloaded serving; no work interrupted')
+        try:
+            result=ShortQualification(self.root,get_profile(name),self.run_dir/'current'/'short'/name,self.manager,self.owner).run()
+            write_json(self.run_dir/'result.json',result)
+            print(json.dumps({'profile':name,'short_DSH':'pass','prefill_tps':result['prefill_tps'],'ttft_s':result['ttft_s'],'decode_tps':result['decode_tps']}))
+        finally:
+            self.stop_worker(self.owner);release_owner(self.reservation,self.owner)
+            self.state.pop('reservation_owner',None);write_json(self.state_path,self.state);self.reconcile_router()
 
     def publish(self, results):
         ledger = self.root/'docs/DAILY-ENGINE-UPDATES.md'
@@ -281,6 +313,13 @@ class Updater:
             entry += '- ' + row['component'] + ': **' + row['status'] + '**; upstream `' + row['revision'][:12] + '`.\n'
             for name,metrics in row.get('candidate_metrics',{}).items():
                 entry += '  - `' + name + '`: ' + str(metrics['context']) + ' context, ' + format(metrics['prefill_tps'],'.2f') + ' prefill tok/s, ' + format(metrics['decode_tps'],'.2f') + ' decode tok/s, ' + format(metrics['ttft_s'],'.3f') + ' s TTFT.\n'
+        if any(row.get('candidate_metrics')for row in results):
+            # The updater preserves these reviewed per-profile guards; include the
+            # companion table beside every nightly performance result list.
+            guard_doc=self.root/'docs/ALL-ENTRY-BENCHMARKS-20261105.md'
+            guards=guard_doc.read_text();start=guards.index('| Profile | Worker RAM')
+            table=guards[start:].split('\n\n',1)[0]
+            entry+='\nEffective guards (configured, not peak usage):2GiB host available;100C;3 bad2-second samples; unlimited swap occupancy; swap rates averaged over30s. Selected native reserves and active/loading PSI exceptions remain unchanged.\n\n'+table+'\n\n'
         text = ledger.read_text(); head, _, tail = text.partition('\n'); ledger.write_text(head+'\n'+entry+tail)
         report = {'date':datetime.now().isoformat(),'results':results}
         write_json(self.run_dir/'report.json',report)
@@ -288,24 +327,36 @@ class Updater:
         # paths, credentials, session data or reservation payloads are exported.
         from update_publish import publish
         owned=['docs/DAILY-ENGINE-UPDATES.md','config/daily-update-versions.json']
+        if any(row['status']=='promoted'for row in results) and (self.root/'config/maintained-profiles.json').exists():owned.append('config/maintained-profiles.json')
         for row in results:
             if row['status']=='promoted' and row['component']=='sglang': owned.append('config/sglang-runtime.json')
-            if row['status']=='promoted' and row['component']=='maya-deepseek': owned.append('config/maya-cachebound-runtime.json')
+            if row['status']=='promoted':
+                owned.extend(self.policy.get('publication_files',{}).get(row['component'],[]))
+        owned=list(dict.fromkeys(self.state.get('publication_owned',[])+owned))
+        self.state['publication_owned']=owned
+        self.state['publication_hashes']={name:sha(self.root/name)for name in owned if (self.root/name).is_file()}
+        write_json(self.state_path,self.state)
         publish(self.root,owned)
+        self.state.pop('publication_owned',None);self.state.pop('publication_hashes',None);write_json(self.state_path,self.state)
 
     def run(self, manual=False, check_only=False):
         if check_only and (self.state.get('pending') or self.state.get('reservation_owner')):
             raise RuntimeError('Recovery required before read-only discovery')
         if not check_only: self.recover()
+        if not check_only:
+            from update_publish import publish,git
+            if self.state.get('publication_owned'):
+                for name,expected in self.state.get('publication_hashes',{}).items():
+                    if sha(self.root/name)!=expected:raise RuntimeError('External publication edit preserved; review required')
+                publish(self.root,self.state['publication_owned'])
+                self.state.pop('publication_owned',None);self.state.pop('publication_hashes',None);write_json(self.state_path,self.state)
+            if git(self.root,'status','--porcelain','--untracked-files=no') or git(self.root.parent/'linux-llm-nvidia-public','status','--porcelain'):
+                raise RuntimeError('Repository edits preserved; automatic engine work deferred until reviewed')
         from profile_catalog import load_catalog
         validate_update_coverage(load_catalog(), self.policy)
         versions = json.loads((self.root/'config/daily-update-versions.json').read_text())
-        stamp = datetime.now().strftime('%Y%m%d-%H%M%S')
+        stamp = datetime.now().strftime('%Y%m%d-%H%M%S')+'-'+str(time.time_ns())
         self.run_dir = self.base/stamp; self.run_dir.mkdir(mode=0o700)
-        if not check_only:
-            from visible_terminal import open_monitor
-            try: open_monitor('NVIDIA daily engine update','nvidia-daily-engine-update.service')
-            except Exception: write_json(self.run_dir/'console-warning.json',{'warning':'Minimized console unavailable; systemd journal retained'})
         candidates = []; results = []
         for component in self.policy['components']:
             row = {'component':component['id'],'revision':'unknown'}
@@ -320,6 +371,17 @@ class Updater:
                 row.update(status='build-or-discovery-blocked',error=type(error).__name__)
                 if row['revision'] != 'unknown' and not check_only: self.state['rejected'][component['id']] = row['revision']
                 write_json(self.run_dir/(component['id']+'-failure.json'),{'error':str(error).replace(self.key,'[redacted]')})
+            results.append(row)
+        for component in self.policy.get('monitored_engines',[]):
+            row={'component':component['id'],'revision':'unknown','automatic_replacement':False}
+            try:
+                if component.get('channel')=='stable':
+                    revision=latest_release(component)['tag_name'];current=component['installed_release']
+                else:
+                    revision=upstream(component);current=component['installed_commit']
+                row.update(revision=revision,status='pinned-current' if revision==current else 'review-required-update-available')
+            except Exception as error:
+                row.update(status='monitor-discovery-blocked',error=type(error).__name__)
             results.append(row)
         write_json(self.state_path,self.state)
         if candidates:
@@ -359,26 +421,34 @@ class Updater:
 
 
 def validate_qualification_policy(args,policy):
-    if (policy.get('validation',{}).get('full_context_stress_requires_explicit_user_request')
-            and not args.recover_only and not args.check_only
-            and not getattr(args,'allow_full_context_tests',False)):
-        raise RuntimeError('Full-context engine qualification is disabled by the short-harness policy. Use short DSH tool checks; full tests require an explicit request and --allow-full-context-tests.')
+    if getattr(args,'allow_full_context_tests',False):
+        raise RuntimeError('The scheduled updater uses short DSH qualification only; long suites must be run separately on explicit request.')
+    if policy.get('validation',{}).get('default') != 'short-actual-harness-tool-call-then-unload':
+        raise RuntimeError('Updater requires the selected short actual DSH validation policy')
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--recover-only',action='store_true')
     parser.add_argument('--check-only',action='store_true',help='Read upstream revisions; no build, GPU use, publication or promotion')
+    parser.add_argument('--smoke-current',metavar='PROFILE',help='Verify one current engine through the owned short DSH path; no update/publication')
     parser.add_argument('--manual',action='store_true',help='Permit admission outside the nightly window; still requires idle and ownership checks')
-    parser.add_argument('--allow-full-context-tests',action='store_true',help='Explicit opt-in for the legacy long qualification suite; never enabled by default')
+    parser.add_argument('--allow-full-context-tests',action='store_true',help='Retired flag; long suites must be requested and run separately')
     args = parser.parse_args()
     from inference_policy import load_policy
     validate_qualification_policy(args,load_policy())
     os.umask(0o077); os.environ['GIT_TERMINAL_PROMPT']='0'
+    # The coordinator owns the visible terminal; worker units remain API-only.
+    os.environ['NVIDIA_API_ONLY']='1'
+    if sum(bool(x)for x in [args.recover_only,args.check_only,args.smoke_current])>1:parser.error('Choose only one operation')
+    settings=json.loads((ROOT/'config/daily-update.json').read_text())
+    if not (args.recover_only or args.check_only or sys.stdout.isatty() or settings.get('scheduled_visibility')=='guarded-headless'):
+        raise RuntimeError('GPU qualification requires a visible terminal or the explicit scheduled-headless policy')
     updater = Updater()
     def interrupted(*_): raise Interrupted('Updater interrupted; preserve or restore production')
     signal.signal(signal.SIGTERM,interrupted); signal.signal(signal.SIGINT,interrupted)
     if args.recover_only: updater.recover()
+    elif args.smoke_current:updater.smoke_current(args.smoke_current)
     else: updater.run(args.manual,args.check_only)
 
 

@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE = 'deepseek-unsloth-strata'
 RUNTIME = 'runtimes/strata-unsloth-029'
+ENGINE_VERSION = '0.1.56'
 
 
 def verify(profile, root=ROOT):
@@ -14,7 +15,7 @@ def verify(profile, root=ROOT):
     if (profile['id'] != PROFILE or profile.get('engine') != 'Strata'
             or manifest.get('schema') != 1
             or manifest.get('profile') != PROFILE or manifest.get('runtime_directory') != RUNTIME
-            or manifest.get('engine_version') != '0.1.56' or not manifest.get('signature_verified')):
+            or manifest.get('engine_version') != ENGINE_VERSION or not manifest.get('signature_verified')):
         raise ValueError('Unsloth Strata runtime identity mismatch')
     hashes = manifest.get('sha256', {})
     required = {RUNTIME + '/engine/strata-dsv41', RUNTIME + '/source/serve/server.py',
