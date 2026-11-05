@@ -1,0 +1,239 @@
+{
+  "date": "2026-11-05",
+  "scope": "Wan1080p fixes;33frames/16fps;seeds27001and27002;GPU-only weights",
+  "timing_scope": "HTTP submission after backend readiness through saved MP4/history; conditioning and backend startup excluded; warm file cache from hash preflight",
+  "CPU_weight_offload": false,
+  "output": [
+    1920,
+    1080
+  ],
+  "render": [
+    1920,
+    1088
+  ],
+  "crop": "Bottom8rows only;no upscaling",
+  "guards_changed": false,
+  "NCCL_timeout_changed": false,
+  "CPU_tests_passed": 462,
+  "attempts": [
+    {
+      "attempt": "010432",
+      "stage": "raylight",
+      "status": "failed",
+      "requests": [],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          4386.0,
+          1042.0
+        ],
+        "max_temperature_C": [
+          55.0,
+          43.0
+        ],
+        "max_bad_samples": 0,
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0,
+        "minimum_host_available_GiB": 71.77910995483398
+      },
+      "change": "NCCL launch ordering alone",
+      "forward_audit": {}
+    },
+    {
+      "attempt": "010935",
+      "stage": "baseline",
+      "status": "failed",
+      "requests": [],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          144.0,
+          8313.0
+        ],
+        "max_temperature_C": [
+          53.0,
+          34.0
+        ],
+        "max_bad_samples": 3,
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0,
+        "minimum_host_available_GiB": 86.26594543457031
+      },
+      "change": "Sequential guidance alone",
+      "forward_audit": {}
+    },
+    {
+      "attempt": "011255",
+      "stage": "baseline",
+      "status": "failed",
+      "requests": [],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          118.0,
+          8313.0
+        ],
+        "max_temperature_C": [
+          52.0,
+          32.0
+        ],
+        "max_bad_samples": 3,
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0,
+        "minimum_host_available_GiB": 86.2177963256836
+      },
+      "change": "Sequential guidance plus allocator cache release",
+      "forward_audit": {}
+    },
+    {
+      "attempt": "011545",
+      "stage": "raylight",
+      "status": "pass",
+      "requests": [
+        {
+          "seed": 27001,
+          "wall_s": 174.80828837099762,
+          "video_sha256": "69881477adc69b363b898cd2368d0b68012ff3c540b9f03c495409bf195c22a5",
+          "frames": 33,
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "seed": 27002,
+          "wall_s": 161.97334794199924,
+          "video_sha256": "2aaad2733e8db613fcbb9ed9faae5bb567db312b872ca41108b116170d8d8d33",
+          "frames": 33,
+          "width": 1920,
+          "height": 1080
+        }
+      ],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          3486.0,
+          946.0
+        ],
+        "max_temperature_C": [
+          73.0,
+          67.0
+        ],
+        "max_bad_samples": 0,
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0,
+        "minimum_host_available_GiB": 71.12834548950195
+      },
+      "change": "Raylight deterministic CFG plus cache release and launch ordering",
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 1959,
+        "processes": 3,
+        "physical_GPU_assignments": [
+          "0",
+          "0,1"
+        ]
+      }
+    },
+    {
+      "attempt": "012146",
+      "stage": "baseline",
+      "status": "failed",
+      "requests": [],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          4510.0,
+          3815.0
+        ],
+        "max_temperature_C": [
+          65.0,
+          53.0
+        ],
+        "max_bad_samples": 0,
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0,
+        "minimum_host_available_GiB": 77.39856338500977
+      },
+      "change": "Native16/14 block split, missing remote kernel context",
+      "forward_audit": {},
+      "split": {
+        "total_blocks": 30,
+        "GPU0_blocks": 16,
+        "GPU1_blocks": 14,
+        "CPU_weight_offload": false
+      }
+    },
+    {
+      "attempt": "012227",
+      "stage": "baseline",
+      "status": "pass",
+      "requests": [
+        {
+          "seed": 27001,
+          "wall_s": 160.75029153300056,
+          "video_sha256": "ba06a0161f275b953f96463ef0e06a8c75ea7c1990bd6995333b568c0af3d883",
+          "frames": 33,
+          "width": 1920,
+          "height": 1080
+        },
+        {
+          "seed": 27002,
+          "wall_s": 158.74783391700112,
+          "video_sha256": "7af3e39c5c7b23c135c90bb0c504ad57e94f3894438673086438caedcfde367e",
+          "frames": 33,
+          "width": 1920,
+          "height": 1080
+        }
+      ],
+      "worker_inactive": true,
+      "reservation_released": true,
+      "resources": {
+        "minimum_free_GPU_MiB": [
+          3642.0,
+          2185.0
+        ],
+        "max_temperature_C": [
+          70.0,
+          66.0
+        ],
+        "max_bad_samples": 0,
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0,
+        "minimum_host_available_GiB": 77.52067184448242
+      },
+      "change": "Native16/14 block split with remote CUDA context and sequential CFG",
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 558,
+        "processes": 1,
+        "physical_GPU_assignments": [
+          "0,1"
+        ]
+      },
+      "split": {
+        "total_blocks": 30,
+        "GPU0_blocks": 16,
+        "GPU1_blocks": 14,
+        "CPU_weight_offload": false
+      }
+    }
+  ],
+  "health": {
+    "API": {
+      "status": "ok",
+      "active_model": null,
+      "busy": false
+    },
+    "hub": {
+      "status": "ok",
+      "active_model": null,
+      "busy": false
+    },
+    "DSH_HTTP": 200
+  },
+  "sample_validation": "Both published clips:33 unique RGB frames; decoded pixels identical after metadata-free remux; poster first frame inspected"
+}

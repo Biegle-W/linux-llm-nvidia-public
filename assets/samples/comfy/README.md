@@ -32,3 +32,12 @@ The workloads and quantization differ; these samples are visual evidence of the 
 | LTX Mesh1080p | ![LTX1080p first frame](ltx-mesh-1080p-poster.png) | [MP4 with audio:1920x1080,33frames,24fps](ltx-mesh-1080p.mp4) |
 
 These are native padded-latent generations cropped to exact output dimensions, with no upscaling. [HD benchmark protocol, results and limits](../../../docs/COMFY-VIDEO-720P1080P-20261105.md).
+
+## Repaired Wan1080p — November5
+
+| Setup | Preview | Download / play |
+|---|---|---|
+| Wan native16/14 GPU split | ![Wan native1080p first frame](wan-baseline-1080p-poster.png) | [MP4:1920x1080,33frames,16fps](wan-baseline-1080p.mp4) |
+| Wan Raylight, deterministic guidance | ![Wan Raylight1080p first frame](wan-raylight-1080p-poster.png) | [MP4:1920x1080,33frames,16fps](wan-raylight-1080p.mp4) |
+
+[Fixes, timings and GPU-only qualification](../../../docs/WAN1080-FIX-20261105.md).

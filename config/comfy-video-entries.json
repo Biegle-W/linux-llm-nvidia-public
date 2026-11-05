@@ -23,7 +23,7 @@
       "resolution_screen_20261105": {
         "scope": "Direct render only;33frames; desktop defaults and controls remain512x288",
         "720p": "passed-two-clips",
-        "1080p": "failed-regular-VRAM-guard-and-Raylight-async-sync-NCCL-timeouts"
+        "1080p": "passed-two-clips-native16/14GPU-split-and-Raylight-sequential-CFG"
       }
     },
     {
@@ -46,5 +46,6 @@
     }
   ],
   "prompt_max_characters": 4000,
-  "resolution_benchmark": "docs/benchmark-results/20261105-comfy-video-720p1080p.json"
+  "resolution_benchmark": "docs/benchmark-results/20261105-comfy-video-720p1080p.json",
+  "resolution_fix_benchmark": "docs/benchmark-results/20261105-wan1080-fix.json"
 }

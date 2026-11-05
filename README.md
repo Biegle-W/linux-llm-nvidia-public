@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Wan1080p VRAM and Raylight timeouts fixed — November5,2026
+
+Native Wan1080p now uses a GPU-resident16/14-block split and sequential guidance: 160.750/158.748s. Raylight passed at174.808/161.973s after deterministic guidance routing, with no timeout increase. Both paths passed two33-frame clips and both-GPU forward audits without CPU weight offload. All462 CPU regressions pass; guards remain unchanged, allowing brief VRAM dips within the existing three-sample grace period. Workers are stopped, reservations released and API/hub/DSH healthy. [Repair, benchmarks and limits](docs/WAN1080-FIX-20261105.md).
+
 ## Video720p/1080p benchmarks complete — November5,2026
 
 GPU-only33-frame tests passed Wan720p at57.626/58.790s and LTX Mesh720p at27.323/27.322s,1080p at51.575/51.576s. Wan1080p regular stopped at the retained VRAM guard; Raylight asynchronous and synchronous retries hit60-second NCCL collective timeouts and produced no clip. LTX1080p reached246MiB free on GPU1 for two samples, recovering before the three-sample stop. All459 CPU tests pass. No guard or512x288 desktop default changed. Successful metadata-free HD clips are included in the public gallery. [Protocol, resource margins and failures](docs/COMFY-VIDEO-720P1080P-20261105.md).

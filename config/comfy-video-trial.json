@@ -12,7 +12,7 @@
     "commit": "b2ecc0237f556f63d87ab591c49111fe8f4d90e9",
     "version": "1.11.0",
     "patch": "scripts/patches/raylight-native-ignored-gpu.patch",
-    "patch_sha256": "e8cf1dca519b933d998b5b6d7bfbfbc13ff2a8a4d226c4933614d20c548d91ff"
+    "patch_sha256": "1d127cedd37a3a3011cd3392dd8e3c194b8e2fe6b1119ace620782b7e9068b07"
   },
   "Mesh": {
     "path": "runtimes/comfyui-mesh",

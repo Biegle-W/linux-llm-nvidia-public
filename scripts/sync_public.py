@@ -24,6 +24,8 @@ RETIRED_FILES = (
 
 
 SAMPLE_MEDIA = (
+    'assets/samples/comfy/wan-baseline-1080p.mp4', 'assets/samples/comfy/wan-baseline-1080p-poster.png',
+    'assets/samples/comfy/wan-raylight-1080p.mp4', 'assets/samples/comfy/wan-raylight-1080p-poster.png',
     'assets/samples/comfy/wan-baseline-720p.mp4', 'assets/samples/comfy/wan-baseline-720p-poster.png',
     'assets/samples/comfy/ltx-mesh-720p.mp4', 'assets/samples/comfy/ltx-mesh-720p-poster.png',
     'assets/samples/comfy/ltx-mesh-1080p.mp4', 'assets/samples/comfy/ltx-mesh-1080p-poster.png',
@@ -36,6 +38,8 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'scripts/comfy_wan_memory.py', 'tests/test_comfy_wan_memory.py',
+    'docs/WAN1080-FIX-20261105.md', 'docs/benchmark-results/20261105-wan1080-fix.json',
     'docs/COMFY-VIDEO-720P1080P-20261105.md', 'docs/benchmark-results/20261105-comfy-video-720p1080p.json',
     'config/comfy-video-entries.json', 'config/comfy-workflows/wan22-5b.json',
     'config/comfy-workflows/wan22-5b.api.json', 'config/comfy-workflows/ltx23-mesh.json',

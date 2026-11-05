@@ -67,6 +67,51 @@ class VideoDenoiser:
             model_options={'load_device':device,'offload_device':device},disable_dynamic=True)
         return (model,)
 
+class WanSequentialCFG:
+    @classmethod
+    def INPUT_TYPES(cls):return {'required':{'model':('MODEL',)}}
+    RETURN_TYPES=('MODEL',)
+    FUNCTION='patch'
+    CATEGORY='NVIDIA/video'
+    def patch(self,model):
+        from comfy_wan_memory import sequential_cfg
+        model=model.clone()
+        model.model_options['sampler_calc_cond_batch_function']=sequential_cfg
+        return (model,)
+
+class ResidentWanBlock(torch.nn.Module):
+    """Keep a native block on GPU1 without GPU0 patcher relocation."""
+    def __init__(self,block,last=False):
+        super().__init__()
+        object.__setattr__(self,'resident',block)
+        self.last=last
+    def forward(self,*args,**kwargs):
+        def move(value):
+            if isinstance(value,torch.Tensor):return value.to('cuda:1')
+            if isinstance(value,dict):return {k:move(v) for k,v in value.items()}
+            if isinstance(value,list):return [move(v) for v in value]
+            if isinstance(value,tuple):return tuple(move(v) for v in value)
+            return value
+        with torch.cuda.device(1):
+            result=self.resident(*move(args),**move(kwargs))
+        return result.to('cuda:0') if self.last else result
+
+class WanSplitDenoiser(VideoDenoiser):
+    def load(self):
+        model=comfy.sd.load_diffusion_model(file('wan2.2_ti2v_5B_fp16.safetensors'),
+            model_options={'load_device':torch.device('cuda:0'),'offload_device':torch.device('cpu')},disable_dynamic=True)
+        blocks=model.model.diffusion_model.blocks;count=len(blocks);remote=14
+        assert count>remote,'Expected native Wan transformer blocks'
+        resident=[]
+        for index in range(count-remote,count):
+            block=blocks[index].to('cuda:1')
+            assert all(p.device==torch.device('cuda:1') for p in block.parameters())
+            resident.append(block);blocks[index]=ResidentWanBlock(block,last=index==count-1)
+        model.offload_device=model.load_device=torch.device('cuda:0')
+        model._wan_resident_remote_blocks=resident
+        (WORK/'wan-split-proof.json').write_text(json.dumps(dict(total_blocks=count,GPU0_blocks=count-remote,GPU1_blocks=remote,CPU_weight_offload=False))+'\n')
+        return (model,)
+
 class VideoVAE:
     @classmethod
     def INPUT_TYPES(cls):return {'required':{}}
@@ -187,6 +232,6 @@ class VideoEntry:
             stop_job_group(process)
 
 NODE_CLASS_MAPPINGS={'NvidiaVideoEntry':VideoEntry,'NvidiaPrepareWanPrompt':PrepareWanPrompt,'NvidiaPreparedWanConditioning':PreparedWanConditioning,
-                     'NvidiaVideoDenoiser':VideoDenoiser,'NvidiaVideoVAE':VideoVAE,
+                     'NvidiaWanSequentialCFG':WanSequentialCFG,'NvidiaWanSplitDenoiser':WanSplitDenoiser,'NvidiaVideoDenoiser':VideoDenoiser,'NvidiaVideoVAE':VideoVAE,
                      'NvidiaPrepareLTXPrompt':PrepareLTXPrompt,'NvidiaPreparedLTXConditioning':PreparedLTXConditioning,
                      'NvidiaMeshDenoiser':MeshDenoiser,'NvidiaMeshVAE':MeshVAE,'NvidiaReleaseMeshServer':ReleaseMeshServer}

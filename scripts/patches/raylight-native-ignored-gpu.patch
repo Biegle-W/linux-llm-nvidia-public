@@ -21,3 +21,19 @@ index 756208b..77f6b1e 100644
          _pre_init_fsdp(diffusion_model)
      self.fsdp_state_dict = None
  
+diff --git a/src/raylight/distributed_worker/ray_worker.py b/src/raylight/distributed_worker/ray_worker.py
+index c627d18..a64837b 100644
+--- a/src/raylight/distributed_worker/ray_worker.py
++++ b/src/raylight/distributed_worker/ray_worker.py
+@@ -1556,6 +1556,11 @@ class RayWorker:
+         if self.config.fsdp_enabled:
+             self._patch_fsdp_for_sampling()
+ 
++        if os.environ.get("NVIDIA_WAN_SEQUENTIAL_CFG") == "1":
++            from comfy_wan_memory import sequential_cfg
++            self.model.model_options["sampler_calc_cond_batch_function"] = sequential_cfg
++            print(f"[Rank {self.local_rank}] Deterministic sequential CFG enabled")
++
+         if disable_noise:
+             noise = torch.zeros(
+                 latent_image.size(),

@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Wan1080p VRAM and Raylight timeouts fixed — November5,2026
+
+Native Wan1080p now uses a GPU-resident16/14-block split and sequential guidance: 160.750/158.748s. Raylight passed at174.808/161.973s after deterministic guidance routing, with no timeout increase. Both paths passed two33-frame clips and both-GPU forward audits without CPU weight offload. All462 CPU regressions pass; guards remain unchanged, allowing brief VRAM dips within the existing three-sample grace period. Workers are stopped, reservations released and API/hub/DSH healthy. [Repair, benchmarks and limits](WAN1080-FIX-20261105.md).
+
 ## Video720p/1080p benchmarks complete — November5,2026
 
 GPU-only33-frame tests passed Wan720p at57.626/58.790s and LTX Mesh720p at27.323/27.322s,1080p at51.575/51.576s. Wan1080p regular stopped at the retained VRAM guard; Raylight asynchronous and synchronous retries hit60-second NCCL collective timeouts and produced no clip. LTX1080p reached246MiB free on GPU1 for two samples, recovering before the three-sample stop. All459 CPU tests pass. No guard or512x288 desktop default changed. Successful metadata-free HD clips are included in the public gallery. [Protocol, resource margins and failures](COMFY-VIDEO-720P1080P-20261105.md).
@@ -8,7 +12,7 @@ GPU-only33-frame tests passed Wan720p at57.626/58.790s and LTX Mesh720p at27.323
 
 Selected **ComfyUI Wan 2.2 5B** and **ComfyUI LTX 2.3 Mesh** workflows/desktop launchers now support prompt/seed generation at512x288x33frames, with fresh GPU-only encoder/render phases and automatic LTX back-half release/restart. Both passed two consecutive frontend requests: Wan20.253/19.223s; LTX35.427/35.407s including prompt preparation and worker startup. Guards, both image launchers and the nine text API/DSH entries remain unchanged. [Usage, registry and qualification](COMFY-VIDEO-ENTRIES-20261104.md).
 
-Public image/video samples are now maintained through a hash-checked binary allowlist: four native1K/2K images, six video clips and six frame posters. Embedded workflow metadata is removed; decoded media matches the originals. No inference was repeated. [Gallery](../assets/samples/comfy/README.md).
+Public image/video samples are now maintained through a hash-checked binary allowlist: four native1K/2K images, eight video clips and eight frame posters. Embedded workflow metadata is removed; decoded media matches the originals. No inference was repeated. [Gallery](../assets/samples/comfy/README.md).
 
 ## ComfyUI two-GPU video trials complete — November4,2026
 

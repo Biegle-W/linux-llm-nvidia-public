@@ -24,7 +24,7 @@ if video_trial:
         folder=ROOT/video_pins[name]['path']
         assert subprocess.check_output(['git','-C',str(folder),'rev-parse','HEAD'],text=True).strip()==video_pins[name]['commit']
         changed=subprocess.check_output(['git','-C',str(folder),'diff','--name-only'],text=True).splitlines()
-        expected={'Raylight':['src/raylight/comfy_dist/model_patcher.py'],'Mesh':['payload_ltx.py','server/payload_ltx.py'],'GGUF':[]}[name]
+        expected={'Raylight':['src/raylight/comfy_dist/model_patcher.py','src/raylight/distributed_worker/ray_worker.py'],'Mesh':['payload_ltx.py','server/payload_ltx.py'],'GGUF':[]}[name]
         assert changed==expected,'Unreviewed video source edits'
         if expected:
             patch=(ROOT/video_pins[name]['patch']).read_bytes()
@@ -43,7 +43,8 @@ mesh_trial = video_trial and json.loads((WORK/'video-stage.json').read_text())['
 if video_trial:
     env.update(COMFY_VIDEO_WORK=str(WORK),COMFY_VIDEO_AUDIT_DIR=str(WORK/'forward-audits'),
                PYTHONPATH=os.pathsep.join([str(ROOT/'scripts/comfy_video_hook'),str(ROOT/'scripts'),str(ROOT/'runtimes/raylight/src'),str(ROOT/config['runtime'])]),
-               RAYLIGHT_RAY_TMPDIR=str(ray_temp),RAY_TMPDIR=str(ray_temp),RAY_USAGE_STATS_ENABLED='0',NCCL_P2P_DISABLE='1',NCCL_DEBUG='INFO')
+               RAYLIGHT_RAY_TMPDIR=str(ray_temp),RAY_TMPDIR=str(ray_temp),RAY_USAGE_STATS_ENABLED='0',NCCL_P2P_DISABLE='1',NCCL_DEBUG='INFO',NCCL_LAUNCH_ORDER_IMPLICIT='1')
+if video_trial and json.loads((WORK/'video-stage.json').read_text())['stage']=='raylight' and json.loads((WORK/'video-stage.json').read_text()).get('width',512)>=1920:env['NVIDIA_WAN_SEQUENTIAL_CFG']='1'
 if entry_trial:env['COMFY_VIDEO_ENTRY']=model_id
 user_directory = ROOT/'data/comfy-user'/model_id if (WORK/'serve').exists() else WORK/'user'
 output_directory = ROOT/'data/comfy-output'/model_id if (WORK/'serve').exists() else WORK/'images'

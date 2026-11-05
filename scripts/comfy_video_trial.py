@@ -15,6 +15,11 @@ def graph(stage,seed,width=512,height=288,sync_ulysses=False):
     if stage=='raylight' and (width,height)!=(512,288):
         # Keep FSDP weights resident and bound decode workspace on GPU1.
         result['8']=dict(class_type='VAEDecodeTiled',inputs=dict(samples=['7',0],vae=['3',0],tile_size=256,overlap=64,temporal_size=16,temporal_overlap=4))
+    if stage=='baseline' and (width,height)==(1920,1080):
+        result['1']['class_type']='NvidiaWanSplitDenoiser'
+        result['24']=dict(class_type='NvidiaWanSequentialCFG',inputs=dict(model=['5',0]))
+        result['7']['inputs']['model']=['24',0]
+        result['8']=dict(class_type='VAEDecodeTiled',inputs=dict(samples=['7',0],vae=['3',0],tile_size=256,overlap=64,temporal_size=16,temporal_overlap=4))
     if (render_width,render_height)!=(width,height):
         result['23']=dict(class_type='ImageCrop',inputs=dict(image=['8',0],width=width,height=height,x=0,y=0))
         result['10']['inputs']['images']=['23',0]
