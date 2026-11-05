@@ -38,6 +38,7 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'scripts/update_reviewed.py',
     'docs/MAYA-1154-QUALIFICATION-20261105.md', 'docs/validation-results/20261105-maya1154-qualification.json',
     'scripts/daily_update_terminal.py', 'scripts/update_short_qualification.py', 'scripts/update_native_builders.py',
     'tests/test_update_restore.py', 'docs/DAILY-UPDATER-RESTORATION-20261105.md',

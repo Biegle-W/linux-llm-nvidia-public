@@ -16,6 +16,22 @@ def good():
 
 
 class ShortGates(unittest.TestCase):
+    def test_manual_review_accepts_only_one_deepseek_token_without_mutating_evidence(self):
+        from update_reviewed import reviewed_gate
+        baseline=good();baseline['profile']='deepseek-unsloth-strata'
+        candidate=dict(baseline,output_tokens=39)
+        self.assertFalse(compare_short(baseline,candidate)['passed'])
+        self.assertTrue(reviewed_gate(baseline,candidate)['passed'])
+        self.assertEqual(candidate['output_tokens'],39)
+        self.assertEqual(reviewed_gate(baseline,candidate)['observed_output_tokens'],[40,39])
+
+    def test_manual_review_keeps_profile_identity_resource_and_speed_gates(self):
+        from update_reviewed import reviewed_gate
+        baseline=good();baseline['profile']='deepseek-unsloth-strata'
+        for field,value in [('profile','flash-next-strata'),('output_tokens',38),('output_tokens',39.0),('prompt_tokens',5999),('fixture_sha256','other'),('cached_tokens',1),('resources_passed',False),('prefill_tps',94.9),('decode_tps',47.4),('ttft_s',2.51)]:
+            candidate=dict(baseline,output_tokens=39);candidate[field]=value
+            with self.subTest(field=field),self.assertRaises(RuntimeError):reviewed_gate(baseline,candidate)
+
     def test_short_tool_pair_needs_no_stress_or_retrieval(self):
         self.assertTrue(compare_short(good(),good())['passed'])
         changed=good();changed.update(prefill_tps=95,decode_tps=47.5,ttft_s=2.5)
