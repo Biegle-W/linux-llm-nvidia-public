@@ -1404,21 +1404,16 @@
         }
       ],
       "current_configuration_benchmark": {
-        "date": "2026-11-05",
-        "source": "docs/validation-results/20261105-engine-refresh.json",
-        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
-        "context": 131072,
-        "prefill_tps": 943.8,
-        "ttft_s": 6.395006419996207,
-        "decode_tps": 58.8,
-        "prompt_tokens": 5591,
-        "output_tokens": 39,
+        "prefill_tps": 934.2,
+        "decode_tps": 68.4,
+        "ttft_s": 6.459628836004413,
+        "prompt_tokens": 5594,
+        "output_tokens": 40,
         "cached_tokens": 0,
-        "prefill_method": "native request timings",
-        "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings",
-        "client_ttft_s": 6.395006419996207,
-        "meaningful_sse_chunks": 21
+        "date": "2026-11-05",
+        "context": 131072,
+        "source": "docs/STRATA-0211-QUALIFICATION-20261105.md",
+        "scope": "Single matched short DSH tool calls; no sustained/full-context claim"
       },
       "swap_policy_selection": {
         "date": "2026-10-29",
@@ -1524,6 +1519,23 @@
           "prefill_method": "native request timings",
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
+        },
+        {
+          "date": "2026-11-05",
+          "source": "docs/validation-results/20261105-engine-refresh.json",
+          "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+          "context": 131072,
+          "prefill_tps": 943.8,
+          "ttft_s": 6.395006419996207,
+          "decode_tps": 58.8,
+          "prompt_tokens": 5591,
+          "output_tokens": 39,
+          "cached_tokens": 0,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings",
+          "client_ttft_s": 6.395006419996207,
+          "meaningful_sse_chunks": 21
         }
       ],
       "hardware_qualification": {
@@ -1551,10 +1563,9 @@
         "full_context_stress": false
       },
       "engine_refresh_qualification": {
-        "date": "2026-11-05",
-        "status": "pass",
-        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
-        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
+        "source_commit": "c3b3f5035506f3e966f1b4b7b188aeaabae92f1d",
+        "status": "passed short DSH; explicit manual acceptance of DeepSeek one-token variance",
+        "evidence": "docs/STRATA-0211-QUALIFICATION-20261105.md"
       }
     },
     {
@@ -2611,21 +2622,16 @@
         }
       ],
       "current_configuration_benchmark": {
-        "date": "2026-11-05",
-        "source": "docs/validation-results/20261105-engine-refresh.json",
-        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
-        "context": 32768,
-        "prefill_tps": 85.7,
-        "ttft_s": 66.69541466100054,
-        "decode_tps": 11.9,
-        "prompt_tokens": 5710,
-        "output_tokens": 62,
+        "prefill_tps": 83.4,
+        "decode_tps": 11.8,
+        "ttft_s": 68.42257575300755,
+        "prompt_tokens": 5704,
+        "output_tokens": 59,
         "cached_tokens": 0,
-        "prefill_method": "native request timings",
-        "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings",
-        "client_ttft_s": 66.69541466100054,
-        "meaningful_sse_chunks": 32
+        "date": "2026-11-05",
+        "context": 32768,
+        "source": "docs/STRATA-0211-QUALIFICATION-20261105.md",
+        "scope": "Reviewed short DSH calls with different output lengths; no sustained/full-context claim"
       },
       "latest_router_validation": {
         "date": "2026-11-01",
@@ -2662,6 +2668,23 @@
           "prefill_method": "native request timings",
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
+        },
+        {
+          "date": "2026-11-05",
+          "source": "docs/validation-results/20261105-engine-refresh.json",
+          "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+          "context": 32768,
+          "prefill_tps": 85.7,
+          "ttft_s": 66.69541466100054,
+          "decode_tps": 11.9,
+          "prompt_tokens": 5710,
+          "output_tokens": 62,
+          "cached_tokens": 0,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings",
+          "client_ttft_s": 66.69541466100054,
+          "meaningful_sse_chunks": 32
         }
       ],
       "hardware_qualification": {
@@ -2689,10 +2712,9 @@
         "full_context_stress": false
       },
       "engine_refresh_qualification": {
-        "date": "2026-11-05",
-        "status": "pass",
-        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
-        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
+        "source_commit": "c3b3f5035506f3e966f1b4b7b188aeaabae92f1d",
+        "status": "passed short DSH; explicit manual acceptance of DeepSeek one-token variance",
+        "evidence": "docs/STRATA-0211-QUALIFICATION-20261105.md"
       }
     },
     {

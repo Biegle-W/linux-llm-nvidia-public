@@ -40,8 +40,8 @@
     "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "strata": {
-    "source_commit": "ffa80d73133ea5c548aefe57889a16e8085a938f",
-    "status": "Qualified existing production; scheduled short DSH updates enabled2026-11-05",
-    "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
+    "source_commit": "c3b3f5035506f3e966f1b4b7b188aeaabae92f1d",
+    "qualified_on": "2026-11-05T11:48:40",
+    "acceptance": "Explicit one-token DeepSeek output variance; STRATA-0211-QUALIFICATION-20261105.md"
   }
 }

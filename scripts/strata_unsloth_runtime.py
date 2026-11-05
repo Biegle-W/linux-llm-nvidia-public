@@ -7,7 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE = 'deepseek-unsloth-strata'
 RUNTIME = 'runtimes/strata-unsloth-029'
-ENGINE_VERSION = '0.1.56'
+ENGINE_VERSION = '0.1.57'
 
 
 def verify(profile, root=ROOT):

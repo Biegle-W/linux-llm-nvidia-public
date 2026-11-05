@@ -1,5 +1,26 @@
 # NVIDIA daily engine updates
 
+## 2026-11-05T11:48:40
+
+- strata: **promoted**; upstream `c3b3f5035506`.
+  - `flash-next-strata`: 131072 context, 934.20 prefill tok/s, 68.40 decode tok/s, 6.460 s TTFT.
+  - `deepseek-unsloth-strata`: 32768 context, 83.40 prefill tok/s, 11.80 decode tok/s, 68.423 s TTFT.
+
+Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-second samples; unlimited swap occupancy; swap rates averaged over30s. Selected native reserves and active/loading PSI exceptions remain unchanged.
+
+| Profile | Worker RAM high/max GiB | GPU policy | Active swap writes/combined | Active/loading PSI % |
+| --- | ---: | --- | ---: | --- |
+| qwen27b-hyperqwen | 32.00/36.00 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
+| qwen27b-sglang | 32.00/36.00 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
+| qwen27b-tensorfold | 32.00/36.00 | 256 MiB free/card after ready; GPU0; native1024 MiB reserve | 1/8 | 10 / none separately |
+| flash-next-iq1s-llamacpp | 87.77/89.77 | 256 MiB free/card after ready; 1536 MiB fit targets | 128/160 | 15 / none separately |
+| flash-next-strata | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
+| glm-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 10 / none separately |
+| deepseek-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
+| bolt-vllm | 87.77/89.77 | 256 MiB free/card after ready; 384 MiB fit targets | 1/8 | 10 / 15 |
+| deepseek-unsloth-strata | 87.77/89.77 | 256 MiB free/card after ready; 1024 MiB native reserve | 128/160 | 15 / 15 |
+
+
 ## 2026-11-05T11:44:11
 
 - tensorfold: **pinned-current**; upstream `v1.2.2`.
