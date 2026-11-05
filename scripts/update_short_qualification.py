@@ -18,9 +18,10 @@ def fingerprint(value):
 
 
 class ShortQualification:
-    def __init__(self,root,profile,output,manager,owner):
+    def __init__(self,root,profile,output,manager,owner,*,recovery=False):
         self.root,self.p,self.out=Path(root),profile,Path(output)
         self.manager,self.owner=manager,owner
+        self.recovery=recovery
         self.out.mkdir(parents=True,exist_ok=False)
         record=self.out.parents[1]/'fixtures'/(profile['id']+'.json')
         if record.exists():
@@ -33,6 +34,20 @@ class ShortQualification:
             self.fixture=Path(tempfile.mkdtemp(prefix='nvidia-daily-tool-',dir='/tmp'))
             proof=self.fixture/'proof.txt';proof.write_text('NVIDIA_TOOL_OK_'+secrets.token_hex(16)+'\n');proof.chmod(0o600)
             write_json(record,{'directory':str(self.fixture)})
+
+    def run_tool(self,command):
+        # A terminal may be gone during rollback or ExecStopPost. Verification of
+        # restored production must not depend on candidate visibility permission.
+        if not self.recovery and sys.stdout.isatty():
+            command=[sys.executable,str(self.root/'scripts/visible_terminal.py'),'foreground','--title',
+                     'Daily engine short DSH check: '+self.p['id'],'--',*command]
+            subprocess.run(command,check=True,timeout=900)
+        else:
+            if not self.recovery:
+                settings=json.loads((self.root/'config/daily-update.json').read_text())
+                if settings.get('scheduled_visibility')!='guarded-headless':raise RuntimeError('Headless scheduled qualification is not authorized')
+            with (self.out/'coordinator.log').open('w')as log:
+                subprocess.run(command,check=True,timeout=900,stdout=log,stderr=subprocess.STDOUT)
 
     def run(self):
         from daily_update_owner import allowed_reservation
@@ -66,15 +81,7 @@ class ShortQualification:
             command=[sys.executable,str(self.root/'scripts/smoke_dsh_tools.py'),
                 '--model',self.p['id'],'--require-followup','--updater-owner-file',str(reservation),
                 '--backend-model',backend,'--fixture',str(self.fixture),'--output',str(self.out/'dsh')]
-            if sys.stdout.isatty():
-                command=[sys.executable,str(self.root/'scripts/visible_terminal.py'),'foreground','--title',
-                         'Daily engine short DSH check: '+self.p['id'],'--',*command]
-                subprocess.run(command,check=True,timeout=900)
-            else:
-                settings=json.loads((self.root/'config/daily-update.json').read_text())
-                if settings.get('scheduled_visibility')!='guarded-headless':raise RuntimeError('Headless scheduled qualification is not authorized')
-                with (self.out/'coordinator.log').open('w')as log:
-                    subprocess.run(command,check=True,timeout=900,stdout=log,stderr=subprocess.STDOUT)
+            self.run_tool(command)
             sample()
             if errors:raise RuntimeError(errors[0])
             state=json.loads((self.out/'dsh/state.json').read_text())
@@ -88,7 +95,7 @@ class ShortQualification:
             result={**metrics,'qualification':'short-dsh-v1','profile':self.p['id'],'context':self.p['allocated_context'],
                     'settings_sha256':fingerprint(settings),'hardware_sha256':fingerprint(hardware),'fixture_sha256':fingerprint((self.fixture/'proof.txt').read_text()),
                     'checks':{'tool':True,'tool_result':True,'followup':True},'resources_passed':True,
-                    'telemetry_samples':len(samples),'full_context_stress':False}
+                    'telemetry_samples':len(samples),'full_context_stress':False,'recovery_verification':self.recovery}
         finally:
             stop.set()
             if monitor:monitor.join(timeout=10)

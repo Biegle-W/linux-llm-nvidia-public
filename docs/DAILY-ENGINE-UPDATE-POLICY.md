@@ -29,6 +29,8 @@ There is **no full-context retrieval, sustained generation, repeated reload or t
 
 ## Ownership, visibility and guards
 
+Post-rollback verification always uses private captured logs, independently of candidate visibility permission or a usable terminal. SIGHUP, SIGTERM and SIGINT share the interruption/rollback path; baseline interruption aborts the run rather than continuing to another component.
+
 The updater owns its reservation by exact live PID/start time/nonce. Its DSH child validates that owner and worker invocation on every forwarded request. It connects only to the already selected private backend through a local timing proxy; normal API clients remain blocked by the reservation. This avoids adding a maintenance bypass to the public API. The parent owns unload and reservation release.
 
 Scheduled runs are configured for guarded headless qualification when no graphical desktop is available. Their logs remain private and all model/admission/resource guards remain mandatory. A foreground desktop terminal is used when available; operator-driven CLI tests retain their foreground TTY. This scheduled exception does not authorize hidden manual benchmarks.

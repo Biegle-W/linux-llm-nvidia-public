@@ -94,5 +94,30 @@
     "timer_is-active": "active",
     "pending_update": false,
     "reserved_updater_owner": false
+  },
+  "recovery_review_followup": {
+    "findings_addressed": [
+      1,
+      2
+    ],
+    "restored_verification": "explicit recovery mode; private captured logs; independent of candidate visibility permission",
+    "interrupt_signals": [
+      "SIGHUP",
+      "SIGTERM",
+      "SIGINT"
+    ],
+    "real_SIGHUP_provisional_CPU_transaction": "rolled back; restored verification called; pending cleared",
+    "candidate_visibility_still_enforced": true,
+    "CPU_tests": {
+      "count": 488,
+      "result": "pass"
+    },
+    "timer_restored_after_checks": true,
+    "extra_GPU_benchmark": false,
+    "public_focused_tests": {
+      "count": 85,
+      "result": "pass"
+    },
+    "next_run": "2026-11-06T03:00:00-05:00"
   }
 }

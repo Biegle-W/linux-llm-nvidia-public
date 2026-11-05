@@ -137,7 +137,7 @@ class Updater:
             for name in component['profiles']:
                 self.clear_recovery_latch(name,transaction.data['started_unix'])
                 output = self.base/('recovery-'+str(time.time_ns()))/name
-                smoke = ShortQualification(self.root,get_profile(name),output,self.manager,self.owner)
+                smoke = ShortQualification(self.root,get_profile(name),output,self.manager,self.owner,recovery=True)
                 smoke.run()
                 self.stop_worker(self.owner)
             owner = self.owner
@@ -228,6 +228,9 @@ class Updater:
         journal = cdir / ('activation-'+str(time.time_ns())) / 'transaction.json'; transaction = Transaction(journal)
         try:
             baseline = self.qualify(component,'production')
+        except Interrupted:
+            self.stop_worker(self.owner)
+            raise
         except Exception as error:
             self.stop_worker(self.owner)
             raise BaselineFailed('Production baseline did not qualify; no candidate installed') from error
@@ -285,7 +288,7 @@ class Updater:
             # Verify a distinct normal restored worker answers before any lock release.
             for name in component['profiles']:
                 from profile_catalog import get_profile
-                smoke = ShortQualification(self.root,get_profile(name),cdir/'rollback-smoke'/name,self.manager,self.owner)
+                smoke = ShortQualification(self.root,get_profile(name),cdir/'rollback-smoke'/name,self.manager,self.owner,recovery=True)
                 smoke.run()
                 self.stop_worker(self.owner)
             self.state.pop('pending',None); write_json(self.state_path,self.state)
@@ -427,6 +430,13 @@ def validate_qualification_policy(args,policy):
         raise RuntimeError('Updater requires the selected short actual DSH validation policy')
 
 
+def install_interrupt_handlers():
+    def interrupted(*_):raise Interrupted('Updater interrupted; preserve or restore production')
+    previous={sig:signal.getsignal(sig)for sig in (signal.SIGTERM,signal.SIGINT,signal.SIGHUP)}
+    for sig in previous:signal.signal(sig,interrupted)
+    return previous
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--recover-only',action='store_true')
@@ -445,8 +455,7 @@ def main():
     if not (args.recover_only or args.check_only or sys.stdout.isatty() or settings.get('scheduled_visibility')=='guarded-headless'):
         raise RuntimeError('GPU qualification requires a visible terminal or the explicit scheduled-headless policy')
     updater = Updater()
-    def interrupted(*_): raise Interrupted('Updater interrupted; preserve or restore production')
-    signal.signal(signal.SIGTERM,interrupted); signal.signal(signal.SIGINT,interrupted)
+    install_interrupt_handlers()
     if args.recover_only: updater.recover()
     elif args.smoke_current:updater.smoke_current(args.smoke_current)
     else: updater.run(args.manual,args.check_only)

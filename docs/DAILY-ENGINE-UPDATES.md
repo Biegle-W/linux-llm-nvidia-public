@@ -1,5 +1,9 @@
 # NVIDIA daily engine updates
 
+## Recovery review fixes — November5,2026
+
+Headless restored-production verification is now independent of candidate visibility permission, and SIGHUP enters interruption/rollback.488 CPU tests and85 focused public checks passed, including a real provisional-transaction hangup. The timer was paused during repair and restored after verification; next run November6 at03:00EST. No extra GPU benchmark or live runtime rollback was performed. [Details](DAILY-UPDATER-RESTORATION-20261105.md).
+
 ## Daily updater restored — November5,2026
 
 Daily engine maintenance is enabled at03:00 America/Toronto, including guarded headless scheduled tests with private logs. Eight text entries use current grouped staging, paired short actual DSH checks and durable rollback; TensorFold and the diffusion stack receive version monitoring. The repaired exact-owner DSH path and485 CPU regressions passed. All resource guards and the20-minute update-admission gate remain. [Restoration, scope and validation](DAILY-UPDATER-RESTORATION-20261105.md). Earlier paused-update and long-suite paragraphs remain dated history.

@@ -154,6 +154,10 @@ class UpdaterIntegrationTests(unittest.TestCase):
             root=Path(temp);u,target,receipt,component=self.prepare(root);u.qualify=Mock(side_effect=RuntimeError('baseline failed'))
             with self.assertRaises(BaselineFailed):u.process(component,'new-revision',receipt)
             self.assertEqual(target.read_bytes(),b'old');self.assertNotIn('pending',u.state);self.assertEqual(u.state['rejected'],{})
+            from daily_engine_update import Interrupted
+            u.qualify=Mock(side_effect=Interrupted('terminal closed during baseline'))
+            with self.assertRaises(Interrupted):u.process(component,'new-revision',receipt)
+            self.assertEqual(target.read_bytes(),b'old');self.assertNotIn('pending',u.state)
 
     def test_interrupt_rolls_back_provisional_runtime(self):
         from unittest.mock import Mock
@@ -163,6 +167,28 @@ class UpdaterIntegrationTests(unittest.TestCase):
             with patch('daily_engine_update.kernel_tests'),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.ShortQualification'):
                 with self.assertRaises(Interrupted):u.process(component,'new-revision',receipt)
             self.assertEqual(target.read_bytes(),b'old');self.assertNotIn('pending',u.state)
+
+    def test_terminal_hangup_rolls_back_and_checks_restored_production(self):
+        import signal
+        from daily_engine_update import Interrupted,install_interrupt_handlers
+        with tempfile.TemporaryDirectory()as temp:
+            root=Path(temp);u,target,receipt,component=self.prepare(root)
+            def hangup():os.kill(os.getpid(),signal.SIGHUP)
+            def qualify(component,label):
+                if label=='production':return {'test':short_good()}
+                hangup()
+            u.qualify=qualify
+            previous=install_interrupt_handlers()
+            try:
+                with patch('daily_engine_update.kernel_tests'),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.ShortQualification')as restored:
+                    with self.assertRaises(Interrupted):u.process(component,'new-revision',receipt)
+                    restored.return_value.run.assert_called_once()
+                    self.assertTrue(restored.call_args.kwargs['recovery'])
+            finally:
+                for sig,handler in previous.items():signal.signal(sig,handler)
+            self.assertEqual(target.read_bytes(),b'old');self.assertNotIn('pending',u.state)
+            journal=next((root/'run/test').glob('activation-*/transaction.json'))
+            self.assertEqual(json.loads(journal.read_text())['phase'],'rolled-back')
 
     def test_publication_includes_only_the_promoted_runtime_manifests(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -201,7 +227,7 @@ class RecoveryIntegrationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             u,target,old=self.pending(Path(temp))
             with patch('daily_engine_update.owner_valid',return_value=False),patch('profile_catalog.get_profile',return_value={'id':'test'}),patch('daily_engine_update.ShortQualification') as q:
-                u.recover();q.return_value.run.assert_called_once()
+                u.recover();q.return_value.run.assert_called_once();self.assertTrue(q.call_args.kwargs['recovery'])
             self.assertEqual(target.read_bytes(),b'old');self.assertFalse(u.reservation.exists());self.assertNotIn('pending',u.state)
 
     def test_live_updater_and_foreign_reservation_are_preserved(self):

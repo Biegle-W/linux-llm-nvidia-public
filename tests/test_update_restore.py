@@ -146,3 +146,26 @@ class ScheduledCancellation(unittest.TestCase):
             with patch.object(terminal,'ROOT',root),patch.object(terminal,'desktop_env',return_value={}),patch.object(terminal.sys,'argv',['entry']),patch.object(terminal.signal,'signal',side_effect=lambda sig,handler:handlers.update({sig:handler})),patch.object(terminal.subprocess,'Popen',return_value=child):
                 self.assertEqual(terminal.main(),143)
             child.terminate.assert_called_once()
+
+
+class RecoveryVisibility(unittest.TestCase):
+    def qualification(self,root,recovery):
+        from update_short_qualification import ShortQualification
+        q=ShortQualification.__new__(ShortQualification);q.root=root;q.out=root;q.p={'id':'test'};q.recovery=recovery
+        (root/'config').mkdir();(root/'config/daily-update.json').write_text(json.dumps({'scheduled_visibility':'require-graphical-terminal'}))
+        return q
+    def test_restored_production_verification_ignores_closed_or_absent_terminal(self):
+        for tty in (False,True):
+            with self.subTest(tty=tty),tempfile.TemporaryDirectory()as tmp:
+                q=self.qualification(Path(tmp),True)
+                with patch('update_short_qualification.sys.stdout',Mock(isatty=Mock(return_value=tty))),patch('update_short_qualification.subprocess.run')as run:
+                    q.run_tool(['python','short-dsh'])
+                self.assertEqual(run.call_args.args[0],['python','short-dsh'])
+                self.assertIn('stdout',run.call_args.kwargs)
+                self.assertTrue((Path(tmp)/'coordinator.log').is_file())
+    def test_candidate_has_no_recovery_visibility_exemption(self):
+        with tempfile.TemporaryDirectory()as tmp:
+            q=self.qualification(Path(tmp),False)
+            with patch('update_short_qualification.sys.stdout',Mock(isatty=Mock(return_value=False))),patch('update_short_qualification.subprocess.run')as run:
+                with self.assertRaisesRegex(RuntimeError,'not authorized'):q.run_tool(['python','candidate'])
+            run.assert_not_called()
