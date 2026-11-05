@@ -20,6 +20,12 @@ RETIRED_FILES = (
     'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
 
 FILES = (
+    'docs/COMFY-VIDEO-DUAL-GPU-20261104.md', 'docs/benchmark-results/20261104-comfy-video-dual-gpu.json',
+    'config/comfy-video-trial.json', 'config/comfy-video-requirements.lock',
+    'scripts/comfy_mesh_gguf.py', 'scripts/comfy_video_trial.py',
+    'scripts/comfy_video_nodes/__init__.py', 'scripts/comfy_video_hook/sitecustomize.py',
+    'scripts/patches/raylight-native-ignored-gpu.patch', 'scripts/patches/mesh-ltx-rotary-matrix.patch',
+    'tests/test_comfy_video_audit.py',
     'docs/COMFY-2K4K-20261104.md', 'docs/benchmark-results/20261105-comfy-2k4k.json',
     'config/comfy-runtime.json', 'config/comfy-requirements.lock',
     'config/comfy-workflows/qwen-image-2.1-turbo.json', 'config/comfy-workflows/qwen-image-2.1-turbo.api.json',

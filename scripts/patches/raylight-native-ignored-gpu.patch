@@ -1,0 +1,23 @@
+diff --git a/src/raylight/comfy_dist/model_patcher.py b/src/raylight/comfy_dist/model_patcher.py
+index 756208b..77f6b1e 100644
+--- a/src/raylight/comfy_dist/model_patcher.py
++++ b/src/raylight/comfy_dist/model_patcher.py
+@@ -380,6 +380,18 @@ def patch_fsdp(self):
+             if count > 0:
+                 print(f"[Rank {self.rank}] Materialized {count} excluded ControlNet-shared params on {target_device}")
+ 
++        # Local strict-residency fix: PyTorch state-dict assignment can leave
++        # ignored, unsharded native parameters (e.g. Wan modulation) on CPU.
++        # Materialize them once before any sampling; never move DTensor shards.
++        if not self.is_cpu_offload:
++            from torch.distributed.tensor import DTensor
++            moved = 0
++            for module in diffusion_model.modules():
++                for name, parameter in list(module.named_parameters(recurse=False)):
++                    if not isinstance(parameter, DTensor) and parameter.device.type == "cpu":
++                        module._parameters[name] = torch.nn.Parameter(parameter.to(target_device), requires_grad=parameter.requires_grad)
++                        moved += parameter.numel()
++            print(f"[Rank {self.rank}] GPU-resident ignored parameters: {moved} elements")
+         _pre_init_fsdp(diffusion_model)
+     self.fsdp_state_dict = None
+ 

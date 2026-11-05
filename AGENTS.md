@@ -1,5 +1,9 @@
 # Agent entry point
 
+## ComfyUI two-GPU video trials complete — November4,2026
+
+Wan2.2TI2V5B passed the GPU-only regular baseline at10.143s first /7.111s warm and Raylight FSDP+Ulysses2 at43.346s /30.539s: distributed latency is about4.3times higher for this512x288x33-frame workload. LTX2.3distilled1.1Q4_0 passed an experimental Mesh28/20-block split at14.259s after server readiness, with valid video/audio and GPU1 denoiser release before VAE decoding; minimum sampled free VRAM1529/1564MiB, zero swap. All442 CPU checks passed. Both physical GPUs were audited, CPU weight execution was forbidden, guards remain, workers stopped and reservations released. Existing LLM/image entries and defaults remain; video candidates are not production entries. [Results, timing scope, patches and limits](docs/COMFY-VIDEO-DUAL-GPU-20261104.md).
+
 ## ComfyUI native2K/4K tests complete — November4,2026
 
 Both models passed two2048x2048 images without CPU weight offload: Qwen Turbo29.360s first /26.339s warm with automatic GPU tiled VAE decoding; FLUX3Klein27.341s /24.279s with regular GPU VAE decoding. Neither native4096 arm produced an image: Qwen GPU0 allocation failed; FLUX GPU0 stayed at41MiB free for three samples and hit the unchanged256MiB guard. All438 CPU checks passed. Workers are stopped, reservations released and1K defaults/LLM profiles remain unchanged. The100C thermal policy and all other guards remain. No benchmark or cleanup remains pending. [Protocol, failures, resource tables and next action](docs/COMFY-2K4K-20261104.md).

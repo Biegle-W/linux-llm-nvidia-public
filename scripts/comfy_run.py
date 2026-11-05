@@ -57,13 +57,21 @@ def graph(model, seed, size=1024):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--model',choices=['qwen-image-2.1-turbo','flux3-klein'],required=True)
+    parser.add_argument('--model',choices=['qwen-image-2.1-turbo','flux3-klein','wan22-5b-raylight','ltx23-mesh'],required=True)
+    parser.add_argument('--video-stage',choices=['prepare','baseline','raylight','mesh-prepare','mesh'])
     parser.add_argument('--size',type=int,choices=[1024,2048,4096],default=1024,help='Square image width/height in pixels')
     mode=parser.add_mutually_exclusive_group()
     mode.add_argument('--serve',action='store_true')
     mode.add_argument('--check-ui',action='store_true')
     parser.add_argument('--foreground-backend',action='store_true',help='Show backend logs in this same visible foreground terminal')
     args=parser.parse_args()
+    if args.model in ('wan22-5b-raylight','ltx23-mesh'):
+        expected=('mesh-prepare','mesh') if args.model=='ltx23-mesh' else ('prepare','baseline','raylight')
+        assert args.video_stage in expected,'Select a matching experimental video stage'
+        assert not args.serve,'Video candidates have no production serving qualification'
+        from comfy_video_trial import graph as validate_video_graph
+        validate_video_graph(args.video_stage,27001)
+    else:assert args.video_stage is None,'Video stage requires a video candidate'
     def interrupted(*_):raise KeyboardInterrupt('Owned ComfyUI coordinator interrupted')
     signal.signal(signal.SIGTERM,interrupted)
     signal.signal(signal.SIGINT,interrupted)
@@ -71,11 +79,17 @@ def main():
     assert sys.stdin.isatty() and sys.stdout.isatty(),'Use visible_terminal.py foreground'
     os.umask(0o077)
     config=json.loads((ROOT/'config/comfy-runtime.json').read_text())
+    if args.video_stage:
+        trial=json.loads((ROOT/'config/comfy-video-trial.json').read_text())
+        config=dict(config,models=trial['models'],checkpoint_directory=trial['checkpoint_directory'])
     model=next(x for x in config['models'] if x['id']==args.model)
-    work=ROOT/'data/comfy-qualification-20261105'/time.strftime('%H%M%S-'+args.model+'-'+str(args.size))
+    base=ROOT/'data/comfy-video-dual-20261104/stages' if args.video_stage else ROOT/'data/comfy-qualification-20261105'
+    work=base/time.strftime('%H%M%S-'+args.model+'-'+(args.video_stage or str(args.size)))
     work.mkdir(parents=True,exist_ok=False)
     (work/'user').mkdir()
     (work/'images').mkdir()
+    if args.video_stage:
+        (work/'video-stage.json').write_text(json.dumps(dict(stage=args.video_stage)))
     if args.serve:
         (work/'serve').touch()
         folder=ROOT/'data/comfy-user'/args.model/'default/workflows'
@@ -84,7 +98,10 @@ def main():
             if source.name==args.model+'.json' and not (folder/source.name).exists():
                 shutil.copy2(source,folder/source.name)
     (work/'extra-model-paths.yaml').write_text('nvidia_images:\n  base_path: '+str(ROOT/config['checkpoint_directory'])+'\n  diffusion_models: diffusion_models\n  text_encoders: text_encoders\n  vae: vae\n')
+    if args.video_stage:
+        (work/'extra-model-paths.yaml').write_text('nvidia_video:\n  base_path: '+str(ROOT/config['checkpoint_directory'])+'\n  diffusion_models: split_files/diffusion_models\n  text_encoders: .\n  vae: split_files/vae\n')
     state=dict(phase='preflight',model=args.model,width=args.size,height=args.size,started=time.time(),pid=os.getpid(),work=str(work))
+    if args.video_stage:state.update(width=512,height=288,frames=33,fps=24 if args.model=='ltx23-mesh' else 16,stage=args.video_stage)
     def save():
         temp=work/'state.tmp';temp.write_text(json.dumps(state,indent=2)+'\n');temp.replace(work/'state.json')
     opener=urllib.request.build_opener(urllib.request.ProxyHandler({}))
@@ -106,7 +123,7 @@ def main():
         health=request('/health',port=10100,key=key)
         assert not any(health.get(k) for k in ('busy','inflight','queued','loading_model','idle_unloading_model'))
         from storage_policy import verify_storage
-        for folder in ('diffusion_models','text_encoders','vae'):
+        for folder in (tuple({str(Path(row['file']).parent) for row in model['files']}) if args.video_stage else ('diffusion_models','text_encoders','vae')):
             verify_storage(dict(id=args.model,storage=dict(checkpoint_directory=config['checkpoint_directory']+'/'+folder,required_transport='sata')))
         print('Verifying publisher hashes and SATA placement; guards='+json.dumps(config['guard_policy']),flush=True)
         for row in model['files']:
@@ -116,6 +133,8 @@ def main():
         with socket.socket() as probe:
             probe.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
             probe.bind(('127.0.0.1',8188))
+        if args.video_stage=='mesh':
+            with socket.socket() as probe:probe.bind(('127.0.0.1',7777))
         lock=dict(owner='comfy-images',pid=os.getpid(),unit=UNIT,nonce=uuid.uuid4().hex,started=time.time())
         fd=os.open(ROOT/'data/GPU-LOCK',os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
         with os.fdopen(fd,'w') as stream:stream.write(json.dumps(lock)+'\n')
@@ -152,6 +171,13 @@ def main():
             try:request('/system_stats');break
             except OSError:time.sleep(1)
         else:raise TimeoutError('ComfyUI did not become ready')
+        if args.video_stage=='mesh':
+            while time.monotonic()<deadline:
+                assert property_of(UNIT,'InvocationID')==owned and property_of(UNIT,'ActiveState')=='active','Owned Mesh backend stopped'
+                try:
+                    with socket.create_connection(('127.0.0.1',7777),timeout=1):break
+                except OSError:time.sleep(1)
+            else:raise TimeoutError('Mesh back-half server did not become ready')
         state.update(phase='ready');save()
         print('ComfyUI ready at http://127.0.0.1:8188; exclusive GPUs reserved.',flush=True)
         if args.check_ui:
@@ -159,15 +185,23 @@ def main():
                 html=response.read().decode()
                 assert response.status==200 and 'ComfyUI' in html
             info=request('/object_info')
-            for candidate in config['models']:
-                assert all(node['class_type'] in info for node in graph(candidate,27001).values())
+            if args.video_stage:
+                from comfy_video_trial import graph as video_graph
+                assert all(node['class_type'] in info for node in video_graph(args.video_stage,27001).values())
+            else:
+                for candidate in config['models']:
+                    assert all(node['class_type'] in info for node in graph(candidate,27001).values())
             state['frontend_http_and_workflow_nodes_passed']=True
         elif args.serve:
             while property_of(UNIT,'InvocationID')==owned and property_of(UNIT,'ActiveState')=='active':time.sleep(2)
         else:
             state['runs']=[]
-            for seed in (27001,27002):
-                prompt=graph(model,seed,args.size);(work/f'workflow-{seed}.json').write_text(json.dumps(prompt,indent=2)+'\n')
+            for seed in ((27001,) if args.video_stage in ('prepare','mesh-prepare','mesh') else (27001,27002)):
+                if args.video_stage:
+                    from comfy_video_trial import graph as video_graph
+                    prompt=video_graph(args.video_stage,seed)
+                else:prompt=graph(model,seed,args.size)
+                (work/f'workflow-{seed}.json').write_text(json.dumps(prompt,indent=2)+'\n')
                 state.update(phase='generating',seed=seed);save()
                 started=time.monotonic();answer=request('/prompt',dict(prompt=prompt,client_id='nvidia-local-qualified'))
                 ident=answer['prompt_id'];deadline=time.monotonic()+1200
@@ -179,6 +213,11 @@ def main():
                 else:raise TimeoutError('Image generation exceeded1200seconds')
                 result=history[ident];(work/f'history-{seed}.json').write_text(json.dumps(result,indent=2)+'\n')
                 assert result['status']['status_str']=='success',str(result['status'])[:1000]
+                if args.video_stage:
+                    from comfy_video_trial import output
+                    state['runs'].append(output(ROOT,work,args.video_stage,seed,time.monotonic()-started))
+                    save();print('Video stage PASS: '+json.dumps(state['runs'][-1]),flush=True)
+                    continue
                 images=result['outputs']['9']['images'];assert len(images)==1
                 image=work/'images'/images[0]['subfolder']/images[0]['filename']
                 image_data=image.read_bytes()
@@ -186,8 +225,12 @@ def main():
                 assert struct.unpack('>II',image_data[16:24])==(args.size,args.size),'Output dimensions differ from requested benchmark size'
                 state['runs'].append(dict(seed=seed,wall_s=time.monotonic()-started,image=str(image),image_sha256=hashlib.sha256(image_data).hexdigest(),width=args.size,height=args.size))
                 save();print('Image PASS: '+json.dumps(state['runs'][-1]),flush=True)
-            placement=[json.loads(x) for x in (work/'placement.jsonl').read_text().splitlines()]
-            assert {'cuda:0','cuda:1'}<={x['expected'] for x in placement}
+            if args.video_stage:
+                from comfy_video_trial import audit
+                state['forward_audit']=audit(work)
+            else:
+                placement=[json.loads(x) for x in (work/'placement.jsonl').read_text().splitlines()]
+                assert {'cuda:0','cuda:1'}<={x['expected'] for x in placement}
             assert not (work/'guard-stop.json').exists()
         state['phase']='pass';save()
     except BaseException as error:

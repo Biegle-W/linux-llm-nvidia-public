@@ -1,0 +1,94 @@
+diff --git a/payload_ltx.py b/payload_ltx.py
+index 4ccd402..41c0333 100644
+--- a/payload_ltx.py
++++ b/payload_ltx.py
+@@ -171,6 +171,7 @@ def compute_constants_session_id(
+     # are constant-keys. Per-timestep meta (compressed, non-constant
+     # none_keys) is intentionally NOT hashed — it changes per call.
+     h.update(json.dumps(meta.get("pe_split_mode", {}), sort_keys=True).encode())
++    h.update(json.dumps(meta.get("pe_matrix_mode", {}), sort_keys=True).encode())
+     h.update(json.dumps(meta.get("flags", {}), sort_keys=True).encode())
+     constant_root_keys = {"v_context", "a_context", "attention_mask",
+                           "self_attention_mask", "v_pe", "a_pe",
+@@ -206,6 +207,7 @@ def flatten_payload(args: dict[str, Any]) -> tuple[dict[str, Any], list[tuple[st
+         "none_keys": [],
+         "flags": {},
+         "pe_split_mode": {},
++        "pe_matrix_mode": {},
+     }
+     named: list[tuple[str, torch.Tensor]] = []
+ 
+@@ -230,6 +232,13 @@ def flatten_payload(args: dict[str, Any]) -> tuple[dict[str, Any], list[tuple[st
+         if v is None:
+             meta["none_keys"].append(k)
+             continue
++        matrix_mode=isinstance(v, tuple) and len(v)==2
++        if matrix_mode:
++            matrix, split_mode=v
++            if not isinstance(matrix, torch.Tensor) or matrix.shape[-2:] != (2,2):
++                raise TypeError("Rotary matrix must end in 2x2")
++            v=(matrix[...,0,0],matrix[...,1,0],split_mode)
++        meta["pe_matrix_mode"][k]=matrix_mode
+         if isinstance(v, tuple) and len(v) == 3:
+             cos, sin, split_mode = v
+             if not (isinstance(cos, torch.Tensor) and isinstance(sin, torch.Tensor)):
+@@ -313,7 +322,11 @@ def reconstruct_payload(
+             continue
+         cos = tensors_by_name[f"{k}.cos"]
+         sin = tensors_by_name[f"{k}.sin"]
+-        out[k] = (cos, sin, bool(pe_split_mode.get(k, False)))
++        if meta.get("pe_matrix_mode", {}).get(k,False):
++            matrix=torch.stack((cos,-sin,sin,cos),dim=-1).reshape(*cos.shape,2,2)
++            out[k]=(matrix,bool(pe_split_mode.get(k,False)))
++        else:
++            out[k] = (cos, sin, bool(pe_split_mode.get(k, False)))
+ 
+     for k in _COMPRESSED_KEYS:
+         if k in none_keys:
+diff --git a/server/payload_ltx.py b/server/payload_ltx.py
+index 4ccd402..41c0333 100644
+--- a/server/payload_ltx.py
++++ b/server/payload_ltx.py
+@@ -171,6 +171,7 @@ def compute_constants_session_id(
+     # are constant-keys. Per-timestep meta (compressed, non-constant
+     # none_keys) is intentionally NOT hashed — it changes per call.
+     h.update(json.dumps(meta.get("pe_split_mode", {}), sort_keys=True).encode())
++    h.update(json.dumps(meta.get("pe_matrix_mode", {}), sort_keys=True).encode())
+     h.update(json.dumps(meta.get("flags", {}), sort_keys=True).encode())
+     constant_root_keys = {"v_context", "a_context", "attention_mask",
+                           "self_attention_mask", "v_pe", "a_pe",
+@@ -206,6 +207,7 @@ def flatten_payload(args: dict[str, Any]) -> tuple[dict[str, Any], list[tuple[st
+         "none_keys": [],
+         "flags": {},
+         "pe_split_mode": {},
++        "pe_matrix_mode": {},
+     }
+     named: list[tuple[str, torch.Tensor]] = []
+ 
+@@ -230,6 +232,13 @@ def flatten_payload(args: dict[str, Any]) -> tuple[dict[str, Any], list[tuple[st
+         if v is None:
+             meta["none_keys"].append(k)
+             continue
++        matrix_mode=isinstance(v, tuple) and len(v)==2
++        if matrix_mode:
++            matrix, split_mode=v
++            if not isinstance(matrix, torch.Tensor) or matrix.shape[-2:] != (2,2):
++                raise TypeError("Rotary matrix must end in 2x2")
++            v=(matrix[...,0,0],matrix[...,1,0],split_mode)
++        meta["pe_matrix_mode"][k]=matrix_mode
+         if isinstance(v, tuple) and len(v) == 3:
+             cos, sin, split_mode = v
+             if not (isinstance(cos, torch.Tensor) and isinstance(sin, torch.Tensor)):
+@@ -313,7 +322,11 @@ def reconstruct_payload(
+             continue
+         cos = tensors_by_name[f"{k}.cos"]
+         sin = tensors_by_name[f"{k}.sin"]
+-        out[k] = (cos, sin, bool(pe_split_mode.get(k, False)))
++        if meta.get("pe_matrix_mode", {}).get(k,False):
++            matrix=torch.stack((cos,-sin,sin,cos),dim=-1).reshape(*cos.shape,2,2)
++            out[k]=(matrix,bool(pe_split_mode.get(k,False)))
++        else:
++            out[k] = (cos, sin, bool(pe_split_mode.get(k, False)))
+ 
+     for k in _COMPRESSED_KEYS:
+         if k in none_keys:

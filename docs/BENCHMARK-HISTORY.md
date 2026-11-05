@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## ComfyUI two-GPU video trials complete — November4,2026
+
+Wan2.2TI2V5B passed the GPU-only regular baseline at10.143s first /7.111s warm and Raylight FSDP+Ulysses2 at43.346s /30.539s: distributed latency is about4.3times higher for this512x288x33-frame workload. LTX2.3distilled1.1Q4_0 passed an experimental Mesh28/20-block split at14.259s after server readiness, with valid video/audio and GPU1 denoiser release before VAE decoding; minimum sampled free VRAM1529/1564MiB, zero swap. All442 CPU checks passed. Both physical GPUs were audited, CPU weight execution was forbidden, guards remain, workers stopped and reservations released. Existing LLM/image entries and defaults remain; video candidates are not production entries. [Results, timing scope, patches and limits](COMFY-VIDEO-DUAL-GPU-20261104.md).
+
 ## Retired AWQ Bolt assets deleted — November 4, 2026
 
 The user requested deletion of the retired AWQ setup. Its55.33 GB weights, dedicated vLLM environment, manifest, launch/supervision/offload code and AWQ-only tests are removed. Native IQ2 remains selected under compatibility ID`bolt-vllm`; all nine profiles, both DSH modes, defaults, guards and shared runtimes are preserved.423 remaining CPU tests passed;33 obsolete adapter tests were retired. Native runtime hashes/dependencies and API/DSH health passed; no model benchmark was repeated. Historical benchmark records and small private source/configuration preimages remain, but the old checkpoint/runtime are no longer installed. [Removal verification](BOLT-AWQ-REMOVAL-20261104.md).

@@ -1,0 +1,220 @@
+{
+  "date": "2026-11-04",
+  "scope": "Isolated short-clip trials, no production promotion",
+  "hardware": [
+    "RTX3080Ti12GB",
+    "RTX308010GB"
+  ],
+  "CPU_weight_offload": false,
+  "source_manifest": "config/comfy-video-trial.json",
+  "runtime_lock": "config/comfy-video-requirements.lock",
+  "arms": {
+    "wan-baseline": {
+      "status": "pass",
+      "runs": [
+        {
+          "seed": 27001,
+          "wall_s": 10.142962329999136,
+          "video_sha256": "83413fa054d562cc6bab200dbdea4ccf3f5fb81b26effb4901a84204364eb14b",
+          "frames": 33,
+          "width": 512,
+          "height": 288
+        },
+        {
+          "seed": 27002,
+          "wall_s": 7.111359251999602,
+          "video_sha256": "0efbfcc677a8e3a1d6eee234733282cceb62a96a04267201999214254ab6b62b",
+          "frames": 33,
+          "width": 512,
+          "height": 288
+        }
+      ],
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 558,
+        "processes": 1
+      },
+      "worker_inactive": true,
+      "reservation_released": true,
+      "resources": {
+        "samples": 11,
+        "minimum_host_available_GiB": 85.69850540161133,
+        "minimum_free_GPU_MiB": [
+          1743.0,
+          6330.0
+        ],
+        "max_temperature_C": [
+          60.0,
+          48.0
+        ],
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0
+      }
+    },
+    "wan-raylight": {
+      "status": "pass",
+      "runs": [
+        {
+          "seed": 27001,
+          "wall_s": 43.345975954000096,
+          "video_sha256": "4e21c6b1874858910f21bc87c42c81737ac4e05d4aed3e1b9e0bf9e9ecdcc070",
+          "frames": 33,
+          "width": 512,
+          "height": 288
+        },
+        {
+          "seed": 27002,
+          "wall_s": 30.539185916999486,
+          "video_sha256": "53bbeb88de9ac9b760eb20b6678347faf225865e28d6f1a261c262bdd6799f36",
+          "frames": 33,
+          "width": 512,
+          "height": 288
+        }
+      ],
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 1960,
+        "processes": 3
+      },
+      "worker_inactive": true,
+      "reservation_released": true,
+      "resources": {
+        "samples": 38,
+        "minimum_host_available_GiB": 71.6521224975586,
+        "minimum_free_GPU_MiB": [
+          5393.0,
+          972.0
+        ],
+        "max_temperature_C": [
+          59.0,
+          48.0
+        ],
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0
+      }
+    },
+    "ltx-prompt": {
+      "status": "pass",
+      "runs": [
+        {
+          "seed": 27001,
+          "wall_s": 14.380987018001179,
+          "prompt_proof": {
+            "encoding_s": 14.000688084999638,
+            "parameter_devices": [
+              "cuda:0",
+              "cuda:1"
+            ],
+            "CPU_weight_offload": false
+          }
+        }
+      ],
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 629,
+        "processes": 1
+      },
+      "worker_inactive": true,
+      "reservation_released": true,
+      "resources": {
+        "samples": 9,
+        "minimum_host_available_GiB": 84.98360824584961,
+        "minimum_free_GPU_MiB": [
+          2335.0,
+          7380.0
+        ],
+        "max_temperature_C": [
+          56.0,
+          39.0
+        ],
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0
+      }
+    },
+    "ltx-mesh": {
+      "status": "pass",
+      "runs": [
+        {
+          "seed": 27001,
+          "wall_s": 14.259049567999682,
+          "video_sha256": "e9bff509c9e873fb55ef88a5cecf1562479f52ad318b429d2d8423baace72e51",
+          "frames": 33,
+          "width": 512,
+          "height": 288,
+          "audio_samples": 63840,
+          "audio_sample_rate": 48000
+        }
+      ],
+      "forward_audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 2914,
+        "processes": 2
+      },
+      "worker_inactive": true,
+      "reservation_released": true,
+      "server_released_before_VAE": true,
+      "resources": {
+        "samples": 9,
+        "minimum_host_available_GiB": 85.72018051147461,
+        "minimum_free_GPU_MiB": [
+          1529.0,
+          1564.0
+        ],
+        "max_temperature_C": [
+          56.0,
+          41.0
+        ],
+        "max_swap_bytes": 0,
+        "max_full_PSI_percent": 0.0
+      }
+    }
+  },
+  "timing_scope": {
+    "Wan": "HTTP submission to validated saved MP4; first includes model/Ray initialization; text prepared separately",
+    "LTX": "HTTP submission after remote server ready to saved AV MP4, including owned server release before VAE; text and server initialization excluded",
+    "warm": "Second request with new seed, same process and saved text conditioning; not a statistical distribution",
+    "file_cache": "Warm from full checkpoint hash preflight; not cold SATA startup"
+  },
+  "wan_time_ratio_ray_to_baseline": [
+    4.2735026064129915,
+    4.294423166487103
+  ],
+  "historical_screens": [
+    {
+      "description": "Wan old Torch2.13 baseline, not paired with selected2.11 Raylight",
+      "request_s": 10.14693033399999
+    },
+    {
+      "description": "Wan patched Raylight initial single-request proof before physical UUID audit",
+      "request_s": 42.42920947700077
+    },
+    {
+      "description": "Mesh before phase release, tile256, completed with one below-floor sample; not selected",
+      "request_s": 13.192951182998513,
+      "minimum_GPU1_free_MiB": 20
+    },
+    {
+      "description": "Mesh tile128 before phase release, completed with one below-floor sample; not selected",
+      "request_s": 13.207935084999917,
+      "minimum_GPU1_free_MiB": 4
+    }
+  ],
+  "failed_gates": [
+    "Initial native/async allocator mismatch",
+    "Raylight missing matching torchaudio; separate2.11 stack installed",
+    "Ray socket path length; short private directory used",
+    "Wan CPU-resident ignored modulation; stopped before execution, patched GPU preload",
+    "LTX combined encoder/GPU0 OOM; split projection and bounded text padding",
+    "Mesh protocol import collision",
+    "Mesh full48-block metadata after20-block filtering; systemd-oomd stopped unit at33.9GiB RAM and7.5GiB swap peak",
+    "Graph builder argument collision caught and fixed before sampling",
+    "Mesh legacy rotary payload incompatible with current Comfy rotation matrices; symmetric wire patch tested"
+  ],
+  "validation": {
+    "CPU_tests_passed": 442,
+    "rotary_wire_CPU_roundtrip": "bit-exact for legacy and current formats",
+    "visual_check": "Coherent fox images and motion in sampled frames; Wan has blown highlights. No formal quality or long-video qualification.",
+    "all_workers_stopped": true,
+    "production_entries_changed": false
+  }
+}

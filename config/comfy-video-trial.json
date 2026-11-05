@@ -1,0 +1,103 @@
+{
+  "schema": 1,
+  "status": "bounded-short-clip-trials-complete-not-production",
+  "checkpoint_directory": "models/comfy-video",
+  "ComfyUI": {
+    "path": "runtimes/ComfyUI-video",
+    "commit": "7ad7adb38f6cbb6c2b0713d3bd44c3fb2b9c8ebe"
+  },
+  "python": "runtimes/env-comfy-video/bin/python",
+  "Raylight": {
+    "path": "runtimes/raylight",
+    "commit": "b2ecc0237f556f63d87ab591c49111fe8f4d90e9",
+    "version": "1.11.0",
+    "patch": "scripts/patches/raylight-native-ignored-gpu.patch",
+    "patch_sha256": "e8cf1dca519b933d998b5b6d7bfbfbc13ff2a8a4d226c4933614d20c548d91ff"
+  },
+  "Mesh": {
+    "path": "runtimes/comfyui-mesh",
+    "commit": "3804156b4b39d258fceffc0b55adf9ad2e5aed37",
+    "patch": "scripts/patches/mesh-ltx-rotary-matrix.patch",
+    "patch_sha256": "72d8f1ff08a72ecc4713c55d475643cb017a4d54dd4496a47d46c9e45092f9c9"
+  },
+  "models": [
+    {
+      "id": "wan22-5b-raylight",
+      "files": [
+        {
+          "repo": "Comfy-Org/Wan-2.2",
+          "revision": "ee6f4a40737a995bf5818954cfce6d59443b0f04",
+          "file": "split_files/diffusion_models/wan2.2_ti2v_5B_fp16.safetensors",
+          "bytes": 9999658848,
+          "sha256": "456f901338bd9eadbded3828b819109a9b68e8a525ca5cf8d0049a69fcfeca1e"
+        },
+        {
+          "repo": "Comfy-Org/Wan-2.2",
+          "revision": "ee6f4a40737a995bf5818954cfce6d59443b0f04",
+          "file": "split_files/vae/wan2.2_vae.safetensors",
+          "bytes": 1409400960,
+          "sha256": "e40321bd36b9709991dae2530eb4ac303dd168276980d3e9bc4b6e2b75fed156"
+        },
+        {
+          "repo": "Winnougan/Wan2.2-INT8-Convrot",
+          "revision": "eb9b397a8df4462bea32903f84264ef26696a454",
+          "file": "umt5_xxl_int8_convrot.safetensors",
+          "bytes": 6743849737,
+          "sha256": "d82e9e154fc1eb9f16dbc432a3deb26a88d22e3cadb19b6b95efebb6eb08f269"
+        }
+      ],
+      "status": "passed-GPU-only-short-clip-slower-than-baseline"
+    },
+    {
+      "id": "ltx23-mesh",
+      "status": "passed-GPU-only-short-clip-with-reviewed-GGUF-adapter",
+      "files": [
+        {
+          "repo": "unsloth/LTX-2.3-GGUF",
+          "revision": "96e8ed4925ead3db9ff4d0084f165ef6a74f28d0",
+          "file": "distilled-1.1/ltx-2.3-22b-distilled-1.1-Q4_0.gguf",
+          "bytes": 12716211232,
+          "sha256": "1e6aa3f8506fa6f0445542fcd9ebfedd5de46bf1e9069462f9d0df928952a25a"
+        },
+        {
+          "repo": "unsloth/gemma-3-12b-it-GGUF",
+          "revision": "d15e4c7dc21dc55d56bf8549db57a71ad8a2a35d",
+          "file": "gemma-3-12b-it-Q4_K_M.gguf",
+          "bytes": 7300778336,
+          "sha256": "15b8fd9d8672cd4240c178c217ca781409291f34e353d2e913b29c7602ceb3ff"
+        },
+        {
+          "repo": "Kijai/LTX2.3_comfy",
+          "revision": "6d980fde0d330f2fed6ff8dfdfddb06d88a004e5",
+          "file": "text_encoders/ltx-2.3_text_projection_bf16.safetensors",
+          "bytes": 2312149072,
+          "sha256": "911d59bb4cb7708179c9a0045ea0fe41212ecfb77aed3a02702b7c0a8274911f"
+        },
+        {
+          "repo": "Kijai/LTX2.3_comfy",
+          "revision": "6d980fde0d330f2fed6ff8dfdfddb06d88a004e5",
+          "file": "vae/LTX23_audio_vae_bf16.safetensors",
+          "bytes": 364855188,
+          "sha256": "5bc10fa4adecf99dda132d916e23048cbd56797702c5fa50eb5d2079048a38c3"
+        },
+        {
+          "repo": "Kijai/LTX2.3_comfy",
+          "revision": "6d980fde0d330f2fed6ff8dfdfddb06d88a004e5",
+          "file": "vae/LTX23_video_vae_bf16.safetensors",
+          "bytes": 1452258578,
+          "sha256": "01ea62d09bc139f95c5dee7b5c062ad6a3e6cd8be910a1983ac02e7eb5b8ee3b"
+        }
+      ],
+      "decode_policy": "End owned back-half server after sampling, then GPU1 VAE128px tiles,32px overlap; no CPU weight offload"
+    }
+  ],
+  "cpu_weight_offload": false,
+  "GGUF": {
+    "path": "runtimes/ComfyUI-GGUF",
+    "commit": "6ea2651e7df66d7585f6ffee804b20e92fb38b8a"
+  },
+  "torch": "2.11.0+cu130",
+  "torchvision": "0.26.0+cu130",
+  "torchaudio": "2.11.0+cu130",
+  "evidence": "docs/benchmark-results/20261104-comfy-video-dual-gpu.json"
+}
