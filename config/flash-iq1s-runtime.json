@@ -60,5 +60,8 @@
       "publisher_sha256_matched": true
     }
   ],
-  "release": "v0.9.0"
+  "release": "v0.9.0",
+  "status": "retired-checkpoint-deleted",
+  "replacement_profile": "flash-next-iq1m-strata",
+  "retirement_evidence": "docs/validation-results/20261105-iq1s-weight-removal.json"
 }

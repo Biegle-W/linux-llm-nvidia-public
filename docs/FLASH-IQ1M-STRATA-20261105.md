@@ -11,7 +11,7 @@ One uncached first tool generation per listed configuration, with parsed read-to
 | Model / quant | Engine | Prefill tok/s | First token s | Decode tok/s | Context | Prompt/output tokens | Checkpoint GB / location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Flash-Next UD-IQ1_M +MTP | Strata0.2.11/engine0.1.57 |1092.5|5.267|78.2|131,072|5592/38|68.007 /NVMe|
-| Retired Flash-Next UD-IQ1_S | llama.cpp stable v0.9.0 |120.73|48.463|36.86|12,288|5824/39|66.379 /NVMe|
+| Retired Flash-Next UD-IQ1_S | llama.cpp stable v0.9.0 |120.73|48.463|36.86|12,288|5824/39|66.379 /NVMe, subsequently deleted|
 
 Observed generation is about2.12times faster, prefill9.05times faster and first-token latency9.20times shorter. MTP accepted28 of35 proposed tokens in the first call. This short burst does not establish sustained throughput. All tool/result/follow-up and resource checks passed on the first actual GPU trial; the owned worker unloaded and GPU resources were released.
 
@@ -30,7 +30,7 @@ Nine lifecycle samples at median5.07s captured peak charged worker RAM56.15GiB, 
 
 All three checkpoint shards match the exact published size/SHA256 pins at Unsloth revision`d96201194f103c906994f283f504209dc8d2a10c`. The28.800GB n-gram shard is byte-identical to IQ1_S and is shared by a verified hardlink; only39.207GB of new checkpoint bytes were added. The native pack uses upstream `iq_pack.py --compat-bf16`: small compatibility tensors are converted to the engine form; expert and n-gram checkpoint bytes remain unchanged. The separate preset is bound to its own pack/tokenizer and complete canonical argument hash. The selected engine passed official signature and full-file verification.
 
-The old IQ1_S checkpoint is retained for rollback, outside the active entries. Its37.568GB model shard plus10.947MB metadata are now inactive; the28.800GB table remains actively shared by IQ1_M. No complete checkpoint was deleted. Earlier IQ1_S deletion savings must account for this sharing.
+Subsequent explicit cleanup removed the old IQ1_S model shard, metadata and obsolete table filename, reclaiming37.58GB exclusive storage. The active IQ1_M28.800GB table retained its original inode and verified full hash. The old weights are no longer retained for rollback; historical qualification evidence is preserved. [Deletion verification](IQ1S-WEIGHT-REMOVAL-20261105.md).
 
 The daily Strata group now qualifies IQ3_XXS, DeepSeek and IQ1_M together; it updates both Qwen presets and IQ1_M runtime hash pins transactionally. llama.cpp maintenance now qualifies Bolt only.506 CPU regressions passed, including wrong pack/tokenizer/device/argument rejection, bounded swap/native status checks, retired DSH selection migration, and future signed updater refresh of both presets without changing pack/argument pins.
 

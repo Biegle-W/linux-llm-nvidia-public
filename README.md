@@ -1,8 +1,12 @@
 # Linux LLM NVIDIA — public reference
 
+## Retired IQ1_S weights deleted; IQ1_M table preserved — November5,2026
+
+At the human's explicit request, removed the old IQ1_S checkpoint and its obsolete n-gram filename, reclaiming37.58GB exclusive storage. The active IQ1_M28.8GB table kept the same inode and full verified SHA256; only its hardlink count changed2to1. No model configuration or guard changed and no inference benchmark was repeated. Prior rollback-retention statements are superseded. [Removal receipt and preserved dependencies](docs/IQ1S-WEIGHT-REMOVAL-20261105.md).
+
 ## Flash-Next IQ1_M replaces IQ1_S — November5,2026
 
-Qualified `flash-next-iq1m-strata` replaces the IQ1_S llama.cpp entry in API/DSH and the Strata desktop selector, with both GPUs,128K allocation and existing MTP. Actual read/tool-result/exact follow-up, guards and owned unload passed;506 CPU regressions passed. The IQ3_XXS entry and global default remain. All RAM/VRAM/thermal/swap guards are preserved; IQ1_S weights remain inactive for rollback and share the28.8GB table with IQ1_M. Idle API/hub were reloaded to load the previously changed RAM validator, and DSH selections migrated. No active jobs, reservations or pending transaction/publication remain; next action is normal use. [Benchmarks, guards and retirement](docs/FLASH-IQ1M-STRATA-20261105.md).
+Qualified `flash-next-iq1m-strata` replaces the IQ1_S llama.cpp entry in API/DSH and the Strata desktop selector, with both GPUs,128K allocation and existing MTP. Actual read/tool-result/exact follow-up, guards and owned unload passed;506 CPU regressions passed. The IQ3_XXS entry and global default remain. All RAM/VRAM/thermal/swap guards are preserved; IQ1_S weights were subsequently removed by explicit request; IQ1_M retains its28.8GB table. Idle API/hub were reloaded to load the previously changed RAM validator, and DSH selections migrated. No active jobs, reservations or pending transaction/publication remain; next action is normal use. [Benchmarks, guards and retirement](docs/FLASH-IQ1M-STRATA-20261105.md).
 
 ## All13 model entries share RAM ceilings — November5,2026
 

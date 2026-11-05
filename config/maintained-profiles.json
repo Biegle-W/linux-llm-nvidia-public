@@ -2898,7 +2898,8 @@
           "client_ttft_s": 48.46262081999885,
           "meaningful_sse_chunks": 19
         },
-        "checkpoint_retained_for_rollback": true
+        "checkpoint_retained_for_rollback": false,
+        "checkpoint_cleanup_evidence": "docs/validation-results/20261105-iq1s-weight-removal.json"
       }
     }
   ],

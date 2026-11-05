@@ -98,7 +98,9 @@
   "shared_table_bytes": 28800138432,
   "new_physical_checkpoint_bytes": 39206956506,
   "shared_table_verified_same_inode": true,
-  "old_checkpoint_deleted": false,
+  "old_checkpoint_deleted": true,
   "cpu_regressions_passed": 506,
-  "scope": "One actual short DSH tool/result/exact follow-up and owned unload; no sustained/full-context or equal-quality comparison"
+  "scope": "One actual short DSH tool/result/exact follow-up and owned unload; no sustained/full-context or equal-quality comparison",
+  "old_checkpoint_retained_at_qualification": true,
+  "subsequent_cleanup_evidence": "docs/validation-results/20261105-iq1s-weight-removal.json"
 }
