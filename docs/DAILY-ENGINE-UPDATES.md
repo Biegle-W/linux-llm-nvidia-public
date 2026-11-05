@@ -1,5 +1,14 @@
 # NVIDIA daily engine updates
 
+## 2026-11-05T11:44:11
+
+- tensorfold: **pinned-current**; upstream `v1.2.2`.
+- comfyui: **pinned-current**; upstream `v0.44.0`.
+- raylight: **pinned-current**; upstream `1.11.0`.
+- mesh: **pinned-current**; upstream `3804156b4b39`.
+- gguf: **pinned-current**; upstream `6ea2651e7df6`.
+- strata: **rejected-production-preserved**; upstream `c3b3f5035506`.
+
 ## 2026-11-05T05:29:58
 
 - hyperqwen: **unchanged**; upstream `6ab9bd05cb84`.
