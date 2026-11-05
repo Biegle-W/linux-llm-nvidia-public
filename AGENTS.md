@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Maya1.1.54 rejected;1.1.53 retained — November5,2026
+
+The requested updater run built1.1.54 after correcting a missing CUDA13profiler header. Both1.1.53 production DSH baselines passed; native correctness then failed before candidate activation, so1.1.54 DSH checks were not reached. Preserve the selected1.1.53 runtimes and rejection record; do not relabel baseline metrics as1.1.54 or waive failed gates. [Results, blockers and guard tables](docs/MAYA-1154-QUALIFICATION-20261105.md).
+
 ## Recovery verification and terminal hangup — November5,2026
 
 Restored-production short DSH checks must use explicit recovery mode with private captured logs, independently of candidate visibility permission or terminal availability. SIGHUP, SIGTERM and SIGINT must preserve the interruption/rollback path, including interruption during baseline. Candidate visibility and all resource/ownership guards remain. [Review follow-up](docs/DAILY-UPDATER-RESTORATION-20261105.md).

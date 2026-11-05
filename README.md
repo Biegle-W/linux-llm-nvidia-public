@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Maya1.1.54 rejected;1.1.53 retained — November5,2026
+
+The requested updater run built1.1.54 after correcting a missing CUDA13profiler header. Both1.1.53 production DSH baselines passed; native correctness then failed before candidate activation, so1.1.54 DSH checks were not reached. Preserve the selected1.1.53 runtimes and rejection record; do not relabel baseline metrics as1.1.54 or waive failed gates. [Results, blockers and guard tables](docs/MAYA-1154-QUALIFICATION-20261105.md).
+
 ## Daily updater restored — November5,2026
 
 Daily engine maintenance is enabled at03:00 America/Toronto, including guarded headless scheduled tests with private logs. Eight text entries use current grouped staging, paired short actual DSH checks and durable rollback; TensorFold and the diffusion stack receive version monitoring. The repaired exact-owner DSH path and485 CPU regressions passed. All resource guards and the20-minute update-admission gate remain. [Restoration, scope and validation](docs/DAILY-UPDATER-RESTORATION-20261105.md). Earlier paused-update and long-suite paragraphs remain dated history.

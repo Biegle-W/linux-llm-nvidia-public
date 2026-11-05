@@ -1,0 +1,211 @@
+{
+  "date": "2026-11-05",
+  "requested_release": "1.1.54",
+  "requested_source_commit": "c1670044bbc09310f35f9d00f7596c50ae8a38f1",
+  "outcome": "rejected-production-preserved",
+  "selected_release": "1.1.53",
+  "selected_source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
+  "attempts": [
+    {
+      "stage": "build",
+      "outcome": "failed before activation",
+      "cause": "Missing SDK-local cuda_profiler_api.h selected an incompatible system CUDA header",
+      "correction": "Installed nvidia-cuda-profiler-api13.0.85 in isolated engine-tools; added real host-header preflight",
+      "production_changed": false
+    },
+    {
+      "stage": "native correctness gate",
+      "outcome": "failed before activation",
+      "build_targets_completed": 464,
+      "binary_linkage_and_frontend_adapter": "pass",
+      "production_DSH_baselines": {
+        "glm-maya": {
+          "profile": "glm-maya",
+          "context": 65536,
+          "prefill_tps": 498.9,
+          "ttft_s": 11.110599763997016,
+          "decode_tps": 14.6,
+          "prompt_tokens": 5440,
+          "output_tokens": 26,
+          "cached_tokens": 0,
+          "checks": {
+            "tool": true,
+            "tool_result": true,
+            "followup": true,
+            "unload": true
+          },
+          "resources_passed": true,
+          "telemetry_samples": 10
+        },
+        "deepseek-maya": {
+          "profile": "deepseek-maya",
+          "context": 32768,
+          "prefill_tps": 182.5,
+          "ttft_s": 32.64736869400076,
+          "decode_tps": 6.8,
+          "prompt_tokens": 5701,
+          "output_tokens": 60,
+          "cached_tokens": 0,
+          "checks": {
+            "tool": true,
+            "tool_result": true,
+            "followup": true,
+            "unload": true
+          },
+          "resources_passed": true,
+          "telemetry_samples": 26
+        }
+      },
+      "native_suite": {
+        "physical_GPU_index": 0,
+        "total": 115,
+        "passed": 102,
+        "failed": 4,
+        "not_run": 9,
+        "failures": [
+          {
+            "test": "ds4_engram_reader_test",
+            "status": "Not Run"
+          },
+          {
+            "test": "ds4_multi_attn_plan_test",
+            "status": "Not Run"
+          },
+          {
+            "test": "ds4_prompt_mem_test",
+            "status": "Not Run"
+          },
+          {
+            "test": "ds4_cpu_prepare_rows_test",
+            "status": "Not Run"
+          },
+          {
+            "test": "ds4_cpu_prepare_stub_test",
+            "status": "Not Run"
+          },
+          {
+            "test": "hipblaslt_table_list_test",
+            "status": "Not Run"
+          },
+          {
+            "test": "env_report_test",
+            "status": "Not Run"
+          },
+          {
+            "test": "idle_gate_test",
+            "status": "Not Run"
+          },
+          {
+            "test": "glm_layer_graph_test",
+            "status": "Failed"
+          },
+          {
+            "test": "mm3_gguf_test",
+            "status": "Failed"
+          },
+          {
+            "test": "glm_model_big_gen",
+            "status": "Failed"
+          },
+          {
+            "test": "glm_model_big_test",
+            "status": "Not Run"
+          },
+          {
+            "test": "ple_parity",
+            "status": "Failed"
+          }
+        ],
+        "prefill_wmma_parity": {
+          "result": "pass",
+          "seconds": 171.35,
+          "upstream_timeout_s": 300
+        }
+      },
+      "physical_GPU1_native_suite": "not reached after GPU0 suite failure",
+      "candidate_1_1_54_DSH": "not reached; no candidate performance or tool qualification claim",
+      "provisional_activation": false
+    }
+  ],
+  "findings": {
+    "missing_default_build_targets": [
+      "ds4_engram_reader_test",
+      "ds4_multi_attn_plan_test",
+      "ds4_prompt_mem_test",
+      "ds4_cpu_prepare_rows_test",
+      "ds4_cpu_prepare_stub_test",
+      "hipblaslt_table_list_test",
+      "env_report_test",
+      "idle_gate_test"
+    ],
+    "fixture_generation": "system Python lacked NumPy; generator failed and its dependent test did not run",
+    "PLE_fixture": "unconfigured Qwen native test requires its default Q2_0 table/pack, unavailable in that development layout",
+    "GLM_graph_cache": "test requires invalidations>0; current multi-key cache retains entries and does not increment that counter",
+    "MiniMax_numeric": "mm3_gguf_test fails two mixed IQ2_XXS/IQ2_XS/IQ2_XS400-row checks; reported max relative error0.974. MiniMax is not a configured entry."
+  },
+  "validation": {
+    "real_CUDA_host_probe": "pass",
+    "CPU_tests": {
+      "count": 496,
+      "result": "pass"
+    },
+    "public_preflight_tests": {
+      "count": 25,
+      "result": "pass"
+    },
+    "model_weights_downloaded": false,
+    "drivers_or_kernel_changed": false,
+    "resource_guards_changed": false,
+    "full_context_or_sustained_model_tests": false
+  },
+  "effective_baseline_guards": {
+    "worker_RAM_high_max_GiB": [
+      87.76984786987305,
+      89.76984786987305
+    ],
+    "host_available_floor_GiB": 2,
+    "native_GPU_reserve_MiB_each": 1024,
+    "swap_occupancy": "unlimited",
+    "swap_writes_combined_MiB_s": [
+      128,
+      160
+    ],
+    "swap_window_s": 30,
+    "GLM_active_full_PSI_percent": 10,
+    "DeepSeek_active_full_PSI_percent": 15,
+    "temperature_stop_C": 100,
+    "bad_samples": 3,
+    "resource_sampling_interval_s": 2,
+    "parallel_requests": 1,
+    "idle_timeout_s": 600
+  },
+  "next_work": [
+    "Build the registered EXCLUDE_FROM_ALL test executables before CTest",
+    "Select a NumPy-capable interpreter for synthetic GLM fixture generation",
+    "Resolve required PLE test fixtures without downloading unneeded model weights",
+    "Reconcile graph-cache test expectations with the multi-key implementation",
+    "Investigate mixed-quant MiniMax numerical failure; do not waive failed native gates to promote1.1.54",
+    "Only after native gates pass, run paired1.1.54 DSH checks and assess promotion"
+  ],
+  "final_health": {
+    "10100": {
+      "reachable": true,
+      "idle": true
+    },
+    "10101": {
+      "reachable": true,
+      "idle": true
+    },
+    "DSH_HTTP": 200,
+    "GPU_LOCK_present": false,
+    "GPU_memory_used_MiB": [
+      "15",
+      "14"
+    ],
+    "updater_service": "inactive",
+    "timer": "ActiveState=active\nNextElapseUSecRealtime=Fri 2026-11-06 03:00:00 EST",
+    "pending": false,
+    "reserved": false,
+    "publication_pending": false
+  }
+}
