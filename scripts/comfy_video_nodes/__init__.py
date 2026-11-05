@@ -1,8 +1,10 @@
-"""GPU-only prompt preparation and regular loaders for isolated video trials."""
+"""GPU-only video entry orchestration and pinned phase loaders."""
 import json
 import os
 from pathlib import Path
 import time
+import subprocess
+import uuid
 import torch
 import folder_paths
 import comfy.sd
@@ -14,6 +16,7 @@ ROOT=Path(__file__).resolve().parents[2]
 PINS=json.loads((ROOT/'config/comfy-video-trial.json').read_text())
 
 def file(name,model=0):
+    assert not os.environ.get('COMFY_VIDEO_ENTRY') or os.environ.get('COMFY_VIDEO_ENTRY_CHILD')=='1','Use the selected video workflow entry'
     row=next(row for row in PINS['models'][model]['files'] if row['file'].endswith('/'+name) or row['file']==name)
     return str(ROOT/PINS['checkpoint_directory']/row['file'])
 
@@ -77,6 +80,9 @@ class VideoVAE:
         vae.patcher.model.to(vae.device)
         return (vae,)
 
+def require_bounded_ltx_tokens(tokens):
+    assert tokens and all(len(batches)==1 and len(batches[0])<=256 for batches in tokens.values()), 'LTX prompt exceeds the qualified256-token encoder limit; shorten the caption'
+
 class PrepareLTXPrompt(PrepareWanPrompt):
     def prepare(self,prompt):
         from comfy_mesh_gguf import gguf_nodes
@@ -101,7 +107,9 @@ class PrepareLTXPrompt(PrepareWanPrompt):
                 return projection(value.to('cuda:1')).to(value.device)
         clip.patcher.model.text_embedding_projection=ProjectionOnSecondGPU()
         assert all(p.device==torch.device('cuda:1') for p in projection.parameters())
-        positive=clip.encode_from_tokens_scheduled(clip.tokenize(prompt))
+        tokens=clip.tokenize(prompt)
+        require_bounded_ltx_tokens(tokens)
+        positive=clip.encode_from_tokens_scheduled(tokens)
         negative=clip.encode_from_tokens_scheduled(clip.tokenize('blurred, static image, distorted anatomy, text, watermark'))
         assert all(p.device.type=='cuda' for p in clip.patcher.model.parameters())
         torch.save(dict(positive=cpu_activations(positive),negative=cpu_activations(negative)),WORK.parent/'ltx-conditioning.pt')
@@ -153,7 +161,32 @@ class ReleaseMeshServer:
             time.sleep(0.1)
         return (samples,)
 
-NODE_CLASS_MAPPINGS={'NvidiaPrepareWanPrompt':PrepareWanPrompt,'NvidiaPreparedWanConditioning':PreparedWanConditioning,
+class VideoEntry:
+    @classmethod
+    def INPUT_TYPES(cls):
+        entry=os.environ.get('COMFY_VIDEO_ENTRY','wan22-5b')
+        return {'required':{'entry':([entry],),'prompt':('STRING',{'multiline':True,'default':'A red fox standing in snow slowly turns its head toward the camera and blinks. Gentle snowflakes drift through the air. Static camera, natural sunrise light, realistic smooth motion.'}),'seed':('INT',{'default':27001,'min':0,'max':2**64-1,'control_after_generate':True})}}
+    RETURN_TYPES=('VIDEO',)
+    FUNCTION='generate'
+    CATEGORY='NVIDIA/video'
+    def generate(self,entry,prompt,seed):
+        from comfy_api.latest import InputImpl
+        assert os.environ.get('COMFY_VIDEO_ENTRY')==entry and not os.environ.get('COMFY_VIDEO_ENTRY_CHILD'),'Cross-entry generation forbidden'
+        assert prompt.strip() and len(prompt)<=4000,'Use a non-empty prompt up to4000 characters'
+        job=WORK/'jobs'/uuid.uuid4().hex;job.mkdir(parents=True)
+        (job/'request.json').write_text(json.dumps(dict(entry=entry,prompt=prompt,seed=seed))+'\n')
+        process=subprocess.Popen([str(ROOT/PINS['python']),str(ROOT/'scripts/comfy_video_job.py'),str(job)],start_new_session=True)
+        try:
+            while process.poll() is None:
+                mm.throw_exception_if_processing_interrupted();time.sleep(0.2)
+            assert process.returncode==0,'Video job failed; inspect the foreground backend log'
+            result=json.loads((job/'result.json').read_text())
+            return (InputImpl.VideoFromFile(result['video']),)
+        finally:
+            from comfy_video_entries import stop_job_group
+            stop_job_group(process)
+
+NODE_CLASS_MAPPINGS={'NvidiaVideoEntry':VideoEntry,'NvidiaPrepareWanPrompt':PrepareWanPrompt,'NvidiaPreparedWanConditioning':PreparedWanConditioning,
                      'NvidiaVideoDenoiser':VideoDenoiser,'NvidiaVideoVAE':VideoVAE,
                      'NvidiaPrepareLTXPrompt':PrepareLTXPrompt,'NvidiaPreparedLTXConditioning':PreparedLTXConditioning,
                      'NvidiaMeshDenoiser':MeshDenoiser,'NvidiaMeshVAE':MeshVAE,'NvidiaReleaseMeshServer':ReleaseMeshServer}

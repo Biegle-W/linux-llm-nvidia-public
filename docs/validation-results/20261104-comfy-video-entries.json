@@ -1,0 +1,108 @@
+{
+  "date": "2026-11-04",
+  "scope": "Selected ComfyUI video entries and Desktop-only launchers; text API/DSH unchanged",
+  "registry": "config/comfy-video-entries.json",
+  "CPU_weight_offload": false,
+  "arms": {
+    "wan22-5b": {
+      "status": "pass",
+      "requests": [
+        {
+          "seed": 27001,
+          "wall_s": 20.253269906999776,
+          "sha256": "ed1d16ae57f634562a8dc6365db0589f4e5cefa766546d13e3cb83cf194df9ad",
+          "frames": 33,
+          "width": 512,
+          "height": 288,
+          "audio_samples": 0
+        },
+        {
+          "seed": 27002,
+          "wall_s": 19.222577010998066,
+          "sha256": "da0104cb403517c0e465697de3060d29e85dfba31bc5a4d52a9d55519bf3558a",
+          "frames": 33,
+          "width": 512,
+          "height": 288,
+          "audio_samples": 0
+        }
+      ],
+      "audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 1602,
+        "processes": 4
+      },
+      "resources": {
+        "minimum_GPU_free_MiB": [
+          1530.0,
+          6096.0
+        ],
+        "max_temperature_C": [
+          55.0,
+          42.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 0
+      },
+      "worker_inactive": true,
+      "reservation_released": true
+    },
+    "ltx23-mesh": {
+      "status": "pass",
+      "requests": [
+        {
+          "seed": 27001,
+          "wall_s": 35.4265136369977,
+          "sha256": "b5aa7e42608899219f19d4079a73314bc425cfbea43dc586f4b0f21a0148e466",
+          "frames": 33,
+          "width": 512,
+          "height": 288,
+          "audio_samples": 63840
+        },
+        {
+          "seed": 27002,
+          "wall_s": 35.4071120630033,
+          "sha256": "4a2512e2a5ff0cbb6bbc49cf0e124f7185e347872eb1215624dadb160b872557",
+          "frames": 33,
+          "width": 512,
+          "height": 288,
+          "audio_samples": 63840
+        }
+      ],
+      "audit": {
+        "physical_gpu_count": 2,
+        "audited_modules": 7086,
+        "processes": 6
+      },
+      "resources": {
+        "minimum_GPU_free_MiB": [
+          1260.0,
+          1331.0
+        ],
+        "max_temperature_C": [
+          59.0,
+          45.0
+        ],
+        "max_swap_bytes": 0,
+        "max_bad_samples": 0
+      },
+      "worker_inactive": true,
+      "reservation_released": true
+    }
+  },
+  "CPU_tests_passed": 455,
+  "UI_checks": {
+    "wan22-5b": {
+      "frontend_HTTP_and_selected_nodes_passed": true,
+      "persistent_workflow_installed": true,
+      "worker_inactive": true,
+      "reservation_released": true
+    },
+    "ltx23-mesh": {
+      "frontend_HTTP_and_selected_nodes_passed": true,
+      "persistent_workflow_installed": true,
+      "worker_inactive": true,
+      "reservation_released": true
+    }
+  },
+  "desktop_file_validate": "passed for both new and both preserved image launchers"
+}

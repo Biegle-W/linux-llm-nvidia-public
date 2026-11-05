@@ -95,5 +95,6 @@
     "loading_full_PSI_percent": 15,
     "idle_unload_s": 600,
     "parallel_execution": 1
-  }
+  },
+  "video_entries": "config/comfy-video-entries.json"
 }

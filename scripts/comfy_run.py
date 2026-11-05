@@ -57,7 +57,8 @@ def graph(model, seed, size=1024):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--model',choices=['qwen-image-2.1-turbo','flux3-klein','wan22-5b-raylight','ltx23-mesh'],required=True)
+    parser.add_argument('--model',choices=['qwen-image-2.1-turbo','flux3-klein','wan22-5b','wan22-5b-raylight','ltx23-mesh'],required=True)
+    parser.add_argument('--video-entry',action='store_true',help='Use the selected interactive video workflow')
     parser.add_argument('--video-stage',choices=['prepare','baseline','raylight','mesh-prepare','mesh'])
     parser.add_argument('--size',type=int,choices=[1024,2048,4096],default=1024,help='Square image width/height in pixels')
     mode=parser.add_mutually_exclusive_group()
@@ -65,13 +66,19 @@ def main():
     mode.add_argument('--check-ui',action='store_true')
     parser.add_argument('--foreground-backend',action='store_true',help='Show backend logs in this same visible foreground terminal')
     args=parser.parse_args()
-    if args.model in ('wan22-5b-raylight','ltx23-mesh'):
+    entry=None
+    if args.video_entry:
+        from comfy_video_entries import entry as get_entry
+        entry=get_entry(args.model)
+        assert args.video_stage is None,'Entry mode owns encoding and rendering stages'
+        args.video_stage='entry'
+    elif args.model in ('wan22-5b-raylight','ltx23-mesh'):
         expected=('mesh-prepare','mesh') if args.model=='ltx23-mesh' else ('prepare','baseline','raylight')
         assert args.video_stage in expected,'Select a matching experimental video stage'
         assert not args.serve,'Video candidates have no production serving qualification'
         from comfy_video_trial import graph as validate_video_graph
         validate_video_graph(args.video_stage,27001)
-    else:assert args.video_stage is None,'Video stage requires a video candidate'
+    else:assert args.video_stage is None and args.model!='wan22-5b','Select video entry mode for this model'
     def interrupted(*_):raise KeyboardInterrupt('Owned ComfyUI coordinator interrupted')
     signal.signal(signal.SIGTERM,interrupted)
     signal.signal(signal.SIGINT,interrupted)
@@ -81,7 +88,8 @@ def main():
     config=json.loads((ROOT/'config/comfy-runtime.json').read_text())
     if args.video_stage:
         trial=json.loads((ROOT/'config/comfy-video-trial.json').read_text())
-        config=dict(config,models=trial['models'],checkpoint_directory=trial['checkpoint_directory'])
+        models=trial['models'] if entry is None else [dict(next(row for row in trial['models'] if row['id']==entry['trial_id']),id=args.model)]
+        config=dict(config,models=models,checkpoint_directory=trial['checkpoint_directory'])
     model=next(x for x in config['models'] if x['id']==args.model)
     base=ROOT/'data/comfy-video-dual-20261104/stages' if args.video_stage else ROOT/'data/comfy-qualification-20261105'
     work=base/time.strftime('%H%M%S-'+args.model+'-'+(args.video_stage or str(args.size)))
@@ -90,8 +98,8 @@ def main():
     (work/'images').mkdir()
     if args.video_stage:
         (work/'video-stage.json').write_text(json.dumps(dict(stage=args.video_stage)))
-    if args.serve:
-        (work/'serve').touch()
+    if args.serve or (args.check_ui and args.video_entry):(work/'serve').touch()
+    if args.serve or args.video_entry:
         folder=ROOT/'data/comfy-user'/args.model/'default/workflows'
         folder.mkdir(parents=True,exist_ok=True)
         for source in (ROOT/'config/comfy-workflows').glob('*.json'):
@@ -186,8 +194,14 @@ def main():
                 assert response.status==200 and 'ComfyUI' in html
             info=request('/object_info')
             if args.video_stage:
+                from comfy_video_entries import graph as entry_graph
                 from comfy_video_trial import graph as video_graph
-                assert all(node['class_type'] in info for node in video_graph(args.video_stage,27001).values())
+                candidate=entry_graph(args.model) if entry else video_graph(args.video_stage,27001)
+                assert all(node['class_type'] in info for node in candidate.values())
+                if entry:
+                    assert info['NvidiaVideoEntry']['input']['required']['entry'][0]==[args.model]
+                    installed=ROOT/'data/comfy-user'/args.model/'default/workflows'/(args.model+'.json')
+                    assert installed.is_file(),'Selected workflow missing from persistent ComfyUI library'
             else:
                 for candidate in config['models']:
                     assert all(node['class_type'] in info for node in graph(candidate,27001).values())
@@ -197,7 +211,10 @@ def main():
         else:
             state['runs']=[]
             for seed in ((27001,) if args.video_stage in ('prepare','mesh-prepare','mesh') else (27001,27002)):
-                if args.video_stage:
+                if args.video_entry:
+                    from comfy_video_entries import graph as entry_graph
+                    prompt=entry_graph(args.model,seed)
+                elif args.video_stage:
                     from comfy_video_trial import graph as video_graph
                     prompt=video_graph(args.video_stage,seed)
                 else:prompt=graph(model,seed,args.size)
@@ -214,8 +231,13 @@ def main():
                 result=history[ident];(work/f'history-{seed}.json').write_text(json.dumps(result,indent=2)+'\n')
                 assert result['status']['status_str']=='success',str(result['status'])[:1000]
                 if args.video_stage:
-                    from comfy_video_trial import output
-                    state['runs'].append(output(ROOT,work,args.video_stage,seed,time.monotonic()-started))
+                    if args.video_entry:
+                        from comfy_video_entries import output
+                        stage_or_id=args.model
+                    else:
+                        from comfy_video_trial import output
+                        stage_or_id=args.video_stage
+                    state['runs'].append(output(ROOT,work,stage_or_id,seed,time.monotonic()-started))
                     save();print('Video stage PASS: '+json.dumps(state['runs'][-1]),flush=True)
                     continue
                 images=result['outputs']['9']['images'];assert len(images)==1

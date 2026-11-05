@@ -71,11 +71,11 @@ def output(root,work,stage,seed,elapsed):
     return dict(seed=seed,wall_s=elapsed,video=str(image),video_sha256=hashlib.sha256(image.read_bytes()).hexdigest(),**value)
 
 def audit(work):
-    paths=list((work/'forward-audits').glob('*.jsonl'))
+    paths=list(work.rglob('forward-audits/*.jsonl'))
     rows=[json.loads(line) for path in paths for line in path.read_text().splitlines()]
     assert rows and not any(row.get('violation') for row in rows),'GPU-forward residency audit failed/missing'
     assert all(all(device.startswith('cuda:') for device in row['devices']) for row in rows)
     uuids=sorted({uuid for row in rows for uuid in row.get('cuda_device_uuids',[])})
-    if (work/'video-stage.json').exists() and json.loads((work/'video-stage.json').read_text())['stage'] in ('baseline','raylight','mesh','mesh-prepare'):
+    if (work/'video-stage.json').exists() and json.loads((work/'video-stage.json').read_text())['stage'] in ('baseline','raylight','mesh','mesh-prepare','entry'):
         assert len(uuids)==2,'Both physical GPUs must have audited neural forwards'
     return dict(physical_gpu_count=len(uuids),audited_modules=len(rows),processes=len(paths),physical_GPU_assignments=sorted({row['CUDA_VISIBLE_DEVICES'] or '' for row in rows}))

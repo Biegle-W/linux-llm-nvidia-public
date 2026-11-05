@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## ComfyUI video entries and launchers installed — November4,2026
+
+Selected **ComfyUI Wan 2.2 5B** and **ComfyUI LTX 2.3 Mesh** workflows/desktop launchers now support prompt/seed generation at512x288x33frames, with fresh GPU-only encoder/render phases and automatic LTX back-half release/restart. Both passed two consecutive frontend requests: Wan20.253/19.223s; LTX35.427/35.407s including prompt preparation and worker startup. Guards, both image launchers and the nine text API/DSH entries remain unchanged. [Usage, registry and qualification](docs/COMFY-VIDEO-ENTRIES-20261104.md).
+
 [Generated image and video samples](assets/samples/comfy/README.md). Metadata-free copies preserve the tested media content.
 
 ## ComfyUI two-GPU video trials complete — November4,2026

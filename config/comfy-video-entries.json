@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "scope": "ComfyUI workflow entries; separate from text API/DSH",
+  "defaults": {
+    "width": 512,
+    "height": 288,
+    "frames": 33,
+    "CPU_weight_offload": false
+  },
+  "models": [
+    {
+      "id": "wan22-5b",
+      "name": "ComfyUI Wan 2.2 5B",
+      "trial_id": "wan22-5b-raylight",
+      "prepare_stage": "prepare",
+      "render_stage": "baseline",
+      "engine": "ComfyUI regular GPU0 denoiser / GPU1 VAE",
+      "fps": 16,
+      "status": "selected-bounded-workflow",
+      "workflow": "config/comfy-workflows/wan22-5b.json",
+      "api_workflow": "config/comfy-workflows/wan22-5b.api.json",
+      "desktop_launcher": "ComfyUI Wan 2.2 5B.desktop"
+    },
+    {
+      "id": "ltx23-mesh",
+      "name": "ComfyUI LTX 2.3 Mesh",
+      "trial_id": "ltx23-mesh",
+      "prepare_stage": "mesh-prepare",
+      "render_stage": "mesh",
+      "engine": "ComfyUI Mesh Q4_0,28/20blocks, phased GPU1 reuse",
+      "fps": 24,
+      "status": "selected-bounded-workflow",
+      "workflow": "config/comfy-workflows/ltx23-mesh.json",
+      "api_workflow": "config/comfy-workflows/ltx23-mesh.api.json",
+      "desktop_launcher": "ComfyUI LTX 2.3 Mesh.desktop"
+    }
+  ],
+  "prompt_max_characters": 4000
+}

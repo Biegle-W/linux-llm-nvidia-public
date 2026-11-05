@@ -38,11 +38,13 @@ env = dict(os.environ, CUDA_VISIBLE_DEVICES='0,1', CUDA_DEVICE_ORDER='PCI_BUS_ID
            NCCL_P2P_DISABLE='1', PYTHONUNBUFFERED='1', HF_HUB_OFFLINE='1',
            HF_HUB_DISABLE_TELEMETRY='1', DO_NOT_TRACK='1', COMFY_PLACEMENT_LOG=str(WORK/'placement.jsonl'), COMFY_MODEL_ID=model_id)
 ray_temp = Path(tempfile.mkdtemp(prefix='nv-ray-')) if video_trial else None
+entry_trial = video_trial and json.loads((WORK/'video-stage.json').read_text())['stage']=='entry'
 mesh_trial = video_trial and json.loads((WORK/'video-stage.json').read_text())['stage']=='mesh'
 if video_trial:
     env.update(COMFY_VIDEO_WORK=str(WORK),COMFY_VIDEO_AUDIT_DIR=str(WORK/'forward-audits'),
                PYTHONPATH=os.pathsep.join([str(ROOT/'scripts/comfy_video_hook'),str(ROOT/'scripts'),str(ROOT/'runtimes/raylight/src'),str(ROOT/config['runtime'])]),
                RAYLIGHT_RAY_TMPDIR=str(ray_temp),RAY_TMPDIR=str(ray_temp),RAY_USAGE_STATS_ENABLED='0',NCCL_P2P_DISABLE='1',NCCL_DEBUG='INFO')
+if entry_trial:env['COMFY_VIDEO_ENTRY']=model_id
 user_directory = ROOT/'data/comfy-user'/model_id if (WORK/'serve').exists() else WORK/'user'
 output_directory = ROOT/'data/comfy-output'/model_id if (WORK/'serve').exists() else WORK/'images'
 user_directory.mkdir(parents=True,exist_ok=True)
@@ -50,7 +52,7 @@ output_directory.mkdir(parents=True,exist_ok=True)
 command = [str(ROOT/config['python']), str(ROOT/config['runtime']/'main.py'), '--listen','127.0.0.1',
            '--port','8188','--disable-auto-launch','--gpu-only','--disable-dynamic-vram',
            '--disable-async-offload','--use-pytorch-cross-attention','--reserve-vram','0.5',
-           '--offline','--disable-all-custom-nodes','--whitelist-custom-nodes',*(['nvidia_video','comfyui_mesh'] if mesh_trial else ['nvidia_video','raylight'] if video_trial else ['nvidia_resident']),
+           '--offline','--disable-all-custom-nodes','--whitelist-custom-nodes',*(['nvidia_video'] if entry_trial else ['nvidia_video','comfyui_mesh'] if mesh_trial else ['nvidia_video','raylight'] if video_trial else ['nvidia_resident']),
            '--extra-model-paths-config',str(WORK/'extra-model-paths.yaml'),
            '--output-directory',str(output_directory),'--user-directory',str(user_directory)]
 if video_trial:

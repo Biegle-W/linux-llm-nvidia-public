@@ -33,6 +33,11 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'config/comfy-video-entries.json', 'config/comfy-workflows/wan22-5b.json',
+    'config/comfy-workflows/wan22-5b.api.json', 'config/comfy-workflows/ltx23-mesh.json',
+    'config/comfy-workflows/ltx23-mesh.api.json', 'scripts/comfy_video_entries.py', 'scripts/comfy_video_job.py',
+    'tests/test_comfy_video_entries.py', 'docs/COMFY-VIDEO-ENTRIES-20261104.md',
+    'docs/validation-results/20261104-comfy-video-entries.json',
     *SAMPLE_MEDIA,
     'assets/samples/comfy/README.md', 'assets/samples/comfy/manifest.json',
     'tests/test_public_sample_media.py',

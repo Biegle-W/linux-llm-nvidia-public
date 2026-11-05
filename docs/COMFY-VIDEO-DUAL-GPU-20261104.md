@@ -1,5 +1,7 @@
 # Guarded two-GPU video trials — November 4, 2026
 
+The initial trials below are now followed by [selected ComfyUI workflow entries and Desktop launchers](COMFY-VIDEO-ENTRIES-20261104.md). Historical candidate status and timing scopes below describe the original trials.
+
 [Generated image and video samples](../assets/samples/comfy/README.md). Metadata-free copies preserve the tested media content.
 
 These are isolated candidate trials on the RTX3080Ti12GB + RTX308010GB pair. No video entry has been promoted into the production API or desktop selectors. The existing nine LLM entries and two image workflows remain unchanged.
