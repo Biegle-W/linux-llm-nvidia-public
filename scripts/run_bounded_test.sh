@@ -19,8 +19,14 @@ if [[ "$name" == qwen27b && $# -eq 3 && "$1" == /usr/bin/python3 &&
       "$2" == "$root/scripts/supervise_dense.py" &&
       ( "$3" == hyperqwen || "$3" == sglang || "$3" == tensorfold ) ]]; then
   swap_limit=infinity
-  ram_high=32G
-  ram_max=36G
+  read -r ram_high ram_max < <(/usr/bin/python3 - "$root" "$3" <<'PY'
+import sys
+sys.path.insert(0,sys.argv[1]+'/scripts')
+from profile_catalog import get_profile,worker_budget,budget_limit_string
+budget=worker_budget(get_profile('qwen27b-'+sys.argv[2]))
+print(budget_limit_string(budget['high']),budget_limit_string(budget['max']))
+PY
+  )
 fi
 monitor_args=(--title "LLM: $name" --unit "llm-test-${name}.service")
 if [[ "$name" == qwen27b ]]; then

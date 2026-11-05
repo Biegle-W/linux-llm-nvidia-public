@@ -17,6 +17,7 @@ import uuid
 from cli_short_models import inactive, property_of
 from gpu_transport_health import require_host_staged
 from pair_p2p_health import require_verified_pair
+from profile_catalog import comfy_worker_budget, budget_systemd_size, require_host_capacity
 
 ROOT = Path(__file__).resolve().parents[1]
 UNIT = 'llm-comfy-images.service'
@@ -94,6 +95,8 @@ def main():
     assert sys.stdin.isatty() and sys.stdout.isatty(),'Use visible_terminal.py foreground'
     os.umask(0o077)
     config=json.loads((ROOT/'config/comfy-runtime.json').read_text())
+    budget=comfy_worker_budget(config)
+    require_host_capacity(dict(id='comfy',minimum_usable_ram_gib=config['minimum_usable_ram_gib']))
     if args.video_stage:
         trial=json.loads((ROOT/'config/comfy-video-trial.json').read_text())
         models=trial['models'] if entry is None else [dict(next(row for row in trial['models'] if row['id']==entry['trial_id']),id=args.model)]
@@ -179,8 +182,8 @@ def main():
         else:
             from visible_terminal import open_monitor
             open_monitor('ComfyUI dual-GPU backend',UNIT,[work/'engine.log'])
-        subprocess.run(['systemd-run','--user','--collect','--unit='+UNIT,'--property=MemoryHigh=32G',
-                        '--property=MemoryMax=36G','--property=MemorySwapMax=infinity','--property=OOMPolicy=kill',
+        subprocess.run(['systemd-run','--user','--collect','--unit='+UNIT,'--property=MemoryHigh='+budget_systemd_size(budget['high']),
+                        '--property=MemoryMax='+budget_systemd_size(budget['max']),'--property=MemorySwapMax=infinity','--property=OOMPolicy=kill',
                         '--property=KillMode=control-group','--property=TimeoutStopSec=45','--property=NoNewPrivileges=yes',
                         '--property=UMask=0077','--property=StandardOutput=append:'+str(work/'engine.log'),
                         '--property=StandardError=append:'+str(work/'engine.log'),'/usr/bin/python3',

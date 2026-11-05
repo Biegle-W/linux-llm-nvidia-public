@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## All13 model entries share RAM ceilings — November5,2026
+
+Every maintained text, image and video entry now uses87.77/89.77GiB worker RAM high/max, retaining exactly2GiB outside the hard cap. Dense launchers and shared ComfyUI launch/admission paths use the selected configuration; all other guards, contexts and placement remain unchanged.501 CPU regressions and a real no-GPU systemd cgroup check passed. All inference workers were idle; no model benchmark was repeated. No jobs or locks remain; next action is normal use. [Change and verification](docs/ALL-MODEL-RAM-CEILINGS-20261105.md).
+
 ## Strata0.2.11 selected after reviewed qualification — November5,2026
 
 Both existing Strata profiles passed short actual DSH tool/result/exact follow-up, resource checks and owned unload. Flash-Next passed the strict paired gate; DeepSeek's59-versus60 output tokens initially triggered verified rollback, then the human explicitly accepted that sole mismatch. The preserved signed artifacts were reverified and0.2.11/engines0.1.57 selected. No material speed gain was observed; scheduled gates and all resource limits remain unchanged.500 CPU regressions passed. No active jobs, pending transaction/publication or GPU reservation remains; next action is normal use or a separately requested new-quant trial. [Results, acceptance and guard table](docs/STRATA-0211-QUALIFICATION-20261105.md).

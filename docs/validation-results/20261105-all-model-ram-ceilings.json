@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-05",
+  "text_profile_count": 9,
+  "image_entries": 2,
+  "video_entries": 2,
+  "worker_ram_high_gib": 87.76984786987305,
+  "worker_ram_max_gib": 89.76984786987305,
+  "memory_high_bytes": 94242156544,
+  "memory_max_bytes": 96389640192,
+  "usable_host_bytes": 98537123840,
+  "outside_hard_cap_bytes": 2147483648,
+  "swap_occupancy": "unlimited",
+  "cpu_regressions_passed": 501,
+  "actual_systemd_cgroup_check": "passed; no model or GPU work",
+  "inference_benchmarks_repeated": false,
+  "other_guards_changed": false
+}

@@ -80,8 +80,8 @@
   "torch": "2.13.0+cu130",
   "python_version": "3.13.17",
   "guard_policy": {
-    "worker_ram_high_GiB": 32,
-    "worker_ram_max_GiB": 36,
+    "worker_ram_high_GiB": 87.76984786987305,
+    "worker_ram_max_GiB": 89.76984786987305,
     "host_available_min_GiB": 2,
     "gpu_free_min_MiB": 256,
     "temperature_max_C": 100,
@@ -96,5 +96,6 @@
     "idle_unload_s": 600,
     "parallel_execution": 1
   },
-  "video_entries": "config/comfy-video-entries.json"
+  "video_entries": "config/comfy-video-entries.json",
+  "minimum_usable_ram_gib": 90
 }

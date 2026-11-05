@@ -20,13 +20,15 @@ All November5 first calls reported zero native cached tokens; OS file caches wer
 
 ## Effective resource guards
 
+[November5 RAM-ceiling update](ALL-MODEL-RAM-CEILINGS-20261105.md): all13 entries now use87.77/89.77GiB. The performance observations above predate the dense/ComfyUI ceiling change; no inference was repeated for this configuration-only update. Historical reports preserve their original limits.
+
 All profiles retain2GiB host available, **100C** temperature stops, three bad2-second resource samples, fail-closed telemetry, swappiness60, parallel1 and idle600s. Swap occupancy is unlimited; active write/combined-I/O limits below are MiB/s over30seconds. Active full-PSI uses three bad samples. Short calls may not fill the averaging window. These are configured limits, not measured peak usage. Historical observations retain their original temperature policies.
 
 | Profile | Worker RAM high/max GiB | GPU policy | Active swap writes/combined | Active/loading PSI % |
 | --- | ---: | --- | ---: | --- |
-| qwen27b-hyperqwen | 32.00/36.00 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
-| qwen27b-sglang | 32.00/36.00 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
-| qwen27b-tensorfold | 32.00/36.00 | 256 MiB free/card after ready; GPU0; native1024 MiB reserve | 1/8 | 10 / none separately |
+| qwen27b-hyperqwen | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
+| qwen27b-sglang | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
+| qwen27b-tensorfold | 87.77/89.77 | 256 MiB free/card after ready; GPU0; native1024 MiB reserve | 1/8 | 10 / none separately |
 | flash-next-iq1s-llamacpp | 87.77/89.77 | 256 MiB free/card after ready; 1536 MiB fit targets | 128/160 | 15 / none separately |
 | flash-next-strata | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
 | glm-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 10 / none separately |

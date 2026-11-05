@@ -24,7 +24,7 @@ def worker_budget(profile):
     if (any(type(budget[k]) not in (int, float) or not math.isfinite(budget[k])
                 or budget[k] * 2**30 != int(budget[k] * 2**30) for k in ('high', 'max'))
             or not (0 < budget['high'] <= budget['max'] - 2
-                    and budget['max'] <= (36 if dense else MOE_WORKER_MAX_GIB))):
+                    and budget['max'] <= MOE_WORKER_MAX_GIB)):
         raise ValueError(f"Invalid bounded worker budget: {profile['id']}")
     return dict(budget)
 
@@ -32,6 +32,13 @@ def worker_budget(profile):
 def budget_limit_string(value):
     """Byte-exact cgroup value, including fractional GiB limits."""
     return 'max' if value is None else str(int(value * 2**30))
+
+
+def comfy_worker_budget(config):
+    """Use the shared image/video settings for launch and cgroup admission."""
+    guard=config['guard_policy']
+    return worker_budget({'id':'comfy','worker_memory_gib':{
+        'high':guard['worker_ram_high_GiB'],'max':guard['worker_ram_max_GiB'],'swap':None}})
 
 def budget_systemd_size(value):
     return str(value)+'G' if type(value) is int else budget_limit_string(value)

@@ -6,6 +6,7 @@ import tempfile
 import subprocess
 import unittest
 import os
+import shutil
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'scripts'))
 from profile_catalog import get_profile, worker_budget
 
@@ -16,6 +17,9 @@ class WorkerBudget(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             temp = Path(directory)
             (temp/'scripts').mkdir()
+            (temp/'config').mkdir()
+            shutil.copy2(root/'scripts/profile_catalog.py',temp/'scripts/profile_catalog.py')
+            shutil.copy2(root/'config/maintained-profiles.json',temp/'config/maintained-profiles.json')
             script=temp/'scripts/run_bounded_test.sh'
             script.write_text((root/'scripts/run_bounded_test.sh').read_text())
             # The launcher requires a visible-console handshake before systemd.
@@ -37,8 +41,9 @@ class WorkerBudget(unittest.TestCase):
                 result=subprocess.check_output(['bash',str(script),name,'/usr/bin/python3',command,engine],text=True,env=env)
                 self.assertIn('fixture-console-opened',result)
                 self.assertIn('--property=MemorySwapMax='+limit,result)
-                self.assertIn('--property=MemoryHigh='+'32G',result)
-                self.assertIn('--property=MemoryMax='+'36G',result)
+                high,hard=('94242156544','96389640192') if limit=='infinity' else ('32G','36G')
+                self.assertIn('--property=MemoryHigh='+high,result)
+                self.assertIn('--property=MemoryMax='+hard,result)
     def test_moe_shell_commands_use_managed_router_selection(self):
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as directory:
@@ -55,8 +60,8 @@ class WorkerBudget(unittest.TestCase):
                     self.assertEqual(result, '--model ' + model)
 
     def test_dense_models_have_selected_bounded_ram_caps(self):
-        for name in ['qwen27b-hyperqwen', 'qwen27b-sglang']:
-            self.assertEqual(worker_budget(get_profile(name)), {'high': 32, 'max': 36, 'swap': None})
+        for name in ['qwen27b-hyperqwen', 'qwen27b-sglang','qwen27b-tensorfold']:
+            self.assertEqual(worker_budget(get_profile(name)), {'high':87.76984786987305,'max':89.76984786987305,'swap':None})
 
     def test_all_selected_moe_profiles_use_96gb_ram_budget(self):
         from profile_catalog import load_catalog,host_ram_reserve_gib
@@ -65,11 +70,10 @@ class WorkerBudget(unittest.TestCase):
             if not p['id'].startswith('qwen27b-'):
                 self.assertEqual(worker_budget(p),{'high':87.76984786987305,'max':89.76984786987305,'swap':None})
 
-    def test_dense_cannot_take_the_larger_moe_budget(self):
+    def test_dense_can_take_the_authorized_larger_budget(self):
         p = deepcopy(get_profile('qwen27b-hyperqwen'))
         p['worker_memory_gib'] = {'high': 44, 'max': 48, 'swap': None}
-        with self.assertRaises(ValueError):
-            worker_budget(p)
+        self.assertEqual(worker_budget(p)['max'],48)
 
     def test_moe_accepts_the_bounded_larger_cache_budget(self):
         p = deepcopy(get_profile('deepseek-unsloth-strata'))
@@ -90,7 +94,7 @@ class DenseNativeGuard(unittest.TestCase):
         import serve_qwen27b_engines as engine
         p=get_profile('qwen27b-hyperqwen')
         for unit,high,hard,accepted in [
-                ('llm-test-qwen27b.service',str(32*1024**3),str(36*1024**3),True),
+                ('llm-test-qwen27b.service','94242156544','96389640192',True),
                 ('foreign.service','max','max',False),
                 ('llm-test-qwen27b.service',str(30*1024**3),'max',False),
                 ('llm-test-qwen27b.service','max',str(36*1024**3),False)]:

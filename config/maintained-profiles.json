@@ -121,8 +121,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": 32,
-        "max": 36,
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
         "swap": null
       },
       "latest_qualification": {
@@ -554,8 +554,8 @@
         "checkpoint_directory": "models/engine-tests/qwen38-27b-hyperqwen-fast"
       },
       "worker_memory_gib": {
-        "high": 32,
-        "max": 36,
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
         "swap": null
       },
       "latest_qualification": {
@@ -2730,8 +2730,8 @@
       ],
       "allocated_context": 12288,
       "worker_memory_gib": {
-        "high": 32,
-        "max": 36,
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
         "swap": null
       },
       "host_ram_reserve_gib": 2,

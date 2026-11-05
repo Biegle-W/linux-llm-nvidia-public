@@ -12,10 +12,13 @@ import tempfile
 import shutil
 import urllib.request
 from inference_swap_guard import SwapGuard, read_cgroup
+from profile_catalog import comfy_worker_budget, budget_limit_string, require_host_capacity
 
 ROOT = Path(__file__).resolve().parents[1]
 WORK = Path(sys.argv[1]).resolve()
 config = json.loads((ROOT / 'config/comfy-runtime.json').read_text())
+budget=comfy_worker_budget(config)
+require_host_capacity(dict(id='comfy',minimum_usable_ram_gib=config['minimum_usable_ram_gib']))
 video_trial = (WORK/'video-stage.json').exists()
 if video_trial:
     video_pins=json.loads((ROOT/'config/comfy-video-trial.json').read_text())
@@ -32,8 +35,8 @@ if video_trial:
             assert subprocess.check_output(['git','-C',str(folder),'diff','--',*expected])==patch,'Video patch drift'
 model_id = json.loads((WORK/'state.json').read_text())['model']
 group = Path('/sys/fs/cgroup') / next(x.split(':', 2)[2].lstrip('/') for x in Path('/proc/self/cgroup').read_text().splitlines() if x.startswith('0:'))
-assert (group/'memory.high').read_text().strip() == str(32*1024**3)
-assert (group/'memory.max').read_text().strip() == str(36*1024**3)
+assert (group/'memory.high').read_text().strip() == budget_limit_string(budget['high'])
+assert (group/'memory.max').read_text().strip() == budget_limit_string(budget['max'])
 env = dict(os.environ, CUDA_VISIBLE_DEVICES='0,1', CUDA_DEVICE_ORDER='PCI_BUS_ID',
            NCCL_P2P_DISABLE='1', PYTHONUNBUFFERED='1', HF_HUB_OFFLINE='1',
            HF_HUB_DISABLE_TELEMETRY='1', DO_NOT_TRACK='1', COMFY_PLACEMENT_LOG=str(WORK/'placement.jsonl'), COMFY_MODEL_ID=model_id)
