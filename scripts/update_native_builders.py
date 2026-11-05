@@ -22,6 +22,18 @@ def cuda_options(root):
             '-DCMAKE_BUILD_RPATH_USE_ORIGIN=ON','-DCMAKE_BUILD_RPATH=$ORIGIN;'+str(cuda/'lib')]
 
 
+
+def verify_cuda_host_headers(root,directory,log):
+    """Reject incomplete SDKs before a system profiler header can mix versions."""
+    from update_builders import run
+    include=root/'runtimes/engine-tools/lib/python3.12/site-packages/nvidia/cu13/include'
+    if not (include/'cuda_profiler_api.h').is_file():
+        raise RuntimeError('CUDA13 SDK lacks cuda_profiler_api.h; install matching nvidia-cuda-profiler-api before building Maya')
+    probe=directory/'cuda-host-headers.cpp'
+    probe.write_text('#include <cuda_profiler_api.h>\n#include <cuda_runtime.h>\nstatic_assert(CUDART_VERSION >= 13000 && CUDART_VERSION < 14000);\n')
+    run(['g++-13','-std=c++20','-fsyntax-only','-isystem',include,'-isystem',include/'cccl',probe],log,timeout=60)
+
+
 def file_action(receipt,target,candidate):
     receipt['files'].append({'target':str(target),'candidate':str(candidate)})
 
@@ -47,6 +59,7 @@ def native(root,component,revision,directory,source,log,receipt):
     from update_builders import run
     kind=component['builder'];build=source/'build';maya=kind=='maya-pair'
     if maya:
+        verify_cuda_host_headers(root,directory,log)
         patch=root/'patches/maya-ds4-file-cache-target-v1153.patch'
         run(['patch','--batch','--fuzz=0','-p1','-i',patch],log,source)
         test=directory/'cache-test'

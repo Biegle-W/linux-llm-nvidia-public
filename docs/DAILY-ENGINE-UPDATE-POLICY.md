@@ -39,6 +39,10 @@ Scheduled runs are configured for guarded headless qualification when no graphic
 
 Preserved limits:2GiB host available; dense worker32/36GiB and heavy workers87.76984787/89.76984787GiB; per-card free-VRAM256MiB where applicable plus selected native reserves/fit targets;100C temperature stops; existing three-bad-sample2-second hysteresis, fail-closed telemetry, PSI/swap windows, swappiness60, concurrency1 and idle600s. Active swap limits remain1/8MiB/s for dense/Bolt and128/160MiB/s for streaming entries over30s, with unlimited occupancy. [Per-profile guard table](ALL-ENTRY-BENCHMARKS-20261105.md).
 
+## CUDA profiler-header preflight
+
+Maya host C++ targets include the profiler API before the runtime API. The isolated CUDA13SDK must contain its own `cuda_profiler_api.h`; otherwise a system CUDA12header can be selected first and introduce incompatible type guards. Native Maya staging now checks for the SDK-local header and syntax-checks both includes before compilation. The matching build-tools dependency is `nvidia-cuda-profiler-api==13.0.85`, installed only in the isolated engine-tools environment. Driver, weights and model guards are unchanged. [NVIDIA package](https://pypi.org/project/nvidia-cuda-profiler-api/13.0.85/).
+
 ## Operations
 
 ```bash

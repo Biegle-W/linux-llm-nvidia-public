@@ -228,3 +228,19 @@ class TargetLayout(unittest.TestCase):
                     with self.assertRaisesRegex(RuntimeError,'overlaps'):tx.file(bundle/'engine',file)
                     self.assertEqual((bundle/'engine').read_bytes(),b'directory-version')
                 tx.rollback();self.assertEqual((bundle/'engine').read_bytes(),b'original')
+
+
+class CUDAHostHeaders(unittest.TestCase):
+    def test_missing_sdk_profiler_header_fails_before_compile(self):
+        from update_native_builders import verify_cuda_host_headers
+        with tempfile.TemporaryDirectory()as tmp,patch('update_builders.run')as run:
+            root=Path(tmp)
+            with self.assertRaisesRegex(RuntimeError,'cuda_profiler_api.h'):verify_cuda_host_headers(root,root,root/'log')
+            run.assert_not_called()
+    def test_host_probe_includes_profiler_before_runtime(self):
+        from update_native_builders import verify_cuda_host_headers
+        with tempfile.TemporaryDirectory()as tmp,patch('update_builders.run')as run:
+            root=Path(tmp);include=root/'runtimes/engine-tools/lib/python3.12/site-packages/nvidia/cu13/include';include.mkdir(parents=True);(include/'cuda_profiler_api.h').write_text('fixture')
+            verify_cuda_host_headers(root,root,root/'log')
+            text=(root/'cuda-host-headers.cpp').read_text();self.assertLess(text.index('cuda_profiler_api.h'),text.index('cuda_runtime.h'))
+            self.assertIn('-fsyntax-only',run.call_args.args[0]);self.assertIn(include,run.call_args.args[0])
