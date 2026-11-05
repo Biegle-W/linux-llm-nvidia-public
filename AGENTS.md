@@ -1,5 +1,7 @@
 # Agent entry point
 
+Public image/video samples are now maintained through a hash-checked binary allowlist: four native1K/2K images, three video clips and three frame posters. Embedded workflow metadata is removed; decoded media matches the originals. No inference was repeated. [Gallery](assets/samples/comfy/README.md).
+
 ## ComfyUI two-GPU video trials complete — November4,2026
 
 Wan2.2TI2V5B passed the GPU-only regular baseline at10.143s first /7.111s warm and Raylight FSDP+Ulysses2 at43.346s /30.539s: distributed latency is about4.3times higher for this512x288x33-frame workload. LTX2.3distilled1.1Q4_0 passed an experimental Mesh28/20-block split at14.259s after server readiness, with valid video/audio and GPU1 denoiser release before VAE decoding; minimum sampled free VRAM1529/1564MiB, zero swap. All442 CPU checks passed. Both physical GPUs were audited, CPU weight execution was forbidden, guards remain, workers stopped and reservations released. Existing LLM/image entries and defaults remain; video candidates are not production entries. [Results, timing scope, patches and limits](docs/COMFY-VIDEO-DUAL-GPU-20261104.md).

@@ -1,5 +1,7 @@
 # Guarded two-GPU video trials — November 4, 2026
 
+[Generated image and video samples](../assets/samples/comfy/README.md). Metadata-free copies preserve the tested media content.
+
 These are isolated candidate trials on the RTX3080Ti12GB + RTX308010GB pair. No video entry has been promoted into the production API or desktop selectors. The existing nine LLM entries and two image workflows remain unchanged.
 
 The tested approaches are [Raylight](https://github.com/komikndr/raylight) with Wan2.2 TI2V5B FP16 and [ComfyUI Mesh](https://github.com/shootthesound/comfyui-mesh) with LTX2.3 distilled1.1 Q4_0 GGUF. Exact source commits, model revisions, file sizes and publisher SHA256 values are in `config/comfy-video-trial.json`; dependencies are in `config/comfy-video-requirements.lock`. The video environment is separate from the working image environment. All eight downloaded model files passed publisher hash verification and reside on SATA.

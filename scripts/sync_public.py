@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Export reviewed reference files to the matching public checkout; never push history."""
 import argparse
+import hashlib
+import json
+import struct
 from pathlib import Path
 import re
 import subprocess
@@ -19,7 +22,20 @@ RETIRED_FILES = (
     'tests/test_bolt_readonly_cache.py',
     'config/super-offload-runtime.json', 'scripts/super_runtime.py', 'scripts/supervise_super.py', 'tests/test_super_runtime.py', 'tests/test_super_bounded_policy.py', 'tests/test_super_request_state.py', 'scripts/super_offload_hook/compact_pool.py', 'scripts/super_offload_hook/repack.py', 'scripts/super_offload_hook/sitecustomize.py', 'scripts/super_offload_hook/placement.py', 'scripts/super_offload_hook/checkpoint_cache.py', 'scripts/super_offload_hook/reuse.py', 'scripts/super_offload_hook/file_backing.py', 'scripts/super_offload_hook/host_trim.py')
 
+
+SAMPLE_MEDIA = (
+    'assets/samples/comfy/qwen-turbo-1k.png', 'assets/samples/comfy/qwen-turbo-2k.png',
+    'assets/samples/comfy/flux-klein-1k.png', 'assets/samples/comfy/flux-klein-2k.png',
+    'assets/samples/comfy/wan-baseline.mp4', 'assets/samples/comfy/wan-raylight.mp4',
+    'assets/samples/comfy/ltx-mesh.mp4',
+    'assets/samples/comfy/wan-baseline-poster.png', 'assets/samples/comfy/wan-raylight-poster.png',
+    'assets/samples/comfy/ltx-mesh-poster.png',
+)
+
 FILES = (
+    *SAMPLE_MEDIA,
+    'assets/samples/comfy/README.md', 'assets/samples/comfy/manifest.json',
+    'tests/test_public_sample_media.py',
     'docs/COMFY-VIDEO-DUAL-GPU-20261104.md', 'docs/benchmark-results/20261104-comfy-video-dual-gpu.json',
     'config/comfy-video-trial.json', 'config/comfy-video-requirements.lock',
     'scripts/comfy_mesh_gguf.py', 'scripts/comfy_video_trial.py',
@@ -292,6 +308,24 @@ def strip_private_workflow(content):
     return (before.rstrip() + '\n\n' + after.lstrip()).rstrip() + '\n'
 
 
+def validate_sample_media(relative, content, records):
+    """Accept only reviewed sample bytes; never broadly bypass the privacy scan."""
+    assert relative in SAMPLE_MEDIA, 'Unreviewed binary export'
+    record=records[relative]
+    assert len(content)==record['bytes'] and hashlib.sha256(content).hexdigest()==record['sha256'], 'Sample content changed; review media and metadata again'
+    if relative.endswith('.png'):
+        assert content.startswith(b'\x89PNG\r\n\x1a\n'), 'Expected PNG sample'
+        pos=8;types=[]
+        while pos<len(content):
+            length=struct.unpack('>I',content[pos:pos+4])[0]
+            kind=content[pos+4:pos+8];types.append(kind)
+            assert kind in (b'IHDR',b'PLTE',b'IDAT',b'IEND',b'tRNS'), 'Unreviewed PNG metadata chunk'
+            pos+=length+12
+        assert pos==len(content) and types[0]==b'IHDR' and types[-1]==b'IEND'
+    else:
+        assert content[4:8]==b'ftyp', 'Expected reviewed MP4 sample'
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('checkout', type=Path)
@@ -305,10 +339,19 @@ def main():
     if subprocess.check_output(['git', '-C', str(target), 'status', '--porcelain'], text=True).strip():
         raise SystemExit('Public checkout must be clean before export.')
     exports = {}
+    manifest=json.loads((source/'assets/samples/comfy/manifest.json').read_text())
+    media_records={}
+    for row in manifest['samples']:
+        base='assets/samples/comfy/'
+        media_records[base+row['file']]=dict(bytes=row['bytes'],sha256=row['sha256'])
+        if row.get('poster'):
+            media_records[base+row['poster']]=dict(bytes=row['poster_bytes'],sha256=row['poster_sha256'])
+    assert set(media_records)==set(SAMPLE_MEDIA),'Sample manifest and reviewed allowlist differ'
     for relative in FILES:
-        binary = relative == 'assets/icons/hyperqwen.png'
+        binary = relative == 'assets/icons/hyperqwen.png' or relative in SAMPLE_MEDIA
         content = (source / relative).read_bytes() if binary else (source / relative).read_text()
-        if binary and not content.startswith(b'\x89PNG\r\n\x1a\n'):
+        if relative in SAMPLE_MEDIA:validate_sample_media(relative,content,media_records)
+        if relative == 'assets/icons/hyperqwen.png' and not content.startswith(b'\x89PNG\r\n\x1a\n'):
             raise SystemExit('Expected official PNG artwork.')
         if relative == 'README.md':
             content = content.replace('# Linux LLM NVIDIA\n', '# Linux LLM NVIDIA — public reference\n', 1)
