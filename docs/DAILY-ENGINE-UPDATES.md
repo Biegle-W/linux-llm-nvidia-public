@@ -1,5 +1,18 @@
 # NVIDIA daily engine updates
 
+## 2026-11-05T05:03:10
+
+- hyperqwen: **unchanged**; upstream `6ab9bd05cb84`.
+- sglang: **unchanged**; upstream `d61ded5b9e2d`.
+- strata: **unchanged**; upstream `ffa80d73133e`.
+- llamacpp: **unchanged**; upstream `cd959bae99ff`.
+- tensorfold: **pinned-current**; upstream `v1.2.2`.
+- comfyui: **pinned-current**; upstream `v0.44.0`.
+- raylight: **pinned-current**; upstream `1.11.0`.
+- mesh: **pinned-current**; upstream `3804156b4b39`.
+- gguf: **pinned-current**; upstream `6ea2651e7df6`.
+- maya: **rejected-production-preserved**; upstream `c1670044bbc0`.
+
 ## Cleanup and transaction-layout review fixes — November5,2026
 
 Review finding#3 is addressed: short qualification cleanup shares the bounded exact-owner retry, and overlapping file/directory targets are rejected before baseline or activation and within transactions.494 CPU tests passed; no model run, resource-policy change or serving restart. The enabled03:00Toronto timer is unchanged. [Details](DAILY-UPDATER-RESTORATION-20261105.md).
