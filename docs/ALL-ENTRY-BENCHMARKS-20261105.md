@@ -1,5 +1,7 @@
 # Current entry observations — November 5, 2026
 
+Latest Strata selection is0.2.11/engines0.1.57 following the explicit reviewed DeepSeek one-token exception. [Paired observations, acceptance and guards](STRATA-0211-QUALIFICATION-20261105.md); other entries below retain their dated observations.
+
 [Engine versions, sharing audit and cleanup suggestions](ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md). Eight updated text entries passed one short actual DSH read/result/exact followup and owned unload. TensorFold is a carried-forward November4 observation; its engine is unchanged. Loading and follow-up are excluded. No full-context or sustained test.
 
 | API/DSH entry | Prefill tok/s | TTFT s | Decode tok/s | Context | Date |
@@ -10,11 +12,11 @@
 | deepseek-maya | 186.70 | 31.944 | 7.900 | 32,768 | 2026-11-05 |
 | bolt-vllm | 500.31 | 12.899 | 67.789 | 163,840 | 2026-11-05 |
 | flash-next-iq1s-llamacpp | 120.73 | 48.463 | 36.861 | 12,288 | 2026-11-05 |
-| flash-next-strata | 943.80 | 6.395 | 58.800 | 131,072 | 2026-11-05 |
-| deepseek-unsloth-strata | 85.70 | 66.695 | 11.900 | 32,768 | 2026-11-05 |
+| flash-next-strata | 934.20 | 6.460 | 68.400 | 131,072 | 2026-11-05 |
+| deepseek-unsloth-strata | 83.40 | 68.423 | 11.800 | 32,768 | 2026-11-05 |
 | qwen27b-tensorfold | 575.26 | 10.135 | 186.951 | 12,288 | 2026-11-04 |
 
-All November5 first calls reported zero native cached tokens; OS file caches were not dropped. DeepSeek/Strata’s old5.840sTTFT reused5539prompt tokens and cannot be compared directly with the new uncached66.695s. TensorFold decode is a short speculative DFlash2/copies burst. Different quantizations, contexts, prompt lengths and speculation prevent equal-quality ranking or a causal performance-regression conclusion from these single observations.
+All November5 first calls reported zero native cached tokens; OS file caches were not dropped. DeepSeek/Strata’s old5.840sTTFT reused5539prompt tokens and cannot be compared directly with the earlier November5 uncached66.695s observation. TensorFold decode is a short speculative DFlash2/copies burst. Different quantizations, contexts, prompt lengths and speculation prevent equal-quality ranking or a causal performance-regression conclusion from these single observations.
 
 ## Effective resource guards
 

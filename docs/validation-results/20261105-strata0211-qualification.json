@@ -1,0 +1,127 @@
+{
+  "date": "2026-11-05",
+  "selected_release": "Strata 0.2.11 / engines 0.1.57",
+  "source_commit": "c3b3f5035506f3e966f1b4b7b188aeaabae92f1d",
+  "scope": "Single short actual DSH tool call, result, exact follow-up and owned unload per arm; loading excluded; no sustained/full-context claim",
+  "acceptance": "Human explicitly accepted DeepSeek 60 vs 59 output tokens after automatic rejection and verified rollback; all other gates passed",
+  "profiles": {
+    "flash-next-strata": {
+      "production": {
+        "context": 131072,
+        "prefill_tps": 941.5,
+        "decode_tps": 68.7,
+        "ttft_s": 6.412643575997208,
+        "prompt_tokens": 5594,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "checks": {
+          "tool": true,
+          "tool_result": true,
+          "followup": true,
+          "unload": true
+        },
+        "resources_passed": true,
+        "telemetry_samples": 6
+      },
+      "candidate": {
+        "context": 131072,
+        "prefill_tps": 934.2,
+        "decode_tps": 68.4,
+        "ttft_s": 6.459628836004413,
+        "prompt_tokens": 5594,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "checks": {
+          "tool": true,
+          "tool_result": true,
+          "followup": true,
+          "unload": true
+        },
+        "resources_passed": true,
+        "telemetry_samples": 7
+      },
+      "rollback-smoke": {
+        "context": 131072,
+        "prefill_tps": 937.2,
+        "decode_tps": 68.1,
+        "ttft_s": 6.4539396399923135,
+        "prompt_tokens": 5594,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "checks": {
+          "tool": true,
+          "tool_result": true,
+          "followup": true,
+          "unload": true
+        },
+        "resources_passed": true,
+        "telemetry_samples": 6
+      },
+      "strict_comparison": {
+        "passed": true,
+        "reasons": [],
+        "scope": "Single matched short DSH tool calls; no sustained/full-context claim"
+      }
+    },
+    "deepseek-unsloth-strata": {
+      "production": {
+        "context": 32768,
+        "prefill_tps": 85.1,
+        "decode_tps": 11.6,
+        "ttft_s": 67.08433768399118,
+        "prompt_tokens": 5704,
+        "output_tokens": 60,
+        "cached_tokens": 0,
+        "checks": {
+          "tool": true,
+          "tool_result": true,
+          "followup": true,
+          "unload": true
+        },
+        "resources_passed": true,
+        "telemetry_samples": 41
+      },
+      "candidate": {
+        "context": 32768,
+        "prefill_tps": 83.4,
+        "decode_tps": 11.8,
+        "ttft_s": 68.42257575300755,
+        "prompt_tokens": 5704,
+        "output_tokens": 59,
+        "cached_tokens": 0,
+        "checks": {
+          "tool": true,
+          "tool_result": true,
+          "followup": true,
+          "unload": true
+        },
+        "resources_passed": true,
+        "telemetry_samples": 42
+      },
+      "rollback-smoke": {
+        "context": 32768,
+        "prefill_tps": 86.6,
+        "decode_tps": 11.7,
+        "ttft_s": 65.901273468,
+        "prompt_tokens": 5704,
+        "output_tokens": 60,
+        "cached_tokens": 0,
+        "checks": {
+          "tool": true,
+          "tool_result": true,
+          "followup": true,
+          "unload": true
+        },
+        "resources_passed": true,
+        "telemetry_samples": 40
+      },
+      "strict_comparison": {
+        "passed": false,
+        "reasons": [
+          "Unmatched output_tokens"
+        ],
+        "scope": "Single matched short DSH tool calls; no sustained/full-context claim"
+      }
+    }
+  }
+}

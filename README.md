@@ -1,5 +1,9 @@
 # Linux LLM NVIDIA — public reference
 
+## Strata0.2.11 selected after reviewed qualification — November5,2026
+
+Both existing Strata profiles passed short actual DSH tool/result/exact follow-up, resource checks and owned unload. Flash-Next passed the strict paired gate; DeepSeek's59-versus60 output tokens initially triggered verified rollback, then the human explicitly accepted that sole mismatch. The preserved signed artifacts were reverified and0.2.11/engines0.1.57 selected. No material speed gain was observed; scheduled gates and all resource limits remain unchanged.500 CPU regressions passed. No active jobs, pending transaction/publication or GPU reservation remains; next action is normal use or a separately requested new-quant trial. [Results, acceptance and guard table](docs/STRATA-0211-QUALIFICATION-20261105.md).
+
 ## Maya1.1.54 rejected;1.1.53 retained — November5,2026
 
 The requested updater run built1.1.54 after correcting a missing CUDA13profiler header. Both1.1.53 production DSH baselines passed; native correctness then failed before candidate activation, so1.1.54 DSH checks were not reached. Preserve the selected1.1.53 runtimes and rejection record; do not relabel baseline metrics as1.1.54 or waive failed gates. [Results, blockers and guard tables](docs/MAYA-1154-QUALIFICATION-20261105.md).
