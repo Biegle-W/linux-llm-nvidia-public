@@ -106,19 +106,22 @@ for folder in [s/'packages/qwen',Path(sys.argv[3])]:
     return bytecode
 
 
-def accept_tested_output_variance(updater, run):
+def accept_tested_output_variance(updater, run, *, maya=False):
+    kind = "maya" if maya else "strata"
+    evidence = "docs/MAYA-QUALIFICATION-REPAIR-20261106.md" if maya else "docs/STRATA-0211-QUALIFICATION-20261105.md"
+    acceptance = "Explicit manual acceptance of measured DeepSeek prefill/decode slowdown" if maya else "Explicit one-token DeepSeek output variance"
     updater.recover()
     root = updater.root
     old = (updater.base/run).resolve()
     if old.parent != updater.base.resolve() or time.time()-old.stat().st_mtime > 86400:
         raise RuntimeError('Choose one completed local run from the last 24 hours')
     report = json.loads((old/'report.json').read_text())
-    rows = [r for r in report['results'] if r['component']=='strata']
+    rows = [r for r in report['results'] if r['component']==kind]
     if len(rows)!=1 or rows[0]['status']!='rejected-production-preserved':
         raise RuntimeError('Run is not a completed rejected Strata qualification')
     revision = rows[0]['revision']
-    component = next(c for c in updater.policy['components'] if c['id']=='strata')
-    journals = list((old/'strata').glob('activation-*/transaction.json'))
+    component = next(c for c in updater.policy['components'] if c['id']==kind)
+    journals = list((old/kind).glob('activation-*/transaction.json'))
     if len(journals)!=1:
         raise RuntimeError('Ambiguous original transaction')
     journal = json.loads(journals[0].read_text())
@@ -130,22 +133,29 @@ def accept_tested_output_variance(updater, run):
     hardware += next(x for x in Path('/proc/meminfo').read_text().splitlines() if x.startswith('MemTotal:'))
     candidate, gates = {}, {}
     for name in component['profiles']:
-        baseline = json.loads((old/'strata/production'/name/'qualification.json').read_text())
-        candidate[name] = json.loads((old/'strata/candidate'/name/'qualification.json').read_text())
-        restored = json.loads((old/'strata/rollback-smoke'/name/'qualification.json').read_text())
+        baseline = json.loads((old/kind/'production'/name/'qualification.json').read_text())
+        candidate[name] = json.loads((old/kind/'candidate'/name/'qualification.json').read_text())
+        restored = json.loads((old/kind/'rollback-smoke'/name/'qualification.json').read_text())
         if not compare_short(restored, restored)['passed'] or not restored.get('recovery_verification'):
             raise RuntimeError('Restored production verification incomplete')
         settings = {k:v for k,v in profiles[name].items() if k in ('id','allocated_context','cli_args','selected_settings','worker_memory_gib','guardrails','kv_cache')}
         if candidate[name]['settings_sha256']!=fingerprint(settings) or candidate[name]['hardware_sha256']!=fingerprint(hardware):
             raise RuntimeError('Hardware or operational settings changed since test')
-        gates[name] = reviewed_gate(baseline, candidate[name])
+        gates[name] = maya_reviewed_gate(baseline, candidate[name], revision, old.name) if maya else reviewed_gate(baseline, candidate[name])
     if not any('acceptance' in g for g in gates.values()):
         raise RuntimeError('No reviewable one-token exception')
-    stage = root/'runtimes/daily-update'/old.name/'strata'
+    stage = root/'runtimes/daily-update'/old.name/kind
     receipt = json.loads((stage/'build-receipt.json').read_text())
     if receipt['revision']!=revision:
         raise RuntimeError('Receipt revision mismatch')
     directories = {}
+    if maya:
+        for item in receipt['directories']:
+            saved = Path(item['target']).with_name(Path(item['target']).name+'.rejected-'+journals[0].parent.name)
+            for entry in receipt['files']:
+                path = Path(entry['candidate'])
+                if path.is_relative_to(item['candidate']):
+                    entry['candidate'] = str(saved/path.relative_to(item['candidate']))
     for action in journal['actions']:
         target = Path(action['target'])
         if action['kind']=='file':
@@ -156,12 +166,15 @@ def accept_tested_output_variance(updater, run):
                 raise RuntimeError('Tested candidate file changed')
         else:
             directories[target] = target.with_name(target.name+'.rejected-'+journals[0].parent.name)
-    manifest = json.loads((stage/'deepseek-unsloth-runtime.json').read_text())
-    production_manifest=json.loads((root/'config/deepseek-unsloth-runtime.json').read_text())
-    for name,expected in production_manifest['sha256'].items():
-        if sha(root/name)!=expected:
-            raise RuntimeError('Production runtime changed since recorded rollback: '+name)
-    bytecode=verify_preserved_strata(stage, directories, manifest)
+    if maya:
+        bytecode = verify_preserved_maya(root, stage, directories, receipt)
+    else:
+        manifest = json.loads((stage/'deepseek-unsloth-runtime.json').read_text())
+        production_manifest=json.loads((root/'config/deepseek-unsloth-runtime.json').read_text())
+        for name,expected in production_manifest['sha256'].items():
+            if sha(root/name)!=expected:
+                raise RuntimeError('Production runtime changed since recorded rollback: '+name)
+        bytecode=verify_preserved_strata(stage, directories, manifest)
     validate_target_layout([i['target'] for i in receipt['files']]+[root/'config/daily-update-versions.json', root/'config/maintained-profiles.json'], directories)
     updater.run_dir = updater.base/('reviewed-'+str(time.time_ns()))
     updater.run_dir.mkdir(mode=0o700)
@@ -169,11 +182,11 @@ def accept_tested_output_variance(updater, run):
     # No new GPU workload: require already unloaded/idle and reserve atomically.
     if not updater.idle_reserve(manual=True,current_only=True):
         raise RuntimeError('Reviewed activation requires idle, unloaded serving')
-    transaction = Transaction(updater.run_dir/'strata/activation-reviewed/transaction.json')
+    transaction = Transaction(updater.run_dir/(kind+'/activation-reviewed/transaction.json'))
     try:
         for path in bytecode:
             path.unlink(missing_ok=True)
-        transaction.begin('strata',revision,updater.owner)
+        transaction.begin(kind,revision,updater.owner)
         updater.state['pending']={'journal':str(transaction.path),'owner':updater.owner}
         write_json(updater.state_path,updater.state)
         for item in receipt['files']:
@@ -181,7 +194,7 @@ def accept_tested_output_variance(updater, run):
         for target, saved in directories.items():
             transaction.directory(target,saved)
         versions = json.loads((root/'config/daily-update-versions.json').read_text())
-        versions['strata']={'source_commit':revision,'qualified_on':datetime.now().isoformat(timespec='seconds'),'acceptance':'Explicit one-token DeepSeek output variance; STRATA-0211-QUALIFICATION-20261105.md'}
+        versions[kind]={'source_commit':revision,'qualified_on':datetime.now().isoformat(timespec='seconds'),'acceptance':acceptance+'; '+evidence}
         temp = updater.run_dir/'versions.json';write_json(temp,versions)
         transaction.file(root/'config/daily-update-versions.json',temp)
         catalog = json.loads((root/'config/maintained-profiles.json').read_text())
@@ -192,17 +205,17 @@ def accept_tested_output_variance(updater, run):
                 profile.setdefault('short_tool_benchmark_history',[]).append(profile['current_configuration_benchmark'])
             row=candidate[name]
             profile['current_configuration_benchmark']={k:row[k] for k in ('prefill_tps','decode_tps','ttft_s','prompt_tokens','output_tokens','cached_tokens')}
-            profile['current_configuration_benchmark'].update(date=datetime.now().date().isoformat(),context=row['context'],source='docs/STRATA-0211-QUALIFICATION-20261105.md',scope=gates[name]['scope'])
-            profile['engine_refresh_qualification']={'source_commit':revision,'status':'passed short DSH; explicit manual acceptance of DeepSeek one-token variance','evidence':'docs/STRATA-0211-QUALIFICATION-20261105.md'}
+            profile['current_configuration_benchmark'].update(date=datetime.now().date().isoformat(),context=row['context'],source=evidence,scope=gates[name]['scope'])
+            profile['engine_refresh_qualification']={'source_commit':revision,'status':'passed short DSH; '+acceptance,'evidence':evidence}
             if 'qualified_engine_runtime' in profile:
                 profile['qualified_engine_runtime'].pop('release',None)
-                profile['qualified_engine_runtime'].update(source_commit=revision,evidence='docs/STRATA-0211-QUALIFICATION-20261105.md')
+                profile['qualified_engine_runtime'].update(source_commit=revision,evidence=evidence)
         temp=updater.run_dir/'catalog.json';write_json(temp,catalog)
         transaction.file(root/'config/maintained-profiles.json',temp)
         transaction.commit()
         updater.state.pop('pending',None)
-        if updater.state.get('rejected',{}).get('strata')==revision:
-            updater.state['rejected'].pop('strata')
+        if updater.state.get('rejected',{}).get(kind)==revision:
+            updater.state['rejected'].pop(kind)
         write_json(updater.state_path,updater.state)
     except BaseException:
         transaction.rollback()
@@ -216,6 +229,68 @@ def accept_tested_output_variance(updater, run):
             updater.state.pop('reservation_owner',None)
             write_json(updater.state_path,updater.state)
             updater.reconcile_router()
-    updater.publish([{'component':'strata','revision':revision,'status':'promoted','gates':gates,
+    updater.publish([{'component':kind,'revision':revision,'status':'promoted','gates':gates,
                       'candidate_metrics':{name:{k:row[k] for k in ('context','prefill_tps','decode_tps','ttft_s')} for name,row in candidate.items()}}])
-    print(json.dumps({'strata':'promoted with explicit reviewed output variance','gates':gates}))
+    print(json.dumps({kind:'promoted with '+acceptance,'gates':gates}))
+
+
+MAYA_REVIEWED_RUN = '20261106-141239-1793992359692678370'
+MAYA_REVIEWED_REVISION = '22fc101f2c109b7e7174c975ff3c2d8e9ce0a867'
+
+
+def maya_reviewed_gate(baseline, candidate, revision, run):
+    """One human-approved measurement pair, never a relaxed scheduled gate."""
+    if revision != MAYA_REVIEWED_REVISION or run != MAYA_REVIEWED_RUN:
+        raise RuntimeError('Maya acceptance is limited to the explicitly reviewed run')
+    name = baseline.get('profile')
+    observed = {'glm-maya': (550.3, 15.5, 551.0, 15.2),
+                'deepseek-maya': (186.8, 8.2, 171.5, 7.7)}
+    if name not in observed or tuple(row.get(k) for row in (baseline, candidate)
+                                   for k in ('prefill_tps', 'decode_tps')) != observed[name]:
+        raise RuntimeError('Maya measurements differ from the approved results')
+    strict = compare_short(baseline, candidate)
+    expected = [] if name == 'glm-maya' else ['Regression >5%: prefill_tps', 'Regression >5%: decode_tps']
+    if strict['reasons'] != expected:
+        raise RuntimeError('Other Maya qualification gates failed')
+    if expected:
+        strict.update(passed=True, acceptance='Explicit human acceptance of measured 8.19% prefill and 6.10% decode slowdown',
+                      strict_passed=False, accepted_reasons=strict['reasons'], reasons=[])
+    return strict
+
+
+def verify_preserved_maya(root, stage, directories, receipt):
+    """Reconstruct patched source and verify tested binaries and protected assets."""
+    import io
+    import tempfile
+    from native_idle_policy import transform
+    target = root/'runtimes/project-maya'
+    if set(directories) != {target}:
+        raise RuntimeError('Unexpected Maya directory layout')
+    saved = directories[target]
+    if subprocess.check_output(['git','-C',str(saved),'rev-parse','HEAD'],text=True).strip() != MAYA_REVIEWED_REVISION:
+        raise RuntimeError('Preserved Maya source revision changed')
+    if sha(root/'patches/maya-qualification-v1156.patch') != receipt['qualification_patch_sha256']:
+        raise RuntimeError('Qualification patch changed')
+    with tempfile.TemporaryDirectory(prefix='maya-reviewed-') as folder:
+        expected = Path(folder)
+        data = subprocess.check_output(['git','-C',str(saved),'archive',MAYA_REVIEWED_REVISION])
+        with tarfile.open(fileobj=io.BytesIO(data)) as archive:
+            archive.extractall(expected,filter='data')
+        for name in ('maya-ds4-file-cache-target-v1153.patch','maya-qualification-v1156.patch'):
+            subprocess.run(['patch','--batch','--fuzz=0','-p1','-i',str(root/'patches'/name)],cwd=expected,check=True,stdout=subprocess.DEVNULL)
+        server = expected/'serve/server.py'
+        server.write_text(transform(server.read_text(),'maya'))
+        for path in expected.rglob('*'):
+            if path.is_file() and path.suffix != '.orig' and sha(path) != sha(saved/path.relative_to(expected)):
+                raise RuntimeError('Preserved Maya source changed: '+str(path.relative_to(expected)))
+        for path in (saved/'serve').rglob('*.py'):
+            if not (expected/path.relative_to(saved)).is_file():
+                raise RuntimeError('Unexpected Maya frontend module')
+    for item in receipt['protected_files']:
+        path = Path(item['path'])
+        if sha(path) != item['sha256'] or sha(saved/path.relative_to(target)) != item['sha256']:
+            raise RuntimeError('Protected Maya asset changed')
+    log = (stage.parents[3]/'data/daily-update'/MAYA_REVIEWED_RUN/'maya/kernel-tests.log').read_text()
+    if log.count('100% tests passed, 0 tests failed out of 118') != 2:
+        raise RuntimeError('Both GPU native qualification records are required')
+    return list((saved/'serve').rglob('*.pyc'))

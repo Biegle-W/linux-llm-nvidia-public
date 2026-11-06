@@ -453,6 +453,7 @@ def install_interrupt_handlers():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--recover-only',action='store_true')
+    parser.add_argument('--accept-tested-maya-slowdown',metavar='RUN',help='Accept only the explicitly reviewed Maya 1.1.56 performance regression')
     parser.add_argument('--accept-tested-output-variance',metavar='RUN',help='Manually accept a completed Strata run whose only failed gate is one DeepSeek output token; no inference is repeated')
     parser.add_argument('--check-only',action='store_true',help='Read upstream revisions; no build, GPU use, publication or promotion')
     parser.add_argument('--smoke-current',metavar='PROFILE',help='Verify one current engine through the owned short DSH path; no update/publication')
@@ -466,16 +467,19 @@ def main():
     os.umask(0o077); os.environ['GIT_TERMINAL_PROMPT']='0'
     # The coordinator owns the visible terminal; worker units remain API-only.
     os.environ['NVIDIA_API_ONLY']='1'
-    if sum(bool(x)for x in [args.recover_only,args.check_only,args.smoke_current,args.accept_tested_output_variance])>1:parser.error('Choose only one operation')
-    if args.accept_tested_output_variance and (not args.manual or args.components):parser.error('Reviewed acceptance requires --manual and no component selector')
+    if sum(bool(x)for x in [args.recover_only,args.check_only,args.smoke_current,args.accept_tested_output_variance,args.accept_tested_maya_slowdown])>1:parser.error('Choose only one operation')
+    if (args.accept_tested_output_variance or args.accept_tested_maya_slowdown) and (not args.manual or args.components):parser.error('Reviewed acceptance requires --manual and no component selector')
     settings=json.loads((ROOT/'config/daily-update.json').read_text())
     if not (args.recover_only or args.check_only or sys.stdout.isatty() or settings.get('scheduled_visibility')=='guarded-headless'):
         raise RuntimeError('GPU qualification requires a visible terminal or the explicit scheduled-headless policy')
-    if args.local_only and (not args.manual or args.accept_tested_output_variance):parser.error('--local-only requires --manual and cannot be combined with reviewed acceptance')
+    if args.local_only and (not args.manual or args.accept_tested_output_variance or args.accept_tested_maya_slowdown):parser.error('--local-only requires --manual and cannot be combined with reviewed acceptance')
     updater = Updater()
     updater.local_only = args.local_only
     install_interrupt_handlers()
-    if args.accept_tested_output_variance:
+    if args.accept_tested_maya_slowdown:
+        from update_reviewed import accept_tested_output_variance
+        accept_tested_output_variance(updater,args.accept_tested_maya_slowdown,maya=True)
+    elif args.accept_tested_output_variance:
         from update_reviewed import accept_tested_output_variance
         accept_tested_output_variance(updater,args.accept_tested_output_variance)
     elif args.recover_only: updater.recover()
