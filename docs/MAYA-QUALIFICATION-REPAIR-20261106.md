@@ -1,5 +1,13 @@
 # Maya qualification repair — November 6, 2026
 
+## Current selected state: explicit reviewed acceptance
+
+Maya1.1.56 is selected for both GLM and DeepSeek after explicit human acceptance of the measured8.19% prefill/6.10% decode slowdown. The preserved tested binaries, reconstructed patched source and354 protected assets verified before transactional activation. All516 CPU regressions pass; prior118/118 native tests on each GPU and both short DSH tool/result/follow-up checks remain the qualification evidence. The one-time exception applies only to this run; scheduled5% gates and all guards remain unchanged. Active binary hashes and API/hub/DSH health pass; GPUs are idle, the03:00 timer is active, and no pending transaction/publication or reservation remains. No inference benchmark was repeated. Next action is normal use.
+
+The historical rejection and rollback below remain evidence of the automatic gate. The human subsequently accepted this exact slowdown and requested implementation. `--manual --accept-tested-maya-slowdown` rechecks the original run/revision and exact observed rates, all other quality/resource/latency gates, current hardware/settings, recorded artifact hashes and rollback completeness. It uses the existing exact-owner idle reservation and durable transaction. Future measurements or other failures cannot use this exception.
+
+## Earlier automatic rejection and repair record
+
 **The native qualification failures are fixed. All118 native tests pass on each GPU and513 CPU regressions pass. Maya1.1.56 was nevertheless rejected by the unchanged DeepSeek performance gate; verified Maya1.1.53 remains selected.** Both restored-production DSH checks and binary hashes pass, serving is healthy, GPUs are idle, and no pending transaction or reservation remains. The human explicitly approved repair/result publication after the initial automatic-review rejection.
 
 Maya v1.1.56 initially built successfully but failed native qualification: 104 passed, four failed and ten not run. Production v1.1.53 remained selected. The original rejection and complete logs are preserved. This repair prepares one explicitly requested retry; promotion is not yet claimed.

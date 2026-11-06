@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Maya1.1.56 selected with reviewed performance exception — November6,2026
+
+Maya1.1.56 is selected for both GLM and DeepSeek after explicit human acceptance of the measured8.19% prefill/6.10% decode slowdown. The preserved tested binaries, reconstructed patched source and354 protected assets verified before transactional activation. All516 CPU regressions pass; prior118/118 native tests on each GPU and both short DSH tool/result/follow-up checks remain the qualification evidence. The one-time exception applies only to this run; scheduled5% gates and all guards remain unchanged. Active binary hashes and API/hub/DSH health pass; GPUs are idle, the03:00 timer is active, and no pending transaction/publication or reservation remains. No inference benchmark was repeated. Next action is normal use. [Acceptance and qualification](docs/MAYA-QUALIFICATION-REPAIR-20261106.md).
+
 ## Maya qualification repaired; performance rollback verified — November 6, 2026
 
 All118 native tests pass on both GPUs and513 CPU regressions pass. Missing CTest targets/fixtures, graph-cache expectations and test upload ordering are repaired without weakening native assertions. Maya1.1.56 passed both short DSH tool/result/follow-ups but DeepSeek prefill/decode regressed8.19%/6.10%, failing the unchanged5% gates. Verified1.1.53 is restored for both Maya entries; both rollback checks and binary hashes pass, GPUs are idle and no pending transaction/reservation remains. Repair/results publication is explicitly approved. [Repair, fixture provenance and final results](docs/MAYA-QUALIFICATION-REPAIR-20261106.md).

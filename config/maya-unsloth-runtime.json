@@ -7,9 +7,9 @@
     "sha256": "edcef1c38dd3d63b02672e4e63b4b08922ba86e6825afa1756862dcc718316d1"
   },
   "bounded_cache_cpu_test": "pass",
-  "status": "Short daily DSH qualification required; see daily ledger",
+  "status": "Selected after passed short DSH checks and explicit reviewed DeepSeek performance exception",
   "CUDA_toolkit": "13.0.88; matching CUDA13 runtime/cuBLAS",
-  "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+  "evidence": "docs/MAYA-QUALIFICATION-REPAIR-20261106.md",
   "cache_controller_patch": {
     "path": "patches/maya-ds4-file-cache-target-v1153.patch",
     "sha256": "edad385d4c5fdde4b6797fe0fb021dedcb311166b56bd893e7e5d70fe4d3b580"

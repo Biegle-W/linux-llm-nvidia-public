@@ -2,9 +2,9 @@
   "date": "2026-11-06",
   "candidate": "Maya 1.1.56",
   "candidate_source": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
-  "selected": "Maya 1.1.53",
-  "selected_source": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
-  "cpu_regressions_passed": 513,
+  "selected": "Maya 1.1.56",
+  "selected_source": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
+  "cpu_regressions_passed": 516,
   "native_tests": {
     "gpu0": {
       "passed": 118,
@@ -90,11 +90,19 @@
       }
     }
   },
-  "result": "candidate rejected for DeepSeek performance regression; restored-production checks passed",
+  "result": "promoted after explicit human acceptance of measured DeepSeek speed regression",
   "scope": "One matched short actual DSH tool/result/follow-up per profile, no full-context or sustained qualification",
   "guards_preserved": true,
   "production_binary_hashes_verified": true,
   "gpu_reservation_released": true,
   "pending_transaction": false,
-  "ple_fixture_provenance": "Real installed IQ4_NL table and original hash/table vectors; independent deterministic synthetic NumPy Q2/BF16/F16 block fixture with all original assertions/tolerances"
+  "ple_fixture_provenance": "Real installed IQ4_NL table and original hash/table vectors; independent deterministic synthetic NumPy Q2/BF16/F16 block fixture with all original assertions/tolerances",
+  "automatic_result": "candidate rejected for DeepSeek performance regression; restored-production checks passed",
+  "reviewed_acceptance": {
+    "prefill_regression_percent": 8.19,
+    "decode_regression_percent": 6.1,
+    "scheduled_gate_unchanged": true,
+    "preserved_candidate_verified": true,
+    "repeated_inference": false
+  }
 }
