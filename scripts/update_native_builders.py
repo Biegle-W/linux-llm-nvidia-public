@@ -55,6 +55,23 @@ def stage_maya_pin(root,profile,revision,candidate,directory,receipt):
     m=directory/names[profile];write_json(m,manifest);file_action(receipt,target,candidate);file_action(receipt,path,m)
 
 
+def preserve_maya_vision(old, source, receipt):
+    """Retain the separately installed encoder across a frontend directory swap."""
+    vision = old / 'build-vision'
+    if not vision.exists():
+        return
+    hashes = {path.relative_to(vision): sha(path)
+              for path in vision.rglob('*') if path.is_file()}
+    shutil.copytree(vision, source / 'build-vision', symlinks=True)
+    for relative, expected in hashes.items():
+        original = vision / relative
+        candidate = source / 'build-vision' / relative
+        if sha(original) != expected or sha(candidate) != expected:
+            raise RuntimeError('Maya vision runtime changed during staging')
+        receipt.setdefault('protected_files', []).append(
+            {'path': str(original), 'sha256': expected})
+
+
 def native(root,component,revision,directory,source,log,receipt):
     from update_builders import run
     kind=component['builder'];build=source/'build';maya=kind=='maya-pair'
@@ -79,6 +96,7 @@ def native(root,component,revision,directory,source,log,receipt):
         old=root/'runtimes/project-maya'
         # Preserve private launch settings and the installed interpreter, never weights.
         run(['cp','-a','--reflink=auto',old/'.venv',source/'.venv'],log,timeout=1800)
+        preserve_maya_vision(old, source, receipt)
         for p in old.glob('*.json'):
             tracked=subprocess.run(['git','-C',str(old),'ls-files','--error-unmatch',p.name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0
             if not tracked:

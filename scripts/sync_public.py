@@ -38,6 +38,8 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'docs/ALL-MODELS-RERUN-20261105.md', 'docs/benchmark-results/20261105-all-models-rerun.json',
+    'tests/test_update_vision_preservation.py',
     'docs/POWERLOSS-RECOVERY-20261105.md', 'docs/validation-results/20261105-powerloss-recovery.json',
     'docs/IQ1S-WEIGHT-REMOVAL-20261105.md', 'docs/validation-results/20261105-iq1s-weight-removal.json',
     'scripts/flash_iq1m_strata_runtime.py', 'tests/test_flash_iq1m_strata_runtime.py',

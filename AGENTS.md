@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Fresh all-model rerun and disk coverage — November5,2026
+
+All nine text entries passed actual DSH tool/result/exact follow-up and owned unload. Both image models passed1024/2048 and both video models passed512×288/720p/1080p. All three separately downloaded vision adapters passed real image requests. GLM needed its missing installed encoder restored from the preserved local preimage. Maya updater staging now preserves that encoder with protected hashes, and508 CPU regressions pass. DeepSeek’s temporary vision preset was restored after its test. No unmatched standalone checkpoints were found in the wider model store. Optional integrated Qwen vision/MTP modes remain separately unqualified, and native4K image shapes retain their earlier failed qualification. [Fresh results, resource guards and full asset coverage](docs/ALL-MODELS-RERUN-20261105.md).
+
 ## Post-power-loss recovery verified — November5,2026
 
 The new boot passes GPU unlock/next-boot readiness and current-boot host-staged transport checks. All IQ1_M checkpoint SHA256s and runtime/pack/preset hashes verify; the old IQ1_S files remain deleted and its active IQ1_M table is intact. Expected SATA storage and all selected model directories are accessible. One guarded IQ1_M actual DSH tool/result/exact follow-up and owned unload passed; no model settings or guards changed and other models were not rerun. API/hub/DSH and timer are healthy; no inference workers, stale reservation or pending transaction remain. Next action is normal use. [Recovery evidence and limits](docs/POWERLOSS-RECOVERY-20261105.md).

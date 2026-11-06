@@ -1,5 +1,7 @@
 # Current entry observations — November 5, 2026
 
+[Fresh all-model rerun and downloaded-asset coverage](ALL-MODELS-RERUN-20261105.md) supersedes the performance observations below. Earlier results retain their original dates and limits.
+
 [Post-power-loss verification](POWERLOSS-RECOVERY-20261105.md): IQ1_M passed a fresh guarded short check on the new boot; selected settings are unchanged. The table below retains its original qualification observations.
 
 Latest replacement: [Flash-Next IQ1_M /Strata](FLASH-IQ1M-STRATA-20261105.md) supersedes IQ1_S /llama.cpp after a passing guarded short actual DSH check. [Retired IQ1_S files were subsequently deleted](IQ1S-WEIGHT-REMOVAL-20261105.md); the active IQ1_M28.8GB table was preserved and hash-verified.
