@@ -1,14 +1,6 @@
 {
-  "version": "1.2.2",
+  "version": "1.2.3",
   "files": {
-    "runtimes/tensorfold-1.2.2/tensorfold-1.2.2-linux-x86_64/bin/tensorfold-native": {
-      "bytes": 180543368,
-      "sha256": "f38d456092662b719755be55750fe762a6246484860faea105dfb4b5e067d8b4"
-    },
-    "runtimes/tensorfold-1.2.2/tensorfold-1.2.2-linux-x86_64/lib/libtfgrammar.so": {
-      "bytes": 3123360,
-      "sha256": "64a30d23b890d4bfce2854cbb6659fc636cd36dacf0eb1696e2a5b2d732e2e8b"
-    },
     "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/chat_template.jinja": {
       "bytes": 8952,
       "sha256": "c3cf9e34abf4f9e36c2d72165aa9c132d3e2a725b6c2586aaa3a8af9d7a81041"
@@ -72,6 +64,14 @@
     "models/engine-tests/qwen38-27b-tensorfold-dflash2/model.safetensors": {
       "bytes": 3848817896,
       "sha256": "67fc76d68dc5a9415511a4f394ef744d67510cd20e93b37cc2cc7d28e4bab65c"
+    },
+    "runtimes/tensorfold-1.2.3/tensorfold-1.2.3-linux-x86_64/bin/tensorfold-native": {
+      "bytes": 188718216,
+      "sha256": "80bade15b0a348b65c28b14a529fd939c66a2b28f24257a33611b9470813babd"
+    },
+    "runtimes/tensorfold-1.2.3/tensorfold-1.2.3-linux-x86_64/lib/libtfgrammar.so": {
+      "bytes": 3123360,
+      "sha256": "64a30d23b890d4bfce2854cbb6659fc636cd36dacf0eb1696e2a5b2d732e2e8b"
     }
   }
 }

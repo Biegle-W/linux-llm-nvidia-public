@@ -58,7 +58,7 @@
   "pinned_profiles": [
     {
       "profile": "qwen27b-tensorfold",
-      "reason": "Latest stable1.2.2 native binary and grammar-library hashes remain pinned; monitor releases daily. A newer standalone binary needs a reviewed package adapter; never replace the EXL3 target/drafter automatically."
+      "reason": "Stable v1.2.3 native binary and grammar-library hashes pinned after paired qualification. Monitor releases without automatic replacement."
     }
   ],
   "validation": "paired-short-actual-DSH-v1",
@@ -84,7 +84,7 @@
       "id": "tensorfold",
       "upstream": "https://github.com/ashhart/TensorFold.git",
       "channel": "stable",
-      "installed_release": "v1.2.2",
+      "installed_release": "v1.2.3",
       "reason": "Pinned native package; report newer stable releases without automatic replacement."
     },
     {

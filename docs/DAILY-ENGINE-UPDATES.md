@@ -1,5 +1,24 @@
 # NVIDIA daily engine updates
 
+## TensorFold v1.2.3 selected — November 6, 2026
+
+TensorFold 1.2.3 is selected for the existing Qwen27B EXL3 2.0bpw profile with 12,288 context and 4-bit DFlash2. The official v1.2.3 archive digest and internal checksums verified. The paired short DSH tool call, matching result, exact follow-up, resource checks and owned unload passed. The normal promotion gates passed and the updater committed the v1.2.3 pin. All 516 CPU regressions passed. Selected binary and grammar hashes verified, the API is healthy, and no update reservation or pending transaction remains. Next action is normal serving with the selected pin.
+
+[Official TensorFold v1.2.3 package and release notes](https://github.com/ashhart/TensorFold/releases/tag/v1.2.3).
+
+| Run | Prefill tok/s | Decode tok/s | Client TTFT s | Prompt / output / cached tokens |
+| --- | ---: | ---: | ---: | --- |
+| production | 577.60 | 187.62 | 10.091 | 5825 / 40 / 0 |
+| candidate | 573.37 | 187.02 | 10.166 | 5825 / 40 / 0 |
+
+Each measurement covers one short tool burst at 12,288 context.
+
+| Profile | Worker RAM high/max | Host reserve | GPU free-memory floor | Swap writes/combined | Active full PSI |
+| --- | --- | --- | --- | --- | --- |
+| qwen27b-tensorfold | 87.77/89.77 GiB | 2 GiB | 256 MiB/card after readiness, GPU0 native reserve 1 GiB | 1/8 MiB/s over 30 s, unlimited occupancy | 10% |
+
+Thermal stop 100°C. Resource checks use three bad samples at two-second intervals, with the swap/pressure window requirements.
+
 ## 2026-11-06T14:52:51
 
 - maya: **promoted**; upstream `22fc101f2c10`.

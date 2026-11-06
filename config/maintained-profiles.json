@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-05",
+  "updated": "2026-11-06",
   "scope": "Current Linux NVIDIA workstation only",
   "selection_policy": {
     "group_by": [
@@ -2770,28 +2770,20 @@
       },
       "evidence": "docs/TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md",
       "notes": "Single GPU0 execution with native host-mapped embeddings, DFlash2 4-bit and automatic context copies; lower precision and context than AutoRound. Native 1GiB reserve unchanged. Short tool burst is not sustained prose throughput.",
-      "runtime": "runtimes/tensorfold-1.2.2/tensorfold-1.2.2-linux-x86_64/bin/tensorfold-native",
+      "runtime": "runtimes/tensorfold-1.2.3/tensorfold-1.2.3-linux-x86_64/bin/tensorfold-native",
       "drafter_directory": "models/engine-tests/qwen38-27b-tensorfold-dflash2",
       "drafter_bits": 4,
       "current_configuration_benchmark": {
-        "date": "2026-11-04",
-        "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
-        "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
-        "context": 12288,
-        "worker_RAM_high_max_GiB": [
-          26,
-          28
-        ],
-        "prefill_tps": 580.9562887769863,
-        "ttft_s": 10.029199,
-        "decode_tps": 180.34265103697027,
-        "prompt_tokens": 5822,
-        "output_tokens": 39,
+        "prefill_tps": 573.371241785288,
+        "decode_tps": 187.02075930428276,
+        "ttft_s": 10.165768,
+        "prompt_tokens": 5825,
+        "output_tokens": 40,
         "cached_tokens": 0,
-        "native_timings": {},
-        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-        "ttft_method": "engine first-token counter",
-        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
+        "date": "2026-11-06",
+        "context": 12288,
+        "source": "docs/DAILY-ENGINE-UPDATES.md",
+        "scope": "Single paired short DSH qualification; no full-context or sustained claim"
       },
       "runtime_manifest": "config/tensorfold-runtime.json",
       "short_tool_benchmark_history": [
@@ -2803,6 +2795,26 @@
           "context": 12288,
           "scope": "one actual DSH read-tool generation; short speculative burst; no sustained/full-context test",
           "evidence": "docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md"
+        },
+        {
+          "date": "2026-11-04",
+          "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
+          "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
+          "context": 12288,
+          "worker_RAM_high_max_GiB": [
+            26,
+            28
+          ],
+          "prefill_tps": 580.9562887769863,
+          "ttft_s": 10.029199,
+          "decode_tps": 180.34265103697027,
+          "prompt_tokens": 5822,
+          "output_tokens": 39,
+          "cached_tokens": 0,
+          "native_timings": {},
+          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
         }
       ],
       "minimum_usable_ram_gib": 90,
@@ -2811,6 +2823,11 @@
         "RAM_class": "96GB",
         "short_tool_followup_owned_unload": "passed",
         "full_context_stress": false
+      },
+      "engine_refresh_qualification": {
+        "source_commit": "6ec5fa4cb233f3606acbdad5bec433f0f8758f96",
+        "status": "passed paired short DSH qualification",
+        "evidence": "docs/DAILY-ENGINE-UPDATES.md"
       }
     },
     {

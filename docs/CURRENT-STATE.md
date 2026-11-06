@@ -1,5 +1,9 @@
 # Current takeover state
 
+## TensorFold v1.2.3 selected — November 6, 2026
+
+TensorFold 1.2.3 is selected for the existing Qwen27B EXL3 2.0bpw profile with 12,288 context and 4-bit DFlash2. The official v1.2.3 archive digest and internal checksums verified. The paired short DSH tool call, matching result, exact follow-up, resource checks and owned unload passed. The normal promotion gates passed and the updater committed the v1.2.3 pin. All 516 CPU regressions passed. Selected binary and grammar hashes verified, the API is healthy, and no update reservation or pending transaction remains. Next action is normal serving with the selected pin. [Trial evidence](DAILY-ENGINE-UPDATES.md).
+
 ## Maya1.1.56 selected with reviewed performance exception — November6,2026
 
 Maya1.1.56 is selected for both GLM and DeepSeek after explicit human acceptance of the measured8.19% prefill/6.10% decode slowdown. The preserved tested binaries, reconstructed patched source and354 protected assets verified before transactional activation. All516 CPU regressions pass; prior118/118 native tests on each GPU and both short DSH tool/result/follow-up checks remain the qualification evidence. The one-time exception applies only to this run; scheduled5% gates and all guards remain unchanged. Active binary hashes and API/hub/DSH health pass; GPUs are idle, the03:00 timer is active, and no pending transaction/publication or reservation remains. No inference benchmark was repeated. Next action is normal use. [Acceptance and qualification](MAYA-QUALIFICATION-REPAIR-20261106.md).
