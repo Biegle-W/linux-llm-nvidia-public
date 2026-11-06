@@ -38,6 +38,8 @@ SAMPLE_MEDIA = (
 )
 
 FILES = (
+    'scripts/generate_ple_fixture.py', 'patches/maya-qualification-v1156.patch',
+    'tests/test_maya_qualification.py', 'docs/MAYA-QUALIFICATION-REPAIR-20261106.md',
     'docs/ALL-MODELS-RERUN-20261105.md', 'docs/benchmark-results/20261105-all-models-rerun.json',
     'tests/test_update_vision_preservation.py',
     'docs/POWERLOSS-RECOVERY-20261105.md', 'docs/validation-results/20261105-powerloss-recovery.json',

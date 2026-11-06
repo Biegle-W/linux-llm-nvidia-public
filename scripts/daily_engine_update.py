@@ -315,6 +315,11 @@ class Updater:
             self.state.pop('reservation_owner',None);write_json(self.state_path,self.state);self.reconcile_router()
 
     def publish(self, results):
+        if getattr(self, 'local_only', False):
+            write_json(self.run_dir/'report.json', {'date':datetime.now().isoformat(), 'results':results,
+                'publication':'local-only; no remote publication performed'})
+            print('Results saved locally: '+str(self.run_dir), flush=True)
+            return
         ledger = self.root/'docs/DAILY-ENGINE-UPDATES.md'
         entry = '\n## ' + datetime.now().isoformat(timespec='seconds') + '\n\n'
         for row in results:
@@ -348,6 +353,8 @@ class Updater:
         self.state.pop('publication_owned',None);self.state.pop('publication_hashes',None);write_json(self.state_path,self.state)
 
     def run(self, manual=False, check_only=False, components=None):
+        if getattr(self, 'local_only', False) and self.state.get('publication_owned'):
+            raise RuntimeError('Local-only run cannot resume pending remote publication')
         if check_only and (self.state.get('pending') or self.state.get('reservation_owner')):
             raise RuntimeError('Recovery required before read-only discovery')
         if not check_only: self.recover()
@@ -450,6 +457,7 @@ def main():
     parser.add_argument('--check-only',action='store_true',help='Read upstream revisions; no build, GPU use, publication or promotion')
     parser.add_argument('--smoke-current',metavar='PROFILE',help='Verify one current engine through the owned short DSH path; no update/publication')
     parser.add_argument('--components',nargs='+',metavar='ID',help='Qualify only these maintained components; full catalog coverage remains validated')
+    parser.add_argument('--local-only',action='store_true',help='Save results locally without commits, exports or pushes; all qualification and ownership gates remain')
     parser.add_argument('--manual',action='store_true',help='Permit admission outside the nightly window; still requires idle and ownership checks')
     parser.add_argument('--allow-full-context-tests',action='store_true',help='Retired flag; long suites must be requested and run separately')
     args = parser.parse_args()
@@ -463,7 +471,9 @@ def main():
     settings=json.loads((ROOT/'config/daily-update.json').read_text())
     if not (args.recover_only or args.check_only or sys.stdout.isatty() or settings.get('scheduled_visibility')=='guarded-headless'):
         raise RuntimeError('GPU qualification requires a visible terminal or the explicit scheduled-headless policy')
+    if args.local_only and (not args.manual or args.accept_tested_output_variance):parser.error('--local-only requires --manual and cannot be combined with reviewed acceptance')
     updater = Updater()
+    updater.local_only = args.local_only
     install_interrupt_handlers()
     if args.accept_tested_output_variance:
         from update_reviewed import accept_tested_output_variance

@@ -72,6 +72,43 @@ def preserve_maya_vision(old, source, receipt):
             {'path': str(original), 'sha256': expected})
 
 
+def build_registered_test_executables(build, log, env):
+    """Build excluded targets that CTest registered; never skip missing coverage."""
+    from update_builders import run
+    listing = json.loads(subprocess.check_output(
+        ['ctest', '--test-dir', str(build), '--show-only=json-v1'], text=True))
+    missing = set()
+    for test in listing['tests']:
+        command = test.get('command') or []
+        # CTest omits COMMAND for missing executables. Registered names match
+        # the CMake targets for these host-only tests.
+        if not command:
+            name = test['name']
+            if not re.fullmatch(r'[A-Za-z0-9_][A-Za-z0-9_-]*', name):
+                raise RuntimeError('Unexpected missing CTest target name')
+            missing.add(name)
+    if missing:
+        run(['cmake', '--build', build, '--parallel', '2', '--target', *sorted(missing)], log, env=env)
+    return sorted(missing)
+
+
+def maya_qualification_options(root, directory, source, log, receipt):
+    from update_builders import run
+    run(['patch', '--batch', '--fuzz=0', '-p1', '-i', root/'patches/maya-qualification-v1156.patch'], log, source)
+    python = root/'runtimes/project-maya/.venv/bin/python'
+    run([python, '-c', 'import numpy'], log, timeout=60)
+    fixture = directory/'ple-fixture'
+    run([python, root/'scripts/generate_ple_fixture.py', fixture], log,
+        env=dict(os.environ, OPENBLAS_NUM_THREADS='2'), timeout=300)
+    table = root/'models/unsloth/flash-next-iq1m-v31/Qwen3.8-Flash-Next-UD-IQ1_M-00003-of-00003.gguf'
+    if not table.is_file():
+        raise RuntimeError('Existing PLE table required; no automatic weight download')
+    receipt['qualification_patch_sha256'] = sha(root/'patches/maya-qualification-v1156.patch')
+    receipt['ple_fixture_manifest'] = json.loads((fixture/'fixture.json').read_text())
+    return ['-DSTRATA_PYTHON3='+str(python), '-DSTRATA_PLE_FIXTURE_DIR='+str(fixture),
+            '-DSTRATA_PLE_PACK='+str(fixture), '-DSTRATA_PLE_GGUF='+str(table)]
+
+
 def native(root,component,revision,directory,source,log,receipt):
     from update_builders import run
     kind=component['builder'];build=source/'build';maya=kind=='maya-pair'
@@ -83,9 +120,11 @@ def native(root,component,revision,directory,source,log,receipt):
         run(['g++','-O2','-std=c++20','-pthread','-I'+str(source/'src/ds4'),root/'tools/maya-file-cache-bound/test_cache_bound.cpp','-o',test],log)
         run([test,directory],log)
     options=['-DSTRATA_ENABLE_CUDA=ON','-DSTRATA_BUILD_TESTS=ON','-DSTRATA_BUILD_DSV41=ON'] if maya else ['-DGGML_CUDA=ON','-DLLAMA_BUILD_TESTS=ON']
+    if maya: options += maya_qualification_options(root,directory,source,log,receipt)
     env=dict(os.environ,CC='gcc-13',CXX='g++-13',MAX_JOBS='2')
     run(['cmake','-S',source,'-B',build,'-G','Ninja','-DCMAKE_BUILD_TYPE=Release',*options,*cuda_options(root)],log,env=env)
     run(['cmake','--build',build,'--parallel','2'],log,env=env)
+    if maya: receipt['additional_test_targets'] = build_registered_test_executables(build,log,env)
     receipt['ctest']=str(build)
     if maya:
         for profile,binary in [('glm-maya','maya'),('deepseek-maya','maya-ds4')]:

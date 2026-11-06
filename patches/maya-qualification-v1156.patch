@@ -1,0 +1,47 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 389bf1c..06edf82 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1218,7 +1218,10 @@ if(STRATA_ENABLE_CUDA OR STRATA_ENABLE_HIP)
+   target_link_libraries(ple_parity PRIVATE strata_kernels ${_strata_gpu_runtime_target})
+   set(STRATA_PLE_FIXTURE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bench/micro" CACHE PATH
+       "Directory containing required ple_in.bin and ple_out.bin parity fixtures")
++  set(STRATA_PLE_PACK "${CMAKE_CURRENT_SOURCE_DIR}/pack/full" CACHE PATH "PLE parity quantized block pack")
++  set(STRATA_PLE_GGUF "${CMAKE_CURRENT_SOURCE_DIR}/../../Q2_0/Qwen3.8-Flash-Next-Q2_0-00002-of-00002.gguf" CACHE FILEPATH "PLE parity real table")
+   add_test(NAME ple_parity COMMAND ple_parity --selftest
++    --pack "${STRATA_PLE_PACK}" --gguf "${STRATA_PLE_GGUF}"
+     --in "${STRATA_PLE_FIXTURE_DIR}/ple_in.bin" --out "${STRATA_PLE_FIXTURE_DIR}/ple_out.bin"
+     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+ 
+diff --git a/tests/glm_layer_graph_test.cu b/tests/glm_layer_graph_test.cu
+index 1d51e77..bf55575 100644
+--- a/tests/glm_layer_graph_test.cu
++++ b/tests/glm_layer_graph_test.cu
+@@ -93,7 +93,9 @@ int main() {
+         require(x == y, "dynamic table or captured plan differs");
+         require(count == expected && expected == (uint64_t) step + 1, "replayed request count differs");
+     }
+-    require(graphs.replays > 0 && graphs.invalidations > 0 && graphs.captures < STEPS, "capture cache not exercised");
++    // The cache now retains each (layer, plan) key instead of invalidating on every switch.
++    require(graphs.captures == 6 && graphs.replays == STEPS - 6 && graphs.invalidations == 0,
++            "multi-key capture cache did not reuse all six layer/plan combinations");
+     const uint64_t before = expected;
+     bool replayed = false;
+     err.clear();
+diff --git a/tests/mm3_gguf_test.cu b/tests/mm3_gguf_test.cu
+index f1856ab..6809f14 100644
+--- a/tests/mm3_gguf_test.cu
++++ b/tests/mm3_gguf_test.cu
+@@ -54,7 +54,11 @@ template <class T>
+ T* dev(const std::vector<T>& h) {
+     T* p = nullptr;
+     CU(cudaMalloc(&p, std::max<size_t>(1, h.size()) * sizeof(T)));
+-    if (!h.empty()) CU(cudaMemcpy(p, h.data(), h.size() * sizeof(T), cudaMemcpyHostToDevice));
++    if (!h.empty()) {
++        CU(cudaMemcpy(p, h.data(), h.size() * sizeof(T), cudaMemcpyHostToDevice));
++        // Kernels use a nonblocking stream: finish default-stream uploads first.
++        CU(cudaStreamSynchronize(nullptr));
++    }
+     return p;
+ }
+ template <class T>

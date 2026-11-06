@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Maya qualification repair prepared — November 6, 2026
+
+All14 formerly failed/unrun native cases pass on both GPUs and511 CPU regressions pass. Repairs cover omitted CTest targets, fixture Python, multi-key cache expectations, nonblocking-stream test upload ordering and independent synthetic PLE block fixtures while retaining the real table oracle and all original assertions. Production remains Maya1.1.53 pending the explicitly requested full updater retry. [Causes, provenance and validation](docs/MAYA-QUALIFICATION-REPAIR-20261106.md).
+
 ## Fresh all-model rerun and disk coverage — November5,2026
 
 All nine text entries passed actual DSH tool/result/exact follow-up and owned unload. Both image models passed1024/2048 and both video models passed512×288/720p/1080p. All three separately downloaded vision adapters passed real image requests. GLM needed its missing installed encoder restored from the preserved local preimage. Maya updater staging now preserves that encoder with protected hashes, and508 CPU regressions pass. DeepSeek’s temporary vision preset was restored after its test. No unmatched standalone checkpoints were found in the wider model store. Optional integrated Qwen vision/MTP modes remain separately unqualified, and native4K image shapes retain their earlier failed qualification. [Fresh results, resource guards and full asset coverage](docs/ALL-MODELS-RERUN-20261105.md).

@@ -1,5 +1,9 @@
 # Current takeover state
 
+## Maya qualification repair prepared — November 6, 2026
+
+All14 formerly failed/unrun native cases pass on both GPUs and511 CPU regressions pass. Repairs cover omitted CTest targets, fixture Python, multi-key cache expectations, nonblocking-stream test upload ordering and independent synthetic PLE block fixtures while retaining the real table oracle and all original assertions. Production remains Maya1.1.53 pending the explicitly requested full updater retry. [Causes, provenance and validation](MAYA-QUALIFICATION-REPAIR-20261106.md).
+
 ## Post-power-loss recovery verified — November5,2026
 
 The new boot passes GPU unlock/next-boot readiness and current-boot host-staged transport checks. All IQ1_M checkpoint SHA256s and runtime/pack/preset hashes verify; the old IQ1_S files remain deleted and its active IQ1_M table is intact. Expected SATA storage and all selected model directories are accessible. One guarded IQ1_M actual DSH tool/result/exact follow-up and owned unload passed; no model settings or guards changed and other models were not rerun. API/hub/DSH and timer are healthy; no inference workers, stale reservation or pending transaction remain. Next action is normal use. [Recovery evidence and limits](POWERLOSS-RECOVERY-20261105.md).
