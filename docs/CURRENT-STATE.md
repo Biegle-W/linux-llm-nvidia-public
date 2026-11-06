@@ -1,8 +1,8 @@
 # Current takeover state
 
-## Maya qualification repair prepared — November 6, 2026
+## Maya qualification repaired; performance rollback verified — November 6, 2026
 
-All14 formerly failed/unrun native cases pass on both GPUs and511 CPU regressions pass. Repairs cover omitted CTest targets, fixture Python, multi-key cache expectations, nonblocking-stream test upload ordering and independent synthetic PLE block fixtures while retaining the real table oracle and all original assertions. Production remains Maya1.1.53 pending the explicitly requested full updater retry. [Causes, provenance and validation](MAYA-QUALIFICATION-REPAIR-20261106.md).
+All118 native tests pass on both GPUs and513 CPU regressions pass. Missing CTest targets/fixtures, graph-cache expectations and test upload ordering are repaired without weakening native assertions. Maya1.1.56 passed both short DSH tool/result/follow-ups but DeepSeek prefill/decode regressed8.19%/6.10%, failing the unchanged5% gates. Verified1.1.53 is restored for both Maya entries; both rollback checks and binary hashes pass, GPUs are idle and no pending transaction/reservation remains. Repair/results publication is explicitly approved. [Repair, fixture provenance and final results](MAYA-QUALIFICATION-REPAIR-20261106.md).
 
 ## Post-power-loss recovery verified — November5,2026
 

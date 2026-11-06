@@ -1,0 +1,100 @@
+{
+  "date": "2026-11-06",
+  "candidate": "Maya 1.1.56",
+  "candidate_source": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
+  "selected": "Maya 1.1.53",
+  "selected_source": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
+  "cpu_regressions_passed": 513,
+  "native_tests": {
+    "gpu0": {
+      "passed": 118,
+      "failed": 0,
+      "not_run": 0,
+      "seconds": 393.1
+    },
+    "gpu1": {
+      "passed": 118,
+      "failed": 0,
+      "not_run": 0,
+      "seconds": 391.56
+    }
+  },
+  "comparisons": {
+    "glm-maya": {
+      "passed": true,
+      "reasons": [],
+      "scope": "Single matched short DSH tool calls; no sustained/full-context claim"
+    },
+    "deepseek-maya": {
+      "passed": false,
+      "reasons": [
+        "Regression >5%: prefill_tps",
+        "Regression >5%: decode_tps"
+      ],
+      "scope": "Single matched short DSH tool calls; no sustained/full-context claim"
+    }
+  },
+  "short_dsh_metrics": {
+    "production": {
+      "glm-maya": {
+        "prefill_tps": 550.3,
+        "decode_tps": 15.5,
+        "ttft_s": 10.057926156000576,
+        "prompt_tokens": 5437,
+        "output_tokens": 25,
+        "cached_tokens": 0
+      },
+      "deepseek-maya": {
+        "prefill_tps": 186.8,
+        "decode_tps": 8.2,
+        "ttft_s": 31.83287961899987,
+        "prompt_tokens": 5701,
+        "output_tokens": 60,
+        "cached_tokens": 0
+      }
+    },
+    "candidate": {
+      "glm-maya": {
+        "prefill_tps": 551.0,
+        "decode_tps": 15.2,
+        "ttft_s": 10.050432596999599,
+        "prompt_tokens": 5437,
+        "output_tokens": 25,
+        "cached_tokens": 0
+      },
+      "deepseek-maya": {
+        "prefill_tps": 171.5,
+        "decode_tps": 7.7,
+        "ttft_s": 34.56852255099966,
+        "prompt_tokens": 5701,
+        "output_tokens": 60,
+        "cached_tokens": 0
+      }
+    },
+    "rollback-smoke": {
+      "glm-maya": {
+        "prefill_tps": 550.0,
+        "decode_tps": 15.4,
+        "ttft_s": 10.058447946000342,
+        "prompt_tokens": 5437,
+        "output_tokens": 25,
+        "cached_tokens": 0
+      },
+      "deepseek-maya": {
+        "prefill_tps": 169.7,
+        "decode_tps": 7.5,
+        "ttft_s": 34.834227383000325,
+        "prompt_tokens": 5701,
+        "output_tokens": 59,
+        "cached_tokens": 0
+      }
+    }
+  },
+  "result": "candidate rejected for DeepSeek performance regression; restored-production checks passed",
+  "scope": "One matched short actual DSH tool/result/follow-up per profile, no full-context or sustained qualification",
+  "guards_preserved": true,
+  "production_binary_hashes_verified": true,
+  "gpu_reservation_released": true,
+  "pending_transaction": false,
+  "ple_fixture_provenance": "Real installed IQ4_NL table and original hash/table vectors; independent deterministic synthetic NumPy Q2/BF16/F16 block fixture with all original assertions/tolerances"
+}
