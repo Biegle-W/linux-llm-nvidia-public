@@ -1,15 +1,14 @@
 {
   "schema": 1,
   "profile": "glm-maya",
-  "release": "1.1.53",
-  "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
+  "source_commit": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
   "ggml_commit": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
   "binary": {
     "path": "runtimes/maya-glm-v1150/maya",
-    "sha256": "40954ae08d5af0b2d7ae3295edbd85d3d0ff7d4ecef054db52def11df6db859b"
+    "sha256": "4da9a7c50e964cf4878c743dd7dad9f23c0a9e877bd9ade9b2423465a285ba75"
   },
   "mode": "normal; existing weights, context and sampling retained",
   "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
-  "status": "Qualified guarded short actual DSH tool/result/exact followup and owned unload2026-11-05",
-  "CUDA_toolkit": "13.0.88;matchingCUDA13runtime/cuBLAS"
+  "status": "Short daily DSH qualification required; see daily ledger",
+  "CUDA_toolkit": "13.0.88; matching CUDA13 runtime/cuBLAS"
 }

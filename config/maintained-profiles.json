@@ -1815,21 +1815,16 @@
         "evidence": "docs/MOE-VRAM512-20261029.md"
       },
       "current_configuration_benchmark": {
-        "date": "2026-11-05",
-        "source": "docs/validation-results/20261105-engine-refresh.json",
-        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
-        "context": 65536,
-        "prefill_tps": 543.7,
-        "ttft_s": 10.217764207998698,
+        "prefill_tps": 551.0,
         "decode_tps": 15.2,
-        "prompt_tokens": 5439,
+        "ttft_s": 10.050432596999599,
+        "prompt_tokens": 5437,
         "output_tokens": 25,
         "cached_tokens": 0,
-        "prefill_method": "native request timings",
-        "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings",
-        "client_ttft_s": 10.217764207998698,
-        "meaningful_sse_chunks": 21
+        "date": "2026-11-06",
+        "context": 65536,
+        "source": "docs/MAYA-QUALIFICATION-REPAIR-20261106.md",
+        "scope": "Single matched short DSH tool calls; no sustained/full-context claim"
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -1928,13 +1923,29 @@
           "prefill_method": "native request timings",
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
+        },
+        {
+          "date": "2026-11-05",
+          "source": "docs/validation-results/20261105-engine-refresh.json",
+          "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+          "context": 65536,
+          "prefill_tps": 543.7,
+          "ttft_s": 10.217764207998698,
+          "decode_tps": 15.2,
+          "prompt_tokens": 5439,
+          "output_tokens": 25,
+          "cached_tokens": 0,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings",
+          "client_ttft_s": 10.217764207998698,
+          "meaningful_sse_chunks": 21
         }
       ],
       "qualified_engine_runtime": {
-        "release": "1.1.53",
-        "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
+        "source_commit": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
         "manifest": "config/maya-glm-runtime.json",
-        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
+        "evidence": "docs/MAYA-QUALIFICATION-REPAIR-20261106.md",
         "scope": "One short actual DSH read/result/exact followup and owned unload; unchanged65536context; no new full-window qualification."
       },
       "hardware_qualification": {
@@ -1962,10 +1973,9 @@
         "full_context_stress": false
       },
       "engine_refresh_qualification": {
-        "date": "2026-11-05",
-        "status": "pass",
-        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
-        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
+        "source_commit": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
+        "status": "passed short DSH; Explicit manual acceptance of measured DeepSeek prefill/decode slowdown",
+        "evidence": "docs/MAYA-QUALIFICATION-REPAIR-20261106.md"
       }
     },
     {
@@ -2164,21 +2174,16 @@
         "evidence": "docs/MAYA-DEMAND-CACHE-20261029.md"
       },
       "current_configuration_benchmark": {
-        "date": "2026-11-05",
-        "source": "docs/validation-results/20261105-engine-refresh.json",
-        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
-        "context": 32768,
-        "prefill_tps": 186.7,
-        "ttft_s": 31.943937379001,
-        "decode_tps": 7.9,
+        "prefill_tps": 171.5,
+        "decode_tps": 7.7,
+        "ttft_s": 34.56852255099966,
         "prompt_tokens": 5701,
-        "output_tokens": 59,
+        "output_tokens": 60,
         "cached_tokens": 0,
-        "prefill_method": "native request timings",
-        "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings",
-        "client_ttft_s": 31.943937379001,
-        "meaningful_sse_chunks": 29
+        "date": "2026-11-06",
+        "context": 32768,
+        "source": "docs/MAYA-QUALIFICATION-REPAIR-20261106.md",
+        "scope": "Single matched short DSH tool calls; no sustained/full-context claim"
       },
       "current_guard_validation": {
         "date": "2026-10-29",
@@ -2400,6 +2405,23 @@
           "prefill_method": "native request timings",
           "ttft_method": "client first delivered content/tool delta; parser buffering included",
           "decode_method": "native request timings"
+        },
+        {
+          "date": "2026-11-05",
+          "source": "docs/validation-results/20261105-engine-refresh.json",
+          "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
+          "context": 32768,
+          "prefill_tps": 186.7,
+          "ttft_s": 31.943937379001,
+          "decode_tps": 7.9,
+          "prompt_tokens": 5701,
+          "output_tokens": 59,
+          "cached_tokens": 0,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings",
+          "client_ttft_s": 31.943937379001,
+          "meaningful_sse_chunks": 29
         }
       ],
       "hardware_qualification": {
@@ -2427,10 +2449,9 @@
         "full_context_stress": false
       },
       "engine_refresh_qualification": {
-        "date": "2026-11-05",
-        "status": "pass",
-        "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
-        "numeric_results": "docs/validation-results/20261105-engine-refresh.json"
+        "source_commit": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
+        "status": "passed short DSH; Explicit manual acceptance of measured DeepSeek prefill/decode slowdown",
+        "evidence": "docs/MAYA-QUALIFICATION-REPAIR-20261106.md"
       }
     },
     {

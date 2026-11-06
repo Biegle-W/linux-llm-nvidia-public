@@ -35,9 +35,9 @@
     "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "maya": {
-    "source_commit": "7c4aa56ed7faea2788705d8e85dd58e892d19f4b",
-    "status": "Qualified existing production; scheduled short DSH updates enabled2026-11-05",
-    "evidence": "docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
+    "source_commit": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
+    "qualified_on": "2026-11-06T14:52:51",
+    "acceptance": "Explicit manual acceptance of measured DeepSeek prefill/decode slowdown; docs/MAYA-QUALIFICATION-REPAIR-20261106.md"
   },
   "strata": {
     "source_commit": "c3b3f5035506f3e966f1b4b7b188aeaabae92f1d",
