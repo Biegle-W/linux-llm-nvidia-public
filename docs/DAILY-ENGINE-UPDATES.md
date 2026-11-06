@@ -1,5 +1,18 @@
 # NVIDIA daily engine updates
 
+## 2026-11-06T13:16:21
+
+- hyperqwen: **unchanged**; upstream `6ab9bd05cb84`.
+- sglang: **unchanged**; upstream `d61ded5b9e2d`.
+- strata: **unchanged**; upstream `c3b3f5035506`.
+- llamacpp: **unchanged**; upstream `cd959bae99ff`.
+- tensorfold: **review-required-update-available**; upstream `v1.2.3`.
+- comfyui: **pinned-current**; upstream `v0.44.0`.
+- raylight: **pinned-current**; upstream `1.11.0`.
+- mesh: **pinned-current**; upstream `3804156b4b39`.
+- gguf: **pinned-current**; upstream `6ea2651e7df6`.
+- maya: **deferred-machine-not-idle**; upstream `22fc101f2c10`.
+
 ## November5 manual entry replacement
 
 Flash-Next IQ1_M /Strata qualified through one guarded actual DSH tool/result/exact follow-up and owned unload, replacing IQ1_S /llama.cpp. Engine versions did not change. Future grouped Strata updates now include both Flash-Next quants and DeepSeek; llama.cpp qualifies Bolt only. [Results, guards and lifecycle verification](FLASH-IQ1M-STRATA-20261105.md).
