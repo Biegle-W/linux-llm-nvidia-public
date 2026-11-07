@@ -56,7 +56,7 @@ def main(*,work=WORK,unit=UNIT,port=PORT,alias='bolt-iq2-candidate',manifest=Non
  os.umask(0o077);work.mkdir(parents=True,exist_ok=True);require_host_staged();group=next(x.split('::',1)[1] for x in Path('/proc/self/cgroup').read_text().splitlines() if x.startswith('0::'));base=Path('/sys/fs/cgroup')/group.lstrip('/')
  assert group.endswith('/'+unit)
  from profile_catalog import get_profile,worker_budget,budget_limit_string,require_host_capacity
- profile=get_profile('bolt-vllm');require_host_capacity(profile);budget=worker_budget(profile)
+ profile=get_profile('bolt-llamacpp');require_host_capacity(profile);budget=worker_budget(profile)
  for name,value in [('memory.high',budget_limit_string(budget['high'])),('memory.max',budget_limit_string(budget['max'])),('memory.swap.max','max')]:assert (base/name).read_text().strip()==value
  pins=json.loads((Path(manifest) if manifest else work/'pins.json').read_text());binary=ROOT/pins['binary'];key=read_private_key(ROOT/'data/local-api-key')
  import hashlib
@@ -67,7 +67,7 @@ def main(*,work=WORK,unit=UNIT,port=PORT,alias='bolt-iq2-candidate',manifest=Non
  folder=ROOT/pins['checkpoint_directory']
  receipts=pins['files'] if manifest else json.loads((work/'download-receipts.json').read_text());assert len(receipts)==1 and receipts==pins['files']
  for row in receipts:assert (folder/row['file']).stat().st_size==row['bytes'] and row['publisher_sha256_matched'] is True
- watch=BoltWatch(base,'bolt-vllm',key,evidence=work/'swap-guard.jsonl',latch=latch,port=port)
+ watch=BoltWatch(base,'bolt-llamacpp',key,evidence=work/'swap-guard.jsonl',latch=latch,port=port)
  life=LifecycleLog(profile_id,path=None if manifest else work/'lifecycle.jsonl',interval=2);life.start()
  command=build_command(pins,port=port,alias=alias)
  print('Pinned command: '+json.dumps(command),flush=True)

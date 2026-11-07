@@ -6,7 +6,7 @@ from bolt_iq2_worker import main as serve
 ROOT=Path(__file__).resolve().parents[1]
 MANIFEST=ROOT/'config/bolt-iq2-runtime.json'
 def verify(profile,manifest):
- if (profile['id']!='bolt-vllm' or profile['engine']!='llama.cpp'
+ if (profile['id']!='bolt-llamacpp' or profile['engine']!='llama.cpp'
      or profile['weight_quant']!='native-IQ2' or profile['allocated_context']!=163840
      or profile['storage']['checkpoint_directory']!=manifest['checkpoint_directory']
      or manifest['planned_context']!=163840 or manifest['fit_target_MiB']!=[384,384]
@@ -14,8 +14,8 @@ def verify(profile,manifest):
   raise ValueError('Maintained native Bolt profile/manifest mismatch')
  return manifest
 def main():
- profile=require_enabled(get_profile('bolt-vllm'));require_host_capacity(profile)
+ profile=require_enabled(get_profile('bolt-llamacpp'));require_host_capacity(profile)
  verify(profile,json.loads(MANIFEST.read_text()))
  return serve(work=ROOT/'data/router/bolt-iq2',unit='llm-router-worker.service',port=10000,
-              alias='bolt',manifest=MANIFEST,capture_engine_log=True,profile_id='bolt-vllm',latch=True)
+              alias='bolt',manifest=MANIFEST,capture_engine_log=True,profile_id='bolt-llamacpp',latch=True)
 if __name__=='__main__':main()

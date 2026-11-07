@@ -8,7 +8,7 @@ Latest replacement: [Flash-Next IQ1_M /Strata](FLASH-IQ1M-STRATA-20261105.md) su
 
 Latest Strata selection is0.2.11/engines0.1.57 following the explicit reviewed DeepSeek one-token exception. [Paired observations, acceptance and guards](STRATA-0211-QUALIFICATION-20261105.md); other entries below retain their dated observations.
 
-[Engine versions, sharing audit and cleanup suggestions](ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md). Eight updated text entries passed one short actual DSH read/result/exact followup and owned unload. TensorFold is a carried-forward November4 observation; its engine is unchanged. Loading and follow-up are excluded. No full-context or sustained test.
+[Engine versions, sharing audit and cleanup suggestions](ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md). Eight updated text entries passed one short actual DSH read/result/exact followup and owned unload. Loading and follow-up are excluded. No full-context or sustained test.
 
 | API/DSH entry | Prefill tok/s | TTFT s | Decode tok/s | Context | Date |
 | --- | ---: | ---: | ---: | ---: | --- |
@@ -20,9 +20,8 @@ Latest Strata selection is0.2.11/engines0.1.57 following the explicit reviewed D
 | flash-next-iq1m-strata | 1092.50 | 5.267 | 78.200 | 131,072 | 2026-11-05 |
 | flash-next-strata | 934.20 | 6.460 | 68.400 | 131,072 | 2026-11-05 |
 | deepseek-unsloth-strata | 83.40 | 68.423 | 11.800 | 32,768 | 2026-11-05 |
-| qwen27b-tensorfold | 575.26 | 10.135 | 186.951 | 12,288 | 2026-11-04 |
 
-All November5 first calls reported zero native cached tokens; OS file caches were not dropped. DeepSeek/Strata’s old5.840sTTFT reused5539prompt tokens and cannot be compared directly with the earlier November5 uncached66.695s observation. TensorFold decode is a short speculative DFlash2/copies burst. Different quantizations, contexts, prompt lengths and speculation prevent equal-quality ranking or a causal performance-regression conclusion from these single observations.
+All November5 first calls reported zero native cached tokens; OS file caches were not dropped. DeepSeek/Strata’s old5.840sTTFT reused5539prompt tokens and cannot be compared directly with the earlier November5 uncached66.695s observation. Different quantizations, contexts, prompt lengths and speculation prevent equal-quality ranking or a causal performance-regression conclusion from these single observations.
 
 ## Effective resource guards
 
@@ -34,7 +33,6 @@ All profiles retain2GiB host available, **100C** temperature stops, three bad2-s
 | --- | ---: | --- | ---: | --- |
 | qwen27b-hyperqwen | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
 | qwen27b-sglang | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
-| qwen27b-tensorfold | 87.77/89.77 | 256 MiB free/card after ready; GPU0; native1024 MiB reserve | 1/8 | 10 / none separately |
 | flash-next-iq1m-strata | 87.77/89.77 | 256 MiB free/card; 1024 MiB native reserve/card | 128/160 | 15 / none separately |
 | flash-next-strata | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
 | glm-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 10 / none separately |

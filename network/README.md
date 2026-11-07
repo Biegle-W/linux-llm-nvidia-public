@@ -10,7 +10,7 @@ Qualified `flash-next-iq1m-strata` replaces the IQ1_S llama.cpp entry in API/DSH
 
 ## Unused Qwen GGUF target/drafter deleted — November 4, 2026
 
-The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries, the selected TensorFold DFlash2 drafter and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](../docs/UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
+The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](../docs/UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
 
 ## Retired AWQ Bolt assets deleted — November 4, 2026
 
@@ -38,11 +38,7 @@ Linux now sees 91.77 GiB usable RAM. Nine larger-RAM candidate definitions and c
 
 ## Worker RAM raised to 26/28 GiB; requested reruns passed — November 4, 2026
 
-All eight profile definitions now use 26/28 GiB soft/hard worker limits. HyperQwen, SGLang, TensorFold DFlash2/copies and the isolated Flash-Next IQ1_S SSD-table candidate each passed one fresh actual DSH tool/result/exact-follow-up and owned unload; 438 CPU regressions passed. The other five profiles remain disabled. Host2 GiB, VRAM256 MiB/card, thermal82 C, swap/PSI/transport/ownership guards, contexts, weights and defaults remain unchanged. Flash-Next measured93.35 prefill tok/s,63.238 s client TTFT and 28.23 decode tok/s; sampled swap483 MiB and soft-limit reclaim persisted, so larger limits showed no speed improvement in this single run. All workers are stopped, GPUs1 MiB each, API/hub/DSH active and no reservation remains. This supersedes earlier24/26 GiB operational descriptions; historical results retain their original guards. [Results, comparison and guard tables](../docs/RAM26-28-RERUN-20261104.md).
-
-## TensorFold DFlash2/copies entry enabled — November 4, 2026
-
-The user-requested `qwen27b-tensorfold` entry is enabled alongside HyperQwen and SGLang, with the same tested EXL3 2.0bpw target, 4-bit DFlash2 drafter, automatic copies and 12,288 context. The normal-router actual DSH tool/result/exact-follow-up and owned unload passed: 581.98 prefill tok/s, 10.019 s TTFT and 183.92 decode tok/s on a short speculative tool burst. Single GPU0 plus host-mapped embeddings; native 1 GiB reserve and all resource guards remain. API/DSH show three entries; defaults are preserved and workers finish idle. The separately requested Flash-Next IQ1_S passed an isolated actual DSH tool/result/exact-follow-up and owned unload with its n-gram table lazily mapped on NVMe: 101.50 prefill tok/s, 58.113 s client TTFT and 29.14 decode tok/s at 12K. All three publisher hashes and native/process mapping proof passed; no guard violation. Soft RAM reclaim and287 MiB sampled swap are recorded, with bounded active rates. It remains an isolated candidate; the enabled menu has three entries and older disabled RAM profiles stay disabled. This update supersedes earlier same-day candidate-only and two-enabled-entry descriptions. [Configuration, guards and results](../docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md).
+All eight profile definitions now use 26/28 GiB soft/hard worker limits. HyperQwen, SGLang and the isolated Flash-Next IQ1_S SSD-table candidate each passed one fresh actual DSH tool/result/exact-follow-up and owned unload; 438 CPU regressions passed. The other five profiles remain disabled. Host2 GiB, VRAM256 MiB/card, thermal82 C, swap/PSI/transport/ownership guards, contexts, weights and defaults remain unchanged. Flash-Next measured93.35 prefill tok/s,63.238 s client TTFT and 28.23 decode tok/s; sampled swap483 MiB and soft-limit reclaim persisted, so larger limits showed no speed improvement in this single run. All workers are stopped, GPUs1 MiB each, API/hub/DSH active and no reservation remains. This supersedes earlier24/26 GiB operational descriptions; historical results retain their original guards. [Results, comparison and guard tables](../docs/RAM26-28-RERUN-20261104.md).
 
 ## Current operation and DSH repair — November 3, 2026
 
@@ -102,7 +98,6 @@ catalog. Requesting its ID selects the model, quantization and engine together:
 | --- | --- | ---: |
 | `qwen27b-hyperqwen` | HyperQwen/vLLM | 86,016 |
 | `qwen27b-sglang` | SGLang | 57,344 |
-| `qwen27b-tensorfold` | TensorFold EXL3 2bpw + DFlash2-4bit/copies | 12,288 |
 | `flash-next-iq1s-llamacpp` | Flash-Next Unsloth v3.1 IQ1_S / llama.cpp + lazy SSD table | 12,288 |
 
 The other five retained profiles are temporarily disabled and hidden from the picker pending the RAM upgrade and guarded qualification. `/v1/models` is authoritative for enabled choices. Context allocations are not new full-window qualification claims.

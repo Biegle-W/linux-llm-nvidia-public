@@ -16,7 +16,7 @@ The coordinator now handles **SIGHUP**, SIGTERM and SIGINT through the same inte
 
 **488 CPU regressions passed**, including a real process-level SIGHUP during a provisional file transaction, restored checks under graphical-only policy with absent/closed terminals, and continued rejection of unauthorized headless candidate checks. These are CPU lifecycle fixtures; no extra model benchmark or live production rollback was needed. All85 focused public checks also passed. The timer was restored only after those checks; its next run remains November6 at03:00EST.
 
-The updater is migrated to the current guarded short-DSH policy and its03:00 America/Toronto schedule is enabled. It covers all nine text entries exactly once: eight automatically qualified entries across five grouped components, plus pinned TensorFold with release monitoring. ComfyUI, Raylight, Mesh and GGUF also receive version checks; automatic image/video replacement remains outside the text qualification protocol.
+The updater is migrated to the current guarded short-DSH policy and its03:00 America/Toronto schedule is enabled. It covers all nine text entries exactly once: eight automatically qualified entries across five grouped components, plus one pinned entry with release monitoring. ComfyUI, Raylight, Mesh and GGUF also receive version checks; automatic image/video replacement remains outside the text qualification protocol.
 
 ## Repairs
 

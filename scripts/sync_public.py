@@ -9,6 +9,9 @@ import re
 import subprocess
 
 RETIRED_FILES = (
+    'config/tensorfold-runtime.json', 'scripts/tensorfold_runtime.py', 'tests/test_tensorfold_runtime.py',
+    'docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md', 'docs/benchmark-results/20261104-tensorfold-entry-and-flash-iq1s.json',
+    'docs/TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md', 'docs/benchmark-results/20261104-tensorfold-and-unsloth.json',
     'config/bolt-offload-runtime.json',
     'scripts/bolt_runtime.py',
     'scripts/supervise_bolt.py',
@@ -91,6 +94,7 @@ FILES = (
     'docs/BOLT-AWQ-REMOVAL-20261104.md', 'docs/validation-results/20261104-bolt-awq-removal.json',
     'config/bolt-iq2-runtime.json', 'scripts/bolt_iq2_runtime.py', 'tests/test_bolt_iq2_runtime.py',
     'docs/BOLT-IQ2-ENTRY-20261104.md', 'docs/benchmark-results/20261104-bolt-iq2-entry.json',
+    'docs/BOLT-ID-RENAME-20261106.md',
     'docs/ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md',
     'config/bolt-iq2-trial.json', 'scripts/bolt_iq2_trial.py', 'scripts/bolt_iq2_worker.py', 'tests/test_bolt_iq2_trial.py',
     'docs/BOLT-NATIVE-IQ2-20261104.md', 'docs/benchmark-results/20261104-bolt-native-iq2.json',
@@ -100,9 +104,6 @@ FILES = (
     'docs/FLASH-IQ1S-ENTRY-20261104.md', 'docs/ALL-ENTRY-BENCHMARKS-20261104.md',
     'docs/benchmark-results/20261104-flash-iq1s-entry.json', 'docs/benchmark-results/20261104-all-entry-benchmarks.json',
     'docs/RAM26-28-RERUN-20261104.md', 'docs/benchmark-results/20261104-ram26-28-rerun.json',
-    'config/tensorfold-runtime.json', 'scripts/tensorfold_runtime.py', 'tests/test_tensorfold_runtime.py',
-    'docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md', 'docs/benchmark-results/20261104-tensorfold-entry-and-flash-iq1s.json',
-    'docs/TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md', 'docs/benchmark-results/20261104-tensorfold-and-unsloth.json',
     'docs/REQUESTED-TWO-MODEL-CHECKS-20261103.md', 'docs/benchmark-results/20261103-requested-two-model-checks.json',
     'docs/DSH-STARTUP-REPAIR-20261103.md', 'docs/validation-results/20261103-dsh-startup.json', 'tests/test_dsh_startup.py',
     'docs/PROVIDER-ABORT-BUFFERING-20261103.md', 'docs/validation-results/20261103-provider-abort-buffering.json',

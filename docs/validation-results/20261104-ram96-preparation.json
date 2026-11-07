@@ -185,17 +185,6 @@
         "reason": "96GB RAM user-confirmed; Linux MemTotal96227652KiB verified. Larger cache candidate; guarded qualification pending boot-proof repair."
       }
     },
-    "qwen27b-tensorfold": {
-      "budget": {
-        "high": 32,
-        "max": 36,
-        "swap": null
-      },
-      "minimum_usable_ram_gib": 90,
-      "enabled": true,
-      "context": 12288,
-      "prepared_cache": {}
-    },
     "flash-next-iq1s-llamacpp": {
       "budget": {
         "high": 84,

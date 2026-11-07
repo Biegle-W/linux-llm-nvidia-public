@@ -34,7 +34,6 @@ class WorkerBudget(unittest.TestCase):
             guarded=str(temp/'scripts/supervise_dense.py')
             cases=[('qwen27b',guarded,'hyperqwen','infinity'),
                    ('qwen27b',guarded,'sglang','infinity'),
-                   ('qwen27b',guarded,'tensorfold','infinity'),
                    ('other',guarded,'hyperqwen','1G'),
                    ('qwen27b','/unrecognized.py','hyperqwen','1G')]
             for name,command,engine,limit in cases:
@@ -54,13 +53,13 @@ class WorkerBudget(unittest.TestCase):
             (temp / 'scripts/router_client.py').write_text('import sys; print(" ".join(sys.argv[1:]))')
             for command, model in [('qwen', 'flash-next-strata'), ('glm', 'glm-maya'),
                                    ('strata-deepseek', 'deepseek-unsloth-strata'), ('maya-deepseek', 'deepseek-maya'),
-                                   ('bolt', 'bolt-vllm')]:
+                                   ('bolt', 'bolt-llamacpp')]:
                 with self.subTest(command=command):
                     result = subprocess.check_output(['bash', str(shell), command], text=True).strip()
                     self.assertEqual(result, '--model ' + model)
 
     def test_dense_models_have_selected_bounded_ram_caps(self):
-        for name in ['qwen27b-hyperqwen', 'qwen27b-sglang','qwen27b-tensorfold']:
+        for name in ['qwen27b-hyperqwen', 'qwen27b-sglang']:
             self.assertEqual(worker_budget(get_profile(name)), {'high':87.76984786987305,'max':89.76984786987305,'swap':None})
 
     def test_all_selected_moe_profiles_use_96gb_ram_budget(self):

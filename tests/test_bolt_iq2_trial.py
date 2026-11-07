@@ -6,17 +6,17 @@ import bolt_iq2_worker as worker
 from inference_swap_guard import TelemetryError
 class NativeBoltGuards(unittest.TestCase):
  def test_native_request_queue_blocks_idle(self):
-  w=worker.BoltWatch('/unused','bolt-vllm','fake',latch=False)
+  w=worker.BoltWatch('/unused','bolt-llamacpp','fake',latch=False)
   for running,queued,phase in [(0,0,'idle'),(1,0,'inference'),(0,1,'inference')]:
    with patch.object(w,'get',return_value=f'llamacpp:requests_processing {running}\nllamacpp:requests_deferred {queued}\n'):self.assertEqual(w.phase(),phase)
   with patch.object(w,'get',side_effect=OSError):
    with self.assertRaises(TelemetryError):w.phase()
  def test_invalid_telemetry_fails_closed(self):
-  w=worker.BoltWatch('/unused','bolt-vllm','fake',latch=False)
+  w=worker.BoltWatch('/unused','bolt-llamacpp','fake',latch=False)
   for text in ['', 'llamacpp:requests_processing NaN\nllamacpp:requests_deferred 0\n','llamacpp:requests_processing 0\nllamacpp:requests_deferred -1\n']:
    with patch.object(w,'get',return_value=text),self.assertRaises(TelemetryError):w.phase()
  def test_awq_swap_pressure_policy_retained(self):
-  w=worker.BoltWatch('/unused','bolt-vllm','fake',latch=False)
+  w=worker.BoltWatch('/unused','bolt-llamacpp','fake',latch=False)
   self.assertEqual((w.guard.write_limit,w.guard.combined_limit,w.guard.window_s,w.guard.pressure_limit,w.guard.bad_samples),(1,8,30,10,3))
  def test_fit_can_offload_without_lowering_context(self):
   p={'binary':'runtime/llama-server','checkpoint_directory':'models/bolt','first_shard':'bolt.gguf','planned_context':163840,'fit_target_MiB':[512,512]};cmd=worker.build_command(p)

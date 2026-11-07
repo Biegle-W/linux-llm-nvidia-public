@@ -1,24 +1,5 @@
 # NVIDIA daily engine updates
 
-## TensorFold v1.2.3 selected — November 6, 2026
-
-TensorFold 1.2.3 is selected for the existing Qwen27B EXL3 2.0bpw profile with 12,288 context and 4-bit DFlash2. The official v1.2.3 archive digest and internal checksums verified. The paired short DSH tool call, matching result, exact follow-up, resource checks and owned unload passed. The normal promotion gates passed and the updater committed the v1.2.3 pin. All 516 CPU regressions passed. Selected binary and grammar hashes verified, the API is healthy, and no update reservation or pending transaction remains. Next action is normal serving with the selected pin.
-
-[Official TensorFold v1.2.3 package and release notes](https://github.com/ashhart/TensorFold/releases/tag/v1.2.3).
-
-| Run | Prefill tok/s | Decode tok/s | Client TTFT s | Prompt / output / cached tokens |
-| --- | ---: | ---: | ---: | --- |
-| production | 577.60 | 187.62 | 10.091 | 5825 / 40 / 0 |
-| candidate | 573.37 | 187.02 | 10.166 | 5825 / 40 / 0 |
-
-Each measurement covers one short tool burst at 12,288 context.
-
-| Profile | Worker RAM high/max | Host reserve | GPU free-memory floor | Swap writes/combined | Active full PSI |
-| --- | --- | --- | --- | --- | --- |
-| qwen27b-tensorfold | 87.77/89.77 GiB | 2 GiB | 256 MiB/card after readiness, GPU0 native reserve 1 GiB | 1/8 MiB/s over 30 s, unlimited occupancy | 10% |
-
-Thermal stop 100°C. Resource checks use three bad samples at two-second intervals, with the swap/pressure window requirements.
-
 ## 2026-11-06T14:52:51
 
 - maya: **promoted**; upstream `22fc101f2c10`.
@@ -31,7 +12,6 @@ Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-se
 | --- | ---: | --- | ---: | --- |
 | qwen27b-hyperqwen | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
 | qwen27b-sglang | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
-| qwen27b-tensorfold | 87.77/89.77 | 256 MiB free/card after ready; GPU0; native1024 MiB reserve | 1/8 | 10 / none separately |
 | flash-next-iq1m-strata | 87.77/89.77 | 256 MiB free/card; 1024 MiB native reserve/card | 128/160 | 15 / none separately |
 | flash-next-strata | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
 | glm-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 10 / none separately |
@@ -46,7 +26,6 @@ Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-se
 - sglang: **unchanged**; upstream `d61ded5b9e2d`.
 - strata: **unchanged**; upstream `c3b3f5035506`.
 - llamacpp: **unchanged**; upstream `cd959bae99ff`.
-- tensorfold: **review-required-update-available**; upstream `v1.2.3`.
 - comfyui: **pinned-current**; upstream `v0.44.0`.
 - raylight: **pinned-current**; upstream `1.11.0`.
 - mesh: **pinned-current**; upstream `3804156b4b39`.
@@ -59,7 +38,6 @@ Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-se
 - sglang: **unchanged**; upstream `d61ded5b9e2d`.
 - strata: **unchanged**; upstream `c3b3f5035506`.
 - llamacpp: **unchanged**; upstream `cd959bae99ff`.
-- tensorfold: **review-required-update-available**; upstream `v1.2.3`.
 - comfyui: **pinned-current**; upstream `v0.44.0`.
 - raylight: **pinned-current**; upstream `1.11.0`.
 - mesh: **pinned-current**; upstream `3804156b4b39`.
@@ -72,7 +50,6 @@ Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-se
 - sglang: **unchanged**; upstream `d61ded5b9e2d`.
 - strata: **unchanged**; upstream `c3b3f5035506`.
 - llamacpp: **unchanged**; upstream `cd959bae99ff`.
-- tensorfold: **review-required-update-available**; upstream `v1.2.3`.
 - comfyui: **pinned-current**; upstream `v0.44.0`.
 - raylight: **pinned-current**; upstream `1.11.0`.
 - mesh: **pinned-current**; upstream `3804156b4b39`.
@@ -95,7 +72,6 @@ Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-se
 | --- | ---: | --- | ---: | --- |
 | qwen27b-hyperqwen | 32.00/36.00 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
 | qwen27b-sglang | 32.00/36.00 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
-| qwen27b-tensorfold | 32.00/36.00 | 256 MiB free/card after ready; GPU0; native1024 MiB reserve | 1/8 | 10 / none separately |
 | flash-next-iq1s-llamacpp | 87.77/89.77 | 256 MiB free/card after ready; 1536 MiB fit targets | 128/160 | 15 / none separately |
 | flash-next-strata | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
 | glm-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 10 / none separately |
@@ -106,7 +82,6 @@ Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-se
 
 ## 2026-11-05T11:44:11
 
-- tensorfold: **pinned-current**; upstream `v1.2.2`.
 - comfyui: **pinned-current**; upstream `v0.44.0`.
 - raylight: **pinned-current**; upstream `1.11.0`.
 - mesh: **pinned-current**; upstream `3804156b4b39`.
@@ -119,7 +94,6 @@ Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-se
 - sglang: **unchanged**; upstream `d61ded5b9e2d`.
 - strata: **unchanged**; upstream `ffa80d73133e`.
 - llamacpp: **unchanged**; upstream `cd959bae99ff`.
-- tensorfold: **pinned-current**; upstream `v1.2.2`.
 - comfyui: **pinned-current**; upstream `v0.44.0`.
 - raylight: **pinned-current**; upstream `1.11.0`.
 - mesh: **pinned-current**; upstream `3804156b4b39`.
@@ -132,7 +106,6 @@ Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-se
 - sglang: **unchanged**; upstream `d61ded5b9e2d`.
 - strata: **unchanged**; upstream `ffa80d73133e`.
 - llamacpp: **unchanged**; upstream `cd959bae99ff`.
-- tensorfold: **pinned-current**; upstream `v1.2.2`.
 - comfyui: **pinned-current**; upstream `v0.44.0`.
 - raylight: **pinned-current**; upstream `1.11.0`.
 - mesh: **pinned-current**; upstream `3804156b4b39`.
@@ -149,11 +122,11 @@ Headless restored-production verification is now independent of candidate visibi
 
 ## Daily updater restored — November5,2026
 
-Daily engine maintenance is enabled at03:00 America/Toronto, including guarded headless scheduled tests with private logs. Eight text entries use current grouped staging, paired short actual DSH checks and durable rollback; TensorFold and the diffusion stack receive version monitoring. The repaired exact-owner DSH path and485 CPU regressions passed. All resource guards and the20-minute update-admission gate remain. [Restoration, scope and validation](DAILY-UPDATER-RESTORATION-20261105.md). Earlier paused-update and long-suite paragraphs remain dated history.
+Daily engine maintenance is enabled at03:00 America/Toronto, including guarded headless scheduled tests with private logs. Eight text entries use current grouped staging, paired short actual DSH checks and durable rollback; the diffusion stack receives version monitoring. The repaired exact-owner DSH path and485 CPU regressions passed. All resource guards and the20-minute update-admission gate remain. [Restoration, scope and validation](DAILY-UPDATER-RESTORATION-20261105.md). Earlier paused-update and long-suite paragraphs remain dated history.
 
 ## Engine refresh and weight sharing — November5,2026
 
-Removed the3.418GB incomplete Qwen cache. HyperQwen, SGLang, Maya, Strata and shared llama.cpp are refreshed; TensorFold and ComfyUI/video integrations were already current under the stable/default-branch policy. All eight changed text entries passed guarded actual DSH read/result/exact followup and owned unload. No complete duplicate checkpoints were found; compatible entries already share weights. Daily updates stay paused; all guards and selected contexts remain. [Versions, sharing and optional cleanup](ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md); [current observations](ALL-ENTRY-BENCHMARKS-20261105.md).
+Removed the3.418GB incomplete Qwen cache. HyperQwen, SGLang, Maya, Strata and shared llama.cpp are refreshed; ComfyUI/video integrations were already current under the stable/default-branch policy. All eight changed text entries passed guarded actual DSH read/result/exact followup and owned unload. No complete duplicate checkpoints were found; compatible entries already share weights. Daily updates stay paused; all guards and selected contexts remain. [Versions, sharing and optional cleanup](ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md); [current observations](ALL-ENTRY-BENCHMARKS-20261105.md).
 
 ## Paused — November 1, 2026
 

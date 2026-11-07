@@ -1,6 +1,6 @@
 # Flash-Next IQ1_S entry — November 4, 2026
 
-`flash-next-iq1s-llamacpp` is now a separate enabled model in the authenticated API and DSH NVIDIA server provider. The display name identifies Unsloth v3.1 IQ1_S, llama.cpp, the SSD n-gram table and 12K allocation. Select it through DSH/API, or run `./scripts/start_model.sh flash-iq1s`. HyperQwen, SGLang and TensorFold remain enabled; all five older RAM/offload entries remain disabled. Existing default selections are preserved.
+`flash-next-iq1s-llamacpp` is now a separate enabled model in the authenticated API and DSH NVIDIA server provider. The display name identifies Unsloth v3.1 IQ1_S, llama.cpp, the SSD n-gram table and 12K allocation. Select it through DSH/API, or run `./scripts/start_model.sh flash-iq1s`. HyperQwen and SGLang remain enabled; all five older RAM/offload entries remain disabled. Existing default selections are preserved.
 
 ## Qualified configuration
 

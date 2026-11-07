@@ -149,7 +149,7 @@ def native(root,component,revision,directory,source,log,receipt):
         if 'not found'in linkage or 'libcudart.so.13'not in linkage or 'libcublas.so.13'not in linkage:raise RuntimeError('llama.cpp CUDA library mismatch')
         old=root/'runtimes/llama.cpp'
         hashes={str((old/'build/bin'/p.name).relative_to(root)):sha(p)for p in libs.iterdir()if p.is_file()and not p.is_symlink()and p.name.startswith('lib')}
-        manifests={'bolt-vllm':'bolt-iq2-runtime.json','flash-next-iq1s-llamacpp':'flash-iq1s-runtime.json'}
+        manifests={'bolt-llamacpp':'bolt-iq2-runtime.json','flash-next-iq1s-llamacpp':'flash-iq1s-runtime.json'}
         for name in [manifests[p] for p in component['profiles']]:
             path=root/'config'/name;manifest=json.loads(path.read_text());manifest.update(source_commit=revision,binary_sha256=sha(candidate),runtime_files_sha256=hashes);manifest.pop('release',None)
             m=directory/name;write_json(m,manifest);file_action(receipt,path,m)

@@ -14,17 +14,17 @@ class RequestState(unittest.TestCase):
   for t in ['', 'vllm:num_requests_running 0','vllm:num_requests_running nan\nvllm:num_requests_waiting 0','vllm:num_requests_running -1\nvllm:num_requests_waiting 0']:
    with self.assertRaises(ValueError):vllm_requests_busy(t)
  def test_bolt_native_phase_and_strict_defaults(self):
-  w=WorkerWatch('/fixture','bolt-vllm','fixture');self.assertEqual((w.guard.write_limit,w.guard.combined_limit,w.guard.pressure_limit),(1,8,10))
+  w=WorkerWatch('/fixture','bolt-llamacpp','fixture');self.assertEqual((w.guard.write_limit,w.guard.combined_limit,w.guard.pressure_limit),(1,8,10))
   with patch.object(w,'get',return_value='llamacpp:requests_processing 1\nllamacpp:requests_deferred 0') as get:self.assertEqual(w.phase(),'inference');get.assert_called_with('/metrics')
   with patch.object(w,'get',return_value='llamacpp:requests_processing 0\nllamacpp:requests_deferred 0'):self.assertEqual(w.phase(),'idle')
  def test_missing_phase_gauge_fails_closed(self):
-  w=WorkerWatch('/fixture','bolt-vllm','fixture')
+  w=WorkerWatch('/fixture','bolt-llamacpp','fixture')
   with patch.object(w,'get',return_value='unrelated 0'):
    with self.assertRaises(TelemetryError):w.phase()
 class ManagedUnload(unittest.TestCase):
  def exercise(self,metrics,error_code=None,unavailable=False):
   with tempfile.TemporaryDirectory() as d:
-   root=Path(d);w=manager.Workers.__new__(manager.Workers);w.active='bolt-vllm';w.key='fixture'
+   root=Path(d);w=manager.Workers.__new__(manager.Workers);w.active='bolt-llamacpp';w.key='fixture'
    def prop(unit,name):
     if unit!=manager.MOE_UNIT:return 'inactive'
     return {'ActiveState':'active','ExecStart':str(root/'scripts/serve_router_moe.py'),'InvocationID':'owned-fixture','ControlGroup':''}.get(name,'')
@@ -33,7 +33,7 @@ class ManagedUnload(unittest.TestCase):
     socket.return_value.__enter__.return_value.connect_ex.return_value=1
     if error_code:
      with self.assertRaises(manager.RouterError) as caught:w.stop_owned()
-     self.assertEqual(caught.exception.code,error_code);stop.assert_not_called();self.assertEqual(w.active,'bolt-vllm')
+     self.assertEqual(caught.exception.code,error_code);stop.assert_not_called();self.assertEqual(w.active,'bolt-llamacpp')
     else:
      w.stop_owned();stop.assert_called_once_with(['systemctl','--user','stop',manager.MOE_UNIT],check=True,timeout=90);self.assertIsNone(w.active)
     req=api.call_args.args[0];self.assertTrue(req.full_url.endswith('/metrics'));self.assertEqual(req.get_header('Authorization'),'Bearer fixture')

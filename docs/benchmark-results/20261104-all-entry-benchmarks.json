@@ -264,21 +264,6 @@
       "source": "docs/benchmark-results/20261103-requested-two-model-checks.json"
     },
     {
-      "profile": "qwen27b-tensorfold",
-      "arm": "24/26GiB normal entry",
-      "metrics": {
-        "prefill_tps": 581.9822104273828,
-        "ttft_s": 10.018767,
-        "decode_tps": 183.9249586168843,
-        "prompt_tokens": 5825,
-        "output_tokens": 40,
-        "cached_tokens": 0,
-        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
-      },
-      "context": 12288,
-      "source": "docs/benchmark-results/20261104-tensorfold-entry-and-flash-iq1s.json"
-    },
-    {
       "profile": "flash-next-iq1s-llamacpp",
       "arm": "24/26GiB isolated",
       "metrics": {
@@ -304,7 +289,7 @@
         "decode_method": "native request timings"
       },
       "context": 12288,
-      "source": "docs/benchmark-results/20261104-tensorfold-entry-and-flash-iq1s.json"
+      "source": "inline record; original combined trial file removed 2026-11-07"
     },
     {
       "profile": "qwen27b-hyperqwen",
@@ -340,24 +325,6 @@
         "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
       },
       "context": 57344,
-      "source": "docs/benchmark-results/20261104-ram26-28-rerun.json"
-    },
-    {
-      "profile": "qwen27b-tensorfold",
-      "arm": "26/28GiB rerun",
-      "metrics": {
-        "prefill_tps": 580.9562887769863,
-        "ttft_s": 10.029199,
-        "decode_tps": 180.34265103697027,
-        "prompt_tokens": 5822,
-        "output_tokens": 39,
-        "cached_tokens": 0,
-        "native_timings": {},
-        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-        "ttft_method": "engine first-token counter",
-        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
-      },
-      "context": 12288,
       "source": "docs/benchmark-results/20261104-ram26-28-rerun.json"
     },
     {
@@ -419,164 +386,6 @@
   ],
   "complete_archive": "docs/BENCHMARK-HISTORY.md and linked numeric artifacts retain all older trials, failures and retired models; no historical record is relabeled as a fresh measurement.",
   "comparison_limits": "Current32GBdirectPCIe noP2P versus historical64GBswitchedhost; differentweights,contexts,caches andspeculation. Historical DeepSeekStrata row reused5539tokens. Noequal-quality speed ranking.",
-  "earlier_isolated_tensorfold": {
-    "variants": {
-      "plain": {
-        "context": 16384,
-        "drafts": false,
-        "drafter_load_bits": null,
-        "tool_pass": true,
-        "matching_result_pass": true,
-        "exact_followup_pass": true,
-        "tool_wall_s": 23.364952151000125,
-        "owned_unload_GPU_release": true,
-        "unload_s": 0.6685099469996203,
-        "metrics": {
-          "prompt_tokens": 5830,
-          "output_tokens": 41,
-          "cached_tokens": 0,
-          "prefill_tps": 584.555736637487,
-          "prefill_method": "TensorFold native one-request prefill-time counter",
-          "ttft_s": 9.982061,
-          "ttft_method": "engine first-token counter",
-          "decode_tps": 34.39735828288387,
-          "decode_method": "TensorFold native one-request inter-token mean; parser buffering excluded"
-        },
-        "sampled_usage": {
-          "samples": 28,
-          "median_interval_s": 2.081092119216919,
-          "worker_RAM_peak_GiB": 11.19915771484375,
-          "worker_swap_peak_MiB": 0.0,
-          "host_min_available_GiB": 24.855926513671875,
-          "GPU_free_min_all_phases_MiB": [
-            2729.0,
-            9928.0
-          ],
-          "GPU_free_min_after_first_nonloading_sample_MiB": [
-            2729.0,
-            9928.0
-          ],
-          "GPU_max_temperature_C": [
-            56.0,
-            27.0
-          ],
-          "actual_memory_high": [
-            "25769803776"
-          ],
-          "actual_memory_max": [
-            "27917287424"
-          ],
-          "actual_memory_swap_max": [
-            "max"
-          ],
-          "memory_events": [
-            "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
-          ],
-          "swap_in_pages_delta": 0,
-          "swap_out_pages_delta": 0,
-          "guard_violations": []
-        }
-      },
-      "drafted": {
-        "context": 12288,
-        "drafts": true,
-        "drafter_load_bits": 4,
-        "tool_pass": true,
-        "matching_result_pass": true,
-        "exact_followup_pass": true,
-        "tool_wall_s": 22.002843142000074,
-        "owned_unload_GPU_release": true,
-        "unload_s": 1.8622581829999945,
-        "metrics": {
-          "prompt_tokens": 5824,
-          "output_tokens": 39,
-          "cached_tokens": 0,
-          "prefill_tps": 576.6283538181283,
-          "prefill_method": "TensorFold native one-request prefill-time counter",
-          "ttft_s": 10.108309,
-          "ttft_method": "engine first-token counter",
-          "decode_tps": 180.37518037518038,
-          "decode_method": "TensorFold native one-request inter-token mean; parser buffering excluded"
-        },
-        "sampled_usage": {
-          "samples": 50,
-          "median_interval_s": 2.0732648372650146,
-          "worker_RAM_peak_GiB": 11.080772399902344,
-          "worker_swap_peak_MiB": 0.0,
-          "host_min_available_GiB": 24.62496566772461,
-          "GPU_free_min_all_phases_MiB": [
-            1359.0,
-            9928.0
-          ],
-          "GPU_free_min_after_first_nonloading_sample_MiB": [
-            1489.0,
-            9928.0
-          ],
-          "GPU_max_temperature_C": [
-            64.0,
-            27.0
-          ],
-          "actual_memory_high": [
-            "25769803776"
-          ],
-          "actual_memory_max": [
-            "27917287424"
-          ],
-          "actual_memory_swap_max": [
-            "max"
-          ],
-          "memory_events": [
-            "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0"
-          ],
-          "swap_in_pages_delta": 0,
-          "swap_out_pages_delta": 0,
-          "guard_violations": []
-        },
-        "native_draft_evidence": {
-          "first_tool_decode_rounds": 4,
-          "accepted_tokens": 35,
-          "proposed_tokens": 60,
-          "scope": "short tool-call argument burst; not long prose or sustained rate"
-        }
-      }
-    },
-    "guards": {
-      "worker_RAM_high_GiB": 24,
-      "worker_RAM_max_GiB": 26,
-      "host_available_floor_GiB": 2,
-      "GPU_free_floor_MiB_each_after_ready": 256,
-      "GPU0_startup_admission_MiB": 11520,
-      "GPU1_startup_admission": "unused by single-GPU trial; reserved against independent selection",
-      "native_CUDA_reserve_GiB": 1,
-      "temperature_stop_C": 82,
-      "sample_period_s": 2,
-      "bad_resource_samples": 3,
-      "worker_swap_occupancy": "unlimited",
-      "active_swap_write_MiB_s": 1,
-      "active_swap_combined_MiB_s": 8,
-      "active_window_s": 30,
-      "active_full_PSI_percent": 10,
-      "PSI_bad_samples": 3,
-      "swap_violation": "immediate after complete active window",
-      "missing_telemetry_samples": 3,
-      "loading_PSI": "no separate threshold; host/thermal/telemetry checks remain",
-      "idle_unload_s": 600,
-      "swappiness": 60
-    },
-    "checkpoint": {
-      "repository": "Mia-AiLab/Qwen3.8-27B-EXL3-2.0bpw",
-      "revision": "b4925724092da59826c02d25a7201fb272bf4f34",
-      "quant": "EXL3 2.0bpw target; native BF16 embedding rows mapped to host memory",
-      "weight_bytes": 9672786556,
-      "storage": "Samsung SATA: models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw"
-    },
-    "drafter": {
-      "repository": "z-lab/Qwen3.8-27B-DFlash2",
-      "revision": "50307d4c4cde6860d4eee73e2547cd786fe8e8a4",
-      "checkpoint_weight_bytes": 3848817896
-    },
-    "source": "docs/benchmark-results/20261104-tensorfold-and-unsloth.json"
-  },
   "earlier_32gb_enabled": {
     "qwen27b-hyperqwen": {
       "date": "2026-11-04",
@@ -654,50 +463,6 @@
         "startup_free_MiB": [
           11520,
           8960
-        ],
-        "loading_PSI_percent": null,
-        "resource_bad_samples": 3,
-        "swap_occupancy": "unlimited",
-        "swap_write_MiB_s": 1,
-        "swap_read_plus_write_MiB_s": 8,
-        "swap_window_s": 30,
-        "active_PSI_percent": 10,
-        "PSI_bad_samples": 3
-      },
-      "source": "docs/benchmark-results/20261104-ram26-28-rerun.json"
-    },
-    "qwen27b-tensorfold": {
-      "date": "2026-11-04",
-      "model": "Qwen3.8-27B",
-      "quant": "EXL3-2.0bpw",
-      "engine": "TensorFold",
-      "context": 12288,
-      "weight_gb": 13.521604452,
-      "storage": "SATA SSD",
-      "metrics": {
-        "prefill_tps": 580.9562887769863,
-        "ttft_s": 10.029199,
-        "decode_tps": 180.34265103697027,
-        "prompt_tokens": 5822,
-        "output_tokens": 39,
-        "cached_tokens": 0,
-        "native_timings": {},
-        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-        "ttft_method": "engine first-token counter",
-        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
-      },
-      "guards": {
-        "worker_RAM_GiB": {
-          "high": 26,
-          "max": 28,
-          "swap": null
-        },
-        "host_available_reserve_GiB": 2,
-        "explicit_GPU_free_floor_MiB": 256,
-        "native_cache_reserve_MiB": null,
-        "startup_free_MiB": [
-          11000,
-          512
         ],
         "loading_PSI_percent": null,
         "resource_bad_samples": 3,
@@ -1014,137 +779,6 @@
           "startup_free_MiB": [
             11520,
             8960
-          ],
-          "loading_PSI_percent": null,
-          "resource_bad_samples": 3,
-          "swap_occupancy": "unlimited",
-          "swap_write_MiB_s": 1,
-          "swap_read_plus_write_MiB_s": 8,
-          "swap_window_s": 30,
-          "active_PSI_percent": 10,
-          "PSI_bad_samples": 3
-        },
-        "source": "docs/benchmark-results/20261104-ram26-28-rerun.json"
-      },
-      "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
-    },
-    "qwen27b-tensorfold": {
-      "model": "Qwen3.8-27B",
-      "quant": "EXL3-2.0bpw",
-      "engine": "TensorFold",
-      "context": 12288,
-      "weight_gb": 13.521604452,
-      "storage": "SATA SSD",
-      "metrics": {
-        "prefill_tps": 575.2631890813566,
-        "ttft_s": 10.135117,
-        "decode_tps": 186.95083193120212,
-        "prompt_tokens": 5825,
-        "output_tokens": 40,
-        "cached_tokens": 0,
-        "native_timings": {},
-        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-        "ttft_method": "engine first-token counter",
-        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
-      },
-      "checks": {
-        "phase": "pass",
-        "followup_passed": true,
-        "strict_final_format": true,
-        "unloaded": true,
-        "wall_s": 22.236469259000046
-      },
-      "guards": {
-        "worker_RAM_GiB": {
-          "high": 32,
-          "max": 36,
-          "swap": null
-        },
-        "host_available_reserve_GiB": 2,
-        "explicit_GPU_free_floor_MiB": 256,
-        "native_cache_reserve_MiB": null,
-        "startup_free_MiB": [
-          11000,
-          512
-        ],
-        "loading_PSI_percent": null,
-        "resource_bad_samples": 3,
-        "swap_occupancy": "unlimited",
-        "swap_write_MiB_s": 1,
-        "swap_read_plus_write_MiB_s": 8,
-        "swap_window_s": 30,
-        "active_PSI_percent": 10,
-        "PSI_bad_samples": 3
-      },
-      "resources": {
-        "lifecycle_samples": 22,
-        "lifecycle_median_interval_s": 5.075297117233276,
-        "charged_worker_RAM_peak_GiB": 15.454833984375,
-        "swap_peak_MiB": 0.0,
-        "minimum_host_available_GiB": 84.99322891235352,
-        "GPU_free_min_MiB_all_phases": [
-          1359.0,
-          9928.0
-        ],
-        "GPU_free_min_MiB_nonloading": [
-          1489.0,
-          9928.0
-        ],
-        "GPU_temperature_max_C": [
-          65.0,
-          34.0
-        ],
-        "memory_events": {
-          "high": 0,
-          "max": 0,
-          "oom": 0,
-          "oom_kill": 0
-        },
-        "effective_kernel_limits": {
-          "memory.high": "34359738368",
-          "memory.max": "38654705664",
-          "memory.swap.max": "max"
-        },
-        "guard_violations": [],
-        "complete_active_windows": 0,
-        "active_swap_write_MiB_s_max": null,
-        "active_swap_combined_MiB_s_max": null,
-        "complete_window_full_PSI_max_percent": null,
-        "loading_full_PSI_max_percent": 0.0,
-        "inference_full_PSI_max_percent": 0.0
-      },
-      "previous_reference": {
-        "date": "2026-11-04",
-        "model": "Qwen3.8-27B",
-        "quant": "EXL3-2.0bpw",
-        "engine": "TensorFold",
-        "context": 12288,
-        "weight_gb": 13.521604452,
-        "storage": "SATA SSD",
-        "metrics": {
-          "prefill_tps": 580.9562887769863,
-          "ttft_s": 10.029199,
-          "decode_tps": 180.34265103697027,
-          "prompt_tokens": 5822,
-          "output_tokens": 39,
-          "cached_tokens": 0,
-          "native_timings": {},
-          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-          "ttft_method": "engine first-token counter",
-          "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
-        },
-        "guards": {
-          "worker_RAM_GiB": {
-            "high": 26,
-            "max": 28,
-            "swap": null
-          },
-          "host_available_reserve_GiB": 2,
-          "explicit_GPU_free_floor_MiB": 256,
-          "native_cache_reserve_MiB": null,
-          "startup_free_MiB": [
-            11000,
-            512
           ],
           "loading_PSI_percent": null,
           "resource_bad_samples": 3,

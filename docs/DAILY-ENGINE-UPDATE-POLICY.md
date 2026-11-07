@@ -16,7 +16,7 @@ The restored timer runs at **03:00 America/Toronto**, skips missed runs (`Persis
 | Strata | `flash-next-strata`, `deepseek-unsloth-strata`, `flash-next-iq1m-strata` | Latest stable tag; signed feed/control/CUDA13 engines, both Qwen presets and IQ1_M pins |
 | llama.cpp | `bolt-vllm` | Latest stable tag; native IQ2 Bolt runtime/manifest |
 
-TensorFold remains a hash-pinned native package and receives a daily stable-release check. ComfyUI/Raylight stable releases and Mesh/GGUF default heads are also checked daily; newer versions are reported for separate image/video workflow and GPU-residency qualification. They are not silently installed through the text-model qualifier. No model weights, contexts, precision, driver, kernel, firmware or resource guards are automatically changed.
+ComfyUI/Raylight stable releases and Mesh/GGUF default heads are also checked daily; newer versions are reported for separate image/video workflow and GPU-residency qualification. They are not silently installed through the text-model qualifier. No model weights, contexts, precision, driver, kernel, firmware or resource guards are automatically changed.
 
 ## Admission, staging and promotion
 

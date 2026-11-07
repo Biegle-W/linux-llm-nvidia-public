@@ -15,7 +15,6 @@ Removed the single abandoned Qwen `.incomplete` download: **3,418,357,760 bytes 
 | [Maya](https://github.com/mw00/project-maya/releases/tag/v1.1.53) | 1.1.53, `7c4aa56ed7fa` | Both GLM and DeepSeek updated; bounded file cache retained |
 | [Strata](https://github.com/Niko1221/Strata/releases/tag/v0.2.10) | app 0.2.10, control and engines 0.1.56 | Both Qwen and DeepSeek updated; signed package manifests verified |
 | [llama.cpp](https://github.com/ggml-org/llama.cpp/releases/tag/v0.9.0) | stable v0.9.0, `cd959bae99ff` | Shared Bolt/Flash runtime updated |
-| [TensorFold](https://github.com/ashhart/TensorFold/releases/tag/v1.2.2) | 1.2.2 | Already latest stable; unchanged |
 | [ComfyUI](https://github.com/Comfy-Org/ComfyUI/releases/tag/v0.44.0) | 0.44.0 | Already latest stable; unchanged |
 | [Raylight](https://github.com/komikndr/raylight/releases/tag/1.11.0) | 1.11.0 | Already latest stable; unchanged |
 | [ComfyUI Mesh](https://github.com/shootthesound/comfyui-mesh) | `3804156b4b39` | Already current default-branch head |
@@ -25,7 +24,7 @@ Native builds target SM86 and use matching CUDA 13.0.88 headers/runtime/cuBLAS, 
 
 ## Validation and fixes
 
-All **eight changed text entries** passed normal-router actual DSH read/tool-result/exact follow-up, retained resource guards and owned unload. **469 CPU regressions passed**. Contexts, weights, cache choices and launch defaults remain selected. The unchanged TensorFold and diffusion engines were not rerun. There was no full-context, sustained-generation or timed-idle suite. Daily automatic updates remain paused; this manual refresh does not qualify the older unattended update pipeline for resumption.
+All **eight changed text entries** passed normal-router actual DSH read/tool-result/exact follow-up, retained resource guards and owned unload. **469 CPU regressions passed**. Contexts, weights, cache choices and launch defaults remain selected. The unchanged diffusion engines were not rerun. There was no full-context, sustained-generation or timed-idle suite. Daily automatic updates remain paused; this manual refresh does not qualify the older unattended update pipeline for resumption.
 
 The public reference has no installed private runtimes. Its full discovery ran451 tests with12 missing-runtime errors and4 skips (Maya/Strata control sources and the private xterm binary are intentionally absent). All39 public runtime-integrity checks and5 public sample/privacy checks passed. The469-test installed-project suite above passed in full. This is an export portability limitation, not a failed live model check.
 
@@ -42,7 +41,6 @@ The managed-store audit found **45 physical large weight files and zero byte-ide
 | Model/assets | Current sharing | Cleanup implication |
 | --- | --- | --- |
 | Qwen27B AutoRound,15.792GB | HyperQwen and SGLang read the same checkpoint | Already shared; retain |
-| Qwen27B EXL3 target9.673GB +DFlash2 drafter3.849GB | TensorFold uses a different format/quant and a separate draft model | AutoRound cannot replace these selected TensorFold weights |
 | DeepSeek UD-IQ1_S,232.980GB | Maya and Strata share all five checkpoint shards | Already shared; retain |
 | DeepSeek last shard,110.595GB | Project path aliases its SATA allocation | Symlink, not another110.595GB copy; deleting the target breaks both engines |
 | Flash-Next IQ1_S66.379GB /IQ3_XXS75.840GB | Different quants, each selected by an entry | Optional retirement of one entry, not duplicate-file cleanup |

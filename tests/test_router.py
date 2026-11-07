@@ -156,6 +156,18 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(json.loads(raw)['model'], 'qwen27b-hyperqwen-search')
         self.assertEqual(self.server.workers.active, 'qwen27b-hyperqwen')
+    def test_legacy_bolt_id_is_hidden_and_resolves_renamed_profile(self):
+        status, raw = self.request('/v1/models')
+        self.assertEqual(status, 200)
+        ids = {m['id'] for m in json.loads(raw)['data']}
+        self.assertIn('bolt-llamacpp', ids); self.assertNotIn('bolt-vllm', ids)
+        status, raw = self.request('/v1/models/bolt-vllm')
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(raw)['id'], 'bolt-llamacpp')
+        status, raw = self.request('/router/select', {'model': 'bolt-vllm'})
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(raw)['model'], 'bolt-vllm')
+        self.assertEqual(self.server.workers.active, 'bolt-llamacpp')
     def test_unknown_model_never_loads(self):
         before=self.server.workers.active
         self.assertEqual(self.request('/v1/chat/completions',{'model':'qwen27b-llama'})[0],404)

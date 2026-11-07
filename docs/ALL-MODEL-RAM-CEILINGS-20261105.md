@@ -4,14 +4,14 @@ All13 maintained entries now use the same worker RAM ceilings: **87.769847869873
 
 | Entry group | Coverage | High / max GiB |
 | --- | --- | ---: |
-| Dense text | Qwen27B HyperQwen, SGLang, TensorFold |87.77/89.77|
+| Dense text | Qwen27B HyperQwen, SGLang |87.77/89.77|
 | Other text | Flash-Next Strata and llama.cpp; GLM Maya; DeepSeek Maya and Strata; Bolt native IQ2 |87.77/89.77|
 | ComfyUI images | Qwen Image2.1 Turbo; FLUX3Klein |87.77/89.77|
 | ComfyUI videos | Wan2.2 5B; LTX2.3 Mesh, every configured resolution |87.77/89.77|
 
 The three dense profiles and shared ComfyUI image/video budget changed from32/36GiB. The other six text profiles already used these exact ceilings. The guarded dense launcher now reads the selected profile rather than hardcoding32/36. ComfyUI launch and admission checks read the same shared configuration. All profiles retain the installed-capacity preflight; ComfyUI also requires90GiB usable capacity for this selected setting. Generic unrelated experimental commands retain their existing smaller defaults, and updater/build coordinators retain their separate limits.
 
-All other settings remain:2GiB host available floor, unlimited maintained-worker swap occupancy, existing per-profile swap I/O and PSI limits, VRAM floors/native reserves,100C stops, three bad2-second samples, fail-closed telemetry, concurrency1, swappiness60 and idle600s. This does not enable CPU weight offload, move embeddings or increase context/cache targets. TensorFold retains its existing host-mapped embedding arrangement.
+All other settings remain:2GiB host available floor, unlimited maintained-worker swap occupancy, existing per-profile swap I/O and PSI limits, VRAM floors/native reserves,100C stops, three bad2-second samples, fail-closed telemetry, concurrency1, swappiness60 and idle600s. This does not enable CPU weight offload, move embeddings or increase context/cache targets.
 
 ## Verification
 

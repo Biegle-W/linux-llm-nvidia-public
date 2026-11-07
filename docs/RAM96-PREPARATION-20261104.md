@@ -14,7 +14,6 @@ Private preimages preserve the previous32 GB configuration and saved pre-migrati
 | --- | ---: | --- | ---: |
 | HyperQwen | 32/36 | GPU-only inference; larger bounded loading/file-cache headroom; no new CPU weight offload | 86,016 |
 | SGLang | 32/36 | GPU-only inference; larger bounded loading/file-cache headroom; no MTP increase | 57,344 |
-| TensorFold Qwen27B | 32/36 | Same EXL3 target,4-bit DFlash2/copies and native host-mapped embeddings | 12,288 |
 | Flash-Next IQ1_S / llama.cpp | 84/86 | Same lazy NVMe n-gram mapping; room for a larger OS file cache without forcing the whole table to be pinned | 12,288 |
 | Flash-Next IQ3 / Strata — paused | 84/86 | Saved resident non-GPU-cache-complement mode restored in its config | 131,072 |
 | GLM/Maya — paused | 84/86 | Native expert RAM tier cap64 decimal GB, previously16; saved64 GB-machine cap was40 | 65,536 |

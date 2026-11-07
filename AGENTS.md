@@ -1,5 +1,9 @@
 # Agent entry point
 
+## Bolt ID renamed to `bolt-llamacpp` — November6,2026
+
+The Bolt native IQ2/llama.cpp entry now uses ID `bolt-llamacpp`; the vLLM-era `bolt-vllm` ID stays accepted as a router alias and DSH migrates saved selections. Weights, runtime, context and all guards are unchanged; no benchmark was repeated. All519 CPU regressions pass. [Rename and compatibility](docs/BOLT-ID-RENAME-20261106.md).
+
 ## Maya1.1.56 selected with reviewed performance exception — November6,2026
 
 Maya1.1.56 is selected for both GLM and DeepSeek after explicit human acceptance of the measured8.19% prefill/6.10% decode slowdown. The preserved tested binaries, reconstructed patched source and354 protected assets verified before transactional activation. All516 CPU regressions pass; prior118/118 native tests on each GPU and both short DSH tool/result/follow-up checks remain the qualification evidence. The one-time exception applies only to this run; scheduled5% gates and all guards remain unchanged. Active binary hashes and API/hub/DSH health pass; GPUs are idle, the03:00 timer is active, and no pending transaction/publication or reservation remains. No inference benchmark was repeated. Next action is normal use. [Acceptance and qualification](docs/MAYA-QUALIFICATION-REPAIR-20261106.md).
@@ -44,11 +48,11 @@ Owned cleanup must retain the shared bounded retry policy and refuse ownership c
 
 ## Daily updater restored — November5,2026
 
-Daily engine maintenance is enabled at03:00 America/Toronto, including guarded headless scheduled tests with private logs. Eight text entries use current grouped staging, paired short actual DSH checks and durable rollback; TensorFold and the diffusion stack receive version monitoring. The repaired exact-owner DSH path and485 CPU regressions passed. All resource guards and the20-minute update-admission gate remain. [Restoration, scope and validation](docs/DAILY-UPDATER-RESTORATION-20261105.md). Earlier paused-update and long-suite paragraphs remain dated history.
+Daily engine maintenance is enabled at03:00 America/Toronto, including guarded headless scheduled tests with private logs. Eight text entries use current grouped staging, paired short actual DSH checks and durable rollback; the diffusion stack receives version monitoring. The repaired exact-owner DSH path and485 CPU regressions passed. All resource guards and the20-minute update-admission gate remain. [Restoration, scope and validation](docs/DAILY-UPDATER-RESTORATION-20261105.md). Earlier paused-update and long-suite paragraphs remain dated history.
 
 ## Engine refresh and weight sharing — November5,2026
 
-Removed the3.418GB incomplete Qwen cache. HyperQwen, SGLang, Maya, Strata and shared llama.cpp are refreshed; TensorFold and ComfyUI/video integrations were already current under the stable/default-branch policy. All eight changed text entries passed guarded actual DSH read/result/exact followup and owned unload. No complete duplicate checkpoints were found; compatible entries already share weights. Daily updates stay paused; all guards and selected contexts remain. [Versions, sharing and optional cleanup](docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md); [current observations](docs/ALL-ENTRY-BENCHMARKS-20261105.md).
+Removed the3.418GB incomplete Qwen cache. HyperQwen, SGLang, Maya, Strata and shared llama.cpp are refreshed; ComfyUI/video integrations were already current under the stable/default-branch policy. All eight changed text entries passed guarded actual DSH read/result/exact followup and owned unload. No complete duplicate checkpoints were found; compatible entries already share weights. Daily updates stay paused; all guards and selected contexts remain. [Versions, sharing and optional cleanup](docs/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md); [current observations](docs/ALL-ENTRY-BENCHMARKS-20261105.md).
 
 ## Both video entries now offer 720p/1080p — November5,2026
 
@@ -87,7 +91,7 @@ An isolated ComfyUI0.44.0 / PyTorch2.13.0 CUDA13 environment and Desktop-only **
 
 ## Unused Qwen GGUF target/drafter deleted — November 4, 2026
 
-The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries, the selected TensorFold DFlash2 drafter and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](docs/UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
+The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](docs/UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
 
 ## Retired AWQ Bolt assets deleted — November 4, 2026
 
@@ -115,15 +119,7 @@ Linux now sees 91.77 GiB usable RAM. Nine larger-RAM candidate definitions and c
 
 ## Worker RAM raised to 26/28 GiB; requested reruns passed — November 4, 2026
 
-All eight profile definitions now use 26/28 GiB soft/hard worker limits. HyperQwen, SGLang, TensorFold DFlash2/copies and the isolated Flash-Next IQ1_S SSD-table candidate each passed one fresh actual DSH tool/result/exact-follow-up and owned unload; 438 CPU regressions passed. The other five profiles remain disabled. Host2 GiB, VRAM256 MiB/card, thermal82 C, swap/PSI/transport/ownership guards, contexts, weights and defaults remain unchanged. Flash-Next measured93.35 prefill tok/s,63.238 s client TTFT and 28.23 decode tok/s; sampled swap483 MiB and soft-limit reclaim persisted, so larger limits showed no speed improvement in this single run. All workers are stopped, GPUs1 MiB each, API/hub/DSH active and no reservation remains. This supersedes earlier24/26 GiB operational descriptions; historical results retain their original guards. [Results, comparison and guard tables](docs/RAM26-28-RERUN-20261104.md).
-
-## TensorFold DFlash2/copies entry enabled — November 4, 2026
-
-The user-requested `qwen27b-tensorfold` entry is enabled alongside HyperQwen and SGLang, with the same tested EXL3 2.0bpw target, 4-bit DFlash2 drafter, automatic copies and 12,288 context. The normal-router actual DSH tool/result/exact-follow-up and owned unload passed: 581.98 prefill tok/s, 10.019 s TTFT and 183.92 decode tok/s on a short speculative tool burst. Single GPU0 plus host-mapped embeddings; native 1 GiB reserve and all resource guards remain. API/DSH show three entries; defaults are preserved and workers finish idle. The separately requested Flash-Next IQ1_S passed an isolated actual DSH tool/result/exact-follow-up and owned unload with its n-gram table lazily mapped on NVMe: 101.50 prefill tok/s, 58.113 s client TTFT and 29.14 decode tok/s at 12K. All three publisher hashes and native/process mapping proof passed; no guard violation. Soft RAM reclaim and287 MiB sampled swap are recorded, with bounded active rates. It remains an isolated candidate; the enabled menu has three entries and older disabled RAM profiles stay disabled. This update supersedes earlier same-day candidate-only and two-enabled-entry descriptions. [Configuration, guards and results](docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md).
-
-## TensorFold candidate and Unsloth v3.1 assessed — November 4, 2026
-
-Experimental TensorFold1.2.2 Qwen27B EXL3 2.0bpw passed actual DSH read/result/exact-follow-up and owned unload: plain16K measured584.6 prefill /9.982s TTFT /34.40 decode; DFlash2-4bit12K measured576.6 /10.108s /180.38tok/s on a short tool-argument burst. Single GPU0 and host-mapped embeddings, lower precision/context, no production promotion. Failed8K client-budget and16K drafted-memory admissions are retained; no guard was relaxed. All test workers are stopped, GPUs idle, reservation released, API/hub/DSH preserved. Unsloth's new IQ1_S plus SSD-mapped n-gram table is a plausible separate candidate; no Flash-Next weights downloaded or disabled profile restored. [Evidence and limits](docs/TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md).
+All eight profile definitions now use 26/28 GiB soft/hard worker limits. HyperQwen, SGLang and the isolated Flash-Next IQ1_S SSD-table candidate each passed one fresh actual DSH tool/result/exact-follow-up and owned unload; 438 CPU regressions passed. The other five profiles remain disabled. Host2 GiB, VRAM256 MiB/card, thermal82 C, swap/PSI/transport/ownership guards, contexts, weights and defaults remain unchanged. Flash-Next measured93.35 prefill tok/s,63.238 s client TTFT and 28.23 decode tok/s; sampled swap483 MiB and soft-limit reclaim persisted, so larger limits showed no speed improvement in this single run. All workers are stopped, GPUs1 MiB each, API/hub/DSH active and no reservation remains. This supersedes earlier24/26 GiB operational descriptions; historical results retain their original guards. [Results, comparison and guard tables](docs/RAM26-28-RERUN-20261104.md).
 
 ## Requested enabled-model checks passed — November 3, 2026
 

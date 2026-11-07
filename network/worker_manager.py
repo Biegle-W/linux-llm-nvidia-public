@@ -83,10 +83,6 @@ class Workers:
         if pid.isdigit() and int(pid) > 0:
             try:
                 cmd = (Path('/proc') / pid / 'cmdline').read_bytes().split(b'\0')
-                if any(b'supervise_dense.py' in x or b'serve_qwen27b_engines.py' in x for x in cmd) and b'tensorfold' in cmd:
-                    return 'qwen27b-tensorfold'
-                if any(b'tensorfold-native' in x for x in cmd):
-                    return 'qwen27b-tensorfold'
                 if any(b'env-hyperqwen/bin/vllm' in x for x in cmd):
                     return 'qwen27b-hyperqwen'
                 if any(b'supervise_dense.py' in x for x in cmd) and b'hyperqwen' in cmd:
@@ -133,8 +129,8 @@ class Workers:
             if not recognized:
                 raise RouterError('An unexpected process owns the inference unit; nothing was stopped.', 'ownership_conflict')
             invocation = unit_property(unit, 'InvocationID')
-            llama_active = getattr(self, 'active', None) in ('flash-next-iq1s-llamacpp','bolt-vllm')
-            if unit == MOE_UNIT and (llama_active or getattr(self, 'active', None) == 'bolt-vllm'):
+            llama_active = getattr(self, 'active', None) in ('flash-next-iq1s-llamacpp','bolt-llamacpp')
+            if unit == MOE_UNIT and (llama_active or getattr(self, 'active', None) == 'bolt-llamacpp'):
                 request = urllib.request.Request('http://127.0.0.1:10000/metrics',
                           headers={'Authorization': 'Bearer ' + self.key})
                 try:
@@ -269,8 +265,8 @@ class Workers:
                 return
         # Native Strata/Maya pages call their worker directly, outside this router lock.
         # Observe their status as well before starting a switch.
-        llama_active = self.active in ('flash-next-iq1s-llamacpp','bolt-vllm')
-        vllm_active = self.active == 'bolt-vllm' or llama_active
+        llama_active = self.active in ('flash-next-iq1s-llamacpp','bolt-llamacpp')
+        vllm_active = self.active == 'bolt-llamacpp' or llama_active
         if self.active and (vllm_active or all_profiles().get(self.active, {}).get('engine') in ('Strata', 'Maya')):
             deadline = time.monotonic() + 7200
             while True:

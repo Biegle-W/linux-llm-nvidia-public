@@ -52,10 +52,7 @@ def validate_update_coverage(catalog, policy):
                 or not ((name == 'deepseek-unsloth-strata'
                             and profiles[name]['engine'] == 'Strata'
                             and profiles[name].get('runtime_manifest') == 'config/deepseek-unsloth-runtime.json')
-                        or (name == 'qwen27b-tensorfold'
-                            and profiles[name]['engine'] == 'TensorFold'
-                            and profiles[name].get('runtime_manifest') == 'config/tensorfold-runtime.json')
-                        or (name == 'bolt-vllm'
+                        or (name == 'bolt-llamacpp'
                             and profiles[name]['engine'] == 'llama.cpp'
                             and profiles[name].get('runtime_manifest') == 'config/bolt-iq2-runtime.json')
                         or (name == 'flash-next-iq1s-llamacpp'

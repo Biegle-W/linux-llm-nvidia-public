@@ -2,7 +2,7 @@
 
 Fresh tests on the i9-13900KS, 96GB-class RAM and RTX3080Ti12GB plus RTX308010GB. Both GPUs use host-staged PCIe4x8/x8 with CUDA P2P unavailable. Nine text entries and four ComfyUI entries passed their selected guarded checks. Separately downloaded vision-adapter outcomes appear below.
 
-Each text row is one actual DSH read tool generation followed by executed tool/result, exact proof follow-up and owned unload. Loading and follow-up are excluded from performance timing. Native engine request timing or one-request counters provide prefill/decode. TensorFold uses the native TPOT inverse for a short DFlash2 speculative tool burst. All first calls report zero cached prompt tokens. OS file caches were retained. Prompt/output lengths differ by tokenizer and appear in the machine-readable evidence. No aggregation, sustained test or full-window quality claim.
+Each text row is one actual DSH read tool generation followed by executed tool/result, exact proof follow-up and owned unload. Loading and follow-up are excluded from performance timing. Native engine request timing or one-request counters provide prefill/decode. All first calls report zero cached prompt tokens. OS file caches were retained. Prompt/output lengths differ by tokenizer and appear in the machine-readable evidence. No aggregation, sustained test or full-window quality claim.
 
 ## VRAM-only models
 
@@ -31,11 +31,9 @@ Bolt retains its qualified minimum CPU-mapped weight component while most weight
 
 ## Other host-backed selected profiles
 
-TensorFold is a dense model with host-mapped embeddings and GPU0 DFlash2 execution.
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen3.8-27B / EXL3-2.0bpw | TensorFold | 570.85 | 10.218 | 190.767 | 12,288 | 9.673 | SATA, `models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw` |
 
 Storage is decimal GB of checkpoint GGUF/safetensors files only. Shared Qwen and DeepSeek checkpoints repeat across engine rows but occupy storage once. Separate native packs, MTP/draft files and model tables remain in the coverage manifest.
 
@@ -52,7 +50,6 @@ Configured limits are separate from observed usage. All entries retain 2 GiB hos
 | deepseek-maya / UD-IQ1_S (Unsloth Dynamic3.1) | Maya |87.77/89.77GiB high/max,2GiB host reserve, active PSI 15%, no separate loading threshold | Native reserve guard + 1024MiB native reserve/fit target | Unlimited occupancy, 128/160MiB/s write/combined over30s |
 | bolt-vllm / native-IQ2 | llama.cpp |87.77/89.77GiB high/max,2GiB host reserve, active/loading PSI 10/15% | 256MiB free/card after readiness + 384MiB native reserve/fit target | Unlimited occupancy, 1/8MiB/s write/combined over30s |
 | deepseek-unsloth-strata / UD-IQ1_S (Unsloth Dynamic3.1) | Strata |87.77/89.77GiB high/max,2GiB host reserve, active/loading PSI 15/15% | 256MiB free/card after readiness + 1024MiB native reserve/fit target | Unlimited occupancy, 128/160MiB/s write/combined over30s |
-| qwen27b-tensorfold / EXL3-2.0bpw | TensorFold |87.77/89.77GiB high/max,2GiB host reserve, active PSI 10%, no separate loading threshold | 256MiB free/card after readiness + 1024MiB native reserve/fit target, GPU0 execution | Unlimited occupancy, 1/8MiB/s write/combined over30s |
 | flash-next-iq1m-strata / Unsloth-Dynamic-v3.1-UD-IQ1_M | Strata |87.77/89.77GiB high/max,2GiB host reserve, active PSI 15%, no separate loading threshold | 256MiB free/card after readiness + 1024MiB native reserve/fit target | Unlimited occupancy, 128/160MiB/s write/combined over30s |
 | qwen-image-2.1-turbo | ComfyUI |87.77/89.77GiB high/max,2GiB host reserve, active/loading PSI10/15% |256MiB free/card, three bad2s samples, both GPUs, GPU-only neural execution |Unlimited occupancy,1/8MiB/s write/combined over30s |
 | flux3-klein | ComfyUI |87.77/89.77GiB high/max,2GiB host reserve, active/loading PSI10/15% |256MiB free/card, three bad2s samples, both GPUs, GPU-only neural execution |Unlimited occupancy,1/8MiB/s write/combined over30s |
@@ -92,6 +89,6 @@ The initial GLM adapter request failed because the configured encoder executable
 
 The managed model tree, its resolved SATA store and Hugging Face cache were checked. No unmatched complete large checkpoints were found outside the managed tree. Ollama and LMStudio model stores are absent. The manifest accounts for every discovered model-format file, including symlink aliases and small metadata. The initial large-file audit counted 46 unique physical files of at least 100 MB, including derived packs and a generated GLM prompt cache.
 
-Every standalone main checkpoint has a fresh owning-profile result above. Text encoders, all image/video VAEs, LTX text projection, Flash MTP and TensorFold DFlash2 are exercised by their owning workflows. Derived dense packs and generated prompt caches are accounted for separately. Optional integrated Qwen vision and MTP heads are present inside the text checkpoints, but their separate modes remain unqualified under the selected dense configurations. The downloaded optional Qwen MTP tensors are retained disabled following earlier VRAM failures. These optional modes are not separate downloaded model entries.
+Every standalone main checkpoint has a fresh owning-profile result above. Text encoders, all image/video VAEs, LTX text projection and Flash MTP are exercised by their owning workflows. Derived dense packs and generated prompt caches are accounted for separately. Optional integrated Qwen vision and MTP heads are present inside the text checkpoints, but their separate modes remain unqualified under the selected dense configurations. The downloaded optional Qwen MTP tensors are retained disabled following earlier VRAM failures. These optional modes are not separate downloaded model entries.
 
 [Machine-readable measurements, token lengths, guard values and full asset coverage](benchmark-results/20261105-all-models-rerun.json). Earlier observations remain in the [previous current index](ALL-ENTRY-BENCHMARKS-20261105.md).

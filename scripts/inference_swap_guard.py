@@ -148,12 +148,11 @@ class WorkerWatch:
             if phase in ('loading', 'warmup', 'idle'):
                 return 'loading' if phase == 'warmup' else phase
         try:
-            if self.profile in ('flash-next-iq1s-llamacpp','bolt-vllm'):
+            if self.profile in ('flash-next-iq1s-llamacpp','bolt-llamacpp'):
                 busy = llama_requests_busy(self.get('/metrics'))
-            elif self.profile.startswith('qwen27b-') or self.profile == 'bolt-vllm':
+            elif self.profile.startswith('qwen27b-') or self.profile == 'bolt-llamacpp':
                 text = self.get('/metrics')
                 name = ('sglang:num_running_reqs' if self.profile.endswith('sglang')
-                        else 'tensorfold:num_requests_running' if self.profile == 'qwen27b-tensorfold'
                         else 'vllm:num_requests_running')
                 values = [float(line.rsplit(' ', 1)[1]) for line in text.splitlines()
                           if line.startswith(name + '{') or line.startswith(name + ' ')]

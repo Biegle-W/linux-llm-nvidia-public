@@ -11,7 +11,7 @@ ROUTER_URL='http://127.0.0.1:10100/v1'
 LEGACY_ROUTER_IDS={'nvidia-hyperqwen','nvidia-sglang','nvidia-router','nvidia-maya','nvidia-vllm-offload'}
 PLAIN='qwen27b-hyperqwen'
 SEARCH=PLAIN+'-search'
-MODEL_REPLACEMENTS={'flash-next-iq1s-llamacpp':'flash-next-iq1m-strata'}
+MODEL_REPLACEMENTS={'flash-next-iq1s-llamacpp':'flash-next-iq1m-strata','bolt-vllm':'bolt-llamacpp'}
 RETIRED={'super-vllm','super-strata-trial'}|set(MODEL_REPLACEMENTS)
 
 def exposed_id(identifier):return PLAIN if identifier==SEARCH else identifier
@@ -42,7 +42,7 @@ def router_providers(providers,profiles):
         if 'models' in p:p['models']=remaining
     for p in profiles:
         identifier=exposed_id(p['id']);m=models.setdefault(identifier,{'id':identifier})
-        if identifier=='bolt-vllm':m['name']=p.get('display_name') or p['model']+' / '+p['engine']
+        if identifier=='bolt-llamacpp':m['name']=p.get('display_name') or p['model']+' / '+p['engine']
         m.setdefault('name',p.get('display_name') or p['model']+' / '+p['engine'])
         if identifier==PLAIN and 'web search' in m['name'].lower():m['name']=p.get('display_name') or p['model']+' / '+p['engine']
         m.update(contextWindow=p['allocated_context'],maxTokens=4096,reasoningEfforts=False)

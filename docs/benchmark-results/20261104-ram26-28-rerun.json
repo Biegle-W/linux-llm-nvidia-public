@@ -202,103 +202,6 @@
         "decode_tps": 0.04451834807508437
       }
     },
-    "qwen27b-tensorfold": {
-      "engine": "TensorFold1.2.2 DFlash2-4bit+copies",
-      "context": 12288,
-      "checkpoint_weight_bytes": 13521604452,
-      "storage": "SATA SSD",
-      "metrics": {
-        "prefill_tps": 580.9562887769863,
-        "ttft_s": 10.029199,
-        "decode_tps": 180.34265103697027,
-        "prompt_tokens": 5822,
-        "output_tokens": 39,
-        "cached_tokens": 0,
-        "native_timings": {},
-        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-        "ttft_method": "engine first-token counter",
-        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
-      },
-      "baseline_24_26": {
-        "prefill_tps": 581.9822104273828,
-        "ttft_s": 10.018767,
-        "decode_tps": 183.9249586168843
-      },
-      "checks": {
-        "phase": "pass",
-        "followup_passed": true,
-        "strict_final_format": true,
-        "unloaded": true,
-        "wall_s": 22.236075351999716
-      },
-      "guards": {
-        "worker_RAM_GiB": {
-          "high": 26,
-          "max": 28,
-          "swap": null
-        },
-        "host_available_reserve_GiB": 2,
-        "explicit_GPU_free_floor_MiB": 256,
-        "native_cache_reserve_MiB": null,
-        "startup_free_MiB": [
-          11000,
-          512
-        ],
-        "loading_PSI_percent": null,
-        "resource_bad_samples": 3,
-        "swap_occupancy": "unlimited",
-        "swap_write_MiB_s": 1,
-        "swap_read_plus_write_MiB_s": 8,
-        "swap_window_s": 30,
-        "active_PSI_percent": 10,
-        "PSI_bad_samples": 3
-      },
-      "resources": {
-        "samples": 20,
-        "median_interval_s": 5.087751150131226,
-        "worker_ram_peak_GiB": 14.795330047607422,
-        "swap_peak_MiB": 0.0,
-        "gpu_free_min_MiB": [
-          1355.0,
-          9928.0
-        ],
-        "gpu_free_min_after_nonloading_MiB": [
-          1355.0,
-          9928.0
-        ],
-        "gpu_temperature_max_C": [
-          61.0,
-          37.0
-        ],
-        "host_available_min_GiB": 24.93010711669922,
-        "memory_events": {
-          "low": "0",
-          "high": "0",
-          "max": "0",
-          "oom": "0",
-          "oom_kill": "0",
-          "oom_group_kill": "0",
-          "sock_throttled": "0"
-        },
-        "effective_limits": {
-          "memory.high": "27917287424",
-          "memory.max": "30064771072",
-          "memory.swap.max": "max"
-        },
-        "guard_violations": [],
-        "complete_active_windows": 0,
-        "loading_PSI_full_max_percent": 0.0,
-        "inference_PSI_full_max_percent": 0.0,
-        "complete_window_PSI_full_max_percent": null,
-        "active_write_mib_s_max": null,
-        "active_combined_mib_s_max": null
-      },
-      "change_percent": {
-        "prefill_tps": -0.17628058590367646,
-        "ttft_s": 0.10412458938309221,
-        "decode_tps": -1.9477006311992673
-      }
-    },
     "flash-next-iq1s-candidate": {
       "engine": "llama.cpp build11909",
       "context": 12288,
@@ -485,8 +388,8 @@
   "maintenance": [
     "All8catalogworkerbudgets26/28GiB;5disabledprofilesstaydisabled",
     "Otherguards andcontexts unchanged",
-    "Corrected priorTensorFold integration regression in vLLM/Bolt busy-gauge parser",
-    "Stale guard fixtures updated; retired updater component removed andTensorFold explicitly pinned; updates remainpaused"
+    "Corrected prior integration regression in vLLM/Bolt busy-gauge parser",
+    "Stale guard fixtures updated; retired updater component removed; updates remainpaused"
   ],
   "final_state": {
     "services": {
@@ -503,11 +406,9 @@
   },
   "engine_alternatives": {
     "conclusion": "No faster engine proven on this host for the exact newIQ1S checkpoint. No alternateengine installed or modelconverted by this rerun.",
-    "TensorFold": "Installed1.2.2 capabilities list qwen4_exp mlx-q4g32/modelopt-mixed, not GGUF; newer upstream recipes add EXL3/NVFP4 but need differentweights and separatequalification.",
     "Strata": "Supports FlashNext andIQkernels, but current documented UnslothUD-IQ1S release support is DeepSeek; that does not establish FlashNextIQ1S-v3.1 compatibility.",
     "Maya": "Official current model list has GLM,DeepSeek,MiniMax, not FlashNext.",
     "sources": [
-      "https://github.com/ashhart/TensorFold/blob/main/docs/recipes/qwen3.8-flash-next.md",
       "https://github.com/Niko1221/Strata/releases/tag/v0.2.9",
       "https://github.com/mw00/project-maya"
     ]

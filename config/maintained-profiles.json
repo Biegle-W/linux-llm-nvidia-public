@@ -2455,7 +2455,7 @@
       }
     },
     {
-      "id": "bolt-vllm",
+      "id": "bolt-llamacpp",
       "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
       "status": "selected",
       "launch": [
@@ -2501,7 +2501,7 @@
       },
       "runtime_manifest": "config/bolt-iq2-runtime.json",
       "native_request_protocol": "llama.cpp",
-      "api_id_compatibility": "Historical bolt-vllm ID retained; now serves native IQ2 llama.cpp, not AWQ.",
+      "api_id_compatibility": "Renamed from bolt-vllm on 2026-11-06; the router accepts bolt-vllm as a legacy alias and DSH migrates saved selections.",
       "retired_AWQ_evidence": "docs/RAM96-RESTORATION-20261104.md",
       "selected_settings": {
         "fit_target_MiB": [
@@ -2736,98 +2736,6 @@
         "source_commit": "c3b3f5035506f3e966f1b4b7b188aeaabae92f1d",
         "status": "passed short DSH; explicit manual acceptance of DeepSeek one-token variance",
         "evidence": "docs/STRATA-0211-QUALIFICATION-20261105.md"
-      }
-    },
-    {
-      "id": "qwen27b-tensorfold",
-      "model": "Qwen3.8-27B",
-      "display_name": "Qwen27B TensorFold EXL3 2bpw + DFlash2 4bit / copies (12K)",
-      "weight_quant": "EXL3-2.0bpw",
-      "engine": "TensorFold",
-      "status": "selected",
-      "launch": [
-        "qwen27b",
-        "tensorfold"
-      ],
-      "allocated_context": 12288,
-      "worker_memory_gib": {
-        "high": 87.76984786987305,
-        "max": 89.76984786987305,
-        "swap": null
-      },
-      "host_ram_reserve_gib": 2,
-      "storage": {
-        "access": "ram-resident",
-        "required_transport": "sata",
-        "checkpoint_directory": "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw"
-      },
-      "startup_gpu_free_mib": [
-        11000,
-        512
-      ],
-      "availability": {
-        "enabled": true
-      },
-      "evidence": "docs/TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md",
-      "notes": "Single GPU0 execution with native host-mapped embeddings, DFlash2 4-bit and automatic context copies; lower precision and context than AutoRound. Native 1GiB reserve unchanged. Short tool burst is not sustained prose throughput.",
-      "runtime": "runtimes/tensorfold-1.2.3/tensorfold-1.2.3-linux-x86_64/bin/tensorfold-native",
-      "drafter_directory": "models/engine-tests/qwen38-27b-tensorfold-dflash2",
-      "drafter_bits": 4,
-      "current_configuration_benchmark": {
-        "prefill_tps": 573.371241785288,
-        "decode_tps": 187.02075930428276,
-        "ttft_s": 10.165768,
-        "prompt_tokens": 5825,
-        "output_tokens": 40,
-        "cached_tokens": 0,
-        "date": "2026-11-06",
-        "context": 12288,
-        "source": "docs/DAILY-ENGINE-UPDATES.md",
-        "scope": "Single paired short DSH qualification; no full-context or sustained claim"
-      },
-      "runtime_manifest": "config/tensorfold-runtime.json",
-      "short_tool_benchmark_history": [
-        {
-          "date": "2026-11-04",
-          "prefill_tps": 581.9822104273828,
-          "ttft_s": 10.018767,
-          "decode_tps": 183.9249586168843,
-          "context": 12288,
-          "scope": "one actual DSH read-tool generation; short speculative burst; no sustained/full-context test",
-          "evidence": "docs/TENSORFOLD-ENTRY-AND-FLASH-IQ1S-20261104.md"
-        },
-        {
-          "date": "2026-11-04",
-          "status": "one short actual DSH read/result/exact followup and owned unload at26/28GiB; nofull-context/stress test",
-          "source": "docs/benchmark-results/20261104-ram26-28-rerun.json",
-          "context": 12288,
-          "worker_RAM_high_max_GiB": [
-            26,
-            28
-          ],
-          "prefill_tps": 580.9562887769863,
-          "ttft_s": 10.029199,
-          "decode_tps": 180.34265103697027,
-          "prompt_tokens": 5822,
-          "output_tokens": 39,
-          "cached_tokens": 0,
-          "native_timings": {},
-          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-          "ttft_method": "engine first-token counter",
-          "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
-        }
-      ],
-      "minimum_usable_ram_gib": 90,
-      "ram_upgrade_qualification": {
-        "date": "2026-11-04",
-        "RAM_class": "96GB",
-        "short_tool_followup_owned_unload": "passed",
-        "full_context_stress": false
-      },
-      "engine_refresh_qualification": {
-        "source_commit": "6ec5fa4cb233f3606acbdad5bec433f0f8758f96",
-        "status": "passed paired short DSH qualification",
-        "evidence": "docs/DAILY-ENGINE-UPDATES.md"
       }
     },
     {

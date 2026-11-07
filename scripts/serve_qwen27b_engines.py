@@ -48,7 +48,7 @@ def preflight(profile):
     if (not group.endswith('/llm-test-qwen27b.service')
             or limit != expected_max
             or (base / 'memory.high').read_text().strip() != expected_high):
-        sys.exit('Use scripts/start_model.sh qwen27b [hyperqwen|sglang|tensorfold].')
+        sys.exit('Use scripts/start_model.sh qwen27b [hyperqwen|sglang].')
     from profile_catalog import require_host_capacity
     require_host_capacity(profile)
     verify_storage(profile)
@@ -103,13 +103,9 @@ def wait_for_gpu_memory(profile, timeout=20, clock=time.monotonic, sleep=time.sl
 
 def main():
     engine = sys.argv[1] if len(sys.argv) == 2 else 'hyperqwen'
-    if engine not in ('hyperqwen', 'sglang', 'tensorfold') or len(sys.argv) > 2:
-        sys.exit('Usage: serve_qwen27b_engines.py hyperqwen|sglang|tensorfold')
+    if engine not in ('hyperqwen', 'sglang') or len(sys.argv) > 2:
+        sys.exit('Usage: serve_qwen27b_engines.py hyperqwen|sglang')
     profile = require_enabled(get_profile('qwen27b-' + engine))
-    if engine == 'tensorfold':
-        from tensorfold_runtime import serve
-        serve(profile)
-        return
     preflight(profile)
     cuda = ROOT / 'runtimes/engine-tools/lib/python3.12/site-packages/nvidia/cu13'
     env = dict(os.environ, CUDA_HOME=str(cuda), CUDA_DEVICE_ORDER='PCI_BUS_ID',

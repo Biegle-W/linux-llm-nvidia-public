@@ -7,7 +7,7 @@ from profile_catalog import get_profile
 import configure
 class MaintainedBoltIQ2(unittest.TestCase):
  def setUp(self):
-  self.profile=get_profile('bolt-vllm');self.manifest=json.loads((ROOT/'config/bolt-iq2-runtime.json').read_text())
+  self.profile=get_profile('bolt-llamacpp');self.manifest=json.loads((ROOT/'config/bolt-iq2-runtime.json').read_text())
  def test_only_qualified_minimum_setting_can_start(self):
   runtime.verify(self.profile,self.manifest)
   for fit in [[256,256],[512,512]]:
@@ -22,7 +22,14 @@ class MaintainedBoltIQ2(unittest.TestCase):
   self.assertEqual(cmd[cmd.index('--port')+1],'10000');self.assertEqual(cmd[cmd.index('--alias')+1],'bolt')
   self.assertEqual(cmd[cmd.index('--fit-target')+1],'384,384')
  def test_dsh_saved_awq_name_is_replaced_without_losing_other_routes(self):
-  providers={'nvidia-strata':{'baseURL':configure.ROUTER_URL,'models':[{'id':'bolt-vllm','name':'Bolt AWQ old name'}]},'unrelated':{'baseURL':'http://example.invalid/v1','models':[{'id':'other','name':'Keep custom name'}]}}
+  providers={'nvidia-strata':{'baseURL':configure.ROUTER_URL,'models':[{'id':'bolt-llamacpp','name':'Bolt AWQ old name'}]},'unrelated':{'baseURL':'http://example.invalid/v1','models':[{'id':'other','name':'Keep custom name'}]}}
   result=configure.router_providers(providers,[self.profile]);model=result['nvidia-strata']['models'][0]
-  self.assertIn('native IQ2',model['name']);self.assertNotIn('AWQ',model['name']);self.assertEqual(model['id'],'bolt-vllm');self.assertEqual(result['unrelated'],providers['unrelated'])
+  self.assertIn('native IQ2',model['name']);self.assertNotIn('AWQ',model['name']);self.assertEqual(model['id'],'bolt-llamacpp');self.assertEqual(result['unrelated'],providers['unrelated'])
+ def test_renamed_bolt_id_replaces_saved_vllm_entry_and_selection(self):
+  old='bolt-vllm';new='bolt-llamacpp'
+  providers={'nvidia-strata':{'baseURL':configure.ROUTER_URL,'models':[{'id':old,'name':'Bolt AWQ old name'}]},'external':{'baseURL':'http://example.invalid/v1','models':[{'id':old}]}}
+  result=configure.router_providers(providers,[self.profile])
+  self.assertEqual([m['id'] for m in result['nvidia-strata']['models']],[new]);self.assertEqual(result['external'],providers['external'])
+  self.assertEqual(configure.migrate_selection({'provider':configure.ROUTER_ID,'model':old},routes={}),{'provider':configure.ROUTER_ID,'model':new})
+  self.assertEqual(configure.migrate_selection({'provider':'external','model':old},routes={}),{'provider':'external','model':old})
 if __name__=='__main__':unittest.main()

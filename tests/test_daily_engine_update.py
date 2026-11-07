@@ -383,8 +383,8 @@ class NativeCheckpointCountingTests(unittest.TestCase):
 
 class CatalogCoverageTests(unittest.TestCase):
     def fixture(self):
-        catalog={'profiles':[{'id':'dense','engine':'HyperQwen-vLLM'}, {'id':'bolt-vllm','engine':'llama.cpp','runtime_manifest':'config/bolt-iq2-runtime.json'}]}
-        policy={'components':[{'profiles':['dense']}], 'pinned_profiles':[{'profile':'bolt-vllm','reason':'Independent qualified runtime snapshot'}]}
+        catalog={'profiles':[{'id':'dense','engine':'HyperQwen-vLLM'}, {'id':'bolt-llamacpp','engine':'llama.cpp','runtime_manifest':'config/bolt-iq2-runtime.json'}]}
+        policy={'components':[{'profiles':['dense']}], 'pinned_profiles':[{'profile':'bolt-llamacpp','reason':'Independent qualified runtime snapshot'}]}
         return catalog,policy
     def test_pinned_custom_profile_preserves_managed_coverage(self):
         from daily_engine_update import validate_update_coverage
@@ -395,18 +395,11 @@ class CatalogCoverageTests(unittest.TestCase):
         for change in ['missing','duplicate','unknown','reason','managed']:
             catalog,policy=self.fixture()
             if change=='missing':policy['pinned_profiles']=[]
-            if change=='duplicate':policy['components'][0]['profiles'].append('bolt-vllm')
+            if change=='duplicate':policy['components'][0]['profiles'].append('bolt-llamacpp')
             if change=='unknown':policy['pinned_profiles'][0]['profile']='unknown'
             if change=='reason':policy['pinned_profiles'][0]['reason']=' '
             if change=='managed':catalog['profiles'][1]['engine']='Maya'
             with self.subTest(change=change),self.assertRaises(RuntimeError):validate_update_coverage(catalog,policy)
-    def test_tensorfold_pin_requires_its_exact_runtime_manifest(self):
-        from daily_engine_update import validate_update_coverage
-        catalog={'profiles':[{'id':'qwen27b-tensorfold','engine':'TensorFold','runtime_manifest':'config/tensorfold-runtime.json'}]}
-        policy={'components':[], 'pinned_profiles':[{'profile':'qwen27b-tensorfold','reason':'Pinned native EXL3/DFlash2 runtime'}]}
-        validate_update_coverage(catalog,policy)
-        catalog['profiles'][0]['runtime_manifest']='config/unrelated.json'
-        with self.assertRaises(RuntimeError):validate_update_coverage(catalog,policy)
     def test_review_catalog_policy_pair_has_complete_coverage(self):
         from daily_engine_update import validate_update_coverage
         root=Path(__file__).resolve().parents[1]

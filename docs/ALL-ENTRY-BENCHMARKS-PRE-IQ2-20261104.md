@@ -21,13 +21,12 @@ At the user's request the six RAM-heavy profiles leave **exactly 2 GiB outside t
 
 ## Short actual-tool measurements
 
-Loading and follow-up are excluded from prefill/TTFT/decode. Contexts are allocated limits, not newly stress-qualified windows. Weights use decimal GB; the TensorFold total includes its drafter, and HyperQwen/SGLang share weights.
+Loading and follow-up are excluded from prefill/TTFT/decode. Contexts are allocated limits, not newly stress-qualified windows. Weights use decimal GB; HyperQwen/SGLang share weights.
 
 | Model / quant | Engine | Prefill tok/s | TTFT s | Decode tok/s | Context tokens | Storage GB | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 2065.02 | 2.852 | 62.33 | 86,016 | 15.792 | SATA SSD |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 2211.30 | 2.790 | 60.21 | 57,344 | 15.792 | SATA SSD |
-| Qwen3.8-27B / EXL3-2.0bpw | TensorFold | 575.26 | 10.135 | 186.95 | 12,288 | 13.522 | SATA SSD |
 | Qwen3.8-Flash-Next / Unsloth-Dynamic-v3.1-UD-IQ1_S | llama.cpp11909 | 120.21 | 48.674 | 35.94 | 12,288 | 66.379 | NVMe SSD |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | 934.80 | 6.205 | 63.20 | 131,072 | 75.840 | NVMe SSD |
 | GLM-5.3-Flash / Maya-S24 | Maya | 546.90 | 10.199 | 15.20 | 65,536 | 94.702 | NVMe SSD |
@@ -35,7 +34,7 @@ Loading and follow-up are excluded from prefill/TTFT/decode. Contexts are alloca
 | NVIDIA-Nemotron-3.5-Bolt-74B-A9B / AWQ-INT4 | vLLM-offload | 217.35 | 29.320 | 0.36 | 163,840 | 55.333 | SATA SSD |
 | DeepSeek-V4.1-Flash-1017 / UD-IQ1_S (Unsloth Dynamic3.1) | Strata | 29.10 | 5.840 | 12.20 | 32,768 | 232.980 | NVMe + SATA SSDs |
 
-These are single short-call observations, not a quality ranking or sustained throughput test. TensorFold uses DFlash2-4bit/copies and its decode figure is a short speculative tool-argument burst. Client TTFT includes tool-parser/SSE buffering. Native cache counters and timing methods are retained in the numeric record; OS file caches were not dropped. The current DeepSeek/Strata request reused 5,539 of 5,707 prompt tokens from its native persistent cache; its 29.1 prefill tok/s covers only the uncached remainder, and its TTFT is a cached-prompt observation. DeepSeek/Strata's historical reference reused 5,539 of 5,710 prompt tokens, so its older prefill figure cannot be compared as a cold full-prompt speed. The already completed matching-policy HyperQwen check was retained when the user changed the RAM-heavy limits; it was not replayed to select a better score.
+These are single short-call observations, not a quality ranking or sustained throughput test. Client TTFT includes tool-parser/SSE buffering. Native cache counters and timing methods are retained in the numeric record; OS file caches were not dropped. The current DeepSeek/Strata request reused 5,539 of 5,707 prompt tokens from its native persistent cache; its 29.1 prefill tok/s covers only the uncached remainder, and its TTFT is a cached-prompt observation. DeepSeek/Strata's historical reference reused 5,539 of 5,710 prompt tokens, so its older prefill figure cannot be compared as a cold full-prompt speed. The already completed matching-policy HyperQwen check was retained when the user changed the RAM-heavy limits; it was not replayed to select a better score.
 
 ## Effective guard policy
 
@@ -45,7 +44,6 @@ All rows retain host-available reserve 2 GiB, thermal stop 82 C with three bad t
 | --- | ---: | --- | ---: | --- |
 | qwen27b-hyperqwen | 32.00/36.00 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
 | qwen27b-sglang | 32.00/36.00 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
-| qwen27b-tensorfold | 32.00/36.00 | GPU0; native 1024 MiB reserve; 256 MiB free/card after ready | 1/8 | 10 / none separately |
 | flash-next-iq1s-llamacpp | 87.77/89.77 | 256 MiB free/card after ready; 1536 MiB fit targets | 128/160 | 15 / none separately |
 | flash-next-strata | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
 | glm-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 10 / none separately |
@@ -61,7 +59,6 @@ Telemetry samples can miss transient peaks. Cgroup charged memory includes file-
 | --- | ---: | ---: | ---: | --- | --- | --- |
 | qwen27b-hyperqwen | 22.16 | 0.0 | 81.16 | 3305/1316 | 52/42 | PASS / PASS / PASS |
 | qwen27b-sglang | 8.90 | 0.0 | 80.37 | 528/1847 | 52/39 | PASS / PASS / PASS |
-| qwen27b-tensorfold | 15.45 | 0.0 | 84.99 | 1489/9928 | 65/34 | PASS / PASS / PASS |
 | flash-next-iq1s-llamacpp | 37.05 | 0.0 | 86.56 | 1593/1512 | 61/38 | PASS / PASS / PASS |
 | flash-next-strata | 82.87 | 0.0 | 42.99 | 547/638 | 57/40 | PASS / PASS / PASS |
 | glm-maya | 75.52 | 0.0 | 16.33 | 799/818 | 59/44 | PASS / PASS / PASS |
@@ -77,7 +74,6 @@ These changes compare single observations across different RAM/cache/topology co
 | --- | --- | --- | ---: |
 | qwen27b-hyperqwen | 2065.24 / 62.59 | 2065.02 / 62.33 | -0.4% |
 | qwen27b-sglang | 2232.88 / 60.23 | 2211.30 / 60.21 | -0.0% |
-| qwen27b-tensorfold | 580.96 / 180.34 | 575.26 / 186.95 | +3.7% |
 | flash-next-iq1s-llamacpp | 88.79 / 31.10 | 120.21 / 35.94 | +15.5% |
 | flash-next-strata | 506.20 / 60.20 | 934.80 / 63.20 | +5.0% |
 | glm-maya | 342.40 / 7.10 | 546.90 / 15.20 | +114.1% |
@@ -98,7 +94,7 @@ The entire section below is dated pre-restoration evidence. Its statements about
 
 Four entries are currently enabled on the temporary32 GB Z690/13900KS host, using direct CPU PCIe4 x8/x8 without CUDA P2P. Flash-Next IQ1_S is now `flash-next-iq1s-llamacpp`, with its n-gram table lazily mapped on NVMe. Five older entries remain disabled; their numbers below are explicitly historical64 GB/switched-host references. Defaults and their disabled state are preserved.
 
-These are short actual DSH read-tool observations, excluding loading and follow-up timing. Current entries passed matching executed tool results, exact follow-ups and owned unload. Context columns are allocated limits, not full-window stress qualification. Different precision, cached prompts, speculation and hardware prevent an equal-quality ranking. Decimal GB are used for weights; HyperQwen and SGLang share one checkpoint. The TensorFold size includes its separate drafter.
+These are short actual DSH read-tool observations, excluding loading and follow-up timing. Current entries passed matching executed tool results, exact follow-ups and owned unload. Context columns are allocated limits, not full-window stress qualification. Different precision, cached prompts, speculation and hardware prevent an equal-quality ranking. Decimal GB are used for weights; HyperQwen and SGLang share one checkpoint.
 
 ## Latest current enabled results
 
@@ -106,10 +102,9 @@ These are short actual DSH read-tool observations, excluding loading and follow-
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 2065.24 | 3.073 | 62.59 | 86,016 | 15.792 | SATA SSD |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 2232.88 | 2.767 | 60.23 | 57,344 | 15.792 | SATA SSD |
-| Qwen3.8-27B / EXL3-2.0bpw | TensorFold | 580.96 | 10.029 | 180.34 | 12,288 | 13.522 | SATA SSD |
 | Qwen3.8-Flash-Next / Unsloth-Dynamic-v3.1-UD-IQ1_S | llama.cpp11909 | 88.79 | 66.292 | 31.10 | 12,288 | 66.379 | NVMe SSD |
 
-TensorFold decode is a short DFlash2-4bit/copies burst, not sustained prose. It runs on GPU0 with host-mapped embeddings. Flash-Next uses both GPUs and CPU-mapped weights; its table is SSD-backed but OS caches were not dropped, so cold-SSD performance is not established. See [the new entry qualification](FLASH-IQ1S-ENTRY-20261104.md) and [the 26/28rerun](RAM26-28-RERUN-20261104.md).
+Flash-Next uses both GPUs and CPU-mapped weights; its table is SSD-backed but OS caches were not dropped, so cold-SSD performance is not established. See [the new entry qualification](FLASH-IQ1S-ENTRY-20261104.md) and [the 26/28rerun](RAM26-28-RERUN-20261104.md).
 
 ## Current effective guards
 
@@ -117,7 +112,6 @@ TensorFold decode is a short DFlash2-4bit/copies burst, not sustained prose. It 
 | --- | --- | --- | --- |
 | HyperQwen | 26/28 GiB; 2 GiB host available | 256 MiB free/card after ready | Unlimited occupancy; active writes 1 / reads+writes 8 MiB/s over 30 s; full PSI>10% for 3 samples |
 | SGLang | 26/28 GiB; 2 GiB host available | 256 MiB free/card after ready | Unlimited occupancy; active writes 1 / reads+writes 8 MiB/s over 30 s; full PSI>10% for 3 samples |
-| TensorFold | 26/28 GiB; 2 GiB host available | GPU0; native 1 GiB reserve; 256 MiB free/card after ready | Unlimited occupancy; active writes 1 / reads+writes 8 MiB/s over 30 s; full PSI>10% for 3 samples |
 | Flash-Next IQ1_S | 26/28 GiB; 2 GiB host available | Both GPUs; 1536 MiB fit targets; 256 MiB independent stop floor/card | Unlimited occupancy; active writes 128 / reads+writes 160 MiB/s over 30 s; full PSI>15% for 3 samples |
 
 Resource/temperature checks use three bad2-second samples and 82 C; missing telemetry fails closed after three. PSI applies after a complete30-second active window; rate violations stop once that window exists. Outside inference the window resets. These entries have no separate loading-PSI stop. Current-boot host-staged proof remains mandatory. Swappiness60, parallel1 and idle600 remain. Actual cgroup limits were verified in each current check; no guard violation occurred. Sampled usage and loading-transient exceptions remain in the linked numeric records.
@@ -154,26 +148,15 @@ This table keeps both earlier24/26 GiB and newer26/28 GiB observations. It is no
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding / 24/26GiB enabled-model check | HyperQwen-vLLM | 2077.92 | 2.821 | 62.53 | 86,016 | 15.792 | SATA SSD |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding / 24/26GiB enabled-model check | SGLang | 2137.89 | 3.044 | 60.20 | 57,344 | 15.792 | SATA SSD |
-| Qwen3.8-27B / EXL3-2.0bpw / 24/26GiB normal entry | TensorFold | 581.98 | 10.019 | 183.92 | 12,288 | 13.522 | SATA SSD |
 | Qwen3.8-Flash-Next / Unsloth-Dynamic-v3.1-UD-IQ1_S / 24/26GiB isolated | llama.cpp11909 | 101.50 | 58.113 | 29.14 | 12,288 | 66.379 | NVMe SSD |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding / 26/28GiB rerun | HyperQwen-vLLM | 2065.24 | 3.073 | 62.59 | 86,016 | 15.792 | SATA SSD |
 | Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding / 26/28GiB rerun | SGLang | 2232.88 | 2.767 | 60.23 | 57,344 | 15.792 | SATA SSD |
-| Qwen3.8-27B / EXL3-2.0bpw / 26/28GiB rerun | TensorFold | 580.96 | 10.029 | 180.34 | 12,288 | 13.522 | SATA SSD |
 | Qwen3.8-Flash-Next / Unsloth-Dynamic-v3.1-UD-IQ1_S / 26/28GiB rerun | llama.cpp11909 | 93.35 | 63.238 | 28.23 | 12,288 | 66.379 | NVMe SSD |
 | Qwen3.8-Flash-Next / Unsloth-Dynamic-v3.1-UD-IQ1_S / 26/28GiB normal entry qualification | llama.cpp11909 | 88.79 | 66.292 | 31.10 | 12,288 | 66.379 | NVMe SSD |
 
-The two earlier isolated TensorFold settings also remain separate observations:
-
-| Model / quant / arm | Engine | Prefill tok/s | TTFT s | Decode tok/s | Context tokens | Storage GB | Storage location |
-| --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Qwen27B EXL3 2bpw / plain | TensorFold 1.2.2 | 584.56 | 9.982 | 34.40 | 16,384 | 9.673 | SATA SSD |
-| Qwen27B EXL3 2bpw / DFlash2-4bit + copies | TensorFold 1.2.2 | 576.63 | 10.108 | 180.38 | 12,288 | 13.522 | SATA SSD |
-
 | Earlier profile | RAM high/max; host reserve | VRAM policy | Swap and pressure |
 | --- | --- | --- | --- |
-| HyperQwen / SGLang / TensorFold 24/26 references | 24/26 GiB; 2 GiB | 256 MiB free/card after ready; TensorFold native 1 GiB reserve | Unlimited; 1/8 MiB/s over 30 s; 10% full PSI,3 samples |
+| HyperQwen / SGLang 24/26 references | 24/26 GiB; 2 GiB | 256 MiB free/card after ready | Unlimited; 1/8 MiB/s over 30 s; 10% full PSI,3 samples |
 | Flash-Next IQ1_S24/26 reference | 24/26 GiB; 2 GiB | Both GPUs; 1536 MiB fit targets and 256 MiB free/card stop | Unlimited; 128/160 MiB/s over 30 s; 15% full PSI,3 samples |
-
-Earlier plain/drafted TensorFold settings use that24/26 GiB policy, GPU0 only, native 1 GiB reserve,2-second resource checks,82 C and three bad samples; GPU1 remained reserved but unused. Their full token/cache/resource tables and rejected8K/16K admissions remain in [the original assessment](TENSORFOLD-AND-UNSLOTH-ASSESSMENT-20261104.md). No failed admission is presented as a qualified benchmark.
 
 The [machine-readable index](benchmark-results/20261104-all-entry-benchmarks.json) retains source references, token/cache counts and timing methods. The complete older archive, tuning arms, failures and retired models remain linked from [the benchmark ledger](BENCHMARK-HISTORY.md); those hundreds of dated experiments are not replaced by this entry summary.

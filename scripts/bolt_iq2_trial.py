@@ -38,7 +38,7 @@ def main():
   assert inactive(),'Independent worker appeared; preserve it'
   pins=json.loads((WORK/'pins.json').read_text());state.update(phase='loading',pins=pins,baseline_gpu=baseline,reservation_owned=True);save()
   from profile_catalog import get_profile,worker_budget,budget_systemd_size,require_host_capacity
-  profile=get_profile('bolt-vllm');require_host_capacity(profile);budget=worker_budget(profile);state['guards']={'worker_RAM_GiB':budget,'host_available_GiB':2,'GPU_free_MiB':256,'temperature_C':100,'swap_write_combined_MiB_s':[1,8],'active_PSI_percent':10,'loading_PSI_percent':15,'window_s':30,'bad_samples':3};save()
+  profile=get_profile('bolt-llamacpp');require_host_capacity(profile);budget=worker_budget(profile);state['guards']={'worker_RAM_GiB':budget,'host_available_GiB':2,'GPU_free_MiB':256,'temperature_C':100,'swap_write_combined_MiB_s':[1,8],'active_PSI_percent':10,'loading_PSI_percent':15,'window_s':30,'bad_samples':3};save()
   from visible_terminal import open_monitor
   if '--foreground-backend' in sys.argv[2:]:
    print('Backend log shares this visible foreground terminal explicitly.',flush=True)

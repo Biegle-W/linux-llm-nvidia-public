@@ -17,7 +17,7 @@ ram_high=32G
 ram_max=36G
 if [[ "$name" == qwen27b && $# -eq 3 && "$1" == /usr/bin/python3 &&
       "$2" == "$root/scripts/supervise_dense.py" &&
-      ( "$3" == hyperqwen || "$3" == sglang || "$3" == tensorfold ) ]]; then
+      ( "$3" == hyperqwen || "$3" == sglang ) ]]; then
   swap_limit=infinity
   read -r ram_high ram_max < <(/usr/bin/python3 - "$root" "$3" <<'PY'
 import sys
@@ -30,9 +30,7 @@ PY
 fi
 monitor_args=(--title "LLM: $name" --unit "llm-test-${name}.service")
 if [[ "$name" == qwen27b ]]; then
-  if [[ "${3:-}" == tensorfold ]]; then
-    monitor_args=(--title "TensorFold DFlash2 / copies backend" --unit "llm-test-${name}.service")
-  elif [[ "${3:-}" == sglang ]]; then
+  if [[ "${3:-}" == sglang ]]; then
     monitor_args=(--title "SGLang backend" --unit "llm-test-${name}.service")
   else
     monitor_args=(--title "HyperQwen vLLM backend" --unit "llm-test-${name}.service")

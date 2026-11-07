@@ -478,66 +478,6 @@
       }
     },
     {
-      "id": "qwen27b-tensorfold",
-      "model": "Qwen3.8-27B",
-      "quant": "EXL3-2.0bpw",
-      "engine": "TensorFold",
-      "context": 12288,
-      "checkpoint_GB": 9.672786556,
-      "storage": {
-        "access": "ram-resident",
-        "required_transport": "sata",
-        "checkpoint_directory": "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw"
-      },
-      "benchmark": {
-        "model": "qwen27b-tensorfold",
-        "measurement": "first actual DSH tool-call generation",
-        "loading_excluded": true,
-        "prompt_tokens": 5828,
-        "output_tokens": 41,
-        "cached_tokens": 0,
-        "native_timings": {},
-        "client_ttft_s": 10.3555460030002,
-        "client_last_token_s": 10.438384498000232,
-        "meaningful_sse_chunks": 6,
-        "generation_wall_s": 10.444850537998718,
-        "usage": {
-          "prompt_tokens": 5828,
-          "completion_tokens": 41,
-          "total_tokens": 5869,
-          "prompt_tokens_details": {
-            "cached_tokens": 0
-          },
-          "completion_tokens_details": {
-            "reasoning_tokens": 0
-          }
-        },
-        "prefill_tps": 570.852066253318,
-        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
-        "ttft_s": 10.217941,
-        "ttft_method": "engine first-token counter",
-        "decode_tps": 190.76688286913392,
-        "decode_method": "TensorFold one-request native TPOT inverse; short speculative tool burst, not sustained prose"
-      },
-      "passed": true,
-      "guards": {
-        "worker_RAM_high_GiB": 87.76984786987305,
-        "worker_RAM_max_GiB": 89.76984786987305,
-        "host_available_min_GiB": 2,
-        "swap_occupancy": "unlimited",
-        "swap_write_MiB_s": 1,
-        "swap_combined_MiB_s": 8,
-        "swap_window_s": 30,
-        "active_full_PSI_percent": 10,
-        "loading_full_PSI_percent": null,
-        "explicit_free_VRAM_floor_MiB": 256,
-        "native_reserve_MiB": 1024,
-        "bad_samples": 3,
-        "sample_seconds": 2,
-        "temperature_C": 100
-      }
-    },
-    {
       "id": "flash-next-iq1m-strata",
       "model": "Qwen3.8-Flash-Next",
       "quant": "Unsloth-Dynamic-v3.1-UD-IQ1_M",
@@ -953,21 +893,6 @@
       "path": "models/engine-tests/qwen38-27b-hyperqwen-fast/mtp_draft_vocab_ids.pt",
       "bytes": 329341,
       "role": "Optional integrated Qwen MTP tensors/metadata, disabled in selected dense profiles after earlier VRAM qualification"
-    },
-    {
-      "path": "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/model-00001-of-00002.safetensors",
-      "bytes": 8574469488,
-      "role": "Checkpoint or supporting native pack executed through its owning text profile"
-    },
-    {
-      "path": "models/engine-tests/qwen38-27b-tensorfold-mia-exl3-2bpw/model-00002-of-00002.safetensors",
-      "bytes": 1098317068,
-      "role": "Checkpoint or supporting native pack executed through its owning text profile"
-    },
-    {
-      "path": "models/engine-tests/qwen38-27b-tensorfold-dflash2/model.safetensors",
-      "bytes": 3848817896,
-      "role": "Active DFlash2 drafter in TensorFold benchmark"
     },
     {
       "path": "models/maya/DeepSeek-V4.1-Flash-1017-GGUF/vision/vision.bin",
