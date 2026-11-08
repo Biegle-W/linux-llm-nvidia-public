@@ -1,5 +1,29 @@
 # NVIDIA daily engine updates
 
+## 2026-11-08T03:46:31
+
+- comfyui: **pinned-current**; upstream `v0.44.0`.
+- raylight: **pinned-current**; upstream `1.11.0`.
+- mesh: **pinned-current**; upstream `3804156b4b39`.
+- gguf: **pinned-current**; upstream `6ea2651e7df6`.
+- strata: **promoted**; upstream `146df3c46873`.
+  - `flash-next-strata`: 131072 context, 1046.00 prefill tok/s, 86.00 decode tok/s, 5.469 s TTFT.
+  - `deepseek-unsloth-strata`: 32768 context, 86.00 prefill tok/s, 11.70 decode tok/s, 66.299 s TTFT.
+
+Effective guards (configured, not peak usage):2GiB host available;100C;3 bad2-second samples; unlimited swap occupancy; swap rates averaged over30s. Selected native reserves and active/loading PSI exceptions remain unchanged.
+
+| Profile | Worker RAM high/max GiB | GPU policy | Active swap writes/combined | Active/loading PSI % |
+| --- | ---: | --- | ---: | --- |
+| qwen27b-hyperqwen | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
+| qwen27b-sglang | 87.77/89.77 | 256 MiB free/card after ready | 1/8 | 10 / none separately |
+| flash-next-iq1m-strata | 87.77/89.77 | 256 MiB free/card; 1024 MiB native reserve/card | 128/160 | 15 / none separately |
+| flash-next-strata | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
+| glm-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 10 / none separately |
+| deepseek-maya | 87.77/89.77 | 1024 MiB native reserve | 128/160 | 15 / none separately |
+| bolt-vllm | 87.77/89.77 | 256 MiB free/card after ready; 384 MiB fit targets | 1/8 | 10 / 15 |
+| deepseek-unsloth-strata | 87.77/89.77 | 256 MiB free/card after ready; 1024 MiB native reserve | 128/160 | 15 / 15 |
+
+
 ## 2026-11-08T03:00:05
 
 - hyperqwen: **unchanged**; upstream `6ab9bd05cb84`.
