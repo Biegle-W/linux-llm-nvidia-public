@@ -100,7 +100,8 @@ def maya_qualification_options(root, directory, source, log, receipt):
     fixture = directory/'ple-fixture'
     run([python, root/'scripts/generate_ple_fixture.py', fixture], log,
         env=dict(os.environ, OPENBLAS_NUM_THREADS='2'), timeout=300)
-    table = root/'models/unsloth/flash-next-iq1m-v31/Qwen3.8-Flash-Next-UD-IQ1_M-00003-of-00003.gguf'
+    # Same PLE table tensor data as the retired IQ1_M shard 3 (only GGUF split-index header bytes differ).
+    table = root/'models/strata/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf'
     if not table.is_file():
         raise RuntimeError('Existing PLE table required; no automatic weight download')
     receipt['qualification_patch_sha256'] = sha(root/'patches/maya-qualification-v1156.patch')
@@ -149,7 +150,7 @@ def native(root,component,revision,directory,source,log,receipt):
         if 'not found'in linkage or 'libcudart.so.13'not in linkage or 'libcublas.so.13'not in linkage:raise RuntimeError('llama.cpp CUDA library mismatch')
         old=root/'runtimes/llama.cpp'
         hashes={str((old/'build/bin'/p.name).relative_to(root)):sha(p)for p in libs.iterdir()if p.is_file()and not p.is_symlink()and p.name.startswith('lib')}
-        manifests={'bolt-llamacpp':'bolt-iq2-runtime.json','flash-next-iq1s-llamacpp':'flash-iq1s-runtime.json'}
+        manifests={'bolt-llamacpp':'bolt-iq2-runtime.json'}
         for name in [manifests[p] for p in component['profiles']]:
             path=root/'config'/name;manifest=json.loads(path.read_text());manifest.update(source_commit=revision,binary_sha256=sha(candidate),runtime_files_sha256=hashes);manifest.pop('release',None)
             m=directory/name;write_json(m,manifest);file_action(receipt,path,m)
@@ -178,16 +179,9 @@ def download(asset,directory):
 def strata_qwen_actions(root,component,directory,terminal,version,qwen,release,receipt):
     from update_builders import canonical
     for profile in component['profiles']:
-        if profile not in ('flash-next-strata','flash-next-iq1m-strata'):continue
+        if profile!='flash-next-strata':continue
         cfg_path=canonical(root,profile);cfg=json.loads(cfg_path.read_text());cfg.update(exe=str(qwen/'strata'),lib_dirs=[str(qwen),str(qwen/'lib')],cwd=str(terminal/version))
         c=directory/(profile+'-launch-private.json');write_json(c,cfg);file_action(receipt,cfg_path,c)
-        if profile=='flash-next-iq1m-strata':
-            pin_path=root/'config/flash-iq1m-strata-runtime.json';pins=json.loads(pin_path.read_text())
-            old_parent=str(Path(pins['binary']).parent)+'/'
-            hashes={k:v for k,v in pins['runtime_files_sha256'].items()if not k.startswith(old_parent)}
-            hashes.update({str(p.relative_to(root)):sha(p)for p in qwen.rglob('*')if p.is_file()})
-            pins.update(binary=str((qwen/'strata').relative_to(root)),runtime_files_sha256=hashes,engine_version=version,release=release['tag_name'])
-            p=directory/'flash-iq1m-strata-runtime.json';write_json(p,pins);file_action(receipt,pin_path,p)
 
 
 def signed_strata(root,component,revision,directory,source,log,receipt):

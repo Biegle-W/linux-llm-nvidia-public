@@ -1,0 +1,113 @@
+{
+ "date": "2026-11-08",
+ "retired_profile": "flash-next-iq1m-strata",
+ "kept_profile": "flash-next-strata",
+ "requested_by": "owner, explicit",
+ "comparison": {
+  "flash-next-strata": {
+   "tools": [
+    8,
+    8
+   ],
+   "retrieval": [
+    4,
+    4
+   ],
+   "gsm8k": [
+    49,
+    50
+   ],
+   "humaneval_1_40": [
+    40,
+    40
+   ],
+   "math_l45": [
+    58,
+    80
+   ],
+   "humaneval_41_164": [
+    118,
+    124
+   ],
+   "tool_5k_prefill_decode": [
+    1243,
+    146
+   ],
+   "prompt_24k_prefill_decode": [
+    2375,
+    108
+   ],
+   "write_400_decode": 124
+  },
+  "flash-next-iq1m-strata": {
+   "tools": [
+    8,
+    8
+   ],
+   "retrieval": [
+    4,
+    4
+   ],
+   "gsm8k": [
+    49,
+    50
+   ],
+   "humaneval_1_40": [
+    39,
+    40
+   ],
+   "math_l45": [
+    62,
+    80
+   ],
+   "humaneval_41_164": [
+    116,
+    124
+   ],
+   "tool_5k_prefill_decode": [
+    1322,
+    149
+   ],
+   "prompt_24k_prefill_decode": [
+    2215,
+    113
+   ],
+   "write_400_decode": 124
+  },
+  "paired_item_differences": {
+   "only_iq3_xxs_correct": 5,
+   "only_iq1m_correct": 7
+  }
+ },
+ "deleted": {
+  "models/unsloth/flash-next-iq1m-v31": 68007094938,
+  "models/strata/packs/unsloth_iq1m_v31": 1548108441,
+  "free_space_gain_bytes": 69555245056
+ },
+ "ple_table": {
+  "old": "models/unsloth/flash-next-iq1m-v31/Qwen3.8-Flash-Next-UD-IQ1_M-00003-of-00003.gguf",
+  "new": "models/strata/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf",
+  "size_bytes": 28800138432,
+  "differing_bytes": 2,
+  "differing_offsets": [
+   45,
+   70
+  ],
+  "difference": "GGUF split.no / split.count header values only"
+ },
+ "checks": {
+  "unit_tests": "516 OK",
+  "v1_models_count": 7,
+  "iq1m_request_status": 404,
+  "flash_next_strata_load_s": 36.9,
+  "flash_next_strata_answer_ok": true,
+  "gpu_after_unload_mib": [
+   1,
+   1
+  ]
+ },
+ "not_rerun": [
+  "Maya build with new PLE table path (next daily update)",
+  "DSH web restart"
+ ]
+}

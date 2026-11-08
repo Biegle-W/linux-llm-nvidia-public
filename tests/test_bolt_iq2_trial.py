@@ -23,6 +23,10 @@ class NativeBoltGuards(unittest.TestCase):
   for flag in ['--ctx-size','--fit-ctx']:self.assertEqual(cmd[cmd.index(flag)+1],'163840')
   self.assertEqual(cmd[cmd.index('--fit-target')+1],'512,512')
   for flag in ['--cpu-moe','--n-cpu-moe','--gpu-layers','-ngl','--mmproj']:self.assertNotIn(flag,cmd)
+  self.assertEqual(cmd[cmd.index('--cache-ram')+1],'0')
+  for cache in [4096,'8192',True]:
+   with self.assertRaises(ValueError):worker.build_command(dict(p,cache_ram_MiB=cache))
+  self.assertEqual(worker.build_command(dict(p,cache_ram_MiB=8192))[cmd.index('--cache-ram')+1],'8192')
   p['fit_target_MiB']=[256,256];self.assertEqual(worker.build_command(p)[worker.build_command(p).index('--fit-target')+1],'256,256')
   p['fit_target_MiB']=[384,384];self.assertEqual(worker.build_command(p)[worker.build_command(p).index('--fit-target')+1],'384,384')
   p['fit_target_MiB']=[128,128]

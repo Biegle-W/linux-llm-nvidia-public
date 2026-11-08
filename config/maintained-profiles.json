@@ -1220,10 +1220,10 @@
       "selected_settings": {
         "mmap_experts": true,
         "gpu": [
-          0,
-          1
+          1,
+          0
         ],
-        "layer_split": "auto",
+        "layer_split": "29",
         "swap_guard": {
           "window_s": 30,
           "write_mib_s": 128,
@@ -1238,7 +1238,10 @@
         "reserve_mib_per_gpu": 1024,
         "vram_reserve_args": {
           "--vram-reserve-mib": 1024
-        }
+        },
+        "gpu_order": "as_given",
+        "trim_stage_weights": true,
+        "split_reason": "2026-11-07 short sweep: layers 0-28 on RTX 3080, 29-47 plus head/draft/verify on RTX 3080 Ti, stage-trimmed dense weights; ~+13% writing and ~+22% 24K prompt reading versus auto K=20. docs/STRATA-LAYER-SPLIT-20261107.md"
       },
       "guard_validation_history": [
         {
@@ -2516,7 +2519,8 @@
         "batch_size": 256,
         "ubatch_size": 128,
         "threads": 8,
-        "speculative_decoding": false
+        "speculative_decoding": false,
+        "cache_ram_MiB": 8192
       },
       "latest_benchmark": {
         "date": "2026-11-05",
@@ -2736,124 +2740,6 @@
         "source_commit": "c3b3f5035506f3e966f1b4b7b188aeaabae92f1d",
         "status": "passed short DSH; explicit manual acceptance of DeepSeek one-token variance",
         "evidence": "docs/STRATA-0211-QUALIFICATION-20261105.md"
-      }
-    },
-    {
-      "model": "Qwen3.8-Flash-Next",
-      "status": "selected",
-      "worker_memory_gib": {
-        "high": 87.76984786987305,
-        "max": 89.76984786987305,
-        "swap": null
-      },
-      "host_ram_reserve_gib": 2,
-      "minimum_usable_ram_gib": 90,
-      "worker_ram_headroom": {
-        "hard_outside_bytes": 2147483648,
-        "measured_MemTotal_bytes": 98537123840,
-        "reclaim_before_hard_bytes": 2147483648
-      },
-      "id": "flash-next-iq1m-strata",
-      "display_name": "Flash-Next Unsloth v3.1 IQ1_M / Strata + MTP (128K)",
-      "weight_quant": "Unsloth-Dynamic-v3.1-UD-IQ1_M",
-      "engine": "Strata",
-      "launch": [
-        "flash-iq1m"
-      ],
-      "allocated_context": 131072,
-      "storage": {
-        "access": "ssd-streaming",
-        "required_transport": "nvme",
-        "checkpoint_directory": "models/unsloth/flash-next-iq1m-v31"
-      },
-      "availability": {
-        "enabled": true
-      },
-      "runtime_selector": {
-        "kind": "strata-launch-preset",
-        "name": "qwen-flash-next-iq1m"
-      },
-      "runtime_manifest": "config/flash-iq1m-strata-runtime.json",
-      "selected_settings": {
-        "mmap_experts": true,
-        "gpu": [
-          0,
-          1
-        ],
-        "layer_split": "auto",
-        "swap_guard": {
-          "window_s": 30,
-          "write_mib_s": 128,
-          "combined_mib_s": 160,
-          "pressure_pct": 15
-        },
-        "resident_experts": true,
-        "plain_mmap_experts": false,
-        "expert_memory_mode": "resident_non_gpu_cache_complement",
-        "reserve_mib_per_gpu": 1024,
-        "vram_reserve_args": {
-          "--vram-reserve-mib": 1024
-        },
-        "drafting": "MTP",
-        "speculative_tokens": 4,
-        "kv_cache": "int8",
-        "reasoning_effort": "none",
-        "parallel": 1,
-        "expert_profile": "data/flash-next-iq1m-20261105/expert-profile.bin"
-      },
-      "evidence": "docs/FLASH-IQ1M-STRATA-20261105.md",
-      "notes": "Qualified short actual DSH tool/result/exact follow-up and owned unload. Replaces IQ1_S llama.cpp entry; existing IQ3_XXS Strata entry remains separate.",
-      "context_validation": "131072-token selected allocation; short actual DSH tool/result/exact follow-up and owned unload passed. No full-window or sustained qualification.",
-      "current_configuration_benchmark": {
-        "prefill_tps": 1092.5,
-        "ttft_s": 5.2669785670004785,
-        "decode_tps": 78.2,
-        "prompt_tokens": 5592,
-        "output_tokens": 38,
-        "cached_tokens": 0,
-        "prefill_method": "native request timings",
-        "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings",
-        "date": "2026-11-05",
-        "context": 131072,
-        "source": "docs/FLASH-IQ1M-STRATA-20261105.md",
-        "scope": "One short actual DSH tool generation; loading and follow-up excluded; no full-context/sustained claim"
-      },
-      "engine_refresh_qualification": {
-        "source_commit": "c3b3f5035506f3e966f1b4b7b188aeaabae92f1d",
-        "status": "passed guarded short actual DSH tool/result/follow-up and owned unload",
-        "evidence": "docs/FLASH-IQ1M-STRATA-20261105.md"
-      },
-      "replaced_entry": {
-        "id": "flash-next-iq1s-llamacpp",
-        "weight_quant": "Unsloth-Dynamic-v3.1-UD-IQ1_S",
-        "benchmark": {
-          "date": "2026-11-05",
-          "source": "docs/validation-results/20261105-engine-refresh.json",
-          "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
-          "context": 12288,
-          "prefill_tps": 120.7329835421291,
-          "ttft_s": 48.46262081999885,
-          "decode_tps": 36.86106675927202,
-          "prompt_tokens": 5824,
-          "output_tokens": 39,
-          "cached_tokens": 0,
-          "prefill_method": "native request timings",
-          "ttft_method": "client first delivered content/tool delta; parser buffering included",
-          "decode_method": "native request timings",
-          "client_ttft_s": 48.46262081999885,
-          "meaningful_sse_chunks": 19
-        },
-        "checkpoint_retained_for_rollback": false,
-        "checkpoint_cleanup_evidence": "docs/validation-results/20261105-iq1s-weight-removal.json"
-      },
-      "post_boot_recovery_verification": {
-        "date": "2026-11-05",
-        "kernel": "7.0.0-42-generic",
-        "driver": "615.71.09",
-        "status": "passed current-boot unlock/transport, full checkpoint integrity and short actual DSH tool/result/exact-follow-up/owned-unload checks",
-        "evidence": "docs/POWERLOSS-RECOVERY-20261105.md",
-        "settings_changed": false
       }
     }
   ],

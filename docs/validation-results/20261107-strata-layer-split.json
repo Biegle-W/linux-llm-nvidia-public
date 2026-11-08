@@ -1,0 +1,604 @@
+{
+ "date": "2026-11-07",
+ "profile": "flash-next-strata",
+ "engine": "Strata 0.2.11 / engine 0.1.57 (unchanged)",
+ "change": {
+  "gpu": [
+   1,
+   0
+  ],
+  "gpu_order": "as_given",
+  "layer_split": "29",
+  "trim_stage_weights": true,
+  "previous": {
+   "gpu": [
+    0,
+    1
+   ],
+   "layer_split": "auto (chose K=20)",
+   "trim_stage_weights": false
+  }
+ },
+ "placement": "Layers 0-28 on RTX 3080 (PCI 02:00.0); layers 29-47, head, draft layer and verify on RTX 3080 Ti (PCI 01:00.0); each card loads only its own dense weights",
+ "scope": "Short isolated sweep arms (one ~5.7K tool call, one ~24K retrieval prompt, one 400-token writing request each) plus one guarded router short DSH tool/result/follow-up with owned unload. No sustained, full-context or image qualification.",
+ "guarded_router_smoke": {
+  "profile": "flash-next-strata",
+  "short_DSH": "pass",
+  "prefill_tps": 1022.7,
+  "ttft_s": 5.999463237996679,
+  "decode_tps": 73.8
+ },
+ "same_day_router_baseline_auto_split": {
+  "production": {
+   "prefill_tps": 924.0,
+   "decode_tps": 69.4,
+   "ttft_s": 6.604744518001098,
+   "prompt_tokens": 5594,
+   "output_tokens": 40
+  },
+  "candidate": {
+   "prefill_tps": 940.9,
+   "decode_tps": 71.2,
+   "ttft_s": 6.0824126829975285,
+   "prompt_tokens": 5594,
+   "output_tokens": 40
+  },
+  "rollback-smoke": {
+   "prefill_tps": 939.6,
+   "decode_tps": 71.3,
+   "ttft_s": 6.097880902001634,
+   "prompt_tokens": 5594,
+   "output_tokens": 40
+  }
+ },
+ "sweep_arms": [
+  {
+   "run": "run2",
+   "arm": "auto",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 5.145,
+    "prefill_tps": 1112.4,
+    "decode_tps": 111.2,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 12.118,
+    "prefill_tps": 1980.7,
+    "decode_tps": 84.1,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.616,
+    "prefill_tps": 61.7,
+    "decode_tps": 101.6,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 85.78,
+   "peak_gpu": [
+    "0, 11242, 723, 59",
+    "1, 9097, 832, 43"
+   ],
+   "error": null
+  },
+  {
+   "run": "run2",
+   "arm": "20:trim",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.878,
+    "prefill_tps": 1173.3,
+    "decode_tps": 123.6,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 12.909,
+    "prefill_tps": 1859.2,
+    "decode_tps": 87.6,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.588,
+    "prefill_tps": 64.7,
+    "decode_tps": 102.9,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 87.39,
+   "peak_gpu": [
+    "0, 11132, 833, 56",
+    "1, 9203, 726, 49"
+   ],
+   "error": null
+  },
+  {
+   "run": "run2",
+   "arm": "20:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.904,
+    "prefill_tps": 1167.0,
+    "decode_tps": 116.2,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 12.116,
+    "prefill_tps": 1981.0,
+    "decode_tps": 84.2,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.588,
+    "prefill_tps": 64.6,
+    "decode_tps": 102.3,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 66.29,
+   "peak_gpu": [
+    "0, 11242, 723, 61",
+    "1, 9097, 832, 45"
+   ],
+   "error": null
+  },
+  {
+   "run": "run2",
+   "arm": "20:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.57,
+    "prefill_tps": 1252.3,
+    "decode_tps": 125.0,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 10.465,
+    "prefill_tps": 2293.5,
+    "decode_tps": 91.4,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.542,
+    "prefill_tps": 70.1,
+    "decode_tps": 110.3,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 66.97,
+   "peak_gpu": [
+    "0, 11236, 729, 62",
+    "1, 9093, 836, 45"
+   ],
+   "error": null
+  },
+  {
+   "run": "run2",
+   "arm": "17:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.572,
+    "prefill_tps": 1251.8,
+    "decode_tps": 120.9,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 10.999,
+    "prefill_tps": 2182.2,
+    "decode_tps": 90.9,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.555,
+    "prefill_tps": 68.4,
+    "decode_tps": 106.1,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 61.3,
+   "peak_gpu": [
+    "0, 11252, 713, 63",
+    "1, 9093, 836, 45"
+   ],
+   "error": null
+  },
+  {
+   "run": "run2",
+   "arm": "23:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.56,
+    "prefill_tps": 1255.1,
+    "decode_tps": 125.0,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 9.929,
+    "prefill_tps": 2417.4,
+    "decode_tps": 94.0,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.543,
+    "prefill_tps": 70.0,
+    "decode_tps": 111.3,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 61.38,
+   "peak_gpu": [
+    "0, 11240, 725, 62",
+    "1, 9105, 824, 48"
+   ],
+   "error": null
+  },
+  {
+   "run": "run2",
+   "arm": "14:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.798,
+    "prefill_tps": 1192.7,
+    "decode_tps": 121.5,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 11.512,
+    "prefill_tps": 2084.9,
+    "decode_tps": 86.8,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.582,
+    "prefill_tps": 65.3,
+    "decode_tps": 105.3,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 76.74,
+   "peak_gpu": [
+    "0, 11246, 719, 63",
+    "1, 9093, 836, 44"
+   ],
+   "error": null
+  },
+  {
+   "run": "run2",
+   "arm": "auto",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.95,
+    "prefill_tps": 1156.1,
+    "decode_tps": 112.9,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 12.117,
+    "prefill_tps": 1980.7,
+    "decode_tps": 82.8,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.625,
+    "prefill_tps": 60.8,
+    "decode_tps": 101.8,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 87.77,
+   "peak_gpu": [
+    "0, 11242, 723, 62",
+    "1, 9097, 832, 45"
+   ],
+   "error": null
+  },
+  {
+   "run": "run3",
+   "arm": "26:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.803,
+    "prefill_tps": 1191.7,
+    "decode_tps": 126.0,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 9.585,
+    "prefill_tps": 2504.1,
+    "decode_tps": 91.3,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.66,
+    "prefill_tps": 57.6,
+    "decode_tps": 111.0,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 87.77,
+   "peak_gpu": [
+    "0, 11246, 719, 59",
+    "1, 9103, 826, 47"
+   ],
+   "error": null
+  },
+  {
+   "run": "run3",
+   "arm": "29:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.578,
+    "prefill_tps": 1250.0,
+    "decode_tps": 131.5,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 9.949,
+    "prefill_tps": 2412.3,
+    "decode_tps": 94.8,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.557,
+    "prefill_tps": 68.3,
+    "decode_tps": 116.3,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 64.15,
+   "peak_gpu": [
+    "0, 11232, 733, 60",
+    "1, 9113, 816, 49"
+   ],
+   "error": null
+  },
+  {
+   "run": "run3",
+   "arm": "23:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.79,
+    "prefill_tps": 1194.8,
+    "decode_tps": 123.3,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 9.945,
+    "prefill_tps": 2413.5,
+    "decode_tps": 94.6,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.563,
+    "prefill_tps": 67.5,
+    "decode_tps": 109.6,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 63.99,
+   "peak_gpu": [
+    "0, 11240, 725, 61",
+    "1, 9105, 824, 48"
+   ],
+   "error": null
+  },
+  {
+   "run": "run4",
+   "arm": "32:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.861,
+    "prefill_tps": 1177.4,
+    "decode_tps": 131.7,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 10.628,
+    "prefill_tps": 2258.3,
+    "decode_tps": 94.5,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.563,
+    "prefill_tps": 67.5,
+    "decode_tps": 110.5,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 64.29,
+   "peak_gpu": [
+    "0, 11226, 739, 57",
+    "1, 9113, 816, 49"
+   ],
+   "error": null
+  },
+  {
+   "run": "run4",
+   "arm": "35:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.952,
+    "prefill_tps": 1155.7,
+    "decode_tps": 132.3,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 11.241,
+    "prefill_tps": 2135.2,
+    "decode_tps": 91.8,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.617,
+    "prefill_tps": 61.6,
+    "decode_tps": 109.9,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache module implementing a Least Recently Used cache with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing"
+   },
+   "mem_peak_GiB": 76.71,
+   "peak_gpu": [
+    "0, 11218, 747, 57",
+    "1, 9111, 818, 50"
+   ],
+   "error": null
+  },
+  {
+   "run": "run4",
+   "arm": "29:trim:swap",
+   "tool": {
+    "prompt_tokens": 5723,
+    "completion_tokens": 30,
+    "ttft_s": 4.62,
+    "prefill_tps": 1238.8,
+    "decode_tps": 132.7,
+    "tool_call": "run_shell{\"command\":\"df -h /\"}",
+    "text": "",
+    "ok": true
+   },
+   "long": {
+    "prompt_tokens": 24001,
+    "completion_tokens": 19,
+    "ttft_s": 9.947,
+    "prefill_tps": 2412.9,
+    "decode_tps": 93.9,
+    "tool_call": "",
+    "text": "CODE-1560 CODE-3264 CODE-6983",
+    "ok": true
+   },
+   "write": {
+    "prompt_tokens": 38,
+    "completion_tokens": 400,
+    "ttft_s": 0.529,
+    "prefill_tps": 71.8,
+    "decode_tps": 114.5,
+    "tool_call": "",
+    "text": "```python\n\"\"\"LRU Cache implementation with get, put, and delete operations.\"\"\"\n\nfrom collections import OrderedDict\nfrom typing import Any, Optional\n\n\nclass LRU"
+   },
+   "mem_peak_GiB": 85.44,
+   "peak_gpu": [
+    "0, 11232, 733, 60",
+    "1, 9113, 816, 50"
+   ],
+   "error": null
+  }
+ ],
+ "gpu_unlock": "VERIFIED before every run",
+ "gpu_lock_file": "not created by the sweep; created and released by the updater smoke only"
+}

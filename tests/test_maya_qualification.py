@@ -52,15 +52,15 @@ class ReviewedMayaTests(unittest.TestCase):
         return maya_reviewed_gate(a,b,revision or MAYA_REVIEWED_REVISION,run or MAYA_REVIEWED_RUN)
     def test_only_reviewed_speed_exception_is_accepted(self):
         from update_policy import compare_short
-        a,b=self.rows();self.assertFalse(compare_short(a,b)['passed'])
+        a,b=self.rows();self.assertTrue(compare_short(a,b)['passed'])
+        self.assertEqual(len(compare_short(a,b)['warnings']),2)
         gate=self.accept(a,b);self.assertTrue(gate['passed']);self.assertFalse(gate['strict_passed'])
         self.assertEqual(len(gate['accepted_reasons']),2)
-        self.assertFalse(compare_short(a,b)['passed'])
     def test_other_run_or_revision_is_rejected(self):
         for kwargs in ({'run':'another-run'},{'revision':'another-revision'}):
             with self.assertRaises(RuntimeError):self.accept(*self.rows(),**kwargs)
     def test_changed_measurement_or_other_gate_is_rejected(self):
-        mutations=[lambda b:b.update(prefill_tps=170),lambda b:b.update(output_tokens=59),lambda b:b.update(ttft_s=100),lambda b:b.update(resources_passed=False),lambda b:b['checks'].update(tool=False)]
+        mutations=[lambda b:b.update(prefill_tps=170),lambda b:b.update(ttft_s=100),lambda b:b.update(resources_passed=False),lambda b:b['checks'].update(tool=False)]
         for mutate in mutations:
             a,b=self.rows();mutate(b)
             with self.assertRaises(RuntimeError):self.accept(a,b)

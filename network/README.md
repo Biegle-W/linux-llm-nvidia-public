@@ -1,5 +1,9 @@
 # NVIDIA model router, Tailscale and DeepSeek Harness
 
+## Flash-Next IQ1_M retired — November 8, 2026
+
+At the owner's request `flash-next-iq1m-strata` was retired and its checkpoint and pack deleted (69.6 GB freed). In a same-day head-to-head it tied the IQ3_XXS entry on quality (MATH L4-5 62 vs 58/80, HumanEval 116 vs 118/124 plus 39 vs 40/40, paired differences 7 vs 5) and on speed (within ~7%), while published fidelity favors IQ3_XXS. `flash-next-strata` is now the only Flash-Next entry; DSH selections migrate to it. The Maya qualification build now reads its PLE table from IQ3_XXS shard 2 (tensor data identical; only 2 GGUF split-header bytes differ). [Comparison, deletion checks and limits](../docs/FLASH-IQ1M-RETIREMENT-20261108.md).
+
 ## Retired IQ1_S weights deleted; IQ1_M table preserved — November5,2026
 
 At the human's explicit request, removed the old IQ1_S checkpoint and its obsolete n-gram filename, reclaiming37.58GB exclusive storage. The active IQ1_M28.8GB table kept the same inode and full verified SHA256; only its hardlink count changed2to1. No model configuration or guard changed and no inference benchmark was repeated. Prior rollback-retention statements are superseded. [Removal receipt and preserved dependencies](../docs/IQ1S-WEIGHT-REMOVAL-20261105.md).
@@ -98,9 +102,13 @@ catalog. Requesting its ID selects the model, quantization and engine together:
 | --- | --- | ---: |
 | `qwen27b-hyperqwen` | HyperQwen/vLLM | 86,016 |
 | `qwen27b-sglang` | SGLang | 57,344 |
-| `flash-next-iq1s-llamacpp` | Flash-Next Unsloth v3.1 IQ1_S / llama.cpp + lazy SSD table | 12,288 |
+| `flash-next-strata` | Strata, Qwen3.8-Flash-Next IQ3_XXS | 131,072 |
+| `glm-maya` | Maya, GLM-5.3-Flash | 65,536 |
+| `deepseek-maya` | Maya, DeepSeek-V4.1-Flash UD-IQ1_S | 32,768 |
+| `deepseek-unsloth-strata` | Strata, DeepSeek-V4.1-Flash UD-IQ1_S | 32,768 |
+| `bolt-llamacpp` | llama.cpp, Nemotron-3.5 Bolt native IQ2 | 163,840 |
 
-The other five retained profiles are temporarily disabled and hidden from the picker pending the RAM upgrade and guarded qualification. `/v1/models` is authoritative for enabled choices. Context allocations are not new full-window qualification claims.
+This table was refreshed on November 8, 2026; `/v1/models` is authoritative. Context allocations are not full-window qualification claims. The dated notes at the top of this file are history; current state is in [CURRENT-STATE.md](../docs/CURRENT-STATE.md).
 
 ```python
 import os
@@ -155,7 +163,7 @@ Desktop shortcuts are installed for:
 - **Maya**: select GLM or DeepSeek, then open Maya's own Chat/Monitor web app
   at the same worker address.
 - **DeepSeek Harness (DSH)**: reopen the separately running DSH web app using its
-  private startup URL. It lists the two enabled profiles under NVIDIA server.
+  private startup URL. It lists the enabled router models under NVIDIA server.
 
 Strata/Maya selection happens in the launcher terminal; closing it leaves the
 managed worker running. Their web apps may request the existing local API key

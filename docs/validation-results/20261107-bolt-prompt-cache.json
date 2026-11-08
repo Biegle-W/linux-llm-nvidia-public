@@ -1,0 +1,41 @@
+{
+ "date": "2026-11-07T03:30:17",
+ "model": "bolt-llamacpp",
+ "cache_ram_MiB": 8192,
+ "results": [
+  {
+   "label": "A-first",
+   "client_ttft_s": 26.525,
+   "total_s": 26.897,
+   "prompt_tokens": 14113,
+   "cached_tokens": 0,
+   "markers_found": 3,
+   "exact_order": true,
+   "reply": "MARK-1-2201 MARK-1-9325 MARK-1-1033"
+  },
+  {
+   "label": "B-first",
+   "client_ttft_s": 21.482,
+   "total_s": 21.855,
+   "prompt_tokens": 14088,
+   "cached_tokens": 13,
+   "markers_found": 3,
+   "exact_order": true,
+   "reply": "MARK-2-0926 MARK-2-1500 MARK-2-1390"
+  },
+  {
+   "label": "A-revisit",
+   "client_ttft_s": 0.422,
+   "total_s": 0.795,
+   "prompt_tokens": 14113,
+   "cached_tokens": 14109,
+   "markers_found": 3,
+   "exact_order": true,
+   "reply": "MARK-1-2201 MARK-1-9325 MARK-1-1033"
+  }
+ ],
+ "worker_memory_peak_GiB": 2.51,
+ "unload": {
+  "status": "unloaded"
+ }
+}

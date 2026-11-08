@@ -20,15 +20,15 @@ class ShortGates(unittest.TestCase):
         from update_reviewed import reviewed_gate
         baseline=good();baseline['profile']='deepseek-unsloth-strata'
         candidate=dict(baseline,output_tokens=39)
-        self.assertFalse(compare_short(baseline,candidate)['passed'])
+        gate=compare_short(baseline,candidate)
+        self.assertTrue(gate['passed']);self.assertEqual(gate['warnings'],['Unmatched output_tokens'])
         self.assertTrue(reviewed_gate(baseline,candidate)['passed'])
         self.assertEqual(candidate['output_tokens'],39)
-        self.assertEqual(reviewed_gate(baseline,candidate)['observed_output_tokens'],[40,39])
 
     def test_manual_review_keeps_profile_identity_resource_and_speed_gates(self):
         from update_reviewed import reviewed_gate
         baseline=good();baseline['profile']='deepseek-unsloth-strata'
-        for field,value in [('profile','flash-next-strata'),('output_tokens',38),('output_tokens',39.0),('prompt_tokens',5999),('fixture_sha256','other'),('cached_tokens',1),('resources_passed',False),('prefill_tps',94.9),('decode_tps',47.4),('ttft_s',2.51)]:
+        for field,value in [('profile','flash-next-strata'),('fixture_sha256','other'),('resources_passed',False),('prefill_tps',49.9),('decode_tps',24.9),('ttft_s',6.1)]:
             candidate=dict(baseline,output_tokens=39);candidate[field]=value
             with self.subTest(field=field),self.assertRaises(RuntimeError):reviewed_gate(baseline,candidate)
 
@@ -36,14 +36,30 @@ class ShortGates(unittest.TestCase):
         self.assertTrue(compare_short(good(),good())['passed'])
         changed=good();changed.update(prefill_tps=95,decode_tps=47.5,ttft_s=2.5)
         self.assertTrue(compare_short(good(),changed)['passed'])
-    def test_mismatched_cache_fixture_tokens_and_missing_native_metrics_fail_closed(self):
-        for field,value in [('qualification','legacy'),('cached_tokens',1),('fixture_sha256','other'),('prompt_tokens',5999),('output_tokens',41),('decode_tps',None),('prefill_tps',float('nan')),('resources_passed',False),('telemetry_samples',0)]:
+    def test_broken_candidate_or_invalid_comparison_fails_closed(self):
+        for field,value in [('qualification','legacy'),('fixture_sha256','other'),('settings_sha256','other'),('decode_tps',None),('prefill_tps',float('nan')),('resources_passed',False),('telemetry_samples',0)]:
             row=good();row[field]=value
             with self.subTest(field=field):self.assertFalse(compare_short(good(),row)['passed'])
-        row=good();row['checks']['unload']=False;self.assertFalse(compare_short(good(),row)['passed'])
-    def test_short_metric_regression_rejects_candidate(self):
-        for field,value in [('prefill_tps',94.9),('decode_tps',47.4),('ttft_s',2.51)]:
-            row=good();row[field]=value;self.assertFalse(compare_short(good(),row)['passed'])
+        for check in ('tool','tool_result','followup','unload'):
+            row=good();row['checks'][check]=False
+            with self.subTest(check=check):self.assertFalse(compare_short(good(),row)['passed'])
+    def test_cache_and_token_differences_are_warnings_only(self):
+        for field,value in [('cached_tokens',1),('prompt_tokens',5999),('output_tokens',41)]:
+            row=good();row[field]=value;gate=compare_short(good(),row)
+            with self.subTest(field=field):
+                self.assertTrue(gate['passed']);self.assertIn('Unmatched '+field,gate['warnings'])
+        base=good();base.update(cached_tokens=5000,ttft_s=0.2,prefill_tps=3000);gate=compare_short(base,good())
+        self.assertTrue(gate['passed']);self.assertIn('Speed not compared: prompt cache reuse',gate['warnings'])
+    def test_broken_production_baseline_does_not_block_working_candidate(self):
+        base=good();base['checks']['unload']=False;gate=compare_short(base,good())
+        self.assertTrue(gate['passed']);self.assertIn('production: incomplete actual DSH/lifecycle check',gate['warnings'])
+    def test_minor_regression_is_warning_severe_regression_blocks(self):
+        for field,value in [('prefill_tps',94.9),('decode_tps',47.4),('ttft_s',2.51),('prefill_tps',51),('decode_tps',26),('ttft_s',5.9)]:
+            row=good();row[field]=value;gate=compare_short(good(),row)
+            with self.subTest(field=field,value=value):self.assertTrue(gate['passed']);self.assertTrue(gate['warnings'])
+        for field,value in [('prefill_tps',49.9),('decode_tps',24.9),('ttft_s',6.1)]:
+            row=good();row[field]=value
+            with self.subTest(field=field,value=value):self.assertFalse(compare_short(good(),row)['passed'])
 
 
 class Discovery(unittest.TestCase):

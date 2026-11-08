@@ -1,0 +1,1063 @@
+# Change history (October 25 – November 8, 2026)
+
+This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/CURRENT-STATE.md` (three near-copies). It is kept for evidence and is **newest first**. Many entries are superseded by later ones; for what is true now read [CURRENT-STATE.md](CURRENT-STATE.md). The README and CURRENT-STATE variants of this log, which differ in a few sections, are in git at commit `b517776`.
+
+## Flash-Next IQ1_M retired — November 8, 2026
+
+At the owner's request `flash-next-iq1m-strata` was retired and its checkpoint and pack deleted (69.6 GB freed). In a same-day head-to-head it tied the IQ3_XXS entry on quality (MATH L4-5 62 vs 58/80, HumanEval 116 vs 118/124 plus 39 vs 40/40, paired differences 7 vs 5) and on speed (within ~7%), while published fidelity favors IQ3_XXS. `flash-next-strata` is now the only Flash-Next entry; DSH selections migrate to it. The Maya qualification build now reads its PLE table from IQ3_XXS shard 2 (tensor data identical; only 2 GGUF split-header bytes differ). [Comparison, deletion checks and limits](FLASH-IQ1M-RETIREMENT-20261108.md).
+
+## Daily updates promote unless the update breaks — November 7, 2026
+
+Owner policy: always update unless the update breaks something. The paired short DSH gate (scripts/update_policy.py compare_short) now blocks only on an invalid comparison (profile, context, settings, hardware or fixture mismatch), a candidate that fails the tool/result/follow-up/unload checks, missing resource evidence or invalid metrics, or a severe slowdown (under half the prefill or decode speed, or over three times the TTFT). Speed drops above 5%, TTFT increases, token-count differences and prompt-cache reuse are recorded as warnings in comparison.json; speed is not compared when either run reused the prompt cache. Replaying the same day's rejected Strata 0.2.12 results under this policy passes all three Strata entries with warnings.
+
+## Flash-Next Strata hand-set layer split — November 7, 2026
+
+`flash-next-strata` now runs layers 0-28 on the RTX 3080 and 29-47 plus head/draft/verify on the RTX 3080 Ti with stage-trimmed dense weights (`gpu` `[1, 0]`, `gpu_order` `as_given`, `layer_split` `"29"`, `--trim-stage-weights`) instead of `auto` (K=20). In a short isolated sweep this wrote ~115 tok/s versus ~102 and read a 24K prompt at ~2,410 versus 1,981 tok/s. The guarded short DSH check passed at 1,022.7 prefill / 73.8 decode tok/s with owned unload (same-day `auto`: 924-941 / 69.4-71.3). The router now refuses a Flash-Next preset whose split differs from the registry. Engine stays Strata 0.2.11 (0.2.12 was rejected by same-day paired gates); no full-context or image re-qualification. [Sweep, guard and limits](STRATA-LAYER-SPLIT-20261107.md).
+
+## Bolt RAM prompt cache enabled — November 7, 2026
+
+Bolt (`bolt-llamacpp`) now runs llama.cpp with an 8 GiB RAM prompt cache instead of none. Returning to an earlier ~14K-token prompt after another one took 0.42 s to first token instead of 26.5 s, with 14,109 tokens restored and exact marker retrieval. The guarded short DSH check passed at 501 prefill / 69.2 decode tok/s with owned unload; worker RAM peaked at 2.5 GiB. Weights, context, fit targets and guards are unchanged; 514 CPU regressions pass. [Setting and validation](BOLT-PROMPT-CACHE-20261107.md).
+
+## Bolt ID renamed to `bolt-llamacpp` — November6,2026
+
+The Bolt native IQ2/llama.cpp entry now uses ID `bolt-llamacpp`; the vLLM-era `bolt-vllm` ID stays accepted as a router alias and DSH migrates saved selections. Weights, runtime, context and all guards are unchanged; no benchmark was repeated. All519 CPU regressions pass. [Rename and compatibility](BOLT-ID-RENAME-20261106.md).
+
+## Maya1.1.56 selected with reviewed performance exception — November6,2026
+
+Maya1.1.56 is selected for both GLM and DeepSeek after explicit human acceptance of the measured8.19% prefill/6.10% decode slowdown. The preserved tested binaries, reconstructed patched source and354 protected assets verified before transactional activation. All516 CPU regressions pass; prior118/118 native tests on each GPU and both short DSH tool/result/follow-up checks remain the qualification evidence. The one-time exception applies only to this run; scheduled5% gates and all guards remain unchanged. Active binary hashes and API/hub/DSH health pass; GPUs are idle, the03:00 timer is active, and no pending transaction/publication or reservation remains. No inference benchmark was repeated. Next action is normal use. [Acceptance and qualification](MAYA-QUALIFICATION-REPAIR-20261106.md).
+
+## Maya qualification repaired; performance rollback verified — November 6, 2026
+
+All118 native tests pass on both GPUs and513 CPU regressions pass. Missing CTest targets/fixtures, graph-cache expectations and test upload ordering are repaired without weakening native assertions. Maya1.1.56 passed both short DSH tool/result/follow-ups but DeepSeek prefill/decode regressed8.19%/6.10%, failing the unchanged5% gates. Verified1.1.53 is restored for both Maya entries; both rollback checks and binary hashes pass, GPUs are idle and no pending transaction/reservation remains. Repair/results publication is explicitly approved. [Repair, fixture provenance and final results](MAYA-QUALIFICATION-REPAIR-20261106.md).
+
+## Fresh all-model rerun and disk coverage — November5,2026
+
+All nine text entries passed actual DSH tool/result/exact follow-up and owned unload. Both image models passed1024/2048 and both video models passed512×288/720p/1080p. All three separately downloaded vision adapters passed real image requests. GLM needed its missing installed encoder restored from the preserved local preimage. Maya updater staging now preserves that encoder with protected hashes, and508 CPU regressions pass. DeepSeek’s temporary vision preset was restored after its test. No unmatched standalone checkpoints were found in the wider model store. Optional integrated Qwen vision/MTP modes remain separately unqualified, and native4K image shapes retain their earlier failed qualification. [Fresh results, resource guards and full asset coverage](ALL-MODELS-RERUN-20261105.md).
+
+## Post-power-loss recovery verified — November5,2026
+
+The new boot passes GPU unlock/next-boot readiness and current-boot host-staged transport checks. All IQ1_M checkpoint SHA256s and runtime/pack/preset hashes verify; the old IQ1_S files remain deleted and its active IQ1_M table is intact. Expected SATA storage and all selected model directories are accessible. One guarded IQ1_M actual DSH tool/result/exact follow-up and owned unload passed; no model settings or guards changed and other models were not rerun. API/hub/DSH and timer are healthy; no inference workers, stale reservation or pending transaction remain. Next action is normal use. [Recovery evidence and limits](POWERLOSS-RECOVERY-20261105.md).
+
+## Retired IQ1_S weights deleted; IQ1_M table preserved — November5,2026
+
+At the human's explicit request, removed the old IQ1_S checkpoint and its obsolete n-gram filename, reclaiming37.58GB exclusive storage. The active IQ1_M28.8GB table kept the same inode and full verified SHA256; only its hardlink count changed2to1. No model configuration or guard changed and no inference benchmark was repeated. Prior rollback-retention statements are superseded. [Removal receipt and preserved dependencies](IQ1S-WEIGHT-REMOVAL-20261105.md).
+
+## Flash-Next IQ1_M replaces IQ1_S — November5,2026
+
+Qualified `flash-next-iq1m-strata` replaces the IQ1_S llama.cpp entry in API/DSH and the Strata desktop selector, with both GPUs,128K allocation and existing MTP. Actual read/tool-result/exact follow-up, guards and owned unload passed;506 CPU regressions passed. The IQ3_XXS entry and global default remain. All RAM/VRAM/thermal/swap guards are preserved; IQ1_S weights were subsequently removed by explicit request; IQ1_M retains its28.8GB table. Idle API/hub were reloaded to load the previously changed RAM validator, and DSH selections migrated. No active jobs, reservations or pending transaction/publication remain; next action is normal use. [Benchmarks, guards and retirement](FLASH-IQ1M-STRATA-20261105.md).
+
+## All13 model entries share RAM ceilings — November5,2026
+
+Every maintained text, image and video entry now uses87.77/89.77GiB worker RAM high/max, retaining exactly2GiB outside the hard cap. Dense launchers and shared ComfyUI launch/admission paths use the selected configuration; all other guards, contexts and placement remain unchanged.501 CPU regressions and a real no-GPU systemd cgroup check passed. All inference workers were idle; no model benchmark was repeated. No jobs or locks remain; next action is normal use. [Change and verification](ALL-MODEL-RAM-CEILINGS-20261105.md).
+
+## Strata0.2.11 selected after reviewed qualification — November5,2026
+
+Both existing Strata profiles passed short actual DSH tool/result/exact follow-up, resource checks and owned unload. Flash-Next passed the strict paired gate; DeepSeek's59-versus60 output tokens initially triggered verified rollback, then the human explicitly accepted that sole mismatch. The preserved signed artifacts were reverified and0.2.11/engines0.1.57 selected. No material speed gain was observed; scheduled gates and all resource limits remain unchanged.500 CPU regressions passed. No active jobs, pending transaction/publication or GPU reservation remains; next action is normal use or a separately requested new-quant trial. [Results, acceptance and guard table](STRATA-0211-QUALIFICATION-20261105.md).
+
+## Maya1.1.54 rejected;1.1.53 retained — November5,2026
+
+The requested updater run built1.1.54 after correcting a missing CUDA13profiler header. Both1.1.53 production DSH baselines passed; native correctness then failed before candidate activation, so1.1.54 DSH checks were not reached. Preserve the selected1.1.53 runtimes and rejection record; do not relabel baseline metrics as1.1.54 or waive failed gates. [Results, blockers and guard tables](MAYA-1154-QUALIFICATION-20261105.md).
+
+## Recovery verification and terminal hangup — November5,2026
+
+Restored-production short DSH checks must use explicit recovery mode with private captured logs, independently of candidate visibility permission or terminal availability. SIGHUP, SIGTERM and SIGINT must preserve the interruption/rollback path, including interruption during baseline. Candidate visibility and all resource/ownership guards remain. [Review follow-up](DAILY-UPDATER-RESTORATION-20261105.md).
+
+Owned cleanup must retain the shared bounded retry policy and refuse ownership conflicts. Reject file targets nested in directory swaps before baseline loading and enforce disjoint targets in both transaction operation orders, including resolved aliases.
+
+## Daily updater restored — November5,2026
+
+Daily engine maintenance is enabled at03:00 America/Toronto, including guarded headless scheduled tests with private logs. Eight text entries use current grouped staging, paired short actual DSH checks and durable rollback; the diffusion stack receives version monitoring. The repaired exact-owner DSH path and485 CPU regressions passed. All resource guards and the20-minute update-admission gate remain. [Restoration, scope and validation](DAILY-UPDATER-RESTORATION-20261105.md). Earlier paused-update and long-suite paragraphs remain dated history.
+
+## Engine refresh and weight sharing — November5,2026
+
+Removed the3.418GB incomplete Qwen cache. HyperQwen, SGLang, Maya, Strata and shared llama.cpp are refreshed; ComfyUI/video integrations were already current under the stable/default-branch policy. All eight changed text entries passed guarded actual DSH read/result/exact followup and owned unload. No complete duplicate checkpoints were found; compatible entries already share weights. Daily updates stay paused; all guards and selected contexts remain. [Versions, sharing and optional cleanup](ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md); [current observations](ALL-ENTRY-BENCHMARKS-20261105.md).
+
+## Both video entries now offer 720p/1080p — November5,2026
+
+Wan and LTX now have resolution dropdowns, separate 720p/1080p Workflows presets and matching desktop right-click actions. Wan selects the faster tested native path, including the 16/14 GPU block split at 1080p. All four end-to-end HD entry requests passed with GPU-only model execution, 465 CPU regressions passed, and guards remain. The UI coordinator uses no GPU compute context; saved workflows, 512x288 defaults, image launchers and text API/DSH entries are preserved. [Usage and validation](COMFY-VIDEO-HD-ENTRIES-20261105.md).
+
+## Wan1080p VRAM and Raylight timeouts fixed — November5,2026
+
+Native Wan1080p now uses a GPU-resident16/14-block split and sequential guidance: 160.750/158.748s. Raylight passed at174.808/161.973s after deterministic guidance routing, with no timeout increase. Both paths passed two33-frame clips and both-GPU forward audits without CPU weight offload. All462 CPU regressions pass; guards remain unchanged, allowing brief VRAM dips within the existing three-sample grace period. Workers are stopped, reservations released and API/hub/DSH healthy. [Repair, benchmarks and limits](WAN1080-FIX-20261105.md).
+
+## Video720p/1080p benchmarks complete — November5,2026
+
+GPU-only33-frame tests passed Wan720p at57.626/58.790s and LTX Mesh720p at27.323/27.322s,1080p at51.575/51.576s. Wan1080p regular stopped at the retained VRAM guard; Raylight asynchronous and synchronous retries hit60-second NCCL collective timeouts and produced no clip. LTX1080p reached246MiB free on GPU1 for two samples, recovering before the three-sample stop. All459 CPU tests pass. No guard or512x288 desktop default changed. Successful metadata-free HD clips are included in the public gallery. [Protocol, resource margins and failures](COMFY-VIDEO-720P1080P-20261105.md).
+
+## ComfyUI video entries and launchers installed — November4,2026
+
+Selected **ComfyUI Wan 2.2 5B** and **ComfyUI LTX 2.3 Mesh** workflows/desktop launchers now support prompt/seed generation at512x288x33frames, with fresh GPU-only encoder/render phases and automatic LTX back-half release/restart. Both passed two consecutive frontend requests: Wan20.253/19.223s; LTX35.427/35.407s including prompt preparation and worker startup. Guards, both image launchers and the nine text API/DSH entries remain unchanged. [Usage, registry and qualification](COMFY-VIDEO-ENTRIES-20261104.md).
+
+Public image/video samples are now maintained through a hash-checked binary allowlist: four native1K/2K images, eight video clips and eight frame posters. Embedded workflow metadata is removed; decoded media matches the originals. No inference was repeated. [Gallery](../assets/samples/comfy/README.md).
+
+## ComfyUI two-GPU video trials complete — November4,2026
+
+Wan2.2TI2V5B passed the GPU-only regular baseline at10.143s first /7.111s warm and Raylight FSDP+Ulysses2 at43.346s /30.539s: distributed latency is about4.3times higher for this512x288x33-frame workload. LTX2.3distilled1.1Q4_0 passed an experimental Mesh28/20-block split at14.259s after server readiness, with valid video/audio and GPU1 denoiser release before VAE decoding; minimum sampled free VRAM1529/1564MiB, zero swap. All442 CPU checks passed. Both physical GPUs were audited, CPU weight execution was forbidden, guards remain, workers stopped and reservations released. Existing LLM/image entries and defaults remain; video candidates are not production entries. [Results, timing scope, patches and limits](COMFY-VIDEO-DUAL-GPU-20261104.md).
+
+## ComfyUI native2K/4K tests complete — November4,2026
+
+Both models passed two2048x2048 images without CPU weight offload: Qwen Turbo29.360s first /26.339s warm with automatic GPU tiled VAE decoding; FLUX3Klein27.341s /24.279s with regular GPU VAE decoding. Neither native4096 arm produced an image: Qwen GPU0 allocation failed; FLUX GPU0 stayed at41MiB free for three samples and hit the unchanged256MiB guard. All438 CPU checks passed. Workers are stopped, reservations released and1K defaults/LLM profiles remain unchanged. The100C thermal policy and all other guards remain. No benchmark or cleanup remains pending. [Protocol, failures, resource tables and next action](COMFY-2K4K-20261104.md).
+
+## All NVIDIA model temperature stops raised — November 4, 2026
+
+All nine maintained NVIDIA LLM profiles, both ComfyUI image profiles and supporting benchmark/update monitors now use100C temperature stops. Existing sampling/hysteresis, memory, swap and ownership guards remain unchanged. Previous benchmarks retain their original82C attribution; no GPU benchmark was repeated. Effective on the next owned worker launch; no running job was restarted. All438 CPU checks passed, including100C stops and acceptance below100C.
+
+## ComfyUI dual-GPU setup — November 5 UTC / November 4 local, 2026
+
+An isolated ComfyUI0.44.0 / PyTorch2.13.0 CUDA13 environment and Desktop-only **ComfyUI Qwen Turbo** / **ComfyUI FLUX3 Klein** shortcuts are installed. Qwen-Image2.1 Turbo INT8 with its W4A8 encoder passed two1024x1024 images,21 all-resident placement audits and owned unload:7.133s first request /4.086s warm,3.218/3.074s denoising. GPU0 holds the denoiser; GPU1 holds encoder/VAE, with no CPU execution-weight offload. All437 CPU checks passed and existing LLM entries/guards remain unchanged. FLUX3Klein INT8 also passed two1024x1024 images and21 residency audits:7.130s first /5.091s warm,4.181/4.065s denoising; zero sampled swap in both models. Both workers finish idle and reservations are released. Use Ctrl+C before switching image launchers; no remaining test/cleanup is pending. [Setup, guards, benchmark scope and next action](COMFY-DUAL-GPU-20261105.md).
+
+
+## Unused Qwen GGUF target/drafter deleted — November 4, 2026
+
+The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
+
+## Retired AWQ Bolt assets deleted — November 4, 2026
+
+The user requested deletion of the retired AWQ setup. Its55.33 GB weights, dedicated vLLM environment, manifest, launch/supervision/offload code and AWQ-only tests are removed. Native IQ2 remains selected under compatibility ID`bolt-vllm`; all nine profiles, both DSH modes, defaults, guards and shared runtimes are preserved.423 remaining CPU tests passed;33 obsolete adapter tests were retired. Native runtime hashes/dependencies and API/DSH health passed; no model benchmark was repeated. Historical benchmark records and small private source/configuration preimages remain, but the old checkpoint/runtime are no longer installed. [Removal verification](BOLT-AWQ-REMOVAL-20261104.md).
+
+## Current: native IQ2 Bolt replaces AWQ in API/DSH — November 4, 2026
+
+Bolt now selects the official native IQ2 text model on pinned llama.cpp11909, both GPUs, 384 MiB fit targets and unchanged 163,840-token allocation. The historical `bolt-vllm` ID remains for compatibility; API metadata and both DSH display names now identify native IQ2/llama.cpp. Normal-router actual DSH read/result/exact follow-up and owned unload passed: 502.58 prefill tok/s, 12.870 s client TTFT and 68.05 decode tok/s. All nine entries remain, with unrelated routes/defaults and all guards preserved. 456 CPU tests passed; workers finish idle and updates stay paused. Older AWQ measurements and candidate-only status below are dated history. [Selected entry, guards and AWQ slowdown research](BOLT-IQ2-ENTRY-20261104.md).
+
+## Native IQ2 Bolt tested on both GPUs — November 4, 2026
+
+The isolated official native IQ2 Bolt candidate passed an actual DSH read/result/exact-follow-up and owned unload at163,840 context on pinned llama.cpp11909. The minimum tested passing fit margin384 MiB/card retains89.4% of weight-buffer bytes on the GPUs with2.18 GiB CPU-mapped weights:506.46 prefill tok/s,12.744 s client TTFT and67.49 decode tok/s, versus the retained same-day AWQ217.35 /29.320 /0.361. The256 MiB fit arm hit the unchanged256 MiB VRAM floor during prefill and is rejected;512 MiB also passed. These are short complete-configuration observations, not an equal-quality or sustained-speed claim.451 CPU checks passed. Both GPUs finish idle, no reservation remains and API/hub/DSH are healthy. All nine selected entries and defaults remain; IQ2 is a separate qualified candidate, not a replacement entry. [Results, guard/placement evidence and failed arms](BOLT-NATIVE-IQ2-20261104.md).
+
+## Current: all nine restored with two-GiB headroom — November 4, 2026
+
+The corrected boot passed early GPU unlock and current-boot host-staged transport. Linux sees 91.76984787 GiB usable RAM. All nine normal-router DSH read/result/exact-follow-up and owned-unload checks passed; all entries are enabled and workers finish idle. The six RAM-heavy profiles now use 87.76984787/89.76984787 GiB high/hard limits, leaving exactly 2 GiB outside the hard cap as requested. Dense profiles retain 32/36 GiB; the independent 2 GiB available-memory stop and all other guards remain. 446 CPU tests passed. Larger supported caches are selected; runtime pins, contexts and defaults are preserved, and daily updates remain paused. This supersedes earlier preparation/waiting and temporary 32 GB operational descriptions below; historical measurements retain their dates and hardware. [All nine benchmarks, exact guard tables and resource evidence](RAM96-RESTORATION-20261104.md).
+
+## Larger RAM verified; restoration prepared, GPU checks awaiting firmware — November 4, 2026
+
+Linux now sees 91.77 GiB usable RAM. Nine larger-RAM candidate definitions and cache configurations are prepared: dense 32/36 GiB worker caps, RAM-heavy 84/86 GiB, and a new 90 GiB minimum measured-capacity gate.445 CPU tests passed. Five paused profiles remain disabled; no GPU benchmark or restoration qualification has run. Secure Boot is enabled again, early GPU unlock health failed and its dependent current-boot transport proof is missing. The human chose preparation first and will correct Secure Boot/reboot later. No guard was bypassed; other policies, engine pins, contexts and defaults are preserved. API/hub/DSH remain healthy and GPU workers are idle. Earlier benchmark rows retain their measured 32/64 GB scope. [Prepared settings, forum/pinning research and continuation](RAM96-PREPARATION-20261104.md).
+
+## Flash-Next IQ1_S entry enabled — November 4, 2026
+
+`flash-next-iq1s-llamacpp` is now the fourth enabled API/DSH entry: the same verified Unsloth v3.1 IQ1_S checkpoint, llama.cpp11909, 12,288 context and lazy NVMe n-gram table. Normal-router actual DSH read/result/exact-follow-up and owned unload passed:88.79 prefill tok/s,66.292 s client TTFT and31.10 decode tok/s. RAM26/28 GiB, host2 GiB, GPU256 MiB/card, swap128/160 MiB/s over30 s,15% active full PSI, thermal82 C and all ownership/telemetry guards remain. All441 CPU checks passed. The five older profiles stay disabled, defaults are preserved and workers finish idle. Earlier isolated-candidate descriptions are dated history; this is the current operational state. [Entry and guard evidence](FLASH-IQ1S-ENTRY-20261104.md); [all current and historical entry benchmarks](ALL-ENTRY-BENCHMARKS-20261104.md).
+
+## Worker RAM raised to 26/28 GiB; requested reruns passed — November 4, 2026
+
+All eight profile definitions now use 26/28 GiB soft/hard worker limits. HyperQwen, SGLang and the isolated Flash-Next IQ1_S SSD-table candidate each passed one fresh actual DSH tool/result/exact-follow-up and owned unload; 438 CPU regressions passed. The other five profiles remain disabled. Host2 GiB, VRAM256 MiB/card, thermal82 C, swap/PSI/transport/ownership guards, contexts, weights and defaults remain unchanged. Flash-Next measured93.35 prefill tok/s,63.238 s client TTFT and 28.23 decode tok/s; sampled swap483 MiB and soft-limit reclaim persisted, so larger limits showed no speed improvement in this single run. All workers are stopped, GPUs1 MiB each, API/hub/DSH active and no reservation remains. This supersedes earlier24/26 GiB operational descriptions; historical results retain their original guards. [Results, comparison and guard tables](RAM26-28-RERUN-20261104.md).
+
+## Requested enabled-model checks passed — November 3, 2026
+
+After the user confirmed RAM is not yet upgraded, HyperQwen and SGLang each passed one short actual DSH read/tool-result/exact-follow-up, normal owned unload and GPU release. Fresh single-call prefill/TTFT/decode observations are 2077.9 tok/s / 2.821 s / 62.53 tok/s and 2137.9 tok/s / 3.044 s / 60.20 tok/s respectively. Tool calls and follow-ups passed; both test workers are inactive and both GPUs returned to 1 MiB used. API/hub/DSH remain active; no GPU reservation remains. Settings/guards are unchanged; all five RAM/offload profiles remain disabled. No full-context or sustained test. See [results, guard tables and loading-transient limits](REQUESTED-TWO-MODEL-CHECKS-20261103.md).
+
+## Current operation and DSH repair — November 3, 2026
+
+DSH uses an explicit headless service mode; desktop launches retain their required visible monitor. The API and private hub remain independent. The current host has **temporary 32 GB RAM**; only **HyperQwen 86,016** and **SGLang 57,344** are enabled. Both retain 24/26 GiB worker budgets, the 2 GiB host reserve, **256 MiB per-GPU free-VRAM floor**, swappiness 60 and idle 600 seconds. Unlock and current-boot host-staged transport are verified; the native-output buffering repair remains deployed. RAM/offload profiles remain disabled until explicit hardware confirmation, measured capacity and guarded requalification. Daily updates remain paused.
+
+See [the current repair and remaining work](DSH-STARTUP-REPAIR-20261103.md). Older dated status paragraphs and benchmark numbers retain their historical hardware/guard scope; they do not override this current state. Standing instructions remain applicable. No new model benchmark was run.
+
+## Provider abort repaired: unbuffered native channel evidence — November 3, 2026
+
+Longer normal client use exposed a remaining false transport-guard stop: one NCCL rank buffered SHM channel logs until exit. Dense launchers now force PYTHONUNBUFFERED=1 through engine/rank startup; the transport deadline and all resource guards remain unchanged. Live SHM proof and two normal completed SSE responses from the same invocation, separated by 36 seconds, pass. 98 focused CPU checks include a real C-stdout visibility regression. Earlier short speed observations do not establish sustained behavior. The user's selected HyperQwen worker remains loaded; RAM/offload profiles remain temporarily disabled. [Repair evidence](PROVIDER-ABORT-BUFFERING-20261103.md).
+
+
+## Verified unlocked VRAM-only operation; RAM models temporarily disabled — November 3, 2026
+
+After reboot, Secure Boot is disabled, ordered GPU unlock is VERIFIED, and the direct CPU PCIe4 x8/x8 host-staged proof passes with CUDA peers unavailable both ways. The iGPU runs the desktop. Only Qwen3.8-27B HyperQwen/vLLM and SGLang remain enabled; both pass real tool/result/follow-up and owned unload on temporary 32 GB RAM. Bolt and all four streaming/offload profiles are temporarily blocked pending the RAM upgrade, with definitions/weights preserved. The overlooked P2P-only runtime guards are corrected to require disabled P2P and bidirectional SHM with bounded startup-log grace; all memory/swap/temperature guards remain. 97 focused CPU checks pass. Do not restore RAM profiles/caches until explicit hardware confirmation, capacity measurement and guarded qualification. [Current evidence](UNLOCKED-VRAM-ONLY-20261103.md).
+
+
+## Z690 / 13900KS / temporary 32 GB migration — November 3, 2026
+
+The current host is the MSI Z690 Carbon WiFi DDR5 / i9-13900KS with temporary 32 GB RAM while awaiting the planned upgrade, Intel UHD 770 desktop and direct CPU PCIe4 x8/x8 RTX 3080 Ti/3080. The external PCIe switch and Crucial NVMe are removed. Stock signed NVIDIA 615.71.09 is loaded; actual CUDA peer capability is zero both ways. Maintained launches disable P2P/custom all-reduce, and the switch ACS service is disabled. All worker budgets are 24/26 GiB with bounded cache preparation; other resource guards remain. 77 focused CPU checks pass. The subsequent reboot verified unlock and both enabled VRAM-only engines; RAM/offload requalification is deferred pending the RAM upgrade. Preboot preparation below remains historical evidence. Startup requires the new root-owned current-boot host-staged proof and successful early unlock. Do not demand a switched-P2P proof on this host, re-enable the switch driver/ACS policy, restore 64 GB caches, or relabel historical benchmarks as new-host results. Headless physical-input activation remains unchanged. [Status and remaining checks](Z690-13900KS-MIGRATION-20261103.md).
+
+
+## GLM engine 1.1.50 selected; 256 MiB reruns — November 3, 2026
+
+GLM selects the normal 1.1.50 engine at unchanged 65,536 context after two passing short matched pairs: tool-call decode improved 17–24%, with mixed prefill. Versioned binary/profile/hash pin and normal-router tool/unload passed; 19 focused CPU checks passed. HyperQwen and SGLang MTP remain memory-blocked under the 256 MiB floor; Bolt pinning still hits oomd and prefetch-two offered no material gain; DeepSeek retains 1.1.46 because new arms did not improve overall and its quant prevents new P2P all-reduce. Other guards and Strata prefill 512 remain unchanged. [Full evidence and limits](VRAM256-OPTIMIZATION-20261103.md).
+
+## Headless-server VRAM floor — November 2, 2026
+
+The selected free-VRAM stop floor is now **256 MiB per card**, including SGLang. Other guards, contexts and native cache allocations remain unchanged.54 focused CPU checks passed; no new inference qualification. Earlier448/512 MiB results retain their historical guard attribution. [Policy and validation](HEADLESS-VRAM256-20261102.md).
+
+## Confirmed Strata prefill improvement — November 2, 2026
+
+DeepSeek/Strata selects prefill chunk512 at unchanged32K context after two guarded baseline/candidate pairs: uncached prefill improved25.6%/27.5%, with passing tool/result/follow-up and unload. Normal-router tool/unload and15 focused tests passed. Other settings remain selected; negative confirmations and guarded startup failures are retained. All guards remain unchanged. [Results and limits](COMMUNITY-OPTIMIZATION-20261102.md).
+
+## Foreground Codex CLI model tests — November 2, 2026
+
+A user-visible foreground CLI TTY satisfies harness visibility when the user chooses terminal execution. Use `visible_terminal.py foreground` with `scripts/cli_short_models.py`; no desktop chat/window is required. All service/GPU/localhost permissions, ownership/resource/P2P guards, short real tool/benchmark metrics, verified unload, serial selection and privacy/reporting rules still apply. A restricted agent must request approved host access to the exact command; it must not disable checks or require switching to a desktop chat. See [CLI short-test instructions](CLI-SHORT-MODEL-TESTS.md).
+
+## Future model short harness test plan — November 2, 2026
+
+For future requested profiles, follow [the reusable plan](FUTURE-MODEL-TEST-PLAN.md): guarded load, one short real harness tool/result round trip with benchmark capture, owned unload and resource-release verification, then switch models. Every result list includes the existing performance columns plus per-profile RAM, VRAM and swap guardrails. Preserve independent work and all guards; no extra full-context or sustained suite is implied.
+
+## Benchmark reports include resource guards — November 1, 2026
+
+Every future model benchmark list must include a companion per-profile RAM, VRAM and swap guard table alongside the performance table. Report worker RAM high/max and host reserve; per-GPU free-VRAM floors and exceptions; swap occupancy, write/combined I/O limits, averaging windows and pressure/hysteresis rules. Distinguish effective limits from measured usage. Use current deployed settings, preserve historical guard attribution, and mark unavailable measurements explicitly. See [reporting conventions](BENCHMARK-REPORTING.md). This reporting requirement does not request new benchmark runs or guard changes.
+
+## SGLang 56K with scoped 448 MiB floor — November 1, 2026
+
+SGLang uses 57,344 tokens with a 448 MiB free-VRAM floor; short tool/unload and native KV checks passed with 469 MiB minimum sampled free. HyperQwen remains 86,016 tokens / 512 MiB floor. Other guards are unchanged. No full-context test. [Evidence](SGLANG-56K-448MIB-20261101.md).
+
+## Qwen27B context increased further — November 1, 2026
+
+HyperQwen now uses 86,016 tokens; SGLang 55,296. Native KV capacity, short DSH read tools, sampled VRAM floor and owned unload passed. SGLang 57,344 was rejected after a 469 MiB transient. Guards remain unchanged; no full-context qualification. [Results](QWEN-LARGER-CONTEXT-20261101.md).
+
+## Qwen27B engines increased to 48K — November 1, 2026
+
+HyperQwen and SGLang now both use 49,152 tokens, backed by native KV allocation and passing short DSH tool/unload checks. Guards are unchanged; no new full-context quality claim. [Settings, VRAM and timings](QWEN-48K-CONTEXT-20261101.md).
+
+## Nemotron Super removed — November 1, 2026
+
+All installed Nemotron Super weights, dedicated runtime and active profile/launcher support have been removed at the user’s request. Seven maintained profiles remain, including Bolt. Both retired Super IDs return HTTP 404; workers are idle. Historical Super results below are dated evidence only. [Removal and validation](NEMOTRON-SUPER-REMOVAL-20261101.md).
+
+## NVIDIA API-only server — November 1, 2026
+
+The authenticated client API remains on port **10100** with the existing key. It forwards to a separate private model hub on **127.0.0.1:10101**; guarded model backends retain their private port and launch paths. The hub owns model selection, FIFO admission and the 600-second idle policy. Restarting the API does not restart the hub or its model workers.
+
+API services and API-launched backends are headless. DSH is a separate client under **NVIDIA server**; optional desktop/client installation uses `network/install.py --with-clients`. Plain HyperQwen and explicit Responses/function-tool support are retained. RAM, VRAM, swap, temperature, P2P and telemetry guards remain enforced.
+
+All **130 focused API/transport/launch-policy checks passed**, including chat/Responses streams, tool forwarding, disconnections and authentication. The full Torch-enabled CPU run passed **415/417**; two unchanged baseline checks still fail (updater catalog coverage and an obsolete Super swap-limit expectation). Live authentication/catalog/context checks passed and the active worker invocation was preserved.
+
+## HyperQwen uses plain chat — November 1, 2026
+
+HyperQwen is listed as `qwen27b-hyperqwen` without forced web search. Saved `qwen27b-hyperqwen-search` selections remain accepted as plain HyperQwen, and DSH migrates that saved selection to the canonical model while preserving unrelated providers. Web search remains available when explicitly requested through the Responses harness and its `web_search` tool.
+
+All 83 focused router, web-search and DSH registration checks passed, covering ordinary and streaming chat, cached selections, local function tools and explicit Responses search. Weights, context limits and resource guards are unchanged.
+
+## Current short-tool observations — November 1
+
+The eight retained profiles now have prefill, TTFT and decode observations measured during actual short DSH read calls, with successful matching tool results and owned unload. DeepSeek/Maya and DeepSeek/Strata share the existing Unsloth UD-IQ1_S checkpoint; the older Maya-S Strata profile is retired. Current configured contexts are 40K HyperQwen, 32K SGLang, 128K Flash-Next, 64K GLM, 32K both DeepSeek engines, 160K Bolt and 64K Super. These calculated windows were not subjected to a new full-context test. [Table, cache state and measurement limits](SHORT-TOOL-BENCHMARKS-20261101.md).
+
+## Default short-tool benchmarks and reporting
+
+Standing user instruction reaffirmed November 1: collect the default benchmark metrics DURING the same short real DSH tool-call round trip, then unload. Do not substitute whole tool-check wall time for prefill throughput, time to first generated token, or decode throughput. Instrument the short tool check to capture request-scoped token counts, timestamps, native timing/counter evidence, and cache reuse; exclude model loading and any follow-up answer from the first tool-call measurement. Include generated tool-call argument tokens, not only assistant prose. Account for parser/SSE buffering; do not infer token speed from chunk counts or invent missing timing. If a metric cannot be measured reliably, explain the instrumentation gap and fix measurement rather than launching a separate long benchmark.
+
+Always report: Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location. Use decimal GB for weights. Keep tool success, total tool duration, load/unload results and measurement method alongside the table. Label single short-call observations, cache state and historical results honestly; never attribute old Maya-S speeds to Unsloth. No extra full-context, sustained, repeated-reload or timed-idle suite is implied. A request to remember this protocol does not itself authorize replaying all models.
+
+## Historical switched hardware — November 1, 2026
+
+The RTX 3060 is permanently removed. Maintain only the RTX 3080 Ti / RTX 3080 pair. The November 1 reboot verified pair-only early unlock, scoped ACS and seeded bidirectional P2P correctness at 13.082 GB/s each way. The current-boot proof gate passes. Early unlock and scoped switch ACS routing must not require the removed card. Before any maintained model starts, require a root-owned current-boot seeded bidirectional peer-read/write proof. A configuration flag alone does not establish working P2P. Preserve resource guards and running jobs; no full-context tests are authorized by this hardware repair.
+
+## NVIDIA models and DSH — November 1
+
+Super is configured at 64K from calculated KV/RAM/VRAM capacity and passed guarded short math plus a real DSH read tool/result check and unload. All nine maintained models share NVIDIA Server Router; no new full-context quality claim is made. [Setup and scope](NEMOTRON-CONTEXT-20261101.md).
+
+## Current validation policy — November 1, 2026
+
+Calculate context limits from engine KV capacity and available RAM/VRAM while preserving all resource guards. Default verification is a short actual DSH tool-call round trip followed by owned unload. Do not run full-context retrieval, sustained stress, repeated reload or timed idle-validation suites unless the user explicitly requests them. Historical long-context results remain dated evidence; calculated limits must not be described as newly stress-qualified. Daily updates remain paused until the user asks to resume.
+
+
+## Bolt 64K context qualified — November 1
+
+Bolt is selected at 64K after two fresh normal-router loads, arithmetic/JSON, 58,893-input-token retrieval and streaming. The 1GiB KV pool, precision and resource guards remain intact. Live DSH advertises 65,536 context / 4,096 output; custom entries are preserved and omitted client thinking defaults off. Actual DSH marker retrieval passed at 33,517 measured input tokens after selecting the supported native sampler; the answer included extra analysis text. All 333 CPU regressions passed. [Results and DSH scope](BOLT-CONTEXT-20261101.md).
+
+## Background terminal focus protection — November 1
+
+Automated test/viewer windows now use a verified execution-boundary wrapper, iconic non-input hints and zero user time; bell/output raising and inherited activation tokens are blocked. This covers cached launcher imports without stopping inference. Explicit attention/authentication and selectors still map and activate normally. Live current/legacy no-focus tests and 27 focused regressions passed. [Implementation and evidence](BACKGROUND-TERMINALS-20261101.md).
+
+## Bolt automatic tool calling verified — October 31
+
+Bolt enables automatic tool choice with `qwen3_coder`, as specified by its model card. A fresh normal-router load passed parsed auto tool calls, a local fixture result round trip and streamed tool arguments with reasoning disabled. All 325 CPU regressions passed; the two-GPU loading policy, 8K context and resource guards remain intact. [Tool-calling settings and scope](BOLT-TOOL-CALLING-20261031.md).
+
+
+## Bolt verified on the two-card host — October 31
+
+Bolt now offloads Mamba input projections as well as experts/output projections and caps KV cache at 1GiB per GPU. Two fresh normal-router loads on the RTX 3080 Ti/3080 passed arithmetic/JSON; near-8K retrieval and a 32-token stream also passed. All 325 CPU tests passed; resource guards and 8K context remain unchanged. [Loading fix and validation](BOLT-TWO-GPU-LOADING-20261031.md).
+
+
+## Latest: restored 64GB worker budgets applied — October 31
+
+All six MoE profiles now use 56 GiB soft / 58 GiB hard worker limits. Both GPU-resident Qwen profiles retain their explicitly uncapped RAM setting. Linux sees 61.3 GiB usable; the independent 2 GiB host-available stop and all VRAM,swap,pressure and temperature guards remain active. Contexts and other model settings are unchanged. All eight actual kernel cgroup settings and 321 CPU tests passed; no inference job was interrupted. [Policy and verification](WORKER-RAM-64GB-20261031.md).
+
+## Latest: additional Unsloth DeepSeek Strata option at 32K — October 31
+
+The Strata model menu now includes a separate **Unsloth Dynamic3.1 UD-IQ1_S**
+DeepSeek option on its independently pinned Strata 0.2.9 / engine 0.1.55 runtime.
+The 32,768-token setting passed three-marker retrieval at **29,446 actual input
+tokens**, plus a complete 256-token stream on a separate same-setting reload.
+Two fresh normal-router loads passed arithmetic, JSON, streaming, authentication
+and actual busy-unload protection. The original seven profile objects remain
+unchanged; the registry now has eight selected profiles. Guards, six experts,
+main-pair placement and idle 600 seconds are preserved. The 3060 remains auxiliary.
+The 29K retrieval request took about 15 minutes; the reply used a JSON code fence,
+recorded separately from correct retrieval content. CPU regression checks passed
+320 tests, with 13 focused checks after cache isolation. Larger contexts were not
+qualified. [Results, use and limits](DEEPSEEK-UNSLOTH-CONTEXT-20261031.md).
+
+## Latest: all-three-card unlock 2.0 compute screen — October 31
+
+Three rotated GEMM sweeps passed all 135 timing samples and sampled CPU-reference
+correctness checks. FP16/BF16 medians were 121.53/126.87 TFLOPS on the 3080 Ti,
+120.95/121.80 on the 3080, and 49.53/49.07 on the 3060. Historical 1.0 changes
+were +0.34/+0.89% and +5.62/+7.66% on the two 3080 cards. Driver/kernel/topology
+changed, the 3080 FP32 control also rose 5.85%, and no Linux 1.0 baseline exists
+for the 3060: these are not controlled unlock-version gains. No guards stopped;
+unlock health stayed VERIFIED and the reservation was released. See the
+[protocol and comparison limits](UNLOCK-V2-BENCHMARK-20261031.md).
+
+## Latest: unlock 2.0 and pair P2P verified after reboot — October 31
+
+The loaded gpu_unlock module is **2.0.0** on Linux 7.0.0-42-generic with NVIDIA
+615.71.09. Boot health reports **VERIFIED**, with successful unlock of the 3080 Ti,
+3080 and 3060 before NVIDIA initialized and no pending reboot. The identity-based
+hook handled changed PCI addresses. All 16 firmware files and the boot image
+passed health checks. Patched NVIDIA module srcversions match the qualified
+candidate. The scoped ACS service applied successfully on this boot; seeded
+16 MiB remote reads/writes passed both directions at 13.081/13.085 GB/s peer copy.
+No model-performance improvement is inferred from this hardware check.
+
+Local scratch work/output folders are consolidated under the project's ignored
+`data/work/` directory; compatibility links preserve existing paths. Cleanup
+removed 2,402,957,853 logical bytes of duplicate downloads, superseded static-driver
+builds and regenerable build products. Obsolete installers and retired settings
+were hash-verified in the private retirement archive before removal. Maintained
+runtimes, models, guards, rollback packages, source pins and benchmark evidence
+remain available. Existing router and harness services remain active.
+
+## Latest: GPU unlock 2.0 staged for all three cards — October 31
+
+The requested upgrade installed gpu-unlock 2.0.0 from reviewed upstream commit
+`7eb51bccae0a0b7e599e084d971170e9a1e82d0c`. DKMS built successfully for
+7.0.0-42-generic; the target initramfs contains the matching 2.0 module/srcversion,
+all declared firmware, and the unchanged model-ID-scoped pre-udev hook. Health
+reports **PENDING REBOOT VERIFICATION**. The loaded module remains 1.0.0 until
+the user chooses to reboot; successful 2.0 unlock on hardware is not yet claimed.
+The 3080 Ti (2208), 3080 (2206), and 3060 (2503) remain the only selected targets.
+NVIDIA 615.71.09, dynamic BAR1/P2P modules, early-selection hooks and boot options
+were preserved; protected file hashes matched. Old 1.0 packages and boot/config
+preimages are retained privately for rollback. No live GPU reload or reboot ran.
+No additional performance gain over the verified 1.0 unlock is claimed.
+
+## Latest: working Dynamic3.1 SSD candidate and quiet automated terminals — October 31
+
+Strata 0.2.9 / engine 0.1.55 passed isolated 2K arithmetic/JSON and two complete 256-token streams with bounded 128/160 MiB/s swap and 15% pressure guards. Decode observations were 5.769 and 7.745 tok/s (second prompt cached); swap activity and pressure were zero. Existing selections remain unchanged. Automated harnesses now stay minimized; 307 CPU tests and a live no-focus/auto-close check passed. [Settings, evidence and scope](DEEPSEEK-DYNAMIC31-20261031.md).
+
+## Current: automated terminals stay minimized — October 31
+
+Automated tests, runtime inspections and unattended helpers use `visible_terminal.py run`, which now opens minimized and never requests focus. Commands requiring an actual user choice or authentication use `run --attention`; user-invoked selectors retain `launch` attention behavior. Backend monitors stay minimized. Completed command windows still close automatically. This supersedes the earlier blanket foreground-harness policy. Never bring automated test windows forward merely for progress; preserve running jobs. See [verification](TERMINAL-ATTENTION-20261031.md).
+
+## Latest: Unsloth Dynamic3.1 DeepSeek bounded trial — October 31
+
+All five pinned UD-IQ1_S shard hashes passed. The model loaded at 2K and passed arithmetic, then the unchanged swap-write guard stopped the JSON request; sustained streaming was not reached. Maintained selections are unchanged. The report records pinned sizes/hashes, the final-shard HTTP failure and Xet recovery, actual outcome and unchanged guards. [Results and limits](DEEPSEEK-DYNAMIC31-20261031.md).
+
+## Latest: Bolt installed and verified through the normal router — October 31
+
+Bolt AWQ INT4 is available at 8K text-only through its independent vLLM runtime. Two fresh normal-router loads passed JSON/arithmetic, near-window retrieval, sustained streaming, authentication and actual busy-unload protection. The final loader reclaims only verified clean checkpoint mappings once per consumed shard; 303 CPU tests passed and resource guards are unchanged. DeepSeek/Maya retains its qualified 32K bounded-residency setup. Bolt generation remains slow; see [measurements and scope](BOLT-MAYA-RELIABILITY-20261031.md).
+
+## Earlier October 31: DeepSeek/Maya and isolated Bolt qualification
+
+DeepSeek/Maya's 36 GiB file-residency target, 32 GB startup read-ahead cap and 4 GB post-prompt warming passed quality/resource checks and two fresh reloads at the original 32K context. Bolt passed three fresh isolated 8K loads, retrieval and sustained streaming using compact prefetch and checkpoint-scoped cache cleanup. At that earlier stage Bolt remained unselected; the installed verification above supersedes that status. See [the reliability report](BOLT-MAYA-RELIABILITY-20261031.md) for measured speeds and scope.
+
+## Main and auxiliary GPU roles — October 31
+
+Use the RTX 3080 Ti 12 GB and RTX 3080 10 GB for main inference. Reserve the RTX 3060 12 GB for auxiliary work. A separate drafter requires explicit engine placement support and a measured benefit before selection; the tested Qwen GGUF 3060 drafter was slower and remains experimental. Preserve the verified pair-only P2P setup, independent resource/ownership guards, unrelated workloads and existing client defaults. Rediscover device identities before changing placement after hardware changes.
+
+## Latest: main-pair inference and auxiliary 3060 optimization — October 31
+
+Main inference uses the RTX 3080 Ti/3080 pair; the RTX 3060 is reserved for auxiliary work. Qualified NCCL P2P settings are selected for both Qwen 27B engines, with custom all-reduce enabled only in HyperQwen. Fresh controls, tools, near-window retrieval, sustained generation and two normal-router reloads per engine passed. The dedicated 3060 GGUF drafter worked but was slower than main-pair MTP and was not selected. Existing native model caches/contexts and all guards are preserved. See [measurements and scope](GPU-PAIR-AUX-OPTIMIZATION-20261031.md).
+
+## Latest: Nemotron INT4 offload startup checks — October 31
+
+Neither Bolt 74B AWQ INT4 nor Super VL mixed INT4 reached inference in the tested installed engines. Bolt real-weight vLLM loads stopped at RAM pressure or the GPU reserve; Super VL initialization hit group-layout/resource gates, and SGLang rejected its fallback implementation. Super VL was initialization-tested only, not fully downloaded or benchmarked. Qwen and all maintained profiles remain unchanged; owned workers/downloads are stopped and no GPU reservation remains. See [scope, failures and next step](NEMOTRON-INT4-OFFLOAD-20261031.md).
+
+## Latest: pair-only P2P correctness PASS after scoped ACS fix — October 31
+
+Clearing request/completion redirection on four Broadcom switch bridges fixed the remote-read mismatch. Bidirectional seeded read/write validation passed twice, including after persistent rule activation, with about 13.08 GB/s copy throughput each way. Only 3080 Ti ↔ 3080 advertises peer access; all 3060 peer directions remain disabled. All-three-GPU tensor unlock remains VERIFIED, links are x8/x8 plus motherboard x4, and the root-owned boot rule is enabled. A new reboot of that ACS rule has not yet been observed. See [measurements, scope and rollback](PEX-ACS-PAIR-20261031.md).
+
+
+## Earlier October 31: foreground harness policy (superseded above)
+
+User-input/authentication tasks, selectors and test terminals now open and activate in front. Only backend monitors retain minimized startup. Three launcher tests passed and live attention-window activation was confirmed. The pair-only ACS guard also excludes terminal work on the motherboard 3060; its four safety tests passed. See [policy and checks](TERMINAL-ATTENTION-20261031.md).
+
+
+## Latest: pair-only switch ACS diagnosis prepared — October 31
+
+The driver advertises P2P only for the two switched GA102 cards; all 3060 peer directions are disabled. Their IOMMU domains are identity. A scoped Broadcom bridge audit and reversible ACS trial is prepared, with conditional persistence only after full pair-only correctness passes. Three CPU safety checks passed; actual ACS/GPU results await administrator authentication. All-three-GPU tensor unlock remains verified. See [scope and validation](PEX-ACS-PAIR-20261031.md).
+
+
+## Latest: all three GPU unlocks verified; P2P still fails — October 31
+
+The dynamic candidate is loaded and the early model-ID hook successfully unlocked the 3080 Ti, 3080 and 3060 before NVIDIA initialized, despite another PCI-address change. Health reports VERIFIED. Switched links remain x8/x8. Actual peer reads still fail: local source data passes validation, while a bounded read-only peer diagnostic returns 0xffffffff. No P2P bandwidth or model improvement is claimed. See [actual results](P2P-DYNAMIC-UNLOCK-20261031.md).
+
+
+## Latest: dynamic P2P and automatic unlock candidate — October 31
+
+A matching 615.71.09 dynamic BAR1 candidate compiled; 33 CPU tests passed. A model-ID-scoped early hook and health checker now support PCI-address changes for exactly the 3080 Ti, 3080 and 3060. Installation/activation and actual post-boot P2P correctness remain pending. The previous static peer-read mismatch remains a failed result; production settings are unchanged. See [candidate and validation boundary](P2P-DYNAMIC-UNLOCK-20261031.md).
+
+
+## Latest: P2P post-boot correctness FAILED — October 31
+
+615.71.09 and IOMMU passthrough are active; the switched cards are x8/x8. Advertised CUDA P2P support is insufficient: the actual remote-read test failed data validation, so working P2P is not established. Only the 3060 has verified tensor unlock; switch enumeration moved both 3080 PCI addresses and their explicit unlock targets missed. Avoid multi-GPU workloads until corrected or the peer path is disabled. See [actual verification](P2P-POSTBOOT-20261031.md).
+
+
+## Latest: P2P packages installed, boot completion pending — October 30
+
+The switch and all three GPUs now enumerate; 3080 Ti/3080 links are x8 each with a Gen4 x16 switch uplink. CUDA peer access remains unavailable under 595.99.02. Matching 615.71.09 P2P modules built successfully after a documented Linux 7 CXL guard correction; bounded correctness verification is prepared. Explicit human approval now covers the driver replacement, IOMMU passthrough and all-three-GPU unlock. 615 packages and patched module files are installed, but final unlock boot preparation stopped at the expected live 595/615 library mismatch. A validated preboot completion terminal awaits administrator authentication; do not reboot until it passes. Post-reboot P2P and three-GPU unlock verification remains pending. See [status and limits](P2P-DRIVER-PREPARATION-20261030.md).
+
+
+## Latest: three-GPU hardware-change preparation — October 30
+
+Prepared read-only next-login inventory and a **Prepare Three GPU Unlock** desktop shortcut for a planned switched 3080 Ti/3080 pair plus motherboard-connected 3060. Current checks pass; the third card is not installed. PCI addresses must be rediscovered after the hardware move, then administrator-authenticated boot preparation and another full power cycle may be needed. P2P, lane sharing and three-GPU model placement remain unqualified; existing profiles are unchanged. See [procedure and limits](THREE-GPU-PREPARATION-20261030.md).
+
+
+## Latest: Unsloth and Comfy desktop installation — October 30
+
+Official Unsloth Desktop 0.1.913-beta and Comfy Desktop 1.1.8 stable are installed per-user with **Unsloth** and **ComfyUI** Desktop/menu shortcuts. Unsloth's isolated backend setup completed all 17 stages; Python 3.13.17, backend 2026.10.11 and PyTorch 2.13.0+cu130 see both CUDA GPUs. AppImage/native-library/shortcut checks pass. Comfy's installed launcher now uses its documented per-app `--no-sandbox` compatibility option and passed an offscreen 15-second startup check; system-wide sandbox settings are unchanged. The initial sandboxed failure is retained as historical evidence. Existing LLM environments/settings are preserved; no model, training or generation job started. Comfy's ordinary first-run choices remain. See [installation status](UNSLOTH-COMFY-DESKTOP-20261030.md) and [verification](validation-results/20261030-unsloth-comfy-desktop.json).
+
+## Latest: official Strata desktop app linked to existing Q3 — October 30
+
+The official Strata 0.2.8 Linux desktop app and its matching 0.1.54 CUDA engine are installed separately, with a new **Strata Official** Desktop/menu shortcut. Its real desktop host recognizes the existing Qwen3.8-Flash-Next IQ3_XXS at 32K with no missing files. Existing GGUF shards and prepared packs are reused; no model weights were downloaded, moved or copied. App state/components and the app-local profile are separate, the router credential was omitted, and the original selector, runtime pins, profiles and guards are preserved. Official binary/help and desktop-host inventory checks passed; the owned host stopped afterward. No model was loaded or benchmarked, and native GUI interaction/inference were not tested. See [installation and use](STRATA-OFFICIAL-APP-20261030.md) and [verification](validation-results/20261030-strata-official-app.json).
+
+## Latest: actual headline content for OpenCat search — October 30
+
+Headline/current-news queries now retrieve actual dated RSS story titles and descriptions rather than sparse generic news-site search snippets. General headlines use BBC World with a Google News fallback; topical current news uses Google News RSS search. Ordinary search remains free anonymous Mwmbl. All 259 CPU tests passed, followed by 22 targeted checks after final normalization. Real nonstreaming and Tailscale streaming responses included three exact fetched headlines with citations (2.845/3.192 seconds), without generic access refusals. Continue selecting `qwen27b-hyperqwen-search`. Worker/DSH, access configuration, model settings and resource guards are preserved. The user's exact original question and direct iPhone confirmation remain pending. See [repair and limits](OPENCAT-HEADLINES-20261030.md) and [verification](validation-results/20261030-opencat-headlines.json).
+
+## Latest: OpenCat empty-tools search compatibility — October 30
+
+The phone trace showed Responses requests with an empty tool list, so the existing entry did not search. A new opt-in `qwen27b-hyperqwen-search` catalog entry enables free web search on the server while reusing the same guarded HyperQwen worker. Refresh OpenCat's model list and select this ID; keep the existing connection and Responses settings. All 255 CPU tests and real empty-tools nonstreaming/streaming/Tailscale requests passed (1.719/1.810/2.613 seconds), with grounded answers and citations. Original model entries, profiles and resource guards are preserved. Temporary diagnostics were removed and the access configuration restored exactly. Phone confirmation after selecting the new entry remains pending. See [repair](OPENCAT-SEARCH-MODEL-20261030.md) and [verification](validation-results/20261030-opencat-search-model.json).
+
+## Latest: free keyless Responses web search live-verified — October 30
+
+The router uses Mwmbl's free anonymous API for `web_search`/`web_search_preview`, with typed streaming search events, untrusted snippets, clickable source links and URL citation annotations. All 250 CPU tests pass. Real nonstreaming, streaming and Tailscale streaming Responses passed in 1.981/1.506/2.176 seconds, including source-domain filtering and stable event ordering. No search key, signup or paid request was used. The documented anonymous allowance is 1,000 requests/month per IP at one request/second; unavailable/quota-limited searches return explicit errors. Model settings, guards and worker/DSH service invocations are preserved. Direct iPhone UI confirmation remains pending. See [implementation and limits](RESPONSES-WEB-SEARCH-20261030.md) and [verification](validation-results/20261030-responses-web-search.json).
+
+## Latest: OpenCat Responses API exposed — October 30
+
+The router now exposes native POST /v1/responses alongside Chat Completions, fixing OpenCat's OpenAIResponses “Unknown endpoint” failure. Typed streaming events, model aliases and upstream errors are preserved through the same authentication, queueing and worker guards. All 232 CPU tests passed; live HyperQwen Responses passed in streaming/non-streaming modes over loopback and Tailscale without restarting the model. Direct iPhone confirmation is pending. Optional protocol diagnostics remain default-off and exclude content and credentials. See [compatibility](OPENCAT-RESPONSES-20261030.md) and [verification](validation-results/20261030-opencat-responses.json).
+
+
+## Latest: OpenAI-compatible request retries repaired — October 30
+
+The router now reuses a verified running worker and waits for its existing cold load after a client disconnect, avoiding repeated reloads and the reported “Native worker state is unavailable” error. Ownership, active-work and resource guards remain intact. All 224 CPU tests passed. Live loopback streaming/non-streaming and Tailscale requests completed in under half a second without restarting the worker. Only the router was restarted; the loaded worker and DSH were preserved. See [repair](API-RELIABILITY-20261030.md) and [verification](validation-results/20261030-api-reliability.json).
+
+
+## Latest: Qwen resident mode qualified and selected — October 30
+
+Qwen now keeps the non-GPU expert cache complement resident across both GPUs at 32K. The matched full-qualification screen measured 88.12 versus 78.74 decode tok/s, 628.8 versus 435.1 prefill tok/s, and 3.46 versus 4.99 seconds TTFT. Both arms passed JSON/arithmetic/image, 29,435-input uncached retrieval, over 120 seconds sustained generation and fresh reload. Two selected normal guarded loads passed. Guards, runtime pins, quantization, context and GPU selection remain unchanged. GLM's exploratory gain did not survive confirmation; DeepSeek fixed/auto both failed the specific JSON fixture, so neither profile changed. The Strata native tokenizer counter was repaired;27 targeted CPU regressions and the real saved-reference counter check passed. See [qualification](HARDWARE-TUNING-QUALIFICATION-20261030.md) and [numeric evidence](validation-results/20261030-hardware-tuning.json).
+
+
+## Latest: forum-backed hardware tuning candidates — October 29
+
+Research supports testing Qwen resident experts on both GPUs, GLM native calibration, and DeepSeek/Maya automatic CPU-lane selection on the restored 64GB system. These are unvalidated candidates; no runtime, model, guard or selected setting changed and no GPU test was started. The installed Qwen setup has a quant-specific budget restriction requiring a native launcher compatibility check. DeepSeek source warns against assuming partial RAM copies improve speed. See [research](HARDWARE-TUNING-RESEARCH-20261029.md) and [candidate evidence](validation-results/20261029-hardware-tuning-research.json).
+
+
+## Latest: completed terminals close automatically — October 29
+
+Harness and selector windows now close when the command finishes, including failures. Private transcripts and atomic exit-code receipts retain the results. Service viewers close after their own service stops; active work, router/DSH service processes, unknown state and unrelated terminals are preserved. Minimized/no-focus startup remains. All 207 CPU regressions and real PTY success/failure/service-stop checks passed; final project terminal inventory was zero. No model or guard setting changed and no GPU benchmark was repeated. See [terminal lifetime](TERMINAL-LIFETIME-20261029.md) and [verification](validation-results/20261029-terminal-lifetime.json).
+
+
+## Latest: targeted 15% pressure guard and two-profile 64GB benchmark — October 29
+
+Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. Only Qwen/Strata and DeepSeek/Maya were repeated; HyperQwen, SGLang, GLM/Maya and DeepSeek/Strata rows are explicitly carried forward from their earlier October 29 records. This composite table is not a new six-profile matched run. See [report](BENCHMARK-PRESSURE-GUARD-64GB-20261029.md) and [numeric evidence](benchmark-results/20261029-pressure-guard.json). Workers are stopped; router idle; no GPU lock; DSH preserved; no fallback.
+
+
+The earlier 10% stop records remain archived. Explicit model selection cleared the old invocation latches; neither profile has a new guard latch. Peak inference pressure was 0% for Qwen and 6.80% for Maya; the added allowance was not exercised in these short runs.
+
+## Latest: four SSD profiles use 128/160 swap limits — October 29
+
+Four SSD-streaming profiles now use bounded swap limits of 128 MiB/s writes and 160 MiB/s combined over 30 seconds. Dense and unknown profiles retain 1/8 MiB/s. All other resource guards, contexts, expert-cache settings, precision choices, runtime pins and model settings are unchanged. 2 of four SSD profiles completed three valid measured requests without guard violations on restored 64GB RAM. RAM remains DDR5-4200 MT/s across four 16GB DIMMs (61.3013GiB usable; 2100MHz DDR clock). The dense profiles were not repeated; their table rows carry forward the earlier October 29 full-RAM run. deepseek-maya did not pass: Sustained full-memory pressure during inference. Qwen reached three outputs but stopped on the unchanged pressure guard; its timings are diagnostic and no new passing median is selected. See [the new report](BENCHMARK-SSD-SWAP-64GB-20261029.md) and [numeric evidence](benchmark-results/20261029-ssd-relaxed-swap.json). The earlier DeepSeek/Maya guard failure and all prior measurements remain dated evidence; this speed screen does not repeat full-window quality qualification.
+
+
+Workers are stopped; router idle; no GPU reservation; DSH preserved. Both pressure-stop latches are retained. No fallback was loaded. No benchmark work remains pending.
+
+## Latest: all six current profiles benchmarked on 64GB — October 29
+
+Firmware configured RAM speed is DDR5-4200 MT/s across four 16GB DIMMs
+(equivalent DDR clock2100MHz); Linux sees61.3013GiB usable. No clock/BIOS change.
+Five selected model/engine profiles completed one warmup and three valid
+128-output fixed-fixture requests with current full-RAM caches and unchanged
+guards. Fresh medians and ranges are in [the report](BENCHMARK-64GB-20261029.md)
+and [numeric evidence](benchmark-results/20261029-full-ram.json); the registry
+now points to five measured results and retains prior entries in history. DeepSeek/Maya failed its first measured request at5.31MiB/s swap writes above1MiB/s; no new speed median or pass is claimed. Its guard remains latched and source settings unchanged.
+These approximately2.2K-input screens exclude model loading; they do not replace
+full-window quality or long-duration qualification. Prior configurations/runs are
+not paired controls for a RAM-only causal comparison. Source readiness/cleanup
+corrections do not change model/runtime settings or the fixed measured fixtures.
+
+## Latest: 64GB RAM restored — October 29
+
+The owner confirmed hardware restoration. Linux sees 61.3013 GiB usable.
+Saved full-RAM cache choices are restored: GLM 40 GiB, Strata DeepSeek 42 decimal
+GB and Maya DeepSeek 8 GB warming with original mapped-expert mode. The newer
+Maya binary/hash guard remains; its temporary 16 GiB file-cache target is inactive.
+Qwen mapped experts/both GPUs and its separate 128/160 MiB/s swap allowance,
+512 MiB native reserves, 2 GiB host floor, all independent guards, swappiness60,
+concurrency one and idle600 remain unchanged. All six normal guarded startup/JSON
+paths passed; the three cache restorations passed fresh reloads. No speed,
+near-window, image or sustained benchmark was repeated. Older reduced-RAM
+measurements retain their hardware/cache scope and are not current speed claims.
+The daily 03:00 Toronto timer is resumed; next October30 03:00EDT. Router idle,
+workers stopped, DSH preserved, no GPU reservation. See [restoration](FULL-RAM-RESTORATION-20261029.md).
+
+## Latest: daily gated engine updates and qualified Qwen — October 29
+
+The daily NVIDIA engine updater is installed and enabled for 03:00 local time
+(America/Toronto), with no missed-night catch-up. Next run at installation:
+October 30, 03:00 EDT. Six selected profiles are covered by independent components:
+HyperQwen, heterogeneous SGLang, Strata Qwen, Maya GLM, Maya DeepSeek and Strata
+DeepSeek. No engine was updated during setup. The read-only discovery found newer
+sources for five components; discovery does not qualify them.
+
+Production and candidate must pass matched speed, quality, near-window retrieval,
+sustained generation, fresh reload and resource checks. Paired performance uses
+the AMD 95% prefill/decode and bounded TTFT envelope. Patch drift, missing evidence,
+failed production baselines or candidate gates block promotion. Durable preimages,
+recovery-before-router ordering and exact reservation ownership protect existing
+work. All 198 CPU regressions passed. See [schedule and gates](DAILY-ENGINE-UPDATE-POLICY.md)
+and [daily ledger](DAILY-ENGINE-UPDATES.md).
+
+Qwen Flash-Next now uses plain mapped experts and both GPUs at 32K, with its
+qualified Qwen-only 128 MiB/s writes / 160 MiB/s combined swap allowance over
+30 seconds. JSON/arithmetic/image, 29,450-token retrieval, separate 8,192-output
+continuous generation (139.52s) and fresh reload passed. Other profiles retain
+1/8 MiB/s swap limits. Independent guards and existing historical benchmarks are
+unchanged. See [qualification](QWEN-RELAXED-SWAP-20261029.md).
+
+DeepSeek/Maya retains its qualified 512 MiB reserve, 16 GiB periodic model-file
+residency target and native 12 GB pinned hot cache. Reduced-RAM cache choices stay
+temporary: full-RAM cache restoration still requires explicit hardware confirmation
+and capacity verification. Older failure/pause/no-updater notes below are historical
+and superseded for the specific configurations described here.
+
+## Latest: current Qwen/Flash-Next reduced-RAM loading test — October 29
+
+The unchanged normal Qwen/Flash-Next Strata preset was tested through the router
+with the current guards. It failed during loading: native startup announced
+about 47 GB of RAM experts and a 39.97 GiB expert arena; host available fell to 0.717 GiB
+(free 0.408 GiB), below the 2 GiB supervisor floor. Peak temperature 42 C; no cgroup
+high/max/OOM event. The RAM guard stopped it safely before readiness.
+
+Loading swap peaked at 1.68 GiB, but this was not an active-inference swap stop:
+no inference window was reached. JSON/image/retrieval/sustained/reload checks
+were not reached. No speed benchmark was repeated;97.09 tok/s remains historical.
+
+Source/cache/context settings and every guard remain unchanged. 44/48 GiB cgroup
+limits and unlimited loading swap occupancy were read back. Router/DSH preserved,
+worker stopped, router idle, no reservation/fallback. This is a current reduced-RAM
+resident-allocation failure, not general incompatibility between Qwen and Strata.
+The other five selections remain unchanged. Do not apply rejected pageable variants
+or restore full-RAM settings without explicit human confirmation and Linux capacity
+verification. Further cache tuning requires its own qualification.
+
+See [current normal-profile test](QWEN-CURRENT-GUARDS-20261029.md) and
+[numeric evidence](validation-results/20261029-qwen-current-guards.json).
+
+
+## Latest: bounded DeepSeek/Maya cache qualifies at 512 MiB — October 29
+
+DeepSeek/Maya passed at **512 MiB native VRAM reserve and unchanged 32,768-token context** on the 45.55 GiB reduced-RAM host. The selected temporary configuration combines a 16 GiB model-file cache target with a native 12 decimal GB pinned hot-expert cache. JSON, arithmetic, image, 29,467-input-token retrieval, 426.5s continuous generation, a fresh isolated process reload and two normal guarded loads all passed. Observed worker swap occupancy and swap read/write rates were zero.
+
+The saved three-request screen measured **1.23 decode tok/s**, 42.5 prefill tok/s and 51.491s TTFT. Earlier full-RAM/historical rates remain preserved; no fresh paired 2,048 MiB control was produced, because the earlier reduced-RAM configuration failed its swap guard.
+
+This supersedes the earlier unresolved DeepSeek/Maya reduced-RAM status only for
+this qualified configuration. Other five selected settings/results remain unchanged;
+Flash/Strata's earlier reduced-RAM failure remains unresolved. Native warming limits
+did not bound demand mmap residency; the new controller targets clean model-file
+residency, with overshoot possible between scans. Its qualified binary is hash-pinned.
+
+The host 2 GiB floor, 46/48 GiB MoE worker budget, dense 512 MiB free-VRAM stop,
+82 C thermal limit, owned swap/PSI/telemetry guards, swappiness 60, concurrency one
+and idle 600s remain. Original native source/binary and archived preimages remain;
+weights, precision and mathematical kernels are unchanged. Router idle, owned
+workers stopped, no GPU reservation, DSH preserved and no fallback.
+
+After explicit human RAM-restoration confirmation, verify Linux capacity, restore
+appropriate full-RAM cache/prefill choices from preimages while preserving the
+qualified VRAM reserve and guards, then verify normal guarded load/reload.
+No timer or MemAvailable trigger.
+
+See [demand-cache qualification and six selected results](MAYA-DEMAND-CACHE-20261029.md)
+and [numeric evidence](benchmark-results/20261029-maya-demand-cache.json).
+
+
+## Latest: DeepSeek/Maya 512 MiB follow-up rejected — October 29
+
+Three additional DeepSeek/Maya 512 MiB candidates were rejected: disabled warming/prefetch,
+256-token prompt chunks, and a native 12 GB copied/pinned expert cache. All hit the
+unchanged owned-worker swap-write guard (7.23, 4.29 and 6.03 MiB/s over ~30 seconds;
+write limit 1 MiB/s). Smaller chunks completed warm-up but failed during the first
+measured response. No cgroup high/max/OOM event occurred; the engine's generic
+OOM suggestion is not evidence of an OOM kill. File-cache/anonymous reclaim
+competition is consistent with the observations; exact kernel victim selection
+was not isolated.
+
+Nothing was applied. DeepSeek/Maya retains 2,048 MiB reserve, 32K, original cache/
+prefill settings and historical benchmark. GLM/Strata DeepSeek 512 MiB selections
+and dense RAM-cap removal remain unchanged. No runtime, precision, worker budget,
+swappiness 60, host 2 GiB, thermal/swap/PSI/telemetry guard, idle 600s or concurrency
+change. Trial workers stopped, GPU reservation released, router idle and DSH
+preserved; no fallback. No passing 512 MiB setup was found in these tested controls.
+Full-RAM cache restoration still requires explicit human confirmation and Linux
+capacity verification.
+
+See [DeepSeek/Maya follow-up](MAYA-DS4-VRAM512-FOLLOWUP-20261029.md) and
+[numeric evidence](benchmark-results/20261029-maya512-followup.json).
+
+
+## Latest: dense RAM caps removed; MoE reserve study — October 29
+
+HyperQwen and SGLang no longer have the 30/36 GiB per-worker RAM caps.
+Their normal guarded launches passed JSON and actual MemoryHigh/MemoryMax
+infinity readbacks (cgroup memory.high/memory.max=max). Ownership enforcement,
+host-available floor 2 GiB, dense free-VRAM floor 512 MiB, temperature 82 C,
+active owned-worker swap/PSI/telemetry stops, swappiness 60, concurrency one and
+idle unload 600 seconds remain. MoE worker RAM budgets are unchanged.
+Forty-two CPU guard/ownership/budget/runtime checks passed; no dense speed or
+context measurements were repeated.
+
+GLM and both DeepSeek engines were tested with 512 MiB native VRAM allocation
+reserves on the current reduced-RAM machine. Only profiles passing isolated
+quality, near-window retrieval, sustained generation, fresh-process reload and
+normal guarded loading were applied:
+
+- deepseek-maya: 512 MiB candidate not applied; original 2,048 MiB reserve retained.
+- glm-maya: 512 MiB reserve qualified and applied.
+- deepseek-strata: 512 MiB reserve qualified and applied.
+
+Native allocation reserves and the dense minimum-free-VRAM stop are different
+controls. All model/cache/context choices were preserved, and prior benchmark
+values remain historical evidence. Only applied candidates have new selected
+measurements. The two early GLM/Strata connection failures occurred before engine
+loading because the router cached the old dense-budget validator; corrected
+trials supersede those setup failures. One idle router reload loaded the new
+validator with no worker interrupted; DSH was preserved.
+
+Final router idle, owned workers stopped and no GPU reservation; no fallback
+restored. Next action: after explicit human DIMM-restoration confirmation, verify
+Linux capacity, restore appropriate full-RAM cache values and verify guarded
+loading. Preserve the separately approved dense cap removal, host reserve and
+qualified VRAM selections unless the human revises them. No timer trigger.
+
+See [qualification and current results](MOE-VRAM512-20261029.md) and
+[numeric evidence](benchmark-results/20261029-moe-vram512.json).
+
+
+## Latest: all profiles use 2 GiB host reserve — October 29
+
+The human approved a **2 GiB host-available RAM floor across all six maintained
+profiles**. The registry now explicitly selects 2 GiB for each profile; the common
+reader also defaults to 2 GiB. Both dense and MoE supervisors use the selected
+value, and the benchmark monitor records and follows the same per-profile floor.
+This supersedes earlier Qwen-only 2 GiB / other-profile 8 GiB instructions.
+
+Forty-one CPU checks passed, including both dense engines at the 2 GiB boundary,
+below-floor stops, the unchanged 512 MiB VRAM boundary, thermal and swap stops,
+worker budgets, intentional shutdown ownership and benchmark metric parsing.
+Supervisor three-reading hysteresis, 82 C, all native VRAM reserves, worker
+RAM/swap budgets, active swap/pressure/telemetry guards, swappiness 60, concurrency
+one and 600-second idle unload are unchanged. No GPU models or benchmarks were
+rerun. Model/cache/context settings and historical benchmark values are unchanged.
+
+Normal workers were inactive; the new floor is read at their next launch. No
+router/DSH restart or job cancellation occurred. Router idle, DSH preserved,
+no GPU reservation and no fallback restored. The earlier Qwen/Maya reduced-RAM
+failures remain unresolved; this policy change does not qualify those setups.
+
+After explicit human confirmation that the RAM DIMM is restored, verify Linux
+capacity, restore appropriate full-RAM cache values and validate normal guarded
+loading. Preserve the separately approved 2 GiB reserve unless the human changes
+that direction, along with unrelated router/Desktop improvements and credentials.
+No timer or MemAvailable trigger.
+
+See [all-profile reserve change](ALL-PROFILES-HOST-RESERVE2-20261029.md) and
+[verification](validation-results/20261029-all-profiles-host-reserve2.json).
+
+
+## Latest: Qwen host-RAM reserve 2 GiB — October 28
+
+The human explicitly lowered Qwen/Strata host-RAM headroom from 8 GiB to **2 GiB**.
+The normal supervisor now reads this Qwen-only selected floor from the registry;
+all other five profiles retain 8 GiB. Eight new boundary/thermal/swap checks and
+18 existing budget/swap/supervisor regressions passed (26 total). Three low
+readings still stop the worker; swap/pressure/telemetry, VRAM reserves, temperature
+82 C, RAM/swap budgets, swappiness 60, idle 600s and concurrency one are preserved.
+No router or DSH restart was needed.
+
+The full-pageable lcz.me candidate was retested with native and isolated host
+headroom 2 GiB. It loaded 35.38 GiB pageable expert RAM (zero pinned), completed
+three benchmark screens (53.29 decode tok/s median), then hit the unchanged swap
+guard at 76.90 MiB/s reads plus 18.81 MiB/s writes over 30.46 seconds. This is a
+rejected screen, not a qualified operating benchmark. **The failed lcz.me cache/
+execution setup was not applied.** Native launch config, selected benchmark fields,
+contexts and the other five profiles are unchanged.
+
+Test worker stopped, GPU reservation released, router idle, DSH ownership preserved;
+no fallback restored. Preimages are archived privately with hashes. See
+[guard selection and retest](QWEN-HOST-RESERVE2-20261028.md) and
+[numeric evidence](benchmark-results/20261028-qwen-host-reserve2.json).
+Next action: after explicit human RAM-restoration confirmation, verify Linux
+capacity, restore appropriate full-RAM caches and verify normal guarded loading.
+Preserve this separately approved reserve selection and unrelated router/Desktop
+changes unless the human changes that direction. No timer/MemAvailable trigger.
+
+
+## Latest: lcz.me Qwen/Strata follow-up — October 28
+
+The user requested qualification of the lcz.me pageable Qwen/Strata setup on the
+current reduced-RAM machine, with application only after a pass. Both candidates
+failed and **nothing was applied**. Full pageable residency needed 31.88 GiB for
+CPU experts but only 30.51 GiB fit after native 8 GiB headroom. A bounded 28 GiB
+pageable candidate, fixed 4096 prefill, seven workers, adaptation/PCIe sharing off,
+1536 MiB VRAM reserve and no conversation cache loaded, then hit active owned-worker
+swap protection at 92.35 MiB/s reads over 30.43 seconds. Its one completed measured
+request does not establish a benchmark median or reliable operating performance.
+
+Qwen context stays 32K. Canonical launch config, registry, runtime, all guards and
+other five profiles are unchanged; the temporary GLM/Strata DeepSeek settings remain.
+Worker stopped, GPU reservation released, router idle, DSH ownership preserved;
+no fallback restored. Prior tests were preserved rather than repeated.
+
+See [candidate settings and failure evidence](QWEN-STRATA-LCZ-20261028.md) and
+[numeric results](benchmark-results/20261028-qwen-strata-lcz.json).
+The next action is to await explicit human RAM-restoration confirmation, verify
+Linux capacity, then restore appropriate full-RAM caches and verify normal guarded
+loading. No timer/MemAvailable trigger, guard relaxation or unrelated rollback.
+
+
+## Latest: reduced-RAM SSD qualification — October 28
+
+2 of the four SSD-streaming profiles now have bounded qualification with one 16 GiB
+DIMM removed (45.55 GiB usable): unchanged contexts, JSON/arithmetic, near-window
+retrieval, supported images, sustained generation, fresh-process reload and normal
+router loading. Qualified cache choices are deployed temporarily. This supersedes earlier
+reduced-RAM caveats only for these selected settings and this
+bounded workload; it does not establish multi-hour reliability or an exhaustive
+cache optimum. Dense measurements were carried forward without retesting.
+
+- `glm-maya`: 2.11 decode tok/s (-56.1% against saved full-RAM fixtures), 65,536 context; 231.1s continuous generation and fresh-process reload passed.
+- `deepseek-strata`: 1.80 decode tok/s (-39.2% against saved full-RAM fixtures), 131,072 context; 381.1s continuous generation and fresh-process reload passed.
+
+Comparisons use saved historical full-RAM fixtures, not a fresh paired full-RAM
+control. Preserve swappiness 60, 512 MiB dense reserve, native MoE GPU reserves,
+8 GiB host floor, 82 C temperature limit, unchanged worker budgets and active
+swap/churn/pressure/telemetry guards, concurrency one and 600-second idle unload.
+Normal validation finished idle; router and DSH ownership were preserved and no
+fallback was restored. Original credential-redacted settings are archived privately
+with hashes; raw credentials and study evidence stay local.
+
+Restore the appropriate full-RAM cache settings only after explicit human
+confirmation that the DIMM is restored and Linux capacity verification, followed
+by normal guarded loading checks and selected-setting metadata updates. A rise
+in MemAvailable or elapsed time does not trigger restoration. Preserve unrelated
+router/desktop improvements, credentials, guards and independent speed history.
+
+See [qualification and all six current results](REDUCED-RAM-20261028.md) and
+[machine-readable evidence](benchmark-results/20261028-reduced-ram.json).
+
+Unresolved on reduced RAM: `deepseek-maya`, `flash-next-strata`. Their original cache settings and historical full-RAM table values are retained; they may stop at the unchanged guards. No passing reduced-RAM operating configuration or reliable slowdown percentage was established for them.
+
+Earlier dated qualification statements below remain historical evidence.
+
+Read [README.md](../README.md) for standing policy, then
+[the current takeover state](CURRENT-STATE.md) before acting. The registry is
+`config/maintained-profiles.json`; historical measurements are evidence, not live
+settings. Update these entry points, the benchmark ledger and both NVIDIA repos
+after meaningful changes so another agent can resume without chat history.
+
+Before yielding, record the objective, selected versus candidate settings,
+completed verification, actual blockers, active jobs/locks, unfinished steps and
+one concrete next action in the canonical takeover handoff. Verify both pushes
+or record the exact outstanding sync step. Do not rerun completed GPU tests for docs.
+
+Latest router update: bounded FIFO admission and separate backend transport are
+deployed; one active operation/eight waiters. Same-model concurrency is NOT enabled:
+all maintained engines are configured for one execution slot. Preserve that limit
+until separate engine/resource/state-isolation qualification. 94 CPU regressions
+and normal nonstream/SSE smoke passed; see docs/ROUTER-IMPROVEMENTS-20261028.md.
+Desktop integration, all guards and DSH ownership remain unchanged.
+
+Four qualified context upgrades and the approved lifecycle controls are deployed.
+All six normal launch paths passed functional/limit checks. Actual GLM/dense idle
+expiry and normal reload, plus isolated Strata idle/reload, are verified. No test
+coordinator remains active. Maya sustained-swap qualification remains unresolved;
+retain its guarded 32K setting and do not relabel short API success as qualification.
+Do not repeat completed measurements. CURRENT-STATE.md records exact evidence.
+
+The user accepted GLM 65,536 and Strata DeepSeek 131,072 despite the recorded
+speed tradeoffs. Resource and near-window quality qualification still applies.
+That historical no-loss gate is superseded by the shared proportional-tradeoff policy below.
+The AMD repository is read-only reference for the requested gap audit; ask before
+filling optional cross-repository feature/model gaps. No new unlock tests or
+hardware changes are authorized by that audit.
+
+The user approved three operational additions after context rollout: guarded
+ten-minute idle unload, full lifecycle telemetry and manual candidate staging.
+Do not ask again for those additions. Model coverage stays unchanged.
+
+Read the [additional AMD parity task background](AMD-PARITY-HANDOFF-20261027.md)
+as a dated backlog. CURRENT-STATE.md is authoritative for live jobs and completion.
+
+The user approved unlimited worker swap occupancy with active churn protection.
+The maintained guarded paths implement this; preserve RAM/GPU limits and consult
+[the policy and rollout evidence](INFERENCE-SWAP-POLICY.md).
+
+The latest user instruction supersedes the earlier VM10 trial approval: keep host
+swappiness at 60. Do not launch or persist swappiness10. Continue remaining
+qualification and deployment at 60 with the existing worker swap/churn guards.
+
+## GPU unlock persistence after updates
+
+As part of every kernel or NVIDIA driver update, automatically check that the
+existing GPU unlock remains installed and configured for the next boot. Also
+perform this check when resuming on a different kernel/driver version. Follow
+[the update verification procedure](UNLOCK-SETUP-20261026.md#required-checks-after-kernel-or-nvidia-driver-updates).
+Verify DKMS for the target kernel, GRUB targets and early initramfs loading; after
+the user's next reboot, confirm successful unlock on both selected GPUs before
+NVIDIA binds and record the running kernel/driver and boot evidence. Do not call
+next-boot preparation post-boot verification. Keep incomplete/failed checks visible
+in CURRENT-STATE.md. The user controls reboot; this requirement does not authorize
+driver updates, new unlock benchmarks, firmware changes or switching unlock source.
+
+The user subsequently requested OS-level automatic checks independent of agents.
+The [health checker](GPU-UNLOCK-HEALTH.md) is installed and enabled. Boot and
+package-update events run root-owned services without an agent. Initial boot and
+update-hook audits passed. Inspect `gpu-unlock-health status --brief`, root-written
+results and failed units rather than relying on this reminder. Preserve the
+root-owned installed copy and event hooks; agents must not silently substitute
+user-writable service code. Actual updates/reboots remain user-controlled.
+
+## SGLang pipeline and recurrent-state study
+
+The user-approved 34/30 and 36/28 pipeline splits failed the unchanged 1 GiB
+GPU-headroom requirement. BF16 on 32/32 passed the tested quality checks but
+showed only +0.9% decode with slightly slower prefill/TTFT. No candidate was
+promoted. Retain 32/32 FP32 and HyperQwen as default; do not repeat these
+completed settings or weaken the guard. See docs/SGLANG-TUNING-20261027.md.
+
+## Isolated SGLang W4A8 study and temporary RAM maintenance
+
+The user subsequently approved an isolated MLP-only W4A8 patch test. The final
+compressed-tensors adapter activated exactly 128 decoder MLP projections and
+passed 18 standalone GPU kernel checks plus JSON, arithmetic and 29,434-input
+retrieval. Prefill improved 21.6% and TTFT 17.5%, but decode regressed 1.4%;
+no production promotion. The first AutoRound-loader attempt was rejected by its
+zero-activation audit before benchmarking; preserve that diagnostic evidence.
+Retain the existing W4A16 SGLang package and HyperQwen default. See
+docs/SGLANG-W4A8-20261027.md; candidate source/cache is private evidence.
+
+One RAM stick is temporarily removed; Linux currently sees 45.55 GiB usable.
+This dense study used fresh controls and retained all guards at swappiness 60.
+MoE profiles have not been qualified on reduced RAM; check capacity and budgets
+before any future MoE work. GPU unlock health reports VERIFIED after reboot.
+
+## Heterogeneous TP2/MTP follow-up — October 28
+
+The user accepted the W4A8 tradeoff and authorized an isolated heterogeneous
+TP2/MTP study. The earlier decode regression is not a reason to reject that
+accepted tradeoff. This authorization does not silently promote the fork.
+The pinned fork, separate native runtime, reproducible local compatibility patch,
+all startup failures and completed controls are recorded in
+[the study report](SGLANG-HETERO-MTP-20261028.md). That study used a
+1 GiB GPU-free guard (superseded by the user-approved 512 MiB floor below), 8 GiB host floor, 30/36 GiB worker limits, active swap-churn
+protection and swappiness 60. No generic CPU weight offload is permitted.
+The benchmark metric reader now counts one canonical TP replica after the final
+PP stage; seven regression tests cover parallel-rank accounting. Do not recompute
+historical measurements or repeat completed variants because the reader changed.
+
+Final outcome: MTP3 qualified at 16K (84.63 decode tok/s, +32.51% over its
+matched TP2 control; 14,686-input retrieval). Corrected MTP1/MTP3 failed 32K
+GPU-headroom qualification. HyperQwen and normal worker were restored; no
+experimental coordinator or GPU-LOCK remains. See CURRENT-STATE.md for details.
+
+## Visible terminals and test cleanup — user direction, October 28
+
+All backend and harness launches must have visible desktop terminals so the user
+can monitor progress. Guarded services keep their resource limits; live terminal
+consoles display their journals and redirected engine logs. Dense bounded launches,
+router MoE launches, router startup and DSH web startup open consoles automatically.
+A failed visible-console handshake must not silently fall back to a hidden launch.
+Closing a console leaves the guarded service running; its stop command is printed.
+
+Run every future benchmark/test coordinator through the visible minimized wrapper (use `--attention` only for an actual input/authentication step):
+`python3 scripts/visible_terminal.py run --title "Test name" -- /absolute/command args`.
+For custom worker units, open a console with `visible_terminal.py open --title
+"Backend" --unit NAME.service --log /absolute/engine.log` before starting them.
+Preserve dated logs/results as well as visible output. Do not run new harnesses
+silently through detached API commands. Completed harness and selector terminals close automatically after the command exits,
+including failures. Private transcripts and exit-code receipts retain the results;
+do not wait for Enter merely to keep a finished terminal open.
+
+Do not automatically reload HyperQwen after an isolated experiment. Unload the
+owned test worker, release its reservation and report the idle state unless the
+user explicitly requests a backend to be left running. HyperQwen's existing
+catalog/default metadata is not permission to repeatedly reload it after tests.
+
+## Standing repository publication authorization — October 28 clarification
+
+The user explicitly authorized publication of all pending reports, handoffs,
+experimental patches and visible-terminal changes to
+`Biegle-W/linux-llm-nvidia-public`, and reaffirmed that both repositories and
+Markdown documentation must always stay updated. Routine publication of reviewed, sanitized project reports, handoffs,
+reference code and experimental patches is included in that standing direction;
+do not ask for a separate approval after every study or implementation change.
+Continue the existing export allowlist, privacy review, nonpersonal commits and
+independent pushes. A platform automatic-review rejection is an external tool
+restriction, not a user-requested approval policy. Describe it accurately and
+never attribute that restriction to the user or bypass a rejection.
+
+## Dense VRAM reserve update — October 28
+
+The user explicitly lowered the dense GPU free-memory guard from 1,024 MiB to
+512 MiB and authorized a visible-terminal TP2/MTP3 32K retest. The normal dense
+supervisor and isolated retest share DENSE_GPU_FREE_MIB=512. Normal workers stop
+after three low-headroom checks; isolated trials also require at least 512 MiB
+at readiness. Swappiness stays 60; host reserve 8 GiB, worker RAM 30/36 GiB,
+temperature 82°C, unlimited swap occupancy and active swap-churn guards are unchanged.
+Earlier 1 GiB failures remain historical evidence under their original guard.
+This approval does not promote the experimental fork or change the selected
+engine settings. Future tests still run visibly and finish idle after cleanup.
+
+The [512 MiB retest](SGLANG-MTP3-512MIB-20261028.md) passed at 32K: 82.79
+decode tok/s, JSON/arithmetic and 29,434-input retrieval, minimum sampled free
+VRAM 802/997 MiB. No production fork promotion; prior 1 GiB failures are preserved.
+The visible test finished idle, with no automatic HyperQwen restoration.
+
+## Desktop shortcut names — October 28
+
+Managed Desktop shortcuts are named HyperQwen vLLM, SGLang, Strata and Maya,
+without an LLM prefix. Their filenames omit that prefix too; the installer migrates
+only project-owned legacy entries. Preserve DSH and unrelated shortcuts. CLI
+llm-* command names remain unchanged. See network/README.md for current routing:
+DSH/API model IDs select fixed engine profiles; the experimental TP2/MTP3 fork
+now backs the maintained qwen27b-sglang profile after verified deployment.
+
+## Latest: SGLang production deployment — October 28
+
+The user explicitly deployed the fastest tested SGLang generation architecture:
+TP2 + MTP3, decoder MLP W4A8, BF16 state/KV, one Mamba slot, 32K. It now backs
+the existing qwen27b-sglang ID, shortcut and DSH provider. Earlier PP2/FP32 and
+“no promotion” statements describe historical stages; do not restore PP2 as the
+normal profile. Source/dependency pins are in config/sglang-runtime.json; the
+normal launcher verifies hashes, import location and versions. env-sglang is still
+an active general-dependency fallback; do not delete it. Source/caches are in
+stable `runtimes/` paths, not dated trial folders. Previous source/settings were
+archived privately at 733820f; keep only the retirement pointer in the active registry.
+
+Fifty CPU regressions, normal-router streaming JSON/tool call, 29,434-input
+retrieval, a 4,096-output, 39.62 s continuous check and a normal unload/reload check
+passed. Four complete active swap windows had zero owned swap I/O. Keep the
+512 MiB dense reserve, swappiness 60, all other guards and visible terminals.
+The router supplies non-thinking defaults while preserving explicit overrides.
+The original 82.79 tok/s qualification median is carried forward, not remeasured.
+SGLang is intentionally selected after deployment; the ordinary 10-minute idle
+unload still applies. HyperQwen was not restored and saved DSH defaults were not
+changed. See docs/SGLANG-DEPLOYMENT-20261028.md and CURRENT-STATE.md.
+
+## Context expansion authorization — October 28
+
+The user authorized larger deployed SGLang context only without losing generation
+speed. Preserve the512 MiB reserve, swappiness 60 and visible terminals. Use fresh
+matched controls and confirmation, full KV capacity and near-window quality/resource
+checks before promotion; do not equate a larger advertised limit with usable KV.
+Current study evidence: data/sglang-context-20261028/. Keep both repositories and
+Markdown documentation current and preserve previous benchmark attribution.
+
+Context study completed: retain 32K. Fresh control 84.76 decode; 38K/36K screens
+regressed 1.70%/1.49% and did not proceed to long-window qualification. Advertised 40K
+backed only 40,760 KV tokens and was rejected before timing. No candidate qualified
+for promotion or confirmation. These small screens do not prove other tuning is
+impossible. Production settings/runtime are unchanged; router is idle after owned
+cleanup. See docs/SGLANG-CONTEXT-20261028.md. Do not rerun rejected measurements
+merely to refresh repositories or obtain a passing median.
+
+## Latest user clarification — proportional context tradeoffs
+
+The user accepts a proportional context/performance tradeoff; the prior strict
+zero-generation-loss gate is no longer the acceptance rule for future work.
+Assess percentage context gain against measured generation slowdown and report
+both. The 38K screen offers 18.75% more allocated context for 1.70% slower generation;
+36K offers 12.5% more for 1.49% slower. These screens remain unqualified for promotion:
+tool/near-window quality and full-workload resource checks were skipped under the
+old gate. 38K is the stronger next qualification candidate; no new speed result,
+quality pass or context deployment is implied by this reassessment. Keep 32K until
+qualification is complete. The 512 MiB reserve, swappiness 60 and visible terminals
+remain mandatory; no further guard relaxation was authorized.
+
+## Shared policy for every maintained engine/model — October 28
+
+config/inference-policy.json is authoritative: automatic 600-second idle unload,
+required visible terminals/lifecycle telemetry and proportional context/speed
+tradeoffs requiring quality/resource qualification. Applies to all six profiles
+across HyperQwen-vLLM, SGLang, Strata and Maya. Active/queued/loading/vision work,
+reservations and unknown state defer teardown; health/model listing does not
+refresh the timer. Next request reloads; do not preload a fallback model.
+
+Router/native wrappers/lifecycle logger read the shared file. The installer now
+preserves 600s on reinstall. Normal dense CLI enters router ownership; its marked
+internal worker path avoids recursion while retaining original preflight/guards.
+No contexts or model/cache settings changed. Preserve 512 MiB dense reserve,
+swappiness 60, all RAM/thermal/swap guards and the reduced-RAM MoE caveats.
+See docs/ALL-ENGINE-POLICY-20261028.md for coverage and actual idle/reload proof.
+
+
+## Latest: SGLang 38K qualification completed, 32K retained — October 28
+
+The user resumed 38,912 under the proportional context/speed policy. Isolated
+GPU-only placement, W4A8/MTP audits and all four 38,912-token KV pools passed.
+JSON/arithmetic, parsed tool call and tool-result roundtrip, 34,964-input retrieval
+and 35,063-input full-history checks passed. A 34,973-input/3,072-output stream ran
+for 163.28 s, including 135.81 s continuous generation. Sampled GPU free memory never
+fell below 560/795 MiB; worker swap and active-window I/O were zero. Keep the existing
+512 MiB reserve, swappiness 60, 600s idle policy and all other guards.
+
+Normal-router retrieval and automatic request reload worked, but the reloaded
+worker advertised 38,912 while all four KV pools backed only 37,501. The deployment
+check rejected that shortfall and restored 32,768 in the maintained profile and
+DSH web/headless providers. Saved DSH defaults were preserved. 39 CPU regressions
+passed after correcting an old visible-console test fixture; production launcher
+and guards were unchanged. A correct fenced tool answer was accepted using the
+existing JSON convention; passed quality checks were reused rather than rerun.
+
+The earlier 83.32 versus 84.76 decode medians remain saved fixed-input screens:
+18.75% more capacity for 1.70% slower generation. No speed measurements were
+repeated. Near 35K actual input, the long resource stream observed 22.61 decode tok/s, a different workload; this does not replace the fixed-input benchmark.
+The failure is normal-reload KV coverage, not speed, OOM or an isolated guard stop.
+
+Final router is idle, DSH active, no GPU-LOCK or test coordinator remains; visible
+review consoles may remain open. No fallback model was restored. No context,
+runtime, precision, budget or model coverage change remains deployed. Keep both
+repos and this canonical handoff current. The 38K quality/resource checks are now
+complete; the remaining blocker is reliable full-KV backing on normal reload.
+Next action: investigate startup memory/capacity variability without relaxing
+guards; do not repeat completed speed screens for luck. Reduced-RAM MoE/Maya
+sustained-swap caveats remain separate unresolved work. See [qualification](SGLANG-38K-QUALIFICATION-20261028.md).
+
+
+## Latest: automatic engine switch closes only its backend — October 28
+
+Normal model/engine selection drains an active API reply, stops the previous
+recognized guarded worker, verifies resources released and starts the new one.
+Backend consoles now follow the worker invocation and close on stop/switch;
+completed Desktop selection launchers no longer remain waiting for Enter.
+Only the registered backend viewer is signaled after path/mode/unit validation.
+Router, DSH, harness/review consoles and unrelated processes remain. Protected
+GPU-LOCK owners block selection; their reservations are never removed by switching.
+
+A real SGLang 32K→HyperQwen 56,320 switch completed a 512-token active stream first,
+closed old worker/viewer, opened the new backend console and passed API JSON.
+Router/DSH invocations stayed unchanged. Normal unload closed the replacement
+backend/viewer; final router idle, DSH active, no GPU-LOCK or coordinator. 53 engine/ownership
+CPU regressions cover native busy/loading/vision, unknown state, ownership changes,
+viewer PID reuse and protected harnesses. No new MoE loads or benchmarks.
+Keep 512 MiB reserve,swappiness 60, 600s idle and all other guards; SGLang remains 32K.
+See [engine switching verification](ENGINE-SWITCHING-20261028.md). Next action: follow the next user task;
+do not repeat completed GPU qualification or restore a fallback automatically.
+
+
+## Historical: all-terminal minimization — October 28 (superseded October 31)
+
+The earlier all-terminal minimization preference is superseded: only backend
+monitors default to minimized. Attention/authentication tasks, tests and selectors
+open in front and activate their owned windows. The shared launcher still uses
+the SHA256-pinned project-local XTerm runtime; backend startup remains native-iconic.
+No global desktop focus-policy setting is changed.
+System packages and inference environments were not modified. Setup is reproduced
+with scripts/install_visible_terminal_runtime.py and config/terminal-runtime.json.
+
+All four engine shortcuts use Terminal=false and the shared selector. The selector
+now opens in the foreground for user interaction; backend monitors remain minimized. Successful selectors close after
+readiness; failures remain available for inspection. Native engine readiness prints
+a web URL instead of activating a browser. Explicit UI opening remains user-controlled.
+Backend-only auto-close and protected router/harness ownership rules remain.
+
+A live window-manager audit verified initial Iconic,hidden and not-active state for
+the test harness, router, DSH and actual SGLang backend. The real SGLang Desktop
+shortcut passed API JSON; router/DSH invocations stayed unchanged during selection.
+The DSH service was not restarted when its viewer was migrated. Router was activated
+once while idle to load the launcher change. 53 engine/ownership regressions passed;
+no benchmark, driver, precision, budget or context change. Final router idle, DSH active,
+no GPU-LOCK. Dense 512 MiB, swappiness 60, 600s idle and other guards remain unchanged.
+See [switching and minimized-window evidence](ENGINE-SWITCHING-20261028.md).

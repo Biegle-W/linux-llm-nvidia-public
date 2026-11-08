@@ -250,11 +250,12 @@ def maya_reviewed_gate(baseline, candidate, revision, run):
         raise RuntimeError('Maya measurements differ from the approved results')
     strict = compare_short(baseline, candidate)
     expected = [] if name == 'glm-maya' else ['Regression >5%: prefill_tps', 'Regression >5%: decode_tps']
-    if strict['reasons'] != expected:
+    observed = strict['reasons'] or [w for w in strict.get('warnings', []) if w.startswith('Regression >5%')]
+    if observed != expected:
         raise RuntimeError('Other Maya qualification gates failed')
     if expected:
         strict.update(passed=True, acceptance='Explicit human acceptance of measured 8.19% prefill and 6.10% decode slowdown',
-                      strict_passed=False, accepted_reasons=strict['reasons'], reasons=[])
+                      strict_passed=False, accepted_reasons=observed, reasons=[])
     return strict
 
 

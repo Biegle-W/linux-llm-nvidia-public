@@ -13,6 +13,9 @@ class MaintainedBoltIQ2(unittest.TestCase):
   for fit in [[256,256],[512,512]]:
    bad=copy.deepcopy(self.manifest);bad['fit_target_MiB']=fit
    with self.assertRaises(ValueError):runtime.verify(self.profile,bad)
+  for cache in [None,0,16384]:
+   bad=copy.deepcopy(self.manifest);bad.pop('cache_ram_MiB') if cache is None else bad.update(cache_ram_MiB=cache)
+   with self.assertRaises(ValueError):runtime.verify(self.profile,bad)
  def test_wrong_quant_or_context_refused(self):
   for key,value in [('weight_quant','AWQ-INT4'),('allocated_context',8192),('engine','vLLM-offload')]:
    bad=copy.deepcopy(self.profile);bad[key]=value
@@ -21,6 +24,7 @@ class MaintainedBoltIQ2(unittest.TestCase):
   cmd=build_command(self.manifest,port=10000,alias='bolt')
   self.assertEqual(cmd[cmd.index('--port')+1],'10000');self.assertEqual(cmd[cmd.index('--alias')+1],'bolt')
   self.assertEqual(cmd[cmd.index('--fit-target')+1],'384,384')
+  self.assertEqual(cmd[cmd.index('--cache-ram')+1],'8192')
  def test_dsh_saved_awq_name_is_replaced_without_losing_other_routes(self):
   providers={'nvidia-strata':{'baseURL':configure.ROUTER_URL,'models':[{'id':'bolt-llamacpp','name':'Bolt AWQ old name'}]},'unrelated':{'baseURL':'http://example.invalid/v1','models':[{'id':'other','name':'Keep custom name'}]}}
   result=configure.router_providers(providers,[self.profile]);model=result['nvidia-strata']['models'][0]

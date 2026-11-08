@@ -31,11 +31,13 @@ class BoltWatch(WorkerWatch):
    raise TelemetryError('Owned llama.cpp request telemetry unavailable')
 def build_command(pins,*,port=PORT,alias='bolt-iq2-candidate'):
  if pins['planned_context']!=163840 or pins['fit_target_MiB'] not in ([512,512],[384,384],[256,256]):raise ValueError('Unreviewed native Bolt context or fit margin')
+ cache_ram=pins.get('cache_ram_MiB',0)
+ if type(cache_ram) is not int or cache_ram not in (0,8192):raise ValueError('Unreviewed native Bolt RAM prompt-cache budget')
  return [str(ROOT/pins['binary']),'-m',str(ROOT/pins['checkpoint_directory']/pins['first_shard']),'--alias',alias,
   '--host','127.0.0.1','--port',str(port),'--api-key-file',str(ROOT/'data/local-api-key'),
   '--verbosity','4','--load-mode','mmap','--lazy-mode','off','--fit','on','--fit-target',','.join(str(x) for x in pins['fit_target_MiB']),'--fit-ctx',str(pins['planned_context']),'--split-mode','layer','--cache-type-k','q8_0','--cache-type-v','q8_0',
   '--ctx-size',str(pins['planned_context']),'--parallel','1','--batch-size','256','--ubatch-size','128',
-  '--threads','8','--metrics','--no-webui','--cache-ram','0','--jinja','--reasoning','off',
+  '--threads','8','--metrics','--no-webui','--cache-ram',str(cache_ram),'--jinja','--reasoning','off',
   '--chat-template-kwargs','{"enable_thinking":false}','--temp','0','--top-k','1','--top-p','1',
   '--repeat-penalty','1','--n-predict','128']
 

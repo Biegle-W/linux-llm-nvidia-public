@@ -1,5 +1,17 @@
 # NVIDIA daily engine updates
 
+## 2026-11-08T03:00:05
+
+- hyperqwen: **unchanged**; upstream `6ab9bd05cb84`.
+- sglang: **unchanged**; upstream `d61ded5b9e2d`.
+- maya: **unchanged**; upstream `22fc101f2c10`.
+- strata: **rejected-revision-not-retried**; upstream `146df3c46873`.
+- llamacpp: **unchanged**; upstream `cd959bae99ff`.
+- comfyui: **pinned-current**; upstream `v0.44.0`.
+- raylight: **pinned-current**; upstream `1.11.0`.
+- mesh: **pinned-current**; upstream `3804156b4b39`.
+- gguf: **pinned-current**; upstream `6ea2651e7df6`.
+
 ## 2026-11-07T03:00:04
 
 - hyperqwen: **unchanged**; upstream `6ab9bd05cb84`.

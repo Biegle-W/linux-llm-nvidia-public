@@ -54,10 +54,7 @@ def validate_update_coverage(catalog, policy):
                             and profiles[name].get('runtime_manifest') == 'config/deepseek-unsloth-runtime.json')
                         or (name == 'bolt-llamacpp'
                             and profiles[name]['engine'] == 'llama.cpp'
-                            and profiles[name].get('runtime_manifest') == 'config/bolt-iq2-runtime.json')
-                        or (name == 'flash-next-iq1s-llamacpp'
-                            and profiles[name]['engine'] == 'llama.cpp'
-                            and profiles[name].get('runtime_manifest') == 'config/flash-iq1s-runtime.json'))
+                            and profiles[name].get('runtime_manifest') == 'config/bolt-iq2-runtime.json'))
                 or not profiles[name].get('runtime_manifest')
                 or not isinstance(entry['reason'], str) or not entry['reason'].strip()):
             raise RuntimeError('Only explicitly pinned custom runtimes may skip automatic updates')

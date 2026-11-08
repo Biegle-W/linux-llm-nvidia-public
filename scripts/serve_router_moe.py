@@ -25,6 +25,16 @@ def pair_gpu_free_values(raw):
     return values
 
 
+def require_flash_next_split(config, profile):
+    """Refuse a Flash-Next launch whose card order, layer split or stage trim drifted from the registry."""
+    selected = profile.get('selected_settings', {})
+    args = config.get('args', [])
+    if (config.get('gpu') != selected.get('gpu') or str(config.get('layer_split')) != str(selected.get('layer_split'))
+            or config.get('gpu_order') != selected.get('gpu_order') or '--layer-split' in args
+            or ('--trim-stage-weights' in args) != bool(selected.get('trim_stage_weights'))):
+        raise ValueError('Flash-Next layer split differs from the selected registry; refusing launch.')
+
+
 def main():
     os.umask(0o077)
     from pair_p2p_health import require_verified_pair
@@ -32,9 +42,6 @@ def main():
     require_enabled(get_profile(sys.argv[1]))
     from profile_catalog import require_host_capacity
     require_host_capacity(get_profile(sys.argv[1]))
-    if sys.argv[1] == 'flash-next-iq1s-llamacpp':
-        from flash_iq1s_runtime import main as flash_main
-        return flash_main()
     if sys.argv[1] == 'bolt-llamacpp':
         from bolt_iq2_runtime import main as bolt_main
         return bolt_main()
@@ -56,9 +63,10 @@ def main():
         source = prepare_config(profile)
     elif profile['id'] == 'flash-next-strata':
         source = Path.home() / '.local/state/strata/launch/qwen-flash-next.json'
-    elif profile['id'] == 'flash-next-iq1m-strata':
-        from flash_iq1m_strata_runtime import prepare_config
-        source = prepare_config(profile)
+        try:
+            require_flash_next_split(json.loads(source.read_text()), profile)
+        except ValueError as error:
+            sys.exit(str(error))
     elif profile['id'] == 'deepseek-strata':
         wrapper = json.loads((Path.home() / '.config/strata/profiles/deepseek-maya-s.json').read_text())
         if wrapper.get('overrides'):
@@ -138,7 +146,7 @@ def main():
                 stop()
                 child.wait(timeout=20)
                 raise SystemExit(1)
-            if profile['id'] in ('deepseek-unsloth-strata','flash-next-iq1m-strata'):
+            if profile['id'] == 'deepseek-unsloth-strata':
                 free = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits'], text=True)
                 free_values = pair_gpu_free_values(free)
                 gpu_bad = gpu_bad + 1 if any(x < GPU_FREE_MIB for x in free_values) else 0

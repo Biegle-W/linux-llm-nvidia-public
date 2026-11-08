@@ -9,7 +9,7 @@ def verify(profile,manifest):
  if (profile['id']!='bolt-llamacpp' or profile['engine']!='llama.cpp'
      or profile['weight_quant']!='native-IQ2' or profile['allocated_context']!=163840
      or profile['storage']['checkpoint_directory']!=manifest['checkpoint_directory']
-     or manifest['planned_context']!=163840 or manifest['fit_target_MiB']!=[384,384]
+     or manifest['planned_context']!=163840 or manifest['fit_target_MiB']!=[384,384] or manifest.get('cache_ram_MiB')!=8192
      or profile.get('runtime_manifest')!='config/bolt-iq2-runtime.json'):
   raise ValueError('Maintained native Bolt profile/manifest mismatch')
  return manifest

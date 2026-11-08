@@ -38,8 +38,7 @@
       "id": "strata",
       "profiles": [
         "flash-next-strata",
-        "deepseek-unsloth-strata",
-        "flash-next-iq1m-strata"
+        "deepseek-unsloth-strata"
       ],
       "upstream": "https://github.com/Niko1221/Strata.git",
       "builder": "strata-signed",
@@ -67,8 +66,7 @@
     ],
     "strata": [
       "config/deepseek-unsloth-runtime.json",
-      "scripts/strata_unsloth_runtime.py",
-      "config/flash-iq1m-strata-runtime.json"
+      "scripts/strata_unsloth_runtime.py"
     ],
     "llamacpp": [
       "config/bolt-iq2-runtime.json"
