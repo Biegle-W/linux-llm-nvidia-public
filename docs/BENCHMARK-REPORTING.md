@@ -80,7 +80,7 @@ A fresh process may still restore a saved conversation prefix from disk. Reusing
 
 ## Short actual-tool observations
 
-The current default measures prefill, TTFT and decode during the same short actual DSH read call and then unloads. Report token/cache counts and parser buffering explicitly. This differs from historical controlled uncached repeat suites below: no extra replay or cache-isolation suite is implied. [November 1 evidence](SHORT-TOOL-BENCHMARKS-20261101.md).
+The current default measures prefill, TTFT and decode during the same short actual DSH read call and then unloads. Report token/cache counts and parser buffering explicitly. This differs from historical controlled uncached repeat suites below: no extra replay or cache-isolation suite is implied. [November 1 evidence](evidence/SHORT-TOOL-BENCHMARKS-20261101.md).
 
 ## Future model test sequence
 

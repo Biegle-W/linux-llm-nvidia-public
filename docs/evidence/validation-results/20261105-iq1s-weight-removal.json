@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-05",
+  "reason": "Explicit removal of retired IQ1_S checkpoint while preserving IQ1_M shared table",
+  "retired_profile": "flash-next-iq1s-llamacpp",
+  "active_profile": "flash-next-iq1m-strata",
+  "old_directory_removed": true,
+  "deleted_filenames": [
+    "Qwen3.8-Flash-Next-UD-IQ1_S-00001-of-00003.gguf",
+    "Qwen3.8-Flash-Next-UD-IQ1_S-00002-of-00003.gguf",
+    "Qwen3.8-Flash-Next-UD-IQ1_S-00003-of-00003.gguf"
+  ],
+  "exclusive_logical_bytes_removed": 37579042266,
+  "exclusive_allocated_bytes_removed": 37579051008,
+  "retained_table": {
+    "file": "Qwen3.8-Flash-Next-UD-IQ1_M-00003-of-00003.gguf",
+    "bytes": 28800138432,
+    "sha256": "05716382c280d999b81afff92b2d527fadbfd926ac225ffdc273f2d1d13331c6",
+    "remaining_hardlinks": 1,
+    "same_inode_before_after": true,
+    "full_hash_verified_before_after": true
+  },
+  "open_owners_before_removal": false,
+  "model_benchmark_repeated": false,
+  "runtime_configuration_changed": false,
+  "qualification_evidence": "docs/evidence/FLASH-IQ1M-STRATA-20261105.md",
+  "post_removal_runtime_dependencies_verified": true,
+  "active_profile_http_status": 200,
+  "api_health_http_status": 200,
+  "focused_cpu_tests_passed": 8
+}

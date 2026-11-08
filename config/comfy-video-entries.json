@@ -64,8 +64,8 @@
     }
   ],
   "prompt_max_characters": 4000,
-  "resolution_benchmark": "docs/benchmark-results/20261105-comfy-video-720p1080p.json",
-  "resolution_fix_benchmark": "docs/benchmark-results/20261105-wan1080-fix.json",
+  "resolution_benchmark": "docs/evidence/benchmark-results/20261105-comfy-video-720p1080p.json",
+  "resolution_fix_benchmark": "docs/evidence/benchmark-results/20261105-wan1080-fix.json",
   "resolutions": {
     "512x288": {
       "width": 512,
@@ -80,5 +80,5 @@
       "height": 1080
     }
   },
-  "interactive_resolution_qualification": "docs/validation-results/20261105-comfy-video-hd-entries.json"
+  "interactive_resolution_qualification": "docs/evidence/validation-results/20261105-comfy-video-hd-entries.json"
 }

@@ -9,12 +9,12 @@ settings and host swappiness 60 remain unchanged.
 
 ## Targeted memory-pressure allowance — October 29
 
-Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. See [bounded two-profile screen](BENCHMARK-PRESSURE-GUARD-64GB-20261029.md).
+Qwen/Strata and DeepSeek/Maya now use 15% full-memory-pressure thresholds, up from 10%, with the same 30-second active window and three-sample stop rule. All other profiles retain 10%. The 128/160 MiB/s SSD swap limits and every independent RAM/VRAM/thermal/telemetry guard remain unchanged, as do contexts, weights, precision, runtime pins, expert caches, swappiness 60, concurrency 1 and idle 600 seconds. Both profiles completed a warmup and three valid 128-output measured requests without a guard violation. See [bounded two-profile screen](evidence/BENCHMARK-PRESSURE-GUARD-64GB-20261029.md).
 
 
 ## October 29 SSD-streaming limits
 
-Four SSD-streaming profiles now use bounded swap limits of 128 MiB/s writes and 160 MiB/s combined over 30 seconds. Dense and unknown profiles retain 1/8 MiB/s. All other resource guards, contexts, expert-cache settings, precision choices, runtime pins and model settings are unchanged. The explicit allowlist is `flash-next-strata`, `glm-maya`, `deepseek-strata`, `deepseek-maya`; new/unknown profiles receive conservative defaults. The daily updater preserves the same scope. See [matched 64GB screen](BENCHMARK-SSD-SWAP-64GB-20261029.md). These are runtime I/O limits, not SSD-endurance budgets.
+Four SSD-streaming profiles now use bounded swap limits of 128 MiB/s writes and 160 MiB/s combined over 30 seconds. Dense and unknown profiles retain 1/8 MiB/s. All other resource guards, contexts, expert-cache settings, precision choices, runtime pins and model settings are unchanged. The explicit allowlist is `flash-next-strata`, `glm-maya`, `deepseek-strata`, `deepseek-maya`; new/unknown profiles receive conservative defaults. The daily updater preserves the same scope. See [matched 64GB screen](evidence/BENCHMARK-SSD-SWAP-64GB-20261029.md). These are runtime I/O limits, not SSD-endurance budgets.
 
 The user explicitly approved unlimited worker swap occupancy with active churn
 protection on October 27. Loading and parked pages are allowed; normal workers
@@ -143,8 +143,8 @@ Linux capacity, restore appropriate full-RAM cache values and verify guarded
 loading. Preserve the separately approved dense cap removal, host reserve and
 qualified VRAM selections unless the human revises them. No timer trigger.
 
-See [qualification and current results](MOE-VRAM512-20261029.md) and
-[numeric evidence](benchmark-results/20261029-moe-vram512.json).
+See [qualification and current results](evidence/MOE-VRAM512-20261029.md) and
+[numeric evidence](evidence/benchmark-results/20261029-moe-vram512.json).
 
 
 ## DeepSeek/Maya 512 MiB follow-up — October 29
@@ -167,8 +167,8 @@ preserved; no fallback. No passing 512 MiB setup was found in these tested contr
 Full-RAM cache restoration still requires explicit human confirmation and Linux
 capacity verification.
 
-See [DeepSeek/Maya follow-up](MAYA-DS4-VRAM512-FOLLOWUP-20261029.md) and
-[numeric evidence](benchmark-results/20261029-maya512-followup.json).
+See [DeepSeek/Maya follow-up](evidence/MAYA-DS4-VRAM512-FOLLOWUP-20261029.md) and
+[numeric evidence](evidence/benchmark-results/20261029-maya512-followup.json).
 
 
 ## DeepSeek/Maya demand-cache qualification — October 29
@@ -194,8 +194,8 @@ appropriate full-RAM cache/prefill choices from preimages while preserving the
 qualified VRAM reserve and guards, then verify normal guarded load/reload.
 No timer or MemAvailable trigger.
 
-See [demand-cache qualification and six selected results](MAYA-DEMAND-CACHE-20261029.md)
-and [numeric evidence](benchmark-results/20261029-maya-demand-cache.json).
+See [demand-cache qualification and six selected results](evidence/MAYA-DEMAND-CACHE-20261029.md)
+and [numeric evidence](evidence/benchmark-results/20261029-maya-demand-cache.json).
 
 
 ## Current Qwen/Flash-Next guard test — October 29
@@ -218,5 +218,5 @@ The other five selections remain unchanged. Do not apply rejected pageable varia
 or restore full-RAM settings without explicit human confirmation and Linux capacity
 verification. Further cache tuning requires its own qualification.
 
-See [current normal-profile test](QWEN-CURRENT-GUARDS-20261029.md) and
-[numeric evidence](validation-results/20261029-qwen-current-guards.json).
+See [current normal-profile test](evidence/QWEN-CURRENT-GUARDS-20261029.md) and
+[numeric evidence](evidence/validation-results/20261029-qwen-current-guards.json).

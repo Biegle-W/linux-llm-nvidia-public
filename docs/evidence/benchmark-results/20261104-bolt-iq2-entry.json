@@ -1,0 +1,614 @@
+{
+  "date": "2026-11-04",
+  "API_id": "bolt-vllm",
+  "API_id_policy": "Historical ID retained for compatibility; now native IQ2 llama.cpp, not AWQ.",
+  "selected_model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+  "quant": "native-IQ2",
+  "engine": "llama.cpp11909",
+  "context": 163840,
+  "weight_gb": 22.018326528,
+  "storage": "SATA SSD",
+  "metrics": {
+    "model": "bolt-vllm",
+    "measurement": "first actual DSH tool-call generation",
+    "loading_excluded": true,
+    "prompt_tokens": 6369,
+    "output_tokens": 42,
+    "cached_tokens": 0,
+    "native_timings": {
+      "cache_n": 0,
+      "prompt_n": 6369,
+      "prompt_ms": 12672.642,
+      "prompt_per_token_ms": 1.9897381064531323,
+      "prompt_per_second": 502.578704582675,
+      "predicted_n": 42,
+      "predicted_ms": 602.535,
+      "predicted_per_token_ms": 14.695975609756097,
+      "predicted_per_second": 68.0458396607666
+    },
+    "client_ttft_s": 12.869814672999837,
+    "client_last_token_s": 13.319403147999765,
+    "meaningful_sse_chunks": 22,
+    "generation_wall_s": 13.367579995999677,
+    "usage": {
+      "completion_tokens": 42,
+      "prompt_tokens": 6369,
+      "total_tokens": 6411,
+      "prompt_tokens_details": {
+        "cached_tokens": 0
+      }
+    },
+    "prefill_tps": 502.578704582675,
+    "prefill_method": "native request timings",
+    "ttft_s": 12.869814672999837,
+    "ttft_method": "client first delivered content/tool delta; parser buffering included",
+    "decode_tps": 68.0458396607666,
+    "decode_method": "native request timings"
+  },
+  "checks": {
+    "phase": "pass",
+    "followup_passed": true,
+    "strict_final_format": true,
+    "unloaded": true,
+    "wall_s": 15.433789626000362
+  },
+  "guards": {
+    "worker_RAM_GiB": {
+      "high": 87.76984786987305,
+      "max": 89.76984786987305,
+      "swap": null
+    },
+    "host_available_reserve_GiB": 2,
+    "explicit_GPU_free_floor_MiB": 256,
+    "native_cache_reserve_MiB": null,
+    "startup_free_MiB": null,
+    "loading_PSI_percent": 15,
+    "resource_bad_samples": 3,
+    "swap_occupancy": "unlimited",
+    "swap_write_MiB_s": 1,
+    "swap_read_plus_write_MiB_s": 8,
+    "swap_window_s": 30,
+    "active_PSI_percent": 10,
+    "PSI_bad_samples": 3
+  },
+  "resources": {
+    "samples": 12,
+    "median_interval_s": 2.0639069080352783,
+    "charged_worker_RAM_peak_GiB": 1.5419921875,
+    "swap_peak_MiB": 0.0,
+    "minimum_host_available_GiB": 86.10499954223633,
+    "GPU_free_min_MiB_nonloading": [
+      621.0,
+      458.0
+    ],
+    "GPU_temp_max_C": [
+      49.0,
+      35.0
+    ],
+    "memory_events": {
+      "high": 0,
+      "max": 0,
+      "oom": 0,
+      "oom_kill": 0
+    },
+    "effective_cgroup_limits": {
+      "memory.high": "94242156544",
+      "memory.max": "96389640192",
+      "memory.swap.max": "max"
+    },
+    "guard_violations": [],
+    "complete_active_windows": 0
+  },
+  "weight_buffers_MiB": {
+    "CPU_Mapped": 2232.2200000000003,
+    "CUDA0": 10123.69,
+    "CUDA1": 8634.88
+  },
+  "CPU_weight_buffer_GiB": 2.1799023437500002,
+  "GPU_weight_fraction": 0.8936571705972,
+  "retired_AWQ_same_day_reference": {
+    "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+    "quant": "AWQ-INT4",
+    "engine": "vLLM-offload",
+    "context": 163840,
+    "weight_gb": 55.332700488,
+    "storage": "SATA SSD",
+    "metrics": {
+      "prefill_tps": 217.35370225526495,
+      "ttft_s": 29.319944143295288,
+      "decode_tps": 0.36112997673219366,
+      "prompt_tokens": 6369,
+      "output_tokens": 41,
+      "cached_tokens": 0,
+      "native_timings": {},
+      "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+      "ttft_method": "engine first-token counter",
+      "decode_method": "vLLM one-request decode counter"
+    },
+    "checks": {
+      "phase": "pass",
+      "followup_passed": true,
+      "strict_final_format": false,
+      "unloaded": true,
+      "wall_s": 257.16456791200017
+    },
+    "guards": {
+      "worker_RAM_GiB": {
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
+        "swap": null
+      },
+      "host_available_reserve_GiB": 2,
+      "explicit_GPU_free_floor_MiB": 256,
+      "native_cache_reserve_MiB": null,
+      "startup_free_MiB": null,
+      "loading_PSI_percent": 15,
+      "resource_bad_samples": 3,
+      "swap_occupancy": "unlimited",
+      "swap_write_MiB_s": 1,
+      "swap_read_plus_write_MiB_s": 8,
+      "swap_window_s": 30,
+      "active_PSI_percent": 10,
+      "PSI_bad_samples": 3
+    },
+    "resources": {
+      "lifecycle_samples": 101,
+      "lifecycle_median_interval_s": 5.081465721130371,
+      "charged_worker_RAM_peak_GiB": 50.516502380371094,
+      "swap_peak_MiB": 0.0,
+      "minimum_host_available_GiB": 38.659263610839844,
+      "GPU_free_min_MiB_all_phases": [
+        5541.0,
+        3654.0
+      ],
+      "GPU_free_min_MiB_nonloading": [
+        5643.0,
+        3654.0
+      ],
+      "GPU_temperature_max_C": [
+        59.0,
+        47.0
+      ],
+      "memory_events": {
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0
+      },
+      "effective_kernel_limits": {
+        "memory.high": "94242156544",
+        "memory.max": "96389640192",
+        "memory.swap.max": "max"
+      },
+      "guard_violations": [],
+      "complete_active_windows": 92,
+      "active_swap_write_MiB_s_max": 0.0,
+      "active_swap_combined_MiB_s_max": 0.0,
+      "complete_window_full_PSI_max_percent": 0.0,
+      "loading_full_PSI_max_percent": 0.0,
+      "inference_full_PSI_max_percent": 0.0
+    },
+    "previous_reference": {
+      "date": "2026-11-03",
+      "hardware": "Core i5-13600KF; RTX3080Ti12GB + RTX308010GB behind existing switch;64GB installed RAM; desktop active on second GPU",
+      "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+      "quant": "AWQ-INT4",
+      "engine": "vLLM-offload",
+      "context": 163840,
+      "weight_gb": 55.332700488,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 240.66212077488655,
+        "ttft_s": 26.452385187149048,
+        "decode_tps": 0.3922516899564806,
+        "prompt_tokens": 6364,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "source": "docs/evidence/benchmark-results/20261103-vram256-optimization.json",
+      "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      }
+    },
+    "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+  },
+  "retired_AWQ_profile": {
+    "id": "bolt-vllm",
+    "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+    "weight_quant": "AWQ-INT4",
+    "engine": "vLLM-offload",
+    "status": "selected",
+    "launch": [
+      "bolt"
+    ],
+    "allocated_context": 163840,
+    "tested_retrieval_input": 58893,
+    "context_validation": "Deferred while temporarily disabled pending RAM upgrade and guarded requalification. Prior-host record: 163840-token calculated memory allocation; short actual DSH tool check pending. No new full-context quality or speed qualification; older retrieval/benchmark evidence remains dated.",
+    "evidence": "docs/evidence/BOLT-MAYA-RELIABILITY-20261031.md",
+    "storage": {
+      "access": "ram-resident",
+      "required_transport": "sata",
+      "checkpoint_directory": "models/bolt-awq-int4"
+    },
+    "worker_memory_gib": {
+      "high": 87.76984786987305,
+      "max": 89.76984786987305,
+      "swap": null
+    },
+    "host_ram_reserve_gib": 2,
+    "capabilities": {
+      "text": true,
+      "vision": false,
+      "tools_qualified": true
+    },
+    "runtime_manifest": "config/bolt-offload-runtime.json",
+    "benchmark_context": 8192,
+    "latest_benchmark": {
+      "run": "20261031-bolt-maya-reliability",
+      "variant": "bolt-8k-normal-clean-mapping-shard-reclaim",
+      "date": "2026-10-31",
+      "context": 8192,
+      "physical_ram_gb": 64,
+      "repetitions": 1,
+      "input_tokens": 2341,
+      "output_tokens": 128,
+      "ttft_s": 11.42714927400084,
+      "prefill_tps": 253.65684628114914,
+      "decode_tps": 0.45057629994449133,
+      "prefill_method": "vllm:request_prefill_time_seconds per-request delta",
+      "decode_method": "Client SSE (completion tokens - 1) / first-to-last-content interval",
+      "warmup": "No dedicated speed-fixture warmup; preceded by correctness and retrieval requests",
+      "evidence": "docs/evidence/BOLT-MAYA-RELIABILITY-20261031.md",
+      "numeric_results": "docs/evidence/benchmark-results/20261031-bolt-maya-reliability.json"
+    },
+    "latest_qualification": {
+      "date": "2026-10-31",
+      "context": 8192,
+      "retrieval_input_tokens": 7373,
+      "checks": {
+        "arithmetic": true,
+        "json": true,
+        "near_window": true,
+        "sustained_stream": true
+      },
+      "sustained_output_tokens": 128,
+      "continuous_generation_s": 281.2668593599992,
+      "fresh_loads": 3,
+      "normal_router_reloads": 2,
+      "normal_router_verification": "pass",
+      "resources_passed": true,
+      "evidence": "docs/evidence/BOLT-MAYA-RELIABILITY-20261031.md",
+      "normal_router_guard_samples": 530,
+      "normal_router_sustained_output_tokens": 128,
+      "normal_router_generation_s": 281.8612519469971
+    },
+    "loading_vram_verification": {
+      "date": "2026-10-31",
+      "context": 8192,
+      "gpu_pair": [
+        "RTX 3080 Ti",
+        "RTX 3080"
+      ],
+      "offload_params": [
+        "experts",
+        "out_proj",
+        "in_proj"
+      ],
+      "kv_cache_bytes_per_gpu": 1073741824,
+      "normal_router_reloads": 2,
+      "arithmetic_json_passes": 2,
+      "retrieval_input_tokens": 7373,
+      "stream_output_tokens": 32,
+      "guards_unchanged": true,
+      "evidence": "docs/evidence/BOLT-TWO-GPU-LOADING-20261031.md",
+      "numeric_results": "docs/evidence/validation-results/20261031-bolt-two-gpu-loading.json"
+    },
+    "tool_call_verification": {
+      "date": "2026-10-31",
+      "parser": "qwen3_coder",
+      "checks": {
+        "auto_tool_call": true,
+        "local_tool_result_roundtrip": true,
+        "streamed_tool_call": true
+      },
+      "request_mode": "Chat Completions; enable_thinking=false",
+      "evidence": "docs/evidence/BOLT-TOOL-CALLING-20261031.md",
+      "numeric_results": "docs/evidence/validation-results/20261031-bolt-tool-calling.json"
+    },
+    "context_expansion": {
+      "date": "2026-11-01",
+      "from": 32768,
+      "to": 65536,
+      "retrieval_input_tokens": 58893,
+      "normal_router_reloads": 2,
+      "resources_passed": true,
+      "dsh_context_window": 65536,
+      "dsh_max_output_tokens": 4096
+    },
+    "actual_dsh_short_tool_smoke": {
+      "date": "2026-11-01",
+      "result": "pass",
+      "actual_harness": true,
+      "tool": "read",
+      "tool_results_completed": 1,
+      "unloaded": true,
+      "assistant_followup_required": false,
+      "output_cap": 128,
+      "full_context_stress": false,
+      "observed_wall_s": 134.66455235500325
+    },
+    "calculated_context_history": [
+      {
+        "date": "2026-11-01",
+        "previous_context": 65536,
+        "new_context": 163840,
+        "status": "candidate awaiting short actual DSH tool and native memory check",
+        "full_context_stress": false
+      }
+    ],
+    "current_configuration_benchmark": {
+      "date": "2026-11-01",
+      "status": "single short actual DSH read-tool observation through API-only gateway; loading excluded; no full-context or sustained qualification",
+      "source": "docs/evidence/benchmark-results/20261101-new-router-all-models.json",
+      "prefill_tps": 234.13699969154735,
+      "ttft_s": 27.200574159622192,
+      "decode_tps": 0.38959527340991257,
+      "prompt_tokens": 6366,
+      "cached_tokens": 0,
+      "output_tokens": 41,
+      "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+      "ttft_method": "engine first-token counter",
+      "decode_method": "vLLM one-request decode counter"
+    },
+    "latest_router_validation": {
+      "date": "2026-11-01",
+      "source": "docs/evidence/benchmark-results/20261101-new-router-all-models.json",
+      "tool_success": true,
+      "worker_inactive_verified": true,
+      "failure": null
+    },
+    "short_tool_benchmark_history": [
+      {
+        "date": "2026-11-01",
+        "status": "single short actual DSH read-tool observation, loading excluded; not full-context or sustained qualification",
+        "source": "docs/evidence/benchmark-results/20261101-short-tool.json",
+        "prefill_tps": 235.6006192621003,
+        "ttft_s": 27.032111406326294,
+        "decode_tps": 0.3883599851215817,
+        "prompt_tokens": 6366,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      }
+    ],
+    "hardware_qualification": {
+      "date": "2026-11-03",
+      "board": "MSI Z690 Carbon WiFi DDR5",
+      "cpu": "13900KS",
+      "installed_ram_gib": 32,
+      "transport": "host-staged, no CUDA P2P",
+      "status": "temporarily disabled awaiting RAM upgrade; no new-host model qualification",
+      "installed_ram_status": "temporary 32 GB; more RAM planned"
+    },
+    "availability": {
+      "enabled": true
+    },
+    "minimum_usable_ram_gib": 90,
+    "worker_ram_headroom": {
+      "hard_outside_bytes": 2147483648,
+      "measured_MemTotal_bytes": 98537123840,
+      "reclaim_before_hard_bytes": 2147483648
+    },
+    "ram_upgrade_qualification": {
+      "date": "2026-11-04",
+      "RAM_class": "96GB",
+      "short_tool_followup_owned_unload": "passed",
+      "full_context_stress": false
+    }
+  },
+  "CPU_tests": 456,
+  "AWQ_slowdown_evidence": {
+    "initial_module_offload_records_two_ranks": 160,
+    "initial_CPU_parameter_bytes_combined": 47005917184,
+    "final_offloader_rank_summary": {
+      "modules_per_rank": 80,
+      "offloaded_decimal_GB_per_rank": 23.503,
+      "static_pool_decimal_GB_per_rank": 0.8613,
+      "group_size": 1,
+      "num_in_group": 1,
+      "prefetch_step": 1,
+      "mode": "cpu"
+    },
+    "pinned_offloader_source_sha256": "d835fa9292f52f283835f724951bae645a84d554c48f30ed639e3297e7eeb776",
+    "offload_params": [
+      "experts",
+      "out_proj",
+      "in_proj"
+    ],
+    "pin_memory_disabled": true,
+    "UVA_disabled": true,
+    "eager_execution": true,
+    "diagnosis": "Strong source/log evidence for large repeated host-to-device parameter movement; no bus-level profiler trace or precise transfer/compute attribution was collected.",
+    "sources": [
+      "https://docs.vllm.ai/en/latest/api/vllm/model_executor/offloader/prefetch/",
+      "https://docs.vllm.ai/en/latest/api/vllm/config/offload/",
+      "https://docs.pytorch.org/tutorials/intermediate/pinmem_nonblock.html"
+    ]
+  },
+  "scope": "One normal-router short actual DSH read/result/exact follow-up and owned unload; loading excluded; no full-context, sustained or quality-equivalence claim.",
+  "normal_route_verification_history": [
+    {
+      "label": "Initial replacement verification",
+      "metrics": {
+        "model": "bolt-vllm",
+        "measurement": "first actual DSH tool-call generation",
+        "loading_excluded": true,
+        "prompt_tokens": 6366,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 6366,
+          "prompt_ms": 12680.485,
+          "prompt_per_token_ms": 1.9919077913917689,
+          "prompt_per_second": 502.0312708859322,
+          "predicted_n": 41,
+          "predicted_ms": 600.807,
+          "predicted_per_token_ms": 15.020175,
+          "predicted_per_second": 66.5771204396753
+        },
+        "client_ttft_s": 12.888222591000158,
+        "client_last_token_s": 13.3330584979999,
+        "meaningful_sse_chunks": 21,
+        "generation_wall_s": 13.38251697700025,
+        "usage": {
+          "completion_tokens": 41,
+          "prompt_tokens": 6366,
+          "total_tokens": 6407,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "prefill_tps": 502.0312708859322,
+        "prefill_method": "native request timings",
+        "ttft_s": 12.888222591000158,
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_tps": 66.5771204396753,
+        "decode_method": "native request timings"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 15.437093299000026
+      },
+      "resources": {
+        "samples": 12,
+        "median_interval_s": 2.0687074661254883,
+        "charged_worker_RAM_peak_GiB": 1.5478286743164062,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 86.15768432617188,
+        "GPU_free_min_MiB_nonloading": [
+          621.0,
+          458.0
+        ],
+        "GPU_temp_max_C": [
+          48.0,
+          36.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_cgroup_limits": {
+          "memory.high": "94242156544",
+          "memory.max": "96389640192",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0
+      }
+    },
+    {
+      "label": "Final guard-parity reload",
+      "metrics": {
+        "model": "bolt-vllm",
+        "measurement": "first actual DSH tool-call generation",
+        "loading_excluded": true,
+        "prompt_tokens": 6369,
+        "output_tokens": 42,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 6369,
+          "prompt_ms": 12672.642,
+          "prompt_per_token_ms": 1.9897381064531323,
+          "prompt_per_second": 502.578704582675,
+          "predicted_n": 42,
+          "predicted_ms": 602.535,
+          "predicted_per_token_ms": 14.695975609756097,
+          "predicted_per_second": 68.0458396607666
+        },
+        "client_ttft_s": 12.869814672999837,
+        "client_last_token_s": 13.319403147999765,
+        "meaningful_sse_chunks": 22,
+        "generation_wall_s": 13.367579995999677,
+        "usage": {
+          "completion_tokens": 42,
+          "prompt_tokens": 6369,
+          "total_tokens": 6411,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "prefill_tps": 502.578704582675,
+        "prefill_method": "native request timings",
+        "ttft_s": 12.869814672999837,
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_tps": 68.0458396607666,
+        "decode_method": "native request timings"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 15.433789626000362
+      },
+      "resources": {
+        "samples": 12,
+        "median_interval_s": 2.0639069080352783,
+        "charged_worker_RAM_peak_GiB": 1.5419921875,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 86.10499954223633,
+        "GPU_free_min_MiB_nonloading": [
+          621.0,
+          458.0
+        ],
+        "GPU_temp_max_C": [
+          49.0,
+          35.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_cgroup_limits": {
+          "memory.high": "94242156544",
+          "memory.max": "96389640192",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0
+      }
+    }
+  ],
+  "final_guard_parity": "Owner-only/nonempty key and256 MiB GPU floor throughout loading and after ready; all other thresholds unchanged."
+}

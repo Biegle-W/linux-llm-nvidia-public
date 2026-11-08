@@ -41,7 +41,7 @@ The updater owns its reservation by exact live PID/start time/nonce. Its DSH chi
 
 Scheduled runs are configured for guarded headless qualification when no graphical desktop is available. Their logs remain private and all model/admission/resource guards remain mandatory. A foreground desktop terminal is used when available; operator-driven CLI tests retain their foreground TTY. This scheduled exception does not authorize hidden manual benchmarks.
 
-Preserved limits:2GiB host available; dense worker32/36GiB and heavy workers87.76984787/89.76984787GiB; per-card free-VRAM256MiB where applicable plus selected native reserves/fit targets;100C temperature stops; existing three-bad-sample2-second hysteresis, fail-closed telemetry, PSI/swap windows, swappiness60, concurrency1 and idle600s. Active swap limits remain1/8MiB/s for dense/Bolt and128/160MiB/s for streaming entries over30s, with unlimited occupancy. [Per-profile guard table](ALL-ENTRY-BENCHMARKS-20261105.md).
+Preserved limits:2GiB host available; dense worker32/36GiB and heavy workers87.76984787/89.76984787GiB; per-card free-VRAM256MiB where applicable plus selected native reserves/fit targets;100C temperature stops; existing three-bad-sample2-second hysteresis, fail-closed telemetry, PSI/swap windows, swappiness60, concurrency1 and idle600s. Active swap limits remain1/8MiB/s for dense/Bolt and128/160MiB/s for streaming entries over30s, with unlimited occupancy. [Per-profile guard table](evidence/ALL-ENTRY-BENCHMARKS-20261105.md).
 
 ## CUDA profiler-header preflight
 
@@ -59,6 +59,6 @@ python3 scripts/daily_engine_update.py --check-only
 
 Use a foreground terminal for `--manual` or `--smoke-current PROFILE`. Updates retain the20-minute idle gate. The current-only diagnostic requires serving to be idle and already unloaded; it never stages or promotes an update and may verify a repair immediately after cleanup. Both modes retain exclusive ownership and all resource guards. `--check-only` never builds, uses GPUs, promotes or publishes. Installation archives replaced project-owned units, verifies them, reloads systemd and restores the timer without restarting API, hub, DSH or any model.
 
-[Restoration validation](DAILY-UPDATER-RESTORATION-20261105.md). Earlier daily ledger entries retain their original long-suite scope and failures; they do not describe the new scheduled protocol.
+[Restoration validation](evidence/DAILY-UPDATER-RESTORATION-20261105.md). Earlier daily ledger entries retain their original long-suite scope and failures; they do not describe the new scheduled protocol.
 
 A requested single-component comparison can use `--manual --components strata`. This restricts candidate updates to Strata while preserving full catalog-coverage validation,20-minute idle admission, resource guards, paired short DSH checks, rollback and independent publication. The scheduled command without this filter still covers every maintained component.

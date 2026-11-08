@@ -24,5 +24,5 @@
     "xgrammar": "0.2.1"
   },
   "fallback_dependencies": "The pinned env uses the retained env-sglang site-packages for general Python dependencies only; native versions above take precedence.",
-  "evidence": "docs/SGLANG-MTP3-512MIB-20261028.md"
+  "evidence": "docs/evidence/SGLANG-MTP3-512MIB-20261028.md"
 }

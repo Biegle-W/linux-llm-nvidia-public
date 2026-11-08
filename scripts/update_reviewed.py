@@ -108,7 +108,7 @@ for folder in [s/'packages/qwen',Path(sys.argv[3])]:
 
 def accept_tested_output_variance(updater, run, *, maya=False):
     kind = "maya" if maya else "strata"
-    evidence = "docs/MAYA-QUALIFICATION-REPAIR-20261106.md" if maya else "docs/STRATA-0211-QUALIFICATION-20261105.md"
+    evidence = "docs/evidence/MAYA-QUALIFICATION-REPAIR-20261106.md" if maya else "docs/evidence/STRATA-0211-QUALIFICATION-20261105.md"
     acceptance = "Explicit manual acceptance of measured DeepSeek prefill/decode slowdown" if maya else "Explicit one-token DeepSeek output variance"
     updater.recover()
     root = updater.root

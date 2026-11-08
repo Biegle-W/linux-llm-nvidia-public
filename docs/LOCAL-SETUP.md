@@ -55,7 +55,7 @@ Both DeepSeek configurations stream experts from NVMe because the full expert
 banks exceed this machine's RAM.
 The distribution driver remains installed. Compute unlock is now verified on
 both cards; P2P is not enabled. See the
-[unlock setup](UNLOCK-SETUP-20261026.md).
+[unlock setup](evidence/UNLOCK-SETUP-20261026.md).
 
 After setup finishes, start a configured model with one of:
 
@@ -73,7 +73,7 @@ occupied or while the setup queue is active. Stop Qwen with
 with `runtimes/bin/strata runtime stop --profile deepseek-maya-s`.
 Stop a foreground Maya server with Ctrl+C.
 Strata DeepSeek now allocates 64K and passed 58,969-token retrieval; see the
-[context expansion](DEEPSEEK-STRATA-CONTEXT-20261027.md). Flash-Next/Strata, GLM/Maya
+[context expansion](evidence/DEEPSEEK-STRATA-CONTEXT-20261027.md). Flash-Next/Strata, GLM/Maya
 and DeepSeek/Maya retain their 32K allocations. Short API smoke checks do not
 validate those full input lengths or
 establish sustained performance, output quality, image handling or tool use.
@@ -82,17 +82,17 @@ their file formats being recognized does not establish those features work.
 
 ## Speed measurements
 
-[The October 26 benchmark](BENCHMARK-20261026.md) records three short and three
+[The October 26 benchmark](evidence/BENCHMARK-20261026.md) records three short and three
 longer requests per model/engine, with 128-token outputs and an 8K context
 allocation. DeepSeek used the same Maya-S weights and matched requested settings
 on Strata and Maya. Temporary benchmark configs left the installed profiles
 unchanged, and Qwen was restored afterward. Raw timing events and resource samples
 are retained under ignored `data/benchmarks/`.
 
-[The unlocked-versus-stock comparison](BENCHMARK-UNLOCK-20261026.md) records the
+[The unlocked-versus-stock comparison](evidence/BENCHMARK-UNLOCK-20261026.md) records the
 repeated protocol after successful per-card unlock and correctness checks.
 
-[CUDA engine qualification](ENGINE-TESTS-20261026.md) records mixed-card
+[CUDA engine qualification](evidence/ENGINE-TESTS-20261026.md) records mixed-card
 compatibility failures, HyperQwen CPU-offload timings, and the memory-pressure
 incident. Run future experimental workers through `scripts/run_bounded_test.sh`
 to give them a separate process group and a hard host-memory limit.
@@ -103,7 +103,7 @@ optimizations relevant to this hardware is eligible for an offload evaluation.
 The historical HyperQwen CPU-offload measurement is not an approved deployment
 profile under this policy. Existing MoE expert streaming is a separate case.
 
-[The dense Qwen3.8-27B profile](DENSE-ENGINE-OPTIMIZATION-20261027.md) defaults to
+[The dense Qwen3.8-27B profile](evidence/DENSE-ENGINE-OPTIMIZATION-20261027.md) defaults to
 HyperQwen/patched vLLM TP2 with MTP3, INT4 KV, BF16 recurrent state and a 32K
 allocation. It passed 29,496-token retrieval and measured 155 code / 108 prose tok/s.
 Start it with `./scripts/start_model.sh qwen27b`; stop it with
@@ -115,7 +115,7 @@ port 10000; all model weights and active MTP weights remain in VRAM.
 
 ## Managed router and desktop clients
 
-The [router deployment](ROUTER-DEPLOYMENT-20261027.md) adds on-demand model/engine
+The [router deployment](evidence/ROUTER-DEPLOYMENT-20261027.md) adds on-demand model/engine
 selection on authenticated port 10100 over loopback and Tailscale. Worker port
 10000 remains private. Use the new Desktop engine entries for safe switching;
 Strata/Maya open their own native web pages and DSH remains separate. GLM expert
@@ -130,7 +130,7 @@ preserved dense trial checkpoints now live on SATA through the existing
 `models/engine-tests` alias. Engines and virtual environments stay on Linux ext4.
 
 Current MoE cache budgets and vision lifecycle are described in the
-[October 27 optimization](MOE-OPTIMIZATION-20261027.md); earlier cache caps above
+[October 27 optimization](evidence/MOE-OPTIMIZATION-20261027.md); earlier cache caps above
 remain historical. All maintained MoE start commands now select through the
 router for the qualified bounded worker budget.
 

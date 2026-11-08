@@ -99,5 +99,5 @@
   "torch": "2.11.0+cu130",
   "torchvision": "0.26.0+cu130",
   "torchaudio": "2.11.0+cu130",
-  "evidence": "docs/benchmark-results/20261104-comfy-video-dual-gpu.json"
+  "evidence": "docs/evidence/benchmark-results/20261104-comfy-video-dual-gpu.json"
 }

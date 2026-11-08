@@ -1,9 +1,9 @@
 # Local LLM repository map — October 25, 2026
 
 > October 26 update: native installation, two-GPU correctness and authenticated
-> inference are now verified. See [native validation](VALIDATION-20261026.md) and
-> [bounded speed results](BENCHMARK-20261026.md). Compute unlock is now verified on both cards; P2P remains unverified.
-> See the [unlock comparison](BENCHMARK-UNLOCK-20261026.md).
+> inference are now verified. See [native validation](evidence/VALIDATION-20261026.md) and
+> [bounded speed results](evidence/BENCHMARK-20261026.md). Compute unlock is now verified on both cards; P2P remains unverified.
+> See the [unlock comparison](evidence/BENCHMARK-UNLOCK-20261026.md).
 > The October 25 preparation details below are historical.
 
 

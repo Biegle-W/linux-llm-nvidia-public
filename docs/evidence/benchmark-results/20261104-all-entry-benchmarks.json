@@ -1,0 +1,1757 @@
+{
+  "date": "2026-11-04",
+  "disabled_historical_references": {
+    "bolt-vllm": {
+      "date": "2026-11-03",
+      "hardware": "Core i5-13600KF; RTX3080Ti12GB + RTX308010GB behind existing switch;64GB installed RAM; desktop active on second GPU",
+      "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+      "quant": "AWQ-INT4",
+      "engine": "vLLM-offload",
+      "context": 163840,
+      "weight_gb": 55.332700488,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 240.66212077488655,
+        "ttft_s": 26.452385187149048,
+        "decode_tps": 0.3922516899564806,
+        "prompt_tokens": 6364,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "source": "docs/evidence/benchmark-results/20261103-vram256-optimization.json",
+      "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      }
+    },
+    "flash-next-strata": {
+      "date": "2026-11-01",
+      "hardware": "RTX 3080 Ti 12 GB + RTX 3080 10 GB; 64 GB installed RAM;historical switched platform",
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "IQ3_XXS",
+      "engine": "Strata",
+      "context": 131072,
+      "weight_gb": 75.839998528,
+      "storage": "NVMe SSD",
+      "metrics": {
+        "prefill_tps": 506.2,
+        "ttft_s": 11.679439051000372,
+        "decode_tps": 60.2,
+        "prompt_tokens": 5597,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "source": "docs/evidence/benchmark-results/20261101-new-router-all-models.json",
+      "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references."
+    },
+    "glm-maya": {
+      "date": "2026-11-03",
+      "hardware": "Core i5-13600KF; RTX3080Ti12GB + RTX308010GB behind existing switch;64GB installed RAM; desktop active on second GPU",
+      "model": "GLM-5.3-Flash",
+      "quant": "Maya-S24",
+      "engine": "Maya",
+      "context": 65536,
+      "weight_gb": 94.701676224,
+      "storage": "NVMe SSD",
+      "metrics": {
+        "prefill_tps": 342.4,
+        "ttft_s": 16.309726675001002,
+        "decode_tps": 7.1,
+        "prompt_tokens": 5440,
+        "output_tokens": 26,
+        "cached_tokens": 0,
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "source": "docs/evidence/benchmark-results/20261103-vram256-optimization.json",
+      "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      }
+    },
+    "deepseek-maya": {
+      "date": "2026-11-03",
+      "hardware": "Core i5-13600KF; RTX3080Ti12GB + RTX308010GB behind existing switch;64GB installed RAM; desktop active on second GPU",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
+      "engine": "Maya",
+      "context": 32768,
+      "weight_gb": 232.97960842,
+      "storage": "NVMe + SATA SSDs",
+      "metrics": {
+        "prefill_tps": 198.8,
+        "ttft_s": 28.660249173999546,
+        "decode_tps": 4.8,
+        "prompt_tokens": 5693,
+        "output_tokens": 63,
+        "cached_tokens": 0,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "source": "docs/evidence/benchmark-results/20261103-vram256-optimization.json",
+      "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      }
+    },
+    "deepseek-unsloth-strata": {
+      "date": "2026-11-01",
+      "hardware": "RTX 3080 Ti 12 GB + RTX 3080 10 GB; 64 GB installed RAM;historical switched platform",
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
+      "engine": "Strata",
+      "context": 32768,
+      "weight_gb": 232.97960842,
+      "storage": "NVMe + SATA SSDs",
+      "metrics": {
+        "prefill_tps": 7.6,
+        "ttft_s": 22.63140446899888,
+        "decode_tps": 3.7,
+        "prompt_tokens": 5710,
+        "output_tokens": 61,
+        "cached_tokens": 5539,
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "source": "docs/evidence/benchmark-results/20261101-new-router-all-models.json",
+      "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+      "historical_declared_guards": {
+        "worker_high_max_GiB": [
+          56,
+          58
+        ],
+        "host_available_reserve_GiB": 2,
+        "GPU_free_floor_MiB": 512,
+        "native_engine_reserve_MiB": 768,
+        "loading_PSI_percent": 15,
+        "active_write_combined_MiB_s": [
+          128,
+          160
+        ],
+        "window_s": 30,
+        "active_PSI_percent": 15,
+        "bad_samples": 3,
+        "temperature_C": 82,
+        "swap_occupancy": "unlimited",
+        "provenance": [
+          "docs/evidence/WORKER-RAM-64GB-20261031.md",
+          "docs/evidence/DEEPSEEK-UNSLOTH-CONTEXT-20261031.md"
+        ],
+        "scope": "documented historical policy; per-run kernel snapshots unavailable"
+      }
+    }
+  },
+  "recent_successful_observations": [
+    {
+      "profile": "qwen27b-hyperqwen",
+      "arm": "24/26GiB enabled-model check",
+      "metrics": {
+        "model": "qwen27b-hyperqwen",
+        "measurement": "first actual DSH tool-call generation",
+        "loading_excluded": true,
+        "prompt_tokens": 5829,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "client_ttft_s": 2.9314915260001726,
+        "client_last_token_s": 3.4274389290003455,
+        "meaningful_sse_chunks": 20,
+        "generation_wall_s": 3.48429996699997,
+        "usage": {
+          "prompt_tokens": 5829,
+          "total_tokens": 5870,
+          "completion_tokens": 41,
+          "completion_tokens_details": {
+            "reasoning_tokens": 0
+          }
+        },
+        "prefill_tps": 2077.9233905103497,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_s": 2.8208792209625244,
+        "ttft_method": "engine first-token counter",
+        "decode_tps": 62.52509679225351,
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "context": 86016,
+      "source": "docs/evidence/benchmark-results/20261103-requested-two-model-checks.json"
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "arm": "24/26GiB enabled-model check",
+      "metrics": {
+        "model": "qwen27b-sglang",
+        "measurement": "first actual DSH tool-call generation",
+        "loading_excluded": true,
+        "prompt_tokens": 6092,
+        "output_tokens": 38,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "client_ttft_s": 3.0438507569997455,
+        "client_last_token_s": 3.5263266249999106,
+        "meaningful_sse_chunks": 4,
+        "generation_wall_s": 3.59010566500001,
+        "usage": {
+          "prompt_tokens": 6092,
+          "total_tokens": 6130,
+          "completion_tokens": 38,
+          "prompt_tokens_details": null,
+          "reasoning_tokens": 0
+        },
+        "prefill_tps": 2137.886256760879,
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_s": 3.0438507569997455,
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_tps": 60.20142998209217,
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+      },
+      "context": 57344,
+      "source": "docs/evidence/benchmark-results/20261103-requested-two-model-checks.json"
+    },
+    {
+      "profile": "flash-next-iq1s-llamacpp",
+      "arm": "24/26GiB isolated",
+      "metrics": {
+        "prefill_tps": 101.50091497043279,
+        "ttft_s": 58.11269205499957,
+        "decode_tps": 29.144509138936144,
+        "prompt_tokens": 5831,
+        "output_tokens": 42,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5831,
+          "prompt_ms": 57447.758,
+          "prompt_per_token_ms": 9.852127936889042,
+          "prompt_per_second": 101.50091497043279,
+          "predicted_n": 42,
+          "predicted_ms": 1406.783,
+          "predicted_per_token_ms": 34.311780487804874,
+          "predicted_per_second": 29.144509138936144
+        },
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "prefill_method": "native request timings",
+        "decode_method": "native request timings"
+      },
+      "context": 12288,
+      "source": "inline record; original combined trial file removed 2026-11-07"
+    },
+    {
+      "profile": "qwen27b-hyperqwen",
+      "arm": "26/28GiB rerun",
+      "metrics": {
+        "prefill_tps": 2065.2388901456025,
+        "ttft_s": 3.072641611099243,
+        "decode_tps": 62.587362329017175,
+        "prompt_tokens": 5826,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "context": 86016,
+      "source": "docs/evidence/benchmark-results/20261104-ram26-28-rerun.json"
+    },
+    {
+      "profile": "qwen27b-sglang",
+      "arm": "26/28GiB rerun",
+      "metrics": {
+        "prefill_tps": 2232.8817853495507,
+        "ttft_s": 2.7673906179998085,
+        "decode_tps": 60.228230664237785,
+        "prompt_tokens": 6095,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+      },
+      "context": 57344,
+      "source": "docs/evidence/benchmark-results/20261104-ram26-28-rerun.json"
+    },
+    {
+      "profile": "flash-next-iq1s-candidate",
+      "arm": "26/28GiB rerun",
+      "metrics": {
+        "prefill_tps": 93.35129834312474,
+        "ttft_s": 63.23782065499927,
+        "decode_tps": 28.234358005242605,
+        "prompt_tokens": 5840,
+        "output_tokens": 45,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5840,
+          "prompt_ms": 62559.387,
+          "prompt_per_token_ms": 10.712223801369863,
+          "prompt_per_second": 93.35129834312474,
+          "predicted_n": 45,
+          "predicted_ms": 1558.385,
+          "predicted_per_token_ms": 35.417840909090906,
+          "predicted_per_second": 28.234358005242605
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "context": 12288,
+      "source": "docs/evidence/benchmark-results/20261104-ram26-28-rerun.json"
+    },
+    {
+      "profile": "flash-next-iq1s-llamacpp",
+      "arm": "26/28GiB normal entry qualification",
+      "metrics": {
+        "prefill_tps": 88.7879102576197,
+        "ttft_s": 66.29202104499927,
+        "decode_tps": 31.102086049650392,
+        "prompt_tokens": 5824,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5824,
+          "prompt_ms": 65594.516,
+          "prompt_per_token_ms": 11.262794642857143,
+          "prompt_per_second": 88.7879102576197,
+          "predicted_n": 39,
+          "predicted_ms": 1221.783,
+          "predicted_per_token_ms": 32.152184210526315,
+          "predicted_per_second": 31.102086049650392
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "context": 12288,
+      "source": "docs/evidence/benchmark-results/20261104-flash-iq1s-entry.json"
+    }
+  ],
+  "complete_archive": "docs/BENCHMARK-HISTORY.md and linked numeric artifacts retain all older trials, failures and retired models; no historical record is relabeled as a fresh measurement.",
+  "comparison_limits": "Current32GBdirectPCIe noP2P versus historical64GBswitchedhost; differentweights,contexts,caches andspeculation. Historical DeepSeekStrata row reused5539tokens. Noequal-quality speed ranking.",
+  "earlier_32gb_enabled": {
+    "qwen27b-hyperqwen": {
+      "date": "2026-11-04",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "context": 86016,
+      "weight_gb": 15.791777864,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 2065.2388901456025,
+        "ttft_s": 3.072641611099243,
+        "decode_tps": 62.587362329017175,
+        "prompt_tokens": 5826,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 26,
+          "max": 28,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          9728,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "source": "docs/evidence/benchmark-results/20261104-ram26-28-rerun.json"
+    },
+    "qwen27b-sglang": {
+      "date": "2026-11-04",
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "context": 57344,
+      "weight_gb": 15.791777864,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 2232.8817853495507,
+        "ttft_s": 2.7673906179998085,
+        "decode_tps": 60.228230664237785,
+        "prompt_tokens": 6095,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 26,
+          "max": 28,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "source": "docs/evidence/benchmark-results/20261104-ram26-28-rerun.json"
+    },
+    "flash-next-iq1s-llamacpp": {
+      "date": "2026-11-04",
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "Unsloth-Dynamic-v3.1-UD-IQ1_S",
+      "engine": "llama.cpp11909",
+      "context": 12288,
+      "weight_gb": 66.379180698,
+      "storage": "NVMe SSD",
+      "metrics": {
+        "prefill_tps": 88.7879102576197,
+        "ttft_s": 66.29202104499927,
+        "decode_tps": 31.102086049650392,
+        "prompt_tokens": 5824,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5824,
+          "prompt_ms": 65594.516,
+          "prompt_per_token_ms": 11.262794642857143,
+          "prompt_per_second": 88.7879102576197,
+          "predicted_n": 39,
+          "predicted_ms": 1221.783,
+          "predicted_per_token_ms": 32.152184210526315,
+          "predicted_per_second": 31.102086049650392
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 26,
+          "max": 28,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          9472
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "source": "docs/evidence/benchmark-results/20261104-flash-iq1s-entry.json"
+    }
+  },
+  "current_enabled": {
+    "qwen27b-hyperqwen": {
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "HyperQwen-vLLM",
+      "context": 86016,
+      "weight_gb": 15.791777864,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 2065.0168509293662,
+        "ttft_s": 2.8516430854797363,
+        "decode_tps": 62.33353317354625,
+        "prompt_tokens": 5823,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 8.01425775200002
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 32,
+          "max": 36,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          9728,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "lifecycle_samples": 17,
+        "lifecycle_median_interval_s": 5.091781735420227,
+        "charged_worker_RAM_peak_GiB": 22.156837463378906,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 81.16367721557617,
+        "GPU_free_min_MiB_all_phases": [
+          3305.0,
+          1316.0
+        ],
+        "GPU_free_min_MiB_nonloading": [
+          3305.0,
+          1316.0
+        ],
+        "GPU_temperature_max_C": [
+          52.0,
+          42.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_kernel_limits": {
+          "memory.high": "34359738368",
+          "memory.max": "38654705664",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0,
+        "active_swap_write_MiB_s_max": null,
+        "active_swap_combined_MiB_s_max": null,
+        "complete_window_full_PSI_max_percent": null,
+        "loading_full_PSI_max_percent": 0.0,
+        "inference_full_PSI_max_percent": 0.0
+      },
+      "previous_reference": {
+        "date": "2026-11-04",
+        "model": "Qwen3.8-27B",
+        "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+        "engine": "HyperQwen-vLLM",
+        "context": 86016,
+        "weight_gb": 15.791777864,
+        "storage": "SATA SSD",
+        "metrics": {
+          "prefill_tps": 2065.2388901456025,
+          "ttft_s": 3.072641611099243,
+          "decode_tps": 62.587362329017175,
+          "prompt_tokens": 5826,
+          "output_tokens": 40,
+          "cached_tokens": 0,
+          "native_timings": {},
+          "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "vLLM one-request decode counter"
+        },
+        "guards": {
+          "worker_RAM_GiB": {
+            "high": 26,
+            "max": 28,
+            "swap": null
+          },
+          "host_available_reserve_GiB": 2,
+          "explicit_GPU_free_floor_MiB": 256,
+          "native_cache_reserve_MiB": null,
+          "startup_free_MiB": [
+            9728,
+            8960
+          ],
+          "loading_PSI_percent": null,
+          "resource_bad_samples": 3,
+          "swap_occupancy": "unlimited",
+          "swap_write_MiB_s": 1,
+          "swap_read_plus_write_MiB_s": 8,
+          "swap_window_s": 30,
+          "active_PSI_percent": 10,
+          "PSI_bad_samples": 3
+        },
+        "source": "docs/evidence/benchmark-results/20261104-ram26-28-rerun.json"
+      },
+      "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+    },
+    "qwen27b-sglang": {
+      "model": "Qwen3.8-27B",
+      "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+      "engine": "SGLang",
+      "context": 57344,
+      "weight_gb": 15.791777864,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 2211.299417648771,
+        "ttft_s": 2.789647231999993,
+        "decode_tps": 60.21488952471615,
+        "prompt_tokens": 6098,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "native_timings": {},
+        "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 8.215307094000025
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 32,
+          "max": 36,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          8960
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "lifecycle_samples": 9,
+        "lifecycle_median_interval_s": 5.073127865791321,
+        "charged_worker_RAM_peak_GiB": 8.898212432861328,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 80.37268829345703,
+        "GPU_free_min_MiB_all_phases": [
+          528.0,
+          1847.0
+        ],
+        "GPU_free_min_MiB_nonloading": [
+          528.0,
+          1847.0
+        ],
+        "GPU_temperature_max_C": [
+          52.0,
+          39.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_kernel_limits": {
+          "memory.high": "34359738368",
+          "memory.max": "38654705664",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0,
+        "active_swap_write_MiB_s_max": null,
+        "active_swap_combined_MiB_s_max": null,
+        "complete_window_full_PSI_max_percent": null,
+        "loading_full_PSI_max_percent": 0.0,
+        "inference_full_PSI_max_percent": 0.0
+      },
+      "previous_reference": {
+        "date": "2026-11-04",
+        "model": "Qwen3.8-27B",
+        "quant": "AutoRound-INT4-fast-heads-INT8-embedding",
+        "engine": "SGLang",
+        "context": 57344,
+        "weight_gb": 15.791777864,
+        "storage": "SATA SSD",
+        "metrics": {
+          "prefill_tps": 2232.8817853495507,
+          "ttft_s": 2.7673906179998085,
+          "decode_tps": 60.228230664237785,
+          "prompt_tokens": 6095,
+          "output_tokens": 39,
+          "cached_tokens": 0,
+          "native_timings": {},
+          "prefill_method": "sglang:per_stage_req_latency_seconds one-request delta; cached tokens excluded",
+          "ttft_method": "engine first-token counter",
+          "decode_method": "SGLang one-request native inter-token intervals; parser buffering excluded"
+        },
+        "guards": {
+          "worker_RAM_GiB": {
+            "high": 26,
+            "max": 28,
+            "swap": null
+          },
+          "host_available_reserve_GiB": 2,
+          "explicit_GPU_free_floor_MiB": 256,
+          "native_cache_reserve_MiB": null,
+          "startup_free_MiB": [
+            11520,
+            8960
+          ],
+          "loading_PSI_percent": null,
+          "resource_bad_samples": 3,
+          "swap_occupancy": "unlimited",
+          "swap_write_MiB_s": 1,
+          "swap_read_plus_write_MiB_s": 8,
+          "swap_window_s": 30,
+          "active_PSI_percent": 10,
+          "PSI_bad_samples": 3
+        },
+        "source": "docs/evidence/benchmark-results/20261104-ram26-28-rerun.json"
+      },
+      "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+    },
+    "flash-next-iq1s-llamacpp": {
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "Unsloth-Dynamic-v3.1-UD-IQ1_S",
+      "engine": "llama.cpp",
+      "context": 12288,
+      "weight_gb": 66.379180698,
+      "storage": "NVMe SSD",
+      "metrics": {
+        "prefill_tps": 120.21488410533829,
+        "ttft_s": 48.67391051200002,
+        "decode_tps": 35.93740838325165,
+        "prompt_tokens": 5824,
+        "output_tokens": 39,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5824,
+          "prompt_ms": 48446.58,
+          "prompt_per_token_ms": 8.3184375,
+          "prompt_per_second": 120.21488410533829,
+          "predicted_n": 39,
+          "predicted_ms": 1057.394,
+          "predicted_per_token_ms": 27.82615789473684,
+          "predicted_per_second": 35.93740838325165
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 52.67214633800006
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": [
+          11520,
+          9472
+        ],
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "lifecycle_samples": 44,
+        "lifecycle_median_interval_s": 2.06953501701355,
+        "charged_worker_RAM_peak_GiB": 37.04733657836914,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 86.55815124511719,
+        "GPU_free_min_MiB_all_phases": [
+          1593.0,
+          1512.0
+        ],
+        "GPU_free_min_MiB_nonloading": [
+          1593.0,
+          1512.0
+        ],
+        "GPU_temperature_max_C": [
+          61.0,
+          38.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_kernel_limits": {
+          "memory.high": "94242156544",
+          "memory.max": "96389640192",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 10,
+        "active_swap_write_MiB_s_max": 0.0,
+        "active_swap_combined_MiB_s_max": 0.0,
+        "complete_window_full_PSI_max_percent": 0.0,
+        "loading_full_PSI_max_percent": 0.0,
+        "inference_full_PSI_max_percent": 0.0
+      },
+      "previous_reference": {
+        "date": "2026-11-04",
+        "model": "Qwen3.8-Flash-Next",
+        "quant": "Unsloth-Dynamic-v3.1-UD-IQ1_S",
+        "engine": "llama.cpp11909",
+        "context": 12288,
+        "weight_gb": 66.379180698,
+        "storage": "NVMe SSD",
+        "metrics": {
+          "prefill_tps": 88.7879102576197,
+          "ttft_s": 66.29202104499927,
+          "decode_tps": 31.102086049650392,
+          "prompt_tokens": 5824,
+          "output_tokens": 39,
+          "cached_tokens": 0,
+          "native_timings": {
+            "cache_n": 0,
+            "prompt_n": 5824,
+            "prompt_ms": 65594.516,
+            "prompt_per_token_ms": 11.262794642857143,
+            "prompt_per_second": 88.7879102576197,
+            "predicted_n": 39,
+            "predicted_ms": 1221.783,
+            "predicted_per_token_ms": 32.152184210526315,
+            "predicted_per_second": 31.102086049650392
+          },
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
+        },
+        "guards": {
+          "worker_RAM_GiB": {
+            "high": 26,
+            "max": 28,
+            "swap": null
+          },
+          "host_available_reserve_GiB": 2,
+          "explicit_GPU_free_floor_MiB": 256,
+          "native_cache_reserve_MiB": null,
+          "startup_free_MiB": [
+            11520,
+            9472
+          ],
+          "loading_PSI_percent": null,
+          "resource_bad_samples": 3,
+          "swap_occupancy": "unlimited",
+          "swap_write_MiB_s": 128,
+          "swap_read_plus_write_MiB_s": 160,
+          "swap_window_s": 30,
+          "active_PSI_percent": 15,
+          "PSI_bad_samples": 3
+        },
+        "source": "docs/evidence/benchmark-results/20261104-flash-iq1s-entry.json"
+      },
+      "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+    },
+    "flash-next-strata": {
+      "model": "Qwen3.8-Flash-Next",
+      "quant": "IQ3_XXS",
+      "engine": "Strata",
+      "context": 131072,
+      "weight_gb": 75.839998528,
+      "storage": "NVMe SSD",
+      "metrics": {
+        "prefill_tps": 934.8,
+        "ttft_s": 6.205179991000023,
+        "decode_tps": 63.2,
+        "prompt_tokens": 5594,
+        "output_tokens": 40,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5594,
+          "prompt_ms": 5984.4,
+          "prompt_per_token_ms": 1.07,
+          "prompt_per_second": 934.8,
+          "predicted_n": 40,
+          "predicted_ms": 632.8,
+          "predicted_per_token_ms": 15.82,
+          "predicted_per_second": 63.2,
+          "draft_n": 40,
+          "draft_n_accepted": 29
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 9.82788073200004
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "lifecycle_samples": 11,
+        "lifecycle_median_interval_s": 5.073064208030701,
+        "charged_worker_RAM_peak_GiB": 82.86796569824219,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 42.988731384277344,
+        "GPU_free_min_MiB_all_phases": [
+          547.0,
+          638.0
+        ],
+        "GPU_free_min_MiB_nonloading": [
+          547.0,
+          638.0
+        ],
+        "GPU_temperature_max_C": [
+          57.0,
+          40.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_kernel_limits": {
+          "memory.high": "94242156544",
+          "memory.max": "96389640192",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0,
+        "active_swap_write_MiB_s_max": null,
+        "active_swap_combined_MiB_s_max": null,
+        "complete_window_full_PSI_max_percent": null,
+        "loading_full_PSI_max_percent": 0.0,
+        "inference_full_PSI_max_percent": 0.0
+      },
+      "previous_reference": {
+        "date": "2026-11-01",
+        "hardware": "RTX 3080 Ti 12 GB + RTX 3080 10 GB; 64 GB installed RAM;historical switched platform",
+        "model": "Qwen3.8-Flash-Next",
+        "quant": "IQ3_XXS",
+        "engine": "Strata",
+        "context": 131072,
+        "weight_gb": 75.839998528,
+        "storage": "NVMe SSD",
+        "metrics": {
+          "prefill_tps": 506.2,
+          "ttft_s": 11.679439051000372,
+          "decode_tps": 60.2,
+          "prompt_tokens": 5597,
+          "output_tokens": 41,
+          "cached_tokens": 0,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
+        },
+        "source": "docs/evidence/benchmark-results/20261101-new-router-all-models.json",
+        "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references."
+      },
+      "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+    },
+    "glm-maya": {
+      "model": "GLM-5.3-Flash",
+      "quant": "Maya-S24",
+      "engine": "Maya",
+      "context": 65536,
+      "weight_gb": 94.701676224,
+      "storage": "NVMe SSD",
+      "metrics": {
+        "prefill_tps": 546.9,
+        "ttft_s": 10.198609314999999,
+        "decode_tps": 15.2,
+        "prompt_tokens": 5436,
+        "output_tokens": 24,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5436,
+          "prompt_ms": 9939.2,
+          "prompt_per_token_ms": 1.828,
+          "prompt_per_second": 546.9,
+          "predicted_n": 24,
+          "predicted_ms": 1583.5,
+          "predicted_per_token_ms": 65.979,
+          "predicted_per_second": 15.2,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 15.827472843999999
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "lifecycle_samples": 14,
+        "lifecycle_median_interval_s": 5.075706481933594,
+        "charged_worker_RAM_peak_GiB": 75.51844024658203,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 16.333667755126953,
+        "GPU_free_min_MiB_all_phases": [
+          799.0,
+          818.0
+        ],
+        "GPU_free_min_MiB_nonloading": [
+          799.0,
+          818.0
+        ],
+        "GPU_temperature_max_C": [
+          59.0,
+          44.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_kernel_limits": {
+          "memory.high": "94242156544",
+          "memory.max": "96389640192",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0,
+        "active_swap_write_MiB_s_max": null,
+        "active_swap_combined_MiB_s_max": null,
+        "complete_window_full_PSI_max_percent": null,
+        "loading_full_PSI_max_percent": 0.0,
+        "inference_full_PSI_max_percent": 0.0
+      },
+      "previous_reference": {
+        "date": "2026-11-03",
+        "hardware": "Core i5-13600KF; RTX3080Ti12GB + RTX308010GB behind existing switch;64GB installed RAM; desktop active on second GPU",
+        "model": "GLM-5.3-Flash",
+        "quant": "Maya-S24",
+        "engine": "Maya",
+        "context": 65536,
+        "weight_gb": 94.701676224,
+        "storage": "NVMe SSD",
+        "metrics": {
+          "prefill_tps": 342.4,
+          "ttft_s": 16.309726675001002,
+          "decode_tps": 7.1,
+          "prompt_tokens": 5440,
+          "output_tokens": 26,
+          "cached_tokens": 0,
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
+        },
+        "source": "docs/evidence/benchmark-results/20261103-vram256-optimization.json",
+        "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+        "guards": {
+          "worker_RAM_GiB": {
+            "high": 56,
+            "max": 58,
+            "swap": null
+          },
+          "host_available_reserve_GiB": 2,
+          "explicit_GPU_free_floor_MiB": null,
+          "native_cache_reserve_MiB": 1024,
+          "startup_free_MiB": null,
+          "loading_PSI_percent": null,
+          "resource_bad_samples": 3,
+          "swap_occupancy": "unlimited",
+          "swap_write_MiB_s": 128,
+          "swap_read_plus_write_MiB_s": 160,
+          "swap_window_s": 30,
+          "active_PSI_percent": 10,
+          "PSI_bad_samples": 3
+        }
+      },
+      "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+    },
+    "deepseek-maya": {
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
+      "engine": "Maya",
+      "context": 32768,
+      "weight_gb": 232.97960842,
+      "storage": "NVMe + SATA SSDs",
+      "metrics": {
+        "prefill_tps": 217.1,
+        "ttft_s": 27.451691367999956,
+        "decode_tps": 7.1,
+        "prompt_tokens": 5701,
+        "output_tokens": 59,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 5701,
+          "prompt_ms": 26254.4,
+          "prompt_per_token_ms": 4.605,
+          "prompt_per_second": 217.1,
+          "predicted_n": 59,
+          "predicted_ms": 8332.6,
+          "predicted_per_token_ms": 141.231,
+          "predicted_per_second": 7.1,
+          "draft_n": 26,
+          "draft_n_accepted": 19
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 42.66442659899997
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": null,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": null,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "lifecycle_samples": 15,
+        "lifecycle_median_interval_s": 5.085300803184509,
+        "charged_worker_RAM_peak_GiB": 80.45541000366211,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 83.03346633911133,
+        "GPU_free_min_MiB_all_phases": [
+          853.0,
+          858.0
+        ],
+        "GPU_free_min_MiB_nonloading": [
+          853.0,
+          858.0
+        ],
+        "GPU_temperature_max_C": [
+          59.0,
+          49.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_kernel_limits": {
+          "memory.high": "94242156544",
+          "memory.max": "96389640192",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 6,
+        "active_swap_write_MiB_s_max": 0.0,
+        "active_swap_combined_MiB_s_max": 0.0,
+        "complete_window_full_PSI_max_percent": 0.0,
+        "loading_full_PSI_max_percent": 0.0,
+        "inference_full_PSI_max_percent": 0.0
+      },
+      "previous_reference": {
+        "date": "2026-11-03",
+        "hardware": "Core i5-13600KF; RTX3080Ti12GB + RTX308010GB behind existing switch;64GB installed RAM; desktop active on second GPU",
+        "model": "DeepSeek-V4.1-Flash-1017",
+        "quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
+        "engine": "Maya",
+        "context": 32768,
+        "weight_gb": 232.97960842,
+        "storage": "NVMe + SATA SSDs",
+        "metrics": {
+          "prefill_tps": 198.8,
+          "ttft_s": 28.660249173999546,
+          "decode_tps": 4.8,
+          "prompt_tokens": 5693,
+          "output_tokens": 63,
+          "cached_tokens": 0,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
+        },
+        "source": "docs/evidence/benchmark-results/20261103-vram256-optimization.json",
+        "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+        "guards": {
+          "worker_RAM_GiB": {
+            "high": 56,
+            "max": 58,
+            "swap": null
+          },
+          "host_available_reserve_GiB": 2,
+          "explicit_GPU_free_floor_MiB": null,
+          "native_cache_reserve_MiB": 1024,
+          "startup_free_MiB": null,
+          "loading_PSI_percent": null,
+          "resource_bad_samples": 3,
+          "swap_occupancy": "unlimited",
+          "swap_write_MiB_s": 128,
+          "swap_read_plus_write_MiB_s": 160,
+          "swap_window_s": 30,
+          "active_PSI_percent": 15,
+          "PSI_bad_samples": 3
+        }
+      },
+      "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+    },
+    "bolt-vllm": {
+      "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+      "quant": "native-IQ2",
+      "engine": "llama.cpp11909",
+      "context": 163840,
+      "weight_gb": 22.018326528,
+      "storage": "SATA SSD",
+      "metrics": {
+        "model": "bolt-vllm",
+        "measurement": "first actual DSH tool-call generation",
+        "loading_excluded": true,
+        "prompt_tokens": 6369,
+        "output_tokens": 42,
+        "cached_tokens": 0,
+        "native_timings": {
+          "cache_n": 0,
+          "prompt_n": 6369,
+          "prompt_ms": 12672.642,
+          "prompt_per_token_ms": 1.9897381064531323,
+          "prompt_per_second": 502.578704582675,
+          "predicted_n": 42,
+          "predicted_ms": 602.535,
+          "predicted_per_token_ms": 14.695975609756097,
+          "predicted_per_second": 68.0458396607666
+        },
+        "client_ttft_s": 12.869814672999837,
+        "client_last_token_s": 13.319403147999765,
+        "meaningful_sse_chunks": 22,
+        "generation_wall_s": 13.367579995999677,
+        "usage": {
+          "completion_tokens": 42,
+          "prompt_tokens": 6369,
+          "total_tokens": 6411,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          }
+        },
+        "prefill_tps": 502.578704582675,
+        "prefill_method": "native request timings",
+        "ttft_s": 12.869814672999837,
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_tps": 68.0458396607666,
+        "decode_method": "native request timings"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 15.433789626000362
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "samples": 12,
+        "median_interval_s": 2.0639069080352783,
+        "charged_worker_RAM_peak_GiB": 1.5419921875,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 86.10499954223633,
+        "GPU_free_min_MiB_nonloading": [
+          621.0,
+          458.0
+        ],
+        "GPU_temp_max_C": [
+          49.0,
+          35.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_cgroup_limits": {
+          "memory.high": "94242156544",
+          "memory.max": "96389640192",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0
+      },
+      "source": "docs/evidence/benchmark-results/20261104-bolt-iq2-entry.json"
+    },
+    "deepseek-unsloth-strata": {
+      "model": "DeepSeek-V4.1-Flash-1017",
+      "quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
+      "engine": "Strata",
+      "context": 32768,
+      "weight_gb": 232.97960842,
+      "storage": "NVMe + SATA SSDs",
+      "metrics": {
+        "prefill_tps": 29.1,
+        "ttft_s": 5.839670529000159,
+        "decode_tps": 12.2,
+        "prompt_tokens": 5707,
+        "output_tokens": 60,
+        "cached_tokens": 5539,
+        "native_timings": {
+          "cache_n": 5539,
+          "prompt_n": 168,
+          "prompt_ms": 5779.7,
+          "prompt_per_token_ms": 34.403,
+          "prompt_per_second": 29.1,
+          "predicted_n": 60,
+          "predicted_ms": 4899.1,
+          "predicted_per_token_ms": 81.652,
+          "predicted_per_second": 12.2,
+          "draft_n": 0,
+          "draft_n_accepted": 0
+        },
+        "prefill_method": "native request timings",
+        "ttft_method": "client first delivered content/tool delta; parser buffering included",
+        "decode_method": "native request timings"
+      },
+      "checks": {
+        "phase": "pass",
+        "followup_passed": true,
+        "strict_final_format": true,
+        "unloaded": true,
+        "wall_s": 16.23232088000009
+      },
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 87.76984786987305,
+          "max": 89.76984786987305,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": 1024,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 128,
+        "swap_read_plus_write_MiB_s": 160,
+        "swap_window_s": 30,
+        "active_PSI_percent": 15,
+        "PSI_bad_samples": 3
+      },
+      "resources": {
+        "lifecycle_samples": 9,
+        "lifecycle_median_interval_s": 5.075170040130615,
+        "charged_worker_RAM_peak_GiB": 63.67212677001953,
+        "swap_peak_MiB": 0.0,
+        "minimum_host_available_GiB": 33.905418395996094,
+        "GPU_free_min_MiB_all_phases": [
+          921.0,
+          940.0
+        ],
+        "GPU_free_min_MiB_nonloading": [
+          921.0,
+          940.0
+        ],
+        "GPU_temperature_max_C": [
+          59.0,
+          48.0
+        ],
+        "memory_events": {
+          "high": 0,
+          "max": 0,
+          "oom": 0,
+          "oom_kill": 0
+        },
+        "effective_kernel_limits": {
+          "memory.high": "94242156544",
+          "memory.max": "96389640192",
+          "memory.swap.max": "max"
+        },
+        "guard_violations": [],
+        "complete_active_windows": 0,
+        "active_swap_write_MiB_s_max": null,
+        "active_swap_combined_MiB_s_max": null,
+        "complete_window_full_PSI_max_percent": null,
+        "loading_full_PSI_max_percent": 0.0,
+        "inference_full_PSI_max_percent": 0.0
+      },
+      "previous_reference": {
+        "date": "2026-11-01",
+        "hardware": "RTX 3080 Ti 12 GB + RTX 3080 10 GB; 64 GB installed RAM;historical switched platform",
+        "model": "DeepSeek-V4.1-Flash-1017",
+        "quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
+        "engine": "Strata",
+        "context": 32768,
+        "weight_gb": 232.97960842,
+        "storage": "NVMe + SATA SSDs",
+        "metrics": {
+          "prefill_tps": 7.6,
+          "ttft_s": 22.63140446899888,
+          "decode_tps": 3.7,
+          "prompt_tokens": 5710,
+          "output_tokens": 61,
+          "cached_tokens": 5539,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings"
+        },
+        "source": "docs/evidence/benchmark-results/20261101-new-router-all-models.json",
+        "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+        "historical_declared_guards": {
+          "worker_high_max_GiB": [
+            56,
+            58
+          ],
+          "host_available_reserve_GiB": 2,
+          "GPU_free_floor_MiB": 512,
+          "native_engine_reserve_MiB": 768,
+          "loading_PSI_percent": 15,
+          "active_write_combined_MiB_s": [
+            128,
+            160
+          ],
+          "window_s": 30,
+          "active_PSI_percent": 15,
+          "bad_samples": 3,
+          "temperature_C": 82,
+          "swap_occupancy": "unlimited",
+          "provenance": [
+            "docs/evidence/WORKER-RAM-64GB-20261031.md",
+            "docs/evidence/DEEPSEEK-UNSLOTH-CONTEXT-20261031.md"
+          ],
+          "scope": "documented historical policy; per-run kernel snapshots unavailable"
+        }
+      },
+      "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+    }
+  },
+  "current_scope": "Nine enabled profiles on96 GB-class host; bolt-vllm compatibility ID now native IQ2 llama.cpp, AWQ retained only as history. Other latest short checks retain their96 GB restoration scope.",
+  "current_source": "docs/evidence/benchmark-results/20261104-bolt-iq2-entry.json for Bolt; docs/evidence/benchmark-results/20261104-ram96-restoration.json for the other8.",
+  "isolated_bolt_native_iq2": {
+    "source": "docs/evidence/benchmark-results/20261104-bolt-native-iq2.json",
+    "status": "Earlier isolated qualification; native IQ2 subsequently selected and normal-router qualified.",
+    "fit_target_MiB": [
+      384,
+      384
+    ],
+    "metrics": {
+      "measurement": "first actual DSH tool-call generation",
+      "loading_excluded": true,
+      "prompt_tokens": 6380,
+      "output_tokens": 45,
+      "cached_tokens": 0,
+      "native_timings": {
+        "cache_n": 0,
+        "prompt_n": 6380,
+        "prompt_ms": 12597.151,
+        "prompt_per_token_ms": 1.9744750783699059,
+        "prompt_per_second": 506.4637234244473,
+        "predicted_n": 45,
+        "predicted_ms": 651.931,
+        "predicted_per_token_ms": 14.816613636363638,
+        "predicted_per_second": 67.49180511434491
+      },
+      "client_ttft_s": 12.744188373999805,
+      "client_last_token_s": 13.242217170000004,
+      "meaningful_sse_chunks": 25,
+      "generation_wall_s": 13.291547784000159,
+      "usage": {
+        "completion_tokens": 45,
+        "prompt_tokens": 6380,
+        "total_tokens": 6425,
+        "prompt_tokens_details": {
+          "cached_tokens": 0
+        }
+      },
+      "prefill_tps": 506.4637234244473,
+      "prefill_method": "native request timings",
+      "ttft_s": 12.744188373999805,
+      "ttft_method": "client first delivered content/tool delta; parser buffering included",
+      "decode_tps": 67.49180511434491,
+      "decode_method": "native request timings"
+    }
+  },
+  "retired_same_day_AWQ_reference": {
+    "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+    "quant": "AWQ-INT4",
+    "engine": "vLLM-offload",
+    "context": 163840,
+    "weight_gb": 55.332700488,
+    "storage": "SATA SSD",
+    "metrics": {
+      "prefill_tps": 217.35370225526495,
+      "ttft_s": 29.319944143295288,
+      "decode_tps": 0.36112997673219366,
+      "prompt_tokens": 6369,
+      "output_tokens": 41,
+      "cached_tokens": 0,
+      "native_timings": {},
+      "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+      "ttft_method": "engine first-token counter",
+      "decode_method": "vLLM one-request decode counter"
+    },
+    "checks": {
+      "phase": "pass",
+      "followup_passed": true,
+      "strict_final_format": false,
+      "unloaded": true,
+      "wall_s": 257.16456791200017
+    },
+    "guards": {
+      "worker_RAM_GiB": {
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
+        "swap": null
+      },
+      "host_available_reserve_GiB": 2,
+      "explicit_GPU_free_floor_MiB": 256,
+      "native_cache_reserve_MiB": null,
+      "startup_free_MiB": null,
+      "loading_PSI_percent": 15,
+      "resource_bad_samples": 3,
+      "swap_occupancy": "unlimited",
+      "swap_write_MiB_s": 1,
+      "swap_read_plus_write_MiB_s": 8,
+      "swap_window_s": 30,
+      "active_PSI_percent": 10,
+      "PSI_bad_samples": 3
+    },
+    "resources": {
+      "lifecycle_samples": 101,
+      "lifecycle_median_interval_s": 5.081465721130371,
+      "charged_worker_RAM_peak_GiB": 50.516502380371094,
+      "swap_peak_MiB": 0.0,
+      "minimum_host_available_GiB": 38.659263610839844,
+      "GPU_free_min_MiB_all_phases": [
+        5541.0,
+        3654.0
+      ],
+      "GPU_free_min_MiB_nonloading": [
+        5643.0,
+        3654.0
+      ],
+      "GPU_temperature_max_C": [
+        59.0,
+        47.0
+      ],
+      "memory_events": {
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0
+      },
+      "effective_kernel_limits": {
+        "memory.high": "94242156544",
+        "memory.max": "96389640192",
+        "memory.swap.max": "max"
+      },
+      "guard_violations": [],
+      "complete_active_windows": 92,
+      "active_swap_write_MiB_s_max": 0.0,
+      "active_swap_combined_MiB_s_max": 0.0,
+      "complete_window_full_PSI_max_percent": 0.0,
+      "loading_full_PSI_max_percent": 0.0,
+      "inference_full_PSI_max_percent": 0.0
+    },
+    "previous_reference": {
+      "date": "2026-11-03",
+      "hardware": "Core i5-13600KF; RTX3080Ti12GB + RTX308010GB behind existing switch;64GB installed RAM; desktop active on second GPU",
+      "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
+      "quant": "AWQ-INT4",
+      "engine": "vLLM-offload",
+      "context": 163840,
+      "weight_gb": 55.332700488,
+      "storage": "SATA SSD",
+      "metrics": {
+        "prefill_tps": 240.66212077488655,
+        "ttft_s": 26.452385187149048,
+        "decode_tps": 0.3922516899564806,
+        "prompt_tokens": 6364,
+        "output_tokens": 41,
+        "cached_tokens": 0,
+        "prefill_method": "vllm:request_prefill_time_seconds one-request delta; cached tokens excluded",
+        "ttft_method": "engine first-token counter",
+        "decode_method": "vLLM one-request decode counter"
+      },
+      "source": "docs/evidence/benchmark-results/20261103-vram256-optimization.json",
+      "guard_scope": "Historical64GB policy:56/58GiBworker,2GiBhost; kernel snapshots not included in this artifact; see dated guard references.",
+      "guards": {
+        "worker_RAM_GiB": {
+          "high": 56,
+          "max": 58,
+          "swap": null
+        },
+        "host_available_reserve_GiB": 2,
+        "explicit_GPU_free_floor_MiB": 256,
+        "native_cache_reserve_MiB": null,
+        "startup_free_MiB": null,
+        "loading_PSI_percent": 15,
+        "resource_bad_samples": 3,
+        "swap_occupancy": "unlimited",
+        "swap_write_MiB_s": 1,
+        "swap_read_plus_write_MiB_s": 8,
+        "swap_window_s": 30,
+        "active_PSI_percent": 10,
+        "PSI_bad_samples": 3
+      }
+    },
+    "comparison_scope": "Prior 32 GB current entry or 64 GB switched historical entry; not an interleaved equal-hardware/cache A/B."
+  }
+}

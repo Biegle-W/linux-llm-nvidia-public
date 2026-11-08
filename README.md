@@ -29,7 +29,7 @@ print(reply.choices[0].message.content)
 | `network/` | Router, private model hub, worker manager, installer |
 | `dsh/` | DeepSeek Harness client registration and launcher |
 | `tests/` | CPU unit tests: `python3 -m unittest discover -s tests -q` |
-| `docs/` | Current state, policies and dated evidence |
+| `docs/` | Current state and policies; dated evidence in `docs/evidence/` |
 | `patches/`, `tools/`, `tooling/`, `assets/` | Engine patches, small native tools, vendored tooling, icons and samples |
 
 `data/`, `models/`, `runtimes/` and `logs/` are local only and never committed.

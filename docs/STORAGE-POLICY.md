@@ -2,15 +2,15 @@
 
 ## Unused Qwen GGUF target/drafter deleted — November 4, 2026
 
-The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
+The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](evidence/UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
 
 ## Selected native IQ2 Bolt — November 4, 2026
 
-The22.018 GB native text checkpoint on SATA at`models/engine-tests/bolt-iq2` now backs the API/DSH Bolt entry. The former55.333 GB AWQ checkpoint and its dedicated runtime were deleted at the user's request; only dated benchmark/source history remains. [Removal verification](BOLT-AWQ-REMOVAL-20261104.md). Both storage ancestry and publisher hash were verified. [Current setup](BOLT-IQ2-ENTRY-20261104.md).
+The22.018 GB native text checkpoint on SATA at`models/engine-tests/bolt-iq2` now backs the API/DSH Bolt entry. The former55.333 GB AWQ checkpoint and its dedicated runtime were deleted at the user's request; only dated benchmark/source history remains. [Removal verification](evidence/BOLT-AWQ-REMOVAL-20261104.md). Both storage ancestry and publisher hash were verified. [Current setup](evidence/BOLT-IQ2-ENTRY-20261104.md).
 
 ## Native IQ2 Bolt candidate — November 4, 2026
 
-The22.018 GB official text checkpoint is a mostly GPU/RAM-resident candidate and lives on SATA at`models/engine-tests/bolt-iq2`. Publisher SHA256 and physical SATA ancestry passed. It uses the existing two GPUs with bounded partial CPU-weight placement; it is not an SSD expert-streaming pack. The separate vision projector/drafter were not downloaded. [Measured placement and guards](BOLT-NATIVE-IQ2-20261104.md).
+The22.018 GB official text checkpoint is a mostly GPU/RAM-resident candidate and lives on SATA at`models/engine-tests/bolt-iq2`. Publisher SHA256 and physical SATA ancestry passed. It uses the existing two GPUs with bounded partial CPU-weight placement; it is not an SSD expert-streaming pack. The separate vision projector/drafter were not downloaded. [Measured placement and guards](evidence/BOLT-NATIVE-IQ2-20261104.md).
 
 ## Unsloth DeepSeek split-storage profile — October 31
 
@@ -39,7 +39,7 @@ remain on the Linux filesystem.
 The complete `models/engine-tests` directory is a link to
 `llm-models/linux-nvidia/engine-tests` on the mounted SATA SSD. It includes the
 kept dense checkpoint. Superseded trial weights and preparation inputs were
-removed in the [unused-model cleanup](UNUSED-MODEL-CLEANUP-20261027.md); their
+removed in the [unused-model cleanup](evidence/UNUSED-MODEL-CLEANUP-20261027.md); their
 benchmark evidence and provenance remain preserved.
 The alias keeps existing engine, router, desktop and tooling paths stable. The
 actual mount mapping and the checksum migration manifest are private local state.
@@ -86,7 +86,7 @@ before the destination contents and launch paths have passed validation.
 
 ## Benchmarks and migration evidence
 
-The [latest matched benchmark](BENCHMARK-20261027-101219.md) predates the storage
+The [latest matched benchmark](evidence/BENCHMARK-20261027-101219.md) predates the storage
 move. Its NVMe storage inventory remains correct for the time of measurement.
 Prefill and decode figures are preserved as historical observations, rather than
 new SATA-load measurements. The relocation checks validate loading and short
@@ -111,7 +111,7 @@ long-context qualifications were preserved.
 
 ## Unused-model cleanup
 
-The [October 27 cleanup](UNUSED-MODEL-CLEANUP-20261027.md) removed unused model
+The [October 27 cleanup](evidence/UNUSED-MODEL-CLEANUP-20261027.md) removed unused model
 and preparation payloads after dependency and performance review. The active
 checkpoint aliases and four unique base model packages remain. Do not recreate
 superseded downloads merely because a historical test references their old paths.

@@ -323,7 +323,7 @@ class Updater:
         if any(row.get('candidate_metrics')for row in results):
             # The updater preserves these reviewed per-profile guards; include the
             # companion table beside every nightly performance result list.
-            guard_doc=self.root/'docs/ALL-ENTRY-BENCHMARKS-20261105.md'
+            guard_doc=self.root/'docs/evidence/ALL-ENTRY-BENCHMARKS-20261105.md'
             guards=guard_doc.read_text();start=guards.index('| Profile | Worker RAM')
             table=guards[start:].split('\n\n',1)[0]
             entry+='\nEffective guards (configured, not peak usage):2GiB host available;100C;3 bad2-second samples; unlimited swap occupancy; swap rates averaged over30s. Selected native reserves and active/loading PSI exceptions remain unchanged.\n\n'+table+'\n\n'

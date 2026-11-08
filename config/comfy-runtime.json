@@ -36,7 +36,7 @@
         2048
       ],
       "resolution_benchmark": {
-        "report": "docs/benchmark-results/20261105-comfy-2k4k.json",
+        "report": "docs/evidence/benchmark-results/20261105-comfy-2k4k.json",
         "2048": "passed-two-images",
         "4096": "failed-GPU0-allocation",
         "default_square_size": 1024
@@ -69,7 +69,7 @@
         2048
       ],
       "resolution_benchmark": {
-        "report": "docs/benchmark-results/20261105-comfy-2k4k.json",
+        "report": "docs/evidence/benchmark-results/20261105-comfy-2k4k.json",
         "2048": "passed-two-images",
         "4096": "stopped-GPU0-free-VRAM-floor",
         "default_square_size": 1024

@@ -8,7 +8,7 @@
     "sha256": "4da9a7c50e964cf4878c743dd7dad9f23c0a9e877bd9ade9b2423465a285ba75"
   },
   "mode": "normal; existing weights, context and sampling retained",
-  "evidence": "docs/MAYA-QUALIFICATION-REPAIR-20261106.md",
+  "evidence": "docs/evidence/MAYA-QUALIFICATION-REPAIR-20261106.md",
   "status": "Selected after passed short DSH checks and explicit reviewed DeepSeek performance exception",
   "CUDA_toolkit": "13.0.88; matching CUDA13 runtime/cuBLAS"
 }
