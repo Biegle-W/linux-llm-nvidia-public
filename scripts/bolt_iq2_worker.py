@@ -73,7 +73,8 @@ def main(*,work=WORK,unit=UNIT,port=PORT,alias='bolt-iq2-candidate',manifest=Non
  life=LifecycleLog(profile_id,path=None if manifest else work/'lifecycle.jsonl',interval=2);life.start()
  command=build_command(pins,port=port,alias=alias)
  print('Pinned command: '+json.dumps(command),flush=True)
- env=dict(os.environ,CUDA_VISIBLE_DEVICES='0,1',CUDA_DEVICE_ORDER='PCI_BUS_ID',NCCL_P2P_DISABLE='1',GGML_CUDA_P2P='0',PYTHONUNBUFFERED='1',HF_HUB_OFFLINE='1')
+ env=dict(os.environ,CUDA_VISIBLE_DEVICES='0,1',CUDA_DEVICE_ORDER='PCI_BUS_ID',NCCL_P2P_DISABLE='1',PYTHONUNBUFFERED='1',HF_HUB_OFFLINE='1')
+ env.pop('GGML_CUDA_P2P',None) # llama.cpp turns peer access on if this is set at all, even to '0'
  engine_log=(work/'engine.log').open('w') if capture_engine_log else None
  child=subprocess.Popen(command,env=env,start_new_session=True,stdout=engine_log,stderr=subprocess.STDOUT if engine_log else None);stopping=False;reason=None;bad=0;loading_bad=0
  def stop(*args):

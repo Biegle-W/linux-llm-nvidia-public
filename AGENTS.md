@@ -46,6 +46,7 @@ curl -s --noproxy '*' -H "Authorization: Bearer $K" -H 'Content-Type: applicatio
   -X POST http://127.0.0.1:10100/router/unload -d '{}'
 nvidia-smi --query-gpu=index,memory.used --format=csv,noheader   # idle = 1 MiB each
 systemctl --user list-timers nvidia-daily-engine-update.timer
+python3 scripts/weights_tracker.py                   # per-drive storage + unused weights (read-only)
 journalctl --user -u nvidia-daily-engine-update.service --since today
 python3 "$PWD/scripts/daily_engine_update.py" --check-only       # read upstream revisions only
 ```

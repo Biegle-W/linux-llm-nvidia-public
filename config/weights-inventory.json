@@ -1,0 +1,64 @@
+{
+  "_comment": "Read by scripts/weights_tracker.py. Router, ComfyUI image and ComfyUI video weights are found from their own configs; list here only helper files those configs do not name. An extra reference lapses (and is reported) when its owner entry is retired. 'kept' marks files nothing uses that the owner wants kept; each needs a reason.",
+  "roots": [
+    {
+      "repo": "models"
+    },
+    {
+      "mount_relative": "llm-models/linux-nvidia"
+    },
+    {
+      "repo": "runtimes",
+      "extensions_only": true
+    },
+    {
+      "repo": "data/work",
+      "extensions_only": true
+    }
+  ],
+  "sata_mount_record": "data/storage-mount.json",
+  "weight_extensions": [
+    ".gguf",
+    ".safetensors",
+    ".bin",
+    ".pt",
+    ".pth",
+    ".ckpt",
+    ".onnx"
+  ],
+  "min_weight_bytes": 50000000,
+  "min_bytes": 500000000,
+  "extra_references": [
+    {
+      "path": "models/strata/models/mmproj-Qwen3.8-Flash-Next-BF16.gguf",
+      "owner": "router:flash-next-strata",
+      "why": "vision projector; launch preset mmproj"
+    },
+    {
+      "path": "models/strata/mtp",
+      "owner": "router:flash-next-strata",
+      "why": "MTP draft head; launch preset --mtp"
+    },
+    {
+      "path": "models/strata/packs/iq3_xxs",
+      "owner": "router:flash-next-strata",
+      "why": "Strata pack (dense.bin, tokenizer); launch preset --pack"
+    },
+    {
+      "path": "runtimes/strata-unsloth-029/pack",
+      "owner": "router:deepseek-maya",
+      "why": "DeepSeek pack; runtimes/project-maya/maya-ds4.json --pack"
+    },
+    {
+      "path": "models/strata/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf",
+      "owner": "updater:scripts/update_native_builders.py#IQ3_XXS-00002-of-00002.gguf",
+      "why": "PLE table for the Maya qualification build"
+    }
+  ],
+  "kept": [
+    {
+      "path": "runtimes/gpu-unlock-native/build",
+      "why": "GPU firmware blobs (gsp_*.bin) in the gpu-unlock package build; not model weights"
+    }
+  ]
+}

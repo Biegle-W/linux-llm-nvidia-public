@@ -116,8 +116,10 @@ def main():
     # Main inference uses the permanent RTX 3080 Ti / RTX 3080 pair.
     env.update(profile.get('environment') or {})
     # Native NCCL stdout must reach the guard before interpreter exit.
-    env.update(PYTHONUNBUFFERED='1', NCCL_P2P_DISABLE='1', GGML_CUDA_P2P='0')
+    env.update(PYTHONUNBUFFERED='1', NCCL_P2P_DISABLE='1')
+    # No GPU peer access; ggml treats any GGML_CUDA_P2P value (even '0') as on.
     env.pop('NCCL_P2P_LEVEL', None)
+    env.pop('GGML_CUDA_P2P', None)
     env['PATH'] = str(cuda / 'bin') + ':' + env['PATH']
     if engine == 'sglang':
         from sglang_runtime import prepare_environment

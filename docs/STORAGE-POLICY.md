@@ -29,12 +29,18 @@ remain on the Linux filesystem.
 
 ## Current placement
 
+Per-drive usage and unused weights: run `python3 scripts/weights_tracker.py` (report in
+`data/weights-tracker/latest.md`); last audit in [STORAGE-STATUS-20261108.md](evidence/STORAGE-STATUS-20261108.md).
+
 | Model group | Access during inference | Required drive | Stable checkpoint path relative to repository |
 | --- | --- | --- | --- |
 | Qwen3.8-27B AutoRound, shared by HyperQwen/vLLM and SGLang | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 | Qwen3.8-Flash-Next IQ3_XXS, Strata | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/strata/models/IQ3_XXS` |
 | GLM-5.3-Flash Maya-S24, Maya | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/maya/Maya-S24` |
-| DeepSeek-V4.1-Flash-1017 Maya-S, shared by Strata and Maya | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/maya/DeepSeek-V4.1-Flash-1017-GGUF/Maya-S` |
+| DeepSeek-V4.1-Flash-1017 UD-IQ1_S, shared by Strata and Maya | SSD-streaming with GPU/RAM caches | NVMe shards 1-4; SATA shard 5 (symlinked) | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S` |
+| Nemotron 3.5 Bolt IQ2, llama.cpp | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/engine-tests/bolt-iq2` |
+| ComfyUI images (Qwen Image 2.1 Turbo, FLUX3 Klein) | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/comfy-images` |
+| ComfyUI video (Wan 2.2 5B, LTX 2.3 Mesh) | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/comfy-video` |
 
 The complete `models/engine-tests` directory is a link to
 `llm-models/linux-nvidia/engine-tests` on the mounted SATA SSD. It includes the

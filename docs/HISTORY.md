@@ -2,6 +2,14 @@
 
 This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/CURRENT-STATE.md` (three near-copies). It is kept for evidence and is **newest first**. Many entries are superseded by later ones; for what is true now read [CURRENT-STATE.md](CURRENT-STATE.md). The README and CURRENT-STATE variants of this log, which differ in a few sections, are in git at commit `b517776`.
 
+## GGML_CUDA_P2P launcher fix — November 9, 2026
+
+The owner confirmed the GPUs run on the motherboard's CPU PCIe x8/x8 bifurcation without peer-to-peer access. A review found that `serve_router_moe.py` (Strata/Maya), `serve_qwen27b_engines.py` and `bolt_iq2_worker.py`, plus the two Qwen27B registry environments, set `GGML_CUDA_P2P=0` to disable peer access. ggml/llama.cpp only checks whether that variable exists (`getenv(name) != nullptr`), so `0` actually requested peer access. That was harmless while the stock driver reports no peer support, but would have enabled an unqualified path if a P2P driver came back. The launchers now remove the variable (including any inherited value) and keep `NCCL_P2P_DISABLE=1`; `tests/test_no_ggml_p2p_env.py` guards it. No model was relaunched or benchmarked; pre-images are in `data/ggml-p2p-env-fix-20261109/`.
+
+## Unused-weights tracker and storage audit — November 8, 2026
+
+Added `scripts/weights_tracker.py` with `config/weights-inventory.json`: a read-only report of which model weights each enabled router, ComfyUI image and ComfyUI video entry uses, and which weights nothing uses, per drive. A file-by-file audit with independent review agreed with it. The 111 GB DeepSeek file on SATA is shard 5 (the only copy), not a duplicate. Unused: 6.9 GB on NVMe (Maya build fixtures and the DeepSeek vision tower), none on SATA. The DeepSeek row in the storage placement table pointed at the deleted Maya-S folder and was corrected. Nothing was deleted. [STORAGE-STATUS-20261108.md](evidence/STORAGE-STATUS-20261108.md)
+
 ## Docs reorganized for handoff — November 8, 2026
 
 All 128 dated evidence docs and the `benchmark-results/` and `validation-results/` folders moved to `docs/evidence/`; every Markdown link and code/config path was rewritten, and the public export retires the old paths. `docs/README.md` is now a topic-grouped index. `network/README.md` and `docs/MAINTAINED-PROFILES.md` were rewritten as short reference pages; their old dated logs are archived as `evidence/NETWORK-README-LOG-THROUGH-20261108.md` and `evidence/MAINTAINED-PROFILES-LOG-THROUGH-20261108.md`. `AGENTS.md` gained quick commands and the updater's push/rejection behaviour.

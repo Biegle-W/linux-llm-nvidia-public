@@ -28,6 +28,10 @@ Start with [CURRENT-STATE.md](CURRENT-STATE.md) and the root [AGENTS.md](../AGEN
 
 Each file records one piece of work and is not updated afterwards, so later work may supersede it. Raw measurements are in `evidence/benchmark-results/` and `evidence/validation-results/`. New evidence goes here as `TOPIC-YYYYMMDD.md`; add it to this index and, if public, to `FILES` in `scripts/sync_public.py`.
 
+### Storage and drives
+
+- [STORAGE-STATUS-20261108.md](evidence/STORAGE-STATUS-20261108.md): Storage status and unused-weights audit — November 8, 2026
+
 ### Retirements, removals and cleanups
 
 - [FLASH-IQ1M-RETIREMENT-20261108.md](evidence/FLASH-IQ1M-RETIREMENT-20261108.md): Flash-Next IQ1_M retired — November 8, 2026

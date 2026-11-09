@@ -92,8 +92,7 @@
         "VLLM_MARLIN_INT8_EXCLUDE_RE": "lm_head|mtp",
         "NCCL_P2P_DISABLE": "1",
         "NCCL_DEBUG": "INFO",
-        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM",
-        "GGML_CUDA_P2P": "0"
+        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM"
       },
       "latest_benchmark": {
         "run": "20261031-pair-main-aux",
@@ -891,8 +890,7 @@
       "environment": {
         "NCCL_P2P_DISABLE": "1",
         "NCCL_DEBUG": "INFO",
-        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM",
-        "GGML_CUDA_P2P": "0"
+        "NCCL_DEBUG_SUBSYS": "INIT,GRAPH,P2P,SHM"
       },
       "calculated_context_history": [
         {

@@ -81,10 +81,13 @@ def main():
     for name, value in profile.get('selected_settings', {}).get('environment', {}).items():
         if str(config.get('env', {}).get(name)) != str(value):
             sys.exit('Canonical RAM/cache setting differs from the selected registry.')
-    config.setdefault('env', {}).update(NCCL_P2P_DISABLE='1', GGML_CUDA_P2P='0')
-    config['env'].pop('NCCL_P2P_LEVEL', None)
-    os.environ.update(NCCL_P2P_DISABLE='1', GGML_CUDA_P2P='0')
-    os.environ.pop('NCCL_P2P_LEVEL', None)
+    # No GPU peer access (the cards sit on CPU x8/x8 bifurcation). ggml enables peer access
+    # whenever GGML_CUDA_P2P is present, whatever its value, so it must be absent, not '0'.
+    config.setdefault('env', {}).update(NCCL_P2P_DISABLE='1')
+    for name in ('NCCL_P2P_LEVEL', 'GGML_CUDA_P2P'):
+        config['env'].pop(name, None)
+        os.environ.pop(name, None)
+    os.environ.update(NCCL_P2P_DISABLE='1')
     args = config['args']
     if int(args[args.index('--max-context') + 1]) != profile['allocated_context']:
         sys.exit('Canonical context differs from the selected registry; refusing launch.')

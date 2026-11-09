@@ -20,6 +20,8 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Recent changes (newest first)
 
+- **Nov 9:** GPU peer access stays off by design: the 3080 Ti and 3080 run on the board's CPU PCIe x8/x8 bifurcation with the stock driver and no P2P. Launchers now remove `GGML_CUDA_P2P` instead of setting it to `0`, because ggml/llama.cpp treated any value, including `0`, as on. NCCL stays host-staged (`NCCL_P2P_DISABLE=1`).
+- **Nov 8:** unused-weights tracker added (`scripts/weights_tracker.py`, report in `data/weights-tracker/`). NVMe 52% used (464 GB free), SATA 22% (784 GB free); 6.9 GB of unused weights, all on NVMe (build fixtures and the DeepSeek vision tower); nothing deleted. [STORAGE-STATUS-20261108.md](evidence/STORAGE-STATUS-20261108.md)
 - **Nov 8:** docs reorganized: dated evidence moved to `docs/evidence/` (topic index in [README.md](README.md)); `network/README.md` and [MAINTAINED-PROFILES.md](MAINTAINED-PROFILES.md) rewritten as short reference pages, old logs archived.
 - **Nov 8:** Strata 0.2.12 (`146df3c`, engine 0.1.58) promoted by a manual updater run after the owner cleared its old-gate rejection; Flash-Next ~+26% decode on the short check, DeepSeek unchanged; K=29 split kept. [DAILY-ENGINE-UPDATES.md](DAILY-ENGINE-UPDATES.md)
 - **Nov 8:** repo cleanup: this file, `AGENTS.md` and `README.md` rewritten short; the old logs moved to [HISTORY.md](HISTORY.md); dead IQ1_S code removed.
