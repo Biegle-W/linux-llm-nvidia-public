@@ -1,12 +1,14 @@
 # Daily NVIDIA engine updater
 
+> **Retired November 9, 2026.** The timer is disabled and updates are installed by hand ([ENGINE-UPDATE-RUNBOOK.md](ENGINE-UPDATE-RUNBOOK.md)). The promotion rule below (promote unless it really breaks) still applies; the schedule and automatic gates describe the retired script.
+
 ## Explicit reviewed acceptance
 
 The scheduled comparison remains strict about output-token equality. After explicit human review, `--manual --accept-tested-output-variance RUN` can activate a completed, rolled-back Strata run from the last24hours whose sole mismatch is one DeepSeek output token. This command never runs on the timer. It preserves the raw rejection and observations, rechecks every other identity, correctness, resource and performance gate, requires passing restored-production receipts and unchanged hardware/settings, and verifies the preserved signed packages, source/control payloads and production hashes. It uses a durable activation transaction and an exact-owner reservation only when serving is already idle and unloaded. No new inference is performed, so this activation does not use the20-minute admission gate for new GPU workloads. Derived Python bytecode is discarded so verified source is recompiled. The acceptance is bound to that recorded run and does not relax later scheduled tests.
 
 ## Current schedule and coverage — November5,2026
 
-The restored timer runs at **03:00 America/Toronto**, skips missed runs (`Persistent=false`) and adds no random delay. It is a local systemd maintenance job. The current short-test policy supersedes the former long-context/sustained update pipeline.
+Until November 9, 2026 the timer ran at **03:00 America/Toronto**, skips missed runs (`Persistent=false`) and adds no random delay. It is a local systemd maintenance job. The current short-test policy supersedes the former long-context/sustained update pipeline.
 
 | Automatic component | API/DSH profiles | Selection |
 | --- | --- | --- |

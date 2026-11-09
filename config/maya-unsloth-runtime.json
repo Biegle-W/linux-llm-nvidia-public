@@ -1,13 +1,13 @@
 {
   "schema": 1,
   "profile": "deepseek-maya",
-  "source_commit": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
+  "source_commit": "00655481ce2b0689ab1c2e8d67034dc5701d6511",
   "binary": {
     "path": "runtimes/maya-unsloth-v1146/maya-ds4",
-    "sha256": "edcef1c38dd3d63b02672e4e63b4b08922ba86e6825afa1756862dcc718316d1"
+    "sha256": "ce2f073fe01ae4a8a20e103036b0092bbf31b8f7aeafaa65fabc3363d080912c"
   },
   "bounded_cache_cpu_test": "pass",
-  "status": "Selected after passed short DSH checks and explicit reviewed DeepSeek performance exception",
+  "status": "Short daily DSH qualification required; see daily ledger",
   "CUDA_toolkit": "13.0.88; matching CUDA13 runtime/cuBLAS",
   "evidence": "docs/evidence/MAYA-QUALIFICATION-REPAIR-20261106.md",
   "cache_controller_patch": {

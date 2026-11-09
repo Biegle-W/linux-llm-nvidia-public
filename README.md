@@ -1,6 +1,6 @@
 # Linux LLM NVIDIA — public reference
 
-Native Linux setup for a two-GPU (RTX 3080 Ti 12 GB + RTX 3080 10 GB) local LLM server. One authenticated OpenAI-compatible router serves several model/quant/engine entries, loading one at a time, with RAM/VRAM/swap/temperature guards and a nightly engine updater that qualifies new engine builds before promoting them.
+Native Linux setup for a two-GPU (RTX 3080 Ti 12 GB + RTX 3080 10 GB) local LLM server. One authenticated OpenAI-compatible router serves several model/quant/engine entries, loading one at a time, with RAM/VRAM/swap/temperature guards and engine updates that are qualified by hand before promotion.
 
 - **Current state, models and settings:** [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md)
 - **Operating rules and architecture for agents:** [AGENTS.md](AGENTS.md)

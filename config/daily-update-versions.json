@@ -1,8 +1,10 @@
 {
   "hyperqwen": {
-    "source_commit": "6ab9bd05cb84b538a6595d634f3e337ac8a80856",
-    "status": "Qualified existing production; scheduled short DSH updates enabled2026-11-05",
-    "evidence": "docs/evidence/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
+    "source_commit": "9268d8d4f5a6069a1a39da3e64b83d0ccd365dc3",
+    "qualified_on": "2026-11-09T21:30:00",
+    "method": "hands-on short DSH",
+    "note": "vLLM 0.33.0",
+    "evidence": "docs/evidence/ENGINE-UPDATES-HANDS-ON-20261109.md"
   },
   "sglang": {
     "source_commit": "d61ded5b9e2dc46453d924a3d4db06ec2c373f54",
@@ -35,12 +37,17 @@
     "evidence": "docs/evidence/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "maya": {
-    "source_commit": "22fc101f2c109b7e7174c975ff3c2d8e9ce0a867",
-    "qualified_on": "2026-11-06T14:52:51",
-    "acceptance": "Explicit manual acceptance of measured DeepSeek prefill/decode slowdown; docs/evidence/MAYA-QUALIFICATION-REPAIR-20261106.md"
+    "source_commit": "00655481ce2b0689ab1c2e8d67034dc5701d6511",
+    "qualified_on": "2026-11-09T21:30:00",
+    "method": "hands-on short DSH",
+    "note": "Maya 1.1.57",
+    "evidence": "docs/evidence/ENGINE-UPDATES-HANDS-ON-20261109.md"
   },
   "strata": {
-    "source_commit": "146df3c468739147f520ac3816de806f71232571",
-    "qualified_on": "2026-11-08T03:46:31"
+    "source_commit": "d2f096475817d4666c364c820b0ca830f751cfc5",
+    "qualified_on": "2026-11-09T21:30:00",
+    "method": "hands-on short DSH",
+    "note": "Strata v0.2.13: control 0.1.59.1, engine/dsv41 0.1.59",
+    "evidence": "docs/evidence/ENGINE-UPDATES-HANDS-ON-20261109.md"
   }
 }

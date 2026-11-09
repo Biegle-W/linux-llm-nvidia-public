@@ -13,7 +13,7 @@ Private operational repo for the NVIDIA LLM server. Read this file, then [docs/C
 - After a test, unload and leave the router idle. Do not preload or reload a fallback model.
 - Permanent deletion of weights or data needs the owner's explicit yes. Keep edited-file pre-images under `data/<task>-<date>/`.
 - Context increases are a proportional tradeoff (report % context gained vs % speed lost) and need quality/resource qualification before promotion.
-- Never print, commit or export `data/local-api-key` or launch presets (they contain the key). Nonpersonal commits, no force pushes. Push only when the owner asks; the 03:00 updater pushes on its own.
+- Never print, commit or export `data/local-api-key` or launch presets (they contain the key). Nonpersonal commits, no force pushes. Push only when the owner asks.
 - Do not touch other agents' uncommitted work.
 
 ## How the server is put together
@@ -25,7 +25,7 @@ Private operational repo for the NVIDIA LLM server. Read this file, then [docs/C
 - **Launchers:** dense Qwen via `scripts/supervise_dense.py`; MoE/native via `scripts/serve_router_moe.py` (Strata, Maya, llama.cpp). `scripts/start_model.sh` and the desktop shortcuts go through the router.
 - **Guards:** RAM/swap/pressure/GPU-free/temperature watch in `scripts/inference_swap_guard.py`; shared idle and lifecycle policy in `config/inference-policy.json`.
 - **DSH** (DeepSeek Harness web client) `nvidia-dsh.service`, local port 3080. Regenerate its model list with `python3 dsh/configure.py`; it picks the change up on restart.
-- **Daily updater** `nvidia-daily-engine-update.timer` at 03:00: `scripts/daily_engine_update.py` builds candidates, runs paired short DSH qualification, promotes, records `docs/DAILY-ENGINE-UPDATES.md`, commits and pushes. Useful flags: `--check-only`, `--manual`, `--components`, `--local-only`, `--smoke-current PROFILE` (call the script by absolute path). Policy: [DAILY-ENGINE-UPDATE-POLICY.md](docs/DAILY-ENGINE-UPDATE-POLICY.md).
+- **Engine updates are hands-on** (since Nov 9, 2026): the 03:00 timer `nvidia-daily-engine-update.timer` is **disabled**; do not re-enable it. Check upstream with `python3 $PWD/scripts/daily_engine_update.py --check-only`, then install by hand per [ENGINE-UPDATE-RUNBOOK.md](docs/ENGINE-UPDATE-RUNBOOK.md), using `--smoke-current PROFILE` (absolute script path) before and after each swap. Promotion policy: [DAILY-ENGINE-UPDATE-POLICY.md](docs/DAILY-ENGINE-UPDATE-POLICY.md).
 - **Strata Flash-Next preset** lives outside the repo at `~/.local/state/strata/launch/qwen-flash-next.json`; the router refuses it if its GPU order, layer split or stage trim drift from the registry.
 - **Public mirror** `~/Desktop/linux-llm-nvidia-public`: export with `scripts/sync_public.py` (allowlist `FILES`, `RETIRED_FILES`, privacy scan; text between `<!-- private-codex-context:start/end -->` markers is stripped). Add new public docs to `FILES`.
 
@@ -45,13 +45,13 @@ curl -s --noproxy '*' -H "Authorization: Bearer $K" http://127.0.0.1:10100/v1/mo
 curl -s --noproxy '*' -H "Authorization: Bearer $K" -H 'Content-Type: application/json' \
   -X POST http://127.0.0.1:10100/router/unload -d '{}'
 nvidia-smi --query-gpu=index,memory.used --format=csv,noheader   # idle = 1 MiB each
-systemctl --user list-timers nvidia-daily-engine-update.timer
+systemctl --user is-enabled nvidia-daily-engine-update.timer   # expect: disabled (updates are hands-on)
 python3 scripts/weights_tracker.py                   # per-drive storage + unused weights (read-only)
 journalctl --user -u nvidia-daily-engine-update.service --since today
 python3 "$PWD/scripts/daily_engine_update.py" --check-only       # read upstream revisions only
 ```
 
-The updater refuses to start engine work while either repo (private or public checkout) has uncommitted tracked edits, and it only pushes commits it made itself, so push your own commits first or the nightly push is deferred. A deferral is a WARNING in the journal and the run still exits 0; while a push is held the next run also skips engine work, and after 3 held runs in a row the run fails on purpose (`last_deferral` in `data/daily-update/state.json` shows the reason). Rejected engine revisions are remembered in `data/daily-update/state.json` under `rejected` and are not retried until removed from there (log the removal in `rejection_history`).
+If the retired script is ever run with `--manual`: it refuses to start engine work while either repo (private or public checkout) has uncommitted tracked edits, and it only pushes commits it made itself, so push your own commits first or the nightly push is deferred. A deferral is a WARNING in the journal and the run still exits 0; while a push is held the next run also skips engine work, and after 3 held runs in a row the run fails on purpose (`last_deferral` in `data/daily-update/state.json` shows the reason). Rejected engine revisions are remembered in `data/daily-update/state.json` under `rejected` and are not retried until removed from there (log the removal in `rejection_history`).
 
 ## Docs layout
 

@@ -2,6 +2,10 @@
 
 This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/CURRENT-STATE.md` (three near-copies). It is kept for evidence and is **newest first**. Many entries are superseded by later ones; for what is true now read [CURRENT-STATE.md](CURRENT-STATE.md). The README and CURRENT-STATE variants of this log, which differ in a few sections, are in git at commit `b517776`.
 
+## Engine updates go hands-on — November 9, 2026
+
+The nightly updater rejected three good releases on November 9 over its own harness bugs (HyperQwen console-script relocation, Maya's test environment and 120 s timeout, and Strata's hotfix control package 0.1.59.1 differing from engine 0.1.59), and would not have retried them. The owner retired it: the timer is disabled and the agent now checks upstream and installs each update by hand, staging in isolation and running the short DSH check on production and on the new version, rolling back only on a real break. Strata 0.2.13, HyperQwen `9268d8d` (vLLM 0.33.0) and Maya 1.1.57 were installed that way the same day, all at parity. [ENGINE-UPDATE-RUNBOOK.md](ENGINE-UPDATE-RUNBOOK.md), [evidence](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md).
+
 ## Updater holds are warnings — November 9, 2026
 
 The 03:00 run on November 9 found every engine current and recorded that, then exited 1 because the owner's unpushed commits held back its push. Holds are by design (the updater never pushes someone else's work), so they are now `PublicationDeferred` warnings: the run exits 0, logs `WARNING: ... deferred`, keeps its own records (committed, or as uncommitted owned files when the hold comes before the commit) and retries next run, skipping engine work while a push is still held. Three held runs in a row fail the unit for attention. The visible-terminal wrapper echoes the warning to the service journal. Three independent reviewers checked that no hold path can push or export unrelated work. Pre-images: `data/updater-deferral-fix-20261109/`.

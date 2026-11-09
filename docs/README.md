@@ -9,8 +9,9 @@ Start with [CURRENT-STATE.md](CURRENT-STATE.md) and the root [AGENTS.md](../AGEN
 | [CURRENT-STATE.md](CURRENT-STATE.md) | What is live now: models, engines, contexts, speeds, open items. Start here. |
 | [HISTORY.md](HISTORY.md) | Dated change log, newest first. Evidence only; older entries are often superseded. |
 | [MAINTAINED-PROFILES.md](MAINTAINED-PROFILES.md) | The model registry and how entries are selected, changed and retired. |
-| [DAILY-ENGINE-UPDATE-POLICY.md](DAILY-ENGINE-UPDATE-POLICY.md) | How the 03:00 updater qualifies and promotes engine builds. |
-| [DAILY-ENGINE-UPDATES.md](DAILY-ENGINE-UPDATES.md) | Nightly updater results (written by the updater; do not hand-edit entries). |
+| [ENGINE-UPDATE-RUNBOOK.md](ENGINE-UPDATE-RUNBOOK.md) | How engine updates are checked and installed by hand (since Nov 9). |
+| [DAILY-ENGINE-UPDATE-POLICY.md](DAILY-ENGINE-UPDATE-POLICY.md) | Promotion rule; the retired 03:00 updater's gates. |
+| [DAILY-ENGINE-UPDATES.md](DAILY-ENGINE-UPDATES.md) | Engine update ledger, newest first (hand-written since Nov 9). |
 | [BENCHMARK-REPORTING.md](BENCHMARK-REPORTING.md) | Required benchmark metrics, table layout and wording. |
 | [BENCHMARK-HISTORY.md](BENCHMARK-HISTORY.md) | Benchmark ledger (dated sections, newest first). |
 | [CLI-SHORT-MODEL-TESTS.md](CLI-SHORT-MODEL-TESTS.md) | Short CLI model checks. |
@@ -136,6 +137,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 
 ### Models, engines and context
 
+- [ENGINE-UPDATES-HANDS-ON-20261109.md](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md): Strata 0.2.13, HyperQwen vLLM 0.33.0, Maya 1.1.57 installed by hand — November 9, 2026
 - [STRATA-LAYER-SPLIT-20261107.md](evidence/STRATA-LAYER-SPLIT-20261107.md): Flash-Next Strata hand-set layer split — November 7, 2026
 - [BOLT-PROMPT-CACHE-20261107.md](evidence/BOLT-PROMPT-CACHE-20261107.md): Bolt RAM prompt cache enabled — November 7, 2026
 - [BOLT-ID-RENAME-20261106.md](evidence/BOLT-ID-RENAME-20261106.md): Bolt API ID renamed to `bolt-llamacpp` — November 6, 2026

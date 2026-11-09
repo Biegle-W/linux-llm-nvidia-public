@@ -1,5 +1,13 @@
 # NVIDIA daily engine updates
 
+## 2026-11-09 hands-on installs
+
+The nightly updater is retired; entries from here on are written by hand ([runbook](ENGINE-UPDATE-RUNBOOK.md)). Short DSH check before and after each swap: [ENGINE-UPDATES-HANDS-ON-20261109.md](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md).
+
+- strata: **promoted**; `d2f096475817` (v0.2.13, control 0.1.59.1, engine 0.1.59).
+- hyperqwen: **promoted**; `9268d8d4f5a6` (vLLM 0.33.0).
+- maya: **promoted**; `00655481ce2b` (1.1.57).
+
 ## 2026-11-09T15:13:54
 
 - sglang: **unchanged**; upstream `d61ded5b9e2d`.
