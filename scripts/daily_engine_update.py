@@ -22,6 +22,9 @@ from update_builders import build, upstream, kernel_tests, latest_release
 from update_short_qualification import ShortQualification, stop_owned_with_retry
 
 
+# Consecutive held runs (publication or engine work) before a hold fails the unit for attention.
+DEFERRAL_ALERT_RUNS = 3
+
 class Interrupted(RuntimeError): pass
 class BaselineFailed(RuntimeError): pass
 
@@ -308,6 +311,37 @@ class Updater:
             self.stop_worker(self.owner);release_owner(self.reservation,self.owner)
             self.state.pop('reservation_owner',None);write_json(self.state_path,self.state);self.reconcile_router()
 
+    def defer(self, stage, reason):
+        """Record a by-design hold (another agent's work is unpushed or unreviewed). Not a failure:
+        the run exits 0, the journal shows a WARNING and the next run retries. A hold that lasts
+        DEFERRAL_ALERT_RUNS runs in a row fails the run so it shows as a failed unit."""
+        now=datetime.now().isoformat(timespec='seconds');previous=self.state.get('last_deferral')or{}
+        held={'stage':stage,'reason':str(reason),'at':now,'first_at':previous.get('first_at',now),'runs':previous.get('runs',0)+1}
+        self.deferrals=getattr(self,'deferrals',[])+[held]
+        self.state['last_deferral']=held;write_json(self.state_path,self.state)
+        print('WARNING: '+stage+' deferred: '+str(reason)+'; held for '+str(held['runs'])+' run(s) since '+held['first_at']+'; retried on the next run',file=sys.stderr,flush=True)
+        if held['runs']>=DEFERRAL_ALERT_RUNS:
+            raise RuntimeError('Updater held for '+str(held['runs'])+' runs in a row since '+held['first_at']+'; push or review the blocking work: '+str(reason))
+
+    def resume_publication(self):
+        """Retry a held publication, then decide whether engine work may start (True) or is held (False).
+
+        While a publication is held (someone else's unpushed commits or edits) or either checkout has
+        uncommitted tracked edits, engine work waits, so new promotions never pile up behind it."""
+        from update_publish import publish,git,PublicationDeferred
+        if self.state.get('publication_owned'):
+            for name,expected in self.state.get('publication_hashes',{}).items():
+                if sha(self.root/name)!=expected:raise RuntimeError('External publication edit preserved; review required')
+            try:publish(self.root,self.state['publication_owned'])
+            except PublicationDeferred as held:
+                self.defer('pending publication',held);return False
+            for key in ('publication_owned','publication_hashes','last_deferral'):self.state.pop(key,None)
+            write_json(self.state_path,self.state)
+        if git(self.root,'status','--porcelain','--untracked-files=no') or git(self.root.parent/'linux-llm-nvidia-public','status','--porcelain'):
+            self.defer('engine work','Repository edits preserved; automatic engine work deferred until reviewed');return False
+        if self.state.pop('last_deferral',None):write_json(self.state_path,self.state)  # nothing held now; restart the count
+        return True
+
     def publish(self, results):
         if getattr(self, 'local_only', False):
             write_json(self.run_dir/'report.json', {'date':datetime.now().isoformat(), 'results':results,
@@ -332,7 +366,7 @@ class Updater:
         write_json(self.run_dir/'report.json',report)
         # Reports/pins are the only nightly tracked writes. No raw logs, installed
         # paths, credentials, session data or reservation payloads are exported.
-        from update_publish import publish
+        from update_publish import publish,PublicationDeferred
         owned=['docs/DAILY-ENGINE-UPDATES.md','config/daily-update-versions.json']
         if any(row['status']=='promoted'for row in results) and (self.root/'config/maintained-profiles.json').exists():owned.append('config/maintained-profiles.json')
         for row in results:
@@ -343,8 +377,11 @@ class Updater:
         self.state['publication_owned']=owned
         self.state['publication_hashes']={name:sha(self.root/name)for name in owned if (self.root/name).is_file()}
         write_json(self.state_path,self.state)
-        publish(self.root,owned)
-        self.state.pop('publication_owned',None);self.state.pop('publication_hashes',None);write_json(self.state_path,self.state)
+        try:publish(self.root,owned)
+        except PublicationDeferred as held:
+            self.defer('publication',held);return
+        self.state.pop('publication_owned',None);self.state.pop('publication_hashes',None);self.state.pop('last_deferral',None)
+        write_json(self.state_path,self.state)
 
     def run(self, manual=False, check_only=False, components=None):
         if getattr(self, 'local_only', False) and self.state.get('publication_owned'):
@@ -352,15 +389,8 @@ class Updater:
         if check_only and (self.state.get('pending') or self.state.get('reservation_owner')):
             raise RuntimeError('Recovery required before read-only discovery')
         if not check_only: self.recover()
-        if not check_only:
-            from update_publish import publish,git
-            if self.state.get('publication_owned'):
-                for name,expected in self.state.get('publication_hashes',{}).items():
-                    if sha(self.root/name)!=expected:raise RuntimeError('External publication edit preserved; review required')
-                publish(self.root,self.state['publication_owned'])
-                self.state.pop('publication_owned',None);self.state.pop('publication_hashes',None);write_json(self.state_path,self.state)
-            if git(self.root,'status','--porcelain','--untracked-files=no') or git(self.root.parent/'linux-llm-nvidia-public','status','--porcelain'):
-                raise RuntimeError('Repository edits preserved; automatic engine work deferred until reviewed')
+        if not check_only and not self.resume_publication():
+            print(json.dumps({'results':[],'gpu_work_performed':False,'deferred':self.deferrals}));return
         from profile_catalog import load_catalog
         validate_update_coverage(load_catalog(), self.policy)
         selected=select_components(self.policy,components)
@@ -427,7 +457,7 @@ class Updater:
                         self.reconcile_router()
         if check_only: write_json(self.run_dir/'discovery.json',results)
         else: self.publish(results)
-        print(json.dumps({'results':results,'gpu_work_performed':bool(candidates and self.manager)}))
+        print(json.dumps({'results':results,'gpu_work_performed':bool(candidates and self.manager),'deferred':getattr(self,'deferrals',[])}))
 
 
 def validate_qualification_policy(args,policy):

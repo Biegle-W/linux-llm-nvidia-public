@@ -164,6 +164,20 @@ class PushRecovery(unittest.TestCase):
         with patch('update_publish.git',side_effect=self.answers),patch('update_publish.subprocess.run')as run:
             with self.assertRaisesRegex(RuntimeError,'Unrelated unpublished files'):push_if_ahead(Path('/repo'),['docs/other.md'])
         run.assert_not_called()
+    def test_holds_are_deferrals_not_failures(self):
+        from update_publish import push_if_ahead,PublicationDeferred
+        def foreign(root,*args):
+            if args[:1]==('show',):return 'Owner\nowner@example.invalid\nOwner\nowner@example.invalid'
+            return self.answers(root,*args)
+        for answers,allowed in ((self.answers,['docs/other.md']),(foreign,['docs/owned.md'])):
+            with patch('update_publish.git',side_effect=answers),patch('update_publish.subprocess.run')as run:
+                with self.assertRaises(PublicationDeferred):push_if_ahead(Path('/repo'),allowed)
+            run.assert_not_called()
+    def test_wrong_branch_still_fails(self):
+        from update_publish import push_if_ahead,PublicationDeferred
+        with patch('update_publish.git',return_value='feature'),patch('update_publish.subprocess.run'):
+            with self.assertRaises(RuntimeError)as caught:push_if_ahead(Path('/repo'),['docs/owned.md'])
+        self.assertNotIsInstance(caught.exception,PublicationDeferred)
 
 
 class ScheduledCancellation(unittest.TestCase):

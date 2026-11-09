@@ -51,7 +51,7 @@ journalctl --user -u nvidia-daily-engine-update.service --since today
 python3 "$PWD/scripts/daily_engine_update.py" --check-only       # read upstream revisions only
 ```
 
-The updater refuses to start engine work while either repo (private or public checkout) has uncommitted tracked edits, and it only pushes commits it made itself, so push your own commits first or the nightly push is deferred. Rejected engine revisions are remembered in `data/daily-update/state.json` under `rejected` and are not retried until removed from there (log the removal in `rejection_history`).
+The updater refuses to start engine work while either repo (private or public checkout) has uncommitted tracked edits, and it only pushes commits it made itself, so push your own commits first or the nightly push is deferred. A deferral is a WARNING in the journal and the run still exits 0; while a push is held the next run also skips engine work, and after 3 held runs in a row the run fails on purpose (`last_deferral` in `data/daily-update/state.json` shows the reason). Rejected engine revisions are remembered in `data/daily-update/state.json` under `rejected` and are not retried until removed from there (log the removal in `rejection_history`).
 
 ## Docs layout
 

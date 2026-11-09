@@ -215,6 +215,76 @@ class UpdaterIntegrationTests(unittest.TestCase):
                 u.publish(rows)
                 self.assertEqual(publish.call_args.args[1],['docs/DAILY-ENGINE-UPDATES.md','config/daily-update-versions.json','config/sglang-runtime.json'])
 
+    def test_deferred_publication_is_a_warning_and_resumes_next_run(self):
+        import contextlib,io
+        from update_publish import PublicationDeferred
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);u,_,_,_=self.prepare(root);(root/'docs').mkdir()
+            (root/'docs/DAILY-ENGINE-UPDATES.md').write_text('# Updates\n')
+            rows=[{'component':'sglang','status':'unchanged','revision':'a'*40}]
+            err=io.StringIO()
+            with patch('update_publish.publish',side_effect=PublicationDeferred('Unrelated unpublished files preserved; push deferred')),contextlib.redirect_stderr(err):
+                u.publish(rows)  # no exception: the run succeeds
+            self.assertIn('WARNING: publication deferred',err.getvalue())
+            saved=json.loads(u.state_path.read_text())
+            self.assertIn('docs/DAILY-ENGINE-UPDATES.md',saved['publication_owned'])  # retried next run
+            self.assertEqual(saved['last_deferral']['stage'],'publication')
+            with patch('update_publish.publish'):
+                u.publish(rows)
+            saved=json.loads(u.state_path.read_text())
+            self.assertNotIn('publication_owned',saved);self.assertNotIn('last_deferral',saved)
+
+    def test_held_pending_publication_skips_engine_work_and_escalates(self):
+        import contextlib,io
+        from update_publish import PublicationDeferred
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);u,_,_,_=self.prepare(root)
+            u.state.update(publication_owned=['docs/DAILY-ENGINE-UPDATES.md'],publication_hashes={})
+            held=PublicationDeferred('Unrelated unpublished files preserved; push deferred')
+            with patch('update_publish.publish',side_effect=held),patch('update_publish.git',return_value='')as git,contextlib.redirect_stderr(io.StringIO()):
+                self.assertFalse(u.resume_publication());self.assertFalse(u.resume_publication())
+                git.assert_not_called()  # engine work never starts behind a held push
+                with self.assertRaisesRegex(RuntimeError,'held for 3 runs in a row'):u.resume_publication()
+            saved=json.loads(u.state_path.read_text())
+            self.assertEqual(saved['publication_owned'],['docs/DAILY-ENGINE-UPDATES.md'])
+            self.assertEqual((saved['last_deferral']['runs'],saved['last_deferral']['stage']),(3,'pending publication'))
+
+    def test_resumed_publication_clears_the_hold_and_dirty_tree_still_defers(self):
+        import contextlib,io
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);u,_,_,_=self.prepare(root)
+            u.state.update(publication_owned=['docs/DAILY-ENGINE-UPDATES.md'],publication_hashes={},last_deferral={'stage':'publication','reason':'x','at':'t','first_at':'t','runs':2})
+            with patch('update_publish.publish')as publish,patch('update_publish.git',return_value=''):
+                self.assertTrue(u.resume_publication())
+            publish.assert_called_once()
+            saved=json.loads(u.state_path.read_text())
+            for key in ('publication_owned','publication_hashes','last_deferral'):self.assertNotIn(key,saved)
+            with patch('update_publish.git',return_value=' M scripts/other.py'),contextlib.redirect_stderr(io.StringIO()):
+                self.assertFalse(u.resume_publication())
+            self.assertEqual(json.loads(u.state_path.read_text())['last_deferral']['stage'],'engine work')
+
+    def test_clean_run_restarts_the_hold_count(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);u,_,_,_=self.prepare(root)
+            u.state['last_deferral']={'stage':'engine work','reason':'x','at':'t','first_at':'t','runs':2}
+            with patch('update_publish.git',return_value=''):self.assertTrue(u.resume_publication())
+            self.assertNotIn('last_deferral',json.loads(u.state_path.read_text()))
+
+    def test_external_edit_to_pending_publication_still_fails(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);u,_,_,_=self.prepare(root);(root/'docs').mkdir();(root/'docs/x.md').write_text('edited')
+            u.state.update(publication_owned=['docs/x.md'],publication_hashes={'docs/x.md':'0'*64})
+            with patch('update_publish.publish')as publish:
+                with self.assertRaisesRegex(RuntimeError,'External publication edit'):u.resume_publication()
+            publish.assert_not_called()
+
+    def test_real_publication_errors_still_fail(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);u,_,_,_=self.prepare(root);(root/'docs').mkdir()
+            (root/'docs/DAILY-ENGINE-UPDATES.md').write_text('# Updates\n')
+            with patch('update_publish.publish',side_effect=RuntimeError('Export byte identity mismatch: x')):
+                with self.assertRaisesRegex(RuntimeError,'byte identity'):u.publish([{'component':'sglang','status':'unchanged','revision':'a'*40}])
+
     def test_normal_router_cannot_bypass_an_updater_reservation(self):
         from unittest.mock import Mock
         import worker_manager

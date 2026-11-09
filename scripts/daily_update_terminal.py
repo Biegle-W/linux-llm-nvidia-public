@@ -8,8 +8,17 @@ import signal
 import sys
 import time
 import uuid
+from datetime import datetime
 from visible_terminal import launch_terminal,terminal_command,desktop_env
 ROOT=Path(__file__).resolve().parents[1]
+
+
+def report_deferral(since):
+    """The visible terminal keeps the updater's stderr; echo a hold so the service journal shows it."""
+    try:held=json.loads((ROOT/'data/daily-update/state.json').read_text()).get('last_deferral')or{}
+    except (OSError,ValueError):return
+    if held.get('at','')>=since:
+        print('WARNING: '+held['stage']+' deferred: '+held['reason']+'; held for '+str(held.get('runs',1))+' run(s)',file=sys.stderr,flush=True)
 
 
 def main():
@@ -26,6 +35,7 @@ def main():
             if child.poll() is None:child.terminate()
         signal.signal(signal.SIGTERM,cancel_child);signal.signal(signal.SIGINT,cancel_child)
         return child.wait()
+    started=datetime.now().isoformat(timespec='seconds')
     receipt=ROOT/'data/daily-update/consoles'/('coordinator-'+uuid.uuid4().hex+'.json')
     receipt.parent.mkdir(parents=True,exist_ok=True)
     command=['/usr/bin/python3',str(ROOT/'scripts/visible_terminal.py'),'foreground',
@@ -44,7 +54,8 @@ def main():
         time.sleep(.2)
     while True:
         record=json.loads(receipt.read_text())
-        if record.get('state')=='finished':return int(record['exit_code'])
+        if record.get('state')=='finished':
+            report_deferral(started);return int(record['exit_code'])
         pid=record.get('pid')
         if pid and not Path('/proc',str(pid)).exists():raise RuntimeError('Updater terminal exited without a completion receipt; recovery remains responsible')
         time.sleep(1)

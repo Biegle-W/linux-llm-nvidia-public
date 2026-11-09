@@ -6,6 +6,13 @@ from pathlib import Path
 import sys
 
 
+class PublicationDeferred(RuntimeError):
+    """A by-design hold, not a failure: someone else's commits or edits are in the way.
+
+    The updater keeps its own records (committed if the hold is at push time, otherwise as
+    uncommitted owned files listed in publication_owned) and retries on the next run."""
+
+
 def git(root, *args):
     return subprocess.check_output(['git','-C',str(root),*args],text=True).strip()
 
@@ -51,22 +58,22 @@ def push_if_ahead(root,allowed):
     for revision in commits:
         identity=git(root,'show','-s','--format=%an%n%ae%n%cn%n%ce',revision).splitlines()
         if identity!=['LLM Maintenance','llm-maintenance@example.invalid']*2:
-            raise RuntimeError('Unrelated unpublished identity preserved; push deferred')
+            raise PublicationDeferred('Unrelated unpublished identity preserved; push deferred')
         parents=git(root,'rev-list','--parents','-n','1',revision).split()
-        if len(parents)!=2:raise RuntimeError('Unreviewed unpublished history preserved; push deferred')
+        if len(parents)!=2:raise PublicationDeferred('Unreviewed unpublished history preserved; push deferred')
         paths=set(git(root,'diff-tree','--no-commit-id','--name-only','-r',revision).splitlines())
         if not paths or not paths.issubset(set(allowed)):
-            raise RuntimeError('Unrelated unpublished files preserved; push deferred')
+            raise PublicationDeferred('Unrelated unpublished files preserved; push deferred')
     if commits:
         subprocess.run(['git','-C',str(root),'-c','credential.helper=','-c','credential.helper=!gh auth git-credential','push','origin','main'],check=True,timeout=120)
 
 
 def publish(root, owned):
     root = Path(root); public = root.parent/'linux-llm-nvidia-public'
-    if git(root,'diff','--name-only','--cached'): raise RuntimeError('Unrelated staged changes preserved; publication deferred')
+    if git(root,'diff','--name-only','--cached'): raise PublicationDeferred('Unrelated staged changes preserved; publication deferred')
     dirty = set(git(root,'diff','--name-only').splitlines())
-    if not dirty.issubset(set(owned)): raise RuntimeError('Unrelated tracked edits preserved; publication deferred')
-    if git(public,'status','--porcelain'): raise RuntimeError('Public checkout is not clean; publication deferred')
+    if not dirty.issubset(set(owned)): raise PublicationDeferred('Unrelated tracked edits preserved; publication deferred')
+    if git(public,'status','--porcelain'): raise PublicationDeferred('Public checkout is not clean; publication deferred')
     hashes = audit_payload(root)
     changed = [p for p in owned if git(root,'status','--porcelain','--',p)]
     if changed:
