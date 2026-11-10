@@ -4,7 +4,7 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 ## HyperQwen `80cf059` — November 9, 2026 (evening)
 
-Upstream HyperQwen moved 35 commits the same day (RTX 20-series support; vLLM still 0.33.0). Rebuilt and installed by hand after a read-only review of the diff: the seven new patches stay off on Ampere cards as this profile is launched. Short DSH check at parity before and after. [evidence](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md).
+Upstream HyperQwen moved 35 commits the same day (almost all RTX 20-series support; vLLM still 0.33.0). Rebuilt and installed by hand after a read-only review of the diff: the seven new patches stay off on Ampere cards as this profile is launched. Short DSH check at parity before and after. [evidence](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md).
 
 ## Engine updates go hands-on — November 9, 2026
 

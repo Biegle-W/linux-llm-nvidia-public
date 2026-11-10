@@ -1,7 +1,7 @@
 {
   "hyperqwen": {
     "source_commit": "80cf059359491d8b4eeccaf19e5805aceed3ff68",
-    "qualified_on": "2026-11-09T21:05:00",
+    "qualified_on": "2026-11-09T20:45:00",
     "method": "hands-on short DSH",
     "note": "vLLM 0.33.0, patch series 65 + 4 KVarN",
     "evidence": "docs/evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md"

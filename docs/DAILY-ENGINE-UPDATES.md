@@ -2,10 +2,11 @@
 
 ## 2026-11-09 evening: HyperQwen again
 
-Upstream moved 35 commits (RTX 20-series work, seven new patches that stay off on these cards). Before and after: [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md).
+Upstream moved 35 commits, almost all RTX 20-series work; the seven new patches stay off on these cards as this profile is launched. Before and after: [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md).
 
 - hyperqwen: **promoted**; `80cf05935949` (vLLM 0.33.0, 65 patches + 4 KVarN).
-- sglang, maya, strata, llamacpp: **unchanged**. comfyui, raylight, mesh, gguf: **pinned-current**.
+- sglang, maya, strata, llamacpp: **unchanged**. comfyui, raylight, mesh, gguf: **pinned-current** (`--check-only` at 20:25 and again after the install).
+- Upstream moved once more during the install, to `e0ed0948607a` (one change, to `docker/prepare.sh`, which this server does not use). Left for the next daily check.
 
 ## 2026-11-09 hands-on installs
 

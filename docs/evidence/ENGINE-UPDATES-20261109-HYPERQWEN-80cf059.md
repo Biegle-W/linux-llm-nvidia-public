@@ -12,7 +12,7 @@ Kept. Parity within run-to-run noise. Rollback script and the previous environme
 
 ## Review before the swap
 
-Three read-only reviewers read the upstream diff and the production launch, and each finding was re-checked by a second reviewer.
+Three read-only agent reviewers read the upstream diff and the production launch, and a second agent re-checked each finding. After the install, two more agents checked the installed environment and these records. Their reports were not saved on the server; the points below can be checked against the patches in `runtimes/hyperqwen-manual/80cf059-20261109/source/patches/`.
 
 - The seven new patches are inert on these cards as launched: `flashinfer-sm75-optin`, `flashinfer-sm75-spec-graphs` and `gdn-sm75-cuda-prefill` need an environment switch and (for two of them) exactly sm75; `dflash2-fp16-residual-scale` and `spec-attn-fp16` only act on an fp16 model (this profile runs bf16); `terminal-request-progress` needs `VLLM_TERMINAL_PROGRESS=1`; `vllm-pr66026-gather-draft-sampled-no-specialize` only touches the speculative-decoding draft kernel, and this profile runs without speculative decoding.
 - Production runs `runtimes/env-hyperqwen/bin/vllm` directly with arguments from `config/maintained-profiles.json`. It uses none of the upstream launchers, so the launcher, Docker and `SPEC`/`CTX` default changes do not apply. Nothing besides the environment and the pin needed updating.
