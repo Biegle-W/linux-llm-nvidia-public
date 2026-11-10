@@ -1239,6 +1239,8 @@
         },
         "gpu_order": "as_given",
         "trim_stage_weights": true,
+        "ple_io": "direct",
+        "ple_io_reason": "2026-11-10 A/B, two runs each: direct table reads load about 10 s faster and leave the 26.8 GiB table out of RAM; prefill is 1% slower and decode is within run-to-run noise. docs/evidence/LAUNCH-TUNING-20261110.md",
         "split_reason": "2026-11-07 short sweep: layers 0-28 on RTX 3080, 29-47 plus head/draft/verify on RTX 3080 Ti, stage-trimmed dense weights; ~+13% writing and ~+22% 24K prompt reading versus auto K=20. docs/evidence/STRATA-LAYER-SPLIT-20261107.md"
       },
       "guard_validation_history": [
@@ -1608,8 +1610,10 @@
         "expert_ram_gib": 64,
         "environment": {
           "MAYA_GLM_RAM_GB": "64",
-          "MAYA_GLM_NO_MTP": "1"
+          "MAYA_GLM_NO_MTP": "1",
+          "MAYA_GLM_CKPT_EVERY": "65536"
         },
+        "checkpoint_every_reason": "2026-11-10 A/B, two runs each: a cold 37K-token prompt reaches its first token in 30.7 s instead of 38.3 s; prompts under 16K tokens are unchanged. docs/evidence/LAUNCH-TUNING-20261110.md",
         "reason": "96GB RAM user-confirmed; Linux MemTotal96227652KiB verified. Larger cache candidate; guarded qualification pending boot-proof repair.",
         "expert_profile": "data/glm-maya-expert-profile.bin",
         "prefill": "auto",

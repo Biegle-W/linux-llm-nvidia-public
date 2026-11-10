@@ -320,6 +320,7 @@ FILES = (
     'docs/evidence/BOLT-ID-RENAME-20261106.md',
     'docs/evidence/BOLT-PROMPT-CACHE-20261107.md', 'docs/evidence/validation-results/20261107-bolt-prompt-cache.json',
     'docs/evidence/STRATA-LAYER-SPLIT-20261107.md', 'docs/evidence/validation-results/20261107-strata-layer-split.json',
+    'docs/evidence/LAUNCH-TUNING-20261110.md', 'docs/evidence/validation-results/20261110-launch-tuning.json',
     'docs/evidence/FLASH-IQ1M-RETIREMENT-20261108.md', 'docs/evidence/validation-results/20261108-flash-iq1m-retirement.json',
     'docs/HISTORY.md', 'docs/README.md',
     'docs/evidence/ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md',

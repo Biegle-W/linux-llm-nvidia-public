@@ -26,7 +26,7 @@ Private operational repo for the NVIDIA LLM server. Read this file, then [docs/C
 - **Guards:** RAM/swap/pressure/GPU-free/temperature watch in `scripts/inference_swap_guard.py`; shared idle and lifecycle policy in `config/inference-policy.json`.
 - **DSH** (DeepSeek Harness web client) `nvidia-dsh.service`, local port 3080. Regenerate its model list with `python3 dsh/configure.py`; it picks the change up on restart.
 - **Engine updates are hands-on** (since Nov 9, 2026): the 03:00 timer `nvidia-daily-engine-update.timer` is **disabled**; do not re-enable it. Check upstream with `python3 $PWD/scripts/daily_engine_update.py --check-only`, then install by hand per [ENGINE-UPDATE-RUNBOOK.md](docs/ENGINE-UPDATE-RUNBOOK.md), using `--smoke-current PROFILE` (absolute script path) before and after each swap. Promotion policy: [DAILY-ENGINE-UPDATE-POLICY.md](docs/DAILY-ENGINE-UPDATE-POLICY.md).
-- **Strata Flash-Next preset** lives outside the repo at `~/.local/state/strata/launch/qwen-flash-next.json`; the router refuses it if its GPU order, layer split or stage trim drift from the registry.
+- **Strata Flash-Next preset** lives outside the repo at `~/.local/state/strata/launch/qwen-flash-next.json`; the router refuses it if its GPU order, layer split, stage trim or table read mode (`--ple-io`) drift from the registry.
 - **Public mirror** `~/Desktop/linux-llm-nvidia-public`: export with `scripts/sync_public.py` (allowlist `FILES`, `RETIRED_FILES`, privacy scan; text between `<!-- private-codex-context:start/end -->` markers is stripped). Add new public docs to `FILES`.
 
 ## Working in the repo

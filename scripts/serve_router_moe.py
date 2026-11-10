@@ -26,13 +26,21 @@ def pair_gpu_free_values(raw):
 
 
 def require_flash_next_split(config, profile):
-    """Refuse a Flash-Next launch whose card order, layer split or stage trim drifted from the registry."""
+    """Refuse a Flash-Next launch whose card order, layer split, stage trim or table read mode drifted from the registry."""
     selected = profile.get('selected_settings', {})
     args = config.get('args', [])
+    # Strata applies user_args over args and splits joined forms ('--ple-io=ram'), so neither may carry these flags.
+    pinned = ('--layer-split', '--trim-stage-weights', '--ple-io')
+    if any(str(a).startswith(pinned) for a in config.get('user_args') or []) or any(
+            str(a).startswith(pinned) and a not in pinned for a in args):
+        raise ValueError('Flash-Next launch settings are overridden outside the selected registry; refusing launch.')
     if (config.get('gpu') != selected.get('gpu') or str(config.get('layer_split')) != str(selected.get('layer_split'))
             or config.get('gpu_order') != selected.get('gpu_order') or '--layer-split' in args
             or ('--trim-stage-weights' in args) != bool(selected.get('trim_stage_weights'))):
         raise ValueError('Flash-Next layer split differs from the selected registry; refusing launch.')
+    ple_io = [args[i + 1] if i + 1 < len(args) else None for i, a in enumerate(args) if a == '--ple-io']
+    if ple_io != ([selected['ple_io']] if selected.get('ple_io') else []):
+        raise ValueError('Flash-Next table read mode differs from the selected registry; refusing launch.')
 
 
 def main():

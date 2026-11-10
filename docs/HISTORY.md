@@ -2,6 +2,10 @@
 
 This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/CURRENT-STATE.md` (three near-copies). It is kept for evidence and is **newest first**. Many entries are superseded by later ones; for what is true now read [CURRENT-STATE.md](CURRENT-STATE.md). The README and CURRENT-STATE variants of this log, which differ in a few sections, are in git at commit `b517776`.
 
+## Launch tuning: Maya GLM checkpoint interval, Strata direct table reads — November 10, 2026
+
+Two settings from forum posts were tested by hand and adopted on the owner's instruction. `glm-maya` now runs with `MAYA_GLM_CKPT_EVERY=65536`: a cold 37K-token prompt reaches its first token in 30.7 s instead of 38.3 s, and prompts under 16K tokens are unchanged. `flash-next-strata` now runs with `--ple-io direct`: it loads about 10 s faster and no longer holds the 26.8 GiB table in RAM, with prefill 1% slower and decode within noise. Both passed the short DSH check. [evidence](evidence/LAUNCH-TUNING-20261110.md).
+
 ## HyperQwen `80cf059` — November 9, 2026 (evening)
 
 Upstream HyperQwen moved 35 commits the same day (almost all RTX 20-series support; vLLM still 0.33.0). Rebuilt and installed by hand after a read-only review of the diff: the seven new patches stay off on Ampere cards as this profile is launched. Short DSH check at parity before and after. [evidence](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md).

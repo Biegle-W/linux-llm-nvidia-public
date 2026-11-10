@@ -1,4 +1,4 @@
-# Current state — November 8, 2026
+# Current state — November 10, 2026
 
 Snapshot of what is live. Replace facts here when they change; dated detail goes in evidence docs and [HISTORY.md](HISTORY.md).
 
@@ -20,6 +20,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Recent changes (newest first)
 
+- **Nov 10:** launch tuning adopted: Maya GLM checkpoint interval 65,536 (cold 37K-token prompt 38.3 s → 30.7 s to first token) and Flash-Next Strata direct table reads (load about 10 s faster, 26.8 GiB of RAM freed). [LAUNCH-TUNING-20261110.md](evidence/LAUNCH-TUNING-20261110.md)
 - **Nov 9:** nightly updater retired (timer disabled); engine updates are now installed by hand with a short DSH check before and after ([runbook](ENGINE-UPDATE-RUNBOOK.md)). Installed the same day: Strata 0.2.13, HyperQwen `9268d8d` (vLLM 0.33.0), Maya 1.1.57, all at parity. [ENGINE-UPDATES-HANDS-ON-20261109.md](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md). That evening HyperQwen was updated again to `80cf059` (still vLLM 0.33.0), also at parity. [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md)
 - **Nov 9:** the updater treats held pushes (someone else's unpushed commits or edits) as warnings, exit 0, instead of failures; 3 held runs in a row fail the unit. See `last_deferral` in `data/daily-update/state.json`.
 - **Nov 9:** GPU peer access stays off by design: the 3080 Ti and 3080 run on the board's CPU PCIe x8/x8 bifurcation with the stock driver and no P2P. Launchers now remove `GGML_CUDA_P2P` instead of setting it to `0`, because ggml/llama.cpp treated any value, including `0`, as on. NCCL stays host-staged (`NCCL_P2P_DISABLE=1`).
