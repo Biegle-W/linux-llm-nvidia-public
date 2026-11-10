@@ -26,7 +26,7 @@ python3 $PWD/scripts/daily_engine_update.py --check-only        # read-only disc
 4. **Swap with pre-images** into `data/<engine>-update-<date>/preimages/` and write a `rollback.sh` beside them before anything is replaced.
 5. **Check the new version** with the same command; compare with the baseline.
 6. **Keep or roll back.** Roll back only on a real break (`rollback.sh`). Leave serving idle and unloaded.
-7. **Record:** pin in `config/daily-update-versions.json`, a dated entry at the top of `docs/DAILY-ENGINE-UPDATES.md`, `docs/CURRENT-STATE.md` if a version changed. Commit locally; push only when the owner asks.
+7. **Record:** pin in `config/daily-update-versions.json`, a dated entry at the top of `docs/DAILY-ENGINE-UPDATES.md`, `docs/CURRENT-STATE.md` if a version changed. Commit, export to the public checkout (`python3 scripts/sync_public.py ../linux-llm-nvidia-public`, check the diff for secrets and home paths), commit there, and push both. Hold the push and ask the owner only if something big changed (a rollback or real break, a profile added/retired, deletions, serving or guard changes, anything about keys, privacy or the public export list).
 
 ## Engine notes
 

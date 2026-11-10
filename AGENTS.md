@@ -13,7 +13,7 @@ Private operational repo for the NVIDIA LLM server. Read this file, then [docs/C
 - After a test, unload and leave the router idle. Do not preload or reload a fallback model.
 - Permanent deletion of weights or data needs the owner's explicit yes. Keep edited-file pre-images under `data/<task>-<date>/`.
 - Context increases are a proportional tradeoff (report % context gained vs % speed lost) and need quality/resource qualification before promotion.
-- Never print, commit or export `data/local-api-key` or launch presets (they contain the key). Nonpersonal commits, no force pushes. Push only when the owner asks.
+- Never print, commit or export `data/local-api-key` or launch presets (they contain the key). Nonpersonal commits. Push routine work without asking (engine updates that pass, doc and record updates, fixes): private repo first, then the public export. Ask the owner first only when something big changed: an engine rolled back or a real break, a model/profile added, retired or swapped, weights or data deleted, router/serving/guard behaviour changed, or anything touching keys, privacy or what the public export includes. Never force-push.
 - Do not touch other agents' uncommitted work.
 
 ## How the server is put together
