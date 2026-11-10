@@ -1,5 +1,12 @@
 # NVIDIA daily engine updates
 
+## 2026-11-09 evening: HyperQwen again
+
+Upstream moved 35 commits (RTX 20-series work, seven new patches that stay off on these cards). Before and after: [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md).
+
+- hyperqwen: **promoted**; `80cf05935949` (vLLM 0.33.0, 65 patches + 4 KVarN).
+- sglang, maya, strata, llamacpp: **unchanged**. comfyui, raylight, mesh, gguf: **pinned-current**.
+
 ## 2026-11-09 hands-on installs
 
 The nightly updater is retired; entries from here on are written by hand ([runbook](ENGINE-UPDATE-RUNBOOK.md)). Short DSH check before and after each swap: [ENGINE-UPDATES-HANDS-ON-20261109.md](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md).

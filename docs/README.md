@@ -138,6 +138,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 ### Models, engines and context
 
 - [ENGINE-UPDATES-HANDS-ON-20261109.md](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md): Strata 0.2.13, HyperQwen vLLM 0.33.0, Maya 1.1.57 installed by hand — November 9, 2026
+- [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md): HyperQwen `80cf059` installed by hand, with the review of the upstream diff — November 9, 2026
 - [STRATA-LAYER-SPLIT-20261107.md](evidence/STRATA-LAYER-SPLIT-20261107.md): Flash-Next Strata hand-set layer split — November 7, 2026
 - [BOLT-PROMPT-CACHE-20261107.md](evidence/BOLT-PROMPT-CACHE-20261107.md): Bolt RAM prompt cache enabled — November 7, 2026
 - [BOLT-ID-RENAME-20261106.md](evidence/BOLT-ID-RENAME-20261106.md): Bolt API ID renamed to `bolt-llamacpp` — November 6, 2026

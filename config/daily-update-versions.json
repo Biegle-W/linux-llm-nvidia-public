@@ -1,10 +1,10 @@
 {
   "hyperqwen": {
-    "source_commit": "9268d8d4f5a6069a1a39da3e64b83d0ccd365dc3",
-    "qualified_on": "2026-11-09T21:30:00",
+    "source_commit": "80cf059359491d8b4eeccaf19e5805aceed3ff68",
+    "qualified_on": "2026-11-09T21:05:00",
     "method": "hands-on short DSH",
-    "note": "vLLM 0.33.0",
-    "evidence": "docs/evidence/ENGINE-UPDATES-HANDS-ON-20261109.md"
+    "note": "vLLM 0.33.0, patch series 65 + 4 KVarN",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md"
   },
   "sglang": {
     "source_commit": "d61ded5b9e2dc46453d924a3d4db06ec2c373f54",

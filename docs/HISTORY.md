@@ -2,6 +2,10 @@
 
 This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/CURRENT-STATE.md` (three near-copies). It is kept for evidence and is **newest first**. Many entries are superseded by later ones; for what is true now read [CURRENT-STATE.md](CURRENT-STATE.md). The README and CURRENT-STATE variants of this log, which differ in a few sections, are in git at commit `b517776`.
 
+## HyperQwen `80cf059` — November 9, 2026 (evening)
+
+Upstream HyperQwen moved 35 commits the same day (RTX 20-series support; vLLM still 0.33.0). Rebuilt and installed by hand after a read-only review of the diff: the seven new patches stay off on Ampere cards as this profile is launched. Short DSH check at parity before and after. [evidence](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md).
+
 ## Engine updates go hands-on — November 9, 2026
 
 The nightly updater rejected three good releases on November 9 over its own harness bugs (HyperQwen console-script relocation, Maya's test environment and 120 s timeout, and Strata's hotfix control package 0.1.59.1 differing from engine 0.1.59), and would not have retried them. The owner retired it: the timer is disabled and the agent now checks upstream and installs each update by hand, staging in isolation and running the short DSH check on production and on the new version, rolling back only on a real break. Strata 0.2.13, HyperQwen `9268d8d` (vLLM 0.33.0) and Maya 1.1.57 were installed that way the same day, all at parity. [ENGINE-UPDATE-RUNBOOK.md](ENGINE-UPDATE-RUNBOOK.md), [evidence](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md).
