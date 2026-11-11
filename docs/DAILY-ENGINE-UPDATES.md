@@ -1,5 +1,14 @@
 # NVIDIA daily engine updates
 
+## 2026-11-11
+
+Before and after: [ENGINE-UPDATES-20261111.md](evidence/ENGINE-UPDATES-20261111.md).
+
+- maya: **promoted**; `f4067232fa59` (1.1.58). Both Maya profiles pass the short DSH check at the same speed as 1.1.57.
+- hyperqwen: **pin moved** to `3d6c9543292e` without a rebuild; the 13 upstream commits change nothing this server installs or runs.
+- sglang, strata, llamacpp: **unchanged**. raylight, mesh, gguf: **pinned-current**.
+- comfyui: `v0.45.0` available; pinned, not installed.
+
 ## 2026-11-09 evening: HyperQwen again
 
 Upstream moved 35 commits, almost all RTX 20-series work; the seven new patches stay off on these cards as this profile is launched. Before and after: [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md).

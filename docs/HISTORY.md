@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Maya 1.1.58 installed; HyperQwen pin moved — November 11, 2026
+
+Daily hands-on update. Maya 1.1.58 was built in isolation, installed with pre-images and a rollback script, and both Maya profiles pass the short DSH check at the same speed as 1.1.57. HyperQwen's 13 new upstream commits change nothing this server installs, so its pin moved to `3d6c954` without a rebuild. ComfyUI `v0.45.0` is available and stays pinned. [evidence](evidence/ENGINE-UPDATES-20261111.md).
+
 ## Unused files and the retired `deepseek-strata` id removed — November 11, 2026
 
 Follow-up to the repository audit, approved by the owner. Eight one-off scripts, four patches that nothing referenced and one trial config were removed, along with the unreachable `deepseek-strata` branches in the MoE launcher, the updater builders and the swap guard. No served profile, limit or setting changed. [evidence](evidence/REPO-AUDIT-20261111.md).
