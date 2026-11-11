@@ -1,5 +1,13 @@
 # NVIDIA daily engine updates
 
+## 2026-11-11 midday: Maya again
+
+Upstream released 1.1.59 a few hours after the morning install. Before and after: [ENGINE-UPDATES-20261111-MAYA-1159.md](evidence/ENGINE-UPDATES-20261111-MAYA-1159.md).
+
+- maya: **promoted**; `027992cb1f09` (1.1.59). Both Maya profiles pass the short DSH check. Warning: `glm-maya` generation measured 13.2 and 12.3 tok/s against 14.4 on 1.1.58 (8-15% slower, inside the promotion rule); `deepseek-maya` is unchanged.
+- hyperqwen, sglang, strata, llamacpp: **unchanged**. raylight, mesh, gguf: **pinned-current**.
+- comfyui: `v0.45.0` available; pinned, not installed.
+
 ## 2026-11-11
 
 Before and after: [ENGINE-UPDATES-20261111.md](evidence/ENGINE-UPDATES-20261111.md).
