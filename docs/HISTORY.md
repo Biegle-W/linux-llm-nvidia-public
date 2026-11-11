@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Unused files and the retired `deepseek-strata` id removed — November 11, 2026
+
+Follow-up to the repository audit, approved by the owner. Eight one-off scripts, four patches that nothing referenced and one trial config were removed, along with the unreachable `deepseek-strata` branches in the MoE launcher, the updater builders and the swap guard. No served profile, limit or setting changed. [evidence](evidence/REPO-AUDIT-20261111.md).
+
 ## Repository audit and cleanup — November 11, 2026
 
 The whole repository was audited (85 findings, 80 confirmed on a second check). Fixed: stale reference docs and registry notes, a unit test that wrote a made-up worker record into the live router folder, the updater installer that would have re-enabled the retired nightly timer, a Strata path pinned to control 0.1.51, a benchmark ordering list missing two entries, unused imports, and ignore rules. No model, engine, launch setting or guard value changed and nothing was deleted. Unused files, the retired `deepseek-strata` branches, export-check changes and disk cleanup are listed for the owner. [evidence](evidence/REPO-AUDIT-20261111.md).

@@ -43,10 +43,6 @@ def upstream(component):
 def canonical(root, profile):
     if profile == 'flash-next-strata':
         return Path.home() / '.local/state/strata/launch/qwen-flash-next.json'
-    if profile == 'deepseek-strata':
-        wrapper = json.loads((Path.home() / '.config/strata/profiles/deepseek-maya-s.json').read_text())
-        if wrapper.get('overrides'): raise RuntimeError('Unreviewed Strata overrides')
-        return Path(wrapper['source_config'])
     catalog = json.loads((root / 'config/maintained-profiles.json').read_text())
     selected = next(x for x in catalog['profiles'] if x['id'] == profile)
     return root / selected['runtime_selector']['path']

@@ -33,8 +33,26 @@ Checks: 536 unit tests pass on the server; no file appears under `data/router/` 
 
 These change what is served, what is published or what is kept, so they were not done.
 
-- **Unused files in the repository:** one-off scripts (`bolt_iq2_trial.py`, `boot_peer_verify.py`, `verify_pair_p2p.cu`, `build_maya_file_cache_bound.py`, `check_local_api.py`, `comfy_download.py`, `install_codex_context_monitor.py`, `test_sglang_quantized_embedding.py`), seven patch files that are not applied, and trial config files that nothing loads.
-- **Retired id `deepseek-strata`** is still named in the swap guard, the MoE launcher and the updater builders. The branches cannot be reached, but removing them edits guard and launch code.
 - **Public export checks** could be stricter, and `tests/test_flash_next_strata_split.py` plus the 15 tests in `scripts/test_native_linux_gpu_unlock.py` (not run by the suite today) are not in the export list.
 - **Registry revisions** recorded for Strata and Maya were not refreshed by the November 9 hands-on updates. The four `selected_settings.reason` notes still say "qualification pending"; they are part of the settings fingerprint, so editing them needs care. `deepseek-maya` names a different runtime manifest than the updater uses.
 - **Disk:** about 8 GB of unused or duplicate weight files, about 60 GB of old runtime copies and about 40 GB of old trial folders under `data/` could be removed. Root drive has 388 GB free, so nothing is urgent.
+
+## Follow-up, same day: unused files and the retired id removed
+
+The owner approved the first two items that were left open. 536 unit tests pass afterwards.
+
+Removed from the repository and from the public copy (git history keeps them):
+
+- Scripts: `bolt_iq2_trial.py`, `boot_peer_verify.py`, `verify_pair_p2p.cu`, `build_maya_file_cache_bound.py`, `check_local_api.py`, `comfy_download.py`, `install_codex_context_monitor.py`, `test_sglang_quantized_embedding.py`.
+- Patches with no reference anywhere: `sglang-int8-embedding-sm86.patch`, `sglang-gpu-placement-audit.patch`, `vllm-dflash-meta-share.patch`, `vllm-draft-placement-audit.patch`.
+- Config: `config/bolt-iq2-trial.json`.
+- The retired id `deepseek-strata`: its branches in `scripts/serve_router_moe.py` and `scripts/update_builders.py`, its entry in the swap guard's streaming list, and one clause in `scripts/inference_swap_guard.py` that could not be reached. The swap-guard test now covers `deepseek-unsloth-strata` in its place.
+- `tests/test_bolt_iq2_trial.py` was renamed `tests/test_bolt_iq2_worker.py`; it always tested the worker.
+
+Kept on purpose:
+
+- `sglang-hetero-ct-w4a8-mtp.patch`, `sglang-mlp-w4a8-sm86.patch` and `llama-demand-mmap-prefault.patch`: not applied today, but dated evidence docs link them as the record of what was built.
+- `patches/maya-ds4-file-cache-target.patch`: `config/maya-cachebound-runtime.json` still names it.
+- `config/maya-cachebound-runtime.json`, `config/web-search.example.json`, `config/model-catalog.example.json`, the two hardware config files, the ComfyUI workflow files and `tooling/codex-context/AMD-SOURCE.json`: each is still read, tested or installed on the host.
+
+Three links in dated evidence docs now point at removed files: two in `BOLT-NATIVE-IQ2-20261104.md` (the trial coordinator and its manifest) and one in `MAYA-DEMAND-CACHE-20261029.md` (the isolated builder). Those docs are left as written.

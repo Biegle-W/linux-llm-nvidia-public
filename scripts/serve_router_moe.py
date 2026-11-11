@@ -75,11 +75,6 @@ def main():
             require_flash_next_split(json.loads(source.read_text()), profile)
         except ValueError as error:
             sys.exit(str(error))
-    elif profile['id'] == 'deepseek-strata':
-        wrapper = json.loads((Path.home() / '.config/strata/profiles/deepseek-maya-s.json').read_text())
-        if wrapper.get('overrides'):
-            sys.exit('Review runtime overrides before using this selected profile.')
-        source = Path(wrapper['source_config'])
     elif profile['engine'] == 'Maya':
         source = ROOT / profile['runtime_selector']['path']
     else:

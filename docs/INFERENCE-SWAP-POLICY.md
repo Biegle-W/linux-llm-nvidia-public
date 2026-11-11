@@ -14,8 +14,7 @@ keep the wording and numbers of their day.
 
 - Swap limits of 128 MiB/s writes and 160 MiB/s combined over a 30-second window
   apply to `flash-next-strata`, `glm-maya`, `deepseek-maya` and
-  `deepseek-unsloth-strata`. The code also still lists the retired id
-  `deepseek-strata`. Every other profile gets 1 MiB/s writes and 8 MiB/s combined.
+  `deepseek-unsloth-strata`. Every other profile gets 1 MiB/s writes and 8 MiB/s combined.
 - The full-memory-pressure limit is 15% for `flash-next-strata`, `deepseek-maya`
   and `deepseek-unsloth-strata`, and 10% for every other profile. Three samples
   over the limit stop the worker.

@@ -14,12 +14,12 @@ def pages(mib):
 
 class SwapPolicyTest(unittest.TestCase):
     def test_ssd_relaxation_is_scoped_and_still_bounded(self):
-        for profile in ('flash-next-strata', 'glm-maya', 'deepseek-strata', 'deepseek-maya'):
+        for profile in ('flash-next-strata', 'glm-maya', 'deepseek-unsloth-strata', 'deepseek-maya'):
             with self.subTest(profile=profile):
                 q = WorkerWatch('/unused', profile, 'test').guard
                 self.assertEqual((q.window_s, q.write_limit, q.combined_limit,
                                   q.pressure_limit, q.bad_samples),
-                                 (30, 128, 160, 15 if profile in ('flash-next-strata', 'deepseek-maya') else 10, 3))
+                                 (30, 128, 160, 15 if profile in ('flash-next-strata', 'deepseek-maya', 'deepseek-unsloth-strata') else 10, 3))
                 q.sample(0, 'inference', 0, 0, 0)
                 self.assertIsNone(q.sample(30, 'inference', pages(0.22 * 30), pages(12.95 * 30), 0))
                 self.assertIsNotNone(q.sample(60, 'inference', pages(0.22 * 30), pages((12.95 + 129) * 30), 0))
@@ -55,7 +55,7 @@ class SwapPolicyTest(unittest.TestCase):
                 self.assertIsNone(g.sample(42, 'inference', 0, 0, 16))
                 self.assertIsNotNone(g.sample(44, 'inference', 0, 0, 16))
                 self.assertIsNotNone(g.sample(46, 'idle', 0, 0, 0))
-        for profile in ('glm-maya', 'deepseek-strata', 'qwen27b-hyperqwen',
+        for profile in ('glm-maya', 'qwen27b-hyperqwen',
                         'qwen27b-sglang', 'unknown', 'deepseek-new'):
             with self.subTest(profile=profile):
                 g = WorkerWatch('/unused', profile, 'test').guard

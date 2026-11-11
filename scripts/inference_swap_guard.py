@@ -19,7 +19,7 @@ def dense_gpu_free_mib(profile_id):
 
 # Explicit maintained SSD-streaming profiles; unknown/dense profiles fail closed.
 SSD_STREAMING_PROFILES = frozenset({
-    'flash-next-strata', 'glm-maya', 'deepseek-strata', 'deepseek-maya',
+    'flash-next-strata', 'glm-maya', 'deepseek-maya',
     'deepseek-unsloth-strata',
 })
 # Bounded per-profile allowance above the recorded 12–13% full-PSI peaks.
@@ -150,7 +150,7 @@ class WorkerWatch:
         try:
             if self.profile == 'bolt-llamacpp':
                 busy = llama_requests_busy(self.get('/metrics'))
-            elif self.profile.startswith('qwen27b-') or self.profile == 'bolt-llamacpp':
+            elif self.profile.startswith('qwen27b-'):
                 text = self.get('/metrics')
                 name = ('sglang:num_running_reqs' if self.profile.endswith('sglang')
                         else 'vllm:num_requests_running')
