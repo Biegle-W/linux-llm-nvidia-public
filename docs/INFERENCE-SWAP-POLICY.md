@@ -6,6 +6,23 @@ permits a run to continue where it would otherwise be stopped; it does not
 accelerate inference that remains below the thresholds. Worker swap occupancy
 settings and host swappiness 60 remain unchanged.
 
+## Current values
+
+These are the values in `scripts/inference_swap_guard.py` and
+`config/maintained-profiles.json`. The dated sections below are history and
+keep the wording and numbers of their day.
+
+- Swap limits of 128 MiB/s writes and 160 MiB/s combined over a 30-second window
+  apply to `flash-next-strata`, `glm-maya`, `deepseek-maya` and
+  `deepseek-unsloth-strata`. The code also still lists the retired id
+  `deepseek-strata`. Every other profile gets 1 MiB/s writes and 8 MiB/s combined.
+- The full-memory-pressure limit is 15% for `flash-next-strata`, `deepseek-maya`
+  and `deepseek-unsloth-strata`, and 10% for every other profile. Three samples
+  over the limit stop the worker.
+- The dense GPU free-memory floor is 256 MiB per card (`GPU_FREE_MIB`).
+- All seven profiles run under 87.77 GiB soft / 89.77 GiB hard worker RAM with a
+  2 GiB host-available floor. Dense workers are no longer uncapped.
+
 
 ## Targeted memory-pressure allowance — October 29
 
@@ -147,76 +164,4 @@ See [qualification and current results](evidence/MOE-VRAM512-20261029.md) and
 [numeric evidence](evidence/benchmark-results/20261029-moe-vram512.json).
 
 
-## DeepSeek/Maya 512 MiB follow-up — October 29
-
-Three additional DeepSeek/Maya 512 MiB candidates were rejected: disabled warming/prefetch,
-256-token prompt chunks, and a native 12 GB copied/pinned expert cache. All hit the
-unchanged owned-worker swap-write guard (7.23, 4.29 and 6.03 MiB/s over ~30 seconds;
-write limit 1 MiB/s). Smaller chunks completed warm-up but failed during the first
-measured response. No cgroup high/max/OOM event occurred; the engine's generic
-OOM suggestion is not evidence of an OOM kill. File-cache/anonymous reclaim
-competition is consistent with the observations; exact kernel victim selection
-was not isolated.
-
-Nothing was applied. DeepSeek/Maya retains 2,048 MiB reserve, 32K, original cache/
-prefill settings and historical benchmark. GLM/Strata DeepSeek 512 MiB selections
-and dense RAM-cap removal remain unchanged. No runtime, precision, worker budget,
-swappiness 60, host 2 GiB, thermal/swap/PSI/telemetry guard, idle 600s or concurrency
-change. Trial workers stopped, GPU reservation released, router idle and DSH
-preserved; no fallback. No passing 512 MiB setup was found in these tested controls.
-Full-RAM cache restoration still requires explicit human confirmation and Linux
-capacity verification.
-
-See [DeepSeek/Maya follow-up](evidence/MAYA-DS4-VRAM512-FOLLOWUP-20261029.md) and
-[numeric evidence](evidence/benchmark-results/20261029-maya512-followup.json).
-
-
-## DeepSeek/Maya demand-cache qualification — October 29
-
-DeepSeek/Maya passed at **512 MiB native VRAM reserve and unchanged 32,768-token context** on the 45.55 GiB reduced-RAM host. The selected temporary configuration combines a 16 GiB model-file cache target with a native 12 decimal GB pinned hot-expert cache. JSON, arithmetic, image, 29,467-input-token retrieval, 426.5s continuous generation, a fresh isolated process reload and two normal guarded loads all passed. Observed worker swap occupancy and swap read/write rates were zero.
-
-The saved three-request screen measured **1.23 decode tok/s**, 42.5 prefill tok/s and 51.491s TTFT. Earlier full-RAM/historical rates remain preserved; no fresh paired 2,048 MiB control was produced, because the earlier reduced-RAM configuration failed its swap guard.
-
-This supersedes the earlier unresolved DeepSeek/Maya reduced-RAM status only for
-this qualified configuration. Other five selected settings/results remain unchanged;
-Flash/Strata's earlier reduced-RAM failure remains unresolved. Native warming limits
-did not bound demand mmap residency; the new controller targets clean model-file
-residency, with overshoot possible between scans. Its qualified binary is hash-pinned.
-
-The host 2 GiB floor, 46/48 GiB MoE worker budget, dense 512 MiB free-VRAM stop,
-82 C thermal limit, owned swap/PSI/telemetry guards, swappiness 60, concurrency one
-and idle 600s remain. Original native source/binary and archived preimages remain;
-weights, precision and mathematical kernels are unchanged. Router idle, owned
-workers stopped, no GPU reservation, DSH preserved and no fallback.
-
-After explicit human RAM-restoration confirmation, verify Linux capacity, restore
-appropriate full-RAM cache/prefill choices from preimages while preserving the
-qualified VRAM reserve and guards, then verify normal guarded load/reload.
-No timer or MemAvailable trigger.
-
-See [demand-cache qualification and six selected results](evidence/MAYA-DEMAND-CACHE-20261029.md)
-and [numeric evidence](evidence/benchmark-results/20261029-maya-demand-cache.json).
-
-
-## Current Qwen/Flash-Next guard test — October 29
-
-The unchanged normal Qwen/Flash-Next Strata preset was tested through the router
-with the current guards. It failed during loading: native startup announced
-about 47 GB of RAM experts and a 39.97 GiB expert arena; host available fell to 0.717 GiB
-(free 0.408 GiB), below the 2 GiB supervisor floor. Peak temperature 42 C; no cgroup
-high/max/OOM event. The RAM guard stopped it safely before readiness.
-
-Loading swap peaked at 1.68 GiB, but this was not an active-inference swap stop:
-no inference window was reached. JSON/image/retrieval/sustained/reload checks
-were not reached. No speed benchmark was repeated;97.09 tok/s remains historical.
-
-Source/cache/context settings and every guard remain unchanged. 44/48 GiB cgroup
-limits and unlimited loading swap occupancy were read back. Router/DSH preserved,
-worker stopped, router idle, no reservation/fallback. This is a current reduced-RAM
-resident-allocation failure, not general incompatibility between Qwen and Strata.
-The other five selections remain unchanged. Do not apply rejected pageable variants
-or restore full-RAM settings without explicit human confirmation and Linux capacity
-verification. Further cache tuning requires its own qualification.
-
-See [current normal-profile test](evidence/QWEN-CURRENT-GUARDS-20261029.md) and
-[numeric evidence](evidence/validation-results/20261029-qwen-current-guards.json).
+The three later October 29 sections (DeepSeek/Maya 512 MiB follow-up, DeepSeek/Maya demand-cache qualification, Qwen/Flash-Next guard test) are kept only in [BENCHMARK-HISTORY.md](BENCHMARK-HISTORY.md#deepseekmaya-512-mib-follow-up--october-29).

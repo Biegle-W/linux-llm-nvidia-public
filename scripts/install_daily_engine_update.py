@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Install the user's daily 03:00 NVIDIA updater without launching an update now."""
+"""Install the updater unit files and the recovery service. The retired 03:00 timer is not enabled or started."""
 import json
 import hashlib
 import shutil
@@ -57,15 +57,9 @@ def main():
     subprocess.run(['systemctl','--user','daemon-reload'],check=True)
     subprocess.run(['systemctl','--user','enable','nvidia-daily-engine-update-recover.service'],check=True)
     subprocess.run(['systemctl','--user','start','nvidia-daily-engine-update-recover.service'],check=True)
-    # The existing API/hub already expose idle/reservation telemetry. Installing
-    # updater units does not require restarting either service or resetting age.
-    h=health()
-    if 'idle_for_s'not in h or any(h.get(k)for k in ('busy','queued','loading_model','active_model','admission_active')):
-        raise SystemExit('Admission changed; timer activation deferred without restarting serving.')
-    subprocess.run(['systemctl','--user','enable','--now','nvidia-daily-engine-update.timer'],check=True)
-    details=subprocess.check_output(['systemctl','--user','show','nvidia-daily-engine-update.timer','-p','ActiveState','-p','NextElapseUSecRealtime'],text=True)
-    print(details.strip())
-    print('Timer enabled. No candidate build or GPU update was started by installation.')
+    # Installing updater units does not require restarting the API or hub.
+    # The nightly timer is retired: its unit file is written but never enabled or started here.
+    print('Recovery service installed. The timer was not enabled. No candidate build or GPU update was started by installation.')
 
 
 if __name__=='__main__':main()

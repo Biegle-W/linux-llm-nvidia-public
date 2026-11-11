@@ -4,7 +4,6 @@ import argparse
 import json
 from pathlib import Path
 import sys
-import subprocess
 import urllib.request
 import urllib.error
 

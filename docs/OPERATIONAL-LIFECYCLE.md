@@ -1,14 +1,16 @@
 # Inference lifecycle controls
 
-Deployment checkpoint, October 27: guarded 600-second idle release and bounded
-private lifecycle logging are enabled; both native adapters are applied with
-hash-verified preimages. Manual candidate staging is available without activation.
-All six normal launch paths passed JSON, supported images, context metadata and
-actual RAM/swap readbacks. Actual GLM/dense 600-second expiry and normal reload passed; Strata passed an
-isolated 30-second idle/reload proof while production remains 600. See the
-documented intentional-shutdown false-latch fix in CURRENT-STATE.md. Context rollout
-is partial: four qualified upgrades deployed; Maya sustained-swap qualification
-remains unresolved. See CURRENT-STATE.md.
+Guarded 600-second idle release and bounded private lifecycle logging are enabled
+for every maintained entry (`idle_timeout_s: 600` and `lifecycle_telemetry: true`
+in `config/inference-policy.json`). Manual candidate staging is available without
+activation. Current contexts are in [CURRENT-STATE.md](CURRENT-STATE.md).
+
+Deployment checkpoint, October 27: both native adapters were applied with
+hash-verified preimages. All six normal launch paths that existed then passed JSON,
+supported images, context metadata and actual RAM/swap readbacks. Actual GLM/dense
+600-second expiry and normal reload passed; Strata passed an isolated 30-second
+idle/reload proof while production remained 600. The intentional-shutdown
+false-latch fix is described in the last paragraph of "Manual candidate staging" below.
 
 ## Ten-minute idle release
 
@@ -50,9 +52,9 @@ Logs stay under ignored `data/telemetry/<profile>/`, mode 600. Each profile keep
 one 10 MiB log plus two rotated files. This bounded logging does not change GPU
 clocks, fan settings, power limits or thermal guards. A raw limiter mask alone
 does not establish a performance cause. Swap monitoring is independently required;
-see INFERENCE-SWAP-POLICY.md. Normal-launch sensor coverage is verified for all six profiles: two GPUs, six
+see [INFERENCE-SWAP-POLICY.md](INFERENCE-SWAP-POLICY.md). Normal-launch sensor coverage was verified for all six profiles that existed on October 27: two GPUs, six
 hwmon devices and owned cgroup counters in owner-only logs. Automatic unload/reload evidence is complete with the shutdown-fix qualification
-described in CURRENT-STATE.md.
+described in the last paragraph of "Manual candidate staging" below.
 
 ## Manual candidate staging
 
@@ -118,4 +120,4 @@ The later shared-policy setup completed a real 600-second automatic unload for t
 new SGLang runtime (observed completion 610.15 s including checks/teardown), followed
 by normal request-triggered reload and JSON verification. The earlier unverified
 status above describes the prior stage and is now resolved. Other profiles were
-not all reloaded for new live timer tests. See ALL-ENGINE-POLICY-20261028.md.
+not all reloaded for new live timer tests. See [ALL-ENGINE-POLICY-20261028.md](evidence/ALL-ENGINE-POLICY-20261028.md).

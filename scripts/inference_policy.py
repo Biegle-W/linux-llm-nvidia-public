@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NATIVE_SOURCES = {'Strata': 'runtimes/strata-terminal/terminal/0.1.51/serve/server.py',
+NATIVE_SOURCES = {'Strata': 'runtimes/strata-terminal/terminal/current/serve/server.py',
                   'Maya': 'runtimes/project-maya/serve/server.py'}
 
 

@@ -1,6 +1,12 @@
-# Change history (October 25 – November 8, 2026)
+# Change history (from October 25, 2026)
 
 This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/CURRENT-STATE.md` (three near-copies). It is kept for evidence and is **newest first**. Many entries are superseded by later ones; for what is true now read [CURRENT-STATE.md](CURRENT-STATE.md). The README and CURRENT-STATE variants of this log, which differ in a few sections, are in git at commit `b517776`.
+
+Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
+
+## Repository audit and cleanup — November 11, 2026
+
+The whole repository was audited (85 findings, 80 confirmed on a second check). Fixed: stale reference docs and registry notes, a unit test that wrote a made-up worker record into the live router folder, the updater installer that would have re-enabled the retired nightly timer, a Strata path pinned to control 0.1.51, a benchmark ordering list missing two entries, unused imports, and ignore rules. No model, engine, launch setting or guard value changed and nothing was deleted. Unused files, the retired `deepseek-strata` branches, export-check changes and disk cleanup are listed for the owner. [evidence](evidence/REPO-AUDIT-20261111.md).
 
 ## Quality benchmark: first measured ranking — November 11, 2026
 

@@ -38,7 +38,7 @@ Per-drive usage and unused weights: run `python3 scripts/weights_tracker.py` (re
 | Qwen3.8-Flash-Next IQ3_XXS, Strata | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/strata/models/IQ3_XXS` |
 | GLM-5.3-Flash Maya-S24, Maya | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/maya/Maya-S24` |
 | DeepSeek-V4.1-Flash-1017 UD-IQ1_S, shared by Strata and Maya | SSD-streaming with GPU/RAM caches | NVMe shards 1-4; SATA shard 5 (symlinked) | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S` |
-| Nemotron 3.5 Bolt IQ2, llama.cpp | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/engine-tests/bolt-iq2` |
+| Nemotron 3.5 Bolt IQ2, llama.cpp | RAM-resident (CPU RAM offload) after loading | Samsung SSD 870 QVO SATA | `models/engine-tests/bolt-iq2` |
 | ComfyUI images (Qwen Image 2.1 Turbo, FLUX3 Klein) | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/comfy-images` |
 | ComfyUI video (Wan 2.2 5B, LTX 2.3 Mesh) | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/comfy-video` |
 
@@ -81,7 +81,7 @@ resident-model weight copy on NVMe. Keep new profile metadata consistent with th
 physical location and run:
 
 ```bash
-python3 scripts/storage_policy.py                 # inspect all six profiles
+python3 scripts/storage_policy.py                 # inspect every profile
 python3 scripts/storage_policy.py qwen27b-hyperqwen
 ```
 
@@ -92,7 +92,7 @@ before the destination contents and launch paths have passed validation.
 
 ## Benchmarks and migration evidence
 
-The [latest matched benchmark](evidence/BENCHMARK-20261027-101219.md) predates the storage
+The [October 27 matched benchmark](evidence/BENCHMARK-20261027-101219.md) predates the storage
 move. Its NVMe storage inventory remains correct for the time of measurement.
 Prefill and decode figures are preserved as historical observations, rather than
 new SATA-load measurements. The relocation checks validate loading and short

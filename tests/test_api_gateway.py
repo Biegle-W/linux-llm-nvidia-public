@@ -1,5 +1,4 @@
 """CPU-only API -> hub -> backend contracts; no model or GPU is loaded."""
-import http.client
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import importlib.util
 import ipaddress
@@ -82,7 +81,7 @@ class APIServicePolicy(unittest.TestCase):
         self.assertIn('Wants=nvidia-model-hub.service',units['nvidia-model-router']);self.assertNotIn('PartOf=',units['nvidia-model-hub'])
     def test_api_launch_skips_monitor_and_preserves_worker_guards(self):
         profile=wm.all_profiles()['bolt-llamacpp']
-        with tempfile.TemporaryDirectory() as folder,patch.object(wm,'ROOT',Path(folder)),patch.object(wm,'profiles',return_value={'bolt-llamacpp':profile}),patch.dict(os.environ,{'NVIDIA_API_ONLY':'1'}),patch.object(wm,'open_monitor') as monitor,patch.object(wm.subprocess,'run',return_value=Mock(returncode=0)) as launch,patch.object(wm,'unit_property',side_effect=lambda unit,key:'active' if key=='ActiveState' else 'a'*32):
+        with tempfile.TemporaryDirectory() as folder,patch.object(wm,'ROOT',Path(folder)),patch.object(wm,'STATE',Path(folder)/'data/router/worker.json'),patch.object(wm,'profiles',return_value={'bolt-llamacpp':profile}),patch.dict(os.environ,{'NVIDIA_API_ONLY':'1'}),patch.object(wm,'open_monitor') as monitor,patch.object(wm.subprocess,'run',return_value=Mock(returncode=0)) as launch,patch.object(wm,'unit_property',side_effect=lambda unit,key:'active' if key=='ActiveState' else 'a'*32):
             manager=wm.Workers.__new__(wm.Workers);manager.wait_native_idle=Mock();manager.stop_owned=Mock();manager.backend_models=Mock(return_value=[{'id':'bolt'}]);manager.key=test_router.KEY;manager.timeout=2;manager.active=None
             manager.start('bolt-llamacpp');monitor.assert_not_called();cmd=launch.call_args.args[0]
             for guard in ['--property=MemoryHigh=94242156544','--property=MemoryMax=96389640192','--property=MemorySwapMax=infinity','--property=OOMPolicy=kill','--setenv=NVIDIA_API_ONLY=1']:self.assertIn(guard,cmd)

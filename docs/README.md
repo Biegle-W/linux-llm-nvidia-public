@@ -23,7 +23,6 @@ Start with [CURRENT-STATE.md](CURRENT-STATE.md) and the root [AGENTS.md](../AGEN
 | [LOCAL-SETUP.md](LOCAL-SETUP.md) | Dependencies, builds and local setup notes. |
 | [PUBLIC-SYNC.md](PUBLIC-SYNC.md) | Exporting to the public mirror. |
 | [REPOSITORY-MAP.md](REPOSITORY-MAP.md) | Repository family and retirement policy. |
-| [CODEX-CONTEXT-HANDOFF.md](CODEX-CONTEXT-HANDOFF.md) | Codex context monitor policy (read by `scripts/codex_context_monitor.py`). |
 
 ## Evidence (`evidence/`)
 
@@ -126,6 +125,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 
 ### Benchmarks
 
+- [REPO-AUDIT-20261111.md](evidence/REPO-AUDIT-20261111.md): Repository audit and cleanup — November 11, 2026
 - [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md): Quality benchmark, first measured ranking of the text entries, with the complete result list — November 11, 2026
 - [ALL-MODELS-RERUN-20261105.md](evidence/ALL-MODELS-RERUN-20261105.md): All downloaded model coverage and rerun — November 5, 2026
 - [ALL-ENTRY-BENCHMARKS-20261105.md](evidence/ALL-ENTRY-BENCHMARKS-20261105.md): Current entry observations — November 5, 2026

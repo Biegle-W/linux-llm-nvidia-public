@@ -142,7 +142,7 @@ class NativeKeepAliveTests(unittest.TestCase):
 
 class NativeAdapterTest(unittest.TestCase):
     def _method(self,family):
-        source=ROOT/('runtimes/project-maya/serve/server.py' if family=='maya' else 'runtimes/strata-terminal/terminal/0.1.51/serve/server.py')
+        source=ROOT/('runtimes/project-maya/serve/server.py' if family=='maya' else 'runtimes/strata-terminal/terminal/current/serve/server.py')
         if not source.exists():self.skipTest('Installed native source is not part of a public checkout.')
         raw=source.read_bytes().decode();patched=transform(raw,family)
         self.assertEqual(transform(patched,family),patched)

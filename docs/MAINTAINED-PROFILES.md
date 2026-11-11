@@ -4,7 +4,7 @@
 
 ## What an entry records
 
-API id, model and quantization, engine and its runtime manifest, allocated context, `worker_memory_gib` budget, weight storage path and drive, selected launch settings (for example the Flash-Next GPU order, layer split and stage trim), and the latest qualified speed measurements with their source. The daily updater rewrites the measurement block when it promotes an engine build and keeps the previous one as history.
+API id, model and quantization, engine and its runtime manifest, allocated context, `worker_memory_gib` budget, weight storage path and drive, selected launch settings (for example the Flash-Next GPU order, layer split and stage trim), and the latest qualified speed measurements with their source. Until November 9, 2026 the nightly updater rewrote the measurement block when it promoted an engine build and kept the previous one as history. Hands-on updates record their numbers in the evidence doc and the update ledger instead.
 
 The catalog rejects duplicate model/quant/engine combinations, dense context that does not match the engine arguments, and unqualified CPU weight offload. Two pairs share one checkpoint on disk: `qwen27b-hyperqwen` / `qwen27b-sglang`, and `deepseek-maya` / `deepseek-unsloth-strata`.
 

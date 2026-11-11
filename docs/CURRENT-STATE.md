@@ -10,7 +10,7 @@ Snapshot of what is live. Replace facts here when they change; dated detail goes
 | `qwen27b-sglang` | same checkpoint | SGLang | 57,344 | same as above |
 | `flash-next-strata` | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | Strata 0.2.13 (engine 0.1.59) + MTP; layers 0-28 on the 3080, 29-47 + head on the 3080 Ti, stage-trimmed | 131,072 | `models/strata/models/IQ3_XXS`, NVMe, 76 GB |
 | `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.57 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
-| `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.57 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf`, NVMe, 122 GB (shared) |
+| `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.57 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
 | `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build) | 32,768 | same as above |
 | `bolt-llamacpp` | NVIDIA Nemotron-3.5 Bolt 74B-A9B native IQ2 | llama.cpp, 8 GiB RAM prompt cache | 163,840 | `models/engine-tests/bolt-iq2`, SATA |
 
@@ -32,6 +32,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Recent changes (newest first)
 
+- **Nov 11:** repository audit: stale docs and registry notes corrected, a unit test stopped writing into the live router folder, the updater installer no longer enables the retired timer. Nothing served changed; removals are left for the owner. [REPO-AUDIT-20261111.md](evidence/REPO-AUDIT-20261111.md)
 - **Nov 11:** first measured quality ranking of the text entries: DeepSeek on Strata 73.0%, Qwen 27B on HyperQwen 68.0%, Flash-Next 62.0%, GLM 57.2%, Bolt 53.9% (macro over MMLU-Pro, AIME 2025, LiveCodeBench and BFCL subsets). [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md)
 - **Nov 10:** launch tuning adopted: Maya GLM checkpoint interval 65,536 (cold 37K-token prompt 38.3 s → 30.7 s to first token) and Flash-Next Strata direct table reads (load about 10 s faster, 26.8 GiB of RAM freed). [LAUNCH-TUNING-20261110.md](evidence/LAUNCH-TUNING-20261110.md)
 - **Nov 9:** nightly updater retired (timer disabled); engine updates are now installed by hand with a short DSH check before and after ([runbook](ENGINE-UPDATE-RUNBOOK.md)). Installed the same day: Strata 0.2.13, HyperQwen `9268d8d` (vLLM 0.33.0), Maya 1.1.57, all at parity. [ENGINE-UPDATES-HANDS-ON-20261109.md](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md). That evening HyperQwen was updated again to `80cf059` (still vLLM 0.33.0), also at parity. [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md)

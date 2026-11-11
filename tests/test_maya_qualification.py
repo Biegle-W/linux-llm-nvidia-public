@@ -8,7 +8,7 @@ from unittest.mock import patch
 sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
 from update_native_builders import build_registered_test_executables
 
-class NativeCoverageTests(unittest.TestCase):
+class MayaQualificationBuildTests(unittest.TestCase):
     def test_missing_registered_tests_are_built_without_skipping_present_tests(self):
         listing={'tests':[{'name':'cpu_missing'},{'name':'gpu_present','command':['/build/gpu_present']},{'name':'cpu_missing'}]}
         with patch('update_native_builders.subprocess.check_output',return_value=json.dumps(listing)), patch('update_builders.run') as run:

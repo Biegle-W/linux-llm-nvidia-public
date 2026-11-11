@@ -1,5 +1,11 @@
 # Native setup
 
+> The dependency and build steps below still apply. The sections from
+> "Requested large-model setup" onward describe the October 26-28, 2026 setup
+> unless they say otherwise. For the live models, contexts, versions and guards
+> read [CURRENT-STATE.md](CURRENT-STATE.md) and the
+> [connection and service handoff](../network/README.md).
+
 The initial runtime is llama.cpp at commit
 `caa8191df159f764fb0160e3d2fc6be008948aee`, built for Ampere CUDA architecture 86.
 The small Qwen2.5 installation-test model and its dedicated launcher were removed
@@ -28,18 +34,19 @@ Raw local inventory, hashes, build logs and smoke-test results belong in ignored
 
 ## Requested large-model setup
 
-The current [six-profile registry](MAINTAINED-PROFILES.md) selects one setting per model, weight quantization and engine. `config/maintained-profiles.json` is the maintained registry; old benchmark snapshots are evidence rather than extra deployment presets.
+The current [registry](MAINTAINED-PROFILES.md) selects one setting per model, weight quantization and engine. `config/maintained-profiles.json` is the maintained registry; old benchmark snapshots are evidence rather than extra deployment presets.
 
 The October 26 setup queue completed all four initial API checks and left Qwen
-as the default. DeepSeek now uses one shared Maya-S weight set with separate
-engine indexes. Read the actual stage and individual API-check results:
+as the default. DeepSeek then used one shared Maya-S weight set with separate
+engine indexes; both DeepSeek entries now share the Unsloth UD-IQ1_S set
+(233 GB). Read the actual stage and individual API-check results:
 
 ```bash
 python3 data/show-setup-status.py
 cat data/model-setup-state.json
 ```
 
-| Engine | Model | Selected pack | Approximate download |
+| Engine | Model | Pack selected on October 26 | Approximate download |
 | --- | --- | --- | ---: |
 | Strata | Qwen3.8-Flash-Next | ISTA-DASLab IQ3_XXS, MTP and CPU vision | 82 GB |
 | Maya | GLM-5.3-Flash | Maya-S24 | 95 GB plus vision |
@@ -51,7 +58,7 @@ after Strata passed streaming, authentication, arithmetic, JSON and conversation
 checks on Maya-S. Its verified hashes and retired settings are retained privately
 in `data/retired-strata-ista-20261026/`.
 
-Both DeepSeek configurations stream experts from NVMe because the full expert
+Both DeepSeek configurations stream experts from SSD because the full expert
 banks exceed this machine's RAM.
 The distribution driver remains installed. Compute unlock is now verified on
 both cards; P2P is not enabled. See the
@@ -72,9 +79,10 @@ occupied or while the setup queue is active. Stop Qwen with
 `runtimes/bin/strata launch --stop --preset qwen-flash-next`. Stop Strata DeepSeek
 with `runtimes/bin/strata runtime stop --profile deepseek-maya-s`.
 Stop a foreground Maya server with Ctrl+C.
-Strata DeepSeek now allocates 64K and passed 58,969-token retrieval; see the
-[context expansion](evidence/DEEPSEEK-STRATA-CONTEXT-20261027.md). Flash-Next/Strata, GLM/Maya
-and DeepSeek/Maya retain their 32K allocations. Short API smoke checks do not
+On October 27 Strata DeepSeek allocated 64K and passed 58,969-token retrieval; see the
+[context expansion](evidence/DEEPSEEK-STRATA-CONTEXT-20261027.md). Current allocations are
+131,072 for Flash-Next/Strata, 65,536 for GLM/Maya and 32,768 for both DeepSeek
+entries. Short API smoke checks do not
 validate those full input lengths or
 establish sustained performance, output quality, image handling or tool use.
 The shared Strata DeepSeek profile currently disables drafting and vision;
@@ -104,12 +112,12 @@ The historical HyperQwen CPU-offload measurement is not an approved deployment
 profile under this policy. Existing MoE expert streaming is a separate case.
 
 [The dense Qwen3.8-27B profile](evidence/DENSE-ENGINE-OPTIMIZATION-20261027.md) defaults to
-HyperQwen/patched vLLM TP2 with MTP3, INT4 KV, BF16 recurrent state and a 32K
-allocation. It passed 29,496-token retrieval and measured 155 code / 108 prose tok/s.
+HyperQwen/patched vLLM TP2 with MTP3, INT4 KV and BF16 recurrent state. It was
+first deployed with a 32K allocation (now 86,016). It passed 29,496-token retrieval and measured 155 code / 108 prose tok/s.
 Start it with `./scripts/start_model.sh qwen27b`; stop it with
 `systemctl --user stop llm-test-qwen27b`. Use `./scripts/start_model.sh qwen27b sglang`
-for the deployed pinned SGLang TP2/MTP3 W4A8 32K profile. Its runtime and
-version pins are in config/sglang-runtime.json; see SGLANG-DEPLOYMENT-20261028.md. The slower IQ4_XS llama.cpp
+for the deployed pinned SGLang TP2/MTP3 W4A8 profile (32K when deployed, now 57,344). Its runtime and
+version pins are in config/sglang-runtime.json; see [SGLANG-DEPLOYMENT-20261028.md](evidence/SGLANG-DEPLOYMENT-20261028.md). The slower IQ4_XS llama.cpp
 profile and its dedicated weights have been removed. Only one engine runs at a time. All use authenticated
 port 10000; all model weights and active MTP weights remain in VRAM.
 
@@ -119,8 +127,9 @@ The [router deployment](evidence/ROUTER-DEPLOYMENT-20261027.md) adds on-demand m
 selection on authenticated port 10100 over loopback and Tailscale. Worker port
 10000 remains private. Use the new Desktop engine entries for safe switching;
 Strata/Maya open their own native web pages and DSH remains separate. GLM expert
-RAM is now capped at 32 GiB inside its managed production budget; earlier GLM
-speeds retain their original uncapped allocation. See the
+RAM was capped at 32 GiB inside its managed production budget at that time; earlier GLM
+speeds retain their original uncapped allocation. Every entry now runs under
+87.77 GiB soft / 89.77 GiB hard worker RAM. See the
 [connection and service handoff](../network/README.md).
 
 ## Current model storage policy
@@ -134,9 +143,9 @@ Current MoE cache budgets and vision lifecycle are described in the
 remain historical. All maintained MoE start commands now select through the
 router for the qualified bounded worker budget.
 
-The installed Maya 1.1.29 Python server includes
+The installed Maya Python server includes
 [`maya-lazy-cpu-vision.patch`](../scripts/patches/maya-lazy-cpu-vision.patch).
-When recreating that pinned runtime, apply the patch once from the repository
+When recreating that runtime, apply the patch once from the repository
 root with `patch -p1 -d runtimes/project-maya < scripts/patches/maya-lazy-cpu-vision.patch`.
 The two vision regression tests require the local runtime; the public reference
 checkout skips them until that runtime is installed.

@@ -1,11 +1,11 @@
-# Local LLM repository map — October 25, 2026
+# Local LLM repository map
 
-> October 26 update: native installation, two-GPU correctness and authenticated
-> inference are now verified. See [native validation](evidence/VALIDATION-20261026.md) and
-> [bounded speed results](evidence/BENCHMARK-20261026.md). Compute unlock is now verified on both cards; P2P remains unverified.
-> See the [unlock comparison](evidence/BENCHMARK-UNLOCK-20261026.md).
-> The October 25 preparation details below are historical.
-
+The Linux NVIDIA server is deployed. Native installation, two-GPU correctness,
+compute unlock on both cards and authenticated inference were verified on
+October 26, 2026; see [native validation](evidence/VALIDATION-20261026.md),
+[bounded speed results](evidence/BENCHMARK-20261026.md) and the
+[unlock comparison](evidence/BENCHMARK-UNLOCK-20261026.md). GPU peer access (P2P)
+stays off by design. What is live now is in [CURRENT-STATE.md](CURRENT-STATE.md).
 
 | Repository | Visibility | Ownership |
 |---|---|---|
@@ -37,12 +37,12 @@ Exclude model weights, binaries/environments, credentials, chats and raw logs fr
 all seven repositories. Local ignored recovery binaries/backups remain where they
 were; central Git archival concerns source/settings, not a weight backup service.
 
-New NVIDIA Linux status is **prepared, not deployed** until the Linux agent records
-native installation, per-GPU correctness/unlock, topology/P2P and real inference.
 The separate AMD Linux machine's runtime, profiles, guards, mounts and schedules
 are unchanged by repository organization. Keep all GitHub-facing prose in English.
 
-## Migration validation
+## Migration validation — October 25, 2026
+
+This section records the one-time repository migration as it stood on that date.
 
 The central archive contains 1,171 hash-verified files with source provenance.
 All 375 retained operational configuration payloads checked across Windows and
@@ -50,6 +50,7 @@ AMD private/public trees are unchanged. Only the disabled Windows Strata archive
 pointer/description was refreshed. New local Markdown links resolve, selected
 public changes pass identity/credential checks and modified Python parses.
 The Linux NVIDIA helper passes 11 host-only tests, including explicit pair/trio
-target selection; real Linux driver/unlock/P2P/inference remains untested.
+target selection; real Linux driver, unlock and inference were not yet tested
+at that point (they were verified the next day, as noted at the top).
 No models, runtime environments, running services, host mounts or schedules were
 changed by the repository migration.

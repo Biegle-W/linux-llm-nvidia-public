@@ -24,8 +24,8 @@ print(reply.choices[0].message.content)
 
 | Path | Contents |
 |---|---|
-| `config/` | Model registry (`maintained-profiles.json`), runtime pins, updater and inference policy |
-| `scripts/` | Launchers, guards, daily updater, benchmarks, public export |
+| `config/` | Model registry (`maintained-profiles.json`), runtime pins, engine-update and inference policy |
+| `scripts/` | Launchers, guards, engine-update check tools, benchmarks, public export |
 | `network/` | Router, private model hub, worker manager, installer |
 | `dsh/` | DeepSeek Harness client registration and launcher |
 | `tests/` | CPU unit tests: `python3 -m unittest discover -s tests -q` |

@@ -3,13 +3,11 @@
 import argparse
 from datetime import datetime
 import fcntl
-import hashlib
 import json
 import os
 from pathlib import Path
 import secrets
 import signal
-import subprocess
 import sys
 import time
 import urllib.request

@@ -57,7 +57,7 @@ Standing reporting instruction, November 1: every future benchmark result list m
 
 RAM guards: worker soft/high and hard/max limits in GiB, plus the minimum host MemAvailable reserve. State explicitly when a worker limit is unlimited. Include loading/inference memory-pressure thresholds and their sustained-sample rules where enforced; distinguish cgroup PSI from host-available RAM.
 
-VRAM guards: minimum free MiB on each GPU, any model-specific exception, and consecutive-sample stop rule. Report startup admission requirements separately from the active/readiness floor if they differ. Use current deployed policy; for example, SGLang's 448 MiB floor must not be replaced by HyperQwen's 512 MiB default.
+VRAM guards: minimum free MiB on each GPU, any model-specific exception, and consecutive-sample stop rule. Report startup admission requirements separately from the active/readiness floor if they differ. Use the current deployed policy (256 MiB per card for dense entries, `GPU_FREE_MIB` in `scripts/inference_swap_guard.py`); do not substitute another engine's default.
 
 Swap guards: worker occupancy cap (including explicitly unlimited), maximum write MiB/s and combined read+write MiB/s, averaging window, and sustained-violation rule. Unlimited occupancy does not mean unlimited swap I/O. Note any different loading/inference/idle enforcement rather than implying one threshold applies in every phase.
 
@@ -66,11 +66,11 @@ Read effective guard values from the selected configuration, kernel cgroup setti
 ## Current classification
 
 - VRAM-only: shared Qwen3.8-27B AutoRound INT4/INT8 on HyperQwen/vLLM and SGLang, checkpoint on SATA.
-- CPU RAM offload: Bolt AWQ INT4, host weights supplied to GPU kernels, checkpoint on SATA.
-- SSD streaming: Flash-Next IQ3_XXS and GLM Maya-S24 on NVMe; shared Unsloth UD-IQ1_S DeepSeek on Strata and Maya, core on NVMe and Engram on SATA; Super W4A16 with SATA checkpoint and bounded NVMe working cache.
+- CPU RAM offload: Nemotron-3.5 Bolt native IQ2 on llama.cpp, checkpoint on SATA.
+- SSD streaming: Flash-Next IQ3_XXS and GLM Maya-S24 on NVMe; shared Unsloth UD-IQ1_S DeepSeek on Strata and Maya, core on NVMe and Engram on SATA.
 
-The [maintained result tables](MAINTAINED-PROFILES.md#latest-matched-speed-evidence)
-use this format. The [storage policy](STORAGE-POLICY.md) reserves NVMe for
+The [November 5 all-models rerun](evidence/ALL-MODELS-RERUN-20261105.md) is a full
+result table in this format; current numbers are in [CURRENT-STATE.md](CURRENT-STATE.md). The [storage policy](STORAGE-POLICY.md) reserves NVMe for
 SSD-streaming models and puts GPU/RAM-resident checkpoints on SATA. New results
 must update both repositories while preserving dated benchmark evidence.
 

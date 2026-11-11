@@ -22,6 +22,26 @@ __pycache__/
 *.zip
 *.tar*
 *.log
+local-api-key
+id_rsa*
+id_ed25519*
+*.p12
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.npz
+*.AppImage
+*.deb
+*.7z
+*.sqlite*
+.DS_Store
+.pytest_cache/
+.idea/
+.vscode/
+*.swp
+*.orig
+*.rej
 
 # Central private retirement repository owns source/settings archives.
 /archives/*

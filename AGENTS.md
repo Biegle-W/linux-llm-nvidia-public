@@ -31,7 +31,7 @@ Private operational repo for the NVIDIA LLM server. Read this file, then [docs/C
 
 ## Working in the repo
 
-- Tests: `python3 -m unittest discover -s tests -q` (pytest is not installed; 516 tests as of Nov 8).
+- Tests: `python3 -m unittest discover -s tests -q` (pytest is not installed; over 500 tests).
 - Ignored, never committed: `data/` (keys, logs, trial evidence, pre-images), `models/`, `runtimes/`, `logs/`.
 - When you change something that matters, update [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md) (replace stale facts, do not append a dated log) and add a dated evidence doc `docs/evidence/TOPIC-YYYYMMDD.md` (raw numbers in `docs/evidence/validation-results/` or `benchmark-results/`), list it in [docs/README.md](docs/README.md), and add a one-paragraph entry at the top of [docs/HISTORY.md](docs/HISTORY.md). If it should be public, add it to `FILES` in `scripts/sync_public.py`.
 - Retiring an entry touches: registry, `config/daily-update.json`, `serve_router_moe.py`, `update_builders.py` / `update_native_builders.py`, `inference_swap_guard.py`, `cli_short_models.py`, `start_model.sh`, `dsh/configure.py` (`MODEL_REPLACEMENTS`), `sync_public.py` (`RETIRED_FILES`) and tests. See commit `b517776` (IQ1_M) as an example.
@@ -46,12 +46,11 @@ curl -s --noproxy '*' -H "Authorization: Bearer $K" -H 'Content-Type: applicatio
   -X POST http://127.0.0.1:10100/router/unload -d '{}'
 nvidia-smi --query-gpu=index,memory.used --format=csv,noheader   # idle = 1 MiB each
 systemctl --user is-enabled nvidia-daily-engine-update.timer   # expect: disabled (updates are hands-on)
-python3 scripts/weights_tracker.py                   # per-drive storage + unused weights (read-only)
-journalctl --user -u nvidia-daily-engine-update.service --since today
+python3 scripts/weights_tracker.py                   # per-drive storage + unused weights; deletes nothing, writes its report under data/weights-tracker/ (--no-write to only print)
 python3 "$PWD/scripts/daily_engine_update.py" --check-only       # read upstream revisions only
 ```
 
-If the retired script is ever run with `--manual`: it refuses to start engine work while either repo (private or public checkout) has uncommitted tracked edits, and it only pushes commits it made itself, so push your own commits first or the nightly push is deferred. A deferral is a WARNING in the journal and the run still exits 0; while a push is held the next run also skips engine work, and after 3 held runs in a row the run fails on purpose (`last_deferral` in `data/daily-update/state.json` shows the reason). Rejected engine revisions are remembered in `data/daily-update/state.json` under `rejected` and are not retried until removed from there (log the removal in `rejection_history`).
+The retired updater's `--manual` mode and its hold behaviour are described in [DAILY-ENGINE-UPDATE-POLICY.md](docs/DAILY-ENGINE-UPDATE-POLICY.md); do not use it for routine updates. Its rejected revisions and `last_deferral` live in `data/daily-update/state.json` and do not block a hands-on install.
 
 ## Docs layout
 

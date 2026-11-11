@@ -1,6 +1,5 @@
 """CPU checks for the diffusion placement gate; no GPU model is loaded."""
 import ast
-import importlib.util
 import json
 import os
 from pathlib import Path

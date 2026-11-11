@@ -1,5 +1,4 @@
 """No-GPU promotion, durable rollback and reservation regressions."""
-import copy
 import json
 import os
 from pathlib import Path

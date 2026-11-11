@@ -4,7 +4,6 @@ import shlex
 from pathlib import Path
 import sys
 import tempfile
-import threading
 import unittest
 from unittest.mock import Mock, patch
 

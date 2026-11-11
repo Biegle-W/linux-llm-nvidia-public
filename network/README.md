@@ -24,7 +24,7 @@ Base URL `http://127.0.0.1:10100/v1` (or the server's Tailscale address) with `A
 
 ## Guards
 
-Every entry runs under the per-entry worker RAM budget in the registry (`worker_memory_gib`; currently 87.77 GiB soft / 89.77 GiB hard for all), with a 2 GiB host-available floor and GPU temperature and pressure/swap watches in `scripts/inference_swap_guard.py`. The nightly updater prints the effective guard values at the end of each entry in [DAILY-ENGINE-UPDATES.md](../docs/DAILY-ENGINE-UPDATES.md). Policy background: [INFERENCE-SWAP-POLICY.md](../docs/INFERENCE-SWAP-POLICY.md).
+Every entry runs under the per-entry worker RAM budget in the registry (`worker_memory_gib`; currently 87.77 GiB soft / 89.77 GiB hard for all), with a 2 GiB host-available floor and GPU temperature and pressure/swap watches in `scripts/inference_swap_guard.py`. Until November 9, 2026 the nightly updater printed the effective guard values at the end of each entry in [DAILY-ENGINE-UPDATES.md](../docs/DAILY-ENGINE-UPDATES.md); current values are in the registry and [ALL-ENTRY-BENCHMARKS-20261105.md](../docs/evidence/ALL-ENTRY-BENCHMARKS-20261105.md). Policy background: [INFERENCE-SWAP-POLICY.md](../docs/INFERENCE-SWAP-POLICY.md).
 
 ## Desktop shortcuts and commands
 

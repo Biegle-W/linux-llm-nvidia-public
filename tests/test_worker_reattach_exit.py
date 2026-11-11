@@ -1,6 +1,6 @@
 import sys,unittest,tempfile
 from pathlib import Path
-from unittest.mock import patch,Mock
+from unittest.mock import patch
 sys.path[:0]=[str(Path(__file__).resolve().parents[1]/'network'),str(Path(__file__).resolve().parents[1]/'scripts')]
 import worker_manager as m
 class Reattach(unittest.TestCase):

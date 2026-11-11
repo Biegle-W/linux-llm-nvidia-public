@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "schedule": "03:00 host local time; missed nights skipped",
+  "schedule": "Retired 2026-11-09: the nightly timer is disabled and engine updates are installed by hand (docs/ENGINE-UPDATE-RUNBOOK.md). Former schedule: 03:00 host local time; missed nights skipped",
   "idle_seconds": 1200,
   "admission_deadline": "06:30",
   "publication": "reviewed ledger and version pins, independent private/public repositories",
