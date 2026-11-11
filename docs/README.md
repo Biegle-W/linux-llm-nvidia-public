@@ -126,6 +126,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 
 ### Benchmarks
 
+- [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md): Quality benchmark, first measured ranking of the text entries, with the complete result list — November 11, 2026
 - [ALL-MODELS-RERUN-20261105.md](evidence/ALL-MODELS-RERUN-20261105.md): All downloaded model coverage and rerun — November 5, 2026
 - [ALL-ENTRY-BENCHMARKS-20261105.md](evidence/ALL-ENTRY-BENCHMARKS-20261105.md): Current entry observations — November 5, 2026
 - [ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md](evidence/ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md): Historical index before native IQ2 selection — November 4, 2026

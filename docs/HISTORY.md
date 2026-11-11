@@ -2,6 +2,10 @@
 
 This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/CURRENT-STATE.md` (three near-copies). It is kept for evidence and is **newest first**. Many entries are superseded by later ones; for what is true now read [CURRENT-STATE.md](CURRENT-STATE.md). The README and CURRENT-STATE variants of this log, which differ in a few sections, are in git at commit `b517776`.
 
+## Quality benchmark: first measured ranking — November 11, 2026
+
+A local benchmark built from public test sets (MMLU-Pro, AIME 2025, LiveCodeBench, BFCL) ran on five text entries on November 10–11, 390 items each, thinking off as served. Macro score: DeepSeek on Strata 73.0%, Qwen 27B on HyperQwen 68.0%, Flash-Next 62.0%, GLM 57.2%, Bolt 53.9%; adjacent ranks are not statistically separated. Nothing in the serving setup changed. [evidence](evidence/QUALITY-BENCHMARK-20261111.md).
+
 ## Launch tuning: Maya GLM checkpoint interval, Strata direct table reads — November 10, 2026
 
 Two settings from forum posts were tested by hand and adopted on the owner's instruction. `glm-maya` now runs with `MAYA_GLM_CKPT_EVERY=65536`: a cold 37K-token prompt reaches its first token in 30.7 s instead of 38.3 s, and prompts under 16K tokens are unchanged. `flash-next-strata` now runs with `--ple-io direct`: it loads about 10 s faster and no longer holds the 26.8 GiB table in RAM, with prefill 1% slower and decode within noise. Both passed the short DSH check. [evidence](evidence/LAUNCH-TUNING-20261110.md).

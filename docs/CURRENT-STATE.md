@@ -1,4 +1,4 @@
-# Current state — November 10, 2026
+# Current state — November 11, 2026
 
 Snapshot of what is live. Replace facts here when they change; dated detail goes in evidence docs and [HISTORY.md](HISTORY.md).
 
@@ -18,8 +18,21 @@ Every entry runs under 87.77 GiB soft / 89.77 GiB hard worker RAM with 2 GiB hos
 
 Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache reuse): ~5.7K-token tool prompt 1,243 prefill / 146 decode tok/s; ~24K prompt 2,375 / 108; writing ~124 tok/s. Strata 0.2.12 qualification (Nov 8, single short ~5.6K-token DSH tool call, old to new): `flash-next-strata` 934 to 1,046 prefill, 68 to 86 decode tok/s, TTFT 6.5 to 5.5 s; `deepseek-unsloth-strata` 83 to 86 prefill, 11.8 to 11.7 decode tok/s, TTFT 68 to 66 s (DeepSeek speed not strictly comparable: prompt cache reuse). Both answered a router smoke check correctly afterwards. Other entries: [ALL-MODELS-RERUN-20261105.md](evidence/ALL-MODELS-RERUN-20261105.md).
 
+## Measured quality (November 10–11)
+
+390 public-benchmark items per entry, thinking off as served, one generation per item. Adjacent ranks are not statistically separated; entries two or more ranks apart are. `qwen27b-sglang` and `deepseek-maya` were not run. Full result list with speeds and guards: [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md).
+
+| Rank | API id | Macro (95% interval) | MMLU-Pro | AIME 2025 | LiveCodeBench | BFCL single | BFCL multi |
+|---:|---|---:|---:|---:|---:|---:|---:|
+| 1 | `deepseek-unsloth-strata` | 73.0% (67.3–78.4) | 86.7% | 76.7% | 55.0% | 90.0% | 56.7% |
+| 2 | `qwen27b-hyperqwen` | 68.0% (62.3–73.7) | 81.9% | 60.0% | 40.0% | 91.7% | 66.7% |
+| 3 | `flash-next-strata` | 62.0% (56.5–67.5) | 85.2% | 73.3% | 58.3% | 73.3% | 20.0% |
+| 4 | `glm-maya` | 57.2% (52.1–62.3) | 86.2% | 6.7% | 55.0% | 91.7% | 46.7% |
+| 5 | `bolt-llamacpp` | 53.9% (48.7–59.4) | 76.2% | 50.0% | 33.3% | 90.0% | 20.0% |
+
 ## Recent changes (newest first)
 
+- **Nov 11:** first measured quality ranking of the text entries: DeepSeek on Strata 73.0%, Qwen 27B on HyperQwen 68.0%, Flash-Next 62.0%, GLM 57.2%, Bolt 53.9% (macro over MMLU-Pro, AIME 2025, LiveCodeBench and BFCL subsets). [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md)
 - **Nov 10:** launch tuning adopted: Maya GLM checkpoint interval 65,536 (cold 37K-token prompt 38.3 s → 30.7 s to first token) and Flash-Next Strata direct table reads (load about 10 s faster, 26.8 GiB of RAM freed). [LAUNCH-TUNING-20261110.md](evidence/LAUNCH-TUNING-20261110.md)
 - **Nov 9:** nightly updater retired (timer disabled); engine updates are now installed by hand with a short DSH check before and after ([runbook](ENGINE-UPDATE-RUNBOOK.md)). Installed the same day: Strata 0.2.13, HyperQwen `9268d8d` (vLLM 0.33.0), Maya 1.1.57, all at parity. [ENGINE-UPDATES-HANDS-ON-20261109.md](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md). That evening HyperQwen was updated again to `80cf059` (still vLLM 0.33.0), also at parity. [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md)
 - **Nov 9:** the updater treats held pushes (someone else's unpushed commits or edits) as warnings, exit 0, instead of failures; 3 held runs in a row fail the unit. See `last_deferral` in `data/daily-update/state.json`.
@@ -37,6 +50,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 - **Strata 0.2.13, Maya 1.1.57, HyperQwen vLLM 0.33.0** have only short-check numbers; no long-context or sustained run yet. The Nov 7 Flash-Next figures above are still from 0.2.11.
 - **DSH web app** still lists `flash-next-iq1m-strata` until `nvidia-dsh.service` restarts (its config is already regenerated; the router returns 404 for that id).
+- **Quality benchmark gaps:** `qwen27b-sglang` and `deepseek-maya` are not measured; nothing was run with thinking on; samples are screening-size.
 - **`data/`** holds many private trial and evidence directories (all gitignored). Pruning them needs the owner's OK.
 - Possible follow-up from Nov 7 research: the DeepSeek entries still use the automatic layer split and might gain from the same hand-set split sweep that helped Flash-Next.
 

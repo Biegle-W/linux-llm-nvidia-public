@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Quality benchmark: first measured ranking — November 11, 2026
+
+Five text entries were scored on 390 public-benchmark items each (MMLU-Pro 210, AIME 2025 30, LiveCodeBench 60, BFCL single-turn 60, BFCL multi-turn 30), thinking off as served, one generation per item, deterministic scoring. Macro score: DeepSeek on Strata 73.0%, Qwen 27B on HyperQwen 68.0%, Flash-Next 62.0%, GLM 57.2%, Bolt 53.9%. Adjacent ranks are not separated at 95%; entries two or more ranks apart are. Flash-Next is weakest at tool calling (44/60 single-turn, 6/30 multi-turn); GLM scored 2/30 on AIME with thinking off. `qwen27b-sglang` and `deepseek-maya` were not run. No speed or guard setting changed. [Complete result list with speeds, quality and guards](evidence/QUALITY-BENCHMARK-20261111.md).
+
 ## Engine refresh and weight sharing — November5,2026
 
 Removed the3.418GB incomplete Qwen cache. HyperQwen, SGLang, Maya, Strata and shared llama.cpp are refreshed; ComfyUI/video integrations were already current under the stable/default-branch policy. All eight changed text entries passed guarded actual DSH read/result/exact followup and owned unload. No complete duplicate checkpoints were found; compatible entries already share weights. Daily updates stay paused; all guards and selected contexts remain. [Versions, sharing and optional cleanup](evidence/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md); [current observations](evidence/ALL-ENTRY-BENCHMARKS-20261105.md).

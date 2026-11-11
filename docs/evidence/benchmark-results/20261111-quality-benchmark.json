@@ -1,0 +1,652 @@
+{
+  "date": "2026-11-10 to 2026-11-11",
+  "run_id": "full1",
+  "hardware": "i9-13900KS, 96 GB-class RAM, RTX 3080 Ti 12 GB + RTX 3080 10 GB",
+  "protocol": {
+    "thinking": "off (as each entry is served)",
+    "temperature": 0.6,
+    "top_p": 0.95,
+    "generations_per_item": 1,
+    "concurrency": 1,
+    "selection_seed": 20261110,
+    "max_output_tokens": {
+      "mmlu_pro": 4096,
+      "aime25": 12288,
+      "lcb": 12288,
+      "bfcl_single": 2048,
+      "bfcl_multi": 2048
+    },
+    "scoring": "quality-1;bfcl-derived-1;lcb-derived-1",
+    "failures": "truncated, no_answer, looped and malformed_tool count as wrong"
+  },
+  "items": {
+    "mmlu_pro": 210,
+    "aime25": 30,
+    "lcb": 60,
+    "bfcl_single": 60,
+    "bfcl_multi": 30
+  },
+  "ranking_by_macro": [
+    "deepseek-unsloth-strata",
+    "qwen27b-hyperqwen",
+    "flash-next-strata",
+    "glm-maya",
+    "bolt-llamacpp"
+  ],
+  "scores": {
+    "deepseek-unsloth-strata": {
+      "mmlu_pro": {
+        "n": 210,
+        "correct": 182,
+        "percent": 86.7,
+        "wilson95": [
+          81.4,
+          90.6
+        ],
+        "outcomes": {
+          "correct": 182,
+          "truncated": 2,
+          "wrong": 26
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "aime25": {
+        "n": 30,
+        "correct": 23,
+        "percent": 76.7,
+        "wilson95": [
+          59.1,
+          88.2
+        ],
+        "outcomes": {
+          "correct": 23,
+          "truncated": 2,
+          "wrong": 5
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "lcb": {
+        "n": 60,
+        "correct": 33,
+        "percent": 55.0,
+        "wilson95": [
+          42.5,
+          66.9
+        ],
+        "outcomes": {
+          "correct": 33,
+          "looped": 1,
+          "truncated": 16,
+          "wrong": 10
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_single": {
+        "n": 60,
+        "correct": 54,
+        "percent": 90.0,
+        "wilson95": [
+          79.9,
+          95.3
+        ],
+        "outcomes": {
+          "correct": 54,
+          "wrong": 6
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_multi": {
+        "n": 30,
+        "correct": 17,
+        "percent": 56.7,
+        "wilson95": [
+          39.2,
+          72.6
+        ],
+        "outcomes": {
+          "correct": 17,
+          "wrong": 13
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "macro": {
+        "percent": 73.0,
+        "interval95": [
+          67.3,
+          78.4
+        ]
+      }
+    },
+    "qwen27b-hyperqwen": {
+      "mmlu_pro": {
+        "n": 210,
+        "correct": 172,
+        "percent": 81.9,
+        "wilson95": [
+          76.1,
+          86.5
+        ],
+        "outcomes": {
+          "correct": 172,
+          "truncated": 14,
+          "wrong": 24
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "aime25": {
+        "n": 30,
+        "correct": 18,
+        "percent": 60.0,
+        "wilson95": [
+          42.3,
+          75.4
+        ],
+        "outcomes": {
+          "correct": 18,
+          "truncated": 1,
+          "wrong": 11
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "lcb": {
+        "n": 60,
+        "correct": 24,
+        "percent": 40.0,
+        "wilson95": [
+          28.6,
+          52.6
+        ],
+        "outcomes": {
+          "correct": 24,
+          "no_answer": 8,
+          "truncated": 18,
+          "wrong": 10
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_single": {
+        "n": 60,
+        "correct": 55,
+        "percent": 91.7,
+        "wilson95": [
+          81.9,
+          96.4
+        ],
+        "outcomes": {
+          "correct": 55,
+          "wrong": 5
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_multi": {
+        "n": 30,
+        "correct": 20,
+        "percent": 66.7,
+        "wilson95": [
+          48.8,
+          80.8
+        ],
+        "outcomes": {
+          "correct": 20,
+          "wrong": 10
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "macro": {
+        "percent": 68.0,
+        "interval95": [
+          62.3,
+          73.7
+        ]
+      }
+    },
+    "flash-next-strata": {
+      "mmlu_pro": {
+        "n": 210,
+        "correct": 179,
+        "percent": 85.2,
+        "wilson95": [
+          79.8,
+          89.4
+        ],
+        "outcomes": {
+          "correct": 179,
+          "truncated": 9,
+          "wrong": 22
+        },
+        "harness_hash": [
+          "9d199290"
+        ]
+      },
+      "aime25": {
+        "n": 30,
+        "correct": 22,
+        "percent": 73.3,
+        "wilson95": [
+          55.6,
+          85.8
+        ],
+        "outcomes": {
+          "correct": 22,
+          "truncated": 1,
+          "wrong": 7
+        },
+        "harness_hash": [
+          "9d199290"
+        ]
+      },
+      "lcb": {
+        "n": 60,
+        "correct": 35,
+        "percent": 58.3,
+        "wilson95": [
+          45.7,
+          69.9
+        ],
+        "outcomes": {
+          "correct": 35,
+          "no_answer": 1,
+          "truncated": 7,
+          "wrong": 17
+        },
+        "harness_hash": [
+          "9d199290"
+        ]
+      },
+      "bfcl_single": {
+        "n": 60,
+        "correct": 44,
+        "percent": 73.3,
+        "wilson95": [
+          61.0,
+          82.9
+        ],
+        "outcomes": {
+          "correct": 44,
+          "malformed_tool": 1,
+          "no_answer": 2,
+          "wrong": 13
+        },
+        "harness_hash": [
+          "9d199290"
+        ]
+      },
+      "bfcl_multi": {
+        "n": 30,
+        "correct": 6,
+        "percent": 20.0,
+        "wilson95": [
+          9.5,
+          37.3
+        ],
+        "outcomes": {
+          "correct": 6,
+          "wrong": 24
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "macro": {
+        "percent": 62.0,
+        "interval95": [
+          56.5,
+          67.5
+        ]
+      }
+    },
+    "glm-maya": {
+      "mmlu_pro": {
+        "n": 210,
+        "correct": 181,
+        "percent": 86.2,
+        "wilson95": [
+          80.9,
+          90.2
+        ],
+        "outcomes": {
+          "correct": 181,
+          "truncated": 3,
+          "wrong": 26
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "aime25": {
+        "n": 30,
+        "correct": 2,
+        "percent": 6.7,
+        "wilson95": [
+          1.8,
+          21.3
+        ],
+        "outcomes": {
+          "correct": 2,
+          "no_answer": 10,
+          "truncated": 3,
+          "wrong": 15
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "lcb": {
+        "n": 60,
+        "correct": 33,
+        "percent": 55.0,
+        "wilson95": [
+          42.5,
+          66.9
+        ],
+        "outcomes": {
+          "correct": 33,
+          "truncated": 13,
+          "wrong": 14
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_single": {
+        "n": 60,
+        "correct": 55,
+        "percent": 91.7,
+        "wilson95": [
+          81.9,
+          96.4
+        ],
+        "outcomes": {
+          "correct": 55,
+          "wrong": 5
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_multi": {
+        "n": 30,
+        "correct": 14,
+        "percent": 46.7,
+        "wilson95": [
+          30.2,
+          63.9
+        ],
+        "outcomes": {
+          "correct": 14,
+          "wrong": 16
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "macro": {
+        "percent": 57.2,
+        "interval95": [
+          52.1,
+          62.3
+        ]
+      }
+    },
+    "bolt-llamacpp": {
+      "mmlu_pro": {
+        "n": 210,
+        "correct": 160,
+        "percent": 76.2,
+        "wilson95": [
+          70.0,
+          81.4
+        ],
+        "outcomes": {
+          "correct": 160,
+          "looped": 1,
+          "no_answer": 6,
+          "truncated": 6,
+          "wrong": 37
+        },
+        "harness_hash": [
+          "9d199290"
+        ]
+      },
+      "aime25": {
+        "n": 30,
+        "correct": 15,
+        "percent": 50.0,
+        "wilson95": [
+          33.2,
+          66.8
+        ],
+        "outcomes": {
+          "correct": 15,
+          "truncated": 15
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "lcb": {
+        "n": 60,
+        "correct": 20,
+        "percent": 33.3,
+        "wilson95": [
+          22.7,
+          45.9
+        ],
+        "outcomes": {
+          "correct": 20,
+          "truncated": 7,
+          "wrong": 33
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_single": {
+        "n": 60,
+        "correct": 54,
+        "percent": 90.0,
+        "wilson95": [
+          79.9,
+          95.3
+        ],
+        "outcomes": {
+          "correct": 54,
+          "wrong": 6
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_multi": {
+        "n": 30,
+        "correct": 6,
+        "percent": 20.0,
+        "wilson95": [
+          9.5,
+          37.3
+        ],
+        "outcomes": {
+          "correct": 6,
+          "wrong": 24
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "macro": {
+        "percent": 53.9,
+        "interval95": [
+          48.7,
+          59.4
+        ]
+      }
+    }
+  },
+  "macro_paired_differences": [
+    {
+      "a": "bolt-llamacpp",
+      "b": "deepseek-unsloth-strata",
+      "a_minus_b_interval95_points": [
+        -25.3,
+        -12.8
+      ],
+      "separated": true
+    },
+    {
+      "a": "bolt-llamacpp",
+      "b": "flash-next-strata",
+      "a_minus_b_interval95_points": [
+        -14.8,
+        -1.7
+      ],
+      "separated": true
+    },
+    {
+      "a": "bolt-llamacpp",
+      "b": "glm-maya",
+      "a_minus_b_interval95_points": [
+        -9.9,
+        3.2
+      ],
+      "separated": false
+    },
+    {
+      "a": "bolt-llamacpp",
+      "b": "qwen27b-hyperqwen",
+      "a_minus_b_interval95_points": [
+        -21.0,
+        -7.1
+      ],
+      "separated": true
+    },
+    {
+      "a": "deepseek-unsloth-strata",
+      "b": "flash-next-strata",
+      "a_minus_b_interval95_points": [
+        4.3,
+        17.4
+      ],
+      "separated": true
+    },
+    {
+      "a": "deepseek-unsloth-strata",
+      "b": "glm-maya",
+      "a_minus_b_interval95_points": [
+        8.9,
+        22.6
+      ],
+      "separated": true
+    },
+    {
+      "a": "deepseek-unsloth-strata",
+      "b": "qwen27b-hyperqwen",
+      "a_minus_b_interval95_points": [
+        -1.3,
+        11.2
+      ],
+      "separated": false
+    },
+    {
+      "a": "flash-next-strata",
+      "b": "glm-maya",
+      "a_minus_b_interval95_points": [
+        -1.6,
+        11.0
+      ],
+      "separated": false
+    },
+    {
+      "a": "flash-next-strata",
+      "b": "qwen27b-hyperqwen",
+      "a_minus_b_interval95_points": [
+        -12.3,
+        0.2
+      ],
+      "separated": false
+    },
+    {
+      "a": "glm-maya",
+      "b": "qwen27b-hyperqwen",
+      "a_minus_b_interval95_points": [
+        -17.3,
+        -4.4
+      ],
+      "separated": true
+    }
+  ],
+  "not_measured": [
+    "qwen27b-sglang",
+    "deepseek-maya"
+  ],
+  "speed_rows_reused": {
+    "qwen27b-hyperqwen": {
+      "prefill_tps": "2,092.0",
+      "ttft_s": "2.80",
+      "decode_tps": "62.6",
+      "measured": "Nov 9"
+    },
+    "qwen27b-sglang": {
+      "prefill_tps": "2,130.13",
+      "ttft_s": "2.897",
+      "decode_tps": "60.121",
+      "measured": "Nov 5"
+    },
+    "bolt-llamacpp": {
+      "prefill_tps": "496.94",
+      "ttft_s": "12.991",
+      "decode_tps": "67.172",
+      "measured": "Nov 5"
+    },
+    "flash-next-strata": {
+      "prefill_tps": "1,031.6",
+      "ttft_s": "5.54",
+      "decode_tps": "85.4",
+      "measured": "Nov 10"
+    },
+    "glm-maya": {
+      "prefill_tps": "550.1",
+      "ttft_s": "10.06",
+      "decode_tps": "14.7",
+      "measured": "Nov 10"
+    },
+    "deepseek-maya": {
+      "prefill_tps": "177.3",
+      "ttft_s": "33.5",
+      "decode_tps": "7.7",
+      "measured": "Nov 9"
+    },
+    "deepseek-unsloth-strata": {
+      "prefill_tps": "87.10",
+      "ttft_s": "65.591",
+      "decode_tps": "12.000",
+      "measured": "Nov 5"
+    }
+  },
+  "run_minutes": {
+    "flash-next-strata": 119,
+    "bolt-llamacpp": 170,
+    "qwen27b-hyperqwen": 254,
+    "glm-maya": 298,
+    "deepseek-unsloth-strata": 517
+  }
+}
