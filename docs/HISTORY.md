@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Quality benchmark: Qwen 27B on SGLang added — November 12, 2026
+
+At the owner's request `qwen27b-sglang` ran the same 390-item benchmark as the other text entries. It scored 68.1% macro, the same as the HyperQwen entry on the same checkpoint (68.0%; not separated). The evidence doc and result file now cover six entries; `deepseek-maya` is still not measured. Nothing in the serving setup changed. [evidence](evidence/QUALITY-BENCHMARK-20261111.md).
+
 ## Maya 1.1.60 and ComfyUI 0.45.0 installed — November 12, 2026
 
 Both at the owner's request. Maya 1.1.60 was built in isolation and installed with pre-images; both Maya profiles pass the short DSH check at the same speed. ComfyUI moved from 0.44.0 to 0.45.0 in both the image and video trees after a review of the upstream diff, with `comfy-kitchen` 0.2.41; six image and video checks pass at the same speed, and two new cloud sign-in options in its page are switched off in the launcher. [evidence](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md).

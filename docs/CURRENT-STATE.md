@@ -18,20 +18,22 @@ Every entry runs under 87.77 GiB soft / 89.77 GiB hard worker RAM with 2 GiB hos
 
 Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache reuse): ~5.7K-token tool prompt 1,243 prefill / 146 decode tok/s; ~24K prompt 2,375 / 108; writing ~124 tok/s. Strata 0.2.12 qualification (Nov 8, single short ~5.6K-token DSH tool call, old to new): `flash-next-strata` 934 to 1,046 prefill, 68 to 86 decode tok/s, TTFT 6.5 to 5.5 s; `deepseek-unsloth-strata` 83 to 86 prefill, 11.8 to 11.7 decode tok/s, TTFT 68 to 66 s (DeepSeek speed not strictly comparable: prompt cache reuse). Both answered a router smoke check correctly afterwards. Other entries: [ALL-MODELS-RERUN-20261105.md](evidence/ALL-MODELS-RERUN-20261105.md).
 
-## Measured quality (November 10–11)
+## Measured quality (November 10–12)
 
-390 public-benchmark items per entry, thinking off as served, one generation per item. Adjacent ranks are not statistically separated; entries two or more ranks apart are. `qwen27b-sglang` and `deepseek-maya` were not run. Full result list with speeds and guards: [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md).
+390 public-benchmark items per entry, thinking off as served, one generation per item. No entry is separated from the one next to it; the two Qwen 27B engines score the same. `deepseek-maya` was not run. Full result list with speeds and guards: [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md).
 
 | Rank | API id | Macro (95% interval) | MMLU-Pro | AIME 2025 | LiveCodeBench | BFCL single | BFCL multi |
 |---:|---|---:|---:|---:|---:|---:|---:|
 | 1 | `deepseek-unsloth-strata` | 73.0% (67.3–78.4) | 86.7% | 76.7% | 55.0% | 90.0% | 56.7% |
-| 2 | `qwen27b-hyperqwen` | 68.0% (62.3–73.7) | 81.9% | 60.0% | 40.0% | 91.7% | 66.7% |
-| 3 | `flash-next-strata` | 62.0% (56.5–67.5) | 85.2% | 73.3% | 58.3% | 73.3% | 20.0% |
-| 4 | `glm-maya` | 57.2% (52.1–62.3) | 86.2% | 6.7% | 55.0% | 91.7% | 46.7% |
-| 5 | `bolt-llamacpp` | 53.9% (48.7–59.4) | 76.2% | 50.0% | 33.3% | 90.0% | 20.0% |
+| 2 | `qwen27b-sglang` | 68.1% (62.3–73.9) | 85.7% | 66.7% | 50.0% | 91.7% | 46.7% |
+| 3 | `qwen27b-hyperqwen` | 68.0% (62.3–73.7) | 81.9% | 60.0% | 40.0% | 91.7% | 66.7% |
+| 4 | `flash-next-strata` | 62.0% (56.5–67.5) | 85.2% | 73.3% | 58.3% | 73.3% | 20.0% |
+| 5 | `glm-maya` | 57.2% (52.1–62.3) | 86.2% | 6.7% | 55.0% | 91.7% | 46.7% |
+| 6 | `bolt-llamacpp` | 53.9% (48.7–59.4) | 76.2% | 50.0% | 33.3% | 90.0% | 20.0% |
 
 ## Recent changes (newest first)
 
+- **Nov 12:** `qwen27b-sglang` added to the quality benchmark: 68.1% macro against 68.0% for the same checkpoint on HyperQwen (difference −6.4 to +6.3 points, not separated). [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md)
 - **Nov 11-12:** Maya 1.1.60 and ComfyUI 0.45.0 installed by hand at the owner's request. Both Maya profiles and six ComfyUI image and video checks pass at the same speed as before; the midday `glm-maya` slowdown on 1.1.59 did not repeat. Two new cloud sign-in options in the ComfyUI page are switched off in the launcher. [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md)
 - **Nov 11:** Maya 1.1.59 installed by hand (released the same day as the 1.1.58 install). Both Maya profiles pass the short check; `glm-maya` generation measured 13.2 and 12.3 tok/s against 14.4 on 1.1.58, a warning under the promotion rule. [ENGINE-UPDATES-20261111-MAYA-1159.md](evidence/ENGINE-UPDATES-20261111-MAYA-1159.md)
 - **Nov 11:** repository audit: stale docs and registry notes corrected, a unit test stopped writing into the live router folder, the updater installer no longer enables the retired timer. Nothing served changed; removals are left for the owner. [REPO-AUDIT-20261111.md](evidence/REPO-AUDIT-20261111.md)
@@ -55,7 +57,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 - **ComfyUI 0.45.0** has only the short 1024² image and 512x288 video checks; 2048², 720p and 1080p were not re-run. The Raylight trial stage gives a different clip than on 0.44.0 (valid, same speed; cause not investigated). [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md)
 - **Strata 0.2.13, Maya 1.1.60, HyperQwen vLLM 0.33.0** have only short-check numbers; no long-context or sustained run yet. The Nov 7 Flash-Next figures above are still from 0.2.11.
 - **DSH web app** still lists `flash-next-iq1m-strata` until `nvidia-dsh.service` restarts (its config is already regenerated; the router returns 404 for that id).
-- **Quality benchmark gaps:** `qwen27b-sglang` and `deepseek-maya` are not measured; nothing was run with thinking on; samples are screening-size.
+- **Quality benchmark gaps:** `deepseek-maya` is not measured; nothing was run with thinking on; samples are screening-size.
 - **`data/`** holds many private trial and evidence directories (all gitignored). Pruning them needs the owner's OK.
 - Possible follow-up from Nov 7 research: the DeepSeek entries still use the automatic layer split and might gain from the same hand-set split sweep that helped Flash-Next.
 

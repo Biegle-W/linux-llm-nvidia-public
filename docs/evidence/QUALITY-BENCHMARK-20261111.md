@@ -1,30 +1,31 @@
 # Quality benchmark: first measured ranking of the text entries — November 11, 2026
 
-Five of the seven enabled text entries were scored on 390 items taken from public benchmarks, run locally through the router on November 10–11. This is the first measured quality result for this server; earlier rankings were estimates from published numbers. Machine-readable results: [`20261111-quality-benchmark.json`](benchmark-results/20261111-quality-benchmark.json).
+Six of the seven enabled text entries were scored on 390 items taken from public benchmarks, run locally through the router. Five ran on November 10–11; `qwen27b-sglang` was added on November 12 with the same frozen items, settings and harness. This is the first measured quality result for this server; earlier rankings were estimates from published numbers. Machine-readable results: [`20261111-quality-benchmark.json`](benchmark-results/20261111-quality-benchmark.json).
 
 ## Ranking
 
 | Rank | Entry | Macro score (95% interval) | Not separated from |
 | ---: | --- | ---: | --- |
-| 1 | `deepseek-unsloth-strata` | 73.0% (67.3–78.4) | `qwen27b-hyperqwen` |
-| 2 | `qwen27b-hyperqwen` | 68.0% (62.3–73.7) | `deepseek-unsloth-strata`, `flash-next-strata` |
-| 3 | `flash-next-strata` | 62.0% (56.5–67.5) | `qwen27b-hyperqwen`, `glm-maya` |
-| 4 | `glm-maya` | 57.2% (52.1–62.3) | `flash-next-strata`, `bolt-llamacpp` |
-| 5 | `bolt-llamacpp` | 53.9% (48.7–59.4) | `glm-maya` |
+| 1 | `deepseek-unsloth-strata` | 73.0% (67.3–78.4) | `qwen27b-sglang`, `qwen27b-hyperqwen` |
+| 2 | `qwen27b-sglang` | 68.1% (62.3–73.9) | `deepseek-unsloth-strata`, `qwen27b-hyperqwen`, `flash-next-strata` |
+| 3 | `qwen27b-hyperqwen` | 68.0% (62.3–73.7) | `deepseek-unsloth-strata`, `qwen27b-sglang`, `flash-next-strata` |
+| 4 | `flash-next-strata` | 62.0% (56.5–67.5) | `qwen27b-sglang`, `qwen27b-hyperqwen`, `glm-maya` |
+| 5 | `glm-maya` | 57.2% (52.1–62.3) | `flash-next-strata`, `bolt-llamacpp` |
+| 6 | `bolt-llamacpp` | 53.9% (48.7–59.4) | `glm-maya` |
 
-The macro score is the plain average of the five benchmark accuracies. "Not separated" means the paired 95% interval for the difference includes zero, so the order of those two could flip on a rerun. Adjacent ranks are not separated anywhere in the list; entries two or more ranks apart are.
+The macro score is the plain average of the five benchmark accuracies. "Not separated" means the paired 95% interval for the difference includes zero, so the order of those two could flip on a rerun. No entry is separated from the one next to it. DeepSeek on Strata is separated from Flash-Next, GLM and Bolt; Bolt is separated from everything except GLM.
 
 What decides the order:
 
 - **DeepSeek** is at or near the top on every benchmark.
-- **Qwen 27B** is weakest of the top four on knowledge and code but best at multi-turn tool use (20/30).
+- **Qwen 27B** scores the same on both engines overall (68.1% on SGLang, 68.0% on HyperQwen; difference −6.4 to +6.3 points). The parts differ: SGLang was higher on knowledge (180 against 172 of 210), math (20 against 18 of 30) and code (30 against 24 of 60), HyperQwen on multi-turn tool use (20 against 14 of 30). None of those four differences is separated on its own, so with one generation per item this does not show that either engine answers better.
 - **Flash-Next** matches DeepSeek on knowledge, math and code, and is the weakest at tool calling: 44/60 single-turn (it called a tool in 6 of 15 cases where none applied) and 6/30 multi-turn.
 - **GLM** matches DeepSeek on knowledge, code and single-turn tools but scored 2/30 on AIME: with thinking off it gave short guesses, 10 of them without a final boxed answer. Counting any final integer as the answer would make it 3/30.
 - **Bolt** is last on knowledge, code and multi-turn tools. Half of its AIME answers ran out of the 12,288-token limit.
 
 ## Complete result list
 
-Hardware: i9-13900KS, 96 GB-class RAM, RTX 3080 Ti 12 GB + RTX 3080 10 GB. Quality cells are percent correct (correct/items), one generation per item. `qwen27b-sglang` and `deepseek-maya` were not run: each shares a checkpoint with a tested entry but uses a different engine and chat template, so the twin's score is not assumed.
+Hardware: i9-13900KS, 96 GB-class RAM, RTX 3080 Ti 12 GB + RTX 3080 10 GB. Quality cells are percent correct (correct/items), one generation per item. `deepseek-maya` was not run: it shares a checkpoint with `deepseek-unsloth-strata` but uses a different engine and chat template, so the twin's score is not assumed.
 
 Speed rows are the latest short DSH tool-call check for each entry (about 5.6K prompt tokens, one request, load time excluded), not new measurements: `qwen27b-hyperqwen`, `deepseek-maya` November 9; `flash-next-strata`, `glm-maya` November 10; the rest November 5 ([ALL-MODELS-RERUN-20261105.md](ALL-MODELS-RERUN-20261105.md), [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md), [ENGINE-UPDATES-HANDS-ON-20261109.md](ENGINE-UPDATES-HANDS-ON-20261109.md), [LAUNCH-TUNING-20261110.md](LAUNCH-TUNING-20261110.md)). The `deepseek-unsloth-strata` row is its last cold-prompt figure; with its prompt cache reused it measured 28.1 prefill tok/s, 6.13 s and 12.2 decode tok/s on November 9. Storage is decimal GB of checkpoint files; shared checkpoints repeat on each engine row but occupy storage once.
 
@@ -37,8 +38,8 @@ Speed rows are the latest short DSH tool-call check for each entry (about 5.6K p
 
 | Model / quant | Engine | MMLU-Pro (210) | AIME 2025 (30) | LiveCodeBench (60) | BFCL single-turn (60) | BFCL multi-turn (30) | Macro (95% interval) | Rank |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 81.9% (172/210) | 60.0% (18/30) | 40.0% (24/60) | 91.7% (55/60) | 66.7% (20/30) | 68.0% (62.3–73.7) | 2 |
-| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | 81.9% (172/210) | 60.0% (18/30) | 40.0% (24/60) | 91.7% (55/60) | 66.7% (20/30) | 68.0% (62.3–73.7) | 3 |
+| Qwen3.8-27B / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 85.7% (180/210) | 66.7% (20/30) | 50.0% (30/60) | 91.7% (55/60) | 46.7% (14/30) | 68.1% (62.3–73.9) | 2 |
 
 ### MoE models with CPU RAM offload
 
@@ -48,7 +49,7 @@ Speed rows are the latest short DSH tool-call check for each entry (about 5.6K p
 
 | Model / quant | Engine | MMLU-Pro (210) | AIME 2025 (30) | LiveCodeBench (60) | BFCL single-turn (60) | BFCL multi-turn (30) | Macro (95% interval) | Rank |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| NVIDIA-Nemotron-3.5-Bolt-74B-A9B / native-IQ2 | llama.cpp | 76.2% (160/210) | 50.0% (15/30) | 33.3% (20/60) | 90.0% (54/60) | 20.0% (6/30) | 53.9% (48.7–59.4) | 5 |
+| NVIDIA-Nemotron-3.5-Bolt-74B-A9B / native-IQ2 | llama.cpp | 76.2% (160/210) | 50.0% (15/30) | 33.3% (20/60) | 90.0% (54/60) | 20.0% (6/30) | 53.9% (48.7–59.4) | 6 |
 
 ### MoE models with SSD streaming
 
@@ -61,8 +62,8 @@ Speed rows are the latest short DSH tool-call check for each entry (about 5.6K p
 
 | Model / quant | Engine | MMLU-Pro (210) | AIME 2025 (30) | LiveCodeBench (60) | BFCL single-turn (60) | BFCL multi-turn (30) | Macro (95% interval) | Rank |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 85.2% (179/210) | 73.3% (22/30) | 58.3% (35/60) | 73.3% (44/60) | 20.0% (6/30) | 62.0% (56.5–67.5) | 3 |
-| GLM-5.3-Flash / Maya-S24 | Maya | 86.2% (181/210) | 6.7% (2/30) | 55.0% (33/60) | 91.7% (55/60) | 46.7% (14/30) | 57.2% (52.1–62.3) | 4 |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 85.2% (179/210) | 73.3% (22/30) | 58.3% (35/60) | 73.3% (44/60) | 20.0% (6/30) | 62.0% (56.5–67.5) | 4 |
+| GLM-5.3-Flash / Maya-S24 | Maya | 86.2% (181/210) | 6.7% (2/30) | 55.0% (33/60) | 91.7% (55/60) | 46.7% (14/30) | 57.2% (52.1–62.3) | 5 |
 | DeepSeek-V4.1-Flash-1017 / UD-IQ1_S (Unsloth Dynamic3.1) | Maya | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured | Not measured |
 | DeepSeek-V4.1-Flash-1017 / UD-IQ1_S (Unsloth Dynamic3.1) | Strata | 86.7% (182/210) | 76.7% (23/30) | 55.0% (33/60) | 90.0% (54/60) | 56.7% (17/30) | 73.0% (67.3–78.4) | 1 |
 
@@ -86,7 +87,7 @@ Configured limits as recorded on November 5; no guard setting has been changed s
 - **Settings:** thinking off, as every entry is served; temperature 0.6, top-p 0.95; one generation per item; one request at a time. Output limits: 4,096 tokens for MMLU-Pro, 12,288 for AIME and LiveCodeBench, 2,048 per call for BFCL.
 - **Scoring:** deterministic, no judge model. MMLU-Pro by final answer letter, AIME by the final boxed integer, LiveCodeBench by running the generated program against the tests in a sandbox with no network, BFCL by the upstream checker (call matching for single-turn, final simulated state and responses for multi-turn). An answer that hit the token limit, had no final answer, looped or produced a malformed tool call counts as wrong.
 - **Statistics:** Wilson 95% intervals per benchmark; the macro interval and pairwise differences come from a paired bootstrap over items (10,000 resamples).
-- **Run:** entries ran one after another through the router, each loaded once and unloaded at the end. Run time: Flash-Next about 2.0 h, Bolt 2.8 h, Qwen 27B 4.2 h, GLM 5.0 h, DeepSeek 8.6 h.
+- **Run:** entries ran one after another through the router, each loaded once and unloaded at the end. Run time: Flash-Next about 2.0 h, Bolt 2.8 h, Qwen 27B 4.2 h on HyperQwen and 4.5 h on SGLang, GLM 5.0 h, DeepSeek 8.6 h.
 
 ## Per-benchmark detail
 
@@ -97,6 +98,11 @@ Configured limits as recorded on November 5; no guard setting has been changed s
 | `deepseek-unsloth-strata` | LiveCodeBench | 33/60 | 42.5–66.9 | correct 33, looped 1, truncated 16, wrong 10 |
 | `deepseek-unsloth-strata` | BFCL single-turn | 54/60 | 79.9–95.3 | correct 54, wrong 6 |
 | `deepseek-unsloth-strata` | BFCL multi-turn | 17/30 | 39.2–72.6 | correct 17, wrong 13 |
+| `qwen27b-sglang` | MMLU-Pro | 180/210 | 80.3–89.8 | correct 180, truncated 8, wrong 22 |
+| `qwen27b-sglang` | AIME 2025 | 20/30 | 48.8–80.8 | correct 20, truncated 1, wrong 9 |
+| `qwen27b-sglang` | LiveCodeBench | 30/60 | 37.7–62.3 | correct 30, no_answer 8, truncated 16, wrong 6 |
+| `qwen27b-sglang` | BFCL single-turn | 55/60 | 81.9–96.4 | correct 55, wrong 5 |
+| `qwen27b-sglang` | BFCL multi-turn | 14/30 | 30.2–63.9 | correct 14, wrong 16 |
 | `qwen27b-hyperqwen` | MMLU-Pro | 172/210 | 76.1–86.5 | correct 172, truncated 14, wrong 24 |
 | `qwen27b-hyperqwen` | AIME 2025 | 18/30 | 42.3–75.4 | correct 18, truncated 1, wrong 11 |
 | `qwen27b-hyperqwen` | LiveCodeBench | 24/60 | 28.6–52.6 | correct 24, no_answer 8, truncated 18, wrong 10 |
@@ -126,22 +132,28 @@ Macro differences (first minus second, percentage points, paired 95% interval):
 | `bolt-llamacpp` | `flash-next-strata` | -14.8 to -1.7 | yes |
 | `bolt-llamacpp` | `glm-maya` | -9.9 to +3.2 | no |
 | `bolt-llamacpp` | `qwen27b-hyperqwen` | -21.0 to -7.1 | yes |
+| `bolt-llamacpp` | `qwen27b-sglang` | -20.0 to -8.7 | yes |
 | `deepseek-unsloth-strata` | `flash-next-strata` | +4.3 to +17.4 | yes |
 | `deepseek-unsloth-strata` | `glm-maya` | +8.9 to +22.6 | yes |
 | `deepseek-unsloth-strata` | `qwen27b-hyperqwen` | -1.3 to +11.2 | no |
+| `deepseek-unsloth-strata` | `qwen27b-sglang` | -1.3 to +11.0 | no |
 | `flash-next-strata` | `glm-maya` | -1.6 to +11.0 | no |
 | `flash-next-strata` | `qwen27b-hyperqwen` | -12.3 to +0.2 | no |
+| `flash-next-strata` | `qwen27b-sglang` | -12.8 to +0.8 | no |
 | `glm-maya` | `qwen27b-hyperqwen` | -17.3 to -4.4 | yes |
+| `glm-maya` | `qwen27b-sglang` | -17.6 to -4.1 | yes |
+| `qwen27b-hyperqwen` | `qwen27b-sglang` | -6.4 to +6.3 | no |
 
-Per benchmark, after correcting for the ten pairwise comparisons, few pairs separate: on MMLU-Pro only Bolt falls below DeepSeek, Flash-Next and GLM; on AIME only GLM falls below the other four; on LiveCodeBench Bolt and Qwen 27B fall below the top three (Qwen 27B is not separated from GLM); on single-turn BFCL only Flash-Next falls below GLM; on multi-turn BFCL Qwen 27B is above Bolt and Flash-Next.
+Per benchmark, after correcting for the fifteen pairwise comparisons, few pairs separate: on MMLU-Pro Bolt falls below DeepSeek, Flash-Next, GLM and Qwen 27B on SGLang; on AIME GLM falls below the other five; on LiveCodeBench Bolt falls below DeepSeek, Flash-Next and GLM, and Qwen 27B on HyperQwen falls below DeepSeek and Flash-Next; on single-turn BFCL nothing separates; on multi-turn BFCL Qwen 27B on HyperQwen is above Bolt and Flash-Next. Qwen 27B on SGLang is not separated from Qwen 27B on HyperQwen on any benchmark.
 
 ## Limits
 
 - **Screening-size samples.** Intervals are wide (about ±5 points on MMLU-Pro, ±15 or more on the 30-item sets). Differences under about 10 macro points are not established.
 - **Thinking was off.** Scores describe the entries as served, not what the models can do with reasoning enabled. GLM's AIME result in particular reflects that setting.
-- **Token limits count against slow reasoners.** Truncated answers are failures: Bolt 15 of 30 on AIME, Qwen 27B 18 of 60 and DeepSeek 16 of 60 on LiveCodeBench.
+- **Token limits count against slow reasoners.** Truncated answers are failures: Bolt 15 of 30 on AIME, Qwen 27B 18 of 60 on HyperQwen and 16 of 60 on SGLang, and DeepSeek 16 of 60, on LiveCodeBench.
 - **Not official leaderboard numbers.** The BFCL and LiveCodeBench scores use local subsets and a local runner around the upstream checkers; do not compare them with published leaderboards.
 - **Quantization, engine and chat template are measured together.** No full-precision reference ran, so this does not isolate quantization loss.
 - **Public items** may appear in training data.
 - **Interrupted run.** A power loss on November 10 restarted the server during Bolt's AIME stage; the 13 lost answers were rerun. Flash-Next's first multi-turn stage stopped on a record-writing error after 3 episodes and was rerun in full after the fix. The fix changed only how records are saved; Flash-Next's other four stages and Bolt's MMLU-Pro stage were run before it and kept.
+- **Added entry.** `qwen27b-sglang` ran a day later than the others, after the November 11 engine updates; SGLang itself and the Qwen checkpoint were unchanged. A two-item-per-benchmark pilot ran first under a separate run id and is not counted.
 - The harness, downloaded datasets and raw answers stay on the server and are not in this repository.

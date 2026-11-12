@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Quality benchmark: Qwen 27B on SGLang added — November 12, 2026
+
+`qwen27b-sglang` ran the same 390 frozen items with the same settings and harness as the five entries scored on November 10–11 (4.5 h). Macro 68.1% (62.3–73.9) against 68.0% for the same checkpoint on HyperQwen; the paired difference is −6.4 to +6.3 points, not separated. By benchmark, SGLang against HyperQwen: MMLU-Pro 180 against 172 of 210, AIME 20 against 18 of 30, LiveCodeBench 30 against 24 of 60, BFCL single-turn 55 each of 60, BFCL multi-turn 14 against 20 of 30; none separated. `deepseek-maya` is still not measured. No speed or guard setting changed. [Complete result list](evidence/QUALITY-BENCHMARK-20261111.md).
+
 ## Quality benchmark: first measured ranking — November 11, 2026
 
 Five text entries were scored on 390 public-benchmark items each (MMLU-Pro 210, AIME 2025 30, LiveCodeBench 60, BFCL single-turn 60, BFCL multi-turn 30), thinking off as served, one generation per item, deterministic scoring. Macro score: DeepSeek on Strata 73.0%, Qwen 27B on HyperQwen 68.0%, Flash-Next 62.0%, GLM 57.2%, Bolt 53.9%. Adjacent ranks are not separated at 95%; entries two or more ranks apart are. Flash-Next is weakest at tool calling (44/60 single-turn, 6/30 multi-turn); GLM scored 2/30 on AIME with thinking off. `qwen27b-sglang` and `deepseek-maya` were not run. No speed or guard setting changed. [Complete result list with speeds, quality and guards](evidence/QUALITY-BENCHMARK-20261111.md).
