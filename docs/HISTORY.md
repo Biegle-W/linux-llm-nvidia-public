@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Maya 1.1.60 and ComfyUI 0.45.0 installed — November 12, 2026
+
+Both at the owner's request. Maya 1.1.60 was built in isolation and installed with pre-images; both Maya profiles pass the short DSH check at the same speed. ComfyUI moved from 0.44.0 to 0.45.0 in both the image and video trees after a review of the upstream diff, with `comfy-kitchen` 0.2.41; six image and video checks pass at the same speed, and two new cloud sign-in options in its page are switched off in the launcher. [evidence](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md).
+
 ## Maya 1.1.59 installed — November 11, 2026
 
 Second hands-on update of the day; upstream released 1.1.59 hours after 1.1.58. Built in isolation, installed with pre-images and a rollback script. Both Maya profiles pass the short DSH check. `glm-maya` generation measured 13.2 and 12.3 tok/s against 14.4 on 1.1.58, which is a warning under the promotion rule, not a break; `deepseek-maya` is unchanged. Upstream now reads its settings as `MAYA_X` (an old `STRATA_X` still counts); the launcher already used the `MAYA_` names. [evidence](evidence/ENGINE-UPDATES-20261111-MAYA-1159.md).

@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "source": "https://github.com/Comfy-Org/ComfyUI",
-  "commit": "7ad7adb38f6cbb6c2b0713d3bd44c3fb2b9c8ebe",
+  "commit": "989d93d0d968e704c589ce0146bb18c77f6b50cc",
   "runtime": "runtimes/ComfyUI",
   "python": "runtimes/env-comfy/bin/python",
   "checkpoint_directory": "models/comfy-images",
@@ -76,7 +76,7 @@
       }
     }
   ],
-  "version": "0.44.0",
+  "version": "0.45.0",
   "torch": "2.13.0+cu130",
   "python_version": "3.13.17",
   "guard_policy": {

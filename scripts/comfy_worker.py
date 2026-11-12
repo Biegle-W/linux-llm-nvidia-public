@@ -61,7 +61,7 @@ output_directory.mkdir(parents=True,exist_ok=True)
 command = [str(ROOT/config['python']), str(ROOT/config['runtime']/'main.py'), '--listen','127.0.0.1',
            '--port','8188','--disable-auto-launch',('--cpu' if entry_trial else '--gpu-only'),'--disable-dynamic-vram',
            '--disable-async-offload','--use-pytorch-cross-attention','--reserve-vram','0.5',
-           '--offline','--disable-all-custom-nodes','--whitelist-custom-nodes',*(['nvidia_video'] if entry_trial else ['nvidia_video','comfyui_mesh'] if mesh_trial else ['nvidia_video','raylight'] if video_trial else ['nvidia_resident']),
+           '--offline','--feature-flag','local_web_sso=false','--feature-flag','partner_node_token=false','--disable-all-custom-nodes','--whitelist-custom-nodes',*(['nvidia_video'] if entry_trial else ['nvidia_video','comfyui_mesh'] if mesh_trial else ['nvidia_video','raylight'] if video_trial else ['nvidia_resident']),
            '--extra-model-paths-config',str(WORK/'extra-model-paths.yaml'),
            '--output-directory',str(output_directory),'--user-directory',str(user_directory)]
 if video_trial:

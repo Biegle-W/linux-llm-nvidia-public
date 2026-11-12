@@ -77,7 +77,7 @@
       "id": "comfyui",
       "upstream": "https://github.com/Comfy-Org/ComfyUI.git",
       "channel": "stable",
-      "installed_release": "v0.44.0",
+      "installed_release": "v0.45.0",
       "reason": "GPU-only image/video stack requires workflow/residency qualification."
     },
     {

@@ -9,8 +9,8 @@ Snapshot of what is live. Replace facts here when they change; dated detail goes
 | `qwen27b-hyperqwen` | Qwen3.8-27B AutoRound INT4 (fast heads, INT8 embedding) | HyperQwen-vLLM (vLLM 0.33.0) | 86,016 | `models/engine-tests/qwen38-27b-hyperqwen-fast`, SATA, 16 GB (shared with SGLang) |
 | `qwen27b-sglang` | same checkpoint | SGLang | 57,344 | same as above |
 | `flash-next-strata` | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | Strata 0.2.13 (engine 0.1.59) + MTP; layers 0-28 on the 3080, 29-47 + head on the 3080 Ti, stage-trimmed | 131,072 | `models/strata/models/IQ3_XXS`, NVMe, 76 GB |
-| `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.59 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
-| `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.59 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
+| `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.60 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
+| `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.60 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
 | `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build) | 32,768 | same as above |
 | `bolt-llamacpp` | NVIDIA Nemotron-3.5 Bolt 74B-A9B native IQ2 | llama.cpp, 8 GiB RAM prompt cache | 163,840 | `models/engine-tests/bolt-iq2`, SATA |
 
@@ -32,6 +32,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Recent changes (newest first)
 
+- **Nov 11-12:** Maya 1.1.60 and ComfyUI 0.45.0 installed by hand at the owner's request. Both Maya profiles and six ComfyUI image and video checks pass at the same speed as before; the midday `glm-maya` slowdown on 1.1.59 did not repeat. Two new cloud sign-in options in the ComfyUI page are switched off in the launcher. [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md)
 - **Nov 11:** Maya 1.1.59 installed by hand (released the same day as the 1.1.58 install). Both Maya profiles pass the short check; `glm-maya` generation measured 13.2 and 12.3 tok/s against 14.4 on 1.1.58, a warning under the promotion rule. [ENGINE-UPDATES-20261111-MAYA-1159.md](evidence/ENGINE-UPDATES-20261111-MAYA-1159.md)
 - **Nov 11:** repository audit: stale docs and registry notes corrected, a unit test stopped writing into the live router folder, the updater installer no longer enables the retired timer. Nothing served changed; removals are left for the owner. [REPO-AUDIT-20261111.md](evidence/REPO-AUDIT-20261111.md)
 - **Nov 11:** Maya 1.1.58 installed by hand; both Maya profiles pass the short check at the same speed as 1.1.57. HyperQwen pin moved to `3d6c954` with no rebuild (nothing installed changed). [ENGINE-UPDATES-20261111.md](evidence/ENGINE-UPDATES-20261111.md)
@@ -51,8 +52,8 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Open items
 
-- **`glm-maya` on Maya 1.1.59** generated 8-15% slower than on 1.1.58 in two short checks (cause not investigated; 1.1.58 pre-images and `rollback.sh` are in `data/maya-update-20261111b/`). [ENGINE-UPDATES-20261111-MAYA-1159.md](evidence/ENGINE-UPDATES-20261111-MAYA-1159.md)
-- **Strata 0.2.13, Maya 1.1.59, HyperQwen vLLM 0.33.0** have only short-check numbers; no long-context or sustained run yet. The Nov 7 Flash-Next figures above are still from 0.2.11.
+- **ComfyUI 0.45.0** has only the short 1024² image and 512x288 video checks; 2048², 720p and 1080p were not re-run. The Raylight trial stage gives a different clip than on 0.44.0 (valid, same speed; cause not investigated). [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md)
+- **Strata 0.2.13, Maya 1.1.60, HyperQwen vLLM 0.33.0** have only short-check numbers; no long-context or sustained run yet. The Nov 7 Flash-Next figures above are still from 0.2.11.
 - **DSH web app** still lists `flash-next-iq1m-strata` until `nvidia-dsh.service` restarts (its config is already regenerated; the router returns 404 for that id).
 - **Quality benchmark gaps:** `qwen27b-sglang` and `deepseek-maya` are not measured; nothing was run with thinking on; samples are screening-size.
 - **`data/`** holds many private trial and evidence directories (all gitignored). Pruning them needs the owner's OK.

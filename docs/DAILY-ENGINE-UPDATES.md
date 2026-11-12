@@ -1,5 +1,13 @@
 # NVIDIA daily engine updates
 
+## 2026-11-11 evening: Maya 1.1.60 and ComfyUI 0.45.0
+
+Both at the owner's request. Before and after: [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md).
+
+- maya: **promoted**; `8b0a449c599f` (1.1.60). Both Maya profiles pass the short DSH check at the same speed as 1.1.59; the midday `glm-maya` slowdown did not repeat.
+- comfyui: **promoted**; `v0.45.0` (`989d93d0d968`), with `comfy-kitchen` 0.2.41 and workflow templates 0.11.105. Six image and video checks pass at the same speed; images and the Wan entry clips are byte-identical. Two new sign-in options in the UI are switched off in the launcher.
+- hyperqwen, sglang, strata, llamacpp: **unchanged**. raylight, mesh, gguf: **pinned-current**.
+
 ## 2026-11-11 midday: Maya again
 
 Upstream released 1.1.59 a few hours after the morning install. Before and after: [ENGINE-UPDATES-20261111-MAYA-1159.md](evidence/ENGINE-UPDATES-20261111-MAYA-1159.md).

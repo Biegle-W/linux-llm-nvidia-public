@@ -4,7 +4,7 @@
   "checkpoint_directory": "models/comfy-video",
   "ComfyUI": {
     "path": "runtimes/ComfyUI-video",
-    "commit": "7ad7adb38f6cbb6c2b0713d3bd44c3fb2b9c8ebe"
+    "commit": "989d93d0d968e704c589ce0146bb18c77f6b50cc"
   },
   "python": "runtimes/env-comfy-video/bin/python",
   "Raylight": {
