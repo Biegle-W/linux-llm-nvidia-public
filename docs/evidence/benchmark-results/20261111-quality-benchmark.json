@@ -936,5 +936,74 @@
   "added_later": {
     "qwen27b-sglang": "2026-11-12, same frozen items, settings and harness",
     "deepseek-maya": "2026-11-12, same frozen items, settings and harness; Maya 1.1.60"
+  },
+  "reruns": {
+    "bolt-llamacpp on llama.cpp 1.0.0": {
+      "date": "2026-11-13",
+      "run_id": "bolt100",
+      "run_minutes": 141,
+      "harness_hash": "38fb335a",
+      "scores": {
+        "mmlu_pro": {
+          "n": 210,
+          "correct": 169,
+          "outcomes": {
+            "correct": 169,
+            "no_answer": 5,
+            "truncated": 6,
+            "wrong": 30
+          }
+        },
+        "aime25": {
+          "n": 30,
+          "correct": 14,
+          "outcomes": {
+            "correct": 14,
+            "looped": 1,
+            "truncated": 14,
+            "wrong": 1
+          }
+        },
+        "lcb": {
+          "n": 60,
+          "correct": 17,
+          "outcomes": {
+            "correct": 17,
+            "truncated": 9,
+            "wrong": 34
+          }
+        },
+        "bfcl_single": {
+          "n": 60,
+          "correct": 53,
+          "outcomes": {
+            "correct": 53,
+            "no_answer": 1,
+            "wrong": 6
+          }
+        },
+        "bfcl_multi": {
+          "n": 30,
+          "correct": 5,
+          "outcomes": {
+            "correct": 5,
+            "wrong": 25
+          }
+        },
+        "macro": {
+          "percent": 52.1,
+          "interval95": [
+            46.9,
+            57.4
+          ]
+        }
+      },
+      "compared_with": "bolt-llamacpp on llama.cpp 0.9.0 (run full1), macro 53.9",
+      "macro_paired_difference_090_minus_100_interval95_points": [
+        -2.3,
+        6.1
+      ],
+      "separated": false
+    }
   }
 }

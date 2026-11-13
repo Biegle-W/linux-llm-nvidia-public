@@ -34,6 +34,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Recent changes (newest first)
 
+- **Nov 13:** `bolt-llamacpp` re-scored on llama.cpp 1.0.0: 52.1% macro against 53.9% on 0.9.0 (difference −2.3 to +6.1 points, not separated). The ranking table still shows the 0.9.0 run. [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md)
 - **Nov 13:** Maya 1.1.61 installed by hand. `deepseek-maya` passes; `glm-maya` failed its first short check after the install (it answered without calling the tool) and passed three repeats, recorded as a warning. [ENGINE-UPDATES-20261113-MAYA-1161.md](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md)
 - **Nov 13:** llama.cpp 1.0.0 installed by hand for `bolt-llamacpp` (from 0.9.0). The short check passes; prompt reading rose from 501.5 to 673 tok/s on two runs and generation is unchanged. No launcher flag changed. [ENGINE-UPDATES-20261113-LLAMACPP-100.md](evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md)
 - **Nov 12:** `deepseek-maya` added to the quality benchmark: 72.4% macro against 73.0% for the same checkpoint on Strata (difference −5.2 to +4.0 points, not separated). All seven text entries are now measured. [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md)

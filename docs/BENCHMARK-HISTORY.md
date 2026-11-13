@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Quality benchmark: Bolt re-run on llama.cpp 1.0.0 — November 13, 2026
+
+After the llama.cpp 1.0.0 install, `bolt-llamacpp` ran the same 390 frozen items again (2.3 h). Macro 52.1% (46.9–57.4) against 53.9% on 0.9.0; the paired difference is −2.3 to +6.1 points, not separated. By benchmark, 1.0.0 against 0.9.0: MMLU-Pro 169 against 160 of 210, AIME 14 against 15 of 30, LiveCodeBench 17 against 20 of 60, BFCL single-turn 53 against 54 of 60, BFCL multi-turn 5 against 6 of 30; none separated. The short-check speed gain of 1.0.0 (prompt reading 501.5 to 673 tok/s) is recorded with the install. [Result list](evidence/QUALITY-BENCHMARK-20261111.md).
+
 ## Quality benchmark: DeepSeek on Maya added — November 12, 2026
 
 `deepseek-maya` (Maya 1.1.60) ran the same 390 frozen items with the same settings and harness as the other entries (9.6 h). Macro 72.4% (66.8–77.9) against 73.0% for the same checkpoint on Strata; the paired difference is −5.2 to +4.0 points, not separated. By benchmark, Maya against Strata: MMLU-Pro 186 against 182 of 210, AIME 24 against 23 of 30, LiveCodeBench 31 against 33 of 60, BFCL single-turn 53 against 54 of 60, BFCL multi-turn 16 against 17 of 30; none separated. All seven text entries are now measured. No speed or guard setting changed. [Complete result list](evidence/QUALITY-BENCHMARK-20261111.md).

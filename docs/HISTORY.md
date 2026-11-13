@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Quality benchmark: Bolt re-run on llama.cpp 1.0.0 — November 13, 2026
+
+At the owner's request `bolt-llamacpp` ran the 390-item benchmark again on llama.cpp 1.0.0. It scored 52.1% macro against 53.9% on 0.9.0; the difference is not separated and no single benchmark separates. Nothing in the serving setup changed. [evidence](evidence/QUALITY-BENCHMARK-20261111.md).
+
 ## Maya 1.1.61 installed — November 13, 2026
 
 At the owner's request, after the llama.cpp install. Built in isolation and installed with pre-images. `deepseek-maya` passes the short DSH check; `glm-maya` failed the first check after the install by answering without calling the tool, then passed three repeats, so 1.1.61 stays with a warning. [evidence](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md).

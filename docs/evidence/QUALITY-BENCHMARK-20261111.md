@@ -158,6 +158,23 @@ Macro differences (first minus second, percentage points, paired 95% interval):
 
 Per benchmark, after correcting for the twenty-one pairwise comparisons, few pairs separate: on MMLU-Pro Bolt falls below both DeepSeek entries, Flash-Next, GLM and Qwen 27B on SGLang; on AIME GLM falls below the other six; on LiveCodeBench Bolt falls below DeepSeek on Strata, Flash-Next and GLM, and Qwen 27B on HyperQwen falls below Flash-Next; on single-turn BFCL nothing separates; on multi-turn BFCL Qwen 27B on HyperQwen is above Bolt and Flash-Next. Neither same-checkpoint pair (Qwen 27B on SGLang and HyperQwen, DeepSeek on Maya and Strata) is separated on any benchmark.
 
+## Re-run: Bolt on llama.cpp 1.0.0 (November 13)
+
+llama.cpp was updated from 0.9.0 to 1.0.0 on November 13 ([ENGINE-UPDATES-20261113-LLAMACPP-100.md](ENGINE-UPDATES-20261113-LLAMACPP-100.md)), and the owner asked for `bolt-llamacpp` to be scored again. Same 390 frozen items, settings and harness (hash `38fb335a`), one generation per item, 2.3 h. The ranking and tables above still show the 0.9.0 run; this section is the comparison.
+
+| Benchmark | llama.cpp 0.9.0 | llama.cpp 1.0.0 | Only 0.9.0 right | Only 1.0.0 right | Exact p |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| MMLU-Pro (210) | 76.2% (160) | 80.5% (169) | 8 | 17 | 0.11 |
+| AIME 2025 (30) | 50.0% (15) | 46.7% (14) | 4 | 3 | 1 |
+| LiveCodeBench (60) | 33.3% (20) | 28.3% (17) | 5 | 2 | 0.45 |
+| BFCL single-turn (60) | 90.0% (54) | 88.3% (53) | 1 | 0 | 1 |
+| BFCL multi-turn (30) | 20.0% (6) | 16.7% (5) | 1 | 0 | 1 |
+| **Macro (95% interval)** | **53.9%** (48.7–59.4) | **52.1%** (46.9–57.4) | | | |
+
+The paired macro difference, 0.9.0 minus 1.0.0, is −2.3 to +6.1 points: not separated. No single benchmark separates either. MMLU-Pro went up by nine items and the other four went down by one to three; with one generation per item at temperature 0.6 this is what a repeat of the same engine could also produce, so the run does not show that 1.0.0 answers better or worse. Bolt stays last in the ranking with either figure.
+
+Outcomes on 1.0.0: MMLU-Pro 169 correct, 30 wrong, 6 truncated, 5 no answer; AIME 14 correct, 14 truncated, 1 looped, 1 wrong; LiveCodeBench 17 correct, 34 wrong, 9 truncated; BFCL single-turn 53 correct, 6 wrong, 1 no answer; BFCL multi-turn 5 correct, 25 wrong.
+
 ## Limits
 
 - **Screening-size samples.** Intervals are wide (about ±5 points on MMLU-Pro, ±15 or more on the 30-item sets). Differences under about 10 macro points are not established.
