@@ -138,6 +138,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 
 ### Models, engines and context
 
+- [ENGINE-UPDATES-20261113-LLAMACPP-100.md](evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md): llama.cpp 1.0.0 installed by hand for `bolt-llamacpp`, with the upstream review and before/after check — November 13, 2026
 - [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md): Maya 1.1.60 and ComfyUI 0.45.0 installed by hand, with the ComfyUI upstream review and before/after checks — November 12, 2026
 - [ENGINE-UPDATES-20261111-MAYA-1159.md](evidence/ENGINE-UPDATES-20261111-MAYA-1159.md): Maya 1.1.59 installed by hand; `glm-maya` generation 8-15% slower in the short check (warning) — November 11, 2026
 - [ENGINE-UPDATES-20261111.md](evidence/ENGINE-UPDATES-20261111.md): Maya 1.1.58 installed by hand; HyperQwen pin moved to `3d6c954` without a rebuild — November 11, 2026

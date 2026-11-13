@@ -32,9 +32,11 @@
     "evidence": "docs/evidence/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "llamacpp": {
-    "source_commit": "cd959bae99ff4bed22bef2604f45241c09bbb8c8",
-    "status": "Qualified existing production; scheduled short DSH updates enabled2026-11-05",
-    "evidence": "docs/evidence/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
+    "source_commit": "b1b770d90d94cad9e9ea5b993bdbc383a522fb28",
+    "qualified_on": "2026-11-13T11:40:00",
+    "method": "hands-on short DSH",
+    "note": "llama.cpp v1.0.0",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md"
   },
   "maya": {
     "source_commit": "8b0a449c599fbb370a1dcc0979ae7c84d4310529",

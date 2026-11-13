@@ -1,5 +1,13 @@
 # NVIDIA daily engine updates
 
+## 2026-11-13: llama.cpp 1.0.0
+
+Before and after: [ENGINE-UPDATES-20261113-LLAMACPP-100.md](evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md).
+
+- llamacpp: **promoted**; `b1b770d90d94` (1.0.0). `bolt-llamacpp` passes the short DSH check; prompt reading 501.5 → 672.2 and 673.8 tok/s, generation unchanged.
+- maya: `f66a913c628c` available; not installed in this update.
+- hyperqwen, sglang, strata: **unchanged**. comfyui, raylight, mesh, gguf: **pinned-current**.
+
 ## 2026-11-11 evening: Maya 1.1.60 and ComfyUI 0.45.0
 
 Both at the owner's request. Before and after: [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md).

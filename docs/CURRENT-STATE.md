@@ -12,7 +12,7 @@ Snapshot of what is live. Replace facts here when they change; dated detail goes
 | `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.60 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
 | `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.60 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
 | `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build) | 32,768 | same as above |
-| `bolt-llamacpp` | NVIDIA Nemotron-3.5 Bolt 74B-A9B native IQ2 | llama.cpp, 8 GiB RAM prompt cache | 163,840 | `models/engine-tests/bolt-iq2`, SATA |
+| `bolt-llamacpp` | NVIDIA Nemotron-3.5 Bolt 74B-A9B native IQ2 | llama.cpp 1.0.0, 8 GiB RAM prompt cache | 163,840 | `models/engine-tests/bolt-iq2`, SATA |
 
 Every entry runs under 87.77 GiB soft / 89.77 GiB hard worker RAM with 2 GiB host reserve. ComfyUI image (Qwen Turbo, FLUX3 Klein) and video (Wan 2.2 5B, LTX 2.3 Mesh) entries run from desktop launchers; see [COMFY-VIDEO-HD-ENTRIES-20261105.md](evidence/COMFY-VIDEO-HD-ENTRIES-20261105.md).
 
@@ -34,6 +34,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Recent changes (newest first)
 
+- **Nov 13:** llama.cpp 1.0.0 installed by hand for `bolt-llamacpp` (from 0.9.0). The short check passes; prompt reading rose from 501.5 to 673 tok/s on two runs and generation is unchanged. No launcher flag changed. [ENGINE-UPDATES-20261113-LLAMACPP-100.md](evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md)
 - **Nov 12:** `deepseek-maya` added to the quality benchmark: 72.4% macro against 73.0% for the same checkpoint on Strata (difference −5.2 to +4.0 points, not separated). All seven text entries are now measured. [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md)
 - **Nov 12:** Ubuntu installed kernel 7.0.0-43 by itself at 06:52; the GPU unlock check read "pending reboot verification" until the owner rebooted at 13:09, after which it read VERIFIED again. No GPU work was started in between.
 - **Nov 12:** `qwen27b-sglang` added to the quality benchmark: 68.1% macro against 68.0% for the same checkpoint on HyperQwen (difference −6.4 to +6.3 points, not separated). [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md)

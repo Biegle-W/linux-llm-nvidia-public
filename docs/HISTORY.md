@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## llama.cpp 1.0.0 installed — November 13, 2026
+
+The owner pointed at the 1.0.0 release. It was reviewed against the Bolt launcher, built in isolation and installed with pre-images and a rollback script. `bolt-llamacpp` passes the short DSH check; prompt reading is 34% faster on two runs and generation is unchanged. No launcher flag changed. [evidence](evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md).
+
 ## Quality benchmark: DeepSeek on Maya added — November 12, 2026
 
 At the owner's request `deepseek-maya` ran the same 390-item benchmark, after the owner rebooted the server onto kernel 7.0.0-43 so the GPU unlock check read VERIFIED again. It scored 72.4% macro, the same as the Strata entry on the same checkpoint (73.0%; not separated). All seven text entries are now measured. Nothing in the serving setup changed. [evidence](evidence/QUALITY-BENCHMARK-20261111.md).
