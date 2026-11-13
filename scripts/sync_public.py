@@ -485,7 +485,7 @@ FILES = (
     'network/systemd/nvidia-daily-engine-update-recover.service',
     'docs/DAILY-ENGINE-UPDATES.md',
     'docs/DAILY-ENGINE-UPDATE-POLICY.md',
-    'docs/ENGINE-UPDATE-RUNBOOK.md', 'docs/evidence/ENGINE-UPDATES-HANDS-ON-20261109.md', 'docs/evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md', 'docs/evidence/ENGINE-UPDATES-20261111.md', 'docs/evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md', 'docs/evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md', 'docs/evidence/ENGINE-UPDATES-20261111-MAYA-1159.md',
+    'docs/ENGINE-UPDATE-RUNBOOK.md', 'docs/evidence/ENGINE-UPDATES-HANDS-ON-20261109.md', 'docs/evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md', 'docs/evidence/ENGINE-UPDATES-20261111.md', 'docs/evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md', 'docs/evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md', 'docs/evidence/ENGINE-UPDATES-20261113-MAYA-1161.md', 'docs/evidence/ENGINE-UPDATES-20261111-MAYA-1159.md',
     'docs/evidence/QWEN-RELAXED-SWAP-20261029.md',
     'docs/evidence/validation-results/20261029-qwen-relaxed-swap.json',
     'docs/evidence/validation-results/20261029-daily-update-setup.json',

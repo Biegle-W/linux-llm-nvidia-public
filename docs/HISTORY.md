@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Maya 1.1.61 installed — November 13, 2026
+
+At the owner's request, after the llama.cpp install. Built in isolation and installed with pre-images. `deepseek-maya` passes the short DSH check; `glm-maya` failed the first check after the install by answering without calling the tool, then passed three repeats, so 1.1.61 stays with a warning. [evidence](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md).
+
 ## llama.cpp 1.0.0 installed — November 13, 2026
 
 The owner pointed at the 1.0.0 release. It was reviewed against the Bolt launcher, built in isolation and installed with pre-images and a rollback script. `bolt-llamacpp` passes the short DSH check; prompt reading is 34% faster on two runs and generation is unchanged. No launcher flag changed. [evidence](evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md).

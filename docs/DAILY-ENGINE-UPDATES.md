@@ -1,5 +1,12 @@
 # NVIDIA daily engine updates
 
+## 2026-11-13 midday: Maya 1.1.61
+
+Before and after: [ENGINE-UPDATES-20261113-MAYA-1161.md](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md).
+
+- maya: **promoted**; `f66a913c628c` (1.1.61). `deepseek-maya` passes. Warning: `glm-maya` failed its first short check after the install (answered without calling the tool) and passed three repeats.
+- llamacpp: **unchanged** since the morning install. hyperqwen, sglang, strata: **unchanged**. comfyui, raylight, mesh, gguf: **pinned-current**.
+
 ## 2026-11-13: llama.cpp 1.0.0
 
 Before and after: [ENGINE-UPDATES-20261113-LLAMACPP-100.md](evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md).
