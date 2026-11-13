@@ -1,5 +1,9 @@
 # Benchmark ledger
 
+## Quality benchmark: DeepSeek on Maya added — November 12, 2026
+
+`deepseek-maya` (Maya 1.1.60) ran the same 390 frozen items with the same settings and harness as the other entries (9.6 h). Macro 72.4% (66.8–77.9) against 73.0% for the same checkpoint on Strata; the paired difference is −5.2 to +4.0 points, not separated. By benchmark, Maya against Strata: MMLU-Pro 186 against 182 of 210, AIME 24 against 23 of 30, LiveCodeBench 31 against 33 of 60, BFCL single-turn 53 against 54 of 60, BFCL multi-turn 16 against 17 of 30; none separated. All seven text entries are now measured. No speed or guard setting changed. [Complete result list](evidence/QUALITY-BENCHMARK-20261111.md).
+
 ## Quality benchmark: Qwen 27B on SGLang added — November 12, 2026
 
 `qwen27b-sglang` ran the same 390 frozen items with the same settings and harness as the five entries scored on November 10–11 (4.5 h). Macro 68.1% (62.3–73.9) against 68.0% for the same checkpoint on HyperQwen; the paired difference is −6.4 to +6.3 points, not separated. By benchmark, SGLang against HyperQwen: MMLU-Pro 180 against 172 of 210, AIME 20 against 18 of 30, LiveCodeBench 30 against 24 of 60, BFCL single-turn 55 each of 60, BFCL multi-turn 14 against 20 of 30; none separated. `deepseek-maya` is still not measured. No speed or guard setting changed. [Complete result list](evidence/QUALITY-BENCHMARK-20261111.md).

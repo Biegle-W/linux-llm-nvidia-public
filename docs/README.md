@@ -126,7 +126,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 ### Benchmarks
 
 - [REPO-AUDIT-20261111.md](evidence/REPO-AUDIT-20261111.md): Repository audit and cleanup — November 11, 2026
-- [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md): Quality benchmark, measured ranking of six text entries (`qwen27b-sglang` added November 12), with the complete result list — November 11, 2026
+- [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md): Quality benchmark, measured ranking of all seven text entries (`qwen27b-sglang` and `deepseek-maya` added November 12), with the complete result list — November 11, 2026
 - [ALL-MODELS-RERUN-20261105.md](evidence/ALL-MODELS-RERUN-20261105.md): All downloaded model coverage and rerun — November 5, 2026
 - [ALL-ENTRY-BENCHMARKS-20261105.md](evidence/ALL-ENTRY-BENCHMARKS-20261105.md): Current entry observations — November 5, 2026
 - [ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md](evidence/ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md): Historical index before native IQ2 selection — November 4, 2026

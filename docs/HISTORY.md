@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Quality benchmark: DeepSeek on Maya added — November 12, 2026
+
+At the owner's request `deepseek-maya` ran the same 390-item benchmark, after the owner rebooted the server onto kernel 7.0.0-43 so the GPU unlock check read VERIFIED again. It scored 72.4% macro, the same as the Strata entry on the same checkpoint (73.0%; not separated). All seven text entries are now measured. Nothing in the serving setup changed. [evidence](evidence/QUALITY-BENCHMARK-20261111.md).
+
 ## Quality benchmark: Qwen 27B on SGLang added — November 12, 2026
 
 At the owner's request `qwen27b-sglang` ran the same 390-item benchmark as the other text entries. It scored 68.1% macro, the same as the HyperQwen entry on the same checkpoint (68.0%; not separated). The evidence doc and result file now cover six entries; `deepseek-maya` is still not measured. Nothing in the serving setup changed. [evidence](evidence/QUALITY-BENCHMARK-20261111.md).

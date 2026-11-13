@@ -28,6 +28,7 @@
   },
   "ranking_by_macro": [
     "deepseek-unsloth-strata",
+    "deepseek-maya",
     "qwen27b-sglang",
     "qwen27b-hyperqwen",
     "flash-next-strata",
@@ -125,6 +126,97 @@
         "interval95": [
           67.3,
           78.4
+        ]
+      }
+    },
+    "deepseek-maya": {
+      "mmlu_pro": {
+        "n": 210,
+        "correct": 186,
+        "percent": 88.6,
+        "wilson95": [
+          83.6,
+          92.2
+        ],
+        "outcomes": {
+          "correct": 186,
+          "truncated": 1,
+          "wrong": 23
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "aime25": {
+        "n": 30,
+        "correct": 24,
+        "percent": 80.0,
+        "wilson95": [
+          62.7,
+          90.5
+        ],
+        "outcomes": {
+          "correct": 24,
+          "truncated": 6
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "lcb": {
+        "n": 60,
+        "correct": 31,
+        "percent": 51.7,
+        "wilson95": [
+          39.3,
+          63.8
+        ],
+        "outcomes": {
+          "correct": 31,
+          "truncated": 18,
+          "wrong": 11
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_single": {
+        "n": 60,
+        "correct": 53,
+        "percent": 88.3,
+        "wilson95": [
+          77.8,
+          94.2
+        ],
+        "outcomes": {
+          "correct": 53,
+          "wrong": 7
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "bfcl_multi": {
+        "n": 30,
+        "correct": 16,
+        "percent": 53.3,
+        "wilson95": [
+          36.1,
+          69.8
+        ],
+        "outcomes": {
+          "correct": 16,
+          "wrong": 14
+        },
+        "harness_hash": [
+          "38fb335a"
+        ]
+      },
+      "macro": {
+        "percent": 72.4,
+        "interval95": [
+          66.8,
+          77.9
         ]
       }
     },
@@ -599,6 +691,15 @@
   "macro_paired_differences": [
     {
       "a": "bolt-llamacpp",
+      "b": "deepseek-maya",
+      "a_minus_b_interval95_points": [
+        -24.8,
+        -12.2
+      ],
+      "separated": true
+    },
+    {
+      "a": "bolt-llamacpp",
       "b": "deepseek-unsloth-strata",
       "a_minus_b_interval95_points": [
         -25.3,
@@ -641,6 +742,51 @@
         -8.7
       ],
       "separated": true
+    },
+    {
+      "a": "deepseek-maya",
+      "b": "deepseek-unsloth-strata",
+      "a_minus_b_interval95_points": [
+        -5.2,
+        4.0
+      ],
+      "separated": false
+    },
+    {
+      "a": "deepseek-maya",
+      "b": "flash-next-strata",
+      "a_minus_b_interval95_points": [
+        4.5,
+        16.1
+      ],
+      "separated": true
+    },
+    {
+      "a": "deepseek-maya",
+      "b": "glm-maya",
+      "a_minus_b_interval95_points": [
+        8.7,
+        21.6
+      ],
+      "separated": true
+    },
+    {
+      "a": "deepseek-maya",
+      "b": "qwen27b-hyperqwen",
+      "a_minus_b_interval95_points": [
+        -1.8,
+        10.5
+      ],
+      "separated": false
+    },
+    {
+      "a": "deepseek-maya",
+      "b": "qwen27b-sglang",
+      "a_minus_b_interval95_points": [
+        -1.8,
+        10.3
+      ],
+      "separated": false
     },
     {
       "a": "deepseek-unsloth-strata",
@@ -733,9 +879,7 @@
       "separated": false
     }
   ],
-  "not_measured": [
-    "deepseek-maya"
-  ],
+  "not_measured": [],
   "speed_rows_reused": {
     "qwen27b-hyperqwen": {
       "prefill_tps": "2,092.0",
@@ -786,9 +930,11 @@
     "qwen27b-hyperqwen": 254,
     "glm-maya": 298,
     "deepseek-unsloth-strata": 517,
-    "qwen27b-sglang": 269
+    "qwen27b-sglang": 269,
+    "deepseek-maya": 575
   },
   "added_later": {
-    "qwen27b-sglang": "2026-11-12, same frozen items, settings and harness"
+    "qwen27b-sglang": "2026-11-12, same frozen items, settings and harness",
+    "deepseek-maya": "2026-11-12, same frozen items, settings and harness; Maya 1.1.60"
   }
 }
