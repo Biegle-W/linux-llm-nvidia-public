@@ -50,3 +50,39 @@ These are native padded-latent generations cropped to exact output dimensions, w
 | [Native 1024 PNG](minimax-h3-1k.png) · [Native 2048 PNG](minimax-h3-2k.png) · [Native 4096 PNG](minimax-h3-4k.png) | [Native 1536x1024 PNG](minimax-h3-sign-1536x1024.png) |
 
 MiniMax H3 Image with the 3-bit GGUF denoiser (AD-Q3_K) and the int8 text encoder streamed from system RAM: 6 Euler steps, CFG 1. The fox images use the same caption and seed 27001 as the other image models and are native generations at each size; the model is tuned for 2048x2048 and above, so 1024 is below its rated range. The sign image comes from the serve-mode check (seed 31001). These are existing test outputs with the embedded workflow metadata removed; the compressed pixel data is unchanged. Every MiniMax H3 image generated on November 15 is kept here: the second seed of each fox run ([1024](minimax-h3-1k-seed27002.png) · [2048](minimax-h3-2k-seed27002.png) · [4096](minimax-h3-4k-seed27002.png)) and the two lighthouse images from the serve-mode check ([seed 31000](minimax-h3-lighthouse-1536x1024-seed31000.png) · [seed 31002](minimax-h3-lighthouse-1536x1024-seed31002.png)). [Research, setup and measurements](../../../docs/evidence/MINIMAX-H3-IMAGE-20261115.md).
+
+## All other outputs of the November 4-5 runs and later repeats — added November 16
+
+At the owner's request every remaining generated image and clip from the test runs is kept here too, not only the selected first-request samples above. They are existing outputs: second seeds, repeated runs and the interactive-entry runs. Clips whose decoded frames and audio are identical to a sample already kept were not added twice. Metadata was removed the same way as above; no poster frames were made for these.
+
+| Image | Size | Seed |
+|---|---|---:|
+| [Qwen Image2.1 Turbo INT8](qwen-turbo-1k-seed27002.png) | 1024x1024 | 27002 |
+| [FLUX3 Klein INT8](flux-klein-1k-seed27002.png) | 1024x1024 | 27002 |
+| [Qwen Image2.1 Turbo INT8](qwen-turbo-2k-seed27002.png) | 2048x2048 | 27002 |
+| [FLUX3 Klein INT8](flux-klein-2k-seed27002.png) | 2048x2048 | 27002 |
+
+| Clip | Size, frames, fps | Seed | Audio | Run (result) |
+|---|---|---:|---|---|
+| [wan22-5b-entry-512x288-seed27002](wan22-5b-entry-512x288-seed27002.mp4) | 512x288, 33, 16 | 27002 | no | 015857-wan22-5b-entry (pass) |
+| [ltx23-mesh-entry-512x288-seed27001](ltx23-mesh-entry-512x288-seed27001.mp4) | 512x288, 33, 24 | 27001 | yes | 020033-ltx23-mesh-entry (pass) |
+| [ltx23-mesh-entry-512x288-seed27002](ltx23-mesh-entry-512x288-seed27002.mp4) | 512x288, 33, 24 | 27002 | yes | 020033-ltx23-mesh-entry (pass) |
+| [wan22-5b-raylight-raylight-512x288-seed27001](wan22-5b-raylight-raylight-512x288-seed27001.mp4) | 512x288, 33, 16 | 27001 | no | 020316-wan22-5b-raylight-raylight (pass) |
+| [wan22-5b-raylight-raylight-512x288-seed27002](wan22-5b-raylight-raylight-512x288-seed27002.mp4) | 512x288, 33, 16 | 27002 | no | 020316-wan22-5b-raylight-raylight (pass) |
+| [wan22-5b-raylight-raylight-512x288-seed27002-run211656](wan22-5b-raylight-raylight-512x288-seed27002-run211656.mp4) | 512x288, 33, 16 | 27002 | no | 211656-wan22-5b-raylight-raylight (pass) |
+| [ltx23-mesh-mesh-512x288-seed27001](ltx23-mesh-mesh-512x288-seed27001.mp4) | 512x288, 33, 24 | 27001 | yes | 211835-ltx23-mesh-mesh (pass) |
+| [ltx23-mesh-mesh-512x288-seed27001-run212011](ltx23-mesh-mesh-512x288-seed27001-run212011.mp4) | 512x288, 33, 24 | 27001 | yes | 212011-ltx23-mesh-mesh (pass) |
+| [ltx23-mesh-entry-512x288-seed27001-run212214](ltx23-mesh-entry-512x288-seed27001-run212214.mp4) | 512x288, 33, 24 | 27001 | yes | 212214-ltx23-mesh-entry (pass) |
+| [ltx23-mesh-entry-512x288-seed27002-run212214](ltx23-mesh-entry-512x288-seed27002-run212214.mp4) | 512x288, 33, 24 | 27002 | yes | 212214-ltx23-mesh-entry (pass) |
+| [ltx23-mesh-entry-512x288-seed27001-run213602](ltx23-mesh-entry-512x288-seed27001-run213602.mp4) | 512x288, 33, 24 | 27001 | yes | 213602-ltx23-mesh-entry-seed27001 (pass) |
+| [ltx23-mesh-entry-512x288-seed27001-run233930](ltx23-mesh-entry-512x288-seed27001-run233930.mp4) | 512x288, 33, 24 | 27001 | yes | 233930-ltx23-mesh-entry (pass) |
+| [ltx23-mesh-entry-512x288-seed27002-run233930](ltx23-mesh-entry-512x288-seed27002-run233930.mp4) | 512x288, 33, 24 | 27002 | yes | 233930-ltx23-mesh-entry (pass) |
+| [wan22-5b-raylight-baseline-1280x720-seed27002](wan22-5b-raylight-baseline-1280x720-seed27002.mp4) | 1280x720, 33, 16 | 27002 | no | 000955-wan22-5b-raylight-baseline-720p (pass) |
+| [ltx23-mesh-mesh-1280x720-seed27002](ltx23-mesh-mesh-1280x720-seed27002.mp4) | 1280x720, 33, 24 | 27002 | yes | 001506-ltx23-mesh-mesh-720p-seed27002 (pass) |
+| [ltx23-mesh-mesh-1920x1080-seed27002](ltx23-mesh-mesh-1920x1080-seed27002.mp4) | 1920x1080, 33, 24 | 27002 | yes | 001756-ltx23-mesh-mesh-1080p-seed27002 (pass) |
+| [wan22-5b-raylight-raylight-1920x1080-seed27002](wan22-5b-raylight-raylight-1920x1080-seed27002.mp4) | 1920x1080, 33, 16 | 27002 | no | 011545-wan22-5b-raylight-raylight-1080p (pass) |
+| [wan22-5b-raylight-baseline-1920x1080-seed27002](wan22-5b-raylight-baseline-1920x1080-seed27002.mp4) | 1920x1080, 33, 16 | 27002 | no | 012227-wan22-5b-raylight-baseline-1080p (pass) |
+| [ltx23-mesh-entry-1280x720-seed27001](ltx23-mesh-entry-1280x720-seed27001.mp4) | 1280x720, 33, 24 | 27001 | yes | 014152-ltx23-mesh-entry-720p-seed27001 (pass) |
+| [ltx23-mesh-entry-1920x1080-seed27001](ltx23-mesh-entry-1920x1080-seed27001.mp4) | 1920x1080, 33, 24 | 27001 | yes | 014258-ltx23-mesh-entry-1080p-seed27001 (pass) |
+| [ltx23-mesh-entry-1280x720-seed27001-run213832](ltx23-mesh-entry-1280x720-seed27001-run213832.mp4) | 1280x720, 33, 24 | 27001 | yes | 213832-ltx23-mesh-entry-720p-seed27001 (pass) |
+| [ltx23-mesh-entry-1920x1080-seed27001-run213940](ltx23-mesh-entry-1920x1080-seed27001-run213940.mp4) | 1920x1080, 33, 24 | 27001 | yes | 213940-ltx23-mesh-entry-1080p-seed27001 (pass) |
