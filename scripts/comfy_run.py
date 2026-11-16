@@ -41,7 +41,16 @@ def graph(model, seed, size=1024):
          '3':node('NvidiaResidentVAE',name=files['vae']),
          '8':node('VAEDecode',samples=['7',0],vae=['3',0]),
          '9':node('SaveImage',images=['8',0],filename_prefix=model['id']+'-'+str(seed))}
-    if qwen:
+    if model['id'] == 'minimax-h3-image':
+        # GGUF denoiser resident on cuda:0; the 25 GiB encoder streams from RAM through cuda:1; the
+        # model walks its own 6-step sigma grid (no shift node) and takes no negative prompt.
+        g.update({'1':node('NvidiaResidentDenoiserGGUF',name=files['diffusion_models']),
+                  '2':node('NvidiaH3RAMEncoder',name=files['text_encoders'],mode=model.get('text_encoder_mode','stream')),
+                  '4':node('MiniMaxH3ImageConditioning',clip=['2',0],prompt=CAPTION,width=size,height=size),
+                  '5':node('ConditioningZeroOut',conditioning=['4',0]),
+                  '7':node('KSampler',model=['1',0],positive=['4',0],negative=['5',0],latent_image=['4',1],
+                           seed=seed,steps=6,cfg=1.0,sampler_name='euler',scheduler='simple',denoise=1.0)})
+    elif qwen:
         g.update({'4':node('TextEncodeQwenImage21',clip=['2',0],prompt=CAPTION,negative_prompt='',resolution=size),
                   '10':node('RandomNoise',noise_seed=seed),'11':node('KSamplerSelect',sampler_name='euler'),
                   '12':node('ManualSigmas',sigmas='1.0, 0.978453, 0.95418, 0.926626, 0.89508, 0.845148, 0.704534, 0.414568, 0'),
@@ -58,7 +67,7 @@ def graph(model, seed, size=1024):
 
 def main():
     parser=argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--model',choices=['qwen-image-2.1-turbo','flux3-klein','wan22-5b','wan22-5b-raylight','ltx23-mesh'],required=True)
+    parser.add_argument('--model',choices=['qwen-image-2.1-turbo','flux3-klein','minimax-h3-image','wan22-5b','wan22-5b-raylight','ltx23-mesh'],required=True)
     parser.add_argument('--video-entry',action='store_true',help='Use the selected interactive video workflow')
     parser.add_argument('--video-resolution',choices=['720p','1080p'],help='Video entry preset or isolated render size; retains33frames and all guards')
     parser.add_argument('--video-sync-ulysses',action='store_true',help='Explicit synchronized Raylight benchmark retry')

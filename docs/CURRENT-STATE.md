@@ -14,7 +14,7 @@ Snapshot of what is live. Replace facts here when they change; dated detail goes
 | `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build); frozen, later Strata versions do not run DeepSeek | 32,768 | same as above |
 | `bolt-llamacpp` | NVIDIA Nemotron-3.5 Bolt 74B-A9B native IQ2 | llama.cpp 1.0.0, 8 GiB RAM prompt cache | 163,840 | `models/engine-tests/bolt-iq2`, SATA |
 
-Every entry runs under 87.77 GiB soft / 89.77 GiB hard worker RAM with 2 GiB host reserve. ComfyUI image (Qwen Turbo, FLUX3 Klein) and video (Wan 2.2 5B, LTX 2.3 Mesh) entries run from desktop launchers; see [COMFY-VIDEO-HD-ENTRIES-20261105.md](evidence/COMFY-VIDEO-HD-ENTRIES-20261105.md).
+Every entry runs under 87.77 GiB soft / 89.77 GiB hard worker RAM with 2 GiB host reserve. ComfyUI image (Qwen Turbo, FLUX3 Klein, MiniMax H3 Image) and video (Wan 2.2 5B, LTX 2.3 Mesh) entries run from desktop launchers; see [COMFY-VIDEO-HD-ENTRIES-20261105.md](evidence/COMFY-VIDEO-HD-ENTRIES-20261105.md).
 
 Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache reuse): ~5.7K-token tool prompt 1,243 prefill / 146 decode tok/s; ~24K prompt 2,375 / 108; writing ~124 tok/s. Strata 0.2.12 qualification (Nov 8, single short ~5.6K-token DSH tool call, old to new): `flash-next-strata` 934 to 1,046 prefill, 68 to 86 decode tok/s, TTFT 6.5 to 5.5 s; `deepseek-unsloth-strata` 83 to 86 prefill, 11.8 to 11.7 decode tok/s, TTFT 68 to 66 s (DeepSeek speed not strictly comparable: prompt cache reuse). Both answered a router smoke check correctly afterwards. Other entries: [ALL-MODELS-RERUN-20261105.md](evidence/ALL-MODELS-RERUN-20261105.md).
 
@@ -34,6 +34,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Recent changes (newest first)
 
+- **Nov 15:** MiniMax H3 Image added as a third image model (`minimax-h3-image`, launcher "ComfyUI MiniMax H3 Image"): 3-bit GGUF denoiser fully on the 3080 Ti, VAE on the 3080, and the 27 GB text encoder kept in system RAM and streamed through the 3080. That last part is an owner-approved exception to the all-on-GPU rule, for this model's encoder only. 1024², 2048² and 4096² pass (6, 13.5 and 58 s of sampling). The licence has territory limits. [MINIMAX-H3-IMAGE-20261115.md](evidence/MINIMAX-H3-IMAGE-20261115.md)
 - **Nov 15:** Maya 1.1.65 and Strata 0.2.14 installed by hand after a review of the upstream fixes. All four profiles pass. Flash-Next reads prompts 4-5% faster; its generation measured 79-84 tok/s against 87 before (warning, inside the spread of earlier days). **Strata 0.2.14 no longer runs DeepSeek**, so `deepseek-unsloth-strata` stays on its 0.2.13 runtime and gets no further Strata updates. [ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md)
 - **Nov 13:** `bolt-llamacpp` re-scored on llama.cpp 1.0.0: 52.1% macro against 53.9% on 0.9.0 (difference −2.3 to +6.1 points, not separated). The ranking table still shows the 0.9.0 run. [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md)
 - **Nov 13:** Maya 1.1.61 installed by hand. `deepseek-maya` passes; `glm-maya` failed its first short check after the install (it answered without calling the tool) and passed three repeats, recorded as a warning. [ENGINE-UPDATES-20261113-MAYA-1161.md](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md)
@@ -61,6 +62,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Open items
 
+- **MiniMax H3 Image** has only the short square-image checks: no image editing, one non-square size, and the saved workflow has not been opened in the browser UI. 4096² leaves about 0.5 GiB on the 3080 Ti. [MINIMAX-H3-IMAGE-20261115.md](evidence/MINIMAX-H3-IMAGE-20261115.md)
 - **`deepseek-unsloth-strata` is frozen on Strata 0.2.13.** Upstream dropped DeepSeek in 0.2.14, so this profile gets no more engine fixes; `deepseek-maya` runs the same checkpoint on an engine that is still updated. Keeping or retiring the Strata profile is the owner's call. [ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md)
 - **`glm-maya`** skipped the tool call once in four short checks on Maya 1.1.61; on 1.1.65 it called the tool in 3 of 3. Keep watching in the daily checks.
 - **Flash-Next generation on Strata 0.2.14** measured 3-9% under the 0.2.13 run of the same day in three short checks (two of them during a compile). Not settled; re-measure on an idle server.

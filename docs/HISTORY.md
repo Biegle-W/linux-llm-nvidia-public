@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## MiniMax H3 Image added — November 15, 2026
+
+At the owner's request, after council research into the quantization. Denoiser `MiniMax-H3-Image-AD-Q3_K.gguf` (8.73 GB) fully on the 3080 Ti, VAE on the 3080, and the official int8 text encoder (27.14 GB) in system RAM, streamed through the 3080: no published encoder fits a 10 GB card, and the owner approved this exception for the one model. 1024², 2048² and 4096² pass; the two existing image models give byte-identical images. [evidence](evidence/MINIMAX-H3-IMAGE-20261115.md).
+
 ## Maya 1.1.65 and Strata 0.2.14 installed — November 15, 2026
 
 Daily update at the owner's request, with a review of the upstream fixes and speed changes first (the owner asked for that review before every update from now on). Maya 1.1.65 needed both local patches refreshed and passes on both profiles at the same speed. Strata 0.2.14 was installed for `flash-next-strata` (prompt reading 4-5% faster, generation 79-84 tok/s against 87, a warning). Strata 0.2.14 no longer runs DeepSeek, so `deepseek-unsloth-strata` was left on its 0.2.13 runtime and is frozen there. [evidence](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md).

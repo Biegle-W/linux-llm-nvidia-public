@@ -39,7 +39,7 @@ Per-drive usage and unused weights: run `python3 scripts/weights_tracker.py` (re
 | GLM-5.3-Flash Maya-S24, Maya | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/maya/Maya-S24` |
 | DeepSeek-V4.1-Flash-1017 UD-IQ1_S, shared by Strata and Maya | SSD-streaming with GPU/RAM caches | NVMe shards 1-4; SATA shard 5 (symlinked) | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S` |
 | Nemotron 3.5 Bolt IQ2, llama.cpp | RAM-resident (CPU RAM offload) after loading | Samsung SSD 870 QVO SATA | `models/engine-tests/bolt-iq2` |
-| ComfyUI images (Qwen Image 2.1 Turbo, FLUX3 Klein) | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/comfy-images` |
+| ComfyUI images (Qwen Image 2.1 Turbo, FLUX3 Klein, MiniMax H3 Image) | GPU-resident after loading; the MiniMax H3 text encoder (27 GB) stays in system RAM | Samsung SSD 870 QVO SATA | `models/comfy-images` |
 | ComfyUI video (Wan 2.2 5B, LTX 2.3 Mesh) | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/comfy-video` |
 
 The complete `models/engine-tests` directory is a link to

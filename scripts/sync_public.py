@@ -324,6 +324,7 @@ FILES = (
     'config/comfy-runtime.json', 'config/comfy-requirements.lock',
     'config/comfy-workflows/qwen-image-2.1-turbo.json', 'config/comfy-workflows/qwen-image-2.1-turbo.api.json',
     'config/comfy-workflows/flux3-klein.json', 'config/comfy-workflows/flux3-klein.api.json',
+    'config/comfy-workflows/minimax-h3-image.json', 'config/comfy-workflows/minimax-h3-image.api.json', 'docs/evidence/MINIMAX-H3-IMAGE-20261115.md',
     'scripts/comfy_run.py', 'scripts/comfy_worker.py', 'scripts/comfy_nodes/__init__.py',
     'scripts/install_comfy_shortcut.py', 'tests/test_comfy_residency.py',
     'docs/evidence/COMFY-DUAL-GPU-20261105.md', 'docs/evidence/benchmark-results/20261105-comfy-dual-gpu.json',

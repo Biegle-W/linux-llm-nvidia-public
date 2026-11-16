@@ -74,6 +74,46 @@
         "4096": "stopped-GPU0-free-VRAM-floor",
         "default_square_size": 1024
       }
+    },
+    {
+      "id": "minimax-h3-image",
+      "repo": "Comfy-Org/MiniMax-H3-Image",
+      "revision": "0bb149f51e3156ed4b90dd45d5620346bfe1df8f",
+      "denoiser_repo": "AtomicChat/MiniMax-H3-Image-GGUF",
+      "denoiser_revision": "5da8538f0b9a7a8a0afd1ff6ed22ade4b0134094",
+      "files": [
+        {
+          "file": "diffusion_models/MiniMax-H3-Image-AD-Q3_K.gguf",
+          "bytes": 8726118624,
+          "sha256": "fc1e22aecb7443cd1eaadf76916718dca6a9421ea3c2955cd868dfbb31f35b36"
+        },
+        {
+          "file": "text_encoders/qwen3vl_32b_minimax_h3_int8_convrot.safetensors",
+          "bytes": 27141342152,
+          "sha256": "bc2ced0fbea64757fa9acddccfc0b3f4819d1dcf1da6c124d690d368be283923"
+        },
+        {
+          "file": "vae/minimax_h3_image_vae_fp16.safetensors",
+          "bytes": 1168505312,
+          "sha256": "d80e9c2e5cfc9844869961ff5a58c9a9e52182df6bfb30b26018dd7f348721af"
+        }
+      ],
+      "text_encoder_mode": "stream",
+      "text_encoder_placement": "system RAM, streamed through cuda:1 (owner-approved exception to cpu_weight_offload=false, 2026-11-15)",
+      "qualification_status": "short-image-test-passed",
+      "validated_square_sizes": [
+        1024,
+        2048,
+        4096
+      ],
+      "resolution_benchmark": {
+        "report": "docs/evidence/MINIMAX-H3-IMAGE-20261115.md",
+        "1024": "passed-two-images",
+        "2048": "passed-two-images",
+        "4096": "passed-two-images",
+        "default_square_size": 2048
+      },
+      "licence": "MiniMax-H3-Image Community License Agreement (territory and hosted-service limits; see evidence)"
     }
   ],
   "version": "0.45.0",

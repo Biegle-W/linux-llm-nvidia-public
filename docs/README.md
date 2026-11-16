@@ -138,6 +138,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 
 ### Models, engines and context
 
+- [MINIMAX-H3-IMAGE-20261115.md](evidence/MINIMAX-H3-IMAGE-20261115.md): MiniMax H3 Image added (Q3 GGUF denoiser, text encoder in RAM), research and measurements — November 15, 2026
 - [ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md): Maya 1.1.65 and Strata 0.2.14 installed by hand, with the upstream review; DeepSeek on Strata frozen at 0.2.13 — November 15, 2026
 - [ENGINE-UPDATES-20261113-MAYA-1161.md](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md): Maya 1.1.61 installed by hand; `glm-maya` failed one of four short checks (warning) — November 13, 2026
 - [ENGINE-UPDATES-20261113-LLAMACPP-100.md](evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md): llama.cpp 1.0.0 installed by hand for `bolt-llamacpp`, with the upstream review and before/after check — November 13, 2026

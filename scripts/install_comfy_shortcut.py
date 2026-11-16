@@ -20,7 +20,7 @@ def content(name,model,video=False):
     return text
 
 def main():
-    for name,model,video in [('ComfyUI Qwen Turbo','qwen-image-2.1-turbo',False),('ComfyUI FLUX3 Klein','flux3-klein',False),('ComfyUI Wan 2.2 5B','wan22-5b',True),('ComfyUI LTX 2.3 Mesh','ltx23-mesh',True)]:
+    for name,model,video in [('ComfyUI Qwen Turbo','qwen-image-2.1-turbo',False),('ComfyUI FLUX3 Klein','flux3-klein',False),('ComfyUI MiniMax H3 Image','minimax-h3-image',False),('ComfyUI Wan 2.2 5B','wan22-5b',True),('ComfyUI LTX 2.3 Mesh','ltx23-mesh',True)]:
         desktop=Path.home()/'Desktop'/(name+'.desktop')
         text=content(name,model,video)
         if desktop.exists() and desktop.read_text() not in (text,legacy_content(name,model,video)):
