@@ -270,6 +270,8 @@ SAMPLE_MEDIA = (
     'assets/samples/comfy/ltx-mesh-1080p.mp4', 'assets/samples/comfy/ltx-mesh-1080p-poster.png',
     'assets/samples/comfy/qwen-turbo-1k.png', 'assets/samples/comfy/qwen-turbo-2k.png',
     'assets/samples/comfy/flux-klein-1k.png', 'assets/samples/comfy/flux-klein-2k.png',
+    'assets/samples/comfy/minimax-h3-1k.png', 'assets/samples/comfy/minimax-h3-2k.png', 'assets/samples/comfy/minimax-h3-4k.png',
+    'assets/samples/comfy/minimax-h3-sign-1536x1024.png',
     'assets/samples/comfy/wan-baseline.mp4', 'assets/samples/comfy/wan-raylight.mp4',
     'assets/samples/comfy/ltx-mesh.mp4',
     'assets/samples/comfy/wan-baseline-poster.png', 'assets/samples/comfy/wan-raylight-poster.png',

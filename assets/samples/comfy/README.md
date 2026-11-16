@@ -41,3 +41,12 @@ These are native padded-latent generations cropped to exact output dimensions, w
 | Wan Raylight, deterministic guidance | ![Wan Raylight1080p first frame](wan-raylight-1080p-poster.png) | [MP4:1920x1080,33frames,16fps](wan-raylight-1080p.mp4) |
 
 [Fixes, timings and GPU-only qualification](../../../docs/evidence/WAN1080-FIX-20261105.md).
+
+## MiniMax H3 Image — November 15
+
+| Fox caption, 2048x2048 | Text rendering, 1536x1024 |
+|---|---|
+| ![MiniMax H3 Image 2K fox in snow](minimax-h3-2k.png) | ![MiniMax H3 Image sign reading OPEN SUNDAY](minimax-h3-sign-1536x1024.png) |
+| [Native 1024 PNG](minimax-h3-1k.png) · [Native 2048 PNG](minimax-h3-2k.png) · [Native 4096 PNG](minimax-h3-4k.png) | [Native 1536x1024 PNG](minimax-h3-sign-1536x1024.png) |
+
+MiniMax H3 Image with the 3-bit GGUF denoiser (AD-Q3_K) and the int8 text encoder streamed from system RAM: 6 Euler steps, CFG 1. The fox images use the same caption and seed 27001 as the other image models and are native generations at each size; the model is tuned for 2048x2048 and above, so 1024 is below its rated range. The sign image comes from the serve-mode check (seed 31001). These are existing test outputs with the embedded workflow metadata removed; the compressed pixel data is unchanged. [Research, setup and measurements](../../../docs/evidence/MINIMAX-H3-IMAGE-20261115.md).

@@ -46,6 +46,8 @@ Entry id `minimax-h3-image`; launcher "ComfyUI MiniMax H3 Image"; files in `mode
 - A read-only review of the new loader code by Codex found no defect; it noted that the new unit tests cover the placement checks only, not the load and release life cycle (that part rests on the runs above).
 - `--check-ui` passes. The saved workflow (`config/comfy-workflows/minimax-h3-image.json`, 2048² by default) was written by hand and has not been opened in the browser UI.
 
+Samples: [1024, 2048 and 4096 fox images and the sign image](../../assets/samples/comfy/README.md), metadata removed.
+
 ## Not done
 
 - No image-editing (reference picture) run; that path uses the encoder's vision tower and more memory.

@@ -230,7 +230,68 @@
       "sha256": "53399606decc92910217bb2bc1f0a16dcb9e0b7f28f0a1195029ff5642255d16",
       "bytes": 1237499,
       "validation": "Remux only; decoded RGB frames and audio identical; embedded workflow metadata removed"
+    },
+    {
+      "id": "minimax-h3-1k",
+      "model": "MiniMax H3 Image AD-Q3_K GGUF, text encoder int8 in RAM",
+      "file": "minimax-h3-1k.png",
+      "kind": "image",
+      "width": 1024,
+      "height": 1024,
+      "seed": 27001,
+      "report": "docs/evidence/MINIMAX-H3-IMAGE-20261115.md",
+      "original_sha256": "c4eeab03804932c6173dfa011fddd608e37ded13061b1db2329a6105e3b0fd5d",
+      "sha256": "4c084b5d312ee6e2cb59faa4405eace5353381690c0c0144d20ee28028f4d504",
+      "bytes": 1923432,
+      "validation": "Compressed pixel data byte-identical; embedded prompt metadata removed",
+      "date": "2026-11-15"
+    },
+    {
+      "id": "minimax-h3-2k",
+      "model": "MiniMax H3 Image AD-Q3_K GGUF, text encoder int8 in RAM",
+      "file": "minimax-h3-2k.png",
+      "kind": "image",
+      "width": 2048,
+      "height": 2048,
+      "seed": 27001,
+      "report": "docs/evidence/MINIMAX-H3-IMAGE-20261115.md",
+      "original_sha256": "18fc43d29cbf7a21f781767a16bd3ab25f5e82d5a0631353cb46199f5bc93e9d",
+      "sha256": "f3ccf59425eb182d983234b3f1c7ce809f13820860ad251c326f713d2daaf492",
+      "bytes": 7897161,
+      "validation": "Compressed pixel data byte-identical; embedded prompt metadata removed",
+      "date": "2026-11-15"
+    },
+    {
+      "id": "minimax-h3-4k",
+      "model": "MiniMax H3 Image AD-Q3_K GGUF, text encoder int8 in RAM",
+      "file": "minimax-h3-4k.png",
+      "kind": "image",
+      "width": 4096,
+      "height": 4096,
+      "seed": 27001,
+      "report": "docs/evidence/MINIMAX-H3-IMAGE-20261115.md",
+      "original_sha256": "6e25da715e50c15b3f2b7579d57ad246ad406d19fae17104ee1444105a4c54a6",
+      "sha256": "0216b28194ea746cdd114ac0ec1fb6c44361111f960d69825bc89d08347d97db",
+      "bytes": 20265034,
+      "validation": "Compressed pixel data byte-identical; embedded prompt metadata removed",
+      "date": "2026-11-15"
+    },
+    {
+      "id": "minimax-h3-sign-1536x1024",
+      "model": "MiniMax H3 Image AD-Q3_K GGUF, text encoder int8 in RAM",
+      "file": "minimax-h3-sign-1536x1024.png",
+      "kind": "image",
+      "width": 1536,
+      "height": 1024,
+      "seed": 31001,
+      "report": "docs/evidence/MINIMAX-H3-IMAGE-20261115.md",
+      "original_sha256": "f7c4701cc72916ceb2f480e417cd293dc020036fa5f7f5e40926378705f910c3",
+      "sha256": "65d5cd78f86544a3f0ee203a618a39ecff24b75df5e4226745965d42920ede96",
+      "bytes": 1598392,
+      "validation": "Compressed pixel data byte-identical; embedded prompt metadata removed",
+      "date": "2026-11-15",
+      "prompt": "A wooden desk by a window with a hand-painted sign that reads \"OPEN SUNDAY\" in red letters, a cup of coffee, morning light, shallow depth of field."
     }
   ],
-  "updated": "2026-11-05"
+  "updated": "2026-11-15"
 }
