@@ -8,10 +8,10 @@ Snapshot of what is live. Replace facts here when they change; dated detail goes
 |---|---|---|---:|---|
 | `qwen27b-hyperqwen` | Qwen3.8-27B AutoRound INT4 (fast heads, INT8 embedding) | HyperQwen-vLLM (vLLM 0.33.0) | 86,016 | `models/engine-tests/qwen38-27b-hyperqwen-fast`, SATA, 16 GB (shared with SGLang) |
 | `qwen27b-sglang` | same checkpoint | SGLang | 57,344 | same as above |
-| `flash-next-strata` | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | Strata 0.2.13 (engine 0.1.59) + MTP; layers 0-28 on the 3080, 29-47 + head on the 3080 Ti, stage-trimmed | 131,072 | `models/strata/models/IQ3_XXS`, NVMe, 76 GB |
-| `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.61 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
-| `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.61 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
-| `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build) | 32,768 | same as above |
+| `flash-next-strata` | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | Strata 0.2.14 (engine 0.1.60) + MTP; layers 0-28 on the 3080, 29-47 + head on the 3080 Ti, stage-trimmed | 131,072 | `models/strata/models/IQ3_XXS`, NVMe, 76 GB |
+| `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.65 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
+| `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.65 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
+| `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build); frozen, later Strata versions do not run DeepSeek | 32,768 | same as above |
 | `bolt-llamacpp` | NVIDIA Nemotron-3.5 Bolt 74B-A9B native IQ2 | llama.cpp 1.0.0, 8 GiB RAM prompt cache | 163,840 | `models/engine-tests/bolt-iq2`, SATA |
 
 Every entry runs under 87.77 GiB soft / 89.77 GiB hard worker RAM with 2 GiB host reserve. ComfyUI image (Qwen Turbo, FLUX3 Klein) and video (Wan 2.2 5B, LTX 2.3 Mesh) entries run from desktop launchers; see [COMFY-VIDEO-HD-ENTRIES-20261105.md](evidence/COMFY-VIDEO-HD-ENTRIES-20261105.md).
@@ -34,6 +34,7 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Recent changes (newest first)
 
+- **Nov 15:** Maya 1.1.65 and Strata 0.2.14 installed by hand after a review of the upstream fixes. All four profiles pass. Flash-Next reads prompts 4-5% faster; its generation measured 79-84 tok/s against 87 before (warning, inside the spread of earlier days). **Strata 0.2.14 no longer runs DeepSeek**, so `deepseek-unsloth-strata` stays on its 0.2.13 runtime and gets no further Strata updates. [ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md)
 - **Nov 13:** `bolt-llamacpp` re-scored on llama.cpp 1.0.0: 52.1% macro against 53.9% on 0.9.0 (difference −2.3 to +6.1 points, not separated). The ranking table still shows the 0.9.0 run. [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md)
 - **Nov 13:** Maya 1.1.61 installed by hand. `deepseek-maya` passes; `glm-maya` failed its first short check after the install (it answered without calling the tool) and passed three repeats, recorded as a warning. [ENGINE-UPDATES-20261113-MAYA-1161.md](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md)
 - **Nov 13:** llama.cpp 1.0.0 installed by hand for `bolt-llamacpp` (from 0.9.0). The short check passes; prompt reading rose from 501.5 to 673 tok/s on two runs and generation is unchanged. No launcher flag changed. [ENGINE-UPDATES-20261113-LLAMACPP-100.md](evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md)
@@ -60,9 +61,11 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 
 ## Open items
 
-- **`glm-maya` on Maya 1.1.61** skipped the tool call in one of four short checks; not seen in earlier hands-on checks. Watch the next daily checks; 1.1.60 pre-images and `rollback.sh` are in `data/maya-update-20261113/`. [ENGINE-UPDATES-20261113-MAYA-1161.md](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md)
+- **`deepseek-unsloth-strata` is frozen on Strata 0.2.13.** Upstream dropped DeepSeek in 0.2.14, so this profile gets no more engine fixes; `deepseek-maya` runs the same checkpoint on an engine that is still updated. Keeping or retiring the Strata profile is the owner's call. [ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md)
+- **`glm-maya`** skipped the tool call once in four short checks on Maya 1.1.61; on 1.1.65 it called the tool in 3 of 3. Keep watching in the daily checks.
+- **Flash-Next generation on Strata 0.2.14** measured 3-9% under the 0.2.13 run of the same day in three short checks (two of them during a compile). Not settled; re-measure on an idle server.
 - **ComfyUI 0.45.0** has only the short 1024² image and 512x288 video checks; 2048², 720p and 1080p were not re-run. The Raylight trial stage gives a different clip than on 0.44.0 (valid, same speed; cause not investigated). [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md)
-- **Strata 0.2.13, Maya 1.1.61, llama.cpp 1.0.0, HyperQwen vLLM 0.33.0** have only short-check numbers; no long-context or sustained run yet. The Nov 7 Flash-Next figures above are still from 0.2.11.
+- **Strata 0.2.14, Maya 1.1.65, llama.cpp 1.0.0, HyperQwen vLLM 0.33.0** have only short-check numbers; no long-context or sustained run yet. The Nov 7 Flash-Next figures above are still from 0.2.11.
 - **DSH web app** still lists `flash-next-iq1m-strata` until `nvidia-dsh.service` restarts (its config is already regenerated; the router returns 404 for that id).
 - **Quality benchmark gaps:** nothing was run with thinking on; samples are screening-size.
 - **`data/`** holds many private trial and evidence directories (all gitignored). Pruning them needs the owner's OK.

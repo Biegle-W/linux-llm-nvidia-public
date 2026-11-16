@@ -1,5 +1,14 @@
 # NVIDIA daily engine updates
 
+## 2026-11-15: Maya 1.1.65 and Strata 0.2.14
+
+Upstream review, before and after: [ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md).
+
+- maya: **promoted**; `c81fab6c9d63` (1.1.65). Both Maya profiles pass the short DSH check at the same speed as 1.1.61; `glm-maya` called the tool in 3 of 3 runs. Both local patches were refreshed for 1.1.65.
+- strata: **promoted** for `flash-next-strata`; `09b603886925` (v0.2.14, control 0.1.60.1, engine 0.1.60). Prompt reading 1017.8 → 1056-1064 tok/s. Warning: generation 79.4, 84.4 and 82.0 tok/s against 87.1 before (inside the spread of earlier days).
+- strata, `deepseek-unsloth-strata`: **not updated and frozen at v0.2.13**. Strata 0.2.14 no longer runs DeepSeek; the profile still passes on its own 0.2.13 runtime.
+- hyperqwen, sglang, llamacpp: **unchanged**. comfyui, raylight, mesh, gguf: **pinned-current**.
+
 ## 2026-11-13 midday: Maya 1.1.61
 
 Before and after: [ENGINE-UPDATES-20261113-MAYA-1161.md](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md).

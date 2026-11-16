@@ -39,6 +39,12 @@ def file_action(receipt,target,candidate):
 
 
 
+# Refreshed for Maya 1.1.65 (upstream added an include beside the one this patch inserts); same changes as v1153.
+MAYA_CACHE_PATCH='maya-ds4-file-cache-target-v1165.patch'
+# v1165 drops the glm_layer_graph_test hunk (fixed upstream in 1.1.65) and re-anchors the ple_parity hunk.
+MAYA_QUALIFICATION_PATCH='maya-qualification-v1165.patch'
+
+
 def stage_maya_pin(root,profile,revision,candidate,directory,receipt):
     from update_builders import canonical
     from maya_cachebound_runtime import verify
@@ -52,6 +58,8 @@ def stage_maya_pin(root,profile,revision,candidate,directory,receipt):
     manifest=json.loads(path.read_text());target=root/manifest['binary']['path']
     manifest.update(source_commit=revision,status='Short daily DSH qualification required; see daily ledger',CUDA_toolkit='13.0.88; matching CUDA13 runtime/cuBLAS')
     manifest.pop('release',None);manifest['binary']['sha256']=sha(candidate)
+    if 'cache_controller_patch' in manifest:
+        manifest['cache_controller_patch']={'path':'patches/'+MAYA_CACHE_PATCH,'sha256':sha(root/'patches'/MAYA_CACHE_PATCH)}
     m=directory/names[profile];write_json(m,manifest);file_action(receipt,target,candidate);file_action(receipt,path,m)
 
 
@@ -94,7 +102,7 @@ def build_registered_test_executables(build, log, env):
 
 def maya_qualification_options(root, directory, source, log, receipt):
     from update_builders import run
-    run(['patch', '--batch', '--fuzz=0', '-p1', '-i', root/'patches/maya-qualification-v1156.patch'], log, source)
+    run(['patch', '--batch', '--fuzz=0', '-p1', '-i', root/'patches'/MAYA_QUALIFICATION_PATCH], log, source)
     python = root/'runtimes/project-maya/.venv/bin/python'
     run([python, '-c', 'import numpy'], log, timeout=60)
     fixture = directory/'ple-fixture'
@@ -104,7 +112,7 @@ def maya_qualification_options(root, directory, source, log, receipt):
     table = root/'models/strata/models/IQ3_XXS/Qwen3.8-Flash-Next-GSQ-RCO-IQ3_XXS-00002-of-00002.gguf'
     if not table.is_file():
         raise RuntimeError('Existing PLE table required; no automatic weight download')
-    receipt['qualification_patch_sha256'] = sha(root/'patches/maya-qualification-v1156.patch')
+    receipt['qualification_patch_sha256'] = sha(root/'patches'/MAYA_QUALIFICATION_PATCH)
     receipt['ple_fixture_manifest'] = json.loads((fixture/'fixture.json').read_text())
     return ['-DSTRATA_PYTHON3='+str(python), '-DSTRATA_PLE_FIXTURE_DIR='+str(fixture),
             '-DSTRATA_PLE_PACK='+str(fixture), '-DSTRATA_PLE_GGUF='+str(table)]
@@ -115,7 +123,7 @@ def native(root,component,revision,directory,source,log,receipt):
     kind=component['builder'];build=source/'build';maya=kind=='maya-pair'
     if maya:
         verify_cuda_host_headers(root,directory,log)
-        patch=root/'patches/maya-ds4-file-cache-target-v1153.patch'
+        patch=root/'patches'/MAYA_CACHE_PATCH
         run(['patch','--batch','--fuzz=0','-p1','-i',patch],log,source)
         test=directory/'cache-test'
         run(['g++','-O2','-std=c++20','-pthread','-I'+str(source/'src/ds4'),root/'tools/maya-file-cache-bound/test_cache_bound.cpp','-o',test],log)

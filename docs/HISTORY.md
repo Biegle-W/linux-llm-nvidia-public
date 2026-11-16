@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Maya 1.1.65 and Strata 0.2.14 installed — November 15, 2026
+
+Daily update at the owner's request, with a review of the upstream fixes and speed changes first (the owner asked for that review before every update from now on). Maya 1.1.65 needed both local patches refreshed and passes on both profiles at the same speed. Strata 0.2.14 was installed for `flash-next-strata` (prompt reading 4-5% faster, generation 79-84 tok/s against 87, a warning). Strata 0.2.14 no longer runs DeepSeek, so `deepseek-unsloth-strata` was left on its 0.2.13 runtime and is frozen there. [evidence](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md).
+
 ## Quality benchmark: Bolt re-run on llama.cpp 1.0.0 — November 13, 2026
 
 At the owner's request `bolt-llamacpp` ran the 390-item benchmark again on llama.cpp 1.0.0. It scored 52.1% macro against 53.9% on 0.9.0; the difference is not separated and no single benchmark separates. Nothing in the serving setup changed. [evidence](evidence/QUALITY-BENCHMARK-20261111.md).
