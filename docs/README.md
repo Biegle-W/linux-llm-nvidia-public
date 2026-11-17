@@ -138,6 +138,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 
 ### Models, engines and context
 
+- [ENGINE-UPDATES-20261116-STRATA-0215.md](evidence/ENGINE-UPDATES-20261116-STRATA-0215.md): Strata 0.2.15 installed by hand (control only), with the upstream review — November 16, 2026
 - [MINIMAX-H3-IMAGE-20261115.md](evidence/MINIMAX-H3-IMAGE-20261115.md): MiniMax H3 Image added (Q3 GGUF denoiser, text encoder in RAM), research and measurements — November 15, 2026
 - [ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md): Maya 1.1.65 and Strata 0.2.14 installed by hand, with the upstream review; DeepSeek on Strata frozen at 0.2.13 — November 15, 2026
 - [ENGINE-UPDATES-20261113-MAYA-1161.md](evidence/ENGINE-UPDATES-20261113-MAYA-1161.md): Maya 1.1.61 installed by hand; `glm-maya` failed one of four short checks (warning) — November 13, 2026

@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Strata 0.2.15 installed — November 16, 2026
+
+Daily update. Only Strata had a new release; it changes the control package only (0.1.61), the engine stays 0.1.60. Installed for `flash-next-strata` with the same speed before and after; five idle-server runs (80.2-85.3 tok/s) close the question left open on November 15 about Flash-Next generation speed. Two server fixes come with it: boolean tool arguments, and clean refusal of requests during shutdown. [evidence](evidence/ENGINE-UPDATES-20261116-STRATA-0215.md).
+
 ## All generation samples kept in the repo — November 16, 2026
 
 At the owner's request every generated image and clip goes into `assets/samples/comfy/`, not only one selected sample per model and size. Added: the nine MiniMax H3 images of November 15, and the remaining outputs of the November 4-5 runs and later repeats (4 images, 22 clips; 17 further clips have the same decoded content as a kept one and were not duplicated). Metadata removed, content unchanged. The rule is in `AGENTS.md`.

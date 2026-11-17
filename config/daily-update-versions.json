@@ -46,10 +46,10 @@
     "evidence": "docs/evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md"
   },
   "strata": {
-    "source_commit": "09b603886925994d0d4461857b01321ef3aa431c",
-    "qualified_on": "2026-11-15T21:40:00",
+    "source_commit": "c77572806996349b49995e4f98d41b5294d36a21",
+    "qualified_on": "2026-11-16T22:10:00",
     "method": "hands-on short DSH",
-    "note": "Strata v0.2.14 for flash-next-strata only: control 0.1.60.1, engine 0.1.60. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59): Strata 0.2.14 no longer runs DeepSeek",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md"
+    "note": "Strata v0.2.15 for flash-next-strata only: control 0.1.61, engine 0.1.60 (unchanged). deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59): Strata no longer runs DeepSeek",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261116-STRATA-0215.md"
   }
 }

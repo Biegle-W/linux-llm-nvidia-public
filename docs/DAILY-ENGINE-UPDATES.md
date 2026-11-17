@@ -1,5 +1,12 @@
 # NVIDIA daily engine updates
 
+## 2026-11-16: Strata 0.2.15
+
+Upstream review, before and after: [ENGINE-UPDATES-20261116-STRATA-0215.md](evidence/ENGINE-UPDATES-20261116-STRATA-0215.md).
+
+- strata: **promoted** for `flash-next-strata`; `c77572806996` (v0.2.15, control 0.1.61, engine 0.1.60 unchanged). Same speed before and after (generation 80.2-85.3 tok/s over five runs on an idle server). `deepseek-unsloth-strata` stays frozen at v0.2.13 and passes.
+- hyperqwen, sglang, maya, llamacpp: **unchanged**. comfyui, raylight, mesh, gguf: **pinned-current**.
+
 ## 2026-11-15: Maya 1.1.65 and Strata 0.2.14
 
 Upstream review, before and after: [ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md](evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md).
