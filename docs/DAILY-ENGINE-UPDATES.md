@@ -1,5 +1,12 @@
 # NVIDIA daily engine updates
 
+## 2026-11-18: Maya 1.1.67
+
+Upstream review, before and after: [ENGINE-UPDATES-20261118-MAYA-1167.md](evidence/ENGINE-UPDATES-20261118-MAYA-1167.md).
+
+- maya: **promoted**; `56b5216ab446` (1.1.67). Both Maya profiles pass the short DSH check (`glm-maya` 2 of 2, `deepseek-maya` 3 of 3). It fixes GLM using the wrong expert's weights when experts sit in RAM, which is this server's case. Warning: `deepseek-maya` prompt reading 175.8 and 171.2 tok/s against 187.1 before, then 209.4 on a third run. The 1.1.65 patches applied unchanged.
+- hyperqwen, sglang, strata, llamacpp: **unchanged**. comfyui, raylight, mesh, gguf: **pinned-current**.
+
 ## 2026-11-16: Strata 0.2.15
 
 Upstream review, before and after: [ENGINE-UPDATES-20261116-STRATA-0215.md](evidence/ENGINE-UPDATES-20261116-STRATA-0215.md).

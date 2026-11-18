@@ -39,11 +39,11 @@
     "evidence": "docs/evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md"
   },
   "maya": {
-    "source_commit": "c81fab6c9d63cf69b928f92460e0a662b28aa9ec",
-    "qualified_on": "2026-11-15T22:00:00",
+    "source_commit": "56b5216ab4464ac41c26b1be32eb63b98de53d0a",
+    "qualified_on": "2026-11-18T09:40:00",
     "method": "hands-on short DSH",
-    "note": "Maya 1.1.65; both profiles pass, glm-maya 3 of 3",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md"
+    "note": "Maya 1.1.67; both profiles pass (glm-maya 2 of 2, deepseek-maya 3 of 3)",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261118-MAYA-1167.md"
   },
   "strata": {
     "source_commit": "c77572806996349b49995e4f98d41b5294d36a21",

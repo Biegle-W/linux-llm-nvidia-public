@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Maya 1.1.67 installed — November 18, 2026
+
+Scheduled daily check. Only Maya had a new release (1.1.66 and 1.1.67). Installed for `glm-maya` and `deepseek-maya`; both pass the short DSH check at the same speed, and the two local patches from 1.1.65 applied unchanged. The release fixes GLM computing an expert with another expert's weights when experts sit in RAM, which applies here. One warning: `deepseek-maya` prompt reading measured 6-8.5% lower on two runs and 12% higher on a third. [evidence](evidence/ENGINE-UPDATES-20261118-MAYA-1167.md).
+
 ## Strata 0.2.15 installed — November 16, 2026
 
 Daily update. Only Strata had a new release; it changes the control package only (0.1.61), the engine stays 0.1.60. Installed for `flash-next-strata` with the same speed before and after; five idle-server runs (80.2-85.3 tok/s) close the question left open on November 15 about Flash-Next generation speed. Two server fixes come with it: boolean tool arguments, and clean refusal of requests during shutdown. [evidence](evidence/ENGINE-UPDATES-20261116-STRATA-0215.md).
