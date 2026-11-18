@@ -32,7 +32,7 @@ All through the normal router path on port 10100, under the worker budget and gu
 | JSON and arithmetic answers | exact, pass |
 | Image (solid colour) | pass |
 | Tool call with follow-up (API) | pass, no reasoning content |
-| DeepSeek Harness real read-tool round trip with follow-up | pass (12.2 s) |
+| DeepSeek Harness real read-tool round trip with follow-up | pass (12.2 s): 5,598-token tool prompt read at 760 tok/s, first tool-call output after 7.6 s, 40 tokens written at 43.7 tok/s (first request after a fresh load) |
 | 19,955-token cold prompt, 300 tokens written, three runs | reading 1,574–1,598 tok/s; writing 67.0 (first), 78.1, 83.2 tok/s; first token after 12.6–13.2 s |
 | 113,029-token cold prompt, code word placed one seventh of the way in | correct answer; reading 2,314 tok/s; first token after 49.1 s |
 | Long writing | 4,331 tokens in 52.7 s at 84.4 tok/s (the model ended the essay itself) |

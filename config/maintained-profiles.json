@@ -1735,6 +1735,33 @@
         ],
         "scope": "Measured on the trial service outside the router with the same launch settings; difference not established.",
         "evidence": "docs/evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md"
+      },
+      "short_tool_benchmark_history": [
+        {
+          "date": "2026-11-18",
+          "context": 131072,
+          "prompt_tokens": 5598,
+          "output_tokens": 40,
+          "cached_tokens": 0,
+          "prefill_tps": 759.9,
+          "decode_tps": 43.7,
+          "ttft_s": 7.627249090000987,
+          "prefill_method": "native request timings",
+          "ttft_method": "client first delivered content/tool delta; parser buffering included",
+          "decode_method": "native request timings",
+          "tool_success": true,
+          "followup_passed": true,
+          "round_trip_wall_s": 12.23,
+          "source": "docs/evidence/FLASH-NEXT-IQ4XS-PROFILE-20261118.md",
+          "scope": "Single short actual DSH read-tool call with follow-up through the router, loading excluded; first request after a fresh load. No sustained/full-context claim."
+        }
+      ],
+      "latest_router_validation": {
+        "date": "2026-11-18",
+        "source": "docs/evidence/FLASH-NEXT-IQ4XS-PROFILE-20261118.md",
+        "tool_success": true,
+        "worker_inactive_verified": true,
+        "failure": null
       }
     },
     {
