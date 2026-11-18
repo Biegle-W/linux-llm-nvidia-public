@@ -452,6 +452,8 @@ FILES = (
     'config/deepseek-unsloth-runtime.json',
     'scripts/strata_unsloth_runtime.py',
     'tests/test_strata_unsloth_runtime.py',
+    'config/flash-iq4xs-strata-runtime.json', 'scripts/flash_iq4xs_strata_runtime.py', 'tests/test_flash_iq4xs_strata_runtime.py',
+    'docs/evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md', 'docs/evidence/FLASH-NEXT-IQ4XS-PROFILE-20261118.md',
     'docs/evidence/DEEPSEEK-UNSLOTH-CONTEXT-20261031.md',
     'docs/evidence/validation-results/20261031-unsloth-strata-context.json',
     'patches/llama-demand-mmap-prefault.patch',

@@ -75,6 +75,12 @@ def main():
             require_flash_next_split(json.loads(source.read_text()), profile)
         except ValueError as error:
             sys.exit(str(error))
+    elif profile['id'] == 'flash-next-iq4xs-strata':
+        from flash_iq4xs_strata_runtime import prepare_config
+        try:
+            source = prepare_config(profile)
+        except (ValueError, OSError, KeyError, TypeError) as error:
+            sys.exit('UD-IQ4_XS preflight failed: ' + str(error))
     elif profile['engine'] == 'Maya':
         source = ROOT / profile['runtime_selector']['path']
     else:
@@ -152,7 +158,7 @@ def main():
                 stop()
                 child.wait(timeout=20)
                 raise SystemExit(1)
-            if profile['id'] == 'deepseek-unsloth-strata':
+            if profile['id'] in ('deepseek-unsloth-strata', 'flash-next-iq4xs-strata'):
                 free = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits'], text=True)
                 free_values = pair_gpu_free_values(free)
                 gpu_bad = gpu_bad + 1 if any(x < GPU_FREE_MIB for x in free_values) else 0
@@ -160,7 +166,7 @@ def main():
                 pressure = read_cgroup(cgroup_base)['pressure_pct']
                 loading_bad = loading_bad + 1 if profile['id']=='deepseek-unsloth-strata' and watch.last_phase == 'loading' and pressure > 15 else 0
                 if gpu_bad >= 3 or loading_bad >= 3:
-                    reason = 'Unsloth GPU reserve/loading pressure guard'
+                    reason = 'GPU free-memory floor/loading pressure guard'
                     watch.guard.fail(reason)
                     watch.step()
                     stop()

@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "updated": "2026-11-11",
+  "updated": "2026-11-18",
   "scope": "Current Linux NVIDIA workstation only",
   "selection_policy": {
     "group_by": [
@@ -1581,6 +1581,160 @@
         "source_commit": "146df3c468739147f520ac3816de806f71232571",
         "status": "passed paired short DSH qualification",
         "evidence": "docs/DAILY-ENGINE-UPDATES.md"
+      }
+    },
+    {
+      "id": "flash-next-iq4xs-strata",
+      "model": "Qwen3.8-Flash-Next",
+      "weight_quant": "UD-IQ4_XS-v31 (Unsloth Dynamic 3.1)",
+      "engine": "Strata",
+      "status": "selected",
+      "launch": [
+        "qwen-iq4xs"
+      ],
+      "allocated_context": 131072,
+      "context_validation": "2026-11-18 through the router: one cold 113,029-token prompt answered correctly (retrieval of a planted code word), short JSON/arithmetic/image/tool checks, DSH read-tool round trip, unload and fresh reload. Nothing at the very top of the 131,072 window and no multi-hour run.",
+      "display_name": "Qwen3.8-Flash-Next / Unsloth UD-IQ4_XS-v31 / Strata",
+      "runtime_selector": {
+        "kind": "strata-launch-preset",
+        "name": "qwen-flash-next-iq4xs"
+      },
+      "runtime_manifest": "config/flash-iq4xs-strata-runtime.json",
+      "evidence": "docs/evidence/FLASH-NEXT-IQ4XS-PROFILE-20261118.md",
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/unsloth-UD-IQ4_XS-v31",
+        "base_weight_bytes": 93672359738,
+        "base_weight_gb": 93.672359738
+      },
+      "worker_memory_gib": {
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
+        "swap": null
+      },
+      "host_ram_reserve_gib": 2,
+      "minimum_usable_ram_gib": 90,
+      "selected_settings": {
+        "gpu": [
+          0,
+          1
+        ],
+        "gpu_order": null,
+        "layer_split": "auto",
+        "trim_stage_weights": false,
+        "kv": "int8",
+        "kv_resident": 32768,
+        "pool_workers": 15,
+        "environment": {
+          "STRATA_ROUTE_TAIL_SKIP": "0"
+        },
+        "swap_guard": {
+          "window_s": 30,
+          "write_mib_s": 128,
+          "combined_mib_s": 160,
+          "pressure_pct": 15
+        },
+        "gpu_free_floor_mib": 256,
+        "layout_reason": "2026-11-17 trial: Strata's automatic layout (layers 0-19 on the RTX 3080, 20-47 on the RTX 3080 Ti, KV streaming with 32,768 of 131,072 cells in VRAM) writes 84-89 tok/s after a 20K-token prompt; the installed IQ3_XXS profile's hand-set split 29 reaches only 61 tok/s with this quant. docs/evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md",
+        "reason": "Owner asked on 2026-11-18 to keep UD-IQ4_XS-v31 as a second Flash-Next entry next to IQ3_XXS."
+      },
+      "tested_retrieval_input": 113029,
+      "current_configuration_benchmark": {
+        "date": "2026-11-18",
+        "context": 131072,
+        "prompt_tokens": 19955,
+        "output_tokens": 300,
+        "cached_tokens": 0,
+        "repetitions": 3,
+        "prefill_tps": 1597.4,
+        "prefill_tps_range": [
+          1574.2,
+          1598.0
+        ],
+        "decode_tps": 83.2,
+        "decode_tps_first_request": 67.0,
+        "decode_tps_range_after_first": [
+          78.1,
+          83.2
+        ],
+        "ttft_s": 12.56,
+        "prefill_method": "native engine log",
+        "decode_method": "native engine log",
+        "scope": "Three cold 20K-token prompts through the router; values are the third run. Not a matched fixture benchmark.",
+        "source": "docs/evidence/FLASH-NEXT-IQ4XS-PROFILE-20261118.md"
+      },
+      "current_guard_validation": {
+        "date": "2026-11-18",
+        "passed": true,
+        "context": 131072,
+        "normal_router_profile": true,
+        "checks": {
+          "json": true,
+          "arithmetic": true,
+          "image": true,
+          "tool_followup": true,
+          "dsh_tool_followup": true,
+          "retrieval": true,
+          "sustained": true,
+          "reload": true
+        },
+        "actual_retrieval_input_tokens": 113029,
+        "retrieval_prefill_tps": 2314.1,
+        "retrieval_ttft_s": 49.05,
+        "sustained_generation_s": 52.65,
+        "sustained_output_tokens": 4331,
+        "sustained_decode_tps": 84.4,
+        "fresh_reload": true,
+        "reload_s": 28.3,
+        "min_gpu_free_mib_3080ti_3080": [
+          659,
+          580
+        ],
+        "gpu_free_floor_mib": 256,
+        "worker_memory_peak_gib": 84.1,
+        "worker_swap_peak_gib": 1.66,
+        "guard_stops": 0,
+        "scope": "Single requests; the long-writing check ended after 53 s because the model finished. No multi-hour run.",
+        "evidence": "docs/evidence/FLASH-NEXT-IQ4XS-PROFILE-20261118.md"
+      },
+      "quality_benchmark": {
+        "date": "2026-11-18",
+        "items": 390,
+        "macro_pct": 65.5,
+        "macro_95_interval_pct": [
+          60.2,
+          70.8
+        ],
+        "correct": {
+          "mmlu_pro": [
+            184,
+            210
+          ],
+          "aime25": [
+            24,
+            30
+          ],
+          "lcb": [
+            35,
+            60
+          ],
+          "bfcl_single": [
+            47,
+            60
+          ],
+          "bfcl_multi": [
+            7,
+            30
+          ]
+        },
+        "compared_with": "flash-next-strata (IQ3_XXS) 62.0% on 2026-11-11",
+        "paired_macro_difference_95_interval_points": [
+          -2.0,
+          8.9
+        ],
+        "scope": "Measured on the trial service outside the router with the same launch settings; difference not established.",
+        "evidence": "docs/evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md"
       }
     },
     {

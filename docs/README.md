@@ -146,6 +146,8 @@ Each file records one piece of work and is not updated afterwards, so later work
 - [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md): Maya 1.1.60 and ComfyUI 0.45.0 installed by hand, with the ComfyUI upstream review and before/after checks — November 12, 2026
 - [ENGINE-UPDATES-20261111-MAYA-1159.md](evidence/ENGINE-UPDATES-20261111-MAYA-1159.md): Maya 1.1.59 installed by hand; `glm-maya` generation 8-15% slower in the short check (warning) — November 11, 2026
 - [ENGINE-UPDATES-20261111.md](evidence/ENGINE-UPDATES-20261111.md): Maya 1.1.58 installed by hand; HyperQwen pin moved to `3d6c954` without a rebuild — November 11, 2026
+- [FLASH-NEXT-IQ4XS-PROFILE-20261118.md](evidence/FLASH-NEXT-IQ4XS-PROFILE-20261118.md): Flash-Next UD-IQ4_XS-v31 added as a second router entry, with its router qualification — November 18, 2026
+- [FLASH-NEXT-IQ4XS-TRIAL-20261117.md](evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md): Flash-Next UD-IQ4_XS-v31 trial against IQ3_XXS: speed, memory and the 390-item quality comparison — November 17, 2026
 - [LAUNCH-TUNING-20261110.md](evidence/LAUNCH-TUNING-20261110.md): Maya GLM 64K checkpoint interval and Flash-Next Strata direct table reads adopted — November 10, 2026
 - [ENGINE-UPDATES-HANDS-ON-20261109.md](evidence/ENGINE-UPDATES-HANDS-ON-20261109.md): Strata 0.2.13, HyperQwen vLLM 0.33.0, Maya 1.1.57 installed by hand — November 9, 2026
 - [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md): HyperQwen `80cf059` installed by hand, with the review of the upstream diff — November 9, 2026

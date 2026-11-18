@@ -6,7 +6,7 @@
 
 API id, model and quantization, engine and its runtime manifest, allocated context, `worker_memory_gib` budget, weight storage path and drive, selected launch settings (for example the Flash-Next GPU order, layer split and stage trim), and the latest qualified speed measurements with their source. Until November 9, 2026 the nightly updater rewrote the measurement block when it promoted an engine build and kept the previous one as history. Hands-on updates record their numbers in the evidence doc and the update ledger instead.
 
-The catalog rejects duplicate model/quant/engine combinations, dense context that does not match the engine arguments, and unqualified CPU weight offload. Two pairs share one checkpoint on disk: `qwen27b-hyperqwen` / `qwen27b-sglang`, and `deepseek-maya` / `deepseek-unsloth-strata`.
+The catalog rejects duplicate model/quant/engine combinations, dense context that does not match the engine arguments, and unqualified CPU weight offload. Flash-Next has two entries with separate weights, `flash-next-strata` (IQ3_XXS, the default) and `flash-next-iq4xs-strata` (UD-IQ4_XS-v31); they share the engine binary, the MTP head and the vision projector. Two pairs share one checkpoint on disk: `qwen27b-hyperqwen` / `qwen27b-sglang`, and `deepseek-maya` / `deepseek-unsloth-strata`.
 
 ## Selection rule
 

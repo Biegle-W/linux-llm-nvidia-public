@@ -45,6 +45,11 @@
       "why": "Strata pack (dense.bin, tokenizer); launch preset --pack"
     },
     {
+      "path": "models/strata/packs/unsloth-ud-iq4_xs-v31",
+      "owner": "router:flash-next-iq4xs-strata",
+      "why": "Strata pack (dense.bin, tokenizer); launch preset --pack. The projector and MTP head are shared with flash-next-strata."
+    },
+    {
       "path": "runtimes/strata-unsloth-029/pack",
       "owner": "router:deepseek-maya",
       "why": "DeepSeek pack; runtimes/project-maya/maya-ds4.json --pack"

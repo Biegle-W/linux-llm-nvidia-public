@@ -263,7 +263,8 @@ def main():
     signal.signal(signal.SIGTERM, interrupted)
     try:
         # SGLang first verifies native metric availability before the slow streamed models.
-        rank = {name: index for index, name in enumerate(['qwen27b-sglang', 'qwen27b-hyperqwen', 'flash-next-strata', 'glm-maya', 'deepseek-maya', 'bolt-llamacpp', 'deepseek-unsloth-strata'])}
+        rank = {name: index for index, name in enumerate(['qwen27b-sglang', 'qwen27b-hyperqwen', 'flash-next-strata', 'glm-maya', 'deepseek-maya', 'bolt-llamacpp', 'deepseek-unsloth-strata',
+                                                           'flash-next-iq4xs-strata'])}
         order = sorted(catalog['profiles'], key=lambda p: rank.get(p['id'], len(rank)))
         for profile in order:
             active[0] = profile['id']; event('loading', profile=profile['id'])

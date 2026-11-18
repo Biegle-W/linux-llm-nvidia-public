@@ -14,12 +14,12 @@ def pages(mib):
 
 class SwapPolicyTest(unittest.TestCase):
     def test_ssd_relaxation_is_scoped_and_still_bounded(self):
-        for profile in ('flash-next-strata', 'glm-maya', 'deepseek-unsloth-strata', 'deepseek-maya'):
+        for profile in ('flash-next-strata', 'flash-next-iq4xs-strata', 'glm-maya', 'deepseek-unsloth-strata', 'deepseek-maya'):
             with self.subTest(profile=profile):
                 q = WorkerWatch('/unused', profile, 'test').guard
                 self.assertEqual((q.window_s, q.write_limit, q.combined_limit,
                                   q.pressure_limit, q.bad_samples),
-                                 (30, 128, 160, 15 if profile in ('flash-next-strata', 'deepseek-maya', 'deepseek-unsloth-strata') else 10, 3))
+                                 (30, 128, 160, 15 if profile in ('flash-next-strata', 'flash-next-iq4xs-strata', 'deepseek-maya', 'deepseek-unsloth-strata') else 10, 3))
                 q.sample(0, 'inference', 0, 0, 0)
                 self.assertIsNone(q.sample(30, 'inference', pages(0.22 * 30), pages(12.95 * 30), 0))
                 self.assertIsNotNone(q.sample(60, 'inference', pages(0.22 * 30), pages((12.95 + 129) * 30), 0))
@@ -43,7 +43,7 @@ class SwapPolicyTest(unittest.TestCase):
                 self.assertEqual((guard.write_limit, guard.combined_limit), (1, 8))
 
     def test_pressure_allowance_is_selected_profile_only_and_still_latches(self):
-        for profile in ('flash-next-strata', 'deepseek-maya', 'deepseek-unsloth-strata'):
+        for profile in ('flash-next-strata', 'flash-next-iq4xs-strata', 'deepseek-maya', 'deepseek-unsloth-strata'):
             with self.subTest(profile=profile):
                 g = WorkerWatch('/unused', profile, 'test').guard
                 for t in (0, 30, 32, 34):
