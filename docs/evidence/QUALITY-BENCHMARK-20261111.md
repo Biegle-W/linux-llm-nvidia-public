@@ -1,6 +1,6 @@
 # Quality benchmark: first measured ranking of the text entries — November 11, 2026
 
-All seven enabled text entries were scored on 390 items taken from public benchmarks, run locally through the router. Five ran on November 10–11; `qwen27b-sglang` and `deepseek-maya` were added on November 12 with the same frozen items, settings and harness. This is the first measured quality result for this server; earlier rankings were estimates from published numbers. Machine-readable results: [`20261111-quality-benchmark.json`](benchmark-results/20261111-quality-benchmark.json).
+All seven enabled text entries were scored on 390 items taken from public benchmarks, run locally through the router. Five ran on November 10–11; `qwen27b-sglang` and `deepseek-maya` were added on November 12 with the same frozen items, settings and harness. An eighth entry, `flash-next-iq4xs-strata`, was added on November 18 ([details below](#added-flash-next-ud-iq4_xs-v31-november-18)). This is the first measured quality result for this server; earlier rankings were estimates from published numbers. Machine-readable results: [`20261111-quality-benchmark.json`](benchmark-results/20261111-quality-benchmark.json).
 
 ## Ranking
 
@@ -8,13 +8,14 @@ All seven enabled text entries were scored on 390 items taken from public benchm
 | ---: | --- | ---: | --- |
 | 1 | `deepseek-unsloth-strata` | 73.0% (67.3–78.4) | `deepseek-maya`, `qwen27b-sglang`, `qwen27b-hyperqwen` |
 | 2 | `deepseek-maya` | 72.4% (66.8–77.9) | `deepseek-unsloth-strata`, `qwen27b-sglang`, `qwen27b-hyperqwen` |
-| 3 | `qwen27b-sglang` | 68.1% (62.3–73.9) | `deepseek-unsloth-strata`, `deepseek-maya`, `qwen27b-hyperqwen`, `flash-next-strata` |
-| 4 | `qwen27b-hyperqwen` | 68.0% (62.3–73.7) | `deepseek-unsloth-strata`, `deepseek-maya`, `qwen27b-sglang`, `flash-next-strata` |
-| 5 | `flash-next-strata` | 62.0% (56.5–67.5) | `qwen27b-sglang`, `qwen27b-hyperqwen`, `glm-maya` |
-| 6 | `glm-maya` | 57.2% (52.1–62.3) | `flash-next-strata`, `bolt-llamacpp` |
-| 7 | `bolt-llamacpp` | 53.9% (48.7–59.4) | `glm-maya` |
+| 3 | `qwen27b-sglang` | 68.1% (62.3–73.9) | `deepseek-unsloth-strata`, `deepseek-maya`, `qwen27b-hyperqwen`, `flash-next-iq4xs-strata`, `flash-next-strata` |
+| 4 | `qwen27b-hyperqwen` | 68.0% (62.3–73.7) | `deepseek-unsloth-strata`, `deepseek-maya`, `qwen27b-sglang`, `flash-next-iq4xs-strata`, `flash-next-strata` |
+| 5 | `flash-next-iq4xs-strata` | 65.5% (60.2–70.8) | `qwen27b-sglang`, `qwen27b-hyperqwen`, `flash-next-strata` |
+| 6 | `flash-next-strata` | 62.0% (56.5–67.5) | `qwen27b-sglang`, `qwen27b-hyperqwen`, `flash-next-iq4xs-strata`, `glm-maya` |
+| 7 | `glm-maya` | 57.2% (52.1–62.3) | `flash-next-strata`, `bolt-llamacpp` |
+| 8 | `bolt-llamacpp` | 53.9% (48.7–59.4) | `glm-maya` |
 
-The macro score is the plain average of the five benchmark accuracies. "Not separated" means the paired 95% interval for the difference includes zero, so the order of those two could flip on a rerun. No entry is separated from the one next to it. Both DeepSeek entries are separated from Flash-Next, GLM and Bolt; Bolt is separated from everything except GLM.
+The macro score is the plain average of the five benchmark accuracies. "Not separated" means the paired 95% interval for the difference includes zero, so the order of those two could flip on a rerun. No entry is separated from the one next to it. Both DeepSeek entries are separated from both Flash-Next entries, GLM and Bolt; Bolt is separated from everything except GLM.
 
 What decides the order:
 
@@ -28,7 +29,7 @@ What decides the order:
 
 Hardware: i9-13900KS, 96 GB-class RAM, RTX 3080 Ti 12 GB + RTX 3080 10 GB. Quality cells are percent correct (correct/items), one generation per item. Entries that share a checkpoint (the two Qwen 27B engines, the two DeepSeek engines) were each run separately, because the engine and chat template differ.
 
-Speed rows are the latest short DSH tool-call check for each entry (about 5.6K prompt tokens, one request, load time excluded), not new measurements: `qwen27b-hyperqwen`, `deepseek-maya` November 9; `flash-next-strata`, `glm-maya` November 10; the rest November 5 ([ALL-MODELS-RERUN-20261105.md](ALL-MODELS-RERUN-20261105.md), [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md), [ENGINE-UPDATES-HANDS-ON-20261109.md](ENGINE-UPDATES-HANDS-ON-20261109.md), [LAUNCH-TUNING-20261110.md](LAUNCH-TUNING-20261110.md)). The `deepseek-unsloth-strata` row is its last cold-prompt figure; with its prompt cache reused it measured 28.1 prefill tok/s, 6.13 s and 12.2 decode tok/s on November 9. Storage is decimal GB of checkpoint files; shared checkpoints repeat on each engine row but occupy storage once.
+Speed rows are the latest short DSH tool-call check for each entry (about 5.6K prompt tokens, one request, load time excluded), not new measurements: `qwen27b-hyperqwen`, `deepseek-maya` November 9; `flash-next-strata`, `glm-maya` November 10; `flash-next-iq4xs-strata` November 18 (its first request after a fresh load); the rest November 5 ([ALL-MODELS-RERUN-20261105.md](ALL-MODELS-RERUN-20261105.md), [ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md](ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md), [ENGINE-UPDATES-HANDS-ON-20261109.md](ENGINE-UPDATES-HANDS-ON-20261109.md), [LAUNCH-TUNING-20261110.md](LAUNCH-TUNING-20261110.md)). The `deepseek-unsloth-strata` row is its last cold-prompt figure; with its prompt cache reused it measured 28.1 prefill tok/s, 6.13 s and 12.2 decode tok/s on November 9. Storage is decimal GB of checkpoint files; shared checkpoints repeat on each engine row but occupy storage once.
 
 ### VRAM-only models
 
@@ -50,21 +51,23 @@ Speed rows are the latest short DSH tool-call check for each entry (about 5.6K p
 
 | Model / quant | Engine | MMLU-Pro (210) | AIME 2025 (30) | LiveCodeBench (60) | BFCL single-turn (60) | BFCL multi-turn (30) | Macro (95% interval) | Rank |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| NVIDIA-Nemotron-3.5-Bolt-74B-A9B / native-IQ2 | llama.cpp | 76.2% (160/210) | 50.0% (15/30) | 33.3% (20/60) | 90.0% (54/60) | 20.0% (6/30) | 53.9% (48.7–59.4) | 7 |
+| NVIDIA-Nemotron-3.5-Bolt-74B-A9B / native-IQ2 | llama.cpp | 76.2% (160/210) | 50.0% (15/30) | 33.3% (20/60) | 90.0% (54/60) | 20.0% (6/30) | 53.9% (48.7–59.4) | 8 |
 
 ### MoE models with SSD streaming
 
 | Model / quant | Engine | Prefill (tok/s) | Time to first token (s) | Decode (tok/s) | Context limit (tokens) | Storage size (GB) | Storage location |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | --- |
 | Qwen3.8-Flash-Next / IQ3_XXS | Strata | 1,031.6 | 5.54 | 85.4 | 131,072 | 75.840 | NVMe, `models/strata/models/IQ3_XXS` |
+| Qwen3.8-Flash-Next / UD-IQ4_XS-v31 (Unsloth Dynamic 3.1) | Strata | 759.9 | 7.63 | 43.7 | 131,072 | 93.672 | NVMe, `models/strata/models/unsloth-UD-IQ4_XS-v31` |
 | GLM-5.3-Flash / Maya-S24 | Maya | 550.1 | 10.06 | 14.7 | 65,536 | 94.702 | NVMe, `models/maya/Maya-S24` |
 | DeepSeek-V4.1-Flash-1017 / UD-IQ1_S (Unsloth Dynamic3.1) | Maya | 177.3 | 33.5 | 7.7 | 32,768 | 232.980 | NVMe core + SATA Engram, `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S` |
 | DeepSeek-V4.1-Flash-1017 / UD-IQ1_S (Unsloth Dynamic3.1) | Strata | 87.10 | 65.591 | 12.000 | 32,768 | 232.980 | NVMe core + SATA Engram, `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S` |
 
 | Model / quant | Engine | MMLU-Pro (210) | AIME 2025 (30) | LiveCodeBench (60) | BFCL single-turn (60) | BFCL multi-turn (30) | Macro (95% interval) | Rank |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 85.2% (179/210) | 73.3% (22/30) | 58.3% (35/60) | 73.3% (44/60) | 20.0% (6/30) | 62.0% (56.5–67.5) | 5 |
-| GLM-5.3-Flash / Maya-S24 | Maya | 86.2% (181/210) | 6.7% (2/30) | 55.0% (33/60) | 91.7% (55/60) | 46.7% (14/30) | 57.2% (52.1–62.3) | 6 |
+| Qwen3.8-Flash-Next / IQ3_XXS | Strata | 85.2% (179/210) | 73.3% (22/30) | 58.3% (35/60) | 73.3% (44/60) | 20.0% (6/30) | 62.0% (56.5–67.5) | 6 |
+| Qwen3.8-Flash-Next / UD-IQ4_XS-v31 (Unsloth Dynamic 3.1) | Strata | 87.6% (184/210) | 80.0% (24/30) | 58.3% (35/60) | 78.3% (47/60) | 23.3% (7/30) | 65.5% (60.2–70.8) | 5 |
+| GLM-5.3-Flash / Maya-S24 | Maya | 86.2% (181/210) | 6.7% (2/30) | 55.0% (33/60) | 91.7% (55/60) | 46.7% (14/30) | 57.2% (52.1–62.3) | 7 |
 | DeepSeek-V4.1-Flash-1017 / UD-IQ1_S (Unsloth Dynamic3.1) | Maya | 88.6% (186/210) | 80.0% (24/30) | 51.7% (31/60) | 88.3% (53/60) | 53.3% (16/30) | 72.4% (66.8–77.9) | 2 |
 | DeepSeek-V4.1-Flash-1017 / UD-IQ1_S (Unsloth Dynamic3.1) | Strata | 86.7% (182/210) | 76.7% (23/30) | 55.0% (33/60) | 90.0% (54/60) | 56.7% (17/30) | 73.0% (67.3–78.4) | 1 |
 
@@ -78,6 +81,7 @@ Configured limits as recorded on November 5; no guard setting has been changed s
 | qwen27b-sglang / AutoRound-INT4-fast-heads-INT8-embedding | SGLang | 87.77/89.77 GiB high/max, 2 GiB host reserve, active PSI 10%, no separate loading threshold | 256 MiB free/card after readiness | Unlimited occupancy, 1/8 MiB/s write/combined over 30 s |
 | bolt-llamacpp / native-IQ2 | llama.cpp | 87.77/89.77 GiB high/max, 2 GiB host reserve, active/loading PSI 10/15% | 256 MiB free/card after readiness + 384 MiB native reserve/fit target | Unlimited occupancy, 1/8 MiB/s write/combined over 30 s |
 | flash-next-strata / IQ3_XXS | Strata | 87.77/89.77 GiB high/max, 2 GiB host reserve, active PSI 15%, no separate loading threshold | Native reserve guard + 1024 MiB native reserve/fit target | Unlimited occupancy, 128/160 MiB/s write/combined over 30 s |
+| flash-next-iq4xs-strata / UD-IQ4_XS-v31 (Unsloth Dynamic 3.1), added November 18 | Strata | 87.77/89.77 GiB high/max, 2 GiB host reserve, PSI 15% | 256 MiB free/card after readiness, no native reserve flag | Unlimited occupancy, 128/160 MiB/s write/combined over 30 s |
 | glm-maya / Maya-S24 | Maya | 87.77/89.77 GiB high/max, 2 GiB host reserve, active PSI 10%, no separate loading threshold | Native reserve guard + 1024 MiB native reserve/fit target | Unlimited occupancy, 128/160 MiB/s write/combined over 30 s |
 | deepseek-maya / UD-IQ1_S (Unsloth Dynamic3.1) | Maya | 87.77/89.77 GiB high/max, 2 GiB host reserve, active PSI 15%, no separate loading threshold | Native reserve guard + 1024 MiB native reserve/fit target | Unlimited occupancy, 128/160 MiB/s write/combined over 30 s |
 | deepseek-unsloth-strata / UD-IQ1_S (Unsloth Dynamic3.1) | Strata | 87.77/89.77 GiB high/max, 2 GiB host reserve, active/loading PSI 15/15% | 256 MiB free/card after readiness + 1024 MiB native reserve/fit target | Unlimited occupancy, 128/160 MiB/s write/combined over 30 s |
@@ -174,6 +178,36 @@ llama.cpp was updated from 0.9.0 to 1.0.0 on November 13 ([ENGINE-UPDATES-202611
 The paired macro difference, 0.9.0 minus 1.0.0, is −2.3 to +6.1 points: not separated. No single benchmark separates either. MMLU-Pro went up by nine items and the other four went down by one to three; with one generation per item at temperature 0.6 this is what a repeat of the same engine could also produce, so the run does not show that 1.0.0 answers better or worse. Bolt stays last in the ranking with either figure.
 
 Outcomes on 1.0.0: MMLU-Pro 169 correct, 30 wrong, 6 truncated, 5 no answer; AIME 14 correct, 14 truncated, 1 looped, 1 wrong; LiveCodeBench 17 correct, 34 wrong, 9 truncated; BFCL single-turn 53 correct, 6 wrong, 1 no answer; BFCL multi-turn 5 correct, 25 wrong.
+
+## Added: Flash-Next UD-IQ4_XS-v31 (November 18)
+
+`flash-next-iq4xs-strata`, the larger Unsloth UD-IQ4_XS-v31 quant of Flash-Next, was scored on November 17–18 on the same 390 frozen items, settings and scorer, one generation per item, 2.8 h. It ranks fifth at 65.5% (60.2–70.8), above the IQ3_XXS entry (62.0%) and below both Qwen 27B entries. It is not separated from IQ3_XXS or from either Qwen 27B entry; both DeepSeek entries are above it and GLM and Bolt are below it. Trial record: [FLASH-NEXT-IQ4XS-TRIAL-20261117.md](FLASH-NEXT-IQ4XS-TRIAL-20261117.md).
+
+| Entry | Benchmark | Correct | 95% interval (%) | Outcomes |
+| --- | --- | ---: | ---: | --- |
+| `flash-next-iq4xs-strata` | MMLU-Pro | 184/210 | 82.5–91.4 | correct 184, truncated 8, wrong 18 |
+| `flash-next-iq4xs-strata` | AIME 2025 | 24/30 | 62.7–90.5 | correct 24, wrong 6 |
+| `flash-next-iq4xs-strata` | LiveCodeBench | 35/60 | 45.7–69.9 | correct 35, no_answer 2, truncated 7, wrong 16 |
+| `flash-next-iq4xs-strata` | BFCL single-turn | 47/60 | 66.4–86.9 | correct 47, no_answer 3, wrong 10 |
+| `flash-next-iq4xs-strata` | BFCL multi-turn | 7/30 | 11.8–40.9 | correct 7, wrong 23 |
+
+Macro differences (first minus second, percentage points, paired 95% interval):
+
+| First | Second | Difference | Separated |
+| --- | --- | ---: | --- |
+| `bolt-llamacpp` | `flash-next-iq4xs-strata` | -18.9 to -4.2 | yes |
+| `deepseek-maya` | `flash-next-iq4xs-strata` | +0.6 to +13.3 | yes |
+| `deepseek-unsloth-strata` | `flash-next-iq4xs-strata` | +1.2 to +14.0 | yes |
+| `flash-next-iq4xs-strata` | `flash-next-strata` | -2.0 to +8.9 | no |
+| `flash-next-iq4xs-strata` | `glm-maya` | +1.8 to +14.8 | yes |
+| `flash-next-iq4xs-strata` | `qwen27b-hyperqwen` | -8.8 to +3.7 | no |
+| `flash-next-iq4xs-strata` | `qwen27b-sglang` | -9.4 to +4.1 | no |
+
+How this run differs from the other seven:
+
+- **Measured outside the router.** It ran on the trial service before the router entry existed, with the launch settings the router entry now uses. The harness treats a different service address as a different comparison, so the pairing with the other entries was rebuilt from the stored answers: an item is paired only when the item, the scorer version and the request sent are identical. All 390 items paired. With this entry included, the other seven macro scores and their twenty-one pairwise intervals come out exactly as listed above.
+- **No per-benchmark claim.** No single benchmark separates the two Flash-Next quants. The per-benchmark paragraph above covers the first seven entries only.
+- **Tool calling is still the weak point:** 47/60 single-turn and 7/30 multi-turn, against 44/60 and 6/30 for IQ3_XXS.
 
 ## Limits
 

@@ -1734,7 +1734,15 @@
           8.9
         ],
         "scope": "Measured on the trial service outside the router with the same launch settings; difference not established.",
-        "evidence": "docs/evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md"
+        "evidence": "docs/evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md",
+        "rank": 5,
+        "ranked_entries": 8,
+        "not_separated_from": [
+          "qwen27b-sglang",
+          "qwen27b-hyperqwen",
+          "flash-next-strata"
+        ],
+        "ranking": "docs/evidence/QUALITY-BENCHMARK-20261111.md"
       },
       "short_tool_benchmark_history": [
         {

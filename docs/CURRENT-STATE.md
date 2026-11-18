@@ -19,9 +19,9 @@ Every entry runs under 87.77 GiB soft / 89.77 GiB hard worker RAM with 2 GiB hos
 
 Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache reuse): ~5.7K-token tool prompt 1,243 prefill / 146 decode tok/s; ~24K prompt 2,375 / 108; writing ~124 tok/s. Strata 0.2.12 qualification (Nov 8, single short ~5.6K-token DSH tool call, old to new): `flash-next-strata` 934 to 1,046 prefill, 68 to 86 decode tok/s, TTFT 6.5 to 5.5 s; `deepseek-unsloth-strata` 83 to 86 prefill, 11.8 to 11.7 decode tok/s, TTFT 68 to 66 s (DeepSeek speed not strictly comparable: prompt cache reuse). Both answered a router smoke check correctly afterwards. Other entries: [ALL-MODELS-RERUN-20261105.md](evidence/ALL-MODELS-RERUN-20261105.md).
 
-## Measured quality (November 10–12)
+## Measured quality (November 10–18)
 
-390 public-benchmark items per entry, thinking off as served, one generation per item. All seven text entries are measured. No entry is separated from the one next to it; the two Qwen 27B engines score the same, and so do the two DeepSeek engines. Full result list with speeds and guards: [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md).
+390 public-benchmark items per entry, thinking off as served, one generation per item. All eight text entries are measured; `flash-next-iq4xs-strata` was added on November 18 from its trial run outside the router. No entry is separated from the one next to it; the two Qwen 27B engines score the same, and so do the two DeepSeek engines. Full result list with speeds and guards: [QUALITY-BENCHMARK-20261111.md](evidence/QUALITY-BENCHMARK-20261111.md).
 
 | Rank | API id | Macro (95% interval) | MMLU-Pro | AIME 2025 | LiveCodeBench | BFCL single | BFCL multi |
 |---:|---|---:|---:|---:|---:|---:|---:|
@@ -29,9 +29,10 @@ Latest measured speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cache
 | 2 | `deepseek-maya` | 72.4% (66.8–77.9) | 88.6% | 80.0% | 51.7% | 88.3% | 53.3% |
 | 3 | `qwen27b-sglang` | 68.1% (62.3–73.9) | 85.7% | 66.7% | 50.0% | 91.7% | 46.7% |
 | 4 | `qwen27b-hyperqwen` | 68.0% (62.3–73.7) | 81.9% | 60.0% | 40.0% | 91.7% | 66.7% |
-| 5 | `flash-next-strata` | 62.0% (56.5–67.5) | 85.2% | 73.3% | 58.3% | 73.3% | 20.0% |
-| 6 | `glm-maya` | 57.2% (52.1–62.3) | 86.2% | 6.7% | 55.0% | 91.7% | 46.7% |
-| 7 | `bolt-llamacpp` | 53.9% (48.7–59.4) | 76.2% | 50.0% | 33.3% | 90.0% | 20.0% |
+| 5 | `flash-next-iq4xs-strata` | 65.5% (60.2–70.8) | 87.6% | 80.0% | 58.3% | 78.3% | 23.3% |
+| 6 | `flash-next-strata` | 62.0% (56.5–67.5) | 85.2% | 73.3% | 58.3% | 73.3% | 20.0% |
+| 7 | `glm-maya` | 57.2% (52.1–62.3) | 86.2% | 6.7% | 55.0% | 91.7% | 46.7% |
+| 8 | `bolt-llamacpp` | 53.9% (48.7–59.4) | 76.2% | 50.0% | 33.3% | 90.0% | 20.0% |
 
 ## Recent changes (newest first)
 

@@ -1,5 +1,5 @@
 {
-  "date": "2026-11-10 to 2026-11-12",
+  "date": "2026-11-10 to 2026-11-18",
   "run_id": "full1",
   "hardware": "i9-13900KS, 96 GB-class RAM, RTX 3080 Ti 12 GB + RTX 3080 10 GB",
   "protocol": {
@@ -31,6 +31,7 @@
     "deepseek-maya",
     "qwen27b-sglang",
     "qwen27b-hyperqwen",
+    "flash-next-iq4xs-strata",
     "flash-next-strata",
     "glm-maya",
     "bolt-llamacpp"
@@ -686,6 +687,84 @@
           59.4
         ]
       }
+    },
+    "flash-next-iq4xs-strata": {
+      "mmlu_pro": {
+        "n": 210,
+        "correct": 184,
+        "percent": 87.6,
+        "wilson95": [
+          82.5,
+          91.4
+        ],
+        "outcomes": {
+          "correct": 184,
+          "truncated": 8,
+          "wrong": 18
+        }
+      },
+      "aime25": {
+        "n": 30,
+        "correct": 24,
+        "percent": 80.0,
+        "wilson95": [
+          62.7,
+          90.5
+        ],
+        "outcomes": {
+          "correct": 24,
+          "wrong": 6
+        }
+      },
+      "lcb": {
+        "n": 60,
+        "correct": 35,
+        "percent": 58.3,
+        "wilson95": [
+          45.7,
+          69.9
+        ],
+        "outcomes": {
+          "correct": 35,
+          "no_answer": 2,
+          "truncated": 7,
+          "wrong": 16
+        }
+      },
+      "bfcl_single": {
+        "n": 60,
+        "correct": 47,
+        "percent": 78.3,
+        "wilson95": [
+          66.4,
+          86.9
+        ],
+        "outcomes": {
+          "correct": 47,
+          "no_answer": 3,
+          "wrong": 10
+        }
+      },
+      "bfcl_multi": {
+        "n": 30,
+        "correct": 7,
+        "percent": 23.3,
+        "wilson95": [
+          11.8,
+          40.9
+        ],
+        "outcomes": {
+          "correct": 7,
+          "wrong": 23
+        }
+      },
+      "macro": {
+        "percent": 65.5,
+        "interval95": [
+          60.2,
+          70.8
+        ]
+      }
     }
   },
   "macro_paired_differences": [
@@ -704,6 +783,15 @@
       "a_minus_b_interval95_points": [
         -25.3,
         -12.8
+      ],
+      "separated": true
+    },
+    {
+      "a": "bolt-llamacpp",
+      "b": "flash-next-iq4xs-strata",
+      "a_minus_b_interval95_points": [
+        -18.9,
+        -4.2
       ],
       "separated": true
     },
@@ -754,6 +842,15 @@
     },
     {
       "a": "deepseek-maya",
+      "b": "flash-next-iq4xs-strata",
+      "a_minus_b_interval95_points": [
+        0.6,
+        13.3
+      ],
+      "separated": true
+    },
+    {
+      "a": "deepseek-maya",
       "b": "flash-next-strata",
       "a_minus_b_interval95_points": [
         4.5,
@@ -790,6 +887,15 @@
     },
     {
       "a": "deepseek-unsloth-strata",
+      "b": "flash-next-iq4xs-strata",
+      "a_minus_b_interval95_points": [
+        1.2,
+        14.0
+      ],
+      "separated": true
+    },
+    {
+      "a": "deepseek-unsloth-strata",
       "b": "flash-next-strata",
       "a_minus_b_interval95_points": [
         4.3,
@@ -821,6 +927,42 @@
       "a_minus_b_interval95_points": [
         -1.3,
         11.0
+      ],
+      "separated": false
+    },
+    {
+      "a": "flash-next-iq4xs-strata",
+      "b": "flash-next-strata",
+      "a_minus_b_interval95_points": [
+        -2.0,
+        8.9
+      ],
+      "separated": false
+    },
+    {
+      "a": "flash-next-iq4xs-strata",
+      "b": "glm-maya",
+      "a_minus_b_interval95_points": [
+        1.8,
+        14.8
+      ],
+      "separated": true
+    },
+    {
+      "a": "flash-next-iq4xs-strata",
+      "b": "qwen27b-hyperqwen",
+      "a_minus_b_interval95_points": [
+        -8.8,
+        3.7
+      ],
+      "separated": false
+    },
+    {
+      "a": "flash-next-iq4xs-strata",
+      "b": "qwen27b-sglang",
+      "a_minus_b_interval95_points": [
+        -9.4,
+        4.1
       ],
       "separated": false
     },
@@ -922,6 +1064,12 @@
       "ttft_s": "65.591",
       "decode_tps": "12.000",
       "measured": "Nov 5"
+    },
+    "flash-next-iq4xs-strata": {
+      "prefill_tps": "759.9",
+      "ttft_s": "7.63",
+      "decode_tps": "43.7",
+      "measured": "Nov 18, first request after a fresh load"
     }
   },
   "run_minutes": {
@@ -931,11 +1079,13 @@
     "glm-maya": 298,
     "deepseek-unsloth-strata": 517,
     "qwen27b-sglang": 269,
-    "deepseek-maya": 575
+    "deepseek-maya": 575,
+    "flash-next-iq4xs-strata": 169
   },
   "added_later": {
     "qwen27b-sglang": "2026-11-12, same frozen items, settings and harness",
-    "deepseek-maya": "2026-11-12, same frozen items, settings and harness; Maya 1.1.60"
+    "deepseek-maya": "2026-11-12, same frozen items, settings and harness; Maya 1.1.60",
+    "flash-next-iq4xs-strata": "2026-11-17 to 2026-11-18, same frozen items, settings and scorer; run on the trial service outside the router with the launch settings of the router entry; pairing rebuilt from identical item, scorer version and request"
   },
   "reruns": {
     "bolt-llamacpp on llama.cpp 1.0.0": {
