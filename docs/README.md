@@ -138,6 +138,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 
 ### Models, engines and context
 
+- [ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md](evidence/ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md): Maya 1.1.70 and Strata 0.2.17 installed by hand, with the upstream review — November 21, 2026
 - [ENGINE-UPDATES-20261118-MAYA-1167.md](evidence/ENGINE-UPDATES-20261118-MAYA-1167.md): Maya 1.1.67 installed by hand, with the upstream review — November 18, 2026
 - [ENGINE-UPDATES-20261116-STRATA-0215.md](evidence/ENGINE-UPDATES-20261116-STRATA-0215.md): Strata 0.2.15 installed by hand (control only), with the upstream review — November 16, 2026
 - [MINIMAX-H3-IMAGE-20261115.md](evidence/MINIMAX-H3-IMAGE-20261115.md): MiniMax H3 Image added (Q3 GGUF denoiser, text encoder in RAM), research and measurements — November 15, 2026

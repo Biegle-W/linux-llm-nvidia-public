@@ -1,5 +1,14 @@
 # NVIDIA daily engine updates
 
+## 2026-11-21: Maya 1.1.70 and Strata 0.2.17
+
+Upstream review, before and after: [ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md](evidence/ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md).
+
+- maya: **promoted**; `b6632a0b11df` (1.1.70). Both Maya profiles pass the short DSH check at the same speed. The 1.1.65 patches applied unchanged.
+- strata: **promoted** for `flash-next-strata` and `flash-next-iq4xs-strata`; `12d491da4a69` (v0.2.17, control 0.1.63, engine 0.1.63). All checks pass. Prompt reading 9% faster on both. Warning: `flash-next-strata` generation 64.5-67.5 tok/s on three runs against 81.0 and 84.8 before (about 20% lower); upstream turned the route tail skip off by default. `flash-next-iq4xs-strata` generation 46.6 and 47.9 against 49.1. `deepseek-unsloth-strata` stays frozen at v0.2.13 and passes.
+- hyperqwen, sglang, llamacpp: **unchanged**. raylight, mesh, gguf: **pinned-current**.
+- comfyui: `v0.46.0` available; pinned, not installed.
+
 ## 2026-11-18: Maya 1.1.67
 
 Upstream review, before and after: [ENGINE-UPDATES-20261118-MAYA-1167.md](evidence/ENGINE-UPDATES-20261118-MAYA-1167.md).

@@ -1,11 +1,11 @@
 {
   "schema": 1,
   "profile": "glm-maya",
-  "source_commit": "56b5216ab4464ac41c26b1be32eb63b98de53d0a",
+  "source_commit": "b6632a0b11dffd2b197c3bbdcb140bbabbe9fa12",
   "ggml_commit": "3cf03257f219afbe7334045ff7c6a06ac68c627d",
   "binary": {
     "path": "runtimes/maya-glm-v1150/maya",
-    "sha256": "3c4eb644c9d2020d7d069a484b621e91b05e86a8c000b7fc31679b04f5144938"
+    "sha256": "edc150e28370209d8bbb78d52971ece65df4b3e169c5f0f07d5e4b919567bcbf"
   },
   "mode": "normal; existing weights, context and sampling retained",
   "evidence": "docs/evidence/MAYA-QUALIFICATION-REPAIR-20261106.md",
