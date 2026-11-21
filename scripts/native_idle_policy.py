@@ -30,10 +30,12 @@ def vision_phases(source):
     """Observe encoder loading separately from image computation, including errors."""
     # Newer Maya only releases an on-demand encoder when GPU lending is used.
     # Preserve this project's request-scoped CPU encoder release as well.
-    release = 'if self.lend is not None and self.proc is not None:'
-    if release in source:
-        assert source.count(release) == 1
-        source = source.replace(release, 'if self.proc is not None:')
+    # Maya 1.1.72 added a second on-demand case (room beside the model); both forms are rewritten.
+    for release in ('if self.lend is not None and self.proc is not None:',
+                    'if (self.lend is not None or self.room is not None) and self.proc is not None:'):
+        if release in source:
+            assert source.count(release) == 1
+            source = source.replace(release, 'if self.proc is not None:')
     tree = ast.parse(source)
     vision = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'Vision')
     lines = source.splitlines(keepends=True)

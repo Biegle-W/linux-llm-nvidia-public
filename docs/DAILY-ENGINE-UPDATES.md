@@ -1,5 +1,15 @@
 # NVIDIA daily engine updates
 
+## 2026-11-21 afternoon: Maya 1.1.72, Strata 0.2.18 and llama.cpp main
+
+At the owner's request (backends to support Inkling 2 Mini). Upstream review, before and after: [ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md](evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md).
+
+- llamacpp: **promoted**; `19bc41dbb41e` (main, 1.0.0-dev build 12622), ahead of the stable release 1.0.0, because Inkling 2 Mini support exists only on main. `bolt-llamacpp` passes twice at the same speed. The upstream check follows stable releases and still reports 1.0.0.
+- maya: **promoted** twice; `a906b01ff0ec` (1.1.71), then `cce2de0ed73b` (1.1.72, released during the install). Both Maya profiles pass at the same speed after each step. The 1.1.65 patches applied unchanged.
+- strata: **promoted** for `flash-next-strata` and `flash-next-iq4xs-strata`; `6e38f588a646` (v0.2.18, control 0.1.64, engine 0.1.64). Same speed. `deepseek-unsloth-strata` stays frozen at v0.2.13 and passes.
+- hyperqwen, sglang: **unchanged**. raylight, mesh, gguf: **pinned-current**. comfyui: `v0.46.0` available; pinned, not installed.
+- Inkling 2 Mini itself: runs on the new llama.cpp as a trial at 24-27 tok/s; Maya 1.1.72's faster engine refuses this server as released. [INKLING2-MINI-TRIAL-20261121.md](evidence/INKLING2-MINI-TRIAL-20261121.md)
+
 ## 2026-11-21: Maya 1.1.70 and Strata 0.2.17
 
 Upstream review, before and after: [ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md](evidence/ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md).

@@ -32,24 +32,24 @@
     "evidence": "docs/evidence/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "llamacpp": {
-    "source_commit": "b1b770d90d94cad9e9ea5b993bdbc383a522fb28",
-    "qualified_on": "2026-11-13T11:40:00",
+    "source_commit": "19bc41dbb41e858eebc269b49ccdec1f0d28880c",
+    "qualified_on": "2026-11-21T13:52:00",
     "method": "hands-on short DSH",
-    "note": "llama.cpp v1.0.0",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261113-LLAMACPP-100.md"
+    "note": "llama.cpp main at 19bc41d (1.0.0-dev build 12622), installed at the owner's request for Inkling 2 Mini support; ahead of the stable release v1.0.0, which the upstream check still reports",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md"
   },
   "maya": {
-    "source_commit": "b6632a0b11dffd2b197c3bbdcb140bbabbe9fa12",
-    "qualified_on": "2026-11-21T03:20:00",
+    "source_commit": "cce2de0ed73b5d4e4f88abb5c0c4039c1c403136",
+    "qualified_on": "2026-11-21T14:20:00",
     "method": "hands-on short DSH",
-    "note": "Maya 1.1.70; both profiles pass the short DSH check",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md"
+    "note": "Maya 1.1.72 (1.1.71 installed and checked first); both profiles pass the short DSH check",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md"
   },
   "strata": {
-    "source_commit": "12d491da4a6904eb49aaa6f2f63ec4b1a17582e3",
-    "qualified_on": "2026-11-21T03:20:00",
+    "source_commit": "6e38f588a646c0ee6948a74afbe670eb75896106",
+    "qualified_on": "2026-11-21T13:50:00",
     "method": "hands-on short DSH",
-    "note": "Strata v0.2.17 for flash-next-strata and flash-next-iq4xs-strata: control 0.1.63, engine 0.1.63. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59): Strata no longer runs DeepSeek",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md"
+    "note": "Strata v0.2.18 for flash-next-strata and flash-next-iq4xs-strata: control 0.1.64, engine 0.1.64. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59): Strata no longer runs DeepSeek",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md"
   }
 }
