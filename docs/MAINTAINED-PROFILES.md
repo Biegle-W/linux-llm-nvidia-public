@@ -8,7 +8,9 @@ API id, model and quantization, engine and its runtime manifest, allocated conte
 
 The catalog rejects duplicate model/quant/engine combinations, dense context that does not match the engine arguments, and unqualified CPU weight offload. Flash-Next has two entries with separate weights, `flash-next-strata` (IQ3_XXS, the default) and `flash-next-iq4xs-strata` (UD-IQ4_XS-v31); they share the engine binary, the MTP head and the vision projector. Two pairs share one checkpoint on disk: `qwen27b-hyperqwen` / `qwen27b-sglang`, and `deepseek-maya` / `deepseek-unsloth-strata`.
 
-Inkling 2 Mini is Thinking Machines Lab's Apache 2.0 26B looped MoE. `inkling-llamacpp` uses UD-Q4_K_M weights and an F16 picture projector on SATA. Its separate Unsloth llama.cpp build serves 32,768 tokens with thinking always on. The November 21 trial passed a tool call and follow-up. Router qualification is pending.
+Inkling 2 Mini is Thinking Machines Lab's Apache 2.0 26B looped MoE. `inkling-llamacpp` uses UD-Q4_K_M weights and an F16 picture projector on SATA. Its separate Unsloth llama.cpp build serves 32,768 tokens with thinking always on. The November 21 trial passed a tool call and follow-up. Router load, the short check and an owned unload passed on November 22.
+
+Tencent Hy4-Flash 220B-A12B uses SQ-96 on the 12 GB card with the experts in RAM and Engram on NVMe. `hy4-flash-strata` serves text and pictures with 32,768 tokens. The trial passed a tool call and follow-up. Router load, the short check and an owned unload passed on November 22.
 
 ## Selection rule
 

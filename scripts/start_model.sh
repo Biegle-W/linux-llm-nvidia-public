@@ -4,7 +4,7 @@ project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 model="${1:-qwen}"
 engine="${2:-hyperqwen}"
 if [[ $# -gt 2 || ( $# -gt 1 && "$model" != qwen27b ) ]]; then
-    echo 'Usage: start_model.sh qwen|qwen27b [hyperqwen|sglang]|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt|inkling|qwen-iq4xs' >&2
+    echo 'Usage: start_model.sh qwen|qwen27b [hyperqwen|sglang]|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt|inkling|hy4|qwen-iq4xs' >&2
     exit 2
 fi
 if [[ "$model" == qwen27b && "$engine" != hyperqwen && "$engine" != sglang ]]; then
@@ -12,12 +12,13 @@ if [[ "$model" == qwen27b && "$engine" != hyperqwen && "$engine" != sglang ]]; t
     exit 2
 fi
 case "$model" in
-    qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt|inkling|qwen-iq4xs) ;;
-    *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt|inkling|qwen-iq4xs' >&2; exit 2 ;;
+    qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt|inkling|hy4|qwen-iq4xs) ;;
+    *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|bolt|inkling|hy4|qwen-iq4xs' >&2; exit 2 ;;
 esac
 # Normal CLI calls use router ownership; only its internal worker path runs preflight below.
 case "$model" in
     qwen) route_model="flash-next-strata" ;;
+    hy4) route_model="hy4-flash-strata" ;;
     qwen-iq4xs) route_model="flash-next-iq4xs-strata" ;;
     glm) route_model="glm-maya" ;;
     strata-deepseek) route_model="deepseek-unsloth-strata" ;;

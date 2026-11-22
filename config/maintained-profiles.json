@@ -3048,6 +3048,117 @@
         "ttft_s": 8.7473359190044,
         "decode_tps": 42.12840088460383
       }
+    },
+    {
+      "id": "hy4-flash-strata",
+      "display_name": "Tencent Hy4-Flash 220B-A12B / SQ-96 / Strata",
+      "model": "Hy4-Flash",
+      "input_modalities": [
+        "text",
+        "image"
+      ],
+      "weight_quant": "SQ-96",
+      "engine": "Strata",
+      "status": "selected",
+      "launch": [
+        "hy4"
+      ],
+      "allocated_context": 32768,
+      "context_validation": "32768-token allocation; router load, chat and tool requests, the short DSH check and owned unload passed on 2026-11-22. A 16.8K-token prompt was read in the trial outside the router. No full-context or sustained qualification.",
+      "capabilities": {
+        "text": true,
+        "vision": true,
+        "tools_qualified": true
+      },
+      "runtime_selector": {
+        "kind": "strata-launch-preset",
+        "name": "hy4-flash-sq-96"
+      },
+      "runtime_manifest": "config/hy4-flash-strata-runtime.json",
+      "evidence": "docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md",
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/hy4-flash",
+        "base_weight_bytes": 158096740352,
+        "base_weight_gb": 158.096740352
+      },
+      "worker_memory_gib": {
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
+        "swap": null
+      },
+      "host_ram_reserve_gib": 2,
+      "minimum_usable_ram_gib": 90,
+      "selected_settings": {
+        "context": 32768,
+        "gpu": [
+          0
+        ],
+        "session_reuse": 1,
+        "drafting": "dfly2",
+        "reasoning_effort": "none",
+        "environment": {
+          "HY4_ENGRAM_ODIRECT": "1"
+        },
+        "gpu_free_floor_mib": 256
+      },
+      "current_configuration_benchmark": {
+        "date": "2026-11-22",
+        "source": "docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md",
+        "scope": "Single trial runs outside the router. Load range includes a cold 8K start. Later file-cache state unrecorded.",
+        "load_s_range": [
+          28,
+          58
+        ],
+        "decode_tps_range": [
+          18,
+          22
+        ],
+        "prompt_tokens": 16792,
+        "prefill_tps": 270,
+        "short_prompt_tokens_under": 50,
+        "short_prefill_tps_range": [
+          52,
+          61
+        ],
+        "reused_turn_new_tokens": 16,
+        "reused_turn_prefill_s": 0.4,
+        "ttft_s": null,
+        "experts_anonymous_ram_gb": 82.93,
+        "worker_memory_gib_range": [
+          79.4,
+          80.0
+        ],
+        "host_available_gib_32k": 8,
+        "gpu0_used_gb_range": [
+          11.35,
+          11.71
+        ],
+        "gpu1_used_mib": 1
+      },
+      "latest_qualification": {
+        "date": "2026-11-22",
+        "status": "pass",
+        "evidence": "docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md",
+        "router_checks_passed": [
+          "router load (26 s)",
+          "chat request",
+          "tool call and follow-up with prompt reuse",
+          "short DSH check",
+          "owned unload"
+        ],
+        "short_tool_use_test": "trial server, cut by the one-hour limit: 33 of 40 single-turn items correct, 5 of 15 episodes reached"
+      },
+      "latest_benchmark": {
+        "date": "2026-11-22",
+        "source": "docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md",
+        "status": "Normal-router short DSH check and owned unload; one run; no context stress",
+        "context": 32768,
+        "prefill_tps": 211.0,
+        "ttft_s": 26.587833371013403,
+        "decode_tps": 27.4
+      }
     }
   ],
   "host_reclaim_policy": {

@@ -11,6 +11,12 @@ class Registration(unittest.TestCase):
   self.assertEqual((model['id'],model['name'],model['input'],model['contextWindow'],model['reasoningEfforts']),
                    ('inkling-llamacpp',profile['display_name'],['text','image'],32768,False))
 
+ def test_hy4_registration(self):
+  profile=next(p for p in registration.load_catalog()['profiles'] if p['id']=='hy4-flash-strata')
+  model,=registration.router_providers({},[profile])[registration.ROUTER_ID]['models']
+  self.assertEqual((model['id'],model['name'],model['input'],model['contextWindow']),
+                   (profile['id'],profile['display_name'],['text','image'],32768))
+
  def fixture(self,folder,profiles,entries):
   oldroot,oldcatalog=registration.ROOT,registration.load_catalog
   self.addCleanup(setattr,registration,'ROOT',oldroot);self.addCleanup(setattr,registration,'load_catalog',oldcatalog)

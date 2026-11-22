@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Hy4-Flash router entry — November 22, 2026
+
+Added `hy4-flash-strata` with 32K context, the signed Hy4 engine and Engram reads from NVMe. The [SQ-96 trial](evidence/HY4-FLASH-SQ96-TRIAL-20261122.md) covers text, pictures and tool use on GPU 0. Router load (26 s), the short DSH check (211 tok/s prompt reading, 27 tok/s generation) and an owned unload passed on November 22.
+
 ## Maya 1.1.73 installed — November 22, 2026
 
 Daily update run. Only Maya had a new release. Installed for `glm-maya` and `deepseek-maya`; both pass the short DSH check at the same speed. The DeepSeek file-cache patch was re-anchored for the new source (`maya-ds4-file-cache-target-v1173.patch`). DeepSeek keeps 192 MiB more VRAM free per card after upstream's fix for issue 1026. [ENGINE-UPDATES-20261122-MAYA-1173.md](evidence/ENGINE-UPDATES-20261122-MAYA-1173.md)

@@ -363,6 +363,7 @@ FILES = (
     'docs/evidence/COMFY-DUAL-GPU-20261105.md', 'docs/evidence/benchmark-results/20261105-comfy-dual-gpu.json',
     'docs/evidence/UNUSED-QWEN-GGUF-REMOVAL-20261104.md', 'docs/evidence/validation-results/20261104-unused-qwen-gguf-removal.json',
     'docs/evidence/BOLT-AWQ-REMOVAL-20261104.md', 'docs/evidence/validation-results/20261104-bolt-awq-removal.json',
+    'config/hy4-flash-strata-runtime.json', 'scripts/hy4_flash_strata_runtime.py', 'tests/test_hy4_flash_strata_runtime.py',
     'config/inkling-llamacpp-runtime.json', 'scripts/inkling_llamacpp_runtime.py', 'tests/test_inkling_llamacpp_runtime.py',
     'config/bolt-iq2-runtime.json', 'scripts/bolt_iq2_runtime.py', 'tests/test_bolt_iq2_runtime.py',
     'docs/evidence/BOLT-IQ2-ENTRY-20261104.md', 'docs/evidence/benchmark-results/20261104-bolt-iq2-entry.json',

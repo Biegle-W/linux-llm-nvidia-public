@@ -70,6 +70,7 @@ After setup finishes, start a configured model with one of:
 ./scripts/start_model.sh qwen
 ./scripts/start_model.sh qwen-iq4xs
 ./scripts/start_model.sh inkling
+./scripts/start_model.sh hy4
 ./scripts/start_model.sh glm
 ./scripts/start_model.sh strata-deepseek
 ./scripts/start_model.sh maya-deepseek

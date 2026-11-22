@@ -20,7 +20,7 @@ def dense_gpu_free_mib(profile_id):
 # Explicit maintained SSD-streaming profiles; unknown/dense profiles fail closed.
 SSD_STREAMING_PROFILES = frozenset({
     'flash-next-strata', 'glm-maya', 'deepseek-maya',
-    'deepseek-unsloth-strata', 'flash-next-iq4xs-strata',
+    'deepseek-unsloth-strata', 'flash-next-iq4xs-strata', 'hy4-flash-strata',
 })
 # Bounded per-profile allowance above the recorded 12–13% full-PSI peaks.
 PRESSURE_15_PROFILES = frozenset({'flash-next-strata', 'deepseek-maya', 'deepseek-unsloth-strata',

@@ -19,6 +19,7 @@
   "sata_mount_record": "data/storage-mount.json",
   "weight_extensions": [
     ".gguf",
+    ".strata",
     ".safetensors",
     ".bin",
     ".pt",
@@ -28,8 +29,13 @@
   ],
   "min_weight_bytes": 50000000,
   "min_bytes": 500000000,
-  "router_manifest_receipts": ["inkling-llamacpp"],
+  "router_manifest_receipts": ["inkling-llamacpp", "hy4-flash-strata"],
   "extra_references": [
+    {
+      "path": "models/strata/packs/hy4-flash-sq-96/tokenizer",
+      "owner": "router:hy4-flash-strata",
+      "why": "Hy4 tokenizer pack"
+    },
     {
       "path": "models/strata/models/mmproj-Qwen3.8-Flash-Next-BF16.gguf",
       "owner": "router:flash-next-strata",

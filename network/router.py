@@ -133,6 +133,7 @@ class Handler(BaseHTTPRequestHandler):
         ready = any(model.get('status', {}).get('value') != 'unloaded' for model in backend)
         catalog = {p['id']: {'id': p['id'], 'object': 'model', 'created': 0, 'owned_by': 'local-nvidia',
                          'name': p.get('display_name') or p['model'] + ' / ' + p['engine'], 'engine': p['engine'],
+                         **({'input': p['input_modalities']} if 'input_modalities' in p else {}),
                          'quant': p['weight_quant'], 'context_window': p['allocated_context'],
                          'max_model_len': p['allocated_context'], 'auto_start': True,
                          'loaded': ready and w.active == p['id'] and w.loading is None}

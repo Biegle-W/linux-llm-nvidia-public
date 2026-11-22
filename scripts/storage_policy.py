@@ -37,7 +37,7 @@ def verify_storage(profile, root=ROOT):
     if storage['required_transport'] == 'sata' or (per_file and 'sata' in per_file.values()):
         ensure_sata_mount(root)
     folder = (root / storage['checkpoint_directory']).resolve(strict=True)
-    files = sorted(p for p in folder.iterdir() if p.suffix in ('.safetensors', '.gguf') and p.is_file())
+    files = sorted(p for p in folder.iterdir() if p.suffix in ('.safetensors', '.gguf', '.strata') and p.is_file())
     if not files:
         raise RuntimeError(f"{profile['id']}: checkpoint files are missing; check the storage mount.")
     if per_file is not None and set(per_file) != {p.name for p in files}:

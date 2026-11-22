@@ -51,16 +51,16 @@ def main():
         from inkling_llamacpp_runtime import PROFILE, main as inkling_main
         require_enabled(get_profile(PROFILE))
         return inkling_main()
-    require_enabled(get_profile(sys.argv[1]))
+    identifier = 'hy4-flash-strata' if sys.argv[1] == 'hy4' else sys.argv[1]
+    profile = require_enabled(get_profile(identifier))
     from profile_catalog import require_host_capacity
-    require_host_capacity(get_profile(sys.argv[1]))
+    require_host_capacity(profile)
     if sys.argv[1] == 'bolt-llamacpp':
         from bolt_iq2_runtime import main as bolt_main
         return bolt_main()
     group = next(line.split('::', 1)[1] for line in Path('/proc/self/cgroup').read_text().splitlines()
                  if line.startswith('0::'))
     limit = (Path('/sys/fs/cgroup') / group.lstrip('/') / 'memory.max').read_text().strip()
-    profile = get_profile(sys.argv[1])
     budget = worker_budget(profile)
     host_floor_kib = host_ram_reserve_gib(profile) * 1024 ** 2
     cgroup_base = Path('/sys/fs/cgroup') / group.lstrip('/')
@@ -72,24 +72,30 @@ def main():
     verify_storage(profile)
     if profile['id'] == 'deepseek-unsloth-strata':
         from strata_unsloth_runtime import prepare_config
-        source = prepare_config(profile)
+        config = json.loads(prepare_config(profile).read_text())
     elif profile['id'] == 'flash-next-strata':
         source = Path.home() / '.local/state/strata/launch/qwen-flash-next.json'
         try:
-            require_flash_next_split(json.loads(source.read_text()), profile)
+            config = json.loads(source.read_text())
+            require_flash_next_split(config, profile)
         except ValueError as error:
             sys.exit(str(error))
     elif profile['id'] == 'flash-next-iq4xs-strata':
         from flash_iq4xs_strata_runtime import prepare_config
         try:
-            source = prepare_config(profile)
+            config = json.loads(prepare_config(profile).read_text())
         except (ValueError, OSError, KeyError, TypeError) as error:
             sys.exit('UD-IQ4_XS preflight failed: ' + str(error))
+    elif profile['id'] == 'hy4-flash-strata':
+        from hy4_flash_strata_runtime import prepare_config
+        try:
+            config = prepare_config(profile)
+        except (ValueError, OSError, KeyError, TypeError) as error:
+            sys.exit('Hy4 preflight failed: ' + str(error))
     elif profile['engine'] == 'Maya':
-        source = ROOT / profile['runtime_selector']['path']
+        config = json.loads((ROOT / profile['runtime_selector']['path']).read_text())
     else:
         sys.exit('No qualified MoE profile selected.')
-    config = json.loads(source.read_text())
     verify_cachebound_runtime(config, profile)
     for name, value in profile.get('selected_settings', {}).get('environment', {}).items():
         if str(config.get('env', {}).get(name)) != str(value):
@@ -162,7 +168,7 @@ def main():
                 stop()
                 child.wait(timeout=20)
                 raise SystemExit(1)
-            if profile['id'] in ('deepseek-unsloth-strata', 'flash-next-iq4xs-strata'):
+            if profile['id'] in ('deepseek-unsloth-strata', 'flash-next-iq4xs-strata', 'hy4-flash-strata'):
                 free = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits'], text=True)
                 free_values = pair_gpu_free_values(free)
                 gpu_bad = gpu_bad + 1 if any(x < GPU_FREE_MIB for x in free_values) else 0

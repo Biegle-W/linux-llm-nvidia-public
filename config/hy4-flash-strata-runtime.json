@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "profile": "hy4-flash-strata",
+  "quant": "SQ-96",
+  "publisher_repository": "strata-engine/Hy4-Flash-Strata",
+  "publisher_revision": null,
+  "verified": "Publisher revision unrecorded. All three files matched the sizes and SHA-256 pins in Strata source.",
+  "checkpoint_directory": "models/strata/models/hy4-flash",
+  "files": [
+    {
+      "file": "Hy4-Flash-SQ-96.strata",
+      "bytes": 89577742336,
+      "sha256": "3b1c5755a220c69892b3d2dbad506b8593a30be24b17a390ecbd1642c0c1e14c",
+      "publisher_sha256_matched": true
+    },
+    {
+      "file": "Hy4-Flash-Engram-Q8.strata",
+      "bytes": 67584905216,
+      "sha256": "ab0cf9b3f9c64bd25f6212d4508e7443ab8b9bc133fbccc7bdfb83510a20c2c1",
+      "publisher_sha256_matched": true
+    },
+    {
+      "file": "Hy4-Flash-Vision.strata",
+      "bytes": 934092800,
+      "sha256": "ef09bceff8f01b8d226d2dc56aef09cec719b21b45783ee9b5d64e7241b72a09",
+      "publisher_sha256_matched": true
+    }
+  ],
+  "release": "v0.2.18",
+  "engine_package": "strata-hy4-0.1.64-linux-x86_64-cuda-cuda13.tar.gz",
+  "engine_build_id": "6e38f588a646+cuda13.0",
+  "engine_directory": "runtimes/strata-hy4/0.1.64-linux-x86_64-cuda-cuda13",
+  "engine_files_sha256": {
+    "strata-hy4": "d327f52cf25a9b64938230eaa1023cc5e0703c0b598fb08c7dfba396ba0702ab",
+    "libcublas.so.13": "25cde432108543626df85d887c730bf2cab96803ca16f9654e4abc8d2b45833e",
+    "libcublasLt.so.13": "1489aeb75d55ee55782798343ac66f57771d561cc1fe1e0491568deefa0e6515",
+    "engine-component.json": "736fc37404cc6931a3123ff6b634fde8356d86f9d20c9258407f5a8b1ad23eac",
+    "BUILD.json": "e5738f42d59b705da8099a16d16200a7256544ad2d36103c215507a019ff86e4"
+  },
+  "tokenizer_directory": "models/strata/packs/hy4-flash-sq-96/tokenizer",
+  "tokenizer_files_sha256": {
+    "chat_template.jinja": "63ddd5de294df36f10c8f2c8e5f7b2a9dc2011c8481335422f04554256aee4ad",
+    "merges.txt": "fd62cf9ad198e3252758cda475c00ac2e2398974d666064af81811bdfff5ea19",
+    "tokenizer.json": "a9d4443a7605349585874c8f440116fbd3b01d6333534fece2ad180a1dd2234c",
+    "token_type.json": "05d3ec42f0f52dd55d066d9ad88f161be62e66ffac8f514368d0cb36b1a190b7",
+    "vocab.json": "ad6c0cb94e4ec278a1ad22f3dcca53c5a5a0a07f14ae04002de1c6648bc6d0c6"
+  },
+  "launch_preset": "~/.local/state/strata/launch/hy4-flash-sq-96.json"
+}

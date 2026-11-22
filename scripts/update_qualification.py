@@ -254,7 +254,7 @@ class Qualification:
             speeds = [self.request('speed-' + str(i), self.fixtures[i + 1], 128, speed=True) for i in range(3)]
             self.exact_json('json', 'Return only JSON keys sum and word with sum=17+25 and word="ready".', {'sum':42,'word':'ready'}); checks['json'] = True
             self.exact_json('arithmetic', 'Return only JSON keys product=19*23 and smallest=min(37,12,29).', {'product':437,'smallest':12}); checks['arithmetic'] = True
-            vision = self.p['id'] in ('flash-next-strata','flash-next-iq4xs-strata','glm-maya','deepseek-maya')
+            vision = self.p['id'] in ('flash-next-strata','flash-next-iq4xs-strata','hy4-flash-strata','glm-maya','deepseek-maya')
             if vision:
                 n = 1024
                 def chunk(k, d): return struct.pack('>I',len(d)) + k + d + struct.pack('>I',zlib.crc32(k+d)&0xffffffff)

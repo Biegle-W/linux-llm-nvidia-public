@@ -25,7 +25,11 @@ class ManagedUnload(unittest.TestCase):
  def exercise(self,metrics,error_code=None,unavailable=False):
   for profile in ('bolt-llamacpp','inkling-llamacpp'):
    with self.subTest(profile=profile):self.exercise_one(profile,metrics,error_code,unavailable)
- def exercise_one(self,profile,metrics,error_code,unavailable):
+ def test_hy4_native_unload_without_loading_field(self):
+  for status,code in [('{"busy":true,"queued":0}', 'backend_busy'), ('{"busy":false,"queued":1}', 'backend_busy'),
+                      ('{"busy":false,"queued":0}', None), ('{"queued":0}', 'backend_state_unknown')]:
+   with self.subTest(status=status):self.exercise_one('hy4-flash-strata',status,code,False,'/status')
+ def exercise_one(self,profile,metrics,error_code,unavailable,endpoint='/metrics'):
   with tempfile.TemporaryDirectory() as d:
    root=Path(d);w=manager.Workers.__new__(manager.Workers);w.active=profile;w.key='fixture'
    def prop(unit,name):
@@ -39,7 +43,7 @@ class ManagedUnload(unittest.TestCase):
      self.assertEqual(caught.exception.code,error_code);stop.assert_not_called();self.assertEqual(w.active,profile)
     else:
      w.stop_owned();stop.assert_called_once_with(['systemctl','--user','stop',manager.MOE_UNIT],check=True,timeout=90);self.assertIsNone(w.active)
-    req=api.call_args.args[0];self.assertTrue(req.full_url.endswith('/metrics'));self.assertEqual(req.get_header('Authorization'),'Bearer fixture')
+    req=api.call_args.args[0];self.assertTrue(req.full_url.endswith(endpoint));self.assertEqual(req.get_header('Authorization'),'Bearer fixture')
  def test_running_and_waiting_requests_preserve_owned_worker(self):
   for a,b in [(1,0),(0,1)]:
    with self.subTest(running=a,waiting=b):self.exercise(f'llamacpp:requests_processing {a}\nllamacpp:requests_deferred {b}',error_code='backend_busy')

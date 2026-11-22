@@ -53,7 +53,7 @@ class WorkerBudget(unittest.TestCase):
             (temp / 'scripts/router_client.py').write_text('import sys; print(" ".join(sys.argv[1:]))')
             for command, model in [('qwen', 'flash-next-strata'), ('qwen-iq4xs', 'flash-next-iq4xs-strata'), ('glm', 'glm-maya'),
                                    ('strata-deepseek', 'deepseek-unsloth-strata'), ('maya-deepseek', 'deepseek-maya'),
-                                   ('bolt', 'bolt-llamacpp'), ('inkling', 'inkling-llamacpp')]:
+                                   ('bolt', 'bolt-llamacpp'), ('inkling', 'inkling-llamacpp'), ('hy4', 'hy4-flash-strata')]:
                 with self.subTest(command=command):
                     result = subprocess.check_output(['bash', str(shell), command], text=True).strip()
                     self.assertEqual(result, '--model ' + model)
@@ -110,7 +110,7 @@ class DenseNativeGuard(unittest.TestCase):
                     self.assertEqual(verify.call_count,1 if accepted else 0)
     def test_unbounded_or_half_unbounded_moe_budgets_are_rejected(self):
         for b in [{'high':None,'max':None,'swap':None},{'high':30,'max':None,'swap':None},{'high':None,'max':36,'swap':None}]:
-            for name in ['glm-maya','deepseek-unsloth-strata','deepseek-maya','flash-next-strata','flash-next-iq4xs-strata']:
+            for name in ['glm-maya','deepseek-unsloth-strata','deepseek-maya','flash-next-strata','flash-next-iq4xs-strata','hy4-flash-strata']:
                 p=deepcopy(get_profile(name));p['worker_memory_gib']=b
                 with self.subTest(profile=name,budget=b),self.assertRaises(ValueError):worker_budget(p)
 

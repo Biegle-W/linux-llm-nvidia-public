@@ -1,6 +1,6 @@
 # Hy4-Flash 220B (SQ-96) on Strata: trial — November 22, 2026
 
-**Status: trial measured outside the router; router entry in preparation.** The owner pointed out that Strata 0.2.18 runs Tencent Hy4-Flash and asked for the SQ-96 build to be set up.
+**Status: router entry `hy4-flash-strata` since November 22 (section "Router entry" below).** The owner pointed out that Strata 0.2.18 runs Tencent Hy4-Flash and asked for the SQ-96 build to be set up.
 
 ## The model and the files
 
@@ -63,9 +63,28 @@ New weights, so the short test ran once, as a larger model (one hour). Thinking 
 
 The printed score of 51.2 rests on five episodes and is not comparable with entries that completed all of them. Single turn (33 of 40) is level with the other entries (28 to 36 of 40). Episodes were slow because each step re-read the whole growing conversation; with prompt reuse on they should be much faster, which was not re-measured. Run id `fast-hy4-20261122`.
 
+## Router entry (November 22)
+
+- **Entry:** `hy4-flash-strata`, 32,768 context, text and pictures, card 0 only, drafter on, prompt reuse between turns on (`--session-reuse 1`), Engram reads bypassing the page cache. Thinking is off as served, like the other entries; a request can turn it on. Launch name `hy4`.
+- **Engine:** `runtimes/strata-hy4/0.1.64-linux-x86_64-cuda-cuda13/`, pinned by hash together with the three weight files and the tokenizer in `config/hy4-flash-strata-runtime.json`. The private launch preset is `~/.local/state/strata/launch/hy4-flash-sq-96.json`; the launcher refuses to start if it differs from the selected settings in any key or argument.
+- **Updates:** on a Strata update the `strata-hy4` package of the same release has to be fetched, verified and installed with it. The old automatic builder now refuses Strata for that reason; Strata updates are done by hand in any case.
+- **Code:** written by Codex (GPT-6.2 Astra) from a specification and reviewed by three reviewers, each finding checked by a second agent. No defect was confirmed. One gap is left open: the free-VRAM stop rule for this entry has no unit test (it is the same rule the other entries use). 571 tests pass.
+
+| Check through the router | Result |
+|---|---|
+| Load | ready in 26 s |
+| Chat request | correct, no thinking |
+| Tool call and follow-up | correct call; the follow-up reused 210 of 227 prompt tokens |
+| Short DSH check (tool call, result, follow-up) | pass; 211 tok/s prompt reading, 26.6 s to first token, 27.4 tok/s generation |
+| VRAM loaded | 11.4 GB of 12 GB; second card 1 MiB |
+| Owned unload | pass; both cards back to 1 MiB, RAM released |
+
+The guards were checked against the measured figures: worker memory 79.4-80.0 GiB under the 87.77 GiB soft limit, about 8 GiB of host RAM available against the 2 GiB floor, about 580 MiB free on card 0 at the lowest against the 256 MiB floor. No shared threshold was changed.
+
 ## Not done
 
 - 64K and 128K context (Strata's default is 128K; its plan says both fit in the card).
 - The second GPU, the drafter's effect on long outputs, a sustained run.
-- The short test with prompt reuse on, and any knowledge, maths or coding score.
+- The short test with prompt reuse on (not rerun, under the rule that nothing is rerun), and any knowledge, maths or coding score.
+- The idle-timeout unload and a picture request through the router.
 - Memory headroom is thin: about 8 GiB of RAM is left with the model loaded, so nothing else large can run beside it.

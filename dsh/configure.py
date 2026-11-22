@@ -46,7 +46,8 @@ def router_providers(providers,profiles):
         m.setdefault('name',p.get('display_name') or p['model']+' / '+p['engine'])
         if identifier==PLAIN and 'web search' in m['name'].lower():m['name']=p.get('display_name') or p['model']+' / '+p['engine']
         m.update(contextWindow=p['allocated_context'],maxTokens=4096,reasoningEfforts=False)
-        m.setdefault('input',['text','image'] if identifier=='inkling-llamacpp' else ['text'])
+        if 'input_modalities' in p:m['input']=list(p['input_modalities'])
+        else:m.setdefault('input',['text','image'] if identifier=='inkling-llamacpp' else ['text'])
     disabled={p['id'] for p in profiles if p.get('availability',{}).get('enabled',True) is False}
     models={k:v for k,v in models.items() if k not in disabled}
     base.update(displayName='NVIDIA server',api='openai-completions',baseURL=ROUTER_URL,defaultMaxTokens=4096,timeoutMs=7200000,streamIdleTimeoutMs=7200000,models=list(models.values()))
