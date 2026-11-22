@@ -1,6 +1,6 @@
 # Inkling 2 Mini trial — November 21, 2026
 
-**Status: trial in progress. Not a router model; no profile, launcher or guard was added.** The owner pointed at the model on its second day and asked for a test. This file records what has been measured so far and is updated when the quality run completes.
+**Status: trial measured. Not a router model; no profile, launcher or guard was added.** The owner pointed at the model on its second day and asked for a test. The quality run is complete (60.0% macro, thinking on) and Unsloth's llama.cpp build was measured at 41-44 tok/s, against 24-27 on production llama.cpp. Whether it becomes a router model is the owner's call.
 
 ## The model
 
@@ -13,7 +13,7 @@ Weights used: Unsloth's `Inkling-2-Mini-UD-Q4_K_XL` (17.63 GB) in the layout mai
 | Engine | State on this server (12 GB + 10 GB, sm_86) |
 |---|---|
 | llama.cpp main `19bc41d` (production since November 21) | **Runs**, slowly (below). Reads only the `Mainline_Support` layout. |
-| Unsloth's llama.cpp build `b12588-mix-c0c3de8` | Not tried. It has correct two-GPU placement for the loop, banded attention and the DSpark drafter, and reads the repository-root layout. It is a downloaded binary or a source build with pinned pull requests; waiting for the owner's decision. |
+| Unsloth's llama.cpp build `b12588-mix-c0c3de8` | **Runs, and is the fastest engine measured here** (section below). Downloaded binary (commit `8832860`, build 12588), reads the repository-root layout, has the DSpark drafter. Trial folder only; not installed as a runtime. |
 | Maya 1.1.72 (`maya-ik2`, experimental) | **Refused as released.** The engine and the setup require one card with 22 GiB or more and refuse two GPUs; it decodes only the `UD-Q4_K_XL` file. Upstream measured 124.6 tok/s on one RTX 3090. The source has an unsupported switch (`IK2_UNSUPPORTED=1` with `--gpus 2` and expert parallel) that nobody has run on Linux or on 22 GB in total; with about 12.4 GiB of room for 14.7 GiB of experts, part would stream from RAM. Not tried. |
 | Strata 0.2.18 | No Inkling support. |
 | vLLM, SGLang | Ruled out by a source review: their Inkling paths need newer GPU generations and more memory on one card. |
@@ -36,21 +36,50 @@ For scale, on the same server Qwen3.8-27B generates 60-110 tok/s and `bolt-llama
 
 **Thinking cannot be turned off on mainline.** Every answer carries reasoning. `--reasoning off`, `reasoning_effort` set to `"none"` and to `0.0` through the template settings all still produce reasoning (shorter with the last two). Adding `--reasoning-budget 0` breaks the output: the model repeats empty thinking blocks until the token limit. Upstream issue 32753 covers the template; the model card says reasoning cannot be fully disabled.
 
-## Quality run (in progress)
+## Measured on Unsloth's llama.cpp build (two GPUs, 32K context)
 
-The 390-item screening set used for the ranking in [QUALITY-BENCHMARK-20261111.md](QUALITY-BENCHMARK-20261111.md), same harness and sampling (temperature 0.6, top-p 0.95; the vendor recommends 1.0 and 1.0). Started November 21, paused for the engine update at 258 items and resumed afterwards on the same build. The run has thinking on, which the eight ranked entries did not, so the result will not be like for like.
+Tested November 21 at the owner's request. Binary: Unsloth's `app-b12588-mix-c0c3de8-linux-x64-cuda13-portable` release (hash verified), run from the trial folder with the CUDA 13 libraries of the engine tools. Weights: `Inkling-2-Mini-UD-Q4_K_M.gguf` (16.61 GB, repository-root layout) and the drafter `dspark-Inkling-2-Mini-Q8_0.gguf` (402 MB), both hash-verified. The file is one quant step smaller than the `UD-Q4_K_XL` used on mainline (17.63 GB), so the comparison is engine plus a 6% smaller file.
 
-| Part | Done | Correct |
-|---|---:|---:|
-| MMLU-Pro | 210 of 210 | 151 (71.9%) |
-| AIME 2025 | 30 of 30 | 18 (60.0%) |
-| LiveCodeBench | 18 of 60 | 15 |
-| Tool calling, single and multi | 0 of 90 | — |
+Launch: `-ngl 99 --tensor-split 13,12 -fa on --ctx-size 32768 --parallel 1`, default batch size. With the drafter: `--tensor-split 15,10 --batch-size 512 --ubatch-size 256 --model-draft … --spec-type draft-dspark --spec-draft-n-max 3 --gpu-layers-draft 99`. The drafter's work memory lands on the second card whatever `--spec-draft-device` says, so the 13,12 split ran out of memory there; 15,10 loads.
 
-No score or rank is claimed until the run completes.
+| | Production llama.cpp `19bc41d` | Unsloth build, no drafter | Unsloth build, DSpark drafter |
+|---|---:|---:|---:|
+| VRAM used | 11.0 of 12 GB, 9.7 of 10 GB | 9.7 of 12 GB, 9.5 of 10 GB | 11.9 of 12 GB, 9.6 of 10 GB |
+| Generation, short prompts | 24-27 tok/s | 43.3-44.3 tok/s | 57-71 tok/s |
+| Generation, 1,200-token essay | — | 43.6 tok/s | 38.1 tok/s |
+| Generation after a 19.6K-token prompt | 12.8 tok/s | 41.1 tok/s | 43.2 and 48.8 tok/s |
+| Prompt reading, 19.6K tokens | 317 tok/s | 810-817 tok/s | 733 tok/s |
+| JSON answer, arithmetic, picture, tool call and follow-up | pass | pass | pass |
+
+One run per cell (two for the long prompt); single-digit differences are within run-to-run noise.
+
+- **The build alone is the gain**: 1.7 times the generation speed on short prompts, 3.2 times after a long prompt, 2.6 times the prompt reading, with 1.5 GB less memory.
+- **The drafter is mixed.** It helps where the next words are predictable (short answers and tool calls: 55-79% of drafted tokens accepted) and hurts on free writing (24% accepted on the essay, 38.1 against 43.6 tok/s). It also fills the 12 GB card to 11.9 GB, leaving nothing for a longer context.
+- Thinking is still on in every answer on this build too.
+- Not measured: quality on this build and file, contexts above 32K, a sustained run, `--spec-draft-p-min` or greedy drafting.
+
+## Quality run (complete)
+
+The 390-item screening set used for the ranking in [QUALITY-BENCHMARK-20261111.md](QUALITY-BENCHMARK-20261111.md), same harness and sampling (temperature 0.6, top-p 0.95; the vendor recommends 1.0 and 1.0). Started November 21, paused for the engine update at 258 items, resumed on the same build (mainline trial build `2a28df0`, `UD-Q4_K_XL`) and finished at 22:10 EST. The run has thinking on, which the eight ranked entries did not, so the result is not like for like, and the harness's paired statistics do not apply (no shared request settings).
+
+| Part | Items | Correct | Accuracy (95% Wilson) | Other outcomes |
+|---|---:|---:|---|---|
+| MMLU-Pro | 210 | 151 | 71.9% (65.5-77.6) | 53 truncated, 6 wrong |
+| AIME 2025 | 30 | 18 | 60.0% (42.3-75.4) | 11 truncated, 1 wrong |
+| LiveCodeBench | 60 | 30 | 50.0% (37.7-62.3) | 27 truncated, 1 looped, 2 wrong |
+| Tool calling, single turn | 60 | 49 | 81.7% (70.1-89.4) | 10 wrong, 1 malformed call |
+| Tool calling, multi turn | 30 | 11 | 36.7% (21.9-54.5) | 15 wrong, 4 truncated |
+| **Macro (mean of the five)** | 390 | 259 | **60.0%** | |
+
+**Where it would sit:** 60.0% falls between `flash-next-strata` (62.0%) and `glm-maya` (57.2%), seventh of nine. It is not added to the ranking table, because the run is not like for like and no interval against the others was computed.
+
+**Truncation is most of the loss.** 95 of the 131 misses are answers cut off at the token limit (53 of the 59 MMLU-Pro misses), 92 of them with no answer text at all because the limit was spent on reasoning; only 34 are wrong answers. With reasoning that cannot be switched off, the harness's token limits, set for thinking-off models, do not fit this model, so 60.0% is a floor for this setup rather than the model's ceiling. A rerun with larger limits was not done.
+
+The run averaged 89 s per MMLU-Pro item and 394 s per AIME item on the slow mainline build; the items add up to 17.3 hours of generation.
 
 ## Not done
 
-- No speed test of the placement fix, the Unsloth build with the drafter, or Maya's unsupported two-GPU switch.
+- No speed test of the mainline placement fix or Maya's unsupported two-GPU switch.
+- No quality run on the Unsloth build, and none with token limits sized for a model that always reasons.
 - No run above 32K context, no sustained run, no router integration.
 - The vendor's benchmark claims were not reproduced.
