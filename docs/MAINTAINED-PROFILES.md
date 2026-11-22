@@ -8,6 +8,8 @@ API id, model and quantization, engine and its runtime manifest, allocated conte
 
 The catalog rejects duplicate model/quant/engine combinations, dense context that does not match the engine arguments, and unqualified CPU weight offload. Flash-Next has two entries with separate weights, `flash-next-strata` (IQ3_XXS, the default) and `flash-next-iq4xs-strata` (UD-IQ4_XS-v31); they share the engine binary, the MTP head and the vision projector. Two pairs share one checkpoint on disk: `qwen27b-hyperqwen` / `qwen27b-sglang`, and `deepseek-maya` / `deepseek-unsloth-strata`.
 
+Inkling 2 Mini is Thinking Machines Lab's Apache 2.0 26B looped MoE. `inkling-llamacpp` uses UD-Q4_K_M weights and an F16 picture projector on SATA. Its separate Unsloth llama.cpp build serves 32,768 tokens with thinking always on. The November 21 trial passed a tool call and follow-up. Router qualification is pending.
+
 ## Selection rule
 
 Keep a qualified configuration that no other configuration beats on prefill/TTFT, decode and safe validated context at once. When speed and context trade off, prefer the largest locally validated safe allocation with competitive speed, then break ties on prefill/TTFT and decode. Context increases are reported as % context gained against % speed lost and need quality and resource qualification before promotion ([context policy](evidence/CONTEXT-VALIDATION-POLICY-20261101.md)). Allocated context is a capacity setting, not a full-window quality claim.

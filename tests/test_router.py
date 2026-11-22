@@ -104,6 +104,9 @@ class RouterTest(unittest.TestCase):
         expected=set(router.profiles()) | set(router.WEB_SEARCH_ALIASES)
         self.assertEqual({m['id'] for m in models},expected)
         self.assertEqual(len(models),len(expected))
+        inkling = next(m for m in models if m['id'] == 'inkling-llamacpp')
+        self.assertEqual((inkling['engine'], inkling['context_window']), ('llama.cpp (Unsloth build)', 32768))
+        self.assertNotIn('inkling', expected)
         self.assertEqual(next(m for m in models if m['id']=='deepseek-unsloth-strata')['context_window'],router.profiles()['deepseek-unsloth-strata']['allocated_context'])
     def test_explicit_selection_requests_guard_reload(self):
         status,_=self.request('/router/select',{'model':'qwen27b-hyperqwen'})

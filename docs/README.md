@@ -139,7 +139,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 ### Models, engines and context
 
 - [ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md](evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md): Maya 1.1.72, Strata 0.2.18 and llama.cpp main installed by hand, with the upstream review — November 21, 2026
-- [INKLING2-MINI-TRIAL-20261121.md](evidence/INKLING2-MINI-TRIAL-20261121.md): Inkling 2 Mini trial on two GPUs: which engines run it, speed on mainline and on the Unsloth build, thinking settings, quality run — November 21, 2026
+- [INKLING2-MINI-TRIAL-20261121.md](evidence/INKLING2-MINI-TRIAL-20261121.md): Trial and router-entry evidence for `inkling-llamacpp`: which engines run it, speed on mainline and on the Unsloth build, thinking settings, quality run — November 21, 2026
 - [QUALITY-FAST-TEST-PLAN.md](QUALITY-FAST-TEST-PLAN.md): Plan for a short tool-use-first quality test (15 minutes for smaller models, 1 hour for larger), built as a harness add-on and replayed on stored records; runs only for new models and weights — November 22, 2026
 - [ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md](evidence/ENGINE-UPDATES-20261121-MAYA-1170-STRATA-0217.md): Maya 1.1.70 and Strata 0.2.17 installed by hand, with the upstream review — November 21, 2026
 - [ENGINE-UPDATES-20261118-MAYA-1167.md](evidence/ENGINE-UPDATES-20261118-MAYA-1167.md): Maya 1.1.67 installed by hand, with the upstream review — November 18, 2026

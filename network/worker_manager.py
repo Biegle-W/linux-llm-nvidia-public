@@ -129,7 +129,7 @@ class Workers:
             if not recognized:
                 raise RouterError('An unexpected process owns the inference unit; nothing was stopped.', 'ownership_conflict')
             invocation = unit_property(unit, 'InvocationID')
-            llama_active = getattr(self, 'active', None) == 'bolt-llamacpp'
+            llama_active = getattr(self, 'active', None) in ('bolt-llamacpp', 'inkling-llamacpp')
             if unit == MOE_UNIT and llama_active:
                 request = urllib.request.Request('http://127.0.0.1:10000/metrics',
                           headers={'Authorization': 'Bearer ' + self.key})
@@ -265,7 +265,7 @@ class Workers:
                 return
         # Native Strata/Maya pages call their worker directly, outside this router lock.
         # Observe their status as well before starting a switch.
-        llama_active = self.active == 'bolt-llamacpp'
+        llama_active = self.active in ('bolt-llamacpp', 'inkling-llamacpp')
         vllm_active = llama_active
         if self.active and (vllm_active or all_profiles().get(self.active, {}).get('engine') in ('Strata', 'Maya')):
             deadline = time.monotonic() + 7200
@@ -305,7 +305,7 @@ class Workers:
                 if os.environ.get('NVIDIA_API_ONLY') != '1':
                     open_monitor('NVIDIA MoE backend', unit, [ROOT / 'data/router' / (p['id'] + '-engine.log')
                                  for p in profiles().values() if p['engine'] in ('Strata', 'Maya', 'vLLM-offload')] +
-                                 [ROOT / 'data/router/bolt-iq2/engine.log'])
+                                 [ROOT / 'data/router/bolt-iq2/engine.log', ROOT / 'data/router/inkling/engine.log'])
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
                                     env=dict(os.environ, LOCAL_LLM_ROUTER_WORKER='1'))
             if result.returncode:

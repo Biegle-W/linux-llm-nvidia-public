@@ -1,6 +1,6 @@
 # Inkling 2 Mini trial — November 21, 2026
 
-**Status: trial measured. Not a router model; no profile, launcher or guard was added.** The owner pointed at the model on its second day and asked for a test. The quality run is complete (60.0% macro, thinking on) and Unsloth's llama.cpp build was measured at 41-44 tok/s, against 24-27 on production llama.cpp. Whether it becomes a router model is the owner's call.
+**Status: router entry `inkling-llamacpp` since November 22 (section "Router entry" below).** Until then it was a trial with no profile, launcher or guard. The owner pointed at the model on its second day and asked for a test. The quality run is complete (60.0% macro, thinking on) and Unsloth's llama.cpp build was measured at 41-44 tok/s, against 24-27 on production llama.cpp. Whether it becomes a router model is the owner's call.
 
 ## The model
 
@@ -89,6 +89,37 @@ A second run of the 390 items was started on November 21 at 22:29 EST on Unsloth
 This supports reading the first run's 60.0% as a floor set by the token limits, but it is a partial result on one part with a different build and file; no score is claimed from it. The partial records are kept under run id `inklingcmp2`.
 
 On the short tool-use test that replaces the 390-item test for future models, the first run's stored records give Inkling 2 Mini 52.4 out of 100 (33 of 40 single-turn items, 2 of 9 episodes); see [QUALITY-FAST-TEST-PLAN.md](../QUALITY-FAST-TEST-PLAN.md).
+
+## Router entry (November 22)
+
+The owner asked for a decision on which Inkling becomes a router model. Chosen: `UD-Q4_K_M` on Unsloth's llama.cpp build without the drafter, because of speed (41-44 against 12.8-27 tok/s) and memory; the drafter slowed free writing and filled the 12 GB card.
+
+- **Entry:** `inkling-llamacpp`, 32,768 context, text and pictures, thinking always on, vendor sampling defaults (temperature 1.0, top-p 1.0). Launch name `inkling`.
+- **Runtime:** a second llama.cpp, `runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/` (Unsloth release, commit `8832860`), with the binary, nine libraries and both weight files pinned by hash in `config/inkling-llamacpp-runtime.json`. It is updated by hand and is not tracked by the upstream check; the production llama.cpp of `bolt-llamacpp` is untouched.
+- **Code:** the worker shares Bolt's supervision and guards with its own launch command. Written by Codex (GPT-6.2 Astra) from a specification, reviewed by three reviewers and here. Fixed in review: a missing test for the unload path, and the launch needed verbose engine logging, without which the two-GPU placement guard would have stopped a healthy worker. 558 tests pass.
+
+| Check through the router | Result |
+|---|---|
+| Load | ready in 11 s |
+| Short DSH check (tool call, result, follow-up) | pass; 805 tok/s prompt reading, 8.7 s to first token, 42.1 tok/s generation |
+| Chat request | correct answer, with reasoning |
+| VRAM loaded | 9.5 GB of 12 GB, 9.3 GB of 10 GB |
+| Owned unload | pass, both cards back to 1 MiB |
+
+**One fault on the way:** the first unload was refused ("worker state is unavailable"). The model hub service was still running the old code, which did not know this entry uses llama.cpp's request gauges. Restarting the hub fixed it; the rule is now in `AGENTS.md`.
+
+**Short tool-use test (first live run of that test):** these are new weights, so it ran once, as a smaller model with the 15-minute limit. It was cut by the limit, as predicted for a model that always reasons.
+
+| Part | Result |
+|---|---|
+| Single turn | 32 of 40 correct (parallel 13/15, no-tool 12/15, plain call 7/10), 6 minutes |
+| Multi-turn episodes | 1 of 9 reached (cut off at the token limit after 252 s, counted wrong); the second was cut by the deadline, 7 not run |
+| Coverage | 41 of 49 items scored |
+| Time | 4.5 s load, 690.5 s of items, inside the limit |
+
+The 40.0 the report prints rests on a single episode and is not comparable with the other entries. The comparable part is single turn: 32 of 40, against 33 of 40 from the stored records of the larger quant on mainline. Run id `fast-inkling-20261122`.
+
+Not done for the entry: a run above 32K context, a sustained run, the idle-timeout unload (only the requested unload was exercised), picture input through the router.
 
 ## Not done
 

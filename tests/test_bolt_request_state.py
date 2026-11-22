@@ -23,8 +23,11 @@ class RequestState(unittest.TestCase):
    with self.assertRaises(TelemetryError):w.phase()
 class ManagedUnload(unittest.TestCase):
  def exercise(self,metrics,error_code=None,unavailable=False):
+  for profile in ('bolt-llamacpp','inkling-llamacpp'):
+   with self.subTest(profile=profile):self.exercise_one(profile,metrics,error_code,unavailable)
+ def exercise_one(self,profile,metrics,error_code,unavailable):
   with tempfile.TemporaryDirectory() as d:
-   root=Path(d);w=manager.Workers.__new__(manager.Workers);w.active='bolt-llamacpp';w.key='fixture'
+   root=Path(d);w=manager.Workers.__new__(manager.Workers);w.active=profile;w.key='fixture'
    def prop(unit,name):
     if unit!=manager.MOE_UNIT:return 'inactive'
     return {'ActiveState':'active','ExecStart':str(root/'scripts/serve_router_moe.py'),'InvocationID':'owned-fixture','ControlGroup':''}.get(name,'')
@@ -33,7 +36,7 @@ class ManagedUnload(unittest.TestCase):
     socket.return_value.__enter__.return_value.connect_ex.return_value=1
     if error_code:
      with self.assertRaises(manager.RouterError) as caught:w.stop_owned()
-     self.assertEqual(caught.exception.code,error_code);stop.assert_not_called();self.assertEqual(w.active,'bolt-llamacpp')
+     self.assertEqual(caught.exception.code,error_code);stop.assert_not_called();self.assertEqual(w.active,profile)
     else:
      w.stop_owned();stop.assert_called_once_with(['systemctl','--user','stop',manager.MOE_UNIT],check=True,timeout=90);self.assertIsNone(w.active)
     req=api.call_args.args[0];self.assertTrue(req.full_url.endswith('/metrics'));self.assertEqual(req.get_header('Authorization'),'Bearer fixture')

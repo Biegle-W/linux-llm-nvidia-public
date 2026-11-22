@@ -1,0 +1,46 @@
+{
+  "binary": "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/llama-server",
+  "binary_sha256": "b695dc3a318e3771f75e491c3df2d0d79812217bad2159d56548a3597a0af97b",
+  "source_repository": "unslothai/llama.cpp",
+  "source_tag": "b12588-mix-c0c3de8",
+  "source_commit": "883286076efe5b85fddb31d9cc7035a6b698ba9b",
+  "version": "1.0.0-dev (build 12588)",
+  "release_tarball": "app-b12588-mix-c0c3de8-linux-x64-cuda13-portable.tar.gz",
+  "release_sha256": "6c1985d2d75c9cc6b299891d557aca70843ba5ccb68f14863a50687048cfdd48",
+  "runtime_files_sha256": {
+    "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/libggml-base.so.1.0.0": "d685167cbd59d9f53e86e22384f6480db95720187fd5a84a2d7a73c9be543dbc",
+    "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/libggml.so.1.0.0": "12b01527ff17c7b3e8351bdf3f39eb3f09f40b6bfb566f56e3baafd3a717ed06",
+    "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/libggml-cuda.so": "7fe65042625d8a5c252fe536627d2be94e4a8963e99148c34b61336ea5a5ffe2",
+    "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/libggml-cpu-alderlake.so": "b629dc402576755655e713bdfc5dfdaa69ebe8191e5bccd4647a4136cfeabbdf",
+    "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/libggml-cpu-haswell.so": "d557f95a84abdb45e912d6a10ae173958b07bbeabcc5d58976bb3335b1d850d0",
+    "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/libllama.so.1.0.0": "72b2eb3cc867e0566880eb3a733302370e560f8cbbf4ea6952b804c635524787",
+    "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/libllama-common.so.1.0.0": "56886d0cc8463d309dfb9ad5351f477be6adaa716528166930249012e9564967",
+    "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/libllama-server-impl.so": "11163dd2ffbbb0c48d7f0c876e6ddd4206b64157e4029cb869a315b4847066d1",
+    "runtimes/llama.cpp-unsloth/b12588-mix-c0c3de8/libmtmd.so.1.0.0": "38d025447b43cfd5fea8944e7d45ba66ac4615e67d80bb9c02002594eb1c836a"
+  },
+  "repository": "unsloth/Inkling-2-Mini-GGUF",
+  "revision": null,
+  "revision_note": "The trial did not record the weight repository revision.",
+  "checkpoint_directory": "models/engine-tests/inkling2-mini-trial",
+  "first_shard": "Inkling-2-Mini-UD-Q4_K_M.gguf",
+  "mmproj": "mmproj-F16.gguf",
+  "planned_context": 32768,
+  "tensor_split": [
+    13,
+    12
+  ],
+  "files": [
+    {
+      "file": "Inkling-2-Mini-UD-Q4_K_M.gguf",
+      "bytes": 16610543328,
+      "sha256": "f90c5a4df44d335ac9f9eea2a15c31d6c5a377b1b3cd9ff7fc2cf123f3cdf7e1",
+      "publisher_sha256_matched": true
+    },
+    {
+      "file": "mmproj-F16.gguf",
+      "bytes": 639348160,
+      "sha256": "3bff75ffeb2d6e0371ba7bd42e30d26a7d98aea681fa44b03b5a20891cfa2c5f",
+      "publisher_sha256_matched": true
+    }
+  ]
+}

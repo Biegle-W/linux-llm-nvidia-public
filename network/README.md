@@ -30,7 +30,7 @@ Every entry runs under the per-entry worker RAM budget in the registry (`worker_
 
 - Shortcuts: **HyperQwen vLLM**, **SGLang**, **Strata** (pick Flash-Next or DeepSeek, then open Strata's web UI on port 10000), **Maya** (pick GLM or DeepSeek, same port), **DeepSeek Harness**. All go through the router. Icon sources: [assets/icons/README.md](../assets/icons/README.md).
 - PATH commands: `llm-hyperqwen`, `llm-sglang`, `llm-strata`, `llm-maya` (accept `--model <id>`; Strata/Maya accept `--web`) and `dsh`.
-- `scripts/start_model.sh qwen | qwen-iq4xs | qwen27b [hyperqwen|sglang] | glm | maya-deepseek | strata-deepseek | bolt` loads an entry through the router.
+- `scripts/start_model.sh qwen | qwen-iq4xs | qwen27b [hyperqwen|sglang] | glm | maya-deepseek | strata-deepseek | bolt | inkling` loads an entry through the router.
 - Native UI setting changes only affect the private generated run config; maintained settings live in the registry.
 
 ## Install and maintenance

@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## November 22, 2026 — Inkling router entry
+
+Added `inkling-llamacpp` for the 26B UD-Q4_K_M model and picture projector. It uses the hand-updated Unsloth build at 32K context. Router load, the short check and an owned unload passed on November 22; the short tool-use test was cut by its 15-minute limit (32 of 40 single-turn items correct, 1 of 9 episodes reached).
+
 ## Current-state change list, November 7-13, 2026 (moved here November 22, 2026)
 
 The short entries below stood under "Recent changes" in `CURRENT-STATE.md`. They are out of date order with the sections around them.

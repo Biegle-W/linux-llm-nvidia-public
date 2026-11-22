@@ -56,7 +56,8 @@ try:
  else:
   workspace=Path(tempfile.mkdtemp(prefix='nvidia-dsh-short-'));nonce='NVIDIA_TOOL_OK_'+uuid.uuid4().hex;file=workspace/'proof.txt';file.write_text(nonce+'\n');file.chmod(0o600)
  import yaml
- entries=yaml.safe_load((R/'data/dsh/profiles/headless/cordis.patch.yml').read_text());provider=next(x['config']['providers']['nvidia-strata'] for x in entries if x['id']=='llm-pi-ai');m=next((x for x in provider['models'] if x['id']==a.model),None);m=m or dict(next(x for x in provider['models'] if x['id']==a.model+'-search'),id=a.model);provider=dict(provider,baseURL=timing_tap.base_url,models=[dict(m,maxTokens=128)]);overlay=O/'selection.yml';overlay.write_text(yaml.safe_dump([{'id':'session-title-llm','disabled':True},{'id':'llm-pi-ai','config':{'providers':{'nvidia-strata':provider}}},{'id':'agent-default-model','config':{'provider':'nvidia-strata','model':a.model}}],sort_keys=False))
+ entries=yaml.safe_load((R/'data/dsh/profiles/headless/cordis.patch.yml').read_text());provider=next(x['config']['providers']['nvidia-strata'] for x in entries if x['id']=='llm-pi-ai');m=next((x for x in provider['models'] if x['id']==a.model),None);m=m or dict(next(x for x in provider['models'] if x['id']==a.model+'-search'),id=a.model);output_cap=m['maxTokens'] if a.model=='inkling-llamacpp' else 128
+ provider=dict(provider,baseURL=timing_tap.base_url,models=[dict(m,maxTokens=output_cap)]);overlay=O/'selection.yml';overlay.write_text(yaml.safe_dump([{'id':'session-title-llm','disabled':True},{'id':'llm-pi-ai','config':{'providers':{'nvidia-strata':provider}}},{'id':'agent-default-model','config':{'provider':'nvidia-strata','model':a.model}}],sort_keys=False))
  task=f'Use the read tool to read {file}. Then reply with only the exact file contents. Do not use bash or any other tools. Do not modify any files.'
  state.update(phase='short-harness-tool',workspace=str(workspace));save();t=time.monotonic()
  stopped_after_tool=False
@@ -87,7 +88,7 @@ try:
  assert run.returncode==0 or stopped_after_tool or (calls and results),(run.returncode,(O/'stderr.txt').read_text()[-500:]);assert calls and results,'No completed actual read tool round trip';assert prop('InvocationID')==owned
  if a.require_followup:assert nonce in final, 'Missing assistant follow-up using actual tool result'
  state.update(followup_required=a.require_followup,followup_passed=nonce in final)
- state.update(phase='pass',wall_s=time.monotonic()-t,structured_read_records=len(calls),completed_tool_results=len(results),assistant_reply_not_required=True,stopped_after_tool_success=stopped_after_tool,final_marker_returned=nonce in final,strict_final_format=final.strip()==nonce if final else None,event_types=sorted({str(e.get('type')) for e in events if isinstance(e,dict)}),nonce_returned=True,output_cap=128,full_context_stress=False);save()
+ state.update(phase='pass',wall_s=time.monotonic()-t,structured_read_records=len(calls),completed_tool_results=len(results),assistant_reply_not_required=True,stopped_after_tool_success=stopped_after_tool,final_marker_returned=nonce in final,strict_final_format=final.strip()==nonce if final else None,event_types=sorted({str(e.get('type')) for e in events if isinstance(e,dict)}),nonce_returned=True,output_cap=output_cap,full_context_stress=False);save()
 except BaseException as e:state.update(phase='failed',error=repr(e));save();raise
 finally:
  if timing_tap:timing_tap.close()

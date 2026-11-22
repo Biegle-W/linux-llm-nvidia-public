@@ -47,6 +47,10 @@ def main():
     os.umask(0o077)
     from pair_p2p_health import require_verified_pair
     require_verified_pair()
+    if sys.argv[1] in ('inkling', 'inkling-llamacpp'):
+        from inkling_llamacpp_runtime import PROFILE, main as inkling_main
+        require_enabled(get_profile(PROFILE))
+        return inkling_main()
     require_enabled(get_profile(sys.argv[1]))
     from profile_catalog import require_host_capacity
     require_host_capacity(get_profile(sys.argv[1]))

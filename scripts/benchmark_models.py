@@ -145,9 +145,9 @@ def main():
     (out / 'prompts.json').write_text(json.dumps(fixtures, indent=2))
     protocol = {'created': time.strftime('%Y-%m-%dT%H:%M:%S%z'), 'repetitions': 3, 'output_tokens': 128,
                 'reference_words': 2000, 'warmup': {'reference_words': 512, 'output_tokens': 64},
-                'temperature': 0, 'top_p': 1, 'seed': 261026, 'thinking': False, 'concurrency': 1,
+                'temperature': 0, 'top_p': 1, 'seed': 261026, 'thinking': False, 'always_thinking_profiles': ['inkling-llamacpp'], 'concurrency': 1,
                 'context': 'Each kept profile retains its installed allocation.',
-                'ttft': 'HTTP request to first nonempty content SSE delta, worker loopback API; load/warmup excluded.',
+                'ttft': 'HTTP request to first nonempty content SSE delta (including reasoning for Inkling), worker loopback API; load/warmup excluded.',
                 'decode': '(completion_tokens - 1)/(last-content timestamp - first-content timestamp), same formula across engines.',
                 'prefill': 'Native prompt timings for Strata/Maya; per-request native prefill-phase metric deltas for dense engines.',
                 'cache': 'Unique early system tags; prefix reuse off in dense profiles; native cached counts checked; OS page cache not flushed.',
@@ -184,6 +184,11 @@ def main():
                 'stream': True, 'stream_options': {'include_usage': True}, 'max_tokens': 64 if warm else 128,
                 'temperature': 0, 'top_p': 1, 'seed': 261026, 'cache_prompt': False,
                 'chat_template_kwargs': {'enable_thinking': False}}
+        thinking = profile.get('selected_settings', {}).get('thinking') == 'always on'
+        if thinking:
+            body.pop('chat_template_kwargs')
+            body['messages'] = [dict(m, content=m['content'].replace(' without internal reasoning', ''))
+                                if m['role'] == 'system' else m for m in body['messages']]
         start = time.perf_counter(); first = last = None; text = ''; reasoning = ''; raw = []; usage = {}; native = {}; done = False; finish = None
         event('request-start', profile=name, case='warmup' if warm else 'measured', rep=rep)
         try:
@@ -201,7 +206,7 @@ def main():
                     usage = data.get('usage') or usage; native = data.get('timings') or native
                     for choice in data.get('choices', []):
                         delta = choice.get('delta') or {}; content = delta.get('content') or ''; reason = delta.get('reasoning_content') or ''
-                        if content:
+                        if content or (thinking and reason):
                             now = time.perf_counter() - start
                             if first is None:
                                 first = now
@@ -216,7 +221,7 @@ def main():
         wall = time.perf_counter() - start
         n = usage.get('completion_tokens'); prompt = usage.get('prompt_tokens')
         row = {'profile': name, 'case': 'warmup' if warm else 'measured', 'rep': rep,
-               'context': profile['allocated_context'], 'prompt_tokens': prompt, 'output_tokens': n,
+               'thinking': thinking, 'context': profile['allocated_context'], 'prompt_tokens': prompt, 'output_tokens': n,
                'ttft_s': first, 'last_content_s': last, 'wall_s': wall, 'usage': usage,
                'native_timings': native, 'client_decode_tps': (n - 1) / (last - first) if n and first is not None and last > first else None,
                'native_decode_tps': native.get('predicted_per_second'), 'prefill_tps': native.get('prompt_per_second'),
@@ -244,7 +249,8 @@ def main():
             if not valid_count or duration <= 0 or duration > first * 1.05 + .05:
                 raise RuntimeError(f'Invalid native prefill interval/count {duration}/{count}; inspect {label} metric snapshots.')
         cap = 64 if warm else 128
-        row['valid'] = bool(done and text.strip() and not reasoning and n == cap and row['client_decode_tps'] and row['prefill_tps']
+        generated = (text.strip() or reasoning.strip()) if thinking else (text.strip() and not reasoning)
+        row['valid'] = bool(done and generated and n == cap and row['client_decode_tps'] and row['prefill_tps']
                             and row['cached_tokens'] <= max(32, prompt * .03))
         (out / (label + '-response.json')).write_text(json.dumps({'request': body, 'events': raw, 'result': row}, indent=2))
         rows.append(row)
@@ -264,7 +270,7 @@ def main():
     try:
         # SGLang first verifies native metric availability before the slow streamed models.
         rank = {name: index for index, name in enumerate(['qwen27b-sglang', 'qwen27b-hyperqwen', 'flash-next-strata', 'glm-maya', 'deepseek-maya', 'bolt-llamacpp', 'deepseek-unsloth-strata',
-                                                           'flash-next-iq4xs-strata'])}
+                                                           'flash-next-iq4xs-strata', 'inkling-llamacpp'])}
         order = sorted(catalog['profiles'], key=lambda p: rank.get(p['id'], len(rank)))
         for profile in order:
             active[0] = profile['id']; event('loading', profile=profile['id'])
@@ -273,7 +279,9 @@ def main():
             record = subprocess.check_output(['systemctl', '--user', 'show', unit, '-p', 'ExecStart', '-p', 'MemoryHigh', '-p', 'MemoryMax', '-p', 'MemorySwapMax'], text=True)
             (out / (profile['id'] + '-unit.txt')).write_text(record)
             owned_worker[0]=(unit,subprocess.check_output(['systemctl','--user','show',unit,'-p','InvocationID','--value'],text=True).strip())
-            if not profile['id'].startswith('qwen27b-'):
+            if profile['id'] == 'inkling-llamacpp':
+                (out / (profile['id'] + '-config-redacted.json')).write_bytes((ROOT / profile['runtime_manifest']).read_bytes())
+            elif not profile['id'].startswith('qwen27b-'):
                 cfg = json.loads((ROOT / 'data/router' / (profile['id'] + '-runtime.json')).read_text()); cfg.pop('api_key', None)
                 (out / (profile['id'] + '-config-redacted.json')).write_text(json.dumps(cfg, indent=2))
             if profile['id'] == 'qwen27b-sglang':

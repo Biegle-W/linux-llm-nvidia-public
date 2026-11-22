@@ -42,6 +42,8 @@ def release_owner(path, owner):
 def validate_update_coverage(catalog, policy):
     profiles = {p['id']: p for p in catalog['profiles']}
     listed = [p for c in policy['components'] for p in c['profiles']]
+    if 'inkling-llamacpp' in listed:
+        raise RuntimeError('Inkling uses a hand-updated Unsloth runtime')
     pinned = policy.get('pinned_profiles', [])
     if not isinstance(pinned, list):
         raise RuntimeError('Pinned updater profiles must be a list')
@@ -53,6 +55,9 @@ def validate_update_coverage(catalog, policy):
                 or not ((name == 'deepseek-unsloth-strata'
                             and profiles[name]['engine'] == 'Strata'
                             and profiles[name].get('runtime_manifest') == 'config/deepseek-unsloth-runtime.json')
+                        or (name == 'inkling-llamacpp'
+                            and profiles[name]['engine'] == 'llama.cpp (Unsloth build)'
+                            and profiles[name].get('runtime_manifest') == 'config/inkling-llamacpp-runtime.json')
                         or (name == 'bolt-llamacpp'
                             and profiles[name]['engine'] == 'llama.cpp'
                             and profiles[name].get('runtime_manifest') == 'config/bolt-iq2-runtime.json'))
@@ -297,12 +302,15 @@ class Updater:
     def smoke_current(self,name):
         """One current-engine end-to-end qualification; no build or promotion."""
         self.recover()
-        from profile_catalog import get_profile
-        if name not in [p for component in self.policy['components']for p in component['profiles']]:raise RuntimeError('Profile is not automatically maintained')
+        from profile_catalog import get_profile, require_enabled
+        maintained = {p for component in self.policy['components'] for p in component['profiles']}
+        maintained.update(entry['profile'] for entry in self.policy.get('pinned_profiles', []))
+        if name not in maintained:raise RuntimeError('Unknown maintained profile')
+        profile = require_enabled(get_profile(name))
         self.run_dir=self.base/('current-smoke-'+str(time.time_ns()));self.run_dir.mkdir(mode=0o700)
         if not self.idle_reserve(manual=True,current_only=True):raise RuntimeError('Current-engine diagnostic requires idle and unloaded serving; no work interrupted')
         try:
-            result=ShortQualification(self.root,get_profile(name),self.run_dir/'current'/'short'/name,self.manager,self.owner).run()
+            result=ShortQualification(self.root,profile,self.run_dir/'current'/'short'/name,self.manager,self.owner).run()
             write_json(self.run_dir/'result.json',result)
             print(json.dumps({'profile':name,'short_DSH':'pass','prefill_tps':result['prefill_tps'],'ttft_s':result['ttft_s'],'decode_tps':result['decode_tps']}))
         finally:

@@ -68,7 +68,11 @@ def claims(cfg):
     for p in registry:
         storage = p.get('storage') or {}
         d = storage.get('checkpoint_directory')
-        if d:
+        if p['id'] in cfg.get('router_manifest_receipts', []):
+            # Trial folders can also contain alternate quants and drafters.
+            for row in load(p['runtime_manifest'])['files']:
+                out.append((Path(d) / row['file'], 'router:' + p['id'], 'runtime manifest receipt'))
+        elif d:
             out.append((d, 'router:' + p['id'], 'registry checkpoint_directory'))
     comfy = load('config/comfy-runtime.json')
     for m in comfy.get('models', []):

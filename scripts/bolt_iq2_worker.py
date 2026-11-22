@@ -54,27 +54,55 @@ def native_placement_proof(path,context):
  log=Path(path).read_text(errors='replace')
  return bool(re.search(r'n_ctx(?:_slot)?\s*=\s*'+str(context)+r'\b',log)) and all(re.search(r'CUDA'+str(i)+r'.*model buffer size',log) for i in [0,1])
 
-def main(*,work=WORK,unit=UNIT,port=PORT,alias='bolt-iq2-candidate',manifest=None,capture_engine_log=False,profile_id='bolt-iq2-candidate',latch=False):
+def verify_runtime_files(root, pins):
+ import hashlib
+ for name, expected in [(pins['binary'], pins['binary_sha256']), *pins['runtime_files_sha256'].items()]:
+  with (root/name).open('rb') as stream:
+   if hashlib.file_digest(stream,'sha256').hexdigest() != expected:
+    raise ValueError('Native runtime SHA-256 mismatch: '+name)
+
+
+def verify_receipts(folder, receipts, pinned, expected_files):
+ if (receipts != pinned or len(receipts) != len(expected_files)
+     or {row['file'] for row in receipts} != set(expected_files)):
+  raise ValueError('Unexpected native checkpoint receipts')
+ for row in receipts:
+  if (folder/row['file']).stat().st_size != row['bytes'] or row['publisher_sha256_matched'] is not True:
+   raise ValueError('Native checkpoint receipt/size mismatch: '+row['file'])
+
+
+def worker_environment(library_dirs=()):
+ env=dict(os.environ,CUDA_VISIBLE_DEVICES='0,1',CUDA_DEVICE_ORDER='PCI_BUS_ID',NCCL_P2P_DISABLE='1',PYTHONUNBUFFERED='1',HF_HUB_OFFLINE='1')
+ env.pop('GGML_CUDA_P2P',None) # Presence alone enables peer access.
+ if library_dirs:
+  paths=[str(path) for path in library_dirs]
+  if env.get('LD_LIBRARY_PATH'):paths.append(env['LD_LIBRARY_PATH'])
+  env['LD_LIBRARY_PATH']=os.pathsep.join(paths)
+ return env
+
+
+def main(*,work=WORK,unit=UNIT,port=PORT,alias='bolt-iq2-candidate',manifest=None,capture_engine_log=False,profile_id='bolt-iq2-candidate',latch=False,
+         command_builder=build_command,receipt_files=None,library_dirs=()):
  os.umask(0o077);work.mkdir(parents=True,exist_ok=True);require_host_staged();group=next(x.split('::',1)[1] for x in Path('/proc/self/cgroup').read_text().splitlines() if x.startswith('0::'));base=Path('/sys/fs/cgroup')/group.lstrip('/')
  assert group.endswith('/'+unit)
  from profile_catalog import get_profile,worker_budget,budget_limit_string,require_host_capacity
- profile=get_profile('bolt-llamacpp');require_host_capacity(profile);budget=worker_budget(profile)
+ profile=get_profile(profile_id if manifest else 'bolt-llamacpp');require_host_capacity(profile);budget=worker_budget(profile)
  for name,value in [('memory.high',budget_limit_string(budget['high'])),('memory.max',budget_limit_string(budget['max'])),('memory.swap.max','max')]:assert (base/name).read_text().strip()==value
- pins=json.loads((Path(manifest) if manifest else work/'pins.json').read_text());binary=ROOT/pins['binary'];key=read_private_key(ROOT/'data/local-api-key')
- import hashlib
- assert hashlib.file_digest(binary.open('rb'),'sha256').hexdigest()==pins['binary_sha256']
- for name,digest in pins['runtime_files_sha256'].items():assert hashlib.file_digest((ROOT/name).open('rb'),'sha256').hexdigest()==digest
+ pins=json.loads((Path(manifest) if manifest else work/'pins.json').read_text());key=read_private_key(ROOT/'data/local-api-key')
+ command=command_builder(pins,port=port,alias=alias)
+ verify_runtime_files(ROOT,pins)
  from storage_policy import verify_storage
- verify_storage({'id':'bolt-iq2-candidate','storage':{'checkpoint_directory':pins['checkpoint_directory'],'access':'ram-resident','required_transport':'sata'}})
+ if manifest and pins['checkpoint_directory'] != profile['storage']['checkpoint_directory']:
+  raise ValueError('Native checkpoint directory differs from registry')
+ verify_storage({'id':profile_id,'storage':{'checkpoint_directory':pins['checkpoint_directory'],'access':'ram-resident','required_transport':'sata'}})
  folder=ROOT/pins['checkpoint_directory']
- receipts=pins['files'] if manifest else json.loads((work/'download-receipts.json').read_text());assert len(receipts)==1 and receipts==pins['files']
- for row in receipts:assert (folder/row['file']).stat().st_size==row['bytes'] and row['publisher_sha256_matched'] is True
- watch=BoltWatch(base,'bolt-llamacpp',key,evidence=work/'swap-guard.jsonl',latch=latch,port=port)
+ receipts=pins['files'] if manifest else json.loads((work/'download-receipts.json').read_text())
+ verify_receipts(folder,receipts,pins['files'],receipt_files or (pins['first_shard'],))
+ label='Bolt' if profile['id']=='bolt-llamacpp' else profile['id']
+ watch=BoltWatch(base,profile['id'],key,evidence=work/'swap-guard.jsonl',latch=latch,port=port)
  life=LifecycleLog(profile_id,path=None if manifest else work/'lifecycle.jsonl',interval=2);life.start()
- command=build_command(pins,port=port,alias=alias)
  print('Pinned command: '+json.dumps(command),flush=True)
- env=dict(os.environ,CUDA_VISIBLE_DEVICES='0,1',CUDA_DEVICE_ORDER='PCI_BUS_ID',NCCL_P2P_DISABLE='1',PYTHONUNBUFFERED='1',HF_HUB_OFFLINE='1')
- env.pop('GGML_CUDA_P2P',None) # llama.cpp turns peer access on if this is set at all, even to '0'
+ env=worker_environment(library_dirs)
  engine_log=(work/'engine.log').open('w') if capture_engine_log else None
  child=subprocess.Popen(command,env=env,start_new_session=True,stdout=engine_log,stderr=subprocess.STDOUT if engine_log else None);stopping=False;reason=None;bad=0;loading_bad=0
  def stop(*args):
@@ -95,10 +123,10 @@ def main(*,work=WORK,unit=UNIT,port=PORT,alias='bolt-iq2-candidate',manifest=Non
    bad=bad+1 if available<2*1024**2 or any(c[0]>=100 for c in cards) or (manifest is not None or watch.ready) and any(c[1]<256 for c in cards) else 0
    if len(cards)!=2 or any(not math.isfinite(v) for c in cards for v in c):raise ValueError('Invalid pair resource telemetry')
    if watch.ready and not native_placement_proof(work/'engine.log',pins['planned_context']):reason='Native two-GPU placement/configured context proof missing'
-   if bad>=3 or loading_bad>=3:reason=reason or ('Bolt sustained loading pressure' if loading_bad>=3 else 'Bolt host/temperature/GPU-headroom guard reached')
+   if bad>=3 or loading_bad>=3:reason=reason or (label+' sustained loading pressure' if loading_bad>=3 else label+' host/temperature/GPU-headroom guard reached')
    state={'phase':watch.last_phase,'ready':watch.ready,'child_pid':child.pid,'guard_reason':reason,'host_available_KiB':available,'GPU_temp_free_MiB':cards,'bad_samples':bad,'loading_bad_samples':loading_bad,'loading_PSI_percent':pressure,'time':time.time()};tmp=work/'worker-status.tmp';tmp.write_text(json.dumps(state));tmp.replace(work/'worker-status.json')
    if reason or bad>=3 or loading_bad>=3:
-    reason=reason or ('Bolt sustained loading pressure' if loading_bad>=3 else 'Bolt host/temperature/GPU-headroom guard reached');print(reason,flush=True);stop();raise SystemExit(1)
+    reason=reason or (label+' sustained loading pressure' if loading_bad>=3 else label+' host/temperature/GPU-headroom guard reached');print(reason,flush=True);stop();raise SystemExit(1)
    time.sleep(2)
   raise SystemExit(0 if stopping else child.returncode)
  finally:

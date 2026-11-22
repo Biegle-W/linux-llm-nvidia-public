@@ -55,7 +55,12 @@
       "channel": "stable"
     }
   ],
-  "pinned_profiles": [],
+  "pinned_profiles": [
+    {
+      "profile": "inkling-llamacpp",
+      "reason": "Hand-updated Unsloth fork with a separate binary and library manifest."
+    }
+  ],
   "validation": "paired-short-actual-DSH-v1",
   "publication_files": {
     "sglang": [

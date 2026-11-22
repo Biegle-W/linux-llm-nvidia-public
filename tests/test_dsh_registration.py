@@ -4,6 +4,13 @@ import yaml
 ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('dsh_registration',ROOT/'dsh/configure.py');registration=importlib.util.module_from_spec(spec);spec.loader.exec_module(registration)
 class Registration(unittest.TestCase):
+ def test_inkling_registration(self):
+  profile=next(p for p in registration.load_catalog()['profiles'] if p['id']=='inkling-llamacpp')
+  providers=registration.router_providers({},[profile])
+  model,=providers[registration.ROUTER_ID]['models']
+  self.assertEqual((model['id'],model['name'],model['input'],model['contextWindow'],model['reasoningEfforts']),
+                   ('inkling-llamacpp',profile['display_name'],['text','image'],32768,False))
+
  def fixture(self,folder,profiles,entries):
   oldroot,oldcatalog=registration.ROOT,registration.load_catalog
   self.addCleanup(setattr,registration,'ROOT',oldroot);self.addCleanup(setattr,registration,'load_catalog',oldcatalog)

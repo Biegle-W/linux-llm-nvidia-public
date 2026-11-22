@@ -28,6 +28,7 @@
   ],
   "min_weight_bytes": 50000000,
   "min_bytes": 500000000,
+  "router_manifest_receipts": ["inkling-llamacpp"],
   "extra_references": [
     {
       "path": "models/strata/models/mmproj-Qwen3.8-Flash-Next-BF16.gguf",
