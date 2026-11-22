@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## llama.cpp b12631, Maya 1.1.74 and Strata 0.2.19 installed — November 22, 2026
+
+Second daily update run of the day. llama.cpp `b12631` for `bolt-llamacpp`, Maya 1.1.74 for `glm-maya` and `deepseek-maya`, and Strata 0.2.19 (control and engine 0.1.65) for both Flash-Next entries; all 16 short DSH checks pass. Speeds are unchanged except `flash-next-strata` (generation about 4% up) and `flash-next-iq4xs-strata` (5% down on one run, a warning). GLM keeps 224 MiB more VRAM free per card after upstream's fix for issue 1026. Hy4 keeps its engine 0.1.64, since the release has no newer CUDA 13 Hy4 package. [ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md](evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md)
+
 ## Hy4-Flash router entry — November 22, 2026
 
 Added `hy4-flash-strata` with 32K context, the signed Hy4 engine and Engram reads from NVMe. The [SQ-96 trial](evidence/HY4-FLASH-SQ96-TRIAL-20261122.md) covers text, pictures and tool use on GPU 0. Router load (26 s), the short DSH check (211 tok/s prompt reading, 27 tok/s generation) and an owned unload passed on November 22.

@@ -1,5 +1,14 @@
 # NVIDIA daily engine updates
 
+## 2026-11-22 (second run): llama.cpp b12631, Maya 1.1.74 and Strata 0.2.19
+
+Upstream review, before and after: [ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md](evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md).
+
+- llamacpp: **promoted**; release `b12631` (`e300919cc704`, 1.0.0-dev build 12631). Three commits after `b12628`, none for CUDA. `bolt-llamacpp` passes twice at the same speed.
+- maya: **promoted**; `e8d4f297f434` (1.1.74). Both Maya profiles pass twice at the same speed. Both local patches applied unchanged. GLM now keeps 224 MiB more VRAM free per card (upstream fix for issue 1026, as DeepSeek got in 1.1.73).
+- strata: **promoted** for `flash-next-strata` and `flash-next-iq4xs-strata`; `c6f6427d9de9` (v0.2.19, control 0.1.65, engine 0.1.65). `flash-next-strata` generation 68.9 and 68.6 tok/s against 65.8 before; prompt reading the same. Warning: `flash-next-iq4xs-strata` generation 44.8 tok/s against 47.2 (95%) and first token 7.20 s against 6.66 s, one run each. `hy4-flash-strata` keeps its engine 0.1.64 (the release has no newer CUDA 13 Hy4 package) and passes under the new control at the same speed. `deepseek-unsloth-strata` stays frozen at v0.2.13 and passes.
+- hyperqwen, sglang: **unchanged**. raylight, mesh, gguf: **pinned-current**. comfyui: `v0.46.0` available; pinned, not installed.
+
 ## 2026-11-22: Maya 1.1.73 and llama.cpp b12628
 
 Upstream review, before and after: [ENGINE-UPDATES-20261122-MAYA-1173.md](evidence/ENGINE-UPDATES-20261122-MAYA-1173.md).

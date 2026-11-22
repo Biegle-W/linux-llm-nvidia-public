@@ -138,6 +138,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 
 ### Models, engines and context
 
+- [ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md](evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md): llama.cpp b12631, Maya 1.1.74 and Strata 0.2.19 installed by hand, with the upstream review — November 22, 2026
 - [ENGINE-UPDATES-20261122-MAYA-1173.md](evidence/ENGINE-UPDATES-20261122-MAYA-1173.md): Maya 1.1.73 and llama.cpp b12628 installed by hand; DeepSeek file-cache patch re-anchored; llama.cpp follows the latest release — November 22, 2026
 - [ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md](evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md): Maya 1.1.72, Strata 0.2.18 and llama.cpp main installed by hand, with the upstream review — November 21, 2026
 - [HY4-FLASH-SQ96-TRIAL-20261122.md](evidence/HY4-FLASH-SQ96-TRIAL-20261122.md): Hy4-Flash 220B (SQ-96) on Strata, trial and router entry `hy4-flash-strata`: files, engine fetch, speed, memory, tool calls, short tool-use test — November 22, 2026

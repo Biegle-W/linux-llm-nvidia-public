@@ -1,10 +1,10 @@
 {
   "schema": 1,
   "profile": "deepseek-maya",
-  "source_commit": "f9a053dcb5a983bef4c3835a8a7f270170bf0e85",
+  "source_commit": "e8d4f297f434091082e4d297ea78dea0c7be3f57",
   "binary": {
     "path": "runtimes/maya-unsloth-v1146/maya-ds4",
-    "sha256": "de7baefff50c363b3a2bf169ba6e9205df8b1ad9963a9d532b27499ab9e2ba99"
+    "sha256": "ea3f98ae256f7dbe51b275180d5fea72636067ab09fcf712e6e87c0d5b025e82"
   },
   "bounded_cache_cpu_test": "pass",
   "status": "Short daily DSH qualification required; see daily ledger",

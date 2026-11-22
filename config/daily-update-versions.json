@@ -32,24 +32,24 @@
     "evidence": "docs/evidence/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md"
   },
   "llamacpp": {
-    "source_commit": "8a97fa98ab1a454709bbf5ac979661feaeadec40",
-    "qualified_on": "2026-11-22T03:39:00",
+    "source_commit": "e300919cc704ddde3a8a8346a8714f57eeeee71b",
+    "qualified_on": "2026-11-22T10:55:00",
     "method": "hands-on short DSH",
-    "note": "llama.cpp release b12628 (1.0.0-dev build 12628). From 2026-11-22 the check follows the newest published release, rolling builds included (owner's rule), not only the stable one",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261122-MAYA-1173.md"
+    "note": "llama.cpp release b12631 (1.0.0-dev build 12631). The check follows the newest published release, rolling builds included (owner's rule, 2026-11-22)",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md"
   },
   "maya": {
-    "source_commit": "f9a053dcb5a983bef4c3835a8a7f270170bf0e85",
-    "qualified_on": "2026-11-22T03:15:00",
+    "source_commit": "e8d4f297f434091082e4d297ea78dea0c7be3f57",
+    "qualified_on": "2026-11-22T11:05:00",
     "method": "hands-on short DSH",
-    "note": "Maya 1.1.73; both profiles pass the short DSH check (deepseek-maya on two starts); DeepSeek file-cache patch re-anchored as v1173",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261122-MAYA-1173.md"
+    "note": "Maya 1.1.74; both profiles pass the short DSH check twice; both local patches (qualification v1165, DeepSeek file cache v1173) applied unchanged",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md"
   },
   "strata": {
-    "source_commit": "6e38f588a646c0ee6948a74afbe670eb75896106",
-    "qualified_on": "2026-11-21T13:50:00",
+    "source_commit": "c6f6427d9de9016fd92d13e29740f65625261df7",
+    "qualified_on": "2026-11-22T11:15:00",
     "method": "hands-on short DSH",
-    "note": "Strata v0.2.18 for flash-next-strata and flash-next-iq4xs-strata: control 0.1.64, engine 0.1.64. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59): Strata no longer runs DeepSeek",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md"
+    "note": "Strata v0.2.19 for flash-next-strata and flash-next-iq4xs-strata: control 0.1.65, engine 0.1.65. hy4-flash-strata keeps its strata-hy4 0.1.64 engine (the signed 0.2.19 feed still names that CUDA 13 package) and runs under control 0.1.65. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59): Strata no longer runs DeepSeek",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md"
   }
 }
