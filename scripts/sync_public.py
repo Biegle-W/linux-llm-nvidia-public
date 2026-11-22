@@ -454,7 +454,7 @@ FILES = (
     'tests/test_strata_unsloth_runtime.py',
     'config/flash-iq4xs-strata-runtime.json', 'scripts/flash_iq4xs_strata_runtime.py', 'tests/test_flash_iq4xs_strata_runtime.py',
     'docs/evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md', 'docs/evidence/FLASH-NEXT-IQ4XS-PROFILE-20261118.md',
-    'docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md', 'docs/evidence/INKLING2-MINI-TRIAL-20261121.md',
+    'docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md', 'docs/evidence/INKLING2-MINI-TRIAL-20261121.md', 'docs/QUALITY-FAST-TEST-PLAN.md',
     'docs/evidence/DEEPSEEK-UNSLOTH-CONTEXT-20261031.md',
     'docs/evidence/validation-results/20261031-unsloth-strata-context.json',
     'patches/llama-demand-mmap-prefault.patch',

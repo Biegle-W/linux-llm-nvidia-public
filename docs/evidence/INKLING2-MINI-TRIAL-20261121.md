@@ -77,9 +77,22 @@ The 390-item screening set used for the ranking in [QUALITY-BENCHMARK-20261111.m
 
 The run averaged 89 s per MMLU-Pro item and 394 s per AIME item on the slow mainline build; the items add up to 17.3 hours of generation.
 
+## Rerun on the Unsloth build (stopped)
+
+A second run of the 390 items was started on November 21 at 22:29 EST on Unsloth's build (`UD-Q4_K_M`, no drafter) with larger token limits (MMLU-Pro 16,384 in place of 4,096; AIME 28,000; LiveCodeBench 24,000; tool calling 8,192 and 6,144). The owner stopped it on November 22 at 111 MMLU-Pro items and decided the first run is good enough.
+
+| On the same 111 MMLU-Pro items | Correct | Cut off at the limit | Wrong |
+|---|---:|---:|---:|
+| First run (mainline, limit 4,096) | 82 (73.9%) | — | — |
+| Rerun (Unsloth build, limit 16,384) | 97 (87.4%) | 6 | 8 |
+
+This supports reading the first run's 60.0% as a floor set by the token limits, but it is a partial result on one part with a different build and file; no score is claimed from it. The partial records are kept under run id `inklingcmp2`.
+
+On the short tool-use test that replaces the 390-item test for future models, the first run's stored records give Inkling 2 Mini 52.4 out of 100 (33 of 40 single-turn items, 2 of 9 episodes); see [QUALITY-FAST-TEST-PLAN.md](../QUALITY-FAST-TEST-PLAN.md).
+
 ## Not done
 
 - No speed test of the mainline placement fix or Maya's unsupported two-GPU switch.
-- No quality run on the Unsloth build, and none with token limits sized for a model that always reasons.
+- No complete quality run on the Unsloth build or with token limits sized for a model that always reasons (stopped at 111 items).
 - No run above 32K context, no sustained run, no router integration.
 - The vendor's benchmark claims were not reproduced.
