@@ -105,7 +105,7 @@ class RouterTest(unittest.TestCase):
         self.assertEqual({m['id'] for m in models},expected)
         self.assertEqual(len(models),len(expected))
         hy4 = next(m for m in models if m['id'] == 'hy4-flash-strata')
-        self.assertEqual((hy4['engine'], hy4['context_window'], hy4['input']), ('Strata', 32768, ['text', 'image']))
+        self.assertEqual((hy4['engine'], hy4['context_window'], hy4['input']), ('Strata', 131072, ['text', 'image']))
         self.assertNotIn('hy4', expected)
         inkling = next(m for m in models if m['id'] == 'inkling-llamacpp')
         self.assertEqual((inkling['engine'], inkling['context_window']), ('llama.cpp (Unsloth build)', 32768))

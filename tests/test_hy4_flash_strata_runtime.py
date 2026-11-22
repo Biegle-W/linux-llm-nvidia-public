@@ -45,10 +45,10 @@ class Hy4Runtime(unittest.TestCase):
         self.config = dict(exe=str(engine / 'strata-hy4'), arch='hy4flash', cwd=str(self.root),
                            tokenizer=str(self.root / 'models/strata/packs/hy4-flash-sq-96/tokenizer'),
                            model_name='hy4-flash-sq-96', lib_dirs=[str(engine)], gpu=[0], gpus_asked=True,
-                           drafting='dfly2', env={'HY4_ENGRAM_ODIRECT': '1'},
+                           drafting='dfly2', env={'HY4_ENGRAM_ODIRECT': '1', 'HY4_KV_INIT_SLOTS': '131072'},
                            args=['--native', str(self.weights / 'Hy4-Flash-SQ-96.strata'),
                                  '--engram', str(self.weights / 'Hy4-Flash-Engram-Q8.strata'),
-                                 '--max-context', '32768', '--vision', str(self.weights / 'Hy4-Flash-Vision.strata'),
+                                 '--max-context', '131072', '--vision', str(self.weights / 'Hy4-Flash-Vision.strata'),
                                  '--session-reuse', '1'])
 
     def prepare(self, config=None, pins=None, profile=None):
@@ -105,7 +105,7 @@ class Hy4Runtime(unittest.TestCase):
                                       '--offline'], start_new_session=True)
         config = json.loads(target.read_text())
         self.assertEqual(config['args'], self.config['args'])
-        self.assertEqual(config['env'], {'HY4_ENGRAM_ODIRECT': '1', 'NCCL_P2P_DISABLE': '1'})
+        self.assertEqual(config['env'], {'HY4_ENGRAM_ODIRECT': '1', 'HY4_KV_INIT_SLOTS': '131072', 'NCCL_P2P_DISABLE': '1'})
         self.assertEqual((config['host'], config['port'], config['parallel'], config['reasoning_effort']),
                          ('127.0.0.1', 10000, 1, 'none'))
         self.assertEqual((config['idle_unload_s'], target.stat().st_mode & 0o777), (600, 0o600))
@@ -125,7 +125,7 @@ class Hy4Runtime(unittest.TestCase):
 
     def test_arguments_are_exact_and_ordered(self):
         args = self.config['args']
-        for flag in ('--draft', '--gpus', '--gpu', '--chunk', '--serve', '--unknown', '--max-context=32768'):
+        for flag in ('--draft', '--gpus', '--gpu', '--chunk', '--serve', '--unknown', '--max-context=131072'):
             with self.subTest(flag=flag), self.assertRaises(ValueError):
                 self.prepare(dict(self.config, args=args + [flag]))
         for i in range(0, len(args), 2):

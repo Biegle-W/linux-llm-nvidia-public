@@ -15,7 +15,7 @@ class Registration(unittest.TestCase):
   profile=next(p for p in registration.load_catalog()['profiles'] if p['id']=='hy4-flash-strata')
   model,=registration.router_providers({},[profile])[registration.ROUTER_ID]['models']
   self.assertEqual((model['id'],model['name'],model['input'],model['contextWindow']),
-                   (profile['id'],profile['display_name'],['text','image'],32768))
+                   (profile['id'],profile['display_name'],['text','image'],131072))
 
  def fixture(self,folder,profiles,entries):
   oldroot,oldcatalog=registration.ROOT,registration.load_catalog

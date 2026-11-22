@@ -10,7 +10,7 @@ The catalog rejects duplicate model/quant/engine combinations, dense context tha
 
 Inkling 2 Mini is Thinking Machines Lab's Apache 2.0 26B looped MoE. `inkling-llamacpp` uses UD-Q4_K_M weights and an F16 picture projector on SATA. Its separate Unsloth llama.cpp build serves 32,768 tokens with thinking always on. The November 21 trial passed a tool call and follow-up. Router load, the short check and an owned unload passed on November 22.
 
-Tencent Hy4-Flash 220B-A12B uses SQ-96 on the 12 GB card with the experts in RAM and Engram on NVMe. `hy4-flash-strata` serves text and pictures with 32,768 tokens. The trial passed a tool call and follow-up. Router load, the short check and an owned unload passed on November 22.
+Tencent Hy4-Flash 220B-A12B uses SQ-96 on the 12 GB card with the experts in RAM and Engram on NVMe. `hy4-flash-strata` serves text and small pictures with 131,072 tokens (context memory reserved at start; pictures of 1024 pixels and larger are refused). The trial passed a tool call and follow-up. Router load, the short check and an owned unload passed on November 22.
 
 ## Selection rule
 

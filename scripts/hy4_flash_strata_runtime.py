@@ -25,7 +25,7 @@ def verify_hashes(folder, hashes, required):
 def prepare_config(profile, root=ROOT, home=None):
     root = Path(root).resolve()
     home = Path.home() if home is None else Path(home)
-    if (profile['id'] != PROFILE or profile['engine'] != 'Strata' or profile['allocated_context'] != 32768
+    if (profile['id'] != PROFILE or profile['engine'] != 'Strata' or profile['allocated_context'] != 131072
             or profile['runtime_manifest'] != MANIFEST):
         raise ValueError('Unexpected Hy4 profile, context or manifest')
     pins = json.loads((root / MANIFEST).read_text())
@@ -46,13 +46,13 @@ def prepare_config(profile, root=ROOT, home=None):
     verify_hashes(tokenizer, pins['tokenizer_files_sha256'], TOKENIZER_FILES)
 
     settings = profile['selected_settings']
-    if (settings['context'] != 32768 or settings['session_reuse'] != 1 or settings['gpu'] != [0]
-            or settings['drafting'] != 'dfly2' or settings['environment'] != {'HY4_ENGRAM_ODIRECT': '1'}
+    if (settings['context'] != 131072 or settings['session_reuse'] != 1 or settings['gpu'] != [0]
+            or settings['drafting'] != 'dfly2' or settings['environment'] != {'HY4_ENGRAM_ODIRECT': '1', 'HY4_KV_INIT_SLOTS': '131072'}
             or settings['reasoning_effort'] != 'none'):
         raise ValueError('Hy4 registry settings differ from the measured trial')
     native, engram, vision = (str(weights / name) for name in WEIGHTS)
     expected = dict(exe=str(engine / 'strata-hy4'), arch='hy4flash', cwd=str(root),
-                    args=['--native', native, '--engram', engram, '--max-context', '32768',
+                    args=['--native', native, '--engram', engram, '--max-context', '131072',
                           '--vision', vision, '--session-reuse', '1'],
                     tokenizer=str(tokenizer), model_name='hy4-flash-sq-96', lib_dirs=[str(engine)],
                     gpu=[0], gpus_asked=True, drafting='dfly2', env=settings['environment'])

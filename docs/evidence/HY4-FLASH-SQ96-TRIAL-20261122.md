@@ -116,11 +116,11 @@ On the shared scale the stored results of the other entries are 66.0 (Qwen on Hy
 | 128K | 94,267 tokens | 280 tok/s | 337 s | returned | 0.7 s |
 | 128K | 127,867 tokens | 274 tok/s | 467 s | returned | 0.8 s |
 
-Loads took 38-40 s at either setting. Worker memory stayed at 79.5-79.8 GiB and available RAM at 8.7-9.1 GiB. The card showed 11.3-11.8 GB used between requests. **Correction:** an earlier version of this line gave the lowest free memory as about 480 MiB; that figure did not subtract the roughly 324 MiB the driver reserves. True free memory at these lengths falls to about 230 MiB, below the 256 MiB guard (see the next section). Reading speed does not fall with length, and one code sat at the very start and one at the very end of each prompt. The router entry still serves 32K; raising it is a serving change for the owner to decide.
+Loads took 38-40 s at either setting. Worker memory stayed at 79.5-79.8 GiB and available RAM at 8.7-9.1 GiB. The card showed 11.3-11.8 GB used between requests. **Correction:** an earlier version of this line gave the lowest free memory as about 480 MiB; that figure did not subtract the roughly 324 MiB the driver reserves. True free memory at these lengths falls to about 230 MiB, below the 256 MiB guard (see the next section). Reading speed does not fall with length, and one code sat at the very start and one at the very end of each prompt. At the time of this trial the router entry served 32K; it was raised later the same day (next section).
 
-## 128K through the router: not adopted (November 22, evening)
+## 128K through the router (November 22, evening)
 
-The owner asked for 128K to be tested through the router and adopted if it passed. It did not pass cleanly, and the entry was put back to 32K. Nothing was committed to the entry.
+The owner asked for 128K to be tested through the router and adopted if it passed. It did not pass cleanly (table below), and the entry was first put back to 32K. **The owner then chose 128K with small pictures only, since pictures are not used; the entry serves 131,072 tokens with the context memory reserved at start (`HY4_KV_INIT_SLOTS=131072`) since that decision.** After the change the standard short check passed (206.8 tok/s prompt reading, 27.2 s to first token, 28.3 tok/s generation) with an owned unload.
 
 | Setting tried | Long prompt (127,867 tokens) | Pictures | Lowest free VRAM, card 0 |
 |---|---|---|---:|
@@ -131,7 +131,8 @@ The owner asked for 128K to be tested through the router and adopted if it passe
 
 - **Cause:** the 12 GB card cannot hold the full 128K context memory (2.72 GB), the picture workspace and the 256 MiB guard margin at once. The engine's own rule keeps only 128 MiB free while it grows the context, which is under the router's floor.
 - **Speed with the reservation:** unchanged within spread (prompt reading 271-275 tok/s, generation 16-21 tok/s), although fewer experts stay cached on the card.
-- **Choices left to the owner:** 128K with only small pictures; 32K with all pictures (current); or a trial of Project Maya's Hy4-Flash engine, which can use both cards.
+- **Owner's choice:** 128K with only small pictures (adopted). The owner also asked for a separate trial of Project Maya's Hy4-Flash engine on both cards; that trial is recorded on its own.
+- **Note for testing:** the model must not be loaded while a large download or copy is running. With about 8 GiB of RAM free, the file cache of a download pushed the worker into swap and the swap guard stopped it once.
 - The router's picture dip to 7 MiB at 32K lasts under the guard's three-sample window; a slower picture could trigger it. Not observed.
 
 ## Not done

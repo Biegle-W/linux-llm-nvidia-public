@@ -3063,8 +3063,8 @@
       "launch": [
         "hy4"
       ],
-      "allocated_context": 32768,
-      "context_validation": "32768-token allocation; router load, chat and tool requests, the short DSH check and owned unload passed on 2026-11-22. A 16.8K-token prompt was read in the trial outside the router. No full-context or sustained qualification.",
+      "allocated_context": 131072,
+      "context_validation": "131072-token allocation with the context memory reserved at start. Through the router on 2026-11-22: a 127,867-token prompt read at 272 tok/s with both hidden codes returned, a reused follow-up, a tool call, 2,000-token outputs, the short DSH check and an owned unload. Pictures of 1024 pixels and larger are refused at this setting (owner accepted).",
       "capabilities": {
         "text": true,
         "vision": true,
@@ -3091,7 +3091,7 @@
       "host_ram_reserve_gib": 2,
       "minimum_usable_ram_gib": 90,
       "selected_settings": {
-        "context": 32768,
+        "context": 131072,
         "gpu": [
           0
         ],
@@ -3099,7 +3099,8 @@
         "drafting": "dfly2",
         "reasoning_effort": "none",
         "environment": {
-          "HY4_ENGRAM_ODIRECT": "1"
+          "HY4_ENGRAM_ODIRECT": "1",
+          "HY4_KV_INIT_SLOTS": "131072"
         },
         "gpu_free_floor_mib": 256
       },
@@ -3153,11 +3154,11 @@
       "latest_benchmark": {
         "date": "2026-11-22",
         "source": "docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md",
-        "status": "Normal-router short DSH check and owned unload; one run; no context stress",
-        "context": 32768,
-        "prefill_tps": 211.0,
-        "ttft_s": 26.587833371013403,
-        "decode_tps": 27.4
+        "status": "Normal-router short DSH check and owned unload at 131072; one run",
+        "context": 131072,
+        "prefill_tps": 206.8,
+        "ttft_s": 27.201250057958532,
+        "decode_tps": 28.3
       }
     }
   ],
