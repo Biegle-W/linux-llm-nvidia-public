@@ -119,6 +119,8 @@ The owner asked for a decision on which Inkling becomes a router model. Chosen: 
 
 The 40.0 the report prints rests on a single episode and is not comparable with the other entries. The comparable part is single turn: 32 of 40, against 33 of 40 from the stored records of the larger quant on mainline. Run id `fast-inkling-20261122`.
 
+**Weights kept:** `Inkling-2-Mini-UD-Q4_K_M.gguf` and `mmproj-F16.gguf` (17 GB). The `UD-Q4_K_XL` file used for the first quality run on mainline and the DSpark drafter were deleted on November 22 with the owner's yes; repeating those measurements means downloading them again, and production llama.cpp can no longer run Inkling from local files.
+
 Not done for the entry: a run above 32K context, a sustained run, the idle-timeout unload (only the requested unload was exercised), picture input through the router.
 
 ## Not done
