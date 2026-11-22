@@ -81,10 +81,46 @@ The printed score of 51.2 rests on five episodes and is not comparable with entr
 
 The guards were checked against the measured figures: worker memory 79.4-80.0 GiB under the 87.77 GiB soft limit, about 8 GiB of host RAM available against the 2 GiB floor, about 580 MiB free on card 0 at the lowest against the 256 MiB floor. No shared threshold was changed.
 
+## Further tests (November 22, afternoon)
+
+Run at the owner's request after the entry was added. Strata had meanwhile been updated to 0.2.19; the Hy4 engine is still 0.1.64.
+
+**Through the router (`hy4-flash-strata`, 32K, thinking off):**
+
+| Test | Result |
+|---|---|
+| Load | 39-40 s (three loads) |
+| Picture (red and blue halves, yellow circle) | described correctly; a follow-up placed the circle on the right side. 6-7 s each |
+| Long outputs, three of 1,800-2,000 tokens | 18.6, 19.0 and 22.0 tok/s (the last is code); no slowdown |
+| 12-turn conversation on an 8.1K-token prompt | first turn 29 s (279 tok/s); each later turn 1.2-3.0 s with the earlier tokens reused; every answer correct |
+| Memory during all of this | card 0 at 10.4-11.4 GB, card 1 unused, 8.5-9.1 GiB of RAM available |
+| Idle unload | unloaded by the router after the 600 s idle time; both cards back to 1 MiB |
+
+**Short tool-use test through the router** (larger-model limits, run id `fast-hy4-router-20261122`). This is the entry as served, so it is the comparable result; the earlier run on the trial server had thinking on and prompt reuse off and was cut by the limit.
+
+| Part | Result |
+|---|---|
+| Single turn | 33 of 40 (parallel 11/15, no-tool 14/15, plain call 8/10) |
+| Multi-turn episodes | 4 of 15 (3 of the 9 core episodes) |
+| Coverage and time | all 55 items, no timeouts, 2,493 s (42 minutes) |
+| Score | 57.9 on the scale shared with the other entries (54.6 with all 15 episodes) |
+
+On the shared scale the stored results of the other entries are 66.0 (Qwen on HyperQwen), 64.7, 63.5, 61.7, 60.4, 53.6 (Bolt), 52.4 (Inkling), 47.4 and 40.6. Hy4-Flash is in the lower middle: single-turn calls are good, multi-turn episodes are weak (4 of 15).
+
+**Larger context (trial server outside the router, same memory limits, same files):**
+
+| Context setting | Prompt | Read speed | Time | Both hidden codes | Follow-up |
+|---|---:|---:|---:|---|---|
+| 64K | 29,867 tokens | 282 tok/s | 106 s | returned | 0.7 s |
+| 64K | 62,067 tokens | 279 tok/s | 223 s | returned | 0.8 s |
+| 128K | 94,267 tokens | 280 tok/s | 337 s | returned | 0.7 s |
+| 128K | 127,867 tokens | 274 tok/s | 467 s | returned | 0.8 s |
+
+Loads took 38-40 s at either setting. Worker memory stayed at 79.5-79.8 GiB and available RAM at 8.7-9.1 GiB. The card showed 11.3-11.8 GB between requests (lowest free about 480 MiB, above the 256 MiB guard); memory was sampled between requests, not during them. Reading speed does not fall with length, and one code sat at the very start and one at the very end of each prompt. The router entry still serves 32K; raising it is a serving change for the owner to decide.
+
 ## Not done
 
-- 64K and 128K context (Strata's default is 128K; its plan says both fit in the card).
 - The second GPU, the drafter's effect on long outputs, a sustained run.
-- The short test with prompt reuse on (not rerun, under the rule that nothing is rerun), and any knowledge, maths or coding score.
-- The idle-timeout unload and a picture request through the router.
+- Any knowledge, maths or coding score.
+- 64K or 128K through the router, and long episodes of tool use at those lengths.
 - Memory headroom is thin: about 8 GiB of RAM is left with the model loaded, so nothing else large can run beside it.

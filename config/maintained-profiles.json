@@ -3148,7 +3148,7 @@
           "short DSH check",
           "owned unload"
         ],
-        "short_tool_use_test": "trial server, cut by the one-hour limit: 33 of 40 single-turn items correct, 5 of 15 episodes reached"
+        "short_tool_use_test": "through the router, complete in 42 minutes: 33 of 40 single-turn items and 4 of 15 episodes correct, score 57.9 on the shared scale"
       },
       "latest_benchmark": {
         "date": "2026-11-22",
