@@ -40,7 +40,8 @@ def file_action(receipt,target,candidate):
 
 
 # Refreshed for Maya 1.1.65 (upstream added an include beside the one this patch inserts); same changes as v1153.
-MAYA_CACHE_PATCH='maya-ds4-file-cache-target-v1165.patch'
+# v1173 re-anchors the begin_request hunk after the late_check line added upstream in 1.1.73 (#1026).
+MAYA_CACHE_PATCH='maya-ds4-file-cache-target-v1173.patch'
 # v1165 drops the glm_layer_graph_test hunk (fixed upstream in 1.1.65) and re-anchors the ple_parity hunk.
 MAYA_QUALIFICATION_PATCH='maya-qualification-v1165.patch'
 

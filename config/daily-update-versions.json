@@ -39,11 +39,11 @@
     "evidence": "docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md"
   },
   "maya": {
-    "source_commit": "cce2de0ed73b5d4e4f88abb5c0c4039c1c403136",
-    "qualified_on": "2026-11-21T14:20:00",
+    "source_commit": "f9a053dcb5a983bef4c3835a8a7f270170bf0e85",
+    "qualified_on": "2026-11-22T03:15:00",
     "method": "hands-on short DSH",
-    "note": "Maya 1.1.72 (1.1.71 installed and checked first); both profiles pass the short DSH check",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md"
+    "note": "Maya 1.1.73; both profiles pass the short DSH check (deepseek-maya on two starts); DeepSeek file-cache patch re-anchored as v1173",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261122-MAYA-1173.md"
   },
   "strata": {
     "source_commit": "6e38f588a646c0ee6948a74afbe670eb75896106",

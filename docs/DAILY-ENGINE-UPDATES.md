@@ -1,5 +1,14 @@
 # NVIDIA daily engine updates
 
+## 2026-11-22: Maya 1.1.73
+
+Upstream review, before and after: [ENGINE-UPDATES-20261122-MAYA-1173.md](evidence/ENGINE-UPDATES-20261122-MAYA-1173.md).
+
+- maya: **promoted**; `f9a053dcb5a9` (1.1.73). Both Maya profiles pass at the same speed. The DeepSeek file-cache patch had to be re-anchored (`maya-ds4-file-cache-target-v1173.patch`); the qualification patch applied unchanged. DeepSeek now keeps 192 MiB more VRAM free per card (upstream fix for issue 1026).
+- llamacpp: **unchanged**; installed main `19bc41dbb41e` is ahead of the newest stable release 1.0.0, which is why the check prints "update-available".
+- Unsloth llama.cpp build for `inkling-llamacpp`: **unchanged**, `b12588-mix-c0c3de8` is still the fork's newest release (checked by hand; the upstream check does not track it).
+- hyperqwen, sglang, strata: **unchanged**. raylight, mesh, gguf: **pinned-current**. comfyui: `v0.46.0` available; pinned, not installed.
+
 ## 2026-11-21 afternoon: Maya 1.1.72, Strata 0.2.18 and llama.cpp main
 
 At the owner's request (backends to support Inkling 2 Mini). Upstream review, before and after: [ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md](evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md).

@@ -1,17 +1,17 @@
 {
   "schema": 1,
   "profile": "deepseek-maya",
-  "source_commit": "cce2de0ed73b5d4e4f88abb5c0c4039c1c403136",
+  "source_commit": "f9a053dcb5a983bef4c3835a8a7f270170bf0e85",
   "binary": {
     "path": "runtimes/maya-unsloth-v1146/maya-ds4",
-    "sha256": "dae97c665c7a49641d10d1e8ee67a7666912313d76b223a6e20381b1ed7cc8b4"
+    "sha256": "de7baefff50c363b3a2bf169ba6e9205df8b1ad9963a9d532b27499ab9e2ba99"
   },
   "bounded_cache_cpu_test": "pass",
   "status": "Short daily DSH qualification required; see daily ledger",
   "CUDA_toolkit": "13.0.88; matching CUDA13 runtime/cuBLAS",
   "evidence": "docs/evidence/MAYA-QUALIFICATION-REPAIR-20261106.md",
   "cache_controller_patch": {
-    "path": "patches/maya-ds4-file-cache-target-v1165.patch",
-    "sha256": "84de135f0437715f092ac1f60a9135bb3f0aa38d64753718b907ba1ffb9d3596"
+    "path": "patches/maya-ds4-file-cache-target-v1173.patch",
+    "sha256": "24f4e838b76a068286c00c26d8b1807b684f9a205b380be39d8fc60a76112438"
   }
 }
