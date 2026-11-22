@@ -116,7 +116,23 @@ On the shared scale the stored results of the other entries are 66.0 (Qwen on Hy
 | 128K | 94,267 tokens | 280 tok/s | 337 s | returned | 0.7 s |
 | 128K | 127,867 tokens | 274 tok/s | 467 s | returned | 0.8 s |
 
-Loads took 38-40 s at either setting. Worker memory stayed at 79.5-79.8 GiB and available RAM at 8.7-9.1 GiB. The card showed 11.3-11.8 GB between requests (lowest free about 480 MiB, above the 256 MiB guard); memory was sampled between requests, not during them. Reading speed does not fall with length, and one code sat at the very start and one at the very end of each prompt. The router entry still serves 32K; raising it is a serving change for the owner to decide.
+Loads took 38-40 s at either setting. Worker memory stayed at 79.5-79.8 GiB and available RAM at 8.7-9.1 GiB. The card showed 11.3-11.8 GB used between requests. **Correction:** an earlier version of this line gave the lowest free memory as about 480 MiB; that figure did not subtract the roughly 324 MiB the driver reserves. True free memory at these lengths falls to about 230 MiB, below the 256 MiB guard (see the next section). Reading speed does not fall with length, and one code sat at the very start and one at the very end of each prompt. The router entry still serves 32K; raising it is a serving change for the owner to decide.
+
+## 128K through the router: not adopted (November 22, evening)
+
+The owner asked for 128K to be tested through the router and adopted if it passed. It did not pass cleanly, and the entry was put back to 32K. Nothing was committed to the entry.
+
+| Setting tried | Long prompt (127,867 tokens) | Pictures | Lowest free VRAM, card 0 |
+|---|---|---|---:|
+| 128K, engine default (context memory grows while reading) | **stopped by the router's free-VRAM guard** after about 56 s, at the first growth step | not reached | under 256 MiB for three samples |
+| 128K, context memory reserved at start (`HY4_KV_INIT_SLOTS=131072`) | pass: read at 272 tok/s (471 s), both codes returned, follow-up 0.9 s, tool call and follow-up, 2,000-token outputs at the usual speed, owned unload | 256-pixel picture pass; **1024 and 2048-pixel pictures refused** ("out of device memory for the vision workspace"), model stays up | 523 MiB (text), 49 MiB for a moment on the refused pictures |
+| 128K, half reserved (65,536), trial server | not run | 1024 pass, 2048 refused once in two tries | 267 MiB |
+| 32K as served (re-checked through the router) | not applicable | 256, 1024 and 2048-pixel pictures all pass (9 s and 23 s) | 7 MiB for a moment, guard not triggered |
+
+- **Cause:** the 12 GB card cannot hold the full 128K context memory (2.72 GB), the picture workspace and the 256 MiB guard margin at once. The engine's own rule keeps only 128 MiB free while it grows the context, which is under the router's floor.
+- **Speed with the reservation:** unchanged within spread (prompt reading 271-275 tok/s, generation 16-21 tok/s), although fewer experts stay cached on the card.
+- **Choices left to the owner:** 128K with only small pictures; 32K with all pictures (current); or a trial of Project Maya's Hy4-Flash engine, which can use both cards.
+- The router's picture dip to 7 MiB at 32K lasts under the guard's three-sample window; a slower picture could trigger it. Not observed.
 
 ## Not done
 
