@@ -1,11 +1,11 @@
-# Maya 1.1.73 installed by hand — November 22, 2026
+# Maya 1.1.73 and llama.cpp b12628 installed by hand — November 22, 2026
 
 Daily update run asked for by the owner. The upstream check found one new release.
 
 | Engine | From | To | Result |
 |---|---|---|---|
 | Maya (`glm-maya`, `deepseek-maya`) | `cce2de0ed73b` (1.1.72) | `f9a053dcb5a9` (1.1.73) | **promoted** |
-| llama.cpp (`bolt-llamacpp`) | main `19bc41dbb41e` | unchanged | the newest stable release is still 1.0.0, which is older than what is installed; the check reports it as "update available" for that reason only |
+| llama.cpp (`bolt-llamacpp`) | main `19bc41dbb41e` (build 12622) | release `b12628` (`8a97fa98ab1a`) | **promoted**, after the owner's rule to follow the latest release (section below) |
 | Unsloth llama.cpp build (`inkling-llamacpp`) | `b12588-mix-c0c3de8` | unchanged | checked by hand: still the newest release of the fork |
 
 HyperQwen, SGLang and Strata had no new commits. Raylight, the mesh and GGUF nodes are pinned and current. ComfyUI `v0.46.0` is available (installed: `v0.45.0`); pinned, not installed.
@@ -48,6 +48,23 @@ Load, one short answer through the app path, tool call, unload; one profile at a
 **The 1026 fix did act on DeepSeek.** On the first start the engine found 854 and 853 MiB free on the two cards, short of the 1,024 MiB reserve, and recorded a margin of 192 MiB per card. On the second start it kept that margin and ended with 1,194 and 1,199 MiB free. Speed did not drop; the second start was the fastest of the three runs (one run each, so no gain is claimed).
 
 All 558 repository tests pass after the install.
+
+## llama.cpp: latest release instead of stable
+
+After the Maya install the owner ruled: do not hold to the newest stable release, use the latest release that best supports the two RTX 3080-class cards. Until then the check followed the release GitHub marks as latest (1.0.0, November 13), which was already older than the installed main-branch commit.
+
+- **Check changed.** `config/daily-update.json` now sets `"channel": "latest"` for llama.cpp, and `scripts/update_builders.py` reads the newest published release, rolling `bNNNNN` builds included (GitHub marks them as pre-releases). The other engines keep their channel; Maya and Strata have no separate pre-release line. A unit test covers the new channel.
+- **Version found:** `b12628`, 6 commits after the installed `19bc41d`. Reviewed from source: none of the 6 touches the CUDA backend or the model code Bolt uses. They are two Vulkan fixes, a fix for two other model architectures, an audio-input fix, a server change for embedding-style batches, and one chat change that passes "no reasoning" to templates that support it.
+- **For this hardware:** the build is made here for these cards (CUDA 13, sm_86), as before. The fix that matters most for two-card use of Inkling on mainline (upstream issue 32718, loop placement) is still open, and DSpark drafting (pull request 32218) is not merged, so `inkling-llamacpp` stays on the Unsloth build.
+- **Build and install:** built in isolation under `runtimes/llamacpp-manual/b12628-8a97fa9-20261122/`; `llama-server --version` reports `1.0.0-dev (build 12628, commit 8a97fa98a)`. Pre-images and rollback in `data/llamacpp-update-20261122/` (back to `19bc41d`).
+
+| Profile | Version | Prompt reading (tok/s) | Time to first token (s) | Generation (tok/s) |
+|---|---|---:|---:|---:|
+| `bolt-llamacpp` | main `19bc41d` | 669.5 | 9.64 | 67.2 |
+| `bolt-llamacpp` | `b12628` | 670.5 | 9.62 | 67.0 |
+| `bolt-llamacpp` | `b12628` (repeat) | 676.0 | 9.56 | 67.6 |
+
+Same speed; all three pass.
 
 ## Limits
 

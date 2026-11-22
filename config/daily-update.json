@@ -52,7 +52,7 @@
       ],
       "upstream": "https://github.com/ggml-org/llama.cpp.git",
       "builder": "llamacpp",
-      "channel": "stable"
+      "channel": "latest"
     }
   ],
   "pinned_profiles": [

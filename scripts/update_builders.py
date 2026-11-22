@@ -18,15 +18,23 @@ def latest_release(component):
     import urllib.request
     repo=component['upstream'].removeprefix('https://github.com/').removesuffix('.git')
     if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+',repo):raise RuntimeError('Unexpected release repository')
-    request=urllib.request.Request('https://api.github.com/repos/'+repo+'/releases/latest',headers={'Accept':'application/vnd.github+json','User-Agent':'NVIDIA-engine-maintenance'})
+    # 'latest' follows the newest published release, rolling builds marked prerelease included (owner's rule,
+    # 2026-11-22); 'stable' follows only the release GitHub marks as latest.
+    newest=component.get('channel')=='latest'
+    request=urllib.request.Request('https://api.github.com/repos/'+repo+('/releases?per_page=10' if newest else '/releases/latest'),headers={'Accept':'application/vnd.github+json','User-Agent':'NVIDIA-engine-maintenance'})
     with urllib.request.urlopen(request,timeout=30)as response:release=json.load(response)
+    if newest:
+        if not isinstance(release,list):raise RuntimeError('Unexpected release list')
+        release=next((r for r in release if isinstance(r,dict) and not r.get('draft') and r.get('tag_name')),None)
+        if release is None:raise RuntimeError('No published release')
+        return release
     if release.get('draft') or release.get('prerelease') or not release.get('tag_name'):raise RuntimeError('No stable release')
     return release
 
 
 def upstream(component):
     ref='HEAD'
-    if component.get('channel')=='stable':
+    if component.get('channel') in ('stable','latest'):
         ref='refs/tags/'+latest_release(component)['tag_name']
         text=subprocess.check_output(['git','ls-remote',component['upstream'],ref,ref+'^{}'],text=True,timeout=90)
         lines=text.splitlines();peeled=[line for line in lines if line.endswith('^{}')]

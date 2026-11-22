@@ -421,7 +421,7 @@ class Updater:
         for component in self.policy.get('monitored_engines',[]):
             row={'component':component['id'],'revision':'unknown','automatic_replacement':False}
             try:
-                if component.get('channel')=='stable':
+                if component.get('channel') in ('stable','latest'):
                     revision=latest_release(component)['tag_name'];current=component['installed_release']
                 else:
                     revision=upstream(component);current=component['installed_commit']

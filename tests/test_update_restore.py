@@ -68,6 +68,16 @@ class Discovery(unittest.TestCase):
         with patch('update_builders.latest_release',return_value={'tag_name':'v2'}),patch('update_builders.subprocess.check_output',return_value='a'*40+'\trefs/tags/v2\n'+'b'*40+'\trefs/tags/v2^{}\n')as remote:
             self.assertEqual(upstream(component),'b'*40)
             self.assertEqual(remote.call_args.args[0][-2:],['refs/tags/v2','refs/tags/v2^{}'])
+    def test_latest_channel_takes_newest_published_release_including_prereleases(self):
+        import io,update_builders
+        component={'upstream':'https://github.com/example/engine.git','channel':'latest'}
+        listing=[{'tag_name':'b3','draft':True},{'tag_name':'b2','prerelease':True},{'tag_name':'v1'}]
+        with patch('urllib.request.urlopen',return_value=io.BytesIO(json.dumps(listing).encode()))as fetch:
+            self.assertEqual(update_builders.latest_release(component)['tag_name'],'b2')
+            self.assertTrue(fetch.call_args.args[0].full_url.endswith('/releases?per_page=10'))
+        with patch('update_builders.latest_release',return_value={'tag_name':'b2'}),patch('update_builders.subprocess.check_output',return_value='c'*40+'\trefs/tags/b2\n')as remote:
+            self.assertEqual(upstream(component),'c'*40)
+            self.assertEqual(remote.call_args.args[0][-2:],['refs/tags/b2','refs/tags/b2^{}'])
     def test_changed_default_branch_cannot_silently_select_stock_sglang(self):
         component={'upstream':'repo','default_branch':'fix/851-consolidated'}
         with patch('update_builders.subprocess.check_output',return_value='ref: refs/heads/main\tHEAD\n'+'a'*40+'\tHEAD\n'):
