@@ -1241,7 +1241,11 @@
         "trim_stage_weights": true,
         "ple_io": "direct",
         "ple_io_reason": "2026-11-10 A/B, two runs each: direct table reads load about 10 s faster and leave the 26.8 GiB table out of RAM; prefill is 1% slower and decode is within run-to-run noise. docs/evidence/LAUNCH-TUNING-20261110.md",
-        "split_reason": "2026-11-07 short sweep: layers 0-28 on RTX 3080, 29-47 plus head/draft/verify on RTX 3080 Ti, stage-trimmed dense weights; ~+13% writing and ~+22% 24K prompt reading versus auto K=20. docs/evidence/STRATA-LAYER-SPLIT-20261107.md"
+        "split_reason": "2026-11-07 short sweep: layers 0-28 on RTX 3080, 29-47 plus head/draft/verify on RTX 3080 Ti, stage-trimmed dense weights; ~+13% writing and ~+22% 24K prompt reading versus auto K=20. docs/evidence/STRATA-LAYER-SPLIT-20261107.md",
+        "environment": {
+          "STRATA_PREFILL_CPU_SHARE_AUTO": "1"
+        },
+        "prefill_cpu_share_reason": "2026-11-22 A/B on Strata 0.2.19, three runs each and a repeat: the link-aware CPU prefill share reads a 5.7K-token prompt 18% faster (1,386 to 1,639 tok/s) and a 21K-token prompt 2% faster; generation unchanged within run-to-run spread. Upstream enables it by default only on newer cards. docs/evidence/FLASH-NEXT-0219-TUNING-20261122.md"
       },
       "guard_validation_history": [
         {
@@ -1627,7 +1631,8 @@
         "kv_resident": 32768,
         "pool_workers": 15,
         "environment": {
-          "STRATA_ROUTE_TAIL_SKIP": "0"
+          "STRATA_ROUTE_TAIL_SKIP": "0",
+          "STRATA_PREFILL_CPU_SHARE_AUTO": "1"
         },
         "swap_guard": {
           "window_s": 30,
@@ -1637,7 +1642,8 @@
         },
         "gpu_free_floor_mib": 256,
         "layout_reason": "2026-11-17 trial: Strata's automatic layout (layers 0-19 on the RTX 3080, 20-47 on the RTX 3080 Ti, KV streaming with 32,768 of 131,072 cells in VRAM) writes 84-89 tok/s after a 20K-token prompt; the installed IQ3_XXS profile's hand-set split 29 reaches only 61 tok/s with this quant. docs/evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md",
-        "reason": "Owner asked on 2026-11-18 to keep UD-IQ4_XS-v31 as a second Flash-Next entry next to IQ3_XXS."
+        "reason": "Owner asked on 2026-11-18 to keep UD-IQ4_XS-v31 as a second Flash-Next entry next to IQ3_XXS.",
+        "prefill_cpu_share_reason": "2026-11-22 A/B on Strata 0.2.19, three runs each and a repeat: the link-aware CPU prefill share reads a 5.7K-token prompt 39% faster (1,038 to 1,445 tok/s) and a 21K-token prompt 9% faster; generation unchanged within run-to-run spread. Upstream enables it by default only on newer cards. docs/evidence/FLASH-NEXT-0219-TUNING-20261122.md"
       },
       "tested_retrieval_input": 113029,
       "current_configuration_benchmark": {
