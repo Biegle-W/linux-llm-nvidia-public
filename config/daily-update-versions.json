@@ -46,10 +46,10 @@
     "evidence": "docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md"
   },
   "strata": {
-    "source_commit": "c6f6427d9de9016fd92d13e29740f65625261df7",
-    "qualified_on": "2026-11-22T11:15:00",
+    "source_commit": "a34979fc94f3d126b9bb8210f4ad311345688b52",
+    "qualified_on": "2026-11-23T17:00:00",
     "method": "hands-on short DSH",
-    "note": "Strata v0.2.19 for flash-next-strata and flash-next-iq4xs-strata: control 0.1.65, engine 0.1.65. hy4-flash-strata keeps its strata-hy4 0.1.64 engine (the signed 0.2.19 feed still names that CUDA 13 package) and runs under control 0.1.65. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59): Strata no longer runs DeepSeek",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md"
+    "note": "Strata v0.2.20: control 0.1.66 for all Strata entries; hy4-flash-strata on strata-hy4 0.1.66. flash-next-strata and flash-next-iq4xs-strata keep Qwen engine 0.1.65 (v0.2.19 package): engine 0.1.66 failed flash-next-iq4xs-strata and slowed flash-next-strata. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59).",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261123-STRATA-0220.md"
   }
 }

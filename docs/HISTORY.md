@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Strata 0.2.20; Inkling 2 Mini holds 128K on both cards — November 23, 2026
+
+Control 0.1.66 and `strata-hy4` 0.1.66 promoted. Qwen engine 0.1.66 failed `flash-next-iq4xs-strata` (`verify: layer 0 never rang`) and slowed `flash-next-strata` 12-14%, so both Flash-Next presets keep engine 0.1.65 under control 0.1.66. On the new `strata-inkling` 0.1.66 Inkling 2 Mini SQ-10 runs on both cards with a layer split (no P2P needed): web-client-shaped requests with 25 tools pass at 16K-64K, and 60K/120K-token recalls pass at 128K, at 55-71 tok/s. [ENGINE-UPDATES-20261123-STRATA-0220.md](evidence/ENGINE-UPDATES-20261123-STRATA-0220.md)
+
 ## Bolt IQ2 router entry retired — November 23, 2026
 
 At the owner's request `bolt-llamacpp` was retired on November 23, 2026. Its 22.0 GB IQ2 GGUF (`models/engine-tests/bolt-iq2`, SATA) was deleted the same day at the owner's request. Saved DSH selections move to the default plain model. The Inkling SQ-10 Strata weights (11.1 GB, NVMe) left by the dropped `inkling-strata` entry were deleted the same day.

@@ -26,16 +26,16 @@
       "publisher_sha256_matched": true
     }
   ],
-  "release": "v0.2.18",
-  "engine_package": "strata-hy4-0.1.64-linux-x86_64-cuda-cuda13.tar.gz",
-  "engine_build_id": "6e38f588a646+cuda13.0",
-  "engine_directory": "runtimes/strata-hy4/0.1.64-linux-x86_64-cuda-cuda13",
+  "release": "v0.2.20",
+  "engine_package": "strata-hy4-0.1.66-linux-x86_64-cuda-cuda13.tar.gz",
+  "engine_build_id": "2e87c08db18a+cuda13.0",
+  "engine_directory": "runtimes/strata-hy4/0.1.66-linux-x86_64-cuda-cuda13",
   "engine_files_sha256": {
-    "strata-hy4": "d327f52cf25a9b64938230eaa1023cc5e0703c0b598fb08c7dfba396ba0702ab",
+    "strata-hy4": "b94abb518fb6d0e52f8b0cf4767440db5a7addd1de0052b8751e3279b8de957e",
     "libcublas.so.13": "25cde432108543626df85d887c730bf2cab96803ca16f9654e4abc8d2b45833e",
     "libcublasLt.so.13": "1489aeb75d55ee55782798343ac66f57771d561cc1fe1e0491568deefa0e6515",
-    "engine-component.json": "736fc37404cc6931a3123ff6b634fde8356d86f9d20c9258407f5a8b1ad23eac",
-    "BUILD.json": "e5738f42d59b705da8099a16d16200a7256544ad2d36103c215507a019ff86e4"
+    "engine-component.json": "5343781c553fc2e27fd8d836b503da0edd8442ec422fdb4be2a623aaf77f2303",
+    "BUILD.json": "f209586afc6a36cecd51da14e0d2e2503aca96c6d7f9ddbd444504011e2c7510"
   },
   "tokenizer_directory": "models/strata/packs/hy4-flash-sq-96/tokenizer",
   "tokenizer_files_sha256": {

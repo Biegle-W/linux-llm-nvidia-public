@@ -41,7 +41,7 @@ class Hy4Runtime(unittest.TestCase):
                 content = name.encode()
                 (folder / name).write_bytes(content)
                 hashes[name] = hashlib.sha256(content).hexdigest()
-        engine = self.root / 'runtimes/strata-hy4/0.1.64-linux-x86_64-cuda-cuda13'
+        engine = self.root / self.pins['engine_directory']
         self.config = dict(exe=str(engine / 'strata-hy4'), arch='hy4flash', cwd=str(self.root),
                            tokenizer=str(self.root / 'models/strata/packs/hy4-flash-sq-96/tokenizer'),
                            model_name='hy4-flash-sq-96', lib_dirs=[str(engine)], gpu=[0], gpus_asked=True,
