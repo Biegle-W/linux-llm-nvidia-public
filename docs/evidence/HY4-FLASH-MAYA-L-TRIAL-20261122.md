@@ -1,6 +1,6 @@
 # Hy4-Flash 220B on Project Maya's engine (Maya-L), both cards: trial — November 22, 2026
 
-**Status: added as `hy4-flash-maya` on November 22 at the owner's request. Router checks passed on November 23; the short tool-use quality test is pending.** The owner asked for Maya's Hy4-Flash engine to be tried on both cards, to see whether it frees RAM and VRAM and lifts the context limit of the Strata entry.
+**Status: added as `hy4-flash-maya` on November 22 at the owner's request. Router checks passed on November 23; short tool-use test scored 43.3, cut short by the memory-pressure guard.** The owner asked for Maya's Hy4-Flash engine to be tried on both cards, to see whether it frees RAM and VRAM and lifts the context limit of the Strata entry.
 
 ## Result in one table
 
@@ -61,3 +61,7 @@ Arithmetic, JSON, a tool call with follow-up, thinking on request and prompt reu
 | Unload | owned unload | owned unload |
 
 The soft cap made the kernel reclaim pages of the 89.5 GB memory-mapped model while it was in use, which the pressure guard counts as stalls. The owner approved lifting it for this entry only; `SOFT_CAP_OFF_PROFILES` in `scripts/profile_catalog.py` names it, and a test keeps every other entry at hard limit minus 2 GiB. The hard limit, the 2 GiB host floor and the pressure and swap guards are unchanged. Expect a slow first answer after each load.
+
+## Short tool-use test — November 23, 2026
+
+Short tool-use test through the router on November 23 (larger-model limits): 33 correct, 14 wrong and 2 without an answer in 28.5 minutes, score 43.3 on the shared scale (`hy4-flash-strata` 57.9). At minute 30 the memory-pressure guard stopped the worker (full pressure 11.4% against 10%, worker at 88.3 GiB with the soft cap already at the hard limit) and the last 6 multi-turn items failed in transport. The soft-cap change removed the stop in the short check but not under sustained load: the 89.5 GB memory-mapped model plus the worker's own memory sit at the 89.77 GiB hard limit, so the kernel keeps reclaiming pages of the model file. Run id `fast-hy4-maya-router-20261123`.

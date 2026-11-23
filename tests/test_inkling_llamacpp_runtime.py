@@ -11,7 +11,7 @@ from unittest.mock import patch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'scripts'))
 import inkling_llamacpp_runtime as runtime
-from bolt_iq2_worker import verify_receipts, verify_runtime_files, worker_environment
+from llamacpp_worker import verify_receipts, verify_runtime_files, worker_environment
 from daily_engine_update import Updater, validate_update_coverage
 from inference_swap_guard import WorkerWatch
 from profile_catalog import get_profile, load_catalog

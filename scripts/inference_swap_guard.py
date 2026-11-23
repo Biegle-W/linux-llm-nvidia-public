@@ -149,7 +149,7 @@ class WorkerWatch:
             if phase in ('loading', 'warmup', 'idle'):
                 return 'loading' if phase == 'warmup' else phase
         try:
-            if self.profile in ('bolt-llamacpp', 'inkling-llamacpp'):
+            if self.profile == 'inkling-llamacpp':
                 busy = llama_requests_busy(self.get('/metrics'))
             elif self.profile.startswith('qwen27b-'):
                 text = self.get('/metrics')

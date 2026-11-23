@@ -4,9 +4,13 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Bolt IQ2 router entry retired — November 23, 2026
+
+At the owner's request `bolt-llamacpp` was retired on November 23, 2026. Its 22.0 GB IQ2 GGUF (`models/engine-tests/bolt-iq2`, SATA) was deleted the same day at the owner's request. Saved DSH selections move to the default plain model. The Inkling SQ-10 Strata weights (11.1 GB, NVMe) left by the dropped `inkling-strata` entry were deleted the same day.
+
 ## Hy4 Maya-L entry added, Inkling SQ-10 entry dropped — November 22-23, 2026
 
-At the owner's request the catalog now includes Hy4 Maya-L on Maya at 128K. Through the router on November 23 it loaded in 6.4-14.4 minutes, made the tool call and follow-up of the short DSH check, and unloaded. The first check was stopped by the memory-pressure guard at the shared 87.77 GiB soft cap; at the owner's choice this entry alone now runs with the soft cap at its 89.77 GiB hard limit, and the check passed (generation 13.1 tok/s, the 5.5K-token first prompt read at 23 tok/s, memory peak 86.5 GiB, swap peak 0.7 GiB). An Inkling SQ-10 entry on Strata was added and then dropped at the owner's choice: through the router it works at 8K (65-76 tok/s, tool calls pass), but the web client keeps 4,096 tokens free beyond its own ~7K-token prompt and sent a 1-token output limit; it needs about 11.5K of context and the 12 GB card holds 8K at most. Its weights stay on disk until the owner decides.
+At the owner's request the catalog now includes Hy4 Maya-L on Maya at 128K. Through the router on November 23 it loaded in 6.4-14.4 minutes, made the tool call and follow-up of the short DSH check, and unloaded. The first check was stopped by the memory-pressure guard at the shared 87.77 GiB soft cap; at the owner's choice this entry alone now runs with the soft cap at its 89.77 GiB hard limit, and the check passed (generation 13.1 tok/s, the 5.5K-token first prompt read at 23 tok/s, memory peak 86.5 GiB, swap peak 0.7 GiB). An Inkling SQ-10 entry on Strata was added and then dropped at the owner's choice: through the router it works at 8K (65-76 tok/s, tool calls pass), but the web client keeps 4,096 tokens free beyond its own ~7K-token prompt and sent a 1-token output limit; it needs about 11.5K of context and the 12 GB card holds 8K at most. Its SQ-10 and Vision weights (11.1 GB) were deleted at the owner's request on November 23.
 
 ## llama.cpp b12631, Maya 1.1.74 and Strata 0.2.19 installed — November 22, 2026
 

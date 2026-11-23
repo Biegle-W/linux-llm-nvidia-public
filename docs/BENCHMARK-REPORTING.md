@@ -66,7 +66,6 @@ Read effective guard values from the selected configuration, kernel cgroup setti
 ## Current classification
 
 - VRAM-only: shared Qwen3.8-27B AutoRound INT4/INT8 on HyperQwen/vLLM and SGLang, checkpoint on SATA.
-- CPU RAM offload: Nemotron-3.5 Bolt native IQ2 on llama.cpp, checkpoint on SATA.
 - SSD streaming: Flash-Next IQ3_XXS and GLM Maya-S24 on NVMe; shared Unsloth UD-IQ1_S DeepSeek on Strata and Maya, core on NVMe and Engram on SATA.
 
 The [November 5 all-models rerun](evidence/ALL-MODELS-RERUN-20261105.md) is a full

@@ -65,7 +65,7 @@ class WorkerBudget(unittest.TestCase):
             (temp / 'scripts/router_client.py').write_text('import sys; print(" ".join(sys.argv[1:]))')
             for command, model in [('qwen', 'flash-next-strata'), ('qwen-iq4xs', 'flash-next-iq4xs-strata'), ('glm', 'glm-maya'),
                                    ('strata-deepseek', 'deepseek-unsloth-strata'), ('maya-deepseek', 'deepseek-maya'),
-                                   ('bolt', 'bolt-llamacpp'), ('inkling', 'inkling-llamacpp'), ('hy4', 'hy4-flash-strata'),
+                                   ('inkling', 'inkling-llamacpp'), ('hy4', 'hy4-flash-strata'),
                                    ('hy4-maya', 'hy4-flash-maya')]:
                 with self.subTest(command=command):
                     result = subprocess.check_output(['bash', str(shell), command], text=True).strip()

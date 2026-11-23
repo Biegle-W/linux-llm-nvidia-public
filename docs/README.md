@@ -1,5 +1,7 @@
 # Documentation index
 
+The router catalog has ten text entries after the [November 23 retirement](HISTORY.md#bolt-iq2-router-entry-retired--november-23-2026).
+
 Start with [CURRENT-STATE.md](CURRENT-STATE.md) and the root [AGENTS.md](../AGENTS.md).
 
 ## Reference (kept current)

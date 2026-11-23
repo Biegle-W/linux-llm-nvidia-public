@@ -2,8 +2,8 @@ import sys,unittest
 from pathlib import Path
 from unittest.mock import patch
 import io,tempfile
-import worker_manager as manager
 ROOT=Path(__file__).resolve().parents[1];sys.path[:0]=[str(ROOT/'network'),str(ROOT/'scripts')]
+import worker_manager as manager
 from worker_manager import vllm_requests_busy
 from inference_swap_guard import WorkerWatch,TelemetryError
 class RequestState(unittest.TestCase):
@@ -13,18 +13,17 @@ class RequestState(unittest.TestCase):
  def test_unknown_gauges_cannot_claim_idle(self):
   for t in ['', 'vllm:num_requests_running 0','vllm:num_requests_running nan\nvllm:num_requests_waiting 0','vllm:num_requests_running -1\nvllm:num_requests_waiting 0']:
    with self.assertRaises(ValueError):vllm_requests_busy(t)
- def test_bolt_native_phase_and_strict_defaults(self):
-  w=WorkerWatch('/fixture','bolt-llamacpp','fixture');self.assertEqual((w.guard.write_limit,w.guard.combined_limit,w.guard.pressure_limit),(1,8,10))
+ def test_llamacpp_native_phase_and_strict_defaults(self):
+  w=WorkerWatch('/fixture','inkling-llamacpp','fixture');self.assertEqual((w.guard.write_limit,w.guard.combined_limit,w.guard.pressure_limit),(1,8,10))
   with patch.object(w,'get',return_value='llamacpp:requests_processing 1\nllamacpp:requests_deferred 0') as get:self.assertEqual(w.phase(),'inference');get.assert_called_with('/metrics')
   with patch.object(w,'get',return_value='llamacpp:requests_processing 0\nllamacpp:requests_deferred 0'):self.assertEqual(w.phase(),'idle')
  def test_missing_phase_gauge_fails_closed(self):
-  w=WorkerWatch('/fixture','bolt-llamacpp','fixture')
+  w=WorkerWatch('/fixture','inkling-llamacpp','fixture')
   with patch.object(w,'get',return_value='unrelated 0'):
    with self.assertRaises(TelemetryError):w.phase()
 class ManagedUnload(unittest.TestCase):
  def exercise(self,metrics,error_code=None,unavailable=False):
-  for profile in ('bolt-llamacpp','inkling-llamacpp'):
-   with self.subTest(profile=profile):self.exercise_one(profile,metrics,error_code,unavailable)
+  self.exercise_one('inkling-llamacpp',metrics,error_code,unavailable)
  def test_hy4_native_unload_without_loading_field(self):
   for status,code in [('{"busy":true,"queued":0}', 'backend_busy'), ('{"busy":false,"queued":1}', 'backend_busy'),
                       ('{"busy":false,"queued":0}', None), ('{"queued":0}', 'backend_state_unknown')]:

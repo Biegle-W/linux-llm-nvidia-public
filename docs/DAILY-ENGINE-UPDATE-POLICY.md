@@ -31,7 +31,7 @@ Until November 9, 2026 the timer ran at **03:00 America/Toronto**, skips missed 
 | Heterogeneous SGLang | `qwen27b-sglang` | Default `fix/851-consolidated`; selected dependency pins and current local compatibility patch |
 | Maya | `glm-maya`, `deepseek-maya` | Latest stable tag; grouped control/binaries/manifests, bounded-cache patch |
 | Strata | `flash-next-strata`, `deepseek-unsloth-strata` | Latest stable tag; signed feed/control/CUDA13 engines |
-| llama.cpp | `bolt-llamacpp` | Latest stable tag; native IQ2 Bolt runtime/manifest |
+| llama.cpp (Unsloth build) | `inkling-llamacpp` | Pinned and updated by hand |
 
 ComfyUI/Raylight stable releases and Mesh/GGUF default heads are also checked daily; newer versions are reported for separate image/video workflow and GPU-residency qualification. They are not silently installed through the text-model qualifier. No model weights, contexts, precision, driver, kernel, firmware or resource guards are automatically changed.
 
@@ -58,7 +58,7 @@ The updater owns its reservation by exact live PID/start time/nonce. Its DSH chi
 
 Scheduled runs are configured for guarded headless qualification when no graphical desktop is available. Their logs remain private and all model/admission/resource guards remain mandatory. A foreground desktop terminal is used when available; operator-driven CLI tests retain their foreground TTY. This scheduled exception does not authorize hidden manual benchmarks.
 
-Preserved limits:2GiB host available; the per-entry worker RAM budget in the registry (`worker_memory_gib` in `config/maintained-profiles.json`); per-card free-VRAM256MiB where applicable plus selected native reserves/fit targets;100C temperature stops; existing three-bad-sample2-second hysteresis, fail-closed telemetry, PSI/swap windows, swappiness60, concurrency1 and idle600s. Active swap limits remain1/8MiB/s for dense/Bolt and128/160MiB/s for streaming entries over30s, with unlimited occupancy. [Per-profile guard table](evidence/ALL-ENTRY-BENCHMARKS-20261105.md).
+Preserved limits:2GiB host available; the per-entry worker RAM budget in the registry (`worker_memory_gib` in `config/maintained-profiles.json`); per-card free-VRAM256MiB where applicable plus selected native reserves/fit targets;100C temperature stops; existing three-bad-sample2-second hysteresis, fail-closed telemetry, PSI/swap windows, swappiness60, concurrency1 and idle600s. Active swap limits remain1/8MiB/s for dense/Inkling and128/160MiB/s for streaming entries over30s, with unlimited occupancy. [Per-profile guard table](evidence/ALL-ENTRY-BENCHMARKS-20261105.md).
 
 ### CUDA profiler-header preflight
 

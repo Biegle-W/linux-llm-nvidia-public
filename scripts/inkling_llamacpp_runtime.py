@@ -1,7 +1,7 @@
 """Launch Inkling with the pinned Unsloth llama.cpp build and native worker guards."""
 from pathlib import Path
 
-from bolt_iq2_worker import main as serve
+from llamacpp_worker import main as serve
 from profile_catalog import get_profile
 
 ROOT = Path(__file__).resolve().parents[1]

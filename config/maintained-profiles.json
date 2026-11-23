@@ -2667,118 +2667,6 @@
       }
     },
     {
-      "id": "bolt-llamacpp",
-      "model": "NVIDIA-Nemotron-3.5-Bolt-74B-A9B",
-      "status": "selected",
-      "launch": [
-        "bolt"
-      ],
-      "allocated_context": 163840,
-      "worker_memory_gib": {
-        "high": 87.76984786987305,
-        "max": 89.76984786987305,
-        "swap": null
-      },
-      "host_ram_reserve_gib": 2,
-      "capabilities": {
-        "text": true,
-        "vision": false,
-        "tools_qualified": true
-      },
-      "availability": {
-        "enabled": true
-      },
-      "minimum_usable_ram_gib": 90,
-      "worker_ram_headroom": {
-        "hard_outside_bytes": 2147483648,
-        "measured_MemTotal_bytes": 98537123840,
-        "reclaim_before_hard_bytes": 2147483648
-      },
-      "ram_upgrade_qualification": {
-        "date": "2026-11-04",
-        "RAM_class": "96GB",
-        "short_tool_followup_owned_unload": "passed",
-        "full_context_stress": false
-      },
-      "weight_quant": "native-IQ2",
-      "engine": "llama.cpp",
-      "display_name": "NVIDIA Bolt 74B-A9B / native IQ2 / llama.cpp",
-      "tested_retrieval_input": 0,
-      "context_validation": "163840-token native allocation; normal-router actual DSH read/result/exact follow-up and owned unload passed. No new full-context or sustained qualification.",
-      "evidence": "docs/evidence/BOLT-IQ2-ENTRY-20261104.md",
-      "storage": {
-        "access": "ram-resident",
-        "required_transport": "sata",
-        "checkpoint_directory": "models/engine-tests/bolt-iq2"
-      },
-      "runtime_manifest": "config/bolt-iq2-runtime.json",
-      "native_request_protocol": "llama.cpp",
-      "api_id_compatibility": "Renamed from bolt-vllm on 2026-11-06; the router accepts bolt-vllm as a legacy alias and DSH migrates saved selections.",
-      "retired_AWQ_evidence": "docs/evidence/RAM96-RESTORATION-20261104.md",
-      "selected_settings": {
-        "fit_target_MiB": [
-          384,
-          384
-        ],
-        "cache_type_k": "q8_0",
-        "cache_type_v": "q8_0",
-        "split_mode": "layer",
-        "load_mode": "mmap",
-        "lazy_mode": "off",
-        "batch_size": 256,
-        "ubatch_size": 128,
-        "threads": 8,
-        "speculative_decoding": false,
-        "cache_ram_MiB": 8192
-      },
-      "latest_benchmark": {
-        "date": "2026-11-05",
-        "source": "docs/evidence/validation-results/20261105-engine-refresh.json",
-        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
-        "context": 163840,
-        "prefill_tps": 500.31086704910666,
-        "ttft_s": 12.898547648001113,
-        "decode_tps": 67.78868234053985,
-        "prompt_tokens": 6366,
-        "output_tokens": 41,
-        "cached_tokens": 0,
-        "prefill_method": "native request timings",
-        "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings",
-        "client_ttft_s": 12.898547648001113,
-        "meaningful_sse_chunks": 21
-      },
-      "latest_qualification": {
-        "date": "2026-11-05",
-        "status": "pass",
-        "evidence": "docs/evidence/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
-        "numeric_results": "docs/evidence/validation-results/20261105-engine-refresh.json"
-      },
-      "current_configuration_benchmark": {
-        "date": "2026-11-05",
-        "source": "docs/evidence/validation-results/20261105-engine-refresh.json",
-        "status": "Guarded normal-router actual DSH read/result/exact followup and owned unload; first tool request only; no context stress",
-        "context": 163840,
-        "prefill_tps": 500.31086704910666,
-        "ttft_s": 12.898547648001113,
-        "decode_tps": 67.78868234053985,
-        "prompt_tokens": 6366,
-        "output_tokens": 41,
-        "cached_tokens": 0,
-        "prefill_method": "native request timings",
-        "ttft_method": "client first delivered content/tool delta; parser buffering included",
-        "decode_method": "native request timings",
-        "client_ttft_s": 12.898547648001113,
-        "meaningful_sse_chunks": 21
-      },
-      "engine_refresh_qualification": {
-        "date": "2026-11-05",
-        "status": "pass",
-        "evidence": "docs/evidence/ENGINE-REFRESH-AND-WEIGHT-SHARING-20261105.md",
-        "numeric_results": "docs/evidence/validation-results/20261105-engine-refresh.json"
-      }
-    },
-    {
       "id": "deepseek-unsloth-strata",
       "model": "DeepSeek-V4.1-Flash-1017",
       "weight_quant": "UD-IQ1_S (Unsloth Dynamic3.1)",
@@ -3270,7 +3158,7 @@
           "short DSH check",
           "owned unload"
         ],
-        "short_tool_use_test": "pending"
+        "short_tool_use_test": "through the router on 2026-11-23, larger-model limits: 33 correct, 14 wrong, 2 without an answer in 28.5 minutes; the memory-pressure guard then stopped the worker (full pressure 11.4% against 10%, worker at 88.3 GiB) and the last 6 items failed in transport; score 43.3 on the shared scale"
       }
     }
   ],

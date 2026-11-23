@@ -18,9 +18,7 @@ import web_search
 
 MAX_BODY = 32 * 1024 * 1024
 # Old saved selections remain usable, but never opt a request into search.
-LEGACY_MODEL_ALIASES = {'qwen27b-hyperqwen-search': 'qwen27b-hyperqwen',
-                        # Bolt was renamed after AWQ/vLLM retirement; old clients keep working.
-                        'bolt-vllm': 'bolt-llamacpp'}
+LEGACY_MODEL_ALIASES = {'qwen27b-hyperqwen-search': 'qwen27b-hyperqwen'}
 WEB_SEARCH_ALIASES = {}
 
 

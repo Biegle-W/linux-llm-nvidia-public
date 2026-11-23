@@ -1,5 +1,9 @@
 # NVIDIA daily engine updates
 
+## 2026-11-23
+
+The `bolt-llamacpp` retirement ends upstream llama.cpp update checks. Inkling continues to use its hand-updated Unsloth runtime.
+
 ## 2026-11-22 (second run): llama.cpp b12631, Maya 1.1.74 and Strata 0.2.19
 
 Upstream review, before and after: [ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md](evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md).

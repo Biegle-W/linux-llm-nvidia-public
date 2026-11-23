@@ -6,8 +6,8 @@
 > read [CURRENT-STATE.md](CURRENT-STATE.md) and the
 > [connection and service handoff](../network/README.md).
 
-The initial runtime is llama.cpp at commit
-`caa8191df159f764fb0160e3d2fc6be008948aee`, built for Ampere CUDA architecture 86.
+The original installation used llama.cpp at commit
+`caa8191df159f764fb0160e3d2fc6be008948aee`, built for Ampere CUDA architecture 86. The current Inkling entry uses the pinned Unsloth build.
 The small Qwen2.5 installation-test model and its dedicated launcher were removed
 at the user's request after the initial smoke checks. Historical test evidence
 remains in ignored `data/` and `logs/`.

@@ -4,13 +4,9 @@
 
 The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](evidence/UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
 
-## Selected native IQ2 Bolt — November 4, 2026
+## Retained weights without a router entry
 
-The22.018 GB native text checkpoint on SATA at`models/engine-tests/bolt-iq2` now backs the API/DSH Bolt entry. The former55.333 GB AWQ checkpoint and its dedicated runtime were deleted at the user's request; only dated benchmark/source history remains. [Removal verification](evidence/BOLT-AWQ-REMOVAL-20261104.md). Both storage ancestry and publisher hash were verified. [Current setup](evidence/BOLT-IQ2-ENTRY-20261104.md).
-
-## Native IQ2 Bolt candidate — November 4, 2026
-
-The22.018 GB official text checkpoint is a mostly GPU/RAM-resident candidate and lives on SATA at`models/engine-tests/bolt-iq2`. Publisher SHA256 and physical SATA ancestry passed. It uses the existing two GPUs with bounded partial CPU-weight placement; it is not an SSD expert-streaming pack. The separate vision projector/drafter were not downloaded. [Measured placement and guards](evidence/BOLT-NATIVE-IQ2-20261104.md).
+At the owner's request `bolt-llamacpp` was retired on November 23, 2026. Its 22.0 GB IQ2 GGUF (`models/engine-tests/bolt-iq2`, SATA) was deleted the same day at the owner's request.
 
 ## Unsloth DeepSeek split-storage profile — October 31
 
@@ -40,7 +36,6 @@ Per-drive usage and unused weights: run `python3 scripts/weights_tracker.py` (re
 | Qwen3.8-Flash-Next IQ3_XXS, Strata | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/strata/models/IQ3_XXS` |
 | GLM-5.3-Flash Maya-S24, Maya | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/maya/Maya-S24` |
 | DeepSeek-V4.1-Flash-1017 UD-IQ1_S, shared by Strata and Maya | SSD-streaming with GPU/RAM caches | NVMe shards 1-4; SATA shard 5 (symlinked) | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S` |
-| Nemotron 3.5 Bolt IQ2, llama.cpp | RAM-resident (CPU RAM offload) after loading | Samsung SSD 870 QVO SATA | `models/engine-tests/bolt-iq2` |
 | ComfyUI images (Qwen Image 2.1 Turbo, FLUX3 Klein, MiniMax H3 Image) | GPU-resident after loading; the MiniMax H3 text encoder (27 GB) stays in system RAM | Samsung SSD 870 QVO SATA | `models/comfy-images` |
 | ComfyUI video (Wan 2.2 5B, LTX 2.3 Mesh) | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/comfy-video` |
 

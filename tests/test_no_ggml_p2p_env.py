@@ -1,6 +1,6 @@
 """GPU peer access stays off: the cards run on CPU PCIe bifurcation (x8/x8) with no P2P.
 
-ggml/llama.cpp (Bolt, Strata, Maya) turns peer access on whenever GGML_CUDA_P2P is present in
+ggml/llama.cpp (Inkling, Strata, Maya) turns peer access on whenever GGML_CUDA_P2P is present in
 the environment, whatever its value (getenv != nullptr), so launchers must remove it rather than
 set it to '0'. NCCL reads its own variable's value, so NCCL_P2P_DISABLE='1' stays.
 """
@@ -8,7 +8,7 @@ import json, re, unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-LAUNCHERS = ['scripts/serve_router_moe.py', 'scripts/serve_qwen27b_engines.py', 'scripts/bolt_iq2_worker.py']
+LAUNCHERS = ['scripts/serve_router_moe.py', 'scripts/serve_qwen27b_engines.py', 'scripts/llamacpp_worker.py']
 ASSIGN = re.compile(r"""GGML_CUDA_P2P\s*=|['"]GGML_CUDA_P2P['"]\s*:""")
 
 

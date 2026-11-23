@@ -114,7 +114,7 @@ def build(root, component, revision, directory):
                         cache_directory=str((directory / 'cache').relative_to(root)))
         candidate = directory / 'sglang-runtime.json'; write_json(candidate, manifest)
         receipt['files'].append({'target': str(root / 'config/sglang-runtime.json'), 'candidate': str(candidate)})
-    elif kind in ('maya-pair','llamacpp','strata-signed'):
+    elif kind in ('maya-pair','strata-signed'):
         from update_native_builders import prepare
         prepare(root,component,revision,directory,source,log,receipt)
     else:

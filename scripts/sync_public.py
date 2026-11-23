@@ -9,6 +9,13 @@ import re
 import subprocess
 
 RETIRED_FILES = (
+    # Native IQ2 retirement, 2026-11-23.
+    'scripts/bolt_iq2_worker.py',
+    'scripts/bolt_iq2_runtime.py',
+    'tests/test_bolt_iq2_runtime.py',
+    'tests/test_bolt_iq2_worker.py',
+    'config/bolt-iq2-runtime.json',
+    'tests/test_bolt_request_state.py',
     # Unused files removed on 2026-11-11 (docs/evidence/REPO-AUDIT-20261111.md).
     'scripts/bolt_iq2_trial.py',
     'config/bolt-iq2-trial.json',
@@ -366,7 +373,7 @@ FILES = (
     'config/maya-hy4-runtime.json', 'scripts/hy4_flash_maya_runtime.py', 'tests/test_hy4_flash_maya_runtime.py',
     'config/hy4-flash-strata-runtime.json', 'scripts/hy4_flash_strata_runtime.py', 'tests/test_hy4_flash_strata_runtime.py',
     'config/inkling-llamacpp-runtime.json', 'scripts/inkling_llamacpp_runtime.py', 'tests/test_inkling_llamacpp_runtime.py',
-    'config/bolt-iq2-runtime.json', 'scripts/bolt_iq2_runtime.py', 'tests/test_bolt_iq2_runtime.py',
+    'tests/test_bolt_retired.py',
     'docs/evidence/BOLT-IQ2-ENTRY-20261104.md', 'docs/evidence/benchmark-results/20261104-bolt-iq2-entry.json',
     'docs/evidence/BOLT-ID-RENAME-20261106.md',
     'docs/evidence/BOLT-PROMPT-CACHE-20261107.md', 'docs/evidence/validation-results/20261107-bolt-prompt-cache.json',
@@ -377,7 +384,7 @@ FILES = (
     'docs/evidence/FLASH-IQ1M-RETIREMENT-20261108.md', 'docs/evidence/validation-results/20261108-flash-iq1m-retirement.json',
     'docs/HISTORY.md', 'docs/README.md',
     'docs/evidence/ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md',
-    'scripts/bolt_iq2_worker.py', 'tests/test_bolt_iq2_worker.py', 'tests/test_no_ggml_p2p_env.py',
+    'scripts/llamacpp_worker.py', 'tests/test_no_ggml_p2p_env.py',
     'docs/evidence/BOLT-NATIVE-IQ2-20261104.md', 'docs/evidence/benchmark-results/20261104-bolt-native-iq2.json',
     'docs/evidence/RAM96-RESTORATION-20261104.md', 'docs/evidence/benchmark-results/20261104-ram96-restoration.json', 'docs/evidence/BOLT-IQ2-AND-PROMETHEVS-20261104.md',
     'docs/evidence/RAM96-PREPARATION-20261104.md', 'docs/evidence/validation-results/20261104-ram96-preparation.json', 'tests/test_ram96_capacity.py',
@@ -463,7 +470,7 @@ FILES = (
     'patches/llama-demand-mmap-prefault.patch',
     'docs/evidence/DEEPSEEK-DYNAMIC31-20261031.md',
     'docs/evidence/validation-results/20261031-deepseek-dynamic31.json',
-    'tests/test_bolt_request_state.py',
+    'tests/test_native_request_state.py',
     'docs/evidence/BOLT-MAYA-RELIABILITY-20261031.md',
     'docs/evidence/benchmark-results/20261031-bolt-maya-reliability.json',
     'docs/evidence/GPU-PAIR-AUX-OPTIMIZATION-20261031.md',

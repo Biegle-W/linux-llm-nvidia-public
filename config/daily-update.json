@@ -46,15 +46,6 @@
       "upstream": "https://github.com/Niko1221/Strata.git",
       "builder": "strata-signed",
       "channel": "stable"
-    },
-    {
-      "id": "llamacpp",
-      "profiles": [
-        "bolt-llamacpp"
-      ],
-      "upstream": "https://github.com/ggml-org/llama.cpp.git",
-      "builder": "llamacpp",
-      "channel": "latest"
     }
   ],
   "pinned_profiles": [
@@ -80,9 +71,6 @@
       "scripts/flash_iq4xs_strata_runtime.py",
       "config/hy4-flash-strata-runtime.json",
       "scripts/hy4_flash_strata_runtime.py"
-    ],
-    "llamacpp": [
-      "config/bolt-iq2-runtime.json"
     ]
   },
   "monitored_engines": [

@@ -1,6 +1,6 @@
 # Maintained profiles (model registry)
 
-`config/maintained-profiles.json` is the single source of truth for every enabled entry. The router re-reads it on each call; `scripts/profile_catalog.py` loads and validates it (`python3 scripts/profile_catalog.py` prints the catalog). The current entries and their numbers are summarized in [CURRENT-STATE.md](CURRENT-STATE.md). The dated log this file used to carry is archived in [MAINTAINED-PROFILES-LOG-THROUGH-20261108.md](evidence/MAINTAINED-PROFILES-LOG-THROUGH-20261108.md).
+`config/maintained-profiles.json` is the single source of truth for the ten enabled text entries. The router re-reads it on each call; `scripts/profile_catalog.py` loads and validates it (`python3 scripts/profile_catalog.py` prints the catalog). The current entries and their numbers are summarized in [CURRENT-STATE.md](CURRENT-STATE.md). The dated log this file used to carry is archived in [MAINTAINED-PROFILES-LOG-THROUGH-20261108.md](evidence/MAINTAINED-PROFILES-LOG-THROUGH-20261108.md).
 
 ## What an entry records
 
@@ -12,7 +12,7 @@ Inkling 2 Mini is Thinking Machines Lab's Apache 2.0 26B looped MoE. `inkling-ll
 
 Tencent Hy4-Flash 220B-A12B uses SQ-96 on the 12 GB card with the experts in RAM and Engram on NVMe. `hy4-flash-strata` serves text and small pictures with 131,072 tokens (context memory reserved at start; pictures of 1024 pixels and larger are refused). The trial passed a tool call and follow-up. Router load, the short check and an owned unload passed on November 22.
 
-The text entry `hy4-flash-maya` splits Maya-L across both cards at 131,072 tokens and reads the n-gram table from the SATA SSD. It is the only entry whose soft memory cap equals its hard limit (89.77 GiB), approved by the owner on November 23 because the shared soft cap throttled its memory-mapped model into the pressure guard. It passed the router checks; the short tool-use quality test is pending. A separate Inkling SQ-10 entry on Strata was tried and dropped (see the Inkling trial note).
+The text entry `hy4-flash-maya` splits Maya-L across both cards at 131,072 tokens and reads the n-gram table from the SATA SSD. It is the only entry whose soft memory cap equals its hard limit (89.77 GiB), approved by the owner on November 23 because the shared soft cap throttled its memory-mapped model into the pressure guard. It passed the router checks; its short tool-use test scored 43.3 (`hy4-flash-strata` 57.9); under that sustained load the memory-pressure guard stopped it at minute 30. A separate Inkling SQ-10 entry on Strata was tried and dropped (see the Inkling trial note).
 
 ## Selection rule
 

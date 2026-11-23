@@ -131,55 +131,46 @@ def maya_qualification_options(root, directory, source, log, receipt):
 
 def native(root,component,revision,directory,source,log,receipt):
     from update_builders import run
-    kind=component['builder'];build=source/'build';maya=kind=='maya-pair'
-    if maya:
-        verify_cuda_host_headers(root,directory,log)
-        patch=root/'patches'/MAYA_CACHE_PATCH
-        run(['patch','--batch','--fuzz=0','-p1','-i',patch],log,source)
-        test=directory/'cache-test'
-        run(['g++','-O2','-std=c++20','-pthread','-I'+str(source/'src/ds4'),root/'tools/maya-file-cache-bound/test_cache_bound.cpp','-o',test],log)
-        run([test,directory],log)
-    options=['-DSTRATA_ENABLE_CUDA=ON','-DSTRATA_BUILD_TESTS=ON','-DSTRATA_BUILD_DSV41=ON'] if maya else ['-DGGML_CUDA=ON','-DLLAMA_BUILD_TESTS=ON']
-    if maya: options += maya_qualification_options(root,directory,source,log,receipt)
+    build=source/'build'
+    verify_cuda_host_headers(root,directory,log)
+    patch=root/'patches'/MAYA_CACHE_PATCH
+    run(['patch','--batch','--fuzz=0','-p1','-i',patch],log,source)
+    test=directory/'cache-test'
+    run(['g++','-O2','-std=c++20','-pthread','-I'+str(source/'src/ds4'),root/'tools/maya-file-cache-bound/test_cache_bound.cpp','-o',test],log)
+    run([test,directory],log)
+    options=['-DSTRATA_ENABLE_CUDA=ON','-DSTRATA_BUILD_TESTS=ON','-DSTRATA_BUILD_DSV41=ON']
+    options += maya_qualification_options(root,directory,source,log,receipt)
     env=dict(os.environ,CC='gcc-13',CXX='g++-13',MAX_JOBS='2')
     run(['cmake','-S',source,'-B',build,'-G','Ninja','-DCMAKE_BUILD_TYPE=Release',*options,*cuda_options(root)],log,env=env)
     run(['cmake','--build',build,'--parallel','2'],log,env=env)
-    if maya: receipt['additional_test_targets'] = build_registered_test_executables(build,log,env)
+    receipt['additional_test_targets'] = build_registered_test_executables(build,log,env)
     receipt['ctest']=str(build)
-    if maya:
-        for profile,binary in [('glm-maya','maya'),('deepseek-maya','maya-ds4')]:
-            candidate=build/binary
-            linkage=subprocess.check_output(['ldd',str(candidate)],text=True)
-            if 'not found'in linkage or 'libcudart.so.13'not in linkage or 'libcublas.so.13'not in linkage:raise RuntimeError('Maya CUDA library mismatch')
-            stage_maya_pin(root,profile,revision,candidate,directory,receipt)
-        if 'hy4-flash-maya' in component['profiles']:
-            candidate=build/'maya-hy4'
-            linkage=subprocess.check_output(['ldd',str(candidate)],text=True)
-            if 'not found'in linkage or 'libcudart.so.13'not in linkage or 'libcublas.so.13'not in linkage:raise RuntimeError('Maya Hy4 CUDA library mismatch')
-            stage_maya_hy4_pin(root,revision,candidate,directory,receipt)
-        old=root/'runtimes/project-maya'
-        # Preserve private launch settings and the installed interpreter, never weights.
-        run(['cp','-a','--reflink=auto',old/'.venv',source/'.venv'],log,timeout=1800)
-        preserve_maya_vision(old, source, receipt)
-        for p in old.glob('*.json'):
-            tracked=subprocess.run(['git','-C',str(old),'ls-files','--error-unmatch',p.name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0
-            if not tracked:
-                expected=sha(p);shutil.copy2(p,source/p.name)
-                if sha(source/p.name)!=expected:raise RuntimeError('Private Maya config changed during staging')
-                receipt.setdefault('protected_files',[]).append({'path':str(p),'sha256':expected})
-        p=source/'serve/server.py';p.write_text(transform(p.read_text(),'maya'))
-        receipt['directories'].append({'target':str(old),'candidate':str(source)})
-    else:
-        candidate=build/'bin/llama-server';libs=build/'bin';linkage=subprocess.check_output(['ldd',str(libs/'libggml-cuda.so')],text=True)
-        if 'not found'in linkage or 'libcudart.so.13'not in linkage or 'libcublas.so.13'not in linkage:raise RuntimeError('llama.cpp CUDA library mismatch')
-        old=root/'runtimes/llama.cpp'
-        hashes={str((old/'build/bin'/p.name).relative_to(root)):sha(p)for p in libs.iterdir()if p.is_file()and not p.is_symlink()and p.name.startswith('lib')}
-        manifests={'bolt-llamacpp':'bolt-iq2-runtime.json'}
-        for name in [manifests[p] for p in component['profiles']]:
-            path=root/'config'/name;manifest=json.loads(path.read_text());manifest.update(source_commit=revision,binary_sha256=sha(candidate),runtime_files_sha256=hashes);manifest.pop('release',None)
-            m=directory/name;write_json(m,manifest);file_action(receipt,path,m)
-        receipt['directories'].append({'target':str(old),'candidate':str(source)})
-    receipt['artifacts']=[{'path':str(p),'sha256':sha(p)}for p in ([build/'maya',build/'maya-ds4']+([build/'maya-hy4']if 'hy4-flash-maya' in component['profiles']else[])if maya else [build/'bin/llama-server'])]
+    for profile,binary in [('glm-maya','maya'),('deepseek-maya','maya-ds4')]:
+        candidate=build/binary
+        linkage=subprocess.check_output(['ldd',str(candidate)],text=True)
+        if 'not found'in linkage or 'libcudart.so.13'not in linkage or 'libcublas.so.13'not in linkage:raise RuntimeError('Maya CUDA library mismatch')
+        stage_maya_pin(root,profile,revision,candidate,directory,receipt)
+    if 'hy4-flash-maya' in component['profiles']:
+        candidate=build/'maya-hy4'
+        linkage=subprocess.check_output(['ldd',str(candidate)],text=True)
+        if 'not found'in linkage or 'libcudart.so.13'not in linkage or 'libcublas.so.13'not in linkage:raise RuntimeError('Maya Hy4 CUDA library mismatch')
+        stage_maya_hy4_pin(root,revision,candidate,directory,receipt)
+    old=root/'runtimes/project-maya'
+    # Preserve private launch settings and the installed interpreter, never weights.
+    run(['cp','-a','--reflink=auto',old/'.venv',source/'.venv'],log,timeout=1800)
+    preserve_maya_vision(old, source, receipt)
+    for p in old.glob('*.json'):
+        tracked=subprocess.run(['git','-C',str(old),'ls-files','--error-unmatch',p.name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL).returncode==0
+        if not tracked:
+            expected=sha(p);shutil.copy2(p,source/p.name)
+            if sha(source/p.name)!=expected:raise RuntimeError('Private Maya config changed during staging')
+            receipt.setdefault('protected_files',[]).append({'path':str(p),'sha256':expected})
+    p=source/'serve/server.py';p.write_text(transform(p.read_text(),'maya'))
+    receipt['directories'].append({'target':str(old),'candidate':str(source)})
+    binaries = [build/'maya', build/'maya-ds4']
+    if 'hy4-flash-maya' in component['profiles']:
+        binaries.append(build/'maya-hy4')
+    receipt['artifacts'] = [{'path':str(p),'sha256':sha(p)} for p in binaries]
 
 
 def download(asset,directory):

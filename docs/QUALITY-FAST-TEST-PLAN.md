@@ -20,7 +20,7 @@ Tool use only. Every item comes from the tool-calling parts of the current test 
 | Multi turn: a function is missing | seeded draw | 3 | 5 |
 | **Total** | | **49** | **55** |
 
-- **Smaller models** (Qwen 27B, Flash-Next, trial models of that size) run the 49 core items. **Larger models** (Bolt, GLM, DeepSeek) run the same 49 plus 6 more multi-turn episodes.
+- **Smaller models** (Qwen 27B, Flash-Next, trial models of that size) run the 49 core items. **Larger models** (GLM, DeepSeek) run the same 49 plus 6 more multi-turn episodes.
 - The draw uses seed 20261122 on sorted item ids and never looks at results. The item list is frozen in a manifest with a hash.
 - Dropped from the tool parts: the "choose among several functions" subset, where every model scores 87-100% and little is learned.
 - Dropped entirely: MMLU-Pro, AIME 2025 and LiveCodeBench. They are 84-89% of today's run time and are not tool use. The 390-item test stays as the deep run, on request.
@@ -54,7 +54,7 @@ Tool use only. Every item comes from the tool-calling parts of the current test 
 | `deepseek-unsloth-strata` | larger | 34/40 | 4/9 (8/15) | 64.7 (69.2) | 46.3 min | 49.3 |
 | `deepseek-maya` | larger | 33/40 | 4/9 (6/15) | 63.5 (61.2) | 47.4 min | 50.4 |
 | `glm-maya` | larger | 35/40 | 3/9 (4/15) | 60.4 (57.1) | 18.9 min | 21.9 |
-| `bolt-llamacpp` | larger | 34/40 | 2/9 (3/15) | 53.6 (52.5) | 9.7 min | 12.7 |
+| `bolt-llamacpp` (retired) | larger | 34/40 | 2/9 (3/15) | 53.6 (52.5) | 9.7 min | 12.7 |
 
 Figures in brackets are the 15-episode score for larger models. Item times are the sums of the recorded seconds for exactly these items.
 

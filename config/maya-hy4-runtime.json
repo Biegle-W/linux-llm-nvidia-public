@@ -8,7 +8,7 @@
   },
   "mode": "Maya 1.1.74 normal build, text only",
   "evidence": "docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md",
-  "status": "Router checks passed 2026-11-23; short tool-use quality test pending",
+  "status": "Router checks passed 2026-11-23; short tool-use test 43.3, stopped by the memory-pressure guard at minute 30",
   "CUDA_toolkit": "13.0.88; matching CUDA13 runtime/cuBLAS",
   "publisher_repository": "peasantsmith/Hy4-Flash-Maya-GGUF",
   "publisher_revision": "9d73294d20e1119d03d00ea81d1d352bfbe61ff4",

@@ -5,8 +5,8 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT/'network'),str(ROOT/'scripts')]
 import worker_manager as m
 class Wait(unittest.TestCase):
- def test_switch_waits_for_native_bolt_before_stopping(self):
-  for profile in ['bolt-llamacpp', 'inkling-llamacpp', 'hy4-flash-strata', 'hy4-flash-maya']:
+ def test_switch_waits_for_native_worker_before_stopping(self):
+  for profile in ['inkling-llamacpp', 'hy4-flash-strata', 'hy4-flash-maya']:
    with self.subTest(profile=profile),tempfile.TemporaryDirectory() as tmp:
     w=m.Workers.__new__(m.Workers);w.active=profile;w.key='fixture';w.wait_native_idle=lambda progress:None;w.detect=lambda:None;progress=[];stopped=[]
     class Done(Exception):pass
