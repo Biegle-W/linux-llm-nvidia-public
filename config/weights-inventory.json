@@ -29,8 +29,13 @@
   ],
   "min_weight_bytes": 50000000,
   "min_bytes": 500000000,
-  "router_manifest_receipts": ["inkling-llamacpp", "hy4-flash-strata"],
+  "router_manifest_receipts": ["inkling-llamacpp", "hy4-flash-strata", "hy4-flash-maya"],
   "extra_references": [
+    {
+      "path": "models/maya-hy4/hy4-flash-maya-l/maya-hy4",
+      "owner": "router:hy4-flash-maya",
+      "why": "Maya pack index and tokenizer"
+    },
     {
       "path": "models/strata/packs/hy4-flash-sq-96/tokenizer",
       "owner": "router:hy4-flash-strata",

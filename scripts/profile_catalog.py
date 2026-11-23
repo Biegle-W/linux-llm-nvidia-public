@@ -8,6 +8,9 @@ ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / 'config/maintained-profiles.json'
 MOE_WORKER_HIGH_GIB = 88
 MOE_WORKER_MAX_GIB = 90
+# Owner-approved (Nov 23, 2026): no soft cap below the hard limit for these entries only.
+# Maya-L memory-maps an 89.5 GB pack; a soft cap throttled it into the pressure guard.
+SOFT_CAP_OFF_PROFILES = frozenset({'hy4-flash-maya'})
 
 
 def worker_budget(profile):
@@ -23,7 +26,7 @@ def worker_budget(profile):
         return dict(budget)
     if (any(type(budget[k]) not in (int, float) or not math.isfinite(budget[k])
                 or budget[k] * 2**30 != int(budget[k] * 2**30) for k in ('high', 'max'))
-            or not (0 < budget['high'] <= budget['max'] - 2
+            or not (0 < budget['high'] <= budget['max'] - (0 if profile['id'] in SOFT_CAP_OFF_PROFILES and budget['high'] == budget['max'] else 2)
                     and budget['max'] <= MOE_WORKER_MAX_GIB)):
         raise ValueError(f"Invalid bounded worker budget: {profile['id']}")
     return dict(budget)
@@ -82,6 +85,9 @@ def validate_catalog(catalog):
         storage = profile['storage']
         location = Path(storage['checkpoint_directory'])
         expected = {'gpu-resident': 'sata', 'ram-resident': 'sata', 'ssd-streaming': 'nvme'}
+        # A measured placement differs from the transport default for its class.
+        if identifier == 'hy4-flash-maya':
+            expected['ssd-streaming'] = 'sata'
         if (storage.get('access') not in expected
                 or storage.get('required_transport') != expected[storage['access']]
                 or location.is_absolute() or '..' in location.parts):

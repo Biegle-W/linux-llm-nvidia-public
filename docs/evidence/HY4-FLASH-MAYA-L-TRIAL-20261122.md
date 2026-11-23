@@ -1,6 +1,6 @@
 # Hy4-Flash 220B on Project Maya's engine (Maya-L), both cards: trial — November 22, 2026
 
-**Status: trial only, not adopted. `hy4-flash-strata` stays the Hy4 entry.** The owner asked for Maya's Hy4-Flash engine to be tried on both cards, to see whether it frees RAM and VRAM and lifts the context limit of the Strata entry.
+**Status: added as `hy4-flash-maya` on November 22 at the owner's request. Router checks passed on November 23; the short tool-use quality test is pending.** The owner asked for Maya's Hy4-Flash engine to be tried on both cards, to see whether it frees RAM and VRAM and lifts the context limit of the Strata entry.
 
 ## Result in one table
 
@@ -47,3 +47,17 @@ Arithmetic, JSON, a tool call with follow-up, thinking on request and prompt reu
 - Pictures, the MTP and DFly2 drafters, Maya-M or Maya-XS (smaller, lower quality), a single-card Maya run, the short tool-use test.
 - The long start times were not broken down; the first start includes a one-time route measurement (152-301 s), and the server restarted the engine during two starts.
 - The 162.5 GB of Maya-L files are still on the SATA SSD. Removing them is the owner's decision.
+
+## Through the router — November 23, 2026
+
+| Check | Shared soft cap (87.77 GiB) | Soft cap at the hard limit (89.77 GiB) |
+|---|---|---|
+| Load to ready | 862 s | 386 s |
+| Tool call, follow-up, 8K recall | pass (recall read at 110 tok/s, follow-up 1.0 s) | — |
+| Short DSH check (web client, 5.5-7K-token prompt) | stopped by the memory-pressure guard: full pressure 11.7-12.7% against 10% | pass: tool call, follow-up and final answer |
+| Generation | 6.4-18.6 tok/s | 13.1 tok/s |
+| First prompt reading | — | 23 tok/s for 5,524 tokens (236 s, cold experts) |
+| Memory | worker held at 87.7-87.8 GiB, swap 1.6 GiB | peak 86.5 GiB, swap peak 0.7 GiB |
+| Unload | owned unload | owned unload |
+
+The soft cap made the kernel reclaim pages of the 89.5 GB memory-mapped model while it was in use, which the pressure guard counts as stalls. The owner approved lifting it for this entry only; `SOFT_CAP_OFF_PROFILES` in `scripts/profile_catalog.py` names it, and a test keeps every other entry at hard limit minus 2 GiB. The hard limit, the 2 GiB host floor and the pressure and swap guards are unchanged. Expect a slow first answer after each load.

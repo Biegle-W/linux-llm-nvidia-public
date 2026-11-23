@@ -51,7 +51,7 @@ def main():
         from inkling_llamacpp_runtime import PROFILE, main as inkling_main
         require_enabled(get_profile(PROFILE))
         return inkling_main()
-    identifier = 'hy4-flash-strata' if sys.argv[1] == 'hy4' else sys.argv[1]
+    identifier = {'hy4': 'hy4-flash-strata', 'hy4-maya': 'hy4-flash-maya'}.get(sys.argv[1], sys.argv[1])
     profile = require_enabled(get_profile(identifier))
     from profile_catalog import require_host_capacity
     require_host_capacity(profile)
@@ -92,6 +92,12 @@ def main():
             config = prepare_config(profile)
         except (ValueError, OSError, KeyError, TypeError) as error:
             sys.exit('Hy4 preflight failed: ' + str(error))
+    elif profile['id'] == 'hy4-flash-maya':
+        from hy4_flash_maya_runtime import prepare_config
+        try:
+            config = prepare_config(profile)
+        except (ValueError, OSError, KeyError, TypeError) as error:
+            sys.exit('Maya Hy4 preflight failed: ' + str(error))
     elif profile['engine'] == 'Maya':
         config = json.loads((ROOT / profile['runtime_selector']['path']).read_text())
     else:
@@ -102,9 +108,10 @@ def main():
             sys.exit('Canonical RAM/cache setting differs from the selected registry.')
     # No GPU peer access (the cards sit on CPU x8/x8 bifurcation). ggml enables peer access
     # whenever GGML_CUDA_P2P is present, whatever its value, so it must be absent, not '0'.
-    config.setdefault('env', {}).update(NCCL_P2P_DISABLE='1')
+    if profile['id'] != 'hy4-flash-maya':
+        config.setdefault('env', {}).update(NCCL_P2P_DISABLE='1')
     for name in ('NCCL_P2P_LEVEL', 'GGML_CUDA_P2P'):
-        config['env'].pop(name, None)
+        config.get('env', {}).pop(name, None)
         os.environ.pop(name, None)
     os.environ.update(NCCL_P2P_DISABLE='1')
     args = config['args']
@@ -114,8 +121,10 @@ def main():
     if key.stat().st_mode & 0o077:
         sys.exit('API-key permissions must be owner-only.')
     config.update(host='127.0.0.1', port=10000, api_key=key.read_text().strip(),
-                  parallel=1, reasoning_effort='none', open_browser=False,
+                  reasoning_effort='none',
                   log=str(ROOT / 'data/router' / (profile['id'] + '-engine.log')))
+    if profile['id'] != 'hy4-flash-maya':
+        config.update(parallel=1, open_browser=False)
     config = apply_native_idle(config, profile)
     config.pop('args_written', None)
     target = ROOT / 'data/router' / (profile['id'] + '-runtime.json')

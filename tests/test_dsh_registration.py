@@ -17,6 +17,14 @@ class Registration(unittest.TestCase):
   self.assertEqual((model['id'],model['name'],model['input'],model['contextWindow']),
                    (profile['id'],profile['display_name'],['text','image'],131072))
 
+ def test_text_only_trial_entries(self):
+  profiles=registration.load_catalog()['profiles']
+  models={m['id']:m for m in registration.router_providers({},profiles)[registration.ROUTER_ID]['models']}
+  for identifier, context in [('hy4-flash-maya',131072)]:
+   self.assertEqual((models[identifier]['input'],models[identifier]['contextWindow']),(['text'],context))
+  self.assertNotIn('hy4-maya',models)
+  self.assertNotIn('inkling-strata',models)
+
  def fixture(self,folder,profiles,entries):
   oldroot,oldcatalog=registration.ROOT,registration.load_catalog
   self.addCleanup(setattr,registration,'ROOT',oldroot);self.addCleanup(setattr,registration,'load_catalog',oldcatalog)

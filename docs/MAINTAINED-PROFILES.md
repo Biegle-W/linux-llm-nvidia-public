@@ -12,6 +12,8 @@ Inkling 2 Mini is Thinking Machines Lab's Apache 2.0 26B looped MoE. `inkling-ll
 
 Tencent Hy4-Flash 220B-A12B uses SQ-96 on the 12 GB card with the experts in RAM and Engram on NVMe. `hy4-flash-strata` serves text and small pictures with 131,072 tokens (context memory reserved at start; pictures of 1024 pixels and larger are refused). The trial passed a tool call and follow-up. Router load, the short check and an owned unload passed on November 22.
 
+The text entry `hy4-flash-maya` splits Maya-L across both cards at 131,072 tokens and reads the n-gram table from the SATA SSD. It is the only entry whose soft memory cap equals its hard limit (89.77 GiB), approved by the owner on November 23 because the shared soft cap throttled its memory-mapped model into the pressure guard. It passed the router checks; the short tool-use quality test is pending. A separate Inkling SQ-10 entry on Strata was tried and dropped (see the Inkling trial note).
+
 ## Selection rule
 
 Keep a qualified configuration that no other configuration beats on prefill/TTFT, decode and safe validated context at once. When speed and context trade off, prefer the largest locally validated safe allocation with competitive speed, then break ties on prefill/TTFT and decode. Context increases are reported as % context gained against % speed lost and need quality and resource qualification before promotion ([context policy](evidence/CONTEXT-VALIDATION-POLICY-20261101.md)). Allocated context is a capacity setting, not a full-window quality claim.

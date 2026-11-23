@@ -23,7 +23,7 @@ class RAM96(unittest.TestCase):
     with self.subTest(profile=profile['id'],capacity=capacity),self.assertRaises(RuntimeError):require_host_capacity(profile,f'MemTotal: {capacity} kB\nMemAvailable: 99999999 kB\n')
  def test_bounded_budgets_leave_host_reserve(self):
   for profile in load_catalog()['profiles']:
-   expected={'high':87.76984786987305,'max':89.76984786987305,'swap':None}
+   expected={'high':89.76984786987305 if profile['id']=='hy4-flash-maya' else 87.76984786987305,'max':89.76984786987305,'swap':None}
    self.assertEqual(worker_budget(profile),expected)
    self.assertGreaterEqual(98537123840/2**30-expected['max'],2)
  def test_byte_exact_only_two_GiB_remain_outside_heavy_worker(self):

@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "profile": "hy4-flash-maya",
+  "source_commit": "e8d4f297f434091082e4d297ea78dea0c7be3f57",
+  "binary": {
+    "path": "runtimes/maya-hy4-v1174/maya-hy4",
+    "sha256": "ea782eb42e0e60c526c79d133cceb56e4e45d5903809eee0b8d22cf1a1886dd7"
+  },
+  "mode": "Maya 1.1.74 normal build, text only",
+  "evidence": "docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md",
+  "status": "Router checks passed 2026-11-23; short tool-use quality test pending",
+  "CUDA_toolkit": "13.0.88; matching CUDA13 runtime/cuBLAS",
+  "publisher_repository": "peasantsmith/Hy4-Flash-Maya-GGUF",
+  "publisher_revision": "9d73294d20e1119d03d00ea81d1d352bfbe61ff4",
+  "checkpoint_directory": "models/maya-hy4/hy4-flash-maya-l",
+  "files": [
+    {
+      "file": "Hy4-Flash-Maya-L-IQ4_XS-00001-of-00002.gguf",
+      "bytes": 89512229920,
+      "sha256": "5f47ce10c0cb6186ec34036cd5eae47b662b780933abca9f1db0db2770799c17",
+      "publisher_sha256_matched": true
+    },
+    {
+      "file": "Hy4-Flash-Maya-L-IQ4_XS-00002-of-00002.gguf",
+      "bytes": 63360616160,
+      "sha256": "5819578b52eb1cda0945a716e0575331406d976b6eebc74db8544b3d478ad244",
+      "publisher_sha256_matched": true
+    }
+  ],
+  "unused_files": [
+    {
+      "file": "mmproj-Hy4-Flash-Maya-XS.gguf",
+      "bytes": 784524096,
+      "sha256": "6884c0317a4e3e781eef4a535706e47ae1423742ffe8341adf6e50497a7338be",
+      "publisher_sha256_matched": true
+    },
+    {
+      "file": "Hy4-Flash-Maya-L-drafter.dfly2",
+      "bytes": 898772352,
+      "sha256": "c856ae476a42ea69ec1f958ca70b96238fd6356f123914ecde497fac3116ab45",
+      "publisher_sha256_matched": true
+    },
+    {
+      "file": "Hy4-Flash-mtp-BF16.gguf",
+      "bytes": 7486183072,
+      "sha256": "a49e5ae439de9a51c680b9110563106743e8d579d91e4d4cb514a527fa908908",
+      "publisher_sha256_matched": true,
+      "publisher_revision": "8027c703f9b49924e610d900edf8bdba2d82d12a"
+    }
+  ],
+  "pack_directory": "models/maya-hy4/hy4-flash-maya-l/maya-hy4",
+  "pack_files_sha256": {
+    "engram.bin": "4255f18334adaa3b03a614f92f6f1e7826571997f46eca829abf5fbba9c7e792",
+    "hy4.txt": "2d81473c7cc6b1eced63ad074611fc14b40a8af17b01675e0572b96d93bb9587",
+    "tensors.txt": "c62169969f702524a69bc0f8cad9de392c2c1419d41a96a5c68657066fd8251d",
+    "tokenizer/chat_template.jinja": "63ddd5de294df36f10c8f2c8e5f7b2a9dc2011c8481335422f04554256aee4ad",
+    "tokenizer/merges.txt": "fd62cf9ad198e3252758cda475c00ac2e2398974d666064af81811bdfff5ea19",
+    "tokenizer/tokenizer.json": "c2449cdfbf444bfd0c213d21216e0be61c4276c1fb41d9fbc1ba8cdcbf7189c6",
+    "tokenizer/token_type.json": "7764d59fe6e3932ccf7e1d648480b49d7a94070259e7d9b00a1664253b378396",
+    "tokenizer/vocab.json": "ad6c0cb94e4ec278a1ad22f3dcca53c5a5a0a07f14ae04002de1c6648bc6d0c6"
+  }
+}

@@ -3166,6 +3166,112 @@
         "ttft_s": 27.201250057958532,
         "decode_tps": 28.3
       }
+    },
+    {
+      "id": "hy4-flash-maya",
+      "display_name": "Tencent Hy4-Flash 220B-A12B / Maya-L / Maya",
+      "model": "Hy4-Flash",
+      "input_modalities": [
+        "text"
+      ],
+      "weight_quant": "Maya-L",
+      "engine": "Maya",
+      "status": "selected",
+      "launch": [
+        "hy4-maya"
+      ],
+      "allocated_context": 131072,
+      "context_validation": "Measured outside the router at up to 127.9K tokens; router checks on 2026-11-23 covered an 8K-token recall and the short DSH check.",
+      "capabilities": {
+        "text": true,
+        "vision": false,
+        "tools_qualified": true
+      },
+      "runtime_selector": {
+        "kind": "private-maya-config",
+        "path": "runtimes/project-maya/maya-hy4-flash-maya-l.json"
+      },
+      "runtime_manifest": "config/maya-hy4-runtime.json",
+      "evidence": "docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md",
+      "storage": {
+        "access": "ssd-streaming",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/maya-hy4/hy4-flash-maya-l",
+        "base_weight_bytes": 152872846080,
+        "base_weight_gb": 152.87284608
+      },
+      "worker_memory_gib": {
+        "high": 89.76984786987305,
+        "max": 89.76984786987305,
+        "swap": null
+      },
+      "host_ram_reserve_gib": 2,
+      "minimum_usable_ram_gib": 90,
+      "selected_settings": {
+        "context": 131072,
+        "gpu": [
+          0,
+          1
+        ],
+        "layer_split": "auto",
+        "drafting": "off",
+        "vision": false,
+        "reasoning_effort": "none",
+        "reason": "Owner requested the trial setup on 2026-11-22 despite slower generation than hy4-flash-strata.",
+        "worker_memory_note": "Owner-approved on 2026-11-23: soft memory cap set to the hard limit (89.77 GiB) for this entry only. At the shared 87.77 GiB soft cap the kernel throttled Maya-L's 89.5 GB memory-mapped pack and full-memory pressure reached 11.7-12.7%, over the 10% guard; the trial without a soft cap had no throttling. The hard limit and the pressure guard are unchanged."
+      },
+      "current_configuration_benchmark": {
+        "date": "2026-11-22",
+        "source": "docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md",
+        "scope": "Trial server outside the router. Cache state unrecorded.",
+        "ttft_s": null,
+        "load_s_range": [
+          724,
+          852
+        ],
+        "decode_tps_range": [
+          11,
+          12.8
+        ],
+        "decode_tps_range_128k": [
+          11.5,
+          12
+        ],
+        "prefill_tps": 163,
+        "prompt_tokens": 127867,
+        "prefill_tps_8k_prompt_32k_context": 201,
+        "prefill_tps_16k_prompt_32k_context": 263,
+        "resident_file_cache_gib_range": [
+          80,
+          83
+        ],
+        "gpu_used_gb_range": [
+          19.9,
+          20.3
+        ],
+        "per_card_free_gb_range_128k": [
+          0.7,
+          0.8
+        ],
+        "swap_used_gib_range": [
+          1.4,
+          2.4
+        ]
+      },
+      "latest_qualification": {
+        "date": "2026-11-23",
+        "status": "pass",
+        "evidence": "docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md",
+        "router_checks_passed": [
+          "router load (386-862 s)",
+          "chat request",
+          "tool call and follow-up",
+          "8K-token recall",
+          "short DSH check",
+          "owned unload"
+        ],
+        "short_tool_use_test": "pending"
+      }
     }
   ],
   "host_reclaim_policy": {

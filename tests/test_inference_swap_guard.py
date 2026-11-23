@@ -14,7 +14,7 @@ def pages(mib):
 
 class SwapPolicyTest(unittest.TestCase):
     def test_ssd_relaxation_is_scoped_and_still_bounded(self):
-        for profile in ('flash-next-strata', 'flash-next-iq4xs-strata', 'hy4-flash-strata', 'glm-maya', 'deepseek-unsloth-strata', 'deepseek-maya'):
+        for profile in ('flash-next-strata', 'flash-next-iq4xs-strata', 'hy4-flash-maya', 'hy4-flash-strata', 'glm-maya', 'deepseek-unsloth-strata', 'deepseek-maya'):
             with self.subTest(profile=profile):
                 q = WorkerWatch('/unused', profile, 'test').guard
                 self.assertEqual((q.window_s, q.write_limit, q.combined_limit,
@@ -55,7 +55,7 @@ class SwapPolicyTest(unittest.TestCase):
                 self.assertIsNone(g.sample(42, 'inference', 0, 0, 16))
                 self.assertIsNotNone(g.sample(44, 'inference', 0, 0, 16))
                 self.assertIsNotNone(g.sample(46, 'idle', 0, 0, 0))
-        for profile in ('glm-maya', 'hy4-flash-strata', 'qwen27b-hyperqwen',
+        for profile in ('glm-maya', 'hy4-flash-maya', 'hy4-flash-strata', 'qwen27b-hyperqwen',
                         'qwen27b-sglang', 'unknown', 'deepseek-new'):
             with self.subTest(profile=profile):
                 g = WorkerWatch('/unused', profile, 'test').guard

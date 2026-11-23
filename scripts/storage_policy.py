@@ -61,6 +61,11 @@ def verify_storage(profile, root=ROOT):
                 raise RuntimeError(f"{profile['id']}: checkpoint storage requires {expected}; "
                                    f"found {', '.join(sorted(transports)) or 'unknown transport'}. "
                                    'See docs/STORAGE-POLICY.md.')
+            if profile['id'] == 'hy4-flash-maya':
+                media = subprocess.check_output(
+                    ['lsblk', '--inverse', '--noheadings', '--raw', '--output', 'TYPE,ROTA', '--', device], text=True)
+                if {line.split()[-1] for line in media.splitlines() if line.split()[:1] == ['disk']} != {'0'}:
+                    raise RuntimeError('Maya Hy4 streaming requires a non-rotational SATA drive.')
             devices[device] = expected
         elif devices[device] != expected:
             raise RuntimeError('One device cannot satisfy conflicting per-file transport requirements.')

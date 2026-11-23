@@ -43,6 +43,18 @@ class WorkerBudget(unittest.TestCase):
                 high,hard=('94242156544','96389640192') if limit=='infinity' else ('32G','36G')
                 self.assertIn('--property=MemoryHigh='+high,result)
                 self.assertIn('--property=MemoryMax='+hard,result)
+    def test_soft_cap_off_is_scoped_to_the_listed_entry(self):
+        maya = get_profile('hy4-flash-maya')
+        budget = worker_budget(maya)
+        self.assertEqual(budget['high'], budget['max'])
+        for identifier in ('hy4-flash-strata', 'flash-next-strata'):
+            other = deepcopy(get_profile(identifier))
+            other['worker_memory_gib'] = dict(budget)
+            with self.assertRaises(ValueError):
+                worker_budget(other)
+        strata = worker_budget(get_profile('hy4-flash-strata'))
+        self.assertEqual(strata['high'], strata['max'] - 2)
+
     def test_moe_shell_commands_use_managed_router_selection(self):
         root = Path(__file__).resolve().parents[1]
         with tempfile.TemporaryDirectory() as directory:
@@ -53,7 +65,8 @@ class WorkerBudget(unittest.TestCase):
             (temp / 'scripts/router_client.py').write_text('import sys; print(" ".join(sys.argv[1:]))')
             for command, model in [('qwen', 'flash-next-strata'), ('qwen-iq4xs', 'flash-next-iq4xs-strata'), ('glm', 'glm-maya'),
                                    ('strata-deepseek', 'deepseek-unsloth-strata'), ('maya-deepseek', 'deepseek-maya'),
-                                   ('bolt', 'bolt-llamacpp'), ('inkling', 'inkling-llamacpp'), ('hy4', 'hy4-flash-strata')]:
+                                   ('bolt', 'bolt-llamacpp'), ('inkling', 'inkling-llamacpp'), ('hy4', 'hy4-flash-strata'),
+                                   ('hy4-maya', 'hy4-flash-maya')]:
                 with self.subTest(command=command):
                     result = subprocess.check_output(['bash', str(shell), command], text=True).strip()
                     self.assertEqual(result, '--model ' + model)
@@ -67,7 +80,8 @@ class WorkerBudget(unittest.TestCase):
         for p in load_catalog()['profiles']:
             self.assertEqual(host_ram_reserve_gib(p),2)
             if not p['id'].startswith('qwen27b-'):
-                self.assertEqual(worker_budget(p),{'high':87.76984786987305,'max':89.76984786987305,'swap':None})
+                high = 89.76984786987305 if p['id'] == 'hy4-flash-maya' else 87.76984786987305
+                self.assertEqual(worker_budget(p),{'high':high,'max':89.76984786987305,'swap':None})
 
     def test_dense_can_take_the_authorized_larger_budget(self):
         p = deepcopy(get_profile('qwen27b-hyperqwen'))
@@ -110,7 +124,7 @@ class DenseNativeGuard(unittest.TestCase):
                     self.assertEqual(verify.call_count,1 if accepted else 0)
     def test_unbounded_or_half_unbounded_moe_budgets_are_rejected(self):
         for b in [{'high':None,'max':None,'swap':None},{'high':30,'max':None,'swap':None},{'high':None,'max':36,'swap':None}]:
-            for name in ['glm-maya','deepseek-unsloth-strata','deepseek-maya','flash-next-strata','flash-next-iq4xs-strata','hy4-flash-strata']:
+            for name in ['glm-maya','deepseek-unsloth-strata','deepseek-maya','flash-next-strata','flash-next-iq4xs-strata','hy4-flash-strata','hy4-flash-maya']:
                 p=deepcopy(get_profile(name));p['worker_memory_gib']=b
                 with self.subTest(profile=name,budget=b),self.assertRaises(ValueError):worker_budget(p)
 

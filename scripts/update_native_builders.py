@@ -64,6 +64,16 @@ def stage_maya_pin(root,profile,revision,candidate,directory,receipt):
     m=directory/names[profile];write_json(m,manifest);file_action(receipt,target,candidate);file_action(receipt,path,m)
 
 
+def stage_maya_hy4_pin(root,revision,candidate,directory,receipt):
+    """Refresh the separately pinned maya-hy4 engine from the same build as serve/server.py."""
+    path=root/'config/maya-hy4-runtime.json'
+    manifest=json.loads(path.read_text());target=root/manifest['binary']['path']
+    if manifest.get('profile')!='hy4-flash-maya' or not target.is_file():raise RuntimeError('Unreviewed Maya Hy4 manifest selection')
+    manifest.update(source_commit=revision,status='Short daily DSH qualification required; see daily ledger',CUDA_toolkit='13.0.88; matching CUDA13 runtime/cuBLAS')
+    manifest['binary']['sha256']=sha(candidate)
+    m=directory/'maya-hy4-runtime.json';write_json(m,manifest);file_action(receipt,target,candidate);file_action(receipt,path,m)
+
+
 def preserve_maya_vision(old, source, receipt):
     """Retain the separately installed encoder across a frontend directory swap."""
     vision = old / 'build-vision'
@@ -142,6 +152,11 @@ def native(root,component,revision,directory,source,log,receipt):
             linkage=subprocess.check_output(['ldd',str(candidate)],text=True)
             if 'not found'in linkage or 'libcudart.so.13'not in linkage or 'libcublas.so.13'not in linkage:raise RuntimeError('Maya CUDA library mismatch')
             stage_maya_pin(root,profile,revision,candidate,directory,receipt)
+        if 'hy4-flash-maya' in component['profiles']:
+            candidate=build/'maya-hy4'
+            linkage=subprocess.check_output(['ldd',str(candidate)],text=True)
+            if 'not found'in linkage or 'libcudart.so.13'not in linkage or 'libcublas.so.13'not in linkage:raise RuntimeError('Maya Hy4 CUDA library mismatch')
+            stage_maya_hy4_pin(root,revision,candidate,directory,receipt)
         old=root/'runtimes/project-maya'
         # Preserve private launch settings and the installed interpreter, never weights.
         run(['cp','-a','--reflink=auto',old/'.venv',source/'.venv'],log,timeout=1800)
@@ -164,7 +179,7 @@ def native(root,component,revision,directory,source,log,receipt):
             path=root/'config'/name;manifest=json.loads(path.read_text());manifest.update(source_commit=revision,binary_sha256=sha(candidate),runtime_files_sha256=hashes);manifest.pop('release',None)
             m=directory/name;write_json(m,manifest);file_action(receipt,path,m)
         receipt['directories'].append({'target':str(old),'candidate':str(source)})
-    receipt['artifacts']=[{'path':str(p),'sha256':sha(p)}for p in ([build/'maya',build/'maya-ds4']if maya else [build/'bin/llama-server'])]
+    receipt['artifacts']=[{'path':str(p),'sha256':sha(p)}for p in ([build/'maya',build/'maya-ds4']+([build/'maya-hy4']if 'hy4-flash-maya' in component['profiles']else[])if maya else [build/'bin/llama-server'])]
 
 
 def download(asset,directory):

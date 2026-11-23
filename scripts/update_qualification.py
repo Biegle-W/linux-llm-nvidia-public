@@ -246,6 +246,7 @@ class Qualification:
         thread = threading.Thread(target=self.monitor, daemon=True); thread.start()
         checks = {}
         try:
+            # Maya Hy4 took 724-852 s to become ready. Use the manager's full load deadline.
             self.manager.start(self.p['id'], allowed_lock=self.owner)
             if self.p['id']=='qwen27b-sglang':
                 from benchmark_models import wait_sglang_warmup

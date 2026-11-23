@@ -1,6 +1,6 @@
 # Inkling 2 Mini on Strata's own engine (`strata-inkling` 0.1.65): trial — November 22, 2026
 
-**Status: trial only, not adopted. `inkling-llamacpp` stays the Inkling entry.** The owner pointed out that Strata 0.2.19 made Inkling 2 Mini much faster and asked for research and optimisation.
+**Status: added as `inkling-strata` on November 22 at the owner's request, dropped on November 23 at the owner's choice.** The owner pointed out that Strata 0.2.19 made Inkling 2 Mini much faster and asked for research and optimisation.
 
 ## Result
 
@@ -48,3 +48,11 @@ The larger packs (SQ-15 13.4 GiB, SQ-20 18.0 GiB) do not fit one 12 GB card, and
 
 - Pictures, parallel requests, the short tool-use test (the 8K limit rules the entry out first).
 - The 11.1 GB of trial files and the unpacked engine are still on the NVMe. Removing them is the owner's decision.
+
+## Router entry dropped — November 23, 2026
+
+- Served at 6,144 tokens, the web client's own prompt (6,963 tokens with 25 tools) did not fit. At the owner's request it was set to 8,192.
+- At 8,192 the router check still failed: the web client sent `max_tokens: 1`. Its library keeps a fixed 4,096-token safety margin, so output room = context − prompt estimate − 4,096. A web-client session needs about 11.5K of context; the 12 GB card holds 8K at most.
+- Through the router at 6,144 it loaded in 3.2 s, passed arithmetic, a tool call with follow-up and a 5K-token recall, wrote 65-76 tok/s and read 2,219 tok/s (lowest free VRAM 465 MiB).
+- Strata itself worked at 8,192 through the router: a 6,935-token prompt with a tool, streamed or not, returned a correct tool call at 65 tok/s; prompts leaving under 1,024 tokens are refused, never truncated.
+- The owner chose to drop the entry rather than keep it API-only. The entry code is kept in `data/inkling-strata-20261122/dropped-entry/`; the SQ-10 and Vision weights (11.1 GB, NVMe) and the `strata-inkling` engine stay on disk until the owner decides.

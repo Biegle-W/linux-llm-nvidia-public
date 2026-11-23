@@ -29,6 +29,8 @@ remain on the Linux filesystem.
 
 ## Current placement
 
+One entry uses a profile-specific placement from its November 22 trial: `hy4-flash-maya` maps its first GGUF shard and reads table rows from the second on the SATA SSD. Its storage preflight checks SATA ancestry and non-rotational media.
+
 Per-drive usage and unused weights: run `python3 scripts/weights_tracker.py` (report in
 `data/weights-tracker/latest.md`); last audit in [STORAGE-STATUS-20261108.md](evidence/STORAGE-STATUS-20261108.md).
 
@@ -68,8 +70,8 @@ using dense Qwen. No new system-wide boot mount is installed.
 Each kept profile records its access type, required drive transport and checkpoint
 alias in `config/maintained-profiles.json`. The launchers resolve actual weight
 files through links and check their block-device ancestry with `findmnt` and
-`lsblk`. Dense launches require SATA; the current SSD-streaming profiles require
-NVMe. A wrong drive, missing checkpoint or unknown transport stops startup.
+`lsblk`. Dense launches require SATA; SSD-streaming profiles default to
+NVMe, with the per-file DeepSeek and SATA SSD Hy4 placements described above. A wrong drive, missing checkpoint or unknown transport stops startup.
 The checks run before launching the selected engine; numerical, placement,
 memory, thermal and process-ownership safeguards remain unchanged.
 

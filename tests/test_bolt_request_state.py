@@ -28,7 +28,8 @@ class ManagedUnload(unittest.TestCase):
  def test_hy4_native_unload_without_loading_field(self):
   for status,code in [('{"busy":true,"queued":0}', 'backend_busy'), ('{"busy":false,"queued":1}', 'backend_busy'),
                       ('{"busy":false,"queued":0}', None), ('{"queued":0}', 'backend_state_unknown')]:
-   with self.subTest(status=status):self.exercise_one('hy4-flash-strata',status,code,False,'/status')
+   for profile in ('hy4-flash-strata', 'hy4-flash-maya'):
+    with self.subTest(profile=profile,status=status):self.exercise_one(profile,status,code,False,'/status')
  def exercise_one(self,profile,metrics,error_code,unavailable,endpoint='/metrics'):
   with tempfile.TemporaryDirectory() as d:
    root=Path(d);w=manager.Workers.__new__(manager.Workers);w.active=profile;w.key='fixture'

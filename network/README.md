@@ -15,8 +15,9 @@ Reference for the network side of the server. What is live right now (models, ve
 
 Base URL `http://127.0.0.1:10100/v1` (or the server's Tailscale address) with `Authorization: Bearer <key>`; the key is `data/local-api-key` and is never printed, committed or exported. `/v1/models` is the authoritative list; the model id picks model, quantization and engine together.
 
+- The text-only entry `hy4-flash-maya` exposes 131,072 tokens and runs with its soft memory cap at its hard limit (owner-approved).
 - Chat Completions with streaming and tool calls; dense engines also expose legacy Completions.
-- The first request to an unloaded model waits for the load (tens of seconds; DeepSeek prefill can take minutes), so use long client timeouts. Streams receive keep-alive comments while waiting.
+- The first request to an unloaded model waits for the load (tens of seconds for most entries; DeepSeek prefill can take minutes, and `hy4-flash-maya` took 6.4-14.4 minutes through the router), so use long client timeouts. Streams receive keep-alive comments while waiting.
 - `POST /router/select {"model": "<id>"}` preloads; `POST /router/unload {}` unloads an idle worker (refused while a reply or switch is active). `/health` shows in-flight and queued counts. All endpoints need the key.
 - Admission: one active request, up to 8 waiting in FIFO order (`network/request_admission.py`); a full queue returns 429 with `Retry-After: 5`. Same-model concurrency is off because every engine runs one sequence.
 - Idle workers unload after 600 s (`config/inference-policy.json`). Unknown or retired ids return 404 and never start a worker.

@@ -15,11 +15,11 @@ TOKENIZER_FILES = {'chat_template.jinja', 'merges.txt', 'tokenizer.json', 'token
 
 def verify_hashes(folder, hashes, required):
     if set(hashes) != required:
-        raise ValueError('Incomplete or unexpected Hy4 runtime hash list')
+        raise ValueError('Incomplete or unexpected runtime hash list')
     for name, digest in hashes.items():
         with (folder / name).open('rb') as stream:
             if hashlib.file_digest(stream, 'sha256').hexdigest() != digest:
-                raise ValueError('Hy4 runtime hash mismatch: ' + name)
+                raise ValueError('runtime hash mismatch: ' + name)
 
 
 def prepare_config(profile, root=ROOT, home=None):
