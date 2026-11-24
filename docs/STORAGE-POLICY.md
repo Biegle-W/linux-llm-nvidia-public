@@ -1,5 +1,9 @@
 # Model storage policy
 
+## Kolibri 1.1 trial weights — November 24, 2026
+
+The Q5_K_M GGUF of Kolibri 1.1 (53.4 GB, `models/engine-tests/kolibri-1.1-gguf`, SATA, hash-verified) was downloaded for a trial. Its experts are read into RAM, so it belongs on SATA. It has no router entry and is listed as kept trial weights in `config/weights-inventory.json`.
+
 ## Flash-Next UD-IQ4_XS weights unused — November 24, 2026
 
 `flash-next-iq4xs-strata` was retired. Its UD-IQ4_XS-v31 checkpoint (`models/strata/models/unsloth-UD-IQ4_XS-v31`, about 88 GB) and Strata pack (`models/strata/packs/unsloth-ud-iq4_xs-v31`, 1.4 GB), both on NVMe, are kept unused and are the largest candidates under the rule below. The MTP head and vision projector stay with `flash-next-strata`.

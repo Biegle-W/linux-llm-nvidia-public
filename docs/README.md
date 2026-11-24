@@ -146,6 +146,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 - [FLASH-NEXT-0219-TUNING-20261122.md](evidence/FLASH-NEXT-0219-TUNING-20261122.md): Flash-Next on Strata 0.2.19: source review, 37 A/B runs, one prompt-reading setting adopted on both entries — November 22, 2026
 - [HY4-FLASH-MAYA-L-TRIAL-20261122.md](evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md): Hy4-Flash on Project Maya's engine (Maya-L) across both cards, now the separate `hy4-flash-maya` entry — November 22, 2026
 - [HY4-FLASH-SQ96-TRIAL-20261122.md](evidence/HY4-FLASH-SQ96-TRIAL-20261122.md): Hy4-Flash 220B (SQ-96) on Strata, trial and router entry `hy4-flash-strata`: files, engine fetch, speed, memory, tool calls, short tool-use test — November 22, 2026
+- [KOLIBRI-1.1-TRIAL-20261124.md](evidence/KOLIBRI-1.1-TRIAL-20261124.md): Kolibri 1.1 Q5_K_M on a llama.cpp pull-request build, both cards, 128K; trial only — November 24, 2026
 - [FLASH-NEXT-IQ4XS-RETIRED-20261124.md](evidence/FLASH-NEXT-IQ4XS-RETIRED-20261124.md): Flash-Next UD-IQ4_XS router entry retired, IQ3_XXS kept — November 24, 2026
 - [INKLING2-MINI-STRATA-ENTRY-20261124.md](evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md): Inkling 2 Mini on Strata, both cards, 128K, replaces the llama.cpp entry — November 24, 2026
 - [GBENCH-TEMPLATE-CHECK-20261123.md](evidence/GBENCH-TEMPLATE-CHECK-20261123.md): gBench chat-template check added to engine updates; baseline 6/6 on all entries — November 23, 2026

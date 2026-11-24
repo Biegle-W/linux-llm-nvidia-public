@@ -40,6 +40,8 @@ Weights, drives and sizes per entry are in [docs/CURRENT-STATE.md](docs/CURRENT-
 | `hy4-flash-maya` | larger | 43.3 (stopped by the memory-pressure guard at minute 30) |
 | `flash-next-strata` | smaller | 40.6 |
 
+**Trials not on the router:** Kolibri 1.1 (Aleph Alpha, 75B MoE with 3.4B active) in Q5_K_M on a llama.cpp build from the unmerged pull request 32891, both cards with 10 layers of experts on the GPUs and the rest in RAM, 131,072 context. Short tool-use test 41.8 with thinking off (60.0 at medium thinking), generation 44 tok/s on short prompts falling to 11 tok/s at 111K tokens, prompt reading 1,030-1,230 tok/s, long-context recall correct up to 119K tokens. [Details](docs/evidence/KOLIBRI-1.1-TRIAL-20261124.md)
+
 **390-item quality test** (November 10-18; MMLU-Pro, AIME 2025, LiveCodeBench, BFCL single- and multi-turn; thinking off as served). Macro score: DeepSeek on Strata 73.0%, DeepSeek on Maya 72.4%, Qwen 27B on SGLang 68.1% and on HyperQwen 68.0%, Flash-Next UD-IQ4_XS 65.5% (entry retired November 24), Flash-Next IQ3_XXS 62.0%, GLM 57.2%. Entries added later have the short test only; the Inkling 2 Mini trial outside the router scored 60.0% with thinking on. [Full results](docs/evidence/QUALITY-BENCHMARK-20261111.md)
 
 **Checks on every engine update**, one entry at a time:

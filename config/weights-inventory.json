@@ -90,6 +90,10 @@
       "why": "Retired Inkling llama.cpp vision projector"
     },
     {
+      "path": "models/engine-tests/kolibri-1.1-gguf/Kolibri-1.1-Q5_K_M.gguf",
+      "why": "Kolibri 1.1 Q5_K_M trial weights (Nov 24, 2026; llama.cpp PR 32891 build); no router entry yet"
+    },
+    {
       "path": "runtimes/gpu-unlock-native/build",
       "why": "GPU firmware blobs (gsp_*.bin) in the gpu-unlock package build; not model weights"
     }

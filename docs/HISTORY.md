@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Kolibri 1.1 Q5_K_M trial on llama.cpp — November 24, 2026
+
+Aleph Alpha's Kolibri 1.1 in Q5_K_M ran on a llama.cpp build from pull request 32891 across both cards with 131,072 context: 44 tok/s generation on short prompts, 11 tok/s at 111K, about 1,100 tok/s prompt reading, recall correct to 119K, tool calls pass. Short tool-use test 41.8 (thinking off). No router entry. [KOLIBRI-1.1-TRIAL-20261124.md](evidence/KOLIBRI-1.1-TRIAL-20261124.md)
+
 ## Flash-Next UD-IQ4_XS entry retired — November 24, 2026
 
 `flash-next-iq4xs-strata` retired at the owner's request; `flash-next-strata` (IQ3_XXS) is the only Flash-Next entry. Weights kept on NVMe as unused. [FLASH-NEXT-IQ4XS-RETIRED-20261124.md](evidence/FLASH-NEXT-IQ4XS-RETIRED-20261124.md)
