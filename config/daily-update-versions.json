@@ -35,7 +35,7 @@
     "source_commit": "e300919cc704ddde3a8a8346a8714f57eeeee71b",
     "qualified_on": "2026-11-22T10:55:00",
     "method": "hands-on short DSH",
-    "note": "llama.cpp release b12631 (1.0.0-dev build 12631). The check follows the newest published release, rolling builds included (owner's rule, 2026-11-22)",
+    "note": "Historical pin for the retired llama.cpp engine. Release b12631 (1.0.0-dev build 12631).",
     "evidence": "docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md"
   },
   "maya": {

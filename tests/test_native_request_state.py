@@ -5,7 +5,6 @@ import io,tempfile
 ROOT=Path(__file__).resolve().parents[1];sys.path[:0]=[str(ROOT/'network'),str(ROOT/'scripts')]
 import worker_manager as manager
 from worker_manager import vllm_requests_busy
-from inference_swap_guard import WorkerWatch,TelemetryError
 class RequestState(unittest.TestCase):
  def test_running_or_queued_blocks_unloading(self):
   for a,b in [(1,0),(0,1),(1,1)]:self.assertTrue(vllm_requests_busy(f'vllm:num_requests_running {a}\nvllm:num_requests_waiting {b}'))
@@ -13,21 +12,11 @@ class RequestState(unittest.TestCase):
  def test_unknown_gauges_cannot_claim_idle(self):
   for t in ['', 'vllm:num_requests_running 0','vllm:num_requests_running nan\nvllm:num_requests_waiting 0','vllm:num_requests_running -1\nvllm:num_requests_waiting 0']:
    with self.assertRaises(ValueError):vllm_requests_busy(t)
- def test_llamacpp_native_phase_and_strict_defaults(self):
-  w=WorkerWatch('/fixture','inkling-llamacpp','fixture');self.assertEqual((w.guard.write_limit,w.guard.combined_limit,w.guard.pressure_limit),(1,8,10))
-  with patch.object(w,'get',return_value='llamacpp:requests_processing 1\nllamacpp:requests_deferred 0') as get:self.assertEqual(w.phase(),'inference');get.assert_called_with('/metrics')
-  with patch.object(w,'get',return_value='llamacpp:requests_processing 0\nllamacpp:requests_deferred 0'):self.assertEqual(w.phase(),'idle')
- def test_missing_phase_gauge_fails_closed(self):
-  w=WorkerWatch('/fixture','inkling-llamacpp','fixture')
-  with patch.object(w,'get',return_value='unrelated 0'):
-   with self.assertRaises(TelemetryError):w.phase()
 class ManagedUnload(unittest.TestCase):
- def exercise(self,metrics,error_code=None,unavailable=False):
-  self.exercise_one('inkling-llamacpp',metrics,error_code,unavailable)
  def test_hy4_native_unload_without_loading_field(self):
   for status,code in [('{"busy":true,"queued":0}', 'backend_busy'), ('{"busy":false,"queued":1}', 'backend_busy'),
                       ('{"busy":false,"queued":0}', None), ('{"queued":0}', 'backend_state_unknown')]:
-   for profile in ('hy4-flash-strata', 'hy4-flash-maya'):
+   for profile in ('inkling-strata', 'hy4-flash-strata', 'hy4-flash-maya'):
     with self.subTest(profile=profile,status=status):self.exercise_one(profile,status,code,False,'/status')
  def exercise_one(self,profile,metrics,error_code,unavailable,endpoint='/metrics'):
   with tempfile.TemporaryDirectory() as d:
@@ -44,11 +33,6 @@ class ManagedUnload(unittest.TestCase):
     else:
      w.stop_owned();stop.assert_called_once_with(['systemctl','--user','stop',manager.MOE_UNIT],check=True,timeout=90);self.assertIsNone(w.active)
     req=api.call_args.args[0];self.assertTrue(req.full_url.endswith(endpoint));self.assertEqual(req.get_header('Authorization'),'Bearer fixture')
- def test_running_and_waiting_requests_preserve_owned_worker(self):
-  for a,b in [(1,0),(0,1)]:
-   with self.subTest(running=a,waiting=b):self.exercise(f'llamacpp:requests_processing {a}\nllamacpp:requests_deferred {b}',error_code='backend_busy')
  def test_unknown_request_state_preserves_owned_worker(self):
-  self.exercise('',error_code='backend_state_unknown');self.exercise('',error_code='backend_state_unknown',unavailable=True)
- def test_confirmed_idle_stops_only_owned_unit(self):
-  self.exercise('llamacpp:requests_processing 0\nllamacpp:requests_deferred 0')
+  self.exercise_one('inkling-strata','','backend_state_unknown',True,'/status')
 if __name__=='__main__':unittest.main()

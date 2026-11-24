@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Inkling 2 Mini on Strata replaces the llama.cpp entry — November 24, 2026
+
+`inkling-strata` added back on both cards with 131,072 context on `strata-inkling` 0.1.66; `inkling-llamacpp` retired, its weights kept on disk. Router checks pass (1,989 tok/s prompt reading, 66 tok/s generation, gBench 6/6); short tool-use test 59.3. [INKLING2-MINI-STRATA-ENTRY-20261124.md](evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md)
+
 ## gBench chat-template check added to engine updates — November 23, 2026
 
 The six chat-template and tool-call cases of gBench 0.5.0.post1's Golden Set run after the short DSH check on every engine update, with the model warmed first and a 120 s limit. All 10 entries pass 6/6 at baseline (3.3-43.2 s). [GBENCH-TEMPLATE-CHECK-20261123.md](evidence/GBENCH-TEMPLATE-CHECK-20261123.md)

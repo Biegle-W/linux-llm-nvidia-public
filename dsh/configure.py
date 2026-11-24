@@ -11,14 +11,16 @@ ROUTER_URL='http://127.0.0.1:10100/v1'
 LEGACY_ROUTER_IDS={'nvidia-hyperqwen','nvidia-sglang','nvidia-router','nvidia-maya','nvidia-vllm-offload'}
 PLAIN='qwen27b-hyperqwen'
 SEARCH=PLAIN+'-search'
-MODEL_REPLACEMENTS={'flash-next-iq1s-llamacpp':'flash-next-strata','flash-next-iq1m-strata':'flash-next-strata','inkling-strata':'inkling-llamacpp'}
+MODEL_REPLACEMENTS={'flash-next-iq1s-llamacpp':'flash-next-strata','flash-next-iq1m-strata':'flash-next-strata','inkling-llamacpp':'inkling-strata'}
 RETIRED_TO_PLAIN={'bolt-llamacpp','bolt-vllm'}
 RETIRED={'super-vllm','super-strata-trial'}|RETIRED_TO_PLAIN|set(MODEL_REPLACEMENTS)
+
+def replacement(identifier):return MODEL_REPLACEMENTS.get(identifier, PLAIN if identifier in RETIRED_TO_PLAIN else exposed_id(identifier))
 
 def exposed_id(identifier):return PLAIN if identifier==SEARCH else identifier
 
 def router_providers(providers,profiles):
-    result=copy.deepcopy(providers);managed={p['id'] for p in profiles}|{SEARCH}
+    result=copy.deepcopy(providers);managed={p['id'] for p in profiles}|{SEARCH}|RETIRED_TO_PLAIN|set(MODEL_REPLACEMENTS)
     def local(key,p):return key in LEGACY_ROUTER_IDS|{ROUTER_ID} and p.get('baseURL',ROUTER_URL).rstrip('/')==ROUTER_URL
     keys=[k for k,p in result.items() if local(k,p)]
     preferred=ROUTER_ID if ROUTER_ID in keys else 'nvidia-strata' if 'nvidia-strata' in keys else next(iter(keys),None)
@@ -37,7 +39,7 @@ def router_providers(providers,profiles):
         if p.get('baseURL','').rstrip('/')!=ROUTER_URL:continue
         remaining=[]
         for model in p.get('models',[]):
-            if model.get('id') in managed or model.get('id') in RETIRED_TO_PLAIN:
+            if model.get('id') in managed:
                 add_model(model)
             else:remaining.append(model)
         if 'models' in p:p['models']=remaining
@@ -47,7 +49,7 @@ def router_providers(providers,profiles):
         if identifier==PLAIN and 'web search' in m['name'].lower():m['name']=p.get('display_name') or p['model']+' / '+p['engine']
         m.update(contextWindow=p['allocated_context'],maxTokens=4096,reasoningEfforts=False)
         if 'input_modalities' in p:m['input']=list(p['input_modalities'])
-        else:m.setdefault('input',['text','image'] if identifier=='inkling-llamacpp' else ['text'])
+        else:m.setdefault('input',['text'])
     disabled={p['id'] for p in profiles if p.get('availability',{}).get('enabled',True) is False}
     models={k:v for k,v in models.items() if k not in disabled}
     base.update(displayName='NVIDIA server',api='openai-completions',baseURL=ROUTER_URL,defaultMaxTokens=4096,timeoutMs=7200000,streamIdleTimeoutMs=7200000,models=list(models.values()))
@@ -57,10 +59,10 @@ def router_providers(providers,profiles):
     return result
 
 def selection_routes(providers,profiles):
-    managed={p['id'] for p in profiles}|{SEARCH}
-    return {(key,m['id']):PLAIN if m['id'] in RETIRED_TO_PLAIN else exposed_id(m['id']) for key,p in providers.items()
+    managed={p['id'] for p in profiles}|{SEARCH}|RETIRED_TO_PLAIN|set(MODEL_REPLACEMENTS)
+    return {(key,m['id']):replacement(m['id']) for key,p in providers.items()
             if p.get('baseURL',ROUTER_URL if key in LEGACY_ROUTER_IDS|{ROUTER_ID} else '').rstrip('/')==ROUTER_URL
-            for m in p.get('models',[]) if m.get('id') in managed or m.get('id') in RETIRED_TO_PLAIN}
+            for m in p.get('models',[]) if m.get('id') in managed}
 
 def migrate_selection(value,field='',routes=None):
     if isinstance(value,dict):

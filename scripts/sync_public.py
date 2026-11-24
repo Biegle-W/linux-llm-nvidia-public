@@ -9,6 +9,8 @@ import re
 import subprocess
 
 RETIRED_FILES = (
+    'config/inkling-llamacpp-runtime.json', 'scripts/inkling_llamacpp_runtime.py', 'tests/test_inkling_llamacpp_runtime.py',
+    'scripts/llamacpp_worker.py', 'tests/test_llamacpp_worker_watch.py',
     # Native IQ2 retirement, 2026-11-23.
     'scripts/bolt_iq2_worker.py',
     'scripts/bolt_iq2_runtime.py',
@@ -372,7 +374,8 @@ FILES = (
     'docs/evidence/BOLT-AWQ-REMOVAL-20261104.md', 'docs/evidence/validation-results/20261104-bolt-awq-removal.json',
     'config/maya-hy4-runtime.json', 'scripts/hy4_flash_maya_runtime.py', 'tests/test_hy4_flash_maya_runtime.py',
     'config/hy4-flash-strata-runtime.json', 'scripts/hy4_flash_strata_runtime.py', 'tests/test_hy4_flash_strata_runtime.py',
-    'config/inkling-llamacpp-runtime.json', 'scripts/inkling_llamacpp_runtime.py', 'tests/test_inkling_llamacpp_runtime.py',
+    'config/inkling-strata-runtime.json', 'scripts/inkling_strata_runtime.py', 'tests/test_inkling_strata_runtime.py',
+    'tests/test_inkling_llamacpp_retired.py',
     'tests/test_bolt_retired.py',
     'tests/test_gbench_template_check.py',
     'docs/evidence/BOLT-IQ2-ENTRY-20261104.md', 'docs/evidence/benchmark-results/20261104-bolt-iq2-entry.json',
@@ -385,11 +388,11 @@ FILES = (
     'docs/evidence/FLASH-IQ1M-RETIREMENT-20261108.md', 'docs/evidence/validation-results/20261108-flash-iq1m-retirement.json',
     'docs/HISTORY.md', 'docs/README.md',
     'docs/evidence/ALL-ENTRY-BENCHMARKS-PRE-IQ2-20261104.md',
-    'scripts/llamacpp_worker.py', 'tests/test_no_ggml_p2p_env.py',
+    'tests/test_no_ggml_p2p_env.py',
     'docs/evidence/BOLT-NATIVE-IQ2-20261104.md', 'docs/evidence/benchmark-results/20261104-bolt-native-iq2.json',
     'docs/evidence/RAM96-RESTORATION-20261104.md', 'docs/evidence/benchmark-results/20261104-ram96-restoration.json', 'docs/evidence/BOLT-IQ2-AND-PROMETHEVS-20261104.md',
     'docs/evidence/RAM96-PREPARATION-20261104.md', 'docs/evidence/validation-results/20261104-ram96-preparation.json', 'tests/test_ram96_capacity.py',
-    'tests/test_llamacpp_worker_watch.py', 'tests/test_flash_iq1m_retired.py',
+    'tests/test_flash_iq1m_retired.py',
     'docs/evidence/FLASH-IQ1S-ENTRY-20261104.md', 'docs/evidence/ALL-ENTRY-BENCHMARKS-20261104.md',
     'docs/evidence/benchmark-results/20261104-flash-iq1s-entry.json', 'docs/evidence/benchmark-results/20261104-all-entry-benchmarks.json',
     'docs/evidence/RAM26-28-RERUN-20261104.md', 'docs/evidence/benchmark-results/20261104-ram26-28-rerun.json',
@@ -467,7 +470,7 @@ FILES = (
     'tests/test_strata_unsloth_runtime.py',
     'config/flash-iq4xs-strata-runtime.json', 'scripts/flash_iq4xs_strata_runtime.py', 'tests/test_flash_iq4xs_strata_runtime.py',
     'docs/evidence/FLASH-NEXT-IQ4XS-TRIAL-20261117.md', 'docs/evidence/FLASH-NEXT-IQ4XS-PROFILE-20261118.md',
-    'docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md', 'docs/evidence/ENGINE-UPDATES-20261122-MAYA-1173.md', 'docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md', 'docs/evidence/ENGINE-UPDATES-20261123-STRATA-0220.md', 'docs/evidence/GBENCH-TEMPLATE-CHECK-20261123.md', 'docs/evidence/INKLING2-MINI-TRIAL-20261121.md', 'docs/evidence/INKLING2-MINI-STRATA-TRIAL-20261122.md', 'docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md', 'docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md', 'docs/evidence/FLASH-NEXT-0219-TUNING-20261122.md', 'docs/QUALITY-FAST-TEST-PLAN.md',
+    'docs/evidence/ENGINE-UPDATES-20261121B-MAYA-1172-STRATA-0218-LLAMACPP-MAIN.md', 'docs/evidence/ENGINE-UPDATES-20261122-MAYA-1173.md', 'docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md', 'docs/evidence/ENGINE-UPDATES-20261123-STRATA-0220.md', 'docs/evidence/GBENCH-TEMPLATE-CHECK-20261123.md', 'docs/evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md', 'docs/evidence/INKLING2-MINI-TRIAL-20261121.md', 'docs/evidence/INKLING2-MINI-STRATA-TRIAL-20261122.md', 'docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md', 'docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md', 'docs/evidence/FLASH-NEXT-0219-TUNING-20261122.md', 'docs/QUALITY-FAST-TEST-PLAN.md',
     'docs/evidence/DEEPSEEK-UNSLOTH-CONTEXT-20261031.md',
     'docs/evidence/validation-results/20261031-unsloth-strata-context.json',
     'patches/llama-demand-mmap-prefault.patch',

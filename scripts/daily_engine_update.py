@@ -42,8 +42,6 @@ def release_owner(path, owner):
 def validate_update_coverage(catalog, policy):
     profiles = {p['id']: p for p in catalog['profiles']}
     listed = [p for c in policy['components'] for p in c['profiles']]
-    if 'inkling-llamacpp' in listed:
-        raise RuntimeError('Inkling uses a hand-updated Unsloth runtime')
     pinned = policy.get('pinned_profiles', [])
     if not isinstance(pinned, list):
         raise RuntimeError('Pinned updater profiles must be a list')
@@ -52,13 +50,9 @@ def validate_update_coverage(catalog, policy):
             raise RuntimeError('Pinned updater profile needs an explicit reason')
         name = entry['profile']
         if (not isinstance(name, str) or name not in profiles
-                or not ((name == 'deepseek-unsloth-strata'
-                            and profiles[name]['engine'] == 'Strata'
-                            and profiles[name].get('runtime_manifest') == 'config/deepseek-unsloth-runtime.json')
-                        or (name == 'inkling-llamacpp'
-                            and profiles[name]['engine'] == 'llama.cpp (Unsloth build)'
-                            and profiles[name].get('runtime_manifest') == 'config/inkling-llamacpp-runtime.json'))
-                or not profiles[name].get('runtime_manifest')
+                or name != 'deepseek-unsloth-strata'
+                or profiles[name]['engine'] != 'Strata'
+                or profiles[name].get('runtime_manifest') != 'config/deepseek-unsloth-runtime.json'
                 or not isinstance(entry['reason'], str) or not entry['reason'].strip()):
             raise RuntimeError('Only explicitly pinned custom runtimes may skip automatic updates')
         listed.append(name)

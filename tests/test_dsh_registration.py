@@ -5,11 +5,12 @@ ROOT=Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('dsh_registration',ROOT/'dsh/configure.py');registration=importlib.util.module_from_spec(spec);spec.loader.exec_module(registration)
 class Registration(unittest.TestCase):
  def test_inkling_registration(self):
-  profile=next(p for p in registration.load_catalog()['profiles'] if p['id']=='inkling-llamacpp')
+  profile=next(p for p in registration.load_catalog()['profiles'] if p['id']=='inkling-strata')
   providers=registration.router_providers({},[profile])
   model,=providers[registration.ROUTER_ID]['models']
+  self.assertEqual(model['maxTokens'],4096)
   self.assertEqual((model['id'],model['name'],model['input'],model['contextWindow'],model['reasoningEfforts']),
-                   ('inkling-llamacpp',profile['display_name'],['text','image'],32768,False))
+                   ('inkling-strata',profile['display_name'],['text'],131072,False))
 
  def test_hy4_registration(self):
   profile=next(p for p in registration.load_catalog()['profiles'] if p['id']=='hy4-flash-strata')
@@ -23,7 +24,7 @@ class Registration(unittest.TestCase):
   for identifier, context in [('hy4-flash-maya',131072)]:
    self.assertEqual((models[identifier]['input'],models[identifier]['contextWindow']),(['text'],context))
   self.assertNotIn('hy4-maya',models)
-  self.assertNotIn('inkling-strata',models)
+  self.assertNotIn('inkling-llamacpp',models)
 
  def fixture(self,folder,profiles,entries):
   oldroot,oldcatalog=registration.ROOT,registration.load_catalog
@@ -33,17 +34,17 @@ class Registration(unittest.TestCase):
  def test_preserves_custom_routes_aliases_and_selection(self):
   with tempfile.TemporaryDirectory() as folder:
    alias={'id':'custom-search','contextWindow':56320,'customField':'preserve'}
-   custom={'displayName':'My models','baseURL':registration.ROUTER_URL,'apiKeyEnv':'CUSTOM_KEY_ENV','models':[{'id':'inkling-llamacpp','contextWindow':8192},alias]}
+   custom={'displayName':'My models','baseURL':registration.ROUTER_URL,'apiKeyEnv':'CUSTOM_KEY_ENV','models':[{'id':'inkling-strata','contextWindow':8192},alias]}
    selected={'provider':'existing','model':'custom-search'}
-   path=self.fixture(folder,[{'id':'inkling-llamacpp','engine':'llama.cpp','model':'Inkling','allocated_context':65536},{'id':'flash-next-strata','engine':'vLLM-offload','model':'Flash Next','allocated_context':65536}],[{'id':'llm-pi-ai','config':{'providers':{'existing':custom}}},{'id':'agent-default-model','config':selected}])
+   path=self.fixture(folder,[{'id':'inkling-strata','engine':'Strata','model':'Inkling','allocated_context':65536},{'id':'flash-next-strata','engine':'vLLM-offload','model':'Flash Next','allocated_context':65536}],[{'id':'llm-pi-ai','config':{'providers':{'existing':custom}}},{'id':'agent-default-model','config':selected}])
    registration.configure('web');entries=yaml.safe_load(path.read_text());providers=entries[0]['config']['providers'];self.assertEqual(providers['existing']['models'],[alias]);self.assertEqual(providers['existing']['apiKeyEnv'],'CUSTOM_KEY_ENV');self.assertEqual(entries[1]['config'],selected)
-   self.assertTrue(next(x for x in entries if x['id']=='session-title-llm')['disabled']);router=providers['nvidia-strata'];self.assertEqual(router['displayName'],'NVIDIA server');self.assertEqual(router['api'],'openai-completions');self.assertEqual([x['id'] for x in router['models']],['inkling-llamacpp','flash-next-strata']);self.assertTrue(all(m['maxTokens']==4096 and m['reasoningEfforts'] is False for m in router['models']))
+   self.assertTrue(next(x for x in entries if x['id']=='session-title-llm')['disabled']);router=providers['nvidia-strata'];self.assertEqual(router['displayName'],'NVIDIA server');self.assertEqual(router['api'],'openai-completions');self.assertEqual([x['id'] for x in router['models']],['inkling-strata','flash-next-strata']);self.assertTrue(all(m['maxTokens']==4096 and m['reasoningEfforts'] is False for m in router['models']))
    registration.configure('web');self.assertEqual(yaml.safe_load(path.read_text()),entries);self.assertEqual(path.stat().st_mode&0o777,0o600)
  def test_one_provider_search_alias_and_old_selection_migration(self):
   with tempfile.TemporaryDirectory() as folder:
-   profiles=[{'id':'qwen27b-hyperqwen','engine':'HyperQwen-vLLM','model':'Qwen3.8-27B','allocated_context':56320},{'id':'inkling-llamacpp','engine':'llama.cpp','model':'Inkling','allocated_context':65536}]
-   providers={'nvidia-hyperqwen':{'baseURL':registration.ROUTER_URL,'models':[{'id':'qwen27b-hyperqwen'},{'id':'qwen27b-hyperqwen-search','customField':'keep'}]},'nvidia-vllm-offload':{'baseURL':registration.ROUTER_URL,'models':[{'id':'inkling-llamacpp'}]},'external':{'baseURL':'https://example.invalid/v1','models':[{'id':'remote'}]}}
-   path=self.fixture(folder,profiles,[{'id':'llm-pi-ai','config':{'providers':providers}},{'id':'agent-default-model','config':{'provider':'nvidia-hyperqwen','model':'qwen27b-hyperqwen-search'}}]);registration.configure('web');entries=yaml.safe_load(path.read_text());actual=entries[0]['config']['providers'];self.assertEqual(set(actual),{'external','nvidia-strata'});self.assertEqual(actual['external'],providers['external']);models=actual['nvidia-strata']['models'];self.assertEqual([m['id'] for m in models],['qwen27b-hyperqwen','inkling-llamacpp']);self.assertEqual(models[0]['customField'],'keep');self.assertEqual(entries[1]['config'],{'provider':'nvidia-strata','model':'qwen27b-hyperqwen'})
+   profiles=[{'id':'qwen27b-hyperqwen','engine':'HyperQwen-vLLM','model':'Qwen3.8-27B','allocated_context':56320},{'id':'inkling-strata','engine':'Strata','model':'Inkling','allocated_context':65536}]
+   providers={'nvidia-hyperqwen':{'baseURL':registration.ROUTER_URL,'models':[{'id':'qwen27b-hyperqwen'},{'id':'qwen27b-hyperqwen-search','customField':'keep'}]},'nvidia-vllm-offload':{'baseURL':registration.ROUTER_URL,'models':[{'id':'inkling-strata'}]},'external':{'baseURL':'https://example.invalid/v1','models':[{'id':'remote'}]}}
+   path=self.fixture(folder,profiles,[{'id':'llm-pi-ai','config':{'providers':providers}},{'id':'agent-default-model','config':{'provider':'nvidia-hyperqwen','model':'qwen27b-hyperqwen-search'}}]);registration.configure('web');entries=yaml.safe_load(path.read_text());actual=entries[0]['config']['providers'];self.assertEqual(set(actual),{'external','nvidia-strata'});self.assertEqual(actual['external'],providers['external']);models=actual['nvidia-strata']['models'];self.assertEqual([m['id'] for m in models],['qwen27b-hyperqwen','inkling-strata']);self.assertEqual(models[0]['customField'],'keep');self.assertEqual(entries[1]['config'],{'provider':'nvidia-strata','model':'qwen27b-hyperqwen'})
    registration.configure('web');self.assertEqual(yaml.safe_load(path.read_text()),entries)
  def test_external_search_named_model_and_nested_provider_are_preserved(self):
   value={'provider':'external','model':registration.SEARCH,'nested':{'provider':{'id':'remote'},'model':registration.SEARCH}}

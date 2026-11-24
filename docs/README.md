@@ -1,6 +1,6 @@
 # Documentation index
 
-The router catalog has ten text entries after the [November 23 retirement](HISTORY.md#bolt-iq2-router-entry-retired--november-23-2026).
+The router catalog has ten text entries; on November 24 `inkling-strata` replaced `inkling-llamacpp` ([history](HISTORY.md)).
 
 Start with [CURRENT-STATE.md](CURRENT-STATE.md) and the root [AGENTS.md](../AGENTS.md).
 
@@ -146,6 +146,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 - [FLASH-NEXT-0219-TUNING-20261122.md](evidence/FLASH-NEXT-0219-TUNING-20261122.md): Flash-Next on Strata 0.2.19: source review, 37 A/B runs, one prompt-reading setting adopted on both entries — November 22, 2026
 - [HY4-FLASH-MAYA-L-TRIAL-20261122.md](evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md): Hy4-Flash on Project Maya's engine (Maya-L) across both cards, now the separate `hy4-flash-maya` entry — November 22, 2026
 - [HY4-FLASH-SQ96-TRIAL-20261122.md](evidence/HY4-FLASH-SQ96-TRIAL-20261122.md): Hy4-Flash 220B (SQ-96) on Strata, trial and router entry `hy4-flash-strata`: files, engine fetch, speed, memory, tool calls, short tool-use test — November 22, 2026
+- [INKLING2-MINI-STRATA-ENTRY-20261124.md](evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md): Inkling 2 Mini on Strata, both cards, 128K, replaces the llama.cpp entry — November 24, 2026
 - [GBENCH-TEMPLATE-CHECK-20261123.md](evidence/GBENCH-TEMPLATE-CHECK-20261123.md): gBench chat-template check added to engine updates; baseline 6/6 on all entries — November 23, 2026
 - [ENGINE-UPDATES-20261123-STRATA-0220.md](evidence/ENGINE-UPDATES-20261123-STRATA-0220.md): Strata 0.2.20 (control and Hy4 engine 0.1.66; Qwen engine kept at 0.1.65) and Inkling 2 Mini at 128K on both cards — November 23, 2026
 - [INKLING2-MINI-STRATA-TRIAL-20261122.md](evidence/INKLING2-MINI-STRATA-TRIAL-20261122.md): Inkling 2 Mini on Strata's own engine (SQ-10): fast but 8K context at most on the 12 GB card; an entry was tried and dropped because the web client needs about 11.5K — November 22-23, 2026

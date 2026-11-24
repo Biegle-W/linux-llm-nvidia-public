@@ -145,9 +145,9 @@ def main():
     (out / 'prompts.json').write_text(json.dumps(fixtures, indent=2))
     protocol = {'created': time.strftime('%Y-%m-%dT%H:%M:%S%z'), 'repetitions': 3, 'output_tokens': 128,
                 'reference_words': 2000, 'warmup': {'reference_words': 512, 'output_tokens': 64},
-                'temperature': 0, 'top_p': 1, 'seed': 261026, 'thinking': False, 'always_thinking_profiles': ['inkling-llamacpp'], 'concurrency': 1,
+                'temperature': 0, 'top_p': 1, 'seed': 261026, 'thinking': False, 'concurrency': 1,
                 'context': 'Each kept profile retains its installed allocation.',
-                'ttft': 'HTTP request to first nonempty content SSE delta (including reasoning for Inkling), worker loopback API; load/warmup excluded.',
+                'ttft': 'HTTP request to first nonempty content SSE delta, worker loopback API; load/warmup excluded.',
                 'decode': '(completion_tokens - 1)/(last-content timestamp - first-content timestamp), same formula across engines.',
                 'prefill': 'Native prompt timings for Strata/Maya; per-request native prefill-phase metric deltas for dense engines.',
                 'cache': 'Unique early system tags; prefix reuse off in dense profiles; native cached counts checked; OS page cache not flushed.',
@@ -270,7 +270,7 @@ def main():
     try:
         # SGLang first verifies native metric availability before the slow streamed models.
         rank = {name: index for index, name in enumerate(['qwen27b-sglang', 'qwen27b-hyperqwen', 'flash-next-strata', 'glm-maya', 'deepseek-maya', 'deepseek-unsloth-strata',
-                                                           'flash-next-iq4xs-strata', 'inkling-llamacpp', 'hy4-flash-strata', 'hy4-flash-maya'])}
+                                                           'flash-next-iq4xs-strata', 'inkling-strata', 'hy4-flash-strata', 'hy4-flash-maya'])}
         order = sorted(catalog['profiles'], key=lambda p: rank.get(p['id'], len(rank)))
         for profile in order:
             active[0] = profile['id']; event('loading', profile=profile['id'])
@@ -279,9 +279,7 @@ def main():
             record = subprocess.check_output(['systemctl', '--user', 'show', unit, '-p', 'ExecStart', '-p', 'MemoryHigh', '-p', 'MemoryMax', '-p', 'MemorySwapMax'], text=True)
             (out / (profile['id'] + '-unit.txt')).write_text(record)
             owned_worker[0]=(unit,subprocess.check_output(['systemctl','--user','show',unit,'-p','InvocationID','--value'],text=True).strip())
-            if profile['id'] == 'inkling-llamacpp':
-                (out / (profile['id'] + '-config-redacted.json')).write_bytes((ROOT / profile['runtime_manifest']).read_bytes())
-            elif not profile['id'].startswith('qwen27b-'):
+            if not profile['id'].startswith('qwen27b-'):
                 cfg = json.loads((ROOT / 'data/router' / (profile['id'] + '-runtime.json')).read_text()); cfg.pop('api_key', None)
                 (out / (profile['id'] + '-config-redacted.json')).write_text(json.dumps(cfg, indent=2))
             if profile['id'] == 'qwen27b-sglang':

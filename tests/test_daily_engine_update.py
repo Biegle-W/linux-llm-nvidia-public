@@ -452,8 +452,8 @@ class NativeCheckpointCountingTests(unittest.TestCase):
 
 class CatalogCoverageTests(unittest.TestCase):
     def fixture(self):
-        catalog={'profiles':[{'id':'dense','engine':'HyperQwen-vLLM'}, {'id':'inkling-llamacpp','engine':'llama.cpp (Unsloth build)','runtime_manifest':'config/inkling-llamacpp-runtime.json'}]}
-        policy={'components':[{'profiles':['dense']}], 'pinned_profiles':[{'profile':'inkling-llamacpp','reason':'Independent qualified runtime snapshot'}]}
+        catalog={'profiles':[{'id':'dense','engine':'HyperQwen-vLLM'}, {'id':'deepseek-unsloth-strata','engine':'Strata','runtime_manifest':'config/deepseek-unsloth-runtime.json'}]}
+        policy={'components':[{'profiles':['dense']}], 'pinned_profiles':[{'profile':'deepseek-unsloth-strata','reason':'Independent qualified runtime snapshot'}]}
         return catalog,policy
     def test_pinned_custom_profile_preserves_managed_coverage(self):
         from daily_engine_update import validate_update_coverage
@@ -464,7 +464,7 @@ class CatalogCoverageTests(unittest.TestCase):
         for change in ['missing','duplicate','unknown','reason','managed']:
             catalog,policy=self.fixture()
             if change=='missing':policy['pinned_profiles']=[]
-            if change=='duplicate':policy['components'][0]['profiles'].append('inkling-llamacpp')
+            if change=='duplicate':policy['components'][0]['profiles'].append('deepseek-unsloth-strata')
             if change=='unknown':policy['pinned_profiles'][0]['profile']='unknown'
             if change=='reason':policy['pinned_profiles'][0]['reason']=' '
             if change=='managed':catalog['profiles'][1]['engine']='Maya'

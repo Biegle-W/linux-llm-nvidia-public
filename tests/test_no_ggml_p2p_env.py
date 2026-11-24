@@ -8,7 +8,7 @@ import json, re, unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-LAUNCHERS = ['scripts/serve_router_moe.py', 'scripts/serve_qwen27b_engines.py', 'scripts/llamacpp_worker.py']
+LAUNCHERS = ['scripts/serve_router_moe.py', 'scripts/serve_qwen27b_engines.py']
 ASSIGN = re.compile(r"""GGML_CUDA_P2P\s*=|['"]GGML_CUDA_P2P['"]\s*:""")
 
 

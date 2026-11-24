@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "profile": "inkling-strata",
+  "quant": "SQ-10",
+  "publisher_repository": "strata-engine/Inkling-2-Mini-Strata",
+  "publisher_revision": "04996a1e",
+  "verified": "Publisher revision recorded in short form.",
+  "checkpoint_directory": "models/strata/models/inkling-2-mini",
+  "files": [
+    {
+      "file": "Inkling-2-Mini-SQ-10.strata",
+      "bytes": 10471526400,
+      "sha256": "ac4d452ad03e4930abd9d46f9c5eec22b2f75a1da45a1e49bd24ccd58b065934",
+      "publisher_sha256_matched": true
+    }
+  ],
+  "release": "v0.2.20",
+  "engine_package": "strata-inkling-0.1.66-linux-x86_64-cuda-cuda13.tar.gz",
+  "engine_build_id": "2e87c08db18a+cuda13.0",
+  "engine_directory": "runtimes/strata-inkling/0.1.66-linux-x86_64-cuda-cuda13",
+  "engine_files_sha256": {
+    "strata-inkling": "49eafca26eae48ac9657659b4175ae0fafeaff0b707037d001b43bb0d1d7ed98",
+    "libcublas.so.13": "25cde432108543626df85d887c730bf2cab96803ca16f9654e4abc8d2b45833e",
+    "libcublasLt.so.13": "1489aeb75d55ee55782798343ac66f57771d561cc1fe1e0491568deefa0e6515",
+    "libcudart.so.13": "f9baf2ef8ee6140d4413a57577d29597a61b171b245d807173bd556607736676",
+    "libgomp.so.1": "4427bcbbc6faac6eaa4e8906ea4668e1615c9cfdff442549a8f5b49c3639217f",
+    "engine-component.json": "5057b33fbad41a35e9889f889f10e356c3d6beba2b1c3394d281b08955bef19b",
+    "BUILD.json": "958055d189bcce51f470e84a2e425ba063a8996823250a01b76c8ba69aeef612"
+  },
+  "tokenizer_directory": "models/strata/packs/inkling-2-mini-sq-10/tokenizer",
+  "tokenizer_files_sha256": {
+    "chat_template.jinja": "53a9035f3255945704b5857657cfb00c1165090c0641c4f782a0cbf268cc16dc",
+    "merges.txt": "fe0bc77954037ef9863de7066fab02302f0f739a4122eaf2e9bfdaa5a63ac39f",
+    "tokenizer.json": "6a638adea64688df3829fe4c607e51f834706720aa31aeeae8262354c56685ed",
+    "token_type.json": "40bc8fac625623eab04a1645833e3f2f3aab0adeb581e8793e2350ca53922c3a",
+    "vocab.json": "e31303ccaacbe11b82275695f26c25515505210a379193a6336a760cf91888f6"
+  },
+  "launch_preset": "~/.local/state/strata/launch/inkling-2-mini-sq-10.json",
+  "engine_commit": "2e87c08db18a"
+}

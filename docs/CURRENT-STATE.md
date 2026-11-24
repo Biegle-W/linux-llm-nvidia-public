@@ -1,4 +1,4 @@
-# Current state — November 23, 2026
+# Current state — November 24, 2026
 
 Snapshot of what is live. Replace facts here when they change; dated detail goes in evidence docs and [HISTORY.md](HISTORY.md).
 
@@ -13,7 +13,7 @@ Snapshot of what is live. Replace facts here when they change; dated detail goes
 | `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.74 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
 | `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.74 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
 | `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build); frozen, later Strata versions do not run DeepSeek | 32,768 | same as above |
-| `inkling-llamacpp` | Inkling 2 Mini 26B UD-Q4_K_M | llama.cpp (Unsloth build 12588) | 32,768 | `models/engine-tests/inkling2-mini-trial`, SATA, 17.25 GB including picture projector |
+| `inkling-strata` | Inkling 2 Mini 26B SQ-10 | Strata 0.2.20 (control 0.1.66, `strata-inkling` 0.1.66), both cards with automatic layer split | 131,072 | `models/strata/models/inkling-2-mini`, NVMe, 10.5 GB |
 | `hy4-flash-strata` | Tencent Hy4-Flash 220B-A12B SQ-96 | Strata 0.2.20 (control 0.1.66), separate Hy4 engine 0.1.66 | 131,072 | `models/strata/models/hy4-flash`, NVMe, 158.10 GB |
 | `hy4-flash-maya` | Tencent Hy4-Flash 220B-A12B Maya-L | Maya 1.1.74, separate Hy4 engine on both cards | 131,072 | `models/maya-hy4/hy4-flash-maya-l`, SATA SSD, 152.87 GB served (162.5 GB installed) |
 
@@ -36,8 +36,26 @@ Last long-prompt speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cach
 | 7 | `glm-maya` | 57.2% (52.1–62.3) | 86.2% | 6.7% | 55.0% | 91.7% | 46.7% |
 | 8 | `bolt-llamacpp` (retired) | 53.9% (48.7–59.4) | 76.2% | 50.0% | 33.3% | 90.0% | 20.0% |
 
+## Short tool-use test (all entries)
+
+49 tool-calling items for smaller models (15 minutes) and 55 for larger ones (1 hour at most); run once per new model or new weights, existing entries scored from stored records. One run is within about ±17 points (smaller) or ±13 (larger), so neighbours are not separated. [QUALITY-FAST-TEST-PLAN.md](QUALITY-FAST-TEST-PLAN.md)
+
+| API id | Group | Score |
+|---|---|---:|
+| `qwen27b-hyperqwen` | smaller | 66.0 |
+| `deepseek-unsloth-strata` | larger | 64.7 |
+| `deepseek-maya` | larger | 63.5 |
+| `qwen27b-sglang` | smaller | 61.7 |
+| `glm-maya` | larger | 60.4 |
+| `inkling-strata` | smaller | 59.3 |
+| `hy4-flash-strata` | larger | 57.9 |
+| `flash-next-iq4xs-strata` | smaller | 47.4 |
+| `hy4-flash-maya` | larger | 43.3 (cut by the memory-pressure guard at minute 30) |
+| `flash-next-strata` | smaller | 40.6 |
+
 ## Recent changes (newest first)
 
+- **Nov 24:** `inkling-strata` added back at the owner's request, now on both cards with 131,072 context (Strata `strata-inkling` 0.1.66, layer split), and `inkling-llamacpp` retired (its 17.25 GB GGUF stays on SATA, unused). Router checks pass: prompt reading 1,989 tok/s, generation 66 tok/s, gBench 6/6. Short tool-use test 59.3 (llama.cpp entry: 32 of 40 single-turn items, 1 of 9 episodes). [INKLING2-MINI-STRATA-ENTRY-20261124.md](evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md)
 - **Nov 23:** Engine updates now also run the six chat-template and tool-call cases of gBench's Golden Set (`scripts/gbench_template_check.py`, about 3-45 s after warm-up). Baseline: all 10 entries pass 6/6. [GBENCH-TEMPLATE-CHECK-20261123.md](evidence/GBENCH-TEMPLATE-CHECK-20261123.md)
 - **Nov 23:** Strata 0.2.20 installed by hand: control 0.1.66 and the Hy4 engine 0.1.66 promoted; the Qwen engine stays at 0.1.65 because 0.1.66 broke `flash-next-iq4xs-strata` on its first prompt and slowed `flash-next-strata` 12-14%. Inkling 2 Mini retested on the new `strata-inkling` 0.1.66: on both cards with the new layer split it holds 128K context and writes 55-71 tok/s (llama.cpp entry 41-44); not added as an entry yet. [ENGINE-UPDATES-20261123-STRATA-0220.md](evidence/ENGINE-UPDATES-20261123-STRATA-0220.md)
 - **Nov 23:** At the owner's request `bolt-llamacpp` was retired and its 22.0 GB IQ2 GGUF (`models/engine-tests/bolt-iq2`, SATA) deleted. The Inkling SQ-10 Strata weights (11.1 GB, NVMe) left by the dropped `inkling-strata` entry were deleted too. Saved web-client selections of Bolt move to `qwen27b-hyperqwen`.

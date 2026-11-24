@@ -2852,95 +2852,88 @@
       }
     },
     {
-      "id": "inkling-llamacpp",
+      "id": "inkling-strata",
+      "display_name": "Inkling 2 Mini 26B / SQ-10 / Strata",
       "model": "Inkling-2-Mini",
+      "input_modalities": [
+        "text"
+      ],
+      "weight_quant": "SQ-10",
+      "engine": "Strata",
       "status": "selected",
       "launch": [
         "inkling"
       ],
-      "allocated_context": 32768,
+      "allocated_context": 131072,
+      "context_validation": "Two-card trial with 60K and 120.6K-token recalls correct at 131072 context (Nov 23); router checks passed Nov 24.",
+      "capabilities": {
+        "text": true,
+        "vision": false,
+        "tools_qualified": true
+      },
+      "runtime_selector": {
+        "kind": "strata-launch-preset",
+        "name": "inkling-2-mini-sq-10"
+      },
+      "runtime_manifest": "config/inkling-strata-runtime.json",
+      "evidence": "docs/evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md",
+      "storage": {
+        "access": "gpu-resident",
+        "required_transport": "nvme",
+        "checkpoint_directory": "models/strata/models/inkling-2-mini",
+        "base_weight_bytes": 10471526400,
+        "base_weight_gb": 10.4715264
+      },
       "worker_memory_gib": {
         "high": 87.76984786987305,
         "max": 89.76984786987305,
         "swap": null
       },
       "host_ram_reserve_gib": 2,
-      "capabilities": {
-        "text": true,
-        "vision": true,
-        "tools_qualified": true
-      },
-      "availability": {
-        "enabled": true
-      },
-      "weight_quant": "UD-Q4_K_M",
-      "engine": "llama.cpp (Unsloth build)",
-      "display_name": "Inkling 2 Mini 26B / UD-Q4_K_M / llama.cpp (Unsloth build)",
-      "context_validation": "32768-token allocation; router load, short DSH read/result/follow-up check and owned unload passed on 2026-11-22. No full-context or sustained qualification.",
-      "evidence": "docs/evidence/INKLING2-MINI-TRIAL-20261121.md",
-      "storage": {
-        "access": "ram-resident",
-        "required_transport": "sata",
-        "checkpoint_directory": "models/engine-tests/inkling2-mini-trial"
-      },
-      "runtime_manifest": "config/inkling-llamacpp-runtime.json",
-      "native_request_protocol": "llama.cpp",
+      "minimum_usable_ram_gib": 90,
       "selected_settings": {
-        "tensor_split": [
-          13,
-          12
+        "context": 131072,
+        "gpu": [
+          0,
+          1
         ],
-        "thinking": "always on"
+        "drafting": "off",
+        "parallel": 1,
+        "thinking": "hidden",
+        "gpu_free_floor_mib": 256,
+        "reason": "Both cards loaded as [cuda-ls 2 stages], with all experts on GPU.",
+        "layer_split": "auto"
       },
-      "latest_benchmark": {
-        "date": "2026-11-21",
-        "source": "docs/evidence/INKLING2-MINI-TRIAL-20261121.md",
-        "status": "One trial run outside the router, cache state unrecorded.",
-        "context": 32768,
-        "short_decode_tps_range": [
-          43.3,
-          44.3
-        ],
-        "prompt_tokens": 19597,
-        "prefill_tps_range": [
-          809,
-          817
-        ],
-        "decode_tps": 41.1,
-        "ttft_s": null,
-        "vram_MiB": [
-          9744,
-          9455
-        ]
+      "current_configuration_benchmark": {
+        "date": "2026-11-23",
+        "scope": "Two-card trial outside the router",
+        "prompt_tokens_approx": 120000,
+        "gpu0_min_free_gb": 1.5,
+        "gpu1_min_free_gb": 3.6
       },
       "latest_qualification": {
-        "date": "2026-11-22",
-        "status": "pass",
-        "evidence": "docs/evidence/INKLING2-MINI-TRIAL-20261121.md",
+        "date": "2026-11-24",
+        "status": "passed",
         "router_checks_passed": [
-          "router load (11 s)",
-          "short DSH check",
-          "chat request through the router",
+          "load",
+          "short DSH tool call and follow-up",
+          "gbench template check 6/6",
           "owned unload"
         ],
-        "trial_checks_passed": [
-          "JSON",
-          "arithmetic",
-          "picture",
-          "tool call",
-          "follow-up"
-        ],
-        "short_tool_use_test": "cut by the 15-minute limit: 32 of 40 single-turn items correct, 1 of 9 episodes reached"
-      },
-      "minimum_usable_ram_gib": 90,
-      "current_configuration_benchmark": {
-        "date": "2026-11-22",
-        "source": "docs/evidence/INKLING2-MINI-TRIAL-20261121.md",
-        "status": "Normal-router short DSH check and owned unload; one run; no context stress",
-        "context": 32768,
-        "prefill_tps": 804.9486612776265,
-        "ttft_s": 8.7473359190044,
-        "decode_tps": 42.12840088460383
+        "short_dsh": {
+          "prompt_tokens": 6966,
+          "prefill_tps": 1989.2,
+          "ttft_s": 4.89,
+          "decode_tps": 66.2
+        },
+        "short_tool_use_test": {
+          "tier": "small",
+          "score": 59.3,
+          "single_turn": "36/40",
+          "episodes": "2/7 (7 of 9 reached)",
+          "item_minutes": 11.5
+        },
+        "source": "docs/evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md"
       }
     },
     {

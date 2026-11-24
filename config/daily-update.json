@@ -41,19 +41,15 @@
         "flash-next-strata",
         "deepseek-unsloth-strata",
         "flash-next-iq4xs-strata",
-        "hy4-flash-strata"
+        "hy4-flash-strata",
+        "inkling-strata"
       ],
       "upstream": "https://github.com/Niko1221/Strata.git",
       "builder": "strata-signed",
       "channel": "stable"
     }
   ],
-  "pinned_profiles": [
-    {
-      "profile": "inkling-llamacpp",
-      "reason": "Hand-updated Unsloth fork with a separate binary and library manifest."
-    }
-  ],
+  "pinned_profiles": [],
   "validation": "paired-short-actual-DSH-v1",
   "publication_files": {
     "sglang": [
@@ -70,7 +66,9 @@
       "config/flash-iq4xs-strata-runtime.json",
       "scripts/flash_iq4xs_strata_runtime.py",
       "config/hy4-flash-strata-runtime.json",
-      "scripts/hy4_flash_strata_runtime.py"
+      "scripts/hy4_flash_strata_runtime.py",
+      "config/inkling-strata-runtime.json",
+      "scripts/inkling_strata_runtime.py"
     ]
   },
   "monitored_engines": [

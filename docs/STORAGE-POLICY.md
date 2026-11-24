@@ -1,5 +1,9 @@
 # Model storage policy
 
+## Inkling llama.cpp weights unused — November 24, 2026
+
+`inkling-llamacpp` was retired; its UD-Q4_K_M GGUF and picture projector (17.25 GB, `models/engine-tests/inkling2-mini-trial`, SATA) are kept and are the first candidates under the rule below. `inkling-strata` uses the SQ-10 pack on NVMe (10.5 GB).
+
 ## Standing rule: free space from retired weights first — November 23, 2026
 
 When a new model does not fit on either drive, the maintaining agent may delete weights that no router, Comfy or updater entry uses any more (retired or dropped entries, as listed under "Unused or duplicate weights" by `scripts/weights_tracker.py`) without asking again, owner's standing approval of November 23, 2026. Delete only as much as the new model needs, and record each deletion here with its size and path. Weights of current entries still go to the owner first (lowest-ranked suggested).

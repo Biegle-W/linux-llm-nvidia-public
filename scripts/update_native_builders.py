@@ -201,8 +201,8 @@ def strata_qwen_actions(root,component,directory,terminal,version,qwen,release,r
 
 def signed_strata(root,component,revision,directory,source,log,receipt):
     from update_builders import run,latest_release,canonical
-    if 'hy4-flash-strata' in component['profiles']:
-        raise RuntimeError('Update Strata by hand: install the matching signed strata-hy4 package and refresh its manifest.')
+    if {'hy4-flash-strata', 'inkling-strata'}.intersection(component['profiles']):
+        raise RuntimeError('Update Strata by hand: install the matching signed engine packages and refresh their manifests.')
     # Confirm discovery did not race a new stable release before package selection.
     from update_builders import upstream
     if upstream(component)!=revision:raise RuntimeError('Stable release changed during staging')

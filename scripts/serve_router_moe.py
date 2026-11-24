@@ -47,11 +47,7 @@ def main():
     os.umask(0o077)
     from pair_p2p_health import require_verified_pair
     require_verified_pair()
-    if sys.argv[1] in ('inkling', 'inkling-llamacpp'):
-        from inkling_llamacpp_runtime import PROFILE, main as inkling_main
-        require_enabled(get_profile(PROFILE))
-        return inkling_main()
-    identifier = {'hy4': 'hy4-flash-strata', 'hy4-maya': 'hy4-flash-maya'}.get(sys.argv[1], sys.argv[1])
+    identifier = {'inkling': 'inkling-strata', 'hy4': 'hy4-flash-strata', 'hy4-maya': 'hy4-flash-maya'}.get(sys.argv[1], sys.argv[1])
     profile = require_enabled(get_profile(identifier))
     from profile_catalog import require_host_capacity
     require_host_capacity(profile)
@@ -83,6 +79,12 @@ def main():
             config = json.loads(prepare_config(profile).read_text())
         except (ValueError, OSError, KeyError, TypeError) as error:
             sys.exit('UD-IQ4_XS preflight failed: ' + str(error))
+    elif profile['id'] == 'inkling-strata':
+        from inkling_strata_runtime import prepare_config
+        try:
+            config = prepare_config(profile)
+        except (ValueError, OSError, KeyError, TypeError) as error:
+            sys.exit('Inkling preflight failed: ' + str(error))
     elif profile['id'] == 'hy4-flash-strata':
         from hy4_flash_strata_runtime import prepare_config
         try:
@@ -174,7 +176,7 @@ def main():
                 stop()
                 child.wait(timeout=20)
                 raise SystemExit(1)
-            if profile['id'] in ('deepseek-unsloth-strata', 'flash-next-iq4xs-strata', 'hy4-flash-strata'):
+            if profile['id'] in ('deepseek-unsloth-strata', 'flash-next-iq4xs-strata', 'hy4-flash-strata', 'inkling-strata'):
                 free = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits'], text=True)
                 free_values = pair_gpu_free_values(free)
                 gpu_bad = gpu_bad + 1 if any(x < GPU_FREE_MIB for x in free_values) else 0

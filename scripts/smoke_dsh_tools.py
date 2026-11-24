@@ -56,7 +56,7 @@ try:
  else:
   workspace=Path(tempfile.mkdtemp(prefix='nvidia-dsh-short-'));nonce='NVIDIA_TOOL_OK_'+uuid.uuid4().hex;file=workspace/'proof.txt';file.write_text(nonce+'\n');file.chmod(0o600)
  import yaml
- entries=yaml.safe_load((R/'data/dsh/profiles/headless/cordis.patch.yml').read_text());provider=next(x['config']['providers']['nvidia-strata'] for x in entries if x['id']=='llm-pi-ai');m=next((x for x in provider['models'] if x['id']==a.model),None);m=m or dict(next(x for x in provider['models'] if x['id']==a.model+'-search'),id=a.model);output_cap=m['maxTokens'] if a.model=='inkling-llamacpp' else 128
+ entries=yaml.safe_load((R/'data/dsh/profiles/headless/cordis.patch.yml').read_text());provider=next(x['config']['providers']['nvidia-strata'] for x in entries if x['id']=='llm-pi-ai');m=next((x for x in provider['models'] if x['id']==a.model),None);m=m or dict(next(x for x in provider['models'] if x['id']==a.model+'-search'),id=a.model);output_cap=128
  provider=dict(provider,baseURL=timing_tap.base_url,models=[dict(m,maxTokens=output_cap)]);overlay=O/'selection.yml';overlay.write_text(yaml.safe_dump([{'id':'session-title-llm','disabled':True},{'id':'llm-pi-ai','config':{'providers':{'nvidia-strata':provider}}},{'id':'agent-default-model','config':{'provider':'nvidia-strata','model':a.model}}],sort_keys=False))
  task=f'Use the read tool to read {file}. Then reply with only the exact file contents. Do not use bash or any other tools. Do not modify any files.'
  state.update(phase='short-harness-tool',workspace=str(workspace));save();t=time.monotonic()

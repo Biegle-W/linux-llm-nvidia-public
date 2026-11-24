@@ -49,6 +49,9 @@ def upstream(component):
 
 
 def canonical(root, profile):
+    if profile == 'inkling-strata':
+        from inkling_strata_runtime import PRESET
+        return Path.home() / PRESET
     if profile == 'hy4-flash-strata':
         from hy4_flash_strata_runtime import PRESET
         return Path.home() / PRESET

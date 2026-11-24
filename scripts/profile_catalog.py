@@ -86,6 +86,8 @@ def validate_catalog(catalog):
         location = Path(storage['checkpoint_directory'])
         expected = {'gpu-resident': 'sata', 'ram-resident': 'sata', 'ssd-streaming': 'nvme'}
         # A measured placement differs from the transport default for its class.
+        if identifier == 'inkling-strata':
+            expected['gpu-resident'] = 'nvme'
         if identifier == 'hy4-flash-maya':
             expected['ssd-streaming'] = 'sata'
         if (storage.get('access') not in expected
