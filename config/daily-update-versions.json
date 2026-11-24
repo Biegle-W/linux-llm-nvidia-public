@@ -39,11 +39,11 @@
     "evidence": "docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md"
   },
   "maya": {
-    "source_commit": "e8d4f297f434091082e4d297ea78dea0c7be3f57",
-    "qualified_on": "2026-11-22T11:05:00",
-    "method": "hands-on short DSH",
-    "note": "Maya 1.1.74; both profiles pass the short DSH check twice; both local patches (qualification v1165, DeepSeek file cache v1173) applied unchanged",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md"
+    "source_commit": "1016876a387e332fc5bf8bb82030fca7dc2821b2",
+    "qualified_on": "2026-11-24T11:10:00",
+    "method": "hands-on short DSH and gBench template check",
+    "note": "Maya 1.1.78; glm-maya, deepseek-maya pass at the same speed; hy4-flash-maya failed its first-start unload and passed on the re-run (slower start: prompt-route measurement on every start). Qualification patch regenerated as v1178; file-cache patch v1173 applied unchanged.",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261124-MAYA-1178.md"
   },
   "strata": {
     "source_commit": "d46f5f268f8ed797e83a5c63a69bffbd7a581cf6",

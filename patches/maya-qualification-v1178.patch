@@ -1,0 +1,32 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 9a49b46d..2850b9d4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1439,7 +1439,10 @@ if(MAYA_ENABLE_CUDA OR MAYA_ENABLE_HIP)
+   target_link_libraries(ple_parity PRIVATE maya_kernels ${_maya_gpu_runtime_target})
+   set(MAYA_PLE_FIXTURE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/bench/micro" CACHE PATH
+       "Directory containing required ple_in.bin and ple_out.bin parity fixtures")
++  set(MAYA_PLE_PACK "${CMAKE_CURRENT_SOURCE_DIR}/pack/full" CACHE PATH "PLE parity quantized block pack")
++  set(MAYA_PLE_GGUF "${CMAKE_CURRENT_SOURCE_DIR}/../../Q2_0/Qwen3.8-Flash-Next-Q2_0-00002-of-00002.gguf" CACHE FILEPATH "PLE parity real table")
+   add_test(NAME ple_parity COMMAND ple_parity --selftest
++    --pack "${MAYA_PLE_PACK}" --gguf "${MAYA_PLE_GGUF}"
+     --in "${MAYA_PLE_FIXTURE_DIR}/ple_in.bin" --out "${MAYA_PLE_FIXTURE_DIR}/ple_out.bin"
+     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+   # an input that is not on the PC: skipped (77, the missing file named - never a pass); a broken one still fails
+diff --git a/tests/mm3_gguf_test.cu b/tests/mm3_gguf_test.cu
+index e450514f..7aed7168 100644
+--- a/tests/mm3_gguf_test.cu
++++ b/tests/mm3_gguf_test.cu
+@@ -54,7 +54,11 @@ template <class T>
+ T* dev(const std::vector<T>& h) {
+     T* p = nullptr;
+     CU(cudaMalloc(&p, std::max<size_t>(1, h.size()) * sizeof(T)));
+-    if (!h.empty()) CU(cudaMemcpy(p, h.data(), h.size() * sizeof(T), cudaMemcpyHostToDevice));
++    if (!h.empty()) {
++        CU(cudaMemcpy(p, h.data(), h.size() * sizeof(T), cudaMemcpyHostToDevice));
++        // Kernels use a nonblocking stream: finish default-stream uploads first.
++        CU(cudaStreamSynchronize(nullptr));
++    }
+     return p;
+ }
+ template <class T>

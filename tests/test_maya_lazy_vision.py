@@ -23,13 +23,33 @@ class LazyVision(unittest.TestCase):
     def setUpClass(cls):
         tree = ast.parse(SOURCE.read_text())
         node = next(n for n in tree.body if isinstance(n, ast.ClassDef) and n.name == 'Vision')
+        # Since Maya 1.1.78 Vision calls module-level helpers (picture_dir #1180, track_spawned #1181): load the
+        # functions and simple constants it references, following references, never the rest of the server.
+        defs = {}
+        for n in tree.body:
+            if isinstance(n, ast.FunctionDef):
+                defs[n.name] = n
+            elif isinstance(n, (ast.Assign, ast.AnnAssign)):
+                for target in (n.targets if isinstance(n, ast.Assign) else [n.target]):
+                    if isinstance(target, ast.Name):
+                        defs.setdefault(target.id, n)
+        wanted, todo = [], [node]
+        while todo:
+            for name in {x.id for x in ast.walk(todo.pop()) if isinstance(x, ast.Name)}:
+                helper = defs.get(name)
+                if helper is not None and helper not in wanted and name not in globals():
+                    wanted.append(helper); todo.append(helper)
+        helpers = sorted(wanted, key=lambda n: n.lineno)
         namespace = dict(globals())
-        exec(compile(ast.Module(body=[node], type_ignores=[]), str(SOURCE), 'exec'), namespace)
+        namespace.setdefault('atexit', __import__('atexit'))
+        exec(compile(ast.Module(body=[*helpers, node], type_ignores=[]), str(SOURCE), 'exec'), namespace)
         cls.Vision = namespace['Vision']
 
     def test_cpu_encoder_starts_for_image_and_stops_after_request(self):
         process = unittest.mock.Mock()
         process.stdout = io.StringIO('READY\nOK 4\n')
+        # Like the real encoder, write the embeddings file: since Maya 1.1.78 a cache hit needs it on disk.
+        process.stdin.write.side_effect = lambda line: line.startswith('ENC ') and Path(line.split()[2]).write_bytes(b'sve')
         config = {'exe': 'encoder', 'mmproj': 'weights', 'model': 'vocab', 'gpu': False}
         with patch.object(subprocess, 'Popen', return_value=process) as spawn:
             vision = self.Vision(config, start=False)

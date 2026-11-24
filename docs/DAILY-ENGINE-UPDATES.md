@@ -1,5 +1,11 @@
 # NVIDIA daily engine updates
 
+## 2026-11-24: Maya 1.1.78 (push held for the owner)
+
+Upstream review, before and after: [ENGINE-UPDATES-20261124-MAYA-1178.md](evidence/ENGINE-UPDATES-20261124-MAYA-1178.md).
+
+- maya: **promoted**; `1016876a387e` (1.1.78). `glm-maya` and `deepseek-maya` pass at the same speed (gBench 6/6). The qualification patch was regenerated for the `MAYA_*` build-option names (`maya-qualification-v1178.patch`). Warning: `hy4-flash-maya` now measures a prompt route for 5-7 minutes on every start; its first start failed the owned unload (stop during that measurement) and gBench (timeout); the re-run passes everything, first token 209.5 s against 116.3 s, prompt reading 26.4 against 47.8 tok/s, generation 15.6 against 13.5 tok/s.
+
 ## 2026-11-24: Strata 0.2.21
 
 Upstream review, before and after: [ENGINE-UPDATES-20261124-STRATA-0221.md](evidence/ENGINE-UPDATES-20261124-STRATA-0221.md).

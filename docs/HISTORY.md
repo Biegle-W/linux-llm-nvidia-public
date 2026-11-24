@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Maya 1.1.78 installed by hand — November 24, 2026
+
+All three Maya entries moved from 1.1.74 to 1.1.78 (DeepSeek empty-turn fix, GLM mapping release, stop during load). GLM and DeepSeek pass at the same speed. `hy4-flash-maya` passed on a re-run after its first start failed the owned unload; every start now spends 5-7 minutes on a prompt-route measurement. The qualification patch was regenerated for upstream's `MAYA_*` names. Committed, push held for the owner. [ENGINE-UPDATES-20261124-MAYA-1178.md](evidence/ENGINE-UPDATES-20261124-MAYA-1178.md)
+
 ## Strata 0.2.21 installed by hand — November 24, 2026
 
 Control 0.1.67 for every Strata entry; `inkling-strata` and `hy4-flash-strata` moved to their 0.1.67 engines and pass (Inkling reads prompts 8% faster). `flash-next-strata` stays on Qwen engine 0.1.65: 0.1.67 generated 11-12% slower on two runs. gBench 6/6 on every run. [ENGINE-UPDATES-20261124-STRATA-0221.md](evidence/ENGINE-UPDATES-20261124-STRATA-0221.md)

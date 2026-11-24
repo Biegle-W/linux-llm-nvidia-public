@@ -1,14 +1,14 @@
 {
   "schema": 1,
   "profile": "hy4-flash-maya",
-  "source_commit": "e8d4f297f434091082e4d297ea78dea0c7be3f57",
+  "source_commit": "1016876a387e332fc5bf8bb82030fca7dc2821b2",
   "binary": {
     "path": "runtimes/maya-hy4-v1174/maya-hy4",
-    "sha256": "ea782eb42e0e60c526c79d133cceb56e4e45d5903809eee0b8d22cf1a1886dd7"
+    "sha256": "72a8a843f79cea6b04c9a09367f64a6ea88dfefcd1023a08b39d2bc7917c625e"
   },
-  "mode": "Maya 1.1.74 normal build, text only",
+  "mode": "Maya 1.1.78 normal build, text only (binary kept at the maya-hy4-v1174 path)",
   "evidence": "docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md",
-  "status": "Router checks passed 2026-11-23; short tool-use test 43.3, stopped by the memory-pressure guard at minute 30",
+  "status": "Short daily DSH qualification required; see daily ledger",
   "CUDA_toolkit": "13.0.88; matching CUDA13 runtime/cuBLAS",
   "publisher_repository": "peasantsmith/Hy4-Flash-Maya-GGUF",
   "publisher_revision": "9d73294d20e1119d03d00ea81d1d352bfbe61ff4",
