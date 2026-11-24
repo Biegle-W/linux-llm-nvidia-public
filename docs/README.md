@@ -9,6 +9,7 @@ Start with [CURRENT-STATE.md](CURRENT-STATE.md) and the root [AGENTS.md](../AGEN
 | Doc | What it covers |
 |---|---|
 | [CURRENT-STATE.md](CURRENT-STATE.md) | What is live now: models, engines, contexts, speeds, open items. Start here. |
+| [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md) | Fixed tables biegle.ca reads every 6 hours: routes, speeds, retirements, quality rankings, trials, hardware. Updated in the same commit as any router or result change. |
 | [HISTORY.md](HISTORY.md) | Dated change log, newest first. Evidence only; older entries are often superseded. |
 | [MAINTAINED-PROFILES.md](MAINTAINED-PROFILES.md) | The model registry and how entries are selected, changed and retired. |
 | [ENGINE-UPDATE-RUNBOOK.md](ENGINE-UPDATE-RUNBOOK.md) | How engine updates are checked and installed by hand (since Nov 9). |

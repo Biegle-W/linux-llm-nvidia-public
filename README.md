@@ -4,7 +4,7 @@ A home LLM server on native Linux with two consumer GPUs: an **RTX 3080 Ti (12 G
 
 This repository is the curated public export of the private operational repository. Everything here is kept current with the live server: models, engines, test results and the procedures used to produce them.
 
-**Start here:** [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md) (what is live now) · [docs/README.md](docs/README.md) (all documents) · [docs/HISTORY.md](docs/HISTORY.md) (dated change log)
+**Start here:** [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md) (what is live now) · [docs/WEBSITE-SUMMARY.md](docs/WEBSITE-SUMMARY.md) (tables read by the website) · [docs/README.md](docs/README.md) (all documents) · [docs/HISTORY.md](docs/HISTORY.md) (dated change log)
 
 ## Models on the router
 
