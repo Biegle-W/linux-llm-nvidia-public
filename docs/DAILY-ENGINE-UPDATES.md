@@ -1,5 +1,13 @@
 # NVIDIA daily engine updates
 
+## 2026-11-24: Strata 0.2.21
+
+Upstream review, before and after: [ENGINE-UPDATES-20261124-STRATA-0221.md](evidence/ENGINE-UPDATES-20261124-STRATA-0221.md).
+
+- strata: **promoted**; `d46f5f268f8e` (v0.2.21, control 0.1.67). `inkling-strata` on `strata-inkling` 0.1.67: prompt reading 2,129 against 1,971 tok/s, first token 3.4 against 4.8 s, same generation. `hy4-flash-strata` on `strata-hy4` 0.1.67 and `deepseek-unsloth-strata` (frozen engine) run at the same speed. `flash-next-strata` keeps Qwen engine 0.1.65: engine 0.1.67 generated 57.8 and 58.7 tok/s against 65.5 (warning only, but 0.1.65 under the new control gives 69.0 and 66.8). gBench 6/6 on every run.
+- maya: 1.1.78 (`1016876a387e`) available; recorded separately.
+- hyperqwen, sglang: **unchanged**. raylight, mesh, gguf: **pinned-current**. comfyui: `v0.46.0` available; pinned, not installed.
+
 ## 2026-11-23
 
 The `bolt-llamacpp` retirement ends upstream llama.cpp update checks. Inkling continues to use its hand-updated Unsloth runtime.

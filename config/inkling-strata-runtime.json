@@ -14,18 +14,18 @@
       "publisher_sha256_matched": true
     }
   ],
-  "release": "v0.2.20",
-  "engine_package": "strata-inkling-0.1.66-linux-x86_64-cuda-cuda13.tar.gz",
-  "engine_build_id": "2e87c08db18a+cuda13.0",
-  "engine_directory": "runtimes/strata-inkling/0.1.66-linux-x86_64-cuda-cuda13",
+  "release": "v0.2.21",
+  "engine_package": "strata-inkling-0.1.67-linux-x86_64-cuda-cuda13.tar.gz",
+  "engine_build_id": "eada4591cef1+cuda13.0",
+  "engine_directory": "runtimes/strata-inkling/0.1.67-linux-x86_64-cuda-cuda13",
   "engine_files_sha256": {
-    "strata-inkling": "49eafca26eae48ac9657659b4175ae0fafeaff0b707037d001b43bb0d1d7ed98",
+    "strata-inkling": "a0105917cb5fd9506656ce1604c2bedcf052f398d6ead9bb57816e7e1aebf012",
     "libcublas.so.13": "25cde432108543626df85d887c730bf2cab96803ca16f9654e4abc8d2b45833e",
     "libcublasLt.so.13": "1489aeb75d55ee55782798343ac66f57771d561cc1fe1e0491568deefa0e6515",
     "libcudart.so.13": "f9baf2ef8ee6140d4413a57577d29597a61b171b245d807173bd556607736676",
     "libgomp.so.1": "4427bcbbc6faac6eaa4e8906ea4668e1615c9cfdff442549a8f5b49c3639217f",
-    "engine-component.json": "5057b33fbad41a35e9889f889f10e356c3d6beba2b1c3394d281b08955bef19b",
-    "BUILD.json": "958055d189bcce51f470e84a2e425ba063a8996823250a01b76c8ba69aeef612"
+    "engine-component.json": "1bd99b4a3615d629343fc3dfdbf5ea1c0a3d96b26922a38ab5562b4582dab4e3",
+    "BUILD.json": "bd8f966ea865fa792621d35a472c47d685cf85a58fa9064e43e323edd587b8e6"
   },
   "tokenizer_directory": "models/strata/packs/inkling-2-mini-sq-10/tokenizer",
   "tokenizer_files_sha256": {
@@ -36,5 +36,5 @@
     "vocab.json": "e31303ccaacbe11b82275695f26c25515505210a379193a6336a760cf91888f6"
   },
   "launch_preset": "~/.local/state/strata/launch/inkling-2-mini-sq-10.json",
-  "engine_commit": "2e87c08db18a"
+  "engine_commit": "eada4591cef1"
 }

@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Strata 0.2.21 installed by hand — November 24, 2026
+
+Control 0.1.67 for every Strata entry; `inkling-strata` and `hy4-flash-strata` moved to their 0.1.67 engines and pass (Inkling reads prompts 8% faster). `flash-next-strata` stays on Qwen engine 0.1.65: 0.1.67 generated 11-12% slower on two runs. gBench 6/6 on every run. [ENGINE-UPDATES-20261124-STRATA-0221.md](evidence/ENGINE-UPDATES-20261124-STRATA-0221.md)
+
 ## Kolibri 1.1 Q5_K_M trial on llama.cpp — November 24, 2026
 
 Aleph Alpha's Kolibri 1.1 in Q5_K_M ran on a llama.cpp build from pull request 32891 across both cards with 131,072 context: 44 tok/s generation on short prompts, 11 tok/s at 111K, about 1,100 tok/s prompt reading, recall correct to 119K, tool calls pass. Short tool-use test 41.8 (thinking off). No router entry. [KOLIBRI-1.1-TRIAL-20261124.md](evidence/KOLIBRI-1.1-TRIAL-20261124.md)

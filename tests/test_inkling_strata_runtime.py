@@ -41,7 +41,7 @@ class InklingStrataRuntime(unittest.TestCase):
                 content = name.encode()
                 (folder / name).write_bytes(content)
                 hashes[name] = hashlib.sha256(content).hexdigest()
-        engine = self.root / 'runtimes/strata-inkling/0.1.66-linux-x86_64-cuda-cuda13'
+        engine = self.root / self.pins['engine_directory']
         self.config = dict(exe=str(engine / 'strata-inkling'), arch='inkling2_loop', cwd=str(self.root),
                            tokenizer=str(self.root / 'models/strata/packs/inkling-2-mini-sq-10/tokenizer'),
                            model_name='inkling-2-mini-sq-10', lib_dirs=[str(engine)], gpu=[0, 1], gpu_order='as_given', gpus_asked=True,
