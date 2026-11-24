@@ -279,7 +279,9 @@ def main():
             record = subprocess.check_output(['systemctl', '--user', 'show', unit, '-p', 'ExecStart', '-p', 'MemoryHigh', '-p', 'MemoryMax', '-p', 'MemorySwapMax'], text=True)
             (out / (profile['id'] + '-unit.txt')).write_text(record)
             owned_worker[0]=(unit,subprocess.check_output(['systemctl','--user','show',unit,'-p','InvocationID','--value'],text=True).strip())
-            if not profile['id'].startswith('qwen27b-'):
+            if profile.get('native_request_protocol') == 'llama.cpp':
+                (out / (profile['id'] + '-config-redacted.json')).write_bytes((ROOT / profile['runtime_manifest']).read_bytes())
+            elif not profile['id'].startswith('qwen27b-'):
                 cfg = json.loads((ROOT / 'data/router' / (profile['id'] + '-runtime.json')).read_text()); cfg.pop('api_key', None)
                 (out / (profile['id'] + '-config-redacted.json')).write_text(json.dumps(cfg, indent=2))
             if profile['id'] == 'qwen27b-sglang':

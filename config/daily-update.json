@@ -48,7 +48,9 @@
       "channel": "stable"
     }
   ],
-  "pinned_profiles": [],
+  "pinned_profiles": [
+    {"profile": "kolibri-llamacpp", "reason": "llama.cpp PR 32891 build; update by hand when the PR merges or its head changes"}
+  ],
   "validation": "paired-short-actual-DSH-v1",
   "publication_files": {
     "sglang": [

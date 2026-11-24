@@ -12,6 +12,10 @@ All three Maya entries moved from 1.1.74 to 1.1.78 (DeepSeek empty-turn fix, GLM
 
 Control 0.1.67 for every Strata entry; `inkling-strata` and `hy4-flash-strata` moved to their 0.1.67 engines and pass (Inkling reads prompts 8% faster). `flash-next-strata` stays on Qwen engine 0.1.65: 0.1.67 generated 11-12% slower on two runs. gBench 6/6 on every run. [ENGINE-UPDATES-20261124-STRATA-0221.md](evidence/ENGINE-UPDATES-20261124-STRATA-0221.md)
 
+## Kolibri 1.1 router entry — November 24, 2026
+
+`kolibri-llamacpp` added at the owner's request on the trial's llama.cpp pull-request build and settings, engine pinned until the merge. Router checks pass (tool call and follow-up, gBench 6/6, owned unload); short tool-use test 41.8 from the trial. [KOLIBRI-1.1-ROUTER-ENTRY-20261124.md](evidence/KOLIBRI-1.1-ROUTER-ENTRY-20261124.md)
+
 ## Kolibri 1.1 Q5_K_M trial on llama.cpp — November 24, 2026
 
 Aleph Alpha's Kolibri 1.1 in Q5_K_M ran on a llama.cpp build from pull request 32891 across both cards with 131,072 context: 44 tok/s generation on short prompts, 11 tok/s at 111K, about 1,100 tok/s prompt reading, recall correct to 119K, tool calls pass. Short tool-use test 41.8 (thinking off). No router entry. [KOLIBRI-1.1-TRIAL-20261124.md](evidence/KOLIBRI-1.1-TRIAL-20261124.md)

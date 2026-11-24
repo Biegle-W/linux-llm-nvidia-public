@@ -69,6 +69,7 @@ After setup finishes, start a configured model with one of:
 ```bash
 ./scripts/start_model.sh qwen
 ./scripts/start_model.sh inkling
+./scripts/start_model.sh kolibri
 ./scripts/start_model.sh hy4
 ./scripts/start_model.sh hy4-maya
 ./scripts/start_model.sh glm

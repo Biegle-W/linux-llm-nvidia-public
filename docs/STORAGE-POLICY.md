@@ -1,8 +1,8 @@
 # Model storage policy
 
-## Kolibri 1.1 trial weights — November 24, 2026
+## Kolibri 1.1 weights — November 24, 2026
 
-The Q5_K_M GGUF of Kolibri 1.1 (53.4 GB, `models/engine-tests/kolibri-1.1-gguf`, SATA, hash-verified) was downloaded for a trial. Its experts are read into RAM, so it belongs on SATA. It has no router entry and is listed as kept trial weights in `config/weights-inventory.json`.
+The Q5_K_M GGUF of Kolibri 1.1 (53.4 GB, `models/engine-tests/kolibri-1.1-gguf`, SATA, hash-verified) was downloaded for a trial and now serves `kolibri-llamacpp`. Its experts are read into RAM from the memory-mapped file, so it belongs on SATA. `config/weights-inventory.json` attributes it to the router entry.
 
 ## Flash-Next UD-IQ4_XS weights unused — November 24, 2026
 
@@ -50,6 +50,7 @@ Per-drive usage and unused weights: run `python3 scripts/weights_tracker.py` (re
 | --- | --- | --- | --- |
 | Qwen3.8-27B AutoRound, shared by HyperQwen/vLLM and SGLang | GPU-resident after loading | Samsung SSD 870 QVO SATA | `models/engine-tests/qwen38-27b-hyperqwen-fast` |
 | Qwen3.8-Flash-Next IQ3_XXS, Strata | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/strata/models/IQ3_XXS` |
+| Kolibri 1.1 Q5_K_M, llama.cpp | experts of 38 layers RAM-resident (memory-mapped), the rest GPU-resident | Samsung SSD 870 QVO SATA | `models/engine-tests/kolibri-1.1-gguf` |
 | GLM-5.3-Flash Maya-S24, Maya | SSD-streaming with GPU/RAM caches | CT1000P3PSSD8 NVMe | `models/maya/Maya-S24` |
 | DeepSeek-V4.1-Flash-1017 UD-IQ1_S, shared by Strata and Maya | SSD-streaming with GPU/RAM caches | NVMe shards 1-4; SATA shard 5 (symlinked) | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S` |
 | ComfyUI images (Qwen Image 2.1 Turbo, FLUX3 Klein, MiniMax H3 Image) | GPU-resident after loading; the MiniMax H3 text encoder (27 GB) stays in system RAM | Samsung SSD 870 QVO SATA | `models/comfy-images` |

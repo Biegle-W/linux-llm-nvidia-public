@@ -29,7 +29,7 @@
   ],
   "min_weight_bytes": 50000000,
   "min_bytes": 500000000,
-  "router_manifest_receipts": ["inkling-strata", "hy4-flash-strata", "hy4-flash-maya"],
+  "router_manifest_receipts": ["kolibri-llamacpp", "inkling-strata", "hy4-flash-strata", "hy4-flash-maya"],
   "extra_references": [
     {
       "path": "models/strata/packs/inkling-2-mini-sq-10/tokenizer",
@@ -88,10 +88,6 @@
     {
       "path": "models/engine-tests/inkling2-mini-trial/mmproj-F16.gguf",
       "why": "Retired Inkling llama.cpp vision projector"
-    },
-    {
-      "path": "models/engine-tests/kolibri-1.1-gguf/Kolibri-1.1-Q5_K_M.gguf",
-      "why": "Kolibri 1.1 Q5_K_M trial weights (Nov 24, 2026; llama.cpp PR 32891 build); no router entry yet"
     },
     {
       "path": "runtimes/gpu-unlock-native/build",

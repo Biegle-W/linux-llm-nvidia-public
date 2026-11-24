@@ -47,8 +47,11 @@ def main():
     os.umask(0o077)
     from pair_p2p_health import require_verified_pair
     require_verified_pair()
-    identifier = {'inkling': 'inkling-strata', 'hy4': 'hy4-flash-strata', 'hy4-maya': 'hy4-flash-maya'}.get(sys.argv[1], sys.argv[1])
+    identifier = {'kolibri': 'kolibri-llamacpp', 'inkling': 'inkling-strata', 'hy4': 'hy4-flash-strata', 'hy4-maya': 'hy4-flash-maya'}.get(sys.argv[1], sys.argv[1])
     profile = require_enabled(get_profile(identifier))
+    if identifier == 'kolibri-llamacpp':
+        from kolibri_llamacpp_runtime import main as serve_kolibri
+        return serve_kolibri(profile)
     from profile_catalog import require_host_capacity
     require_host_capacity(profile)
     group = next(line.split('::', 1)[1] for line in Path('/proc/self/cgroup').read_text().splitlines()

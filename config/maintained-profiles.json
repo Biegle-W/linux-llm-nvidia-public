@@ -2962,6 +2962,118 @@
         ],
         "short_tool_use_test": "through the router on 2026-11-23, larger-model limits: 33 correct, 14 wrong, 2 without an answer in 28.5 minutes; the memory-pressure guard then stopped the worker (full pressure 11.4% against 10%, worker at 88.3 GiB) and the last 6 items failed in transport; score 43.3 on the shared scale"
       }
+    },
+    {
+      "id": "kolibri-llamacpp",
+      "model": "Kolibri-1.1",
+      "display_name": "Aleph Alpha Kolibri 1.1 75B MoE (3.44B active) / Q5_K_M / llama.cpp",
+      "engine": "llama.cpp",
+      "weight_quant": "Q5_K_M",
+      "status": "selected",
+      "availability": {
+        "enabled": true
+      },
+      "launch": [
+        "kolibri"
+      ],
+      "allocated_context": 131072,
+      "input_modalities": [
+        "text"
+      ],
+      "capabilities": {
+        "text": true,
+        "vision": false,
+        "tools_qualified": true
+      },
+      "context_validation": "Trial recall through 119.2K tokens at 131072 allocated context.",
+      "worker_memory_gib": {
+        "high": 87.76984786987305,
+        "max": 89.76984786987305,
+        "swap": null
+      },
+      "host_ram_reserve_gib": 2,
+      "minimum_usable_ram_gib": 90,
+      "storage": {
+        "access": "ram-resident",
+        "required_transport": "sata",
+        "checkpoint_directory": "models/engine-tests/kolibri-1.1-gguf"
+      },
+      "runtime_manifest": "config/kolibri-llamacpp-runtime.json",
+      "native_request_protocol": "llama.cpp",
+      "selected_settings": {
+        "context": 131072,
+        "gpu": [
+          0,
+          1
+        ],
+        "gpu_layers": 99,
+        "split_mode": "layer",
+        "tensor_split": [
+          12,
+          10
+        ],
+        "override_tensor": "blk\\.([7-9]|[1-3][0-9]|4[0-4])\\.ffn_(up|down|gate)_exps\\.weight=CPU",
+        "parallel": 1,
+        "batch": 2048,
+        "ubatch": 2048,
+        "flash_attention": "on",
+        "cache_type_k": "f16",
+        "cache_type_v": "f16",
+        "jinja": true,
+        "reasoning_format": "deepseek",
+        "temperature": 1.0,
+        "top_p": 0.99,
+        "top_k": 128,
+        "min_p": 0,
+        "chat_template_kwargs": {
+          "reasoning_effort": "none",
+          "enable_thinking": false
+        },
+        "thinking": "hidden",
+        "thinking_request_override": {
+          "chat_template_kwargs": {
+            "reasoning_effort": "medium",
+            "enable_thinking": true
+          }
+        },
+        "gpu_free_floor_mib": 256
+      },
+      "cpu_weight_offload_qualification": {
+        "evidence": "docs/evidence/KOLIBRI-1.1-TRIAL-20261124.md",
+        "placement": "Routed experts in layers 7\u201344 are memory-mapped in RAM, 2\u20136 on GPU0 and 45\u201349 on GPU1. Attention, dense layers and shared experts stay on the GPUs.",
+        "loaded_vram_gb": [
+          10.1,
+          9.1
+        ],
+        "kv_cache_gb": 1.1
+      },
+      "evidence": "docs/evidence/KOLIBRI-1.1-ROUTER-ENTRY-20261124.md",
+      "latest_qualification": {
+        "date": "2026-11-24",
+        "status": "passed",
+        "evidence": "docs/evidence/KOLIBRI-1.1-ROUTER-ENTRY-20261124.md",
+        "router_checks_passed": [
+          "load",
+          "short DSH tool call and follow-up (2 runs)",
+          "gbench template check 6/6",
+          "owned unload"
+        ],
+        "short_dsh": {
+          "prompt_tokens": 5707,
+          "prefill_tps": 541.9,
+          "ttft_s": 10.82,
+          "decode_tps": 36.2,
+          "note": "web-client prompt runs in five batches at checkpoint boundaries; plain 6.1K prompt reads at 1316 tok/s"
+        },
+        "short_tool_use_test": {
+          "tier": "small",
+          "score": 41.8,
+          "single_turn": "29/40",
+          "episodes": "1/9",
+          "thinking": "off",
+          "source": "docs/evidence/KOLIBRI-1.1-TRIAL-20261124.md"
+        }
+      }
     }
   ],
   "host_reclaim_policy": {

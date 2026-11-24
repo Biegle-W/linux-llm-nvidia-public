@@ -13,7 +13,7 @@ sys.path.insert(0, str(ROOT / 'scripts'))
 from profile_catalog import load_catalog, worker_budget, profile_enabled, budget_systemd_size
 from inference_policy import load_policy
 from visible_terminal import open_monitor, close_backend_monitor
-from inference_swap_guard import WorkerWatch
+from inference_swap_guard import WorkerWatch, llama_requests_busy, TelemetryError
 from request_admission import RequestAdmission, QueueFull
 from idle_control import claim as claim_idle, release as release_idle, owned_native_idle
 
@@ -67,6 +67,19 @@ class Workers:
         self.last_activity = time.monotonic()
         self.idle_unloading = None
         self._idle_probe = None
+
+    def native_status(self, profile):
+        metrics = profile.get('native_request_protocol') == 'llama.cpp'
+        path = '/metrics' if metrics else '/status'
+        request = urllib.request.Request('http://127.0.0.1:10000' + path,
+                                         headers={'Authorization': 'Bearer ' + self.key})
+        with OPENER.open(request, timeout=3) as response:
+            if metrics:
+                data = response.read(2 * 1024 * 1024 + 1)
+                if len(data) > 2 * 1024 * 1024:
+                    raise TelemetryError('Worker telemetry too large')
+                return {'busy': llama_requests_busy(data.decode())}
+            return json.load(response)
 
     def backend_models(self):
         req = urllib.request.Request('http://127.0.0.1:10000/v1/models',
@@ -130,14 +143,12 @@ class Workers:
                 raise RouterError('An unexpected process owns the inference unit; nothing was stopped.', 'ownership_conflict')
             invocation = unit_property(unit, 'InvocationID')
             if unit == MOE_UNIT:
-                request = urllib.request.Request('http://127.0.0.1:10000/status',
-                          headers={'Authorization': 'Bearer ' + self.key})
                 try:
-                    with OPENER.open(request, timeout=3) as response:
-                        status = json.load(response)
+                    profile = all_profiles().get(getattr(self, 'active', None), {})
+                    status = self.native_status(profile)
                     if type(status.get('busy')) is not bool:
                         raise ValueError('Native busy state missing')
-                except (OSError, ValueError) as error:
+                except (OSError, ValueError, TelemetryError) as error:
                     raise RouterError('Native worker state is unavailable; active work was preserved.',
                                       'backend_state_unknown', 409) from error
                 if any(status.get(k) for k in ('busy', 'queued', 'loading', 'compute_active')):
@@ -250,15 +261,13 @@ class Workers:
                 return
         # Native Strata/Maya pages call their worker directly, outside this router lock.
         # Observe their status as well before starting a switch.
-        if all_profiles().get(self.active, {}).get('engine') in ('Strata', 'Maya'):
+        previous = all_profiles().get(self.active, {})
+        if previous.get('engine') in ('Strata', 'Maya') or previous.get('native_request_protocol') == 'llama.cpp':
             deadline = time.monotonic() + 7200
             while True:
-                req = urllib.request.Request('http://127.0.0.1:10000/status',
-                      headers={'Authorization': 'Bearer ' + self.key})
                 try:
-                    with OPENER.open(req, timeout=3) as response:
-                        status = json.load(response)
-                except (OSError, ValueError):
+                    status = self.native_status(previous)
+                except (OSError, ValueError, TelemetryError):
                     break
                 if (not status.get('busy') and not status.get('queued')
                         and not status.get('loading') and not status.get('compute_active')):
@@ -286,7 +295,8 @@ class Workers:
                 unit = MOE_UNIT
                 if os.environ.get('NVIDIA_API_ONLY') != '1':
                     open_monitor('NVIDIA MoE backend', unit, [ROOT / 'data/router' / (p['id'] + '-engine.log')
-                                 for p in profiles().values() if p['engine'] in ('Strata', 'Maya', 'vLLM-offload')])
+                                 for p in profiles().values() if p['engine'] in ('Strata', 'Maya', 'vLLM-offload')] +
+                                 [ROOT / 'data/router/kolibri/engine.log'])
             result = subprocess.run(cmd, capture_output=True, text=True, timeout=30,
                                     env=dict(os.environ, LOCAL_LLM_ROUTER_WORKER='1'))
             if result.returncode:

@@ -1,0 +1,30 @@
+{
+  "binary": "runtimes/llamacpp-manual/kolibri-pr32891-5f4d222-20261124/source/build/bin/llama-server",
+  "binary_sha256": "eb2d249dd10608658835d5bd0d44a6edc8e73c9c0635021e4231934142188060",
+  "runtime_files_sha256": {
+    "runtimes/llamacpp-manual/kolibri-pr32891-5f4d222-20261124/source/build/bin/libllama-server-impl.so": "bdfc7c4b996cec293c60af4bc9698175202a1117c27d49cc4e8101d9ea8e9b9a",
+    "runtimes/llamacpp-manual/kolibri-pr32891-5f4d222-20261124/source/build/bin/libllama-common.so.1.0.0": "579e8e6393448e7fa7cd313f684568e06a12c6618e4aad63a9e8072103e8f7b7",
+    "runtimes/llamacpp-manual/kolibri-pr32891-5f4d222-20261124/source/build/bin/libmtmd.so.1.0.0": "3dce4e212388ad2475a98c8a27823eb3bb065b636bdca5bd711cb01af9d30dd1",
+    "runtimes/llamacpp-manual/kolibri-pr32891-5f4d222-20261124/source/build/bin/libllama.so.1.0.0": "3a3712c6b65334e80ce554dc9b9c7c4ad1869ebcb7f5618ba485e08570a63391",
+    "runtimes/llamacpp-manual/kolibri-pr32891-5f4d222-20261124/source/build/bin/libggml.so.1.0.0": "c2c74dc3a5326919ae21fc0043a72df1ca089b71f638f2de47ff31ce3d8ffe23",
+    "runtimes/llamacpp-manual/kolibri-pr32891-5f4d222-20261124/source/build/bin/libggml-base.so.1.0.0": "a7868609f3a8795ebc69b46c30977f67d38786220d1c8f3e1efb4a9b6c643727",
+    "runtimes/llamacpp-manual/kolibri-pr32891-5f4d222-20261124/source/build/bin/libggml-cpu.so.1.0.0": "1808d98813ad36f58404650e48a223c684165b88f311d6ae13a5e401c14108bd",
+    "runtimes/llamacpp-manual/kolibri-pr32891-5f4d222-20261124/source/build/bin/libggml-cuda.so.1.0.0": "bb6fc935ad989524fd4ceab371711d4af14eb9d2ef46474fda73b6ccdf6b7361"
+  },
+  "source_repository": "ggml-org/llama.cpp",
+  "pull_request": 32891,
+  "source_commit": "5f4d222898ddb12cf581edf1b7e841d80e0b2e17",
+  "base_commit": "6aee50801",
+  "build": "CUDA 12.4, sm_86, gcc-13",
+  "repository": "Aleph-Alpha/Kolibri-1.1-GGUF",
+  "revision": "90116812a1669494a894b729e677ed75d6068320",
+  "checkpoint_directory": "models/engine-tests/kolibri-1.1-gguf",
+  "files": [
+    {
+      "file": "Kolibri-1.1-Q5_K_M.gguf",
+      "bytes": 53394217408,
+      "sha256": "f338bb58bdb7d69e2097c656737cfcad5c84dffc2ee2085914e7bcc778052195",
+      "publisher_sha256_matched": true
+    }
+  ]
+}

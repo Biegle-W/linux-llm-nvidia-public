@@ -32,6 +32,7 @@
     "GLM-5.3-Flash": {"repo": "zai-org/GLM-5.3-Flash", "revision": "46a050bec13002ad29ee795c16e61cf4fa3c4a9c"},
     "DeepSeek-V4.1-Flash-1017": {"repo": "deepseek-ai/DeepSeek-V4.1-Flash-1017", "revision": "08c8657f02291e11b6f6b63e0e16014f8e748518"},
     "Inkling-2-Mini": {"repo": "thinkingmachines/Inkling-2-Mini", "revision": "7a67ae2314b44ef05c87fd1d4d311c58aaeb18f6"},
+    "Kolibri-1.1": {"repo": "Aleph-Alpha/Kolibri-1.1", "revision": "bfc33150d363f55a86cd4f0f7f79711deb9e0361"},
     "Hy4-Flash": {"repo": "tencent/Hy4-flash", "revision": "eccd3123eec73f2040f4c9ed0de1883593470510"}
   }
 }

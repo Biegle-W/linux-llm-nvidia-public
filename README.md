@@ -1,6 +1,6 @@
 # Linux LLM NVIDIA — public reference
 
-A home LLM server on native Linux with two consumer GPUs: an **RTX 3080 Ti (12 GB)** and an **RTX 3080 (10 GB)**, no peer-to-peer link between them, 92 GiB of RAM, an NVMe system drive and a SATA SSD for model weights. One authenticated, OpenAI-compatible router serves **nine text models**, loading one at a time on demand. Large mixture-of-experts models run by keeping the busy parts on the GPUs and the rest in RAM or streamed from SSD. RAM, VRAM, swap, memory-pressure and temperature guards stop a worker when it starts to starve the machine. Engine updates are researched, installed and checked by hand before they are kept. ComfyUI adds image and video generation.
+A home LLM server on native Linux with two consumer GPUs: an **RTX 3080 Ti (12 GB)** and an **RTX 3080 (10 GB)**, no peer-to-peer link between them, 92 GiB of RAM, an NVMe system drive and a SATA SSD for model weights. One authenticated, OpenAI-compatible router serves **ten text models**, loading one at a time on demand. Large mixture-of-experts models run by keeping the busy parts on the GPUs and the rest in RAM or streamed from SSD. RAM, VRAM, swap, memory-pressure and temperature guards stop a worker when it starts to starve the machine. Engine updates are researched, installed and checked by hand before they are kept. ComfyUI adds image and video generation.
 
 This repository is the curated public export of the private operational repository. Everything here is kept current with the live server: models, engines, test results and the procedures used to produce them.
 
@@ -16,6 +16,7 @@ Speeds are from the latest short check through the router: one real tool call fr
 | `qwen27b-sglang` | same weights | SGLang | 57,344 | 2,130 | 2.9 | 60.1 |
 | `flash-next-strata` | Qwen3.8 Flash Next 125B-A6B, IQ3_XXS (default Flash-Next) | Strata 0.2.21 + MTP | 131,072 | 1,270 | 4.5 | 69.0 |
 | `inkling-strata` | Inkling 2 Mini 26B, Strata SQ-10, both cards | Strata 0.2.21 (`strata-inkling`) | 131,072 | 2,129 | 3.4 | 66.9 |
+| `kolibri-llamacpp` | Aleph Alpha Kolibri 1.1 75B-A3.4B, Q5_K_M, both cards with most experts in RAM | llama.cpp (pull request 32891 build) | 131,072 | 511-542 (1,316 on a plain prompt) | 10.8-11.4 | 36.2-36.5 (43 on longer answers) |
 | `glm-maya` | GLM-5.3 Flash 320B-A18B, Maya-S24 | Maya 1.1.78 | 65,536 | 541 | 10.2 | 14.2 |
 | `deepseek-maya` | DeepSeek V4.1 Flash, Unsloth UD-IQ1_S | Maya 1.1.78 | 32,768 | 180-211 | 29-33 | 7.7-9.0 |
 | `deepseek-unsloth-strata` | same weights | Strata 0.2.13 (frozen: later Strata dropped DeepSeek) | 32,768 | 87 (cold; 28 with prompt reuse) | 65.6 (6.0) | 12.0 |
@@ -38,9 +39,8 @@ Weights, drives and sizes per entry are in [docs/CURRENT-STATE.md](docs/CURRENT-
 | `inkling-strata` | smaller | 59.3 |
 | `hy4-flash-strata` | larger | 57.9 |
 | `hy4-flash-maya` | larger | 43.3 (stopped by the memory-pressure guard at minute 30) |
+| `kolibri-llamacpp` | smaller | 41.8 (thinking off; 60.0 with thinking at medium) |
 | `flash-next-strata` | smaller | 40.6 |
-
-**Trials not on the router:** Kolibri 1.1 (Aleph Alpha, 75B MoE with 3.4B active) in Q5_K_M on a llama.cpp build from the unmerged pull request 32891, both cards with 10 layers of experts on the GPUs and the rest in RAM, 131,072 context. Short tool-use test 41.8 with thinking off (60.0 at medium thinking), generation 44 tok/s on short prompts falling to 11 tok/s at 111K tokens, prompt reading 1,030-1,230 tok/s, long-context recall correct up to 119K tokens. [Details](docs/evidence/KOLIBRI-1.1-TRIAL-20261124.md)
 
 **390-item quality test** (November 10-18; MMLU-Pro, AIME 2025, LiveCodeBench, BFCL single- and multi-turn; thinking off as served). Macro score: DeepSeek on Strata 73.0%, DeepSeek on Maya 72.4%, Qwen 27B on SGLang 68.1% and on HyperQwen 68.0%, Flash-Next UD-IQ4_XS 65.5% (entry retired November 24), Flash-Next IQ3_XXS 62.0%, GLM 57.2%. Entries added later have the short test only; the Inkling 2 Mini trial outside the router scored 60.0% with thinking on. [Full results](docs/evidence/QUALITY-BENCHMARK-20261111.md)
 
@@ -53,8 +53,8 @@ A new version is kept unless it really breaks something: a failed load, check or
 ## How it works
 
 - **Router** (`network/`, port 10100 on loopback and Tailscale): authenticated OpenAI-compatible API (Chat Completions with streaming and tool calls). The model id selects model, weights and engine together. One request runs at a time, up to eight wait in order; a request for an unloaded model loads it first. Idle models unload after 10 minutes. [network/README.md](network/README.md)
-- **Engines:** HyperQwen (a patched vLLM) and SGLang for the dense Qwen 27B; Strata for Flash-Next, Inkling, Hy4 and the frozen DeepSeek build; Maya for GLM, DeepSeek and Hy4. Each engine version, binary hash and local patch is pinned in `config/`.
-- **Memory layout:** Qwen 27B and Inkling 2 Mini fit entirely in VRAM across both cards. The large MoE models keep attention and part of the experts on the GPUs and the rest in RAM or streamed from NVMe/SATA (`hy4-flash-strata` runs on the 12 GB card with all experts in RAM). Flash-Next uses a hand-tuned layer split between the 12 GB and 10 GB cards; other two-card entries use the engine's automatic split. No entry needs a GPU-to-GPU link.
+- **Engines:** HyperQwen (a patched vLLM) and SGLang for the dense Qwen 27B; Strata for Flash-Next, Inkling, Hy4 and the frozen DeepSeek build; Maya for GLM, DeepSeek and Hy4; llama.cpp, built from the still-unmerged Kolibri pull request and pinned, for Kolibri 1.1. Each engine version, binary hash and local patch is pinned in `config/`.
+- **Memory layout:** Qwen 27B and Inkling 2 Mini fit entirely in VRAM across both cards. The large MoE models keep attention and part of the experts on the GPUs and the rest in RAM or streamed from NVMe/SATA (`hy4-flash-strata` runs on the 12 GB card with all experts in RAM; `kolibri-llamacpp` keeps the experts of 10 of its 48 MoE layers on the two cards and the rest in RAM, memory-mapped from SATA). Flash-Next uses a hand-tuned layer split between the 12 GB and 10 GB cards; other two-card entries use the engine's automatic split. No entry needs a GPU-to-GPU link.
 - **Guards:** every worker runs in a systemd scope with a RAM budget (87.77 GiB soft, 89.77 GiB hard, 2 GiB host reserve; `hy4-flash-maya` has its soft cap at the hard limit). It is stopped on sustained swap writes, full memory pressure above the entry's limit (10-15%), too little free VRAM (per-entry floor, 256 MiB for most) or GPU temperature. [Swap and pressure policy](docs/INFERENCE-SWAP-POLICY.md)
 - **GPU unlock health:** a boot and package-update service checks that the GPU unlock is still in place after kernel or driver changes. Inference work starts only when it reads VERIFIED. [GPU-UNLOCK-HEALTH.md](docs/GPU-UNLOCK-HEALTH.md)
 - **Web client:** DeepSeek Harness (`dsh/`) lists the router's models. Selections of retired entries move to their replacement.

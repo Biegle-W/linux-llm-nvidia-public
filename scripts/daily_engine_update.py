@@ -45,14 +45,16 @@ def validate_update_coverage(catalog, policy):
     pinned = policy.get('pinned_profiles', [])
     if not isinstance(pinned, list):
         raise RuntimeError('Pinned updater profiles must be a list')
+    approved = {
+        'deepseek-unsloth-strata': ('Strata', 'config/deepseek-unsloth-runtime.json'),
+        'kolibri-llamacpp': ('llama.cpp', 'config/kolibri-llamacpp-runtime.json'),
+    }
     for entry in pinned:
         if not isinstance(entry, dict) or set(entry) != {'profile', 'reason'}:
             raise RuntimeError('Pinned updater profile needs an explicit reason')
         name = entry['profile']
         if (not isinstance(name, str) or name not in profiles
-                or name != 'deepseek-unsloth-strata'
-                or profiles[name]['engine'] != 'Strata'
-                or profiles[name].get('runtime_manifest') != 'config/deepseek-unsloth-runtime.json'
+                or approved.get(name) != (profiles[name]['engine'], profiles[name].get('runtime_manifest'))
                 or not isinstance(entry['reason'], str) or not entry['reason'].strip()):
             raise RuntimeError('Only explicitly pinned custom runtimes may skip automatic updates')
         listed.append(name)

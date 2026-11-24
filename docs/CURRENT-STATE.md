@@ -2,7 +2,7 @@
 
 Snapshot of what is live. Replace facts here when they change; dated detail goes in evidence docs and [HISTORY.md](HISTORY.md).
 
-## Nine enabled text models (`/v1/models`)
+## Ten enabled text models (`/v1/models`)
 
 | API id | Model / quant | Engine | Context | Weights (location, size) |
 |---|---|---|---:|---|
@@ -13,6 +13,7 @@ Snapshot of what is live. Replace facts here when they change; dated detail goes
 | `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.78 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
 | `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build); frozen, later Strata versions do not run DeepSeek | 32,768 | same as above |
 | `inkling-strata` | Inkling 2 Mini 26B SQ-10 | Strata 0.2.21 (control 0.1.67, `strata-inkling` 0.1.67), both cards with automatic layer split | 131,072 | `models/strata/models/inkling-2-mini`, NVMe, 10.5 GB |
+| `kolibri-llamacpp` | Aleph Alpha Kolibri 1.1 75B-A3.4B Q5_K_M | llama.cpp pull request 32891 build (`5f4d2228`, pinned); experts of layers 2-6 on the 3080 Ti and 45-49 on the 3080, the rest in RAM; thinking off by default | 131,072 | `models/engine-tests/kolibri-1.1-gguf`, SATA, 53.4 GB |
 | `hy4-flash-strata` | Tencent Hy4-Flash 220B-A12B SQ-96 | Strata 0.2.21 (control 0.1.67), separate Hy4 engine 0.1.67 | 131,072 | `models/strata/models/hy4-flash`, NVMe, 158.10 GB |
 | `hy4-flash-maya` | Tencent Hy4-Flash 220B-A12B Maya-L | Maya 1.1.78, separate Hy4 engine on both cards | 131,072 | `models/maya-hy4/hy4-flash-maya-l`, SATA SSD, 152.87 GB served (162.5 GB installed) |
 
@@ -49,10 +50,12 @@ Last long-prompt speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cach
 | `inkling-strata` | smaller | 59.3 |
 | `hy4-flash-strata` | larger | 57.9 |
 | `hy4-flash-maya` | larger | 43.3 (cut by the memory-pressure guard at minute 30) |
+| `kolibri-llamacpp` | smaller | 41.8 (thinking off; 60.0 at medium) |
 | `flash-next-strata` | smaller | 40.6 |
 
 ## Recent changes (newest first)
 
+- **Nov 24:** `kolibri-llamacpp` added at the owner's request: Kolibri 1.1 Q5_K_M on the llama.cpp pull-request build from the trial, same settings, engine pinned until the merge. Router checks pass: tool call and follow-up, gBench 6/6, owned unload. The web-client prompt reads at about 520 tok/s because llama-server splits it at checkpoint boundaries (plain prompts 1,316 tok/s); generation 43 tok/s on longer answers. [KOLIBRI-1.1-ROUTER-ENTRY-20261124.md](evidence/KOLIBRI-1.1-ROUTER-ENTRY-20261124.md)
 - **Nov 24:** Kolibri 1.1 Q5_K_M trialled on a separate llama.cpp build from pull request 32891 (no router entry). Both cards, experts of 10 layers on the GPUs and the rest in RAM, 131,072 context: prompt reading 1,030-1,230 tok/s, generation 44 tok/s short and 11 tok/s at 111K (CPU-bound sparse-attention masks), recall correct to 119K, tool calls and follow-ups pass. Short tool-use test 41.8 thinking off, 60.0 at medium; it rarely makes parallel calls. [KOLIBRI-1.1-TRIAL-20261124.md](evidence/KOLIBRI-1.1-TRIAL-20261124.md)
 - **Nov 24:** Maya 1.1.78 installed by hand for all three Maya entries; GLM and DeepSeek pass at the same speed. `hy4-flash-maya` now spends 5-7 minutes measuring a prompt route on every start (first token 209 s against 116 s in the short check, generation 16% faster); its first start failed the owned unload during that measurement and passed on the re-run. [ENGINE-UPDATES-20261124-MAYA-1178.md](evidence/ENGINE-UPDATES-20261124-MAYA-1178.md)
 - **Nov 24:** Strata 0.2.21 installed by hand: control 0.1.67, `strata-inkling` 0.1.67 (prompt reading 8% faster, first token 3.4 against 4.8 s) and `strata-hy4` 0.1.67 (same speed) promoted; the Qwen engine stays at 0.1.65 because 0.1.67, like 0.1.66, slows `flash-next-strata` 11-12%. [ENGINE-UPDATES-20261124-STRATA-0221.md](evidence/ENGINE-UPDATES-20261124-STRATA-0221.md)
@@ -95,7 +98,7 @@ Entries before November 15 are in [HISTORY.md](HISTORY.md).
 - **`glm-maya`** skipped the tool call once in four short checks on Maya 1.1.61; on 1.1.65 it called the tool in 3 of 3 on 1.1.67 in 2 of 2 on 1.1.70 in 1 of 1, on 1.1.71 in 1 of 1, on 1.1.72 in 2 of 2, on 1.1.73 in 1 of 1 and on 1.1.74 in 2 of 2. Keep watching in the daily checks. Maya 1.1.67 fixes wrong expert weights on this kind of setup; its quality score has not been re-run on the fixed engine.
 - **ComfyUI 0.45.0** has only the short 1024² image and 512x288 video checks for the earlier image and video models; their 2048², 720p and 1080p sizes were not re-run. MiniMax H3 Image was measured on 0.45.0 at 2048² and 4096². The Raylight trial stage gives a different clip than on 0.44.0 (valid, same speed; cause not investigated). [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md)
 - **Strata 0.2.20, Maya 1.1.74, HyperQwen vLLM 0.33.0** have only short-check numbers; no long-context or sustained run yet. The Nov 7 Flash-Next figures above are still from 0.2.11. Strata 0.2.17 changed the engine and turned the route tail skip off for `flash-next-strata`, so only its short-check speed has been re-measured since (same speed); its long-prompt speed figures and its quality score (measured on engine 0.1.60 with the skip on) have not.
-- **Kolibri 1.1 (trial only)** runs on an unmerged llama.cpp pull request with no human review yet; no router entry, guard or web-client listing. Its 53.4 GB Q5_K_M file is on SATA. Whether to add it is the owner's call. [KOLIBRI-1.1-TRIAL-20261124.md](evidence/KOLIBRI-1.1-TRIAL-20261124.md)
+- **`kolibri-llamacpp`** runs on an unmerged llama.cpp pull request with no human review yet, pinned in `config/daily-update.json`; update it by hand when the pull request merges. Generation falls with context (11 tok/s at 111K, CPU-bound sparse-attention masks), and the web-client prompt is read in several small batches; no multi-hour run. [KOLIBRI-1.1-ROUTER-ENTRY-20261124.md](evidence/KOLIBRI-1.1-ROUTER-ENTRY-20261124.md)
 - **Quality benchmark gaps:** none of the eight ranked entries was run with thinking on (only the Inkling 2 Mini trial, which cannot turn it off); samples are screening-size. From November 22 new models get only the short tool-use test, which does not measure knowledge, maths or coding, and has not yet been run live. [QUALITY-FAST-TEST-PLAN.md](QUALITY-FAST-TEST-PLAN.md)
 - **`data/`** holds many private trial and evidence directories (all gitignored). Pruning them needs the owner's OK.
 - Possible follow-up from Nov 7 research: the DeepSeek entries still use the automatic layer split and might gain from the same hand-set split sweep that helped Flash-Next.

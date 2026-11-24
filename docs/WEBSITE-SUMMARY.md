@@ -15,10 +15,11 @@ This file supplies the NVIDIA tables on the biegle.ca test-results page. It is u
 | deepseek-maya | DeepSeek-V4.1-Flash-1017 | UD-IQ1_S (Unsloth Dynamic3.1) | Maya | 1.1.78 | 32768 | 232.97960842 | NVMe + SATA | streamed from SSD |
 | deepseek-unsloth-strata | DeepSeek-V4.1-Flash-1017 | UD-IQ1_S (Unsloth Dynamic3.1) | Strata | 0.2.13 (DSV4.1 0.1.59, control 0.1.67) | 32768 | 232.97960842 | NVMe + SATA | streamed from SSD |
 | inkling-strata | Inkling 2 Mini 26B | SQ-10 | Strata | 0.2.21 (control 0.1.67, Inkling 0.1.67) | 131072 | 10.4715264 | NVMe | VRAM only |
+| kolibri-llamacpp | Kolibri 1.1 | Q5_K_M | llama.cpp | PR 32891 build (5f4d2228), pinned | 131072 | 53.394217408 | SATA | partly in system memory |
 | hy4-flash-strata | Tencent Hy4-Flash 220B-A12B | SQ-96 | Strata | 0.2.21 (control 0.1.67, Hy4 0.1.67) | 131072 | 158.096740352 | NVMe | partly in system memory |
 | hy4-flash-maya | Tencent Hy4-Flash 220B-A12B | Maya-L | Maya | 1.1.78 | 131072 | 152.87284608 | SATA | streamed from SSD |
 
-Weight sizes are decimal GB of served checkpoint files. The two dense Qwen routes share one checkpoint, as do the two DeepSeek routes. Hy4 on Strata uses the 3080 Ti with all experts in RAM and reads its Engram table from NVMe. Hy4 on Maya maps experts into the file cache, caches a fraction on both cards and reads table rows from SATA.
+Weight sizes are decimal GB of served checkpoint files. The two dense Qwen routes share one checkpoint, as do the two DeepSeek routes. Hy4 on Strata uses the 3080 Ti with all experts in RAM and reads its Engram table from NVMe. Hy4 on Maya maps experts into the file cache, caches a fraction on both cards and reads table rows from SATA. Kolibri keeps the experts of 10 of its 48 MoE layers on the two cards and the rest in RAM, memory-mapped from SATA.
 
 Maya 1.1.78 is serving. Its promotion was held for the owner's review of the `hy4-flash-maya` first start (see docs/evidence/ENGINE-UPDATES-20261124-MAYA-1178.md).
 
@@ -37,6 +38,7 @@ One short DSH web-client tool call on a roughly 5.6K–7K-token prompt, followed
 | deepseek-maya | 179.7 | 32.98 | 8.2 | not recorded | 2026-11-24 | 1.1.78 | docs/evidence/ENGINE-UPDATES-20261124-MAYA-1178.md (1016876a387e) | Single run. |
 | deepseek-unsloth-strata | 28.3 | 5.98 | 12.3 | not recorded | 2026-11-24 | 0.2.13 (DSV4.1 0.1.59, control 0.1.67) | docs/evidence/ENGINE-UPDATES-20261124-STRATA-0221.md (d46f5f268f8e) | Prompt reuse. Only reused-prompt check on current control. |
 | inkling-strata | 2129.3 | 3.44 | 66.9 | not recorded | 2026-11-24 | 0.2.21 (control 0.1.67, Inkling 0.1.67) | docs/evidence/ENGINE-UPDATES-20261124-STRATA-0221.md (d46f5f268f8e) | Single run on Inkling eada4591cef1. |
+| kolibri-llamacpp | 541.9 | 10.82 | 36.2 | 5707 | 2026-11-24 | PR 32891 build (5f4d2228) | docs/evidence/KOLIBRI-1.1-ROUTER-ENTRY-20261124.md | First of two passing checks. The web-client prompt runs in five batches at checkpoint boundaries; a plain 6.1K-token prompt reads at 1,316 tok/s. |
 | hy4-flash-strata | 213.3 | 26.41 | 23.7 | not recorded | 2026-11-24 | 0.2.21 (control 0.1.67, Hy4 0.1.67) | docs/evidence/ENGINE-UPDATES-20261124-STRATA-0221.md (d46f5f268f8e) | Single run on Hy4 4da72cca05cc. |
 | hy4-flash-maya | 26.4 | 209.5 | 15.6 | not recorded | 2026-11-24 | 1.1.78 | docs/evidence/ENGINE-UPDATES-20261124-MAYA-1178.md (1016876a387e) | Passing repeat. Prompt-route calibration took 322–435 s per start. First start failed owned unload. |
 
@@ -75,7 +77,7 @@ Each route answered the same 390 items with thinking off as served and one gener
 
 A tie means the paired 95% interval includes zero. No adjacent entries in the original ranking separated. Neither same-checkpoint engine pair separated on any individual benchmark. DeepSeek exceeded both Flash-Next quants and GLM. The two Flash-Next quants tied (paired difference −2.0 to +8.9 points).
 
-Inkling 2 Mini on inkling-strata and Hy4-Flash on both routes are **not tested** on this benchmark. The separate Inkling llama.cpp trial used thinking on. Sources are docs/evidence/QUALITY-BENCHMARK-20261111.md and docs/CURRENT-STATE.md.
+Inkling 2 Mini on inkling-strata, Kolibri 1.1 on kolibri-llamacpp and Hy4-Flash on both routes are **not tested** on this benchmark. The separate Inkling llama.cpp trial used thinking on. Sources are docs/evidence/QUALITY-BENCHMARK-20261111.md and docs/CURRENT-STATE.md.
 
 ## Short tool-use test
 
@@ -86,6 +88,7 @@ Inkling 2 Mini on inkling-strata and Hy4-Flash on both routes are **not tested**
 | GLM-5.3-Flash | Maya-S24 | Maya | larger | 60.4 | 35/40 | 3/9 | 2026-11-22 | docs/QUALITY-FAST-TEST-PLAN.md | Passed 4/15 overall. |
 | Inkling 2 Mini 26B | SQ-10 | Strata | smaller | 59.3 | 36/40 | 2/7 | 2026-11-24 | docs/evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md | Reached 7/9 episodes. Retired llama.cpp reached 1/9. |
 | Tencent Hy4-Flash 220B-A12B | SQ-96 | Strata | larger | 57.9 | 33/40 | 3/9 | 2026-11-22 | docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md | Passed 4/15 overall at 32K. Maya 43.3, memory guard at minute 30. |
+| Kolibri 1.1 | Q5_K_M | llama.cpp | smaller | 41.8 | 29/40 | 1/9 | 2026-11-24 | docs/evidence/KOLIBRI-1.1-TRIAL-20261124.md | Thinking off as served. With thinking at medium 60.0 (24/40, 3 of 5 scored episodes). |
 | Qwen3.8-Flash-Next | IQ3_XXS | Strata | smaller | 40.6 | 28/40 | 1/9 | 2026-11-22 | docs/QUALITY-FAST-TEST-PLAN.md | Strata UD-IQ4_XS-v31 47.4 (retired). |
 
 The BFCL v4 screen gives equal weight to single-turn accuracy and multi-turn episode pass rate on the common core. Single turn covers 15 parallel calls, 15 cases where no tool fits and 10 plain calls. The common core has nine multi-turn episodes. The larger group gets six additional episodes. Deadline cuts reduce scored coverage. Dates identify live runs or the replay of stored answers.
@@ -96,7 +99,6 @@ Smaller models get 49 items in 15 minutes, with about ±17 points of noise at 95
 
 | Model | Quant | Engine | Date | Status | Key results | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| Kolibri 1.1 | Q5_K_M | llama.cpp PR 32891 (5f4d2228) | 2026-11-24 | trial, not for the website | 131072 context, 53.4 GB on SATA, 10 expert layers on GPUs and the rest in RAM; prefill 1,035-1,227 tok/s; decode 43.7-45 tok/s short, 11.4 at 111K; recall correct to 119.2K; tool call and follow-up pass; short tool-use 41.8 thinking off, 60.0 medium (5 of 9 episodes scored) | docs/evidence/KOLIBRI-1.1-TRIAL-20261124.md |
 | Nemotron-3.5-Bolt-74B-A9B | AWQ INT4 | vLLM and SGLang startup trials | 2026-10-31 | trial, not for the website | see source | docs/evidence/NEMOTRON-INT4-OFFLOAD-20261031.md |
 | Nemotron-3.5-Super-VL-120B-A12B | W4A16-Merlin | vLLM and SGLang startup trials | 2026-10-31 | trial, not for the website | see source | docs/evidence/NEMOTRON-INT4-OFFLOAD-20261031.md |
 | Nemotron-3.5-Bolt-74B-A9B | AWQ INT4 | vLLM pageable offload | 2026-10-31 | trial, not for the website | see source | docs/evidence/GPU-PAIR-AUX-OPTIMIZATION-20261031.md |

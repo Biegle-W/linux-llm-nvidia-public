@@ -21,8 +21,9 @@ class Registration(unittest.TestCase):
  def test_text_only_trial_entries(self):
   profiles=registration.load_catalog()['profiles']
   models={m['id']:m for m in registration.router_providers({},profiles)[registration.ROUTER_ID]['models']}
-  for identifier, context in [('hy4-flash-maya',131072)]:
+  for identifier, context in [('hy4-flash-maya',131072), ('kolibri-llamacpp',131072)]:
    self.assertEqual((models[identifier]['input'],models[identifier]['contextWindow']),(['text'],context))
+   self.assertEqual(models[identifier]['maxTokens'],4096)
   self.assertNotIn('hy4-maya',models)
   self.assertNotIn('inkling-llamacpp',models)
 

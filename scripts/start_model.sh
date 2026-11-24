@@ -4,7 +4,7 @@ project_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 model="${1:-qwen}"
 engine="${2:-hyperqwen}"
 if [[ $# -gt 2 || ( $# -gt 1 && "$model" != qwen27b ) ]]; then
-    echo 'Usage: start_model.sh qwen|qwen27b [hyperqwen|sglang]|strata-deepseek|glm|maya-deepseek|strata-unsloth|inkling|inkling-strata|hy4|hy4-maya' >&2
+    echo 'Usage: start_model.sh qwen|qwen27b [hyperqwen|sglang]|strata-deepseek|glm|maya-deepseek|strata-unsloth|inkling|inkling-strata|kolibri|hy4|hy4-maya' >&2
     exit 2
 fi
 if [[ "$model" == qwen27b && "$engine" != hyperqwen && "$engine" != sglang ]]; then
@@ -12,12 +12,13 @@ if [[ "$model" == qwen27b && "$engine" != hyperqwen && "$engine" != sglang ]]; t
     exit 2
 fi
 case "$model" in
-    qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|inkling|inkling-strata|hy4|hy4-maya) ;;
-    *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|inkling|inkling-strata|hy4|hy4-maya' >&2; exit 2 ;;
+    qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|inkling|inkling-strata|kolibri|hy4|hy4-maya) ;;
+    *) echo 'Usage: start_model.sh qwen|qwen27b|strata-deepseek|glm|maya-deepseek|strata-unsloth|inkling|inkling-strata|kolibri|hy4|hy4-maya' >&2; exit 2 ;;
 esac
 # Normal CLI calls use router ownership; only its internal worker path runs preflight below.
 case "$model" in
     qwen) route_model="flash-next-strata" ;;
+    kolibri) route_model="kolibri-llamacpp" ;;
     hy4-maya) route_model="hy4-flash-maya" ;;
     hy4) route_model="hy4-flash-strata" ;;
     glm) route_model="glm-maya" ;;
