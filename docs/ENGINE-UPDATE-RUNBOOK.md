@@ -24,8 +24,10 @@ python3 $PWD/scripts/daily_engine_update.py --check-only        # read-only disc
 2. **Stage in isolation** under `runtimes/<engine>-manual/<rev>-<date>/` (or reuse a complete staging dir and its `build-receipt.json`). Nothing in production changes.
 3. **Baseline production** with the short DSH check, one profile at a time, calling the script by **absolute path** (its reservation owner check matches its own command line):
    `python3 $PWD/scripts/daily_engine_update.py --smoke-current PROFILE`
+   then the gBench chat-template check (warms the model, six cases within 120 s, unloads):
+   `python3 scripts/gbench_template_check.py --model PROFILE`
 4. **Swap with pre-images** into `data/<engine>-update-<date>/preimages/` and write a `rollback.sh` beside them before anything is replaced.
-5. **Check the new version** with the same command; compare with the baseline.
+5. **Check the new version** with the same two commands; compare with the baseline. A structured chat-template case that fails while its twin passes is a real break (template or serialization); see [GBENCH-TEMPLATE-CHECK-20261123.md](evidence/GBENCH-TEMPLATE-CHECK-20261123.md).
 6. **Keep or roll back.** Roll back only on a real break (`rollback.sh`). Leave serving idle and unloaded.
 7. **Record:** pin in `config/daily-update-versions.json`, a dated entry at the top of `docs/DAILY-ENGINE-UPDATES.md`, `docs/CURRENT-STATE.md` if a version changed. Commit, export to the public checkout (`python3 scripts/sync_public.py ../linux-llm-nvidia-public`, check the diff for secrets and home paths), commit there, and push both. Hold the push and ask the owner only if something big changed (a rollback or real break, a profile added/retired, deletions, serving or guard changes, anything about keys, privacy or the public export list).
 

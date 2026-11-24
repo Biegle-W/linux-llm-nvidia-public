@@ -38,6 +38,7 @@ Last long-prompt speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cach
 
 ## Recent changes (newest first)
 
+- **Nov 23:** Engine updates now also run the six chat-template and tool-call cases of gBench's Golden Set (`scripts/gbench_template_check.py`, about 3-45 s after warm-up). Baseline: all 10 entries pass 6/6. [GBENCH-TEMPLATE-CHECK-20261123.md](evidence/GBENCH-TEMPLATE-CHECK-20261123.md)
 - **Nov 23:** Strata 0.2.20 installed by hand: control 0.1.66 and the Hy4 engine 0.1.66 promoted; the Qwen engine stays at 0.1.65 because 0.1.66 broke `flash-next-iq4xs-strata` on its first prompt and slowed `flash-next-strata` 12-14%. Inkling 2 Mini retested on the new `strata-inkling` 0.1.66: on both cards with the new layer split it holds 128K context and writes 55-71 tok/s (llama.cpp entry 41-44); not added as an entry yet. [ENGINE-UPDATES-20261123-STRATA-0220.md](evidence/ENGINE-UPDATES-20261123-STRATA-0220.md)
 - **Nov 23:** At the owner's request `bolt-llamacpp` was retired and its 22.0 GB IQ2 GGUF (`models/engine-tests/bolt-iq2`, SATA) deleted. The Inkling SQ-10 Strata weights (11.1 GB, NVMe) left by the dropped `inkling-strata` entry were deleted too. Saved web-client selections of Bolt move to `qwen27b-hyperqwen`.
 

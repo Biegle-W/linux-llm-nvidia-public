@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## gBench chat-template check added to engine updates — November 23, 2026
+
+The six chat-template and tool-call cases of gBench 0.5.0.post1's Golden Set run after the short DSH check on every engine update, with the model warmed first and a 120 s limit. All 10 entries pass 6/6 at baseline (3.3-43.2 s). [GBENCH-TEMPLATE-CHECK-20261123.md](evidence/GBENCH-TEMPLATE-CHECK-20261123.md)
+
 ## Strata 0.2.20; Inkling 2 Mini holds 128K on both cards — November 23, 2026
 
 Control 0.1.66 and `strata-hy4` 0.1.66 promoted. Qwen engine 0.1.66 failed `flash-next-iq4xs-strata` (`verify: layer 0 never rang`) and slowed `flash-next-strata` 12-14%, so both Flash-Next presets keep engine 0.1.65 under control 0.1.66. On the new `strata-inkling` 0.1.66 Inkling 2 Mini SQ-10 runs on both cards with a layer split (no P2P needed): web-client-shaped requests with 25 tools pass at 16K-64K, and 60K/120K-token recalls pass at 128K, at 55-71 tok/s. [ENGINE-UPDATES-20261123-STRATA-0220.md](evidence/ENGINE-UPDATES-20261123-STRATA-0220.md)
