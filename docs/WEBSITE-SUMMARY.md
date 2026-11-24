@@ -2,7 +2,7 @@
 
 Last updated: 2026-11-24
 
-This file supplies the NVIDIA tables on the biegle.ca test-results page. It is updated in the same commit as any change to the router or results. The AMD repository reports results on different test items, so the two sets are not comparable.
+This file supplies the NVIDIA tables on the biegle.ca test-results page. Models are ranked by the short tool-use test (owner's decision, 2026-11-24); the 390-item test is archived. It is updated in the same commit as any change to the router or results. The AMD repository reports results on different test items, so the two sets are not comparable.
 
 ## Enabled routes
 
@@ -62,7 +62,23 @@ The SGLang token count comes from docs/evidence/validation-results/20261105-engi
 | super-strata-trial | Nemotron-3.5-Super-VL-120B-A12B / UD-Q4_K_XL | Strata | 2026-11-01 | qwen27b-hyperqwen (saved selections) | Deleted | docs/evidence/NEMOTRON-SUPER-REMOVAL-20261101.md |
 | qwen27b-llama | Qwen3.8-27B / IQ4_XS | llama.cpp | 2026-10-27 | qwen27b-hyperqwen | Deleted | docs/evidence/QWEN27B-GPU-ONLY-20261026.md |
 
-## Quality ranking (390-item test)
+## Quality ranking (short tool-use test)
+
+| Rank | Model | Quant | Engine | Route | Score | 95% interval | Single turn | Parallel calls | No tool fits | Plain calls | Multi-turn episodes | Other engines/quants (with scores) | Tie note | Date | Source |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 | Qwen3.8-27B | AutoRound INT4 | HyperQwen-vLLM | qwen27b-hyperqwen | 66.0 | 49.0–83.0 | 35/40 | 12/15 | 13/15 | 10/10 | 4/9 | SGLang 61.7 (45.6–77.8) | not separated from any other model (all 95% intervals overlap) | 2026-11-22 (stored answers of 2026-11-10) | docs/QUALITY-FAST-TEST-PLAN.md |
+| 2 | DeepSeek-V4.1-Flash-1017 | UD-IQ1_S | Strata | deepseek-unsloth-strata | 64.7 | 47.6–81.9 | 34/40 | 13/15 | 12/15 | 9/10 | 4/9 | Maya 63.5 (46.2–80.7) | not separated from any other model (all 95% intervals overlap) | 2026-11-22 (stored answers of 2026-11-11/12) | docs/QUALITY-FAST-TEST-PLAN.md |
+| 3 | GLM-5.3-Flash | Maya-S24 | Maya | glm-maya | 60.4 | 44.2–76.6 | 35/40 | 13/15 | 12/15 | 10/10 | 3/9 | none | not separated from any other model (all 95% intervals overlap) | 2026-11-22 (stored answers of 2026-11-11) | docs/QUALITY-FAST-TEST-PLAN.md |
+| 4 | Inkling 2 Mini 26B | SQ-10 | Strata | inkling-strata | 59.3 | 41.9–76.7 | 36/40 | 14/15 | 14/15 | 8/10 | 2/7 (7 of 9 reached) | retired llama.cpp UD-Q4_K_M 40.0 (cut, 1 of 9 episodes reached) | not separated from any other model (all 95% intervals overlap) | 2026-11-24 | docs/evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md |
+| 5 | Tencent Hy4-Flash 220B-A12B | SQ-96 | Strata | hy4-flash-strata | 57.9 | 41.4–74.4 | 33/40 | 11/15 | 14/15 | 8/10 | 3/9 | Maya (Maya-L weights) 45.6 (33.6–57.5); run stopped by the memory-pressure guard at minute 30 | not separated from any other model (all 95% intervals overlap) | 2026-11-22 | docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md |
+| 6 | Kolibri 1.1 | Q5_K_M | llama.cpp (PR 32891 build) | kolibri-llamacpp | 41.8 | 29.4–54.2 | 29/40 | 5/15 | 14/15 | 10/10 | 1/9 | thinking at medium (not as served) 60.0, 3 of 5 scored episodes | not separated from any other model (all 95% intervals overlap) | 2026-11-24 | docs/evidence/KOLIBRI-1.1-TRIAL-20261124.md |
+| 7 | Qwen3.8-Flash-Next | IQ3_XXS | Strata | flash-next-strata | 40.6 | 28.1–53.0 | 28/40 | 11/15 | 9/15 | 8/10 | 1/9 | retired UD-IQ4_XS-v31 47.4 (32.1–62.6) | not separated from any other model (all 95% intervals overlap) | 2026-11-22 (stored answers of 2026-11-10) | docs/QUALITY-FAST-TEST-PLAN.md |
+
+Score = 50 × (single-turn accuracy on 40 items + pass rate on the 9 common multi-turn episodes), the same 49 items for every model. Larger models also run 6 extra episodes in their 1-hour limit; those are reported in the source files but not used for the ranking, so every model is scored on the same items. The 95% interval is the normal approximation over both parts. Thinking as served (off, or hidden for Inkling). Single turn splits into 15 parallel-call items, 15 items where no tool fits and 10 plain calls (BFCL v4). Scores dated 2026-11-22 with stored answers were scored on answers recorded in the November 10-12 runs on the engines of that time; the others were run live through the router or, for Kolibri, on the trial server with the same engine build, weights and settings as the route.
+
+One row per model, best engine shown. No model is separated from another by one run: about ±17 points per model at 95%; gaps of 20-25 points are needed. The 390-item results below are archived and no longer rank models. AMD results use other items and are not comparable.
+
+## Archived: 390-item test (not the ranking)
 
 | Rank | Model | Quant | Engine | Score (macro %) | 95% interval | MMLU-Pro | AIME 2025 | LiveCodeBench | BFCL single | BFCL multi | Other engines/quants (with scores) | Tie note | Date |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -71,29 +87,13 @@ The SGLang token count comes from docs/evidence/validation-results/20261105-engi
 | 3 | Qwen3.8-Flash-Next | IQ3_XXS | Strata | 62.0 | 56.5–67.5 | 85.2% | 73.3% | 58.3% | 73.3% | 20.0% | Strata UD-IQ4_XS-v31 65.5% (retired) | Tied with IQ4_XS, Qwen 27B and GLM | 2026-11-11 |
 | 4 | GLM-5.3-Flash | Maya-S24 | Maya | 57.2 | 52.1–62.3 | 86.2% | 6.7% | 55.0% | 91.7% | 46.7% | None | Tied with Flash-Next IQ3_XXS | 2026-11-11 |
 
-Rank orders the best enabled route for each scored model. Dates identify the dated results. The first five routes ran over 2026-11-10 to 2026-11-11. Qwen on SGLang and DeepSeek on Maya ran on 2026-11-12. The larger Flash-Next quant ran over 2026-11-17 to 2026-11-18.
+Kept for reference only; the ranking is the short tool-use test above (owner's decision, 2026-11-24). Rank orders the best enabled route for each scored model. Dates identify the dated results. The first five routes ran over 2026-11-10 to 2026-11-11. Qwen on SGLang and DeepSeek on Maya ran on 2026-11-12. The larger Flash-Next quant ran over 2026-11-17 to 2026-11-18.
 
 Each route answered the same 390 items with thinking off as served and one generation per item. The macro score weights five benchmarks equally. MMLU-Pro contributed 210 items, AIME 2025 contributed 30, LiveCodeBench contributed 60, and BFCL v4 contributed 60 single-turn items and 30 multi-turn episodes.
 
 A tie means the paired 95% interval includes zero. No adjacent entries in the original ranking separated. Neither same-checkpoint engine pair separated on any individual benchmark. DeepSeek exceeded both Flash-Next quants and GLM. The two Flash-Next quants tied (paired difference −2.0 to +8.9 points).
 
 Inkling 2 Mini on inkling-strata, Kolibri 1.1 on kolibri-llamacpp and Hy4-Flash on both routes are **not tested** on this benchmark. The separate Inkling llama.cpp trial used thinking on. Sources are docs/evidence/QUALITY-BENCHMARK-20261111.md and docs/CURRENT-STATE.md.
-
-## Short tool-use test
-
-| Model | Quant | Engine | Group (smaller/larger) | Score | Single turn | Multi-turn | Date | Source | Note |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Qwen3.8-27B | AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | smaller | 66.0 | 35/40 | 4/9 | 2026-11-22 | docs/QUALITY-FAST-TEST-PLAN.md | SGLang 61.7. |
-| DeepSeek-V4.1-Flash-1017 | UD-IQ1_S (Unsloth Dynamic3.1) | Strata | larger | 64.7 | 34/40 | 4/9 | 2026-11-22 | docs/QUALITY-FAST-TEST-PLAN.md | Maya 63.5. Strata passed 8/15 overall. |
-| GLM-5.3-Flash | Maya-S24 | Maya | larger | 60.4 | 35/40 | 3/9 | 2026-11-22 | docs/QUALITY-FAST-TEST-PLAN.md | Passed 4/15 overall. |
-| Inkling 2 Mini 26B | SQ-10 | Strata | smaller | 59.3 | 36/40 | 2/7 | 2026-11-24 | docs/evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md | Reached 7/9 episodes. Retired llama.cpp reached 1/9. |
-| Tencent Hy4-Flash 220B-A12B | SQ-96 | Strata | larger | 57.9 | 33/40 | 3/9 | 2026-11-22 | docs/evidence/HY4-FLASH-SQ96-TRIAL-20261122.md | Passed 4/15 overall at 32K. Maya 43.3, memory guard at minute 30. |
-| Kolibri 1.1 | Q5_K_M | llama.cpp | smaller | 41.8 | 29/40 | 1/9 | 2026-11-24 | docs/evidence/KOLIBRI-1.1-TRIAL-20261124.md | Thinking off as served. With thinking at medium 60.0 (24/40, 3 of 5 scored episodes). |
-| Qwen3.8-Flash-Next | IQ3_XXS | Strata | smaller | 40.6 | 28/40 | 1/9 | 2026-11-22 | docs/QUALITY-FAST-TEST-PLAN.md | Strata UD-IQ4_XS-v31 47.4 (retired). |
-
-The BFCL v4 screen gives equal weight to single-turn accuracy and multi-turn episode pass rate on the common core. Single turn covers 15 parallel calls, 15 cases where no tool fits and 10 plain calls. The common core has nine multi-turn episodes. The larger group gets six additional episodes. Deadline cuts reduce scored coverage. Dates identify live runs or the replay of stored answers.
-
-Smaller models get 49 items in 15 minutes, with about ±17 points of noise at 95%. Larger models get 55 items in at most one hour, with about ±13 points. One run generally separates gaps of 20–25 points. See docs/QUALITY-FAST-TEST-PLAN.md and docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md.
 
 ## Trials (not router entries)
 

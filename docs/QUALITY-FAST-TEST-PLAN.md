@@ -2,6 +2,10 @@
 
 **Status: built, replayed on stored records, and run live once (Inkling 2 Mini, November 22).** Asked for by the owner: the 390-item quality test takes 2 to 10 hours per model; the new test must finish in 15 minutes for the smaller models and in 1 hour at most for the larger ones, and put tool use first. The scores and times below come from the stored records of the existing runs on the chosen items; nothing was run on the GPUs for them.
 
+## The ranking (owner's decision, November 24)
+
+This test is now the quality ranking on the website and in the README; the 390-item test is archived and no longer ranks models. To keep one standard, every model is ranked on the same 49 items (40 single-turn, 9 common episodes) with score = 50 × (single-turn accuracy + episode pass rate). Larger models still run the 6 extra episodes, which are reported but not used for the ranking. Each score gets a 95% interval (normal approximation over both parts); with one run no model is separated from another. The table the website reads is [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md).
+
 ## When it runs
 
 Owner's rule, November 22: the test is run **only for new models and new weights**. Nothing that already has stored records is run again; the eight ranked models are scored on this test from their stored records. The 390-item test is no longer the routine test.
@@ -64,7 +68,7 @@ Figures in brackets are the 15-episode score for larger models. Item times are t
 
 ## What this test can and cannot tell
 
-- **It is a screen, not a ranking.** One run puts a model's score within about ±17 points (smaller) or ±13 points (larger) at 95%. Two models need to be 20-25 points apart to be told apart by one run. The 390-item test could not separate neighbours either; this one is coarser still.
+- **As a ranking it is coarse.** One run puts a model's score within about ±17 points (smaller) or ±13 points (larger) at 95%. Two models need to be 20-25 points apart to be told apart by one run. The 390-item test could not separate neighbours either; this one is coarser still.
 - **What it is good for:** catching a broken tool-calling setup after an engine or template update (a model against its own stored baseline, item by item), and a first look at a new model in the time of a coffee.
 - **Sharper answer when needed:** a second form drawn the same way from the remaining 15 episodes doubles the multi-turn count for another 10-45 minutes.
 - **Risk of dropping the other parts:** a model can lose reasoning or coding quality without this test noticing. Run the 390-item test when an entry's rank matters or the model is being swapped.

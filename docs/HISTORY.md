@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Short tool-use test becomes the quality ranking — November 24, 2026
+
+Owner's decision: one ranking standard. Models are ranked by the short tool-use test on the same 49 items with 95% intervals; the 390-item test is archived. `hy4-flash-maya` moves from 43.3 (55-item scale) to 45.6 on the common items. [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md)
+
 ## Maya 1.1.78 installed by hand — November 24, 2026
 
 All three Maya entries moved from 1.1.74 to 1.1.78 (DeepSeek empty-turn fix, GLM mapping release, stop during load). GLM and DeepSeek pass at the same speed. `hy4-flash-maya` passed on a re-run after its first start failed the owned unload; every start now spends 5-7 minutes on a prompt-route measurement. The qualification patch was regenerated for upstream's `MAYA_*` names. Committed, push held for the owner. [ENGINE-UPDATES-20261124-MAYA-1178.md](evidence/ENGINE-UPDATES-20261124-MAYA-1178.md)

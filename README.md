@@ -27,22 +27,19 @@ Weights, drives and sizes per entry are in [docs/CURRENT-STATE.md](docs/CURRENT-
 
 ## Test results
 
-**Short tool-use test** (run once for every new model or new weights). 49 tool-calling items in 15 minutes for smaller models, 55 items in at most an hour for larger ones. One run is accurate to about ±17 points (smaller) or ±13 (larger), so neighbouring scores are not a reliable order. [How it works](docs/QUALITY-FAST-TEST-PLAN.md)
+**Quality ranking: short tool-use test** (owner's choice, November 24). 49 tool-calling items for every model: 40 single-turn (parallel calls, cases where no tool fits, plain calls) and 9 multi-turn episodes; score = 50 × (single-turn accuracy + episode pass rate). Run once for every new model or new weights. One run is accurate to about ±17 points, so no model is separated from another; read the order as a rough guide. [How it works](docs/QUALITY-FAST-TEST-PLAN.md) · [table the website reads](docs/WEBSITE-SUMMARY.md)
 
-| API id | Group | Score |
-|---|---|---:|
-| `qwen27b-hyperqwen` | smaller | 66.0 |
-| `deepseek-unsloth-strata` | larger | 64.7 |
-| `deepseek-maya` | larger | 63.5 |
-| `qwen27b-sglang` | smaller | 61.7 |
-| `glm-maya` | larger | 60.4 |
-| `inkling-strata` | smaller | 59.3 |
-| `hy4-flash-strata` | larger | 57.9 |
-| `hy4-flash-maya` | larger | 43.3 (stopped by the memory-pressure guard at minute 30) |
-| `kolibri-llamacpp` | smaller | 41.8 (thinking off; 60.0 with thinking at medium) |
-| `flash-next-strata` | smaller | 40.6 |
+| Rank | Model | Best route | Score (95% interval) | Single turn | Episodes | Other engines |
+|---:|---|---|---:|---:|---:|---|
+| 1 | Qwen3.8-27B AutoRound INT4 | `qwen27b-hyperqwen` | 66.0 (49.0–83.0) | 35/40 | 4/9 | SGLang 61.7 (45.6–77.8) |
+| 2 | DeepSeek-V4.1-Flash-1017 UD-IQ1_S | `deepseek-unsloth-strata` | 64.7 (47.6–81.9) | 34/40 | 4/9 | Maya 63.5 (46.2–80.7) |
+| 3 | GLM-5.3-Flash Maya-S24 | `glm-maya` | 60.4 (44.2–76.6) | 35/40 | 3/9 | none |
+| 4 | Inkling 2 Mini 26B SQ-10 | `inkling-strata` | 59.3 (41.9–76.7) | 36/40 | 2/7 (7 of 9 reached) | retired llama.cpp UD-Q4_K_M 40.0 (cut, 1 of 9 episodes reached) |
+| 5 | Tencent Hy4-Flash 220B-A12B SQ-96 | `hy4-flash-strata` | 57.9 (41.4–74.4) | 33/40 | 3/9 | Maya (Maya-L weights) 45.6 (33.6–57.5); run stopped by the memory-pressure guard at minute 30 |
+| 6 | Kolibri 1.1 Q5_K_M | `kolibri-llamacpp` | 41.8 (29.4–54.2) | 29/40 | 1/9 | thinking at medium (not as served) 60.0, 3 of 5 scored episodes |
+| 7 | Qwen3.8-Flash-Next IQ3_XXS | `flash-next-strata` | 40.6 (28.1–53.0) | 28/40 | 1/9 | retired UD-IQ4_XS-v31 47.4 (32.1–62.6) |
 
-**390-item quality test** (November 10-18; MMLU-Pro, AIME 2025, LiveCodeBench, BFCL single- and multi-turn; thinking off as served). Macro score: DeepSeek on Strata 73.0%, DeepSeek on Maya 72.4%, Qwen 27B on SGLang 68.1% and on HyperQwen 68.0%, Flash-Next UD-IQ4_XS 65.5% (entry retired November 24), Flash-Next IQ3_XXS 62.0%, GLM 57.2%. Entries added later have the short test only; the Inkling 2 Mini trial outside the router scored 60.0% with thinking on. [Full results](docs/evidence/QUALITY-BENCHMARK-20261111.md)
+**390-item quality test, archived (not the ranking)** (November 10-18; MMLU-Pro, AIME 2025, LiveCodeBench, BFCL single- and multi-turn; thinking off as served). Macro score: DeepSeek on Strata 73.0%, DeepSeek on Maya 72.4%, Qwen 27B on SGLang 68.1% and on HyperQwen 68.0%, Flash-Next UD-IQ4_XS 65.5% (entry retired November 24), Flash-Next IQ3_XXS 62.0%, GLM 57.2%. Entries added later have the short test only; the Inkling 2 Mini trial outside the router scored 60.0% with thinking on. [Full results](docs/evidence/QUALITY-BENCHMARK-20261111.md)
 
 **Checks on every engine update**, one entry at a time:
 1. a short check through the web client before and after the swap: a real tool call and follow-up, with prompt-reading, first-token and generation speed;

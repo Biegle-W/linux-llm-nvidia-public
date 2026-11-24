@@ -10,7 +10,7 @@ from profile_catalog import load_catalog
 
 SUMMARY = ROOT / 'docs/WEBSITE-SUMMARY.md'
 SECTIONS = ('## Enabled routes', '## Speed (standard short tool-call check)', '## Retired or removed routes',
-            '## Quality ranking (390-item test)', '## Short tool-use test', '## Trials (not router entries)',
+            '## Quality ranking (short tool-use test)', '## Archived: 390-item test (not the ranking)', '## Trials (not router entries)',
             '## Hardware and measurement conditions')
 
 
