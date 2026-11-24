@@ -49,7 +49,7 @@
     "source_commit": "a34979fc94f3d126b9bb8210f4ad311345688b52",
     "qualified_on": "2026-11-23T17:00:00",
     "method": "hands-on short DSH",
-    "note": "Strata v0.2.20: control 0.1.66 for all Strata entries; hy4-flash-strata on strata-hy4 0.1.66. flash-next-strata and flash-next-iq4xs-strata keep Qwen engine 0.1.65 (v0.2.19 package): engine 0.1.66 failed flash-next-iq4xs-strata and slowed flash-next-strata. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59).",
+    "note": "Strata v0.2.20: control 0.1.66 for all Strata entries; hy4-flash-strata on strata-hy4 0.1.66. flash-next-strata keeps Qwen engine 0.1.65 (v0.2.19 package) because engine 0.1.66 slowed this profile. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59).",
     "evidence": "docs/evidence/ENGINE-UPDATES-20261123-STRATA-0220.md"
   }
 }

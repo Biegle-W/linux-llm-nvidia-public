@@ -11,7 +11,7 @@ ROUTER_URL='http://127.0.0.1:10100/v1'
 LEGACY_ROUTER_IDS={'nvidia-hyperqwen','nvidia-sglang','nvidia-router','nvidia-maya','nvidia-vllm-offload'}
 PLAIN='qwen27b-hyperqwen'
 SEARCH=PLAIN+'-search'
-MODEL_REPLACEMENTS={'flash-next-iq1s-llamacpp':'flash-next-strata','flash-next-iq1m-strata':'flash-next-strata','inkling-llamacpp':'inkling-strata'}
+MODEL_REPLACEMENTS={'flash-next-iq1s-llamacpp':'flash-next-strata','flash-next-iq1m-strata':'flash-next-strata','flash-next-iq4xs-strata':'flash-next-strata','inkling-llamacpp':'inkling-strata'}
 RETIRED_TO_PLAIN={'bolt-llamacpp','bolt-vllm'}
 RETIRED={'super-vllm','super-strata-trial'}|RETIRED_TO_PLAIN|set(MODEL_REPLACEMENTS)
 

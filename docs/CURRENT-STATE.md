@@ -2,14 +2,13 @@
 
 Snapshot of what is live. Replace facts here when they change; dated detail goes in evidence docs and [HISTORY.md](HISTORY.md).
 
-## Ten enabled text models (`/v1/models`)
+## Nine enabled text models (`/v1/models`)
 
 | API id | Model / quant | Engine | Context | Weights (location, size) |
 |---|---|---|---:|---|
 | `qwen27b-hyperqwen` | Qwen3.8-27B AutoRound INT4 (fast heads, INT8 embedding) | HyperQwen-vLLM (vLLM 0.33.0) | 86,016 | `models/engine-tests/qwen38-27b-hyperqwen-fast`, SATA, 16 GB (shared with SGLang) |
 | `qwen27b-sglang` | same checkpoint | SGLang | 57,344 | same as above |
 | `flash-next-strata` | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | Strata 0.2.20 (control 0.1.66, engine 0.1.65) + MTP; layers 0-28 on the 3080, 29-47 + head on the 3080 Ti, stage-trimmed | 131,072 | `models/strata/models/IQ3_XXS`, NVMe, 76 GB |
-| `flash-next-iq4xs-strata` | Qwen3.8-Flash-Next Unsloth UD-IQ4_XS-v31 | same Strata engine as `flash-next-strata` + MTP; automatic split (layers 0-19 on the 3080, 20-47 on the 3080 Ti), KV streaming | 131,072 | `models/strata/models/unsloth-UD-IQ4_XS-v31`, NVMe, 94 GB |
 | `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.74 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
 | `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.74 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
 | `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build); frozen, later Strata versions do not run DeepSeek | 32,768 | same as above |
@@ -31,7 +30,7 @@ Last long-prompt speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cach
 | 2 | `deepseek-maya` | 72.4% (66.8–77.9) | 88.6% | 80.0% | 51.7% | 88.3% | 53.3% |
 | 3 | `qwen27b-sglang` | 68.1% (62.3–73.9) | 85.7% | 66.7% | 50.0% | 91.7% | 46.7% |
 | 4 | `qwen27b-hyperqwen` | 68.0% (62.3–73.7) | 81.9% | 60.0% | 40.0% | 91.7% | 66.7% |
-| 5 | `flash-next-iq4xs-strata` | 65.5% (60.2–70.8) | 87.6% | 80.0% | 58.3% | 78.3% | 23.3% |
+| 5 | `flash-next-iq4xs-strata` (retired Nov 24) | 65.5% (60.2–70.8) | 87.6% | 80.0% | 58.3% | 78.3% | 23.3% |
 | 6 | `flash-next-strata` | 62.0% (56.5–67.5) | 85.2% | 73.3% | 58.3% | 73.3% | 20.0% |
 | 7 | `glm-maya` | 57.2% (52.1–62.3) | 86.2% | 6.7% | 55.0% | 91.7% | 46.7% |
 | 8 | `bolt-llamacpp` (retired) | 53.9% (48.7–59.4) | 76.2% | 50.0% | 33.3% | 90.0% | 20.0% |
@@ -49,12 +48,12 @@ Last long-prompt speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cach
 | `glm-maya` | larger | 60.4 |
 | `inkling-strata` | smaller | 59.3 |
 | `hy4-flash-strata` | larger | 57.9 |
-| `flash-next-iq4xs-strata` | smaller | 47.4 |
 | `hy4-flash-maya` | larger | 43.3 (cut by the memory-pressure guard at minute 30) |
 | `flash-next-strata` | smaller | 40.6 |
 
 ## Recent changes (newest first)
 
+- **Nov 24:** `flash-next-iq4xs-strata` retired at the owner's request; `flash-next-strata` (IQ3_XXS) stays the only Flash-Next entry. The larger quant was about 40% slower at writing (43.5 against 69.5 tok/s) with no measurable quality gain. Saved web-client selections move to `flash-next-strata`; its 88 GB checkpoint and 1.4 GB pack stay on NVMe as unused weights. [FLASH-NEXT-IQ4XS-RETIRED-20261124.md](evidence/FLASH-NEXT-IQ4XS-RETIRED-20261124.md)
 - **Nov 24:** `inkling-strata` added back at the owner's request, now on both cards with 131,072 context (Strata `strata-inkling` 0.1.66, layer split), and `inkling-llamacpp` retired (its 17.25 GB GGUF stays on SATA, unused). Router checks pass: prompt reading 1,989 tok/s, generation 66 tok/s, gBench 6/6. Short tool-use test 59.3 (llama.cpp entry: 32 of 40 single-turn items, 1 of 9 episodes). [INKLING2-MINI-STRATA-ENTRY-20261124.md](evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md)
 - **Nov 23:** Engine updates now also run the six chat-template and tool-call cases of gBench's Golden Set (`scripts/gbench_template_check.py`, about 3-45 s after warm-up). Baseline: all 10 entries pass 6/6. [GBENCH-TEMPLATE-CHECK-20261123.md](evidence/GBENCH-TEMPLATE-CHECK-20261123.md)
 - **Nov 23:** Strata 0.2.20 installed by hand: control 0.1.66 and the Hy4 engine 0.1.66 promoted; the Qwen engine stays at 0.1.65 because 0.1.66 broke `flash-next-iq4xs-strata` on its first prompt and slowed `flash-next-strata` 12-14%. Inkling 2 Mini retested on the new `strata-inkling` 0.1.66: on both cards with the new layer split it holds 128K context and writes 55-71 tok/s (llama.cpp entry 41-44); not added as an entry yet. [ENGINE-UPDATES-20261123-STRATA-0220.md](evidence/ENGINE-UPDATES-20261123-STRATA-0220.md)
@@ -93,7 +92,6 @@ Entries before November 15 are in [HISTORY.md](HISTORY.md).
 - **`glm-maya`** skipped the tool call once in four short checks on Maya 1.1.61; on 1.1.65 it called the tool in 3 of 3 on 1.1.67 in 2 of 2 on 1.1.70 in 1 of 1, on 1.1.71 in 1 of 1, on 1.1.72 in 2 of 2, on 1.1.73 in 1 of 1 and on 1.1.74 in 2 of 2. Keep watching in the daily checks. Maya 1.1.67 fixes wrong expert weights on this kind of setup; its quality score has not been re-run on the fixed engine.
 - **ComfyUI 0.45.0** has only the short 1024² image and 512x288 video checks for the earlier image and video models; their 2048², 720p and 1080p sizes were not re-run. MiniMax H3 Image was measured on 0.45.0 at 2048² and 4096². The Raylight trial stage gives a different clip than on 0.44.0 (valid, same speed; cause not investigated). [ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md](evidence/ENGINE-UPDATES-20261112-MAYA-1160-COMFYUI-045.md)
 - **Strata 0.2.20, Maya 1.1.74, HyperQwen vLLM 0.33.0** have only short-check numbers; no long-context or sustained run yet. The Nov 7 Flash-Next figures above are still from 0.2.11. Strata 0.2.17 changed the engine and turned the route tail skip off for `flash-next-strata`, so only its short-check speed has been re-measured since (same speed); its long-prompt speed figures and its quality score (measured on engine 0.1.60 with the skip on) have not.
-- **`flash-next-iq4xs-strata`** has one near-window request (113K tokens) and a 53-second writing run; nothing at the very top of the window and no multi-hour run. It must be updated together with `flash-next-strata` on every Strata engine update (the launch is refused if the two presets name different engines). Its first router session swapped 1.7 GiB while loading; the second did not.
 - **Quality benchmark gaps:** none of the eight ranked entries was run with thinking on (only the Inkling 2 Mini trial, which cannot turn it off); samples are screening-size. From November 22 new models get only the short tool-use test, which does not measure knowledge, maths or coding, and has not yet been run live. [QUALITY-FAST-TEST-PLAN.md](QUALITY-FAST-TEST-PLAN.md)
 - **`data/`** holds many private trial and evidence directories (all gitignored). Pruning them needs the owner's OK.
 - Possible follow-up from Nov 7 research: the DeepSeek entries still use the automatic layer split and might gain from the same hand-set split sweep that helped Flash-Next.

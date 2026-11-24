@@ -194,7 +194,7 @@ def download(asset,directory):
 def strata_qwen_actions(root,component,directory,terminal,version,qwen,release,receipt):
     from update_builders import canonical
     for profile in component['profiles']:
-        if profile not in ('flash-next-strata','flash-next-iq4xs-strata'):continue
+        if profile != 'flash-next-strata':continue
         cfg_path=canonical(root,profile);cfg=json.loads(cfg_path.read_text());cfg.update(exe=str(qwen/'strata'),lib_dirs=[str(qwen),str(qwen/'lib')],cwd=str(terminal/version))
         c=directory/(profile+'-launch-private.json');write_json(c,cfg);file_action(receipt,cfg_path,c)
 

@@ -57,8 +57,6 @@ def canonical(root, profile):
         return Path.home() / PRESET
     if profile == 'flash-next-strata':
         return Path.home() / '.local/state/strata/launch/qwen-flash-next.json'
-    if profile == 'flash-next-iq4xs-strata':
-        return Path.home() / '.local/state/strata/launch/qwen-flash-next-iq4xs.json'
     catalog = json.loads((root / 'config/maintained-profiles.json').read_text())
     selected = next(x for x in catalog['profiles'] if x['id'] == profile)
     return root / selected['runtime_selector']['path']

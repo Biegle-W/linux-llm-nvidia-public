@@ -1,6 +1,6 @@
 # Linux LLM NVIDIA — public reference
 
-A home LLM server on native Linux with two consumer GPUs: an **RTX 3080 Ti (12 GB)** and an **RTX 3080 (10 GB)**, no peer-to-peer link between them, 92 GiB of RAM, an NVMe system drive and a SATA SSD for model weights. One authenticated, OpenAI-compatible router serves **ten text models**, loading one at a time on demand. Large mixture-of-experts models run by keeping the busy parts on the GPUs and the rest in RAM or streamed from SSD. RAM, VRAM, swap, memory-pressure and temperature guards stop a worker when it starts to starve the machine. Engine updates are researched, installed and checked by hand before they are kept. ComfyUI adds image and video generation.
+A home LLM server on native Linux with two consumer GPUs: an **RTX 3080 Ti (12 GB)** and an **RTX 3080 (10 GB)**, no peer-to-peer link between them, 92 GiB of RAM, an NVMe system drive and a SATA SSD for model weights. One authenticated, OpenAI-compatible router serves **nine text models**, loading one at a time on demand. Large mixture-of-experts models run by keeping the busy parts on the GPUs and the rest in RAM or streamed from SSD. RAM, VRAM, swap, memory-pressure and temperature guards stop a worker when it starts to starve the machine. Engine updates are researched, installed and checked by hand before they are kept. ComfyUI adds image and video generation.
 
 This repository is the curated public export of the private operational repository. Everything here is kept current with the live server: models, engines, test results and the procedures used to produce them.
 
@@ -15,7 +15,6 @@ Speeds are from the latest short check through the router: one real tool call fr
 | `qwen27b-hyperqwen` | Qwen3.8 27B, AutoRound INT4 | HyperQwen (vLLM 0.33.0) | 86,016 | 2,092 | 2.8 | 62.6 |
 | `qwen27b-sglang` | same weights | SGLang | 57,344 | 2,130 | 2.9 | 60.1 |
 | `flash-next-strata` | Qwen3.8 Flash Next 125B-A6B, IQ3_XXS (default Flash-Next) | Strata 0.2.20 + MTP | 131,072 | 1,273 | 4.5 | 69.5 |
-| `flash-next-iq4xs-strata` | Qwen3.8 Flash Next, Unsloth UD-IQ4_XS | Strata 0.2.20 + MTP | 131,072 | 989 | 6.3 | 43.5 |
 | `inkling-strata` | Inkling 2 Mini 26B, Strata SQ-10, both cards | Strata 0.2.20 (`strata-inkling`) | 131,072 | 1,989 | 4.9 | 66.2 |
 | `glm-maya` | GLM-5.3 Flash 320B-A18B, Maya-S24 | Maya 1.1.74 | 65,536 | 545 | 10.2 | 14.5 |
 | `deepseek-maya` | DeepSeek V4.1 Flash, Unsloth UD-IQ1_S | Maya 1.1.74 | 32,768 | 187-211 | 29-32 | 7.7-9.0 |
@@ -38,15 +37,14 @@ Weights, drives and sizes per entry are in [docs/CURRENT-STATE.md](docs/CURRENT-
 | `glm-maya` | larger | 60.4 |
 | `inkling-strata` | smaller | 59.3 |
 | `hy4-flash-strata` | larger | 57.9 |
-| `flash-next-iq4xs-strata` | smaller | 47.4 |
 | `hy4-flash-maya` | larger | 43.3 (stopped by the memory-pressure guard at minute 30) |
 | `flash-next-strata` | smaller | 40.6 |
 
-**390-item quality test** (November 10-18; MMLU-Pro, AIME 2025, LiveCodeBench, BFCL single- and multi-turn; thinking off as served). Macro score: DeepSeek on Strata 73.0%, DeepSeek on Maya 72.4%, Qwen 27B on SGLang 68.1% and on HyperQwen 68.0%, Flash-Next UD-IQ4_XS 65.5%, Flash-Next IQ3_XXS 62.0%, GLM 57.2%. Entries added later have the short test only; the Inkling 2 Mini trial outside the router scored 60.0% with thinking on. [Full results](docs/evidence/QUALITY-BENCHMARK-20261111.md)
+**390-item quality test** (November 10-18; MMLU-Pro, AIME 2025, LiveCodeBench, BFCL single- and multi-turn; thinking off as served). Macro score: DeepSeek on Strata 73.0%, DeepSeek on Maya 72.4%, Qwen 27B on SGLang 68.1% and on HyperQwen 68.0%, Flash-Next UD-IQ4_XS 65.5% (entry retired November 24), Flash-Next IQ3_XXS 62.0%, GLM 57.2%. Entries added later have the short test only; the Inkling 2 Mini trial outside the router scored 60.0% with thinking on. [Full results](docs/evidence/QUALITY-BENCHMARK-20261111.md)
 
 **Checks on every engine update**, one entry at a time:
 1. a short check through the web client before and after the swap: a real tool call and follow-up, with prompt-reading, first-token and generation speed;
-2. right after it, the six chat-template and tool-call cases of Google DeepMind's gBench Golden Set, after a warm-up, within 120 s. A structured case failing while its plain twin passes points to a broken chat template or message serialization. All ten entries pass 6/6 ([details](docs/evidence/GBENCH-TEMPLATE-CHECK-20261123.md)).
+2. right after it, the six chat-template and tool-call cases of Google DeepMind's gBench Golden Set, after a warm-up, within 120 s. A structured case failing while its plain twin passes points to a broken chat template or message serialization. All entries passed 6/6 at baseline ([details](docs/evidence/GBENCH-TEMPLATE-CHECK-20261123.md)).
 
 A new version is kept unless it really breaks something: a failed load, check or unload, invalid output, less than half the speed or more than three times the wait for the first token. Smaller slowdowns are recorded as warnings. [Runbook](docs/ENGINE-UPDATE-RUNBOOK.md) · [update log](docs/DAILY-ENGINE-UPDATES.md)
 

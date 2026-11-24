@@ -62,11 +62,6 @@
       "why": "Strata pack (dense.bin, tokenizer); launch preset --pack"
     },
     {
-      "path": "models/strata/packs/unsloth-ud-iq4_xs-v31",
-      "owner": "router:flash-next-iq4xs-strata",
-      "why": "Strata pack (dense.bin, tokenizer); launch preset --pack. The projector and MTP head are shared with flash-next-strata."
-    },
-    {
       "path": "runtimes/strata-unsloth-029/pack",
       "owner": "router:deepseek-maya",
       "why": "DeepSeek pack; runtimes/project-maya/maya-ds4.json --pack"
@@ -78,6 +73,14 @@
     }
   ],
   "kept": [
+    {
+      "path": "models/strata/packs/unsloth-ud-iq4_xs-v31",
+      "why": "Retired router entry flash-next-iq4xs-strata (Nov 24, 2026); kept until space is needed"
+    },
+    {
+      "path": "models/strata/models/unsloth-UD-IQ4_XS-v31",
+      "why": "Retired router entry flash-next-iq4xs-strata (Nov 24, 2026); kept until space is needed"
+    },
     {
       "path": "models/engine-tests/inkling2-mini-trial/Inkling-2-Mini-UD-Q4_K_M.gguf",
       "why": "Retired Inkling llama.cpp weights"

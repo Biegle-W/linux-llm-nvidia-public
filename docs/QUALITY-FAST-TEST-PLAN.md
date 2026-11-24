@@ -49,7 +49,7 @@ Tool use only. Every item comes from the tool-calling parts of the current test 
 |---|---|---:|---:|---:|---:|---:|
 | `qwen27b-hyperqwen` | smaller | 35/40 | 4/9 | 66.0 | 8.6 min | 11.6 |
 | `qwen27b-sglang` | smaller | 36/40 | 3/9 | 61.7 | 10.4 min | 13.4 |
-| `flash-next-iq4xs-strata` | smaller | 29/40 | 2/9 | 47.4 | 7.3 min | 10.3 |
+| `flash-next-iq4xs-strata` (retired Nov 24) | smaller | 29/40 | 2/9 | 47.4 | 7.3 min | 10.3 |
 | `flash-next-strata` | smaller | 28/40 | 1/9 | 40.6 | 5.1 min | 8.1 |
 | `deepseek-unsloth-strata` | larger | 34/40 | 4/9 (8/15) | 64.7 (69.2) | 46.3 min | 49.3 |
 | `deepseek-maya` | larger | 33/40 | 4/9 (6/15) | 63.5 (61.2) | 47.4 min | 50.4 |

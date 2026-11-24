@@ -73,12 +73,6 @@ def main():
             require_flash_next_split(config, profile)
         except ValueError as error:
             sys.exit(str(error))
-    elif profile['id'] == 'flash-next-iq4xs-strata':
-        from flash_iq4xs_strata_runtime import prepare_config
-        try:
-            config = json.loads(prepare_config(profile).read_text())
-        except (ValueError, OSError, KeyError, TypeError) as error:
-            sys.exit('UD-IQ4_XS preflight failed: ' + str(error))
     elif profile['id'] == 'inkling-strata':
         from inkling_strata_runtime import prepare_config
         try:
@@ -176,7 +170,7 @@ def main():
                 stop()
                 child.wait(timeout=20)
                 raise SystemExit(1)
-            if profile['id'] in ('deepseek-unsloth-strata', 'flash-next-iq4xs-strata', 'hy4-flash-strata', 'inkling-strata'):
+            if profile['id'] in ('deepseek-unsloth-strata', 'hy4-flash-strata', 'inkling-strata'):
                 free = subprocess.check_output(['nvidia-smi', '--query-gpu=memory.free', '--format=csv,noheader,nounits'], text=True)
                 free_values = pair_gpu_free_values(free)
                 gpu_bad = gpu_bad + 1 if any(x < GPU_FREE_MIB for x in free_values) else 0

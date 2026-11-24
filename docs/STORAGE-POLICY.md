@@ -1,5 +1,9 @@
 # Model storage policy
 
+## Flash-Next UD-IQ4_XS weights unused — November 24, 2026
+
+`flash-next-iq4xs-strata` was retired. Its UD-IQ4_XS-v31 checkpoint (`models/strata/models/unsloth-UD-IQ4_XS-v31`, about 88 GB) and Strata pack (`models/strata/packs/unsloth-ud-iq4_xs-v31`, 1.4 GB), both on NVMe, are kept unused and are the largest candidates under the rule below. The MTP head and vision projector stay with `flash-next-strata`.
+
 ## Inkling llama.cpp weights unused — November 24, 2026
 
 `inkling-llamacpp` was retired; its UD-Q4_K_M GGUF and picture projector (17.25 GB, `models/engine-tests/inkling2-mini-trial`, SATA) are kept and are the first candidates under the rule below. `inkling-strata` uses the SQ-10 pack on NVMe (10.5 GB).
