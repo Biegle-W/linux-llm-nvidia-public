@@ -1,5 +1,9 @@
 # Model storage policy
 
+## Standing rule: free space from retired weights first — November 23, 2026
+
+When a new model does not fit on either drive, the maintaining agent may delete weights that no router, Comfy or updater entry uses any more (retired or dropped entries, as listed under "Unused or duplicate weights" by `scripts/weights_tracker.py`) without asking again, owner's standing approval of November 23, 2026. Delete only as much as the new model needs, and record each deletion here with its size and path. Weights of current entries still go to the owner first (lowest-ranked suggested).
+
 ## Unused Qwen GGUF target/drafter deleted — November 4, 2026
 
 The unconfigured Qwen3.8-27B Q4_K_M target and its MTP-only GGUF drafter were deleted at the user's request: 19.450 GB of weights. All nine configured entries and every maintained checkpoint/runtime remain unchanged. No inference or regression suite was repeated; unchanged-catalog/checkpoint and API/DSH checks verify preservation. Historical results remain dated evidence. [Removal record](evidence/UNUSED-QWEN-GGUF-REMOVAL-20261104.md).
