@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Retired IQ4_XS and Inkling GGUF weights deleted — November 25, 2026
+
+At the owner's request the unused weights of the two routes retired on November 24 were deleted: the Flash-Next UD-IQ4_XS-v31 checkpoint and Strata pack (95.2 GB, NVMe) and the Inkling 2 Mini UD-Q4_K_M GGUF and projector (17.25 GB, SATA). No enabled route used them. [STORAGE-POLICY.md](STORAGE-POLICY.md)
+
 ## Short tool-use test rerun on every enabled route — November 25, 2026
 
 At the owner's request all ten enabled routes ran the short tool-use test live through the router, one at a time, and the ranking now uses these runs. deepseek-maya 70.3, qwen27b-sglang 67.2, hy4-flash-strata 58.5, glm-maya 49.3, inkling-strata 47.5, kolibri-llamacpp 41.8, flash-next-strata 40.6. [SHORT-TEST-RERUN-20261124.md](evidence/SHORT-TEST-RERUN-20261124.md)

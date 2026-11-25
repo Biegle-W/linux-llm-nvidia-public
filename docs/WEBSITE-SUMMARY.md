@@ -48,8 +48,8 @@ The SGLang token count comes from docs/evidence/validation-results/20261105-engi
 
 | Route | Model / quant | Engine | Retired (date) | Replaced by | Weights kept or deleted | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| flash-next-iq4xs-strata | Qwen3.8-Flash-Next / UD-IQ4_XS-v31 | Strata | 2026-11-24 | flash-next-strata | Kept on NVMe | docs/evidence/FLASH-NEXT-IQ4XS-RETIRED-20261124.md |
-| inkling-llamacpp | Inkling 2 Mini / UD-Q4_K_M | Unsloth llama.cpp | 2026-11-24 | inkling-strata | Kept on SATA | docs/evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md |
+| flash-next-iq4xs-strata | Qwen3.8-Flash-Next / UD-IQ4_XS-v31 | Strata | 2026-11-24 | flash-next-strata | Deleted 2026-11-25 | docs/evidence/FLASH-NEXT-IQ4XS-RETIRED-20261124.md |
+| inkling-llamacpp | Inkling 2 Mini / UD-Q4_K_M | Unsloth llama.cpp | 2026-11-24 | inkling-strata | Deleted 2026-11-25 | docs/evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md |
 | bolt-llamacpp | Nemotron-3.5-Bolt-74B-A9B / native IQ2 | llama.cpp | 2026-11-23 | qwen27b-hyperqwen (saved selections) | Deleted | docs/CURRENT-STATE.md |
 | inkling-strata (single-card 8K version) | Inkling 2 Mini / SQ-10 | Strata | 2026-11-23 | inkling-strata (two-card reintroduction 2026-11-24) | Original weights deleted | docs/evidence/INKLING2-MINI-STRATA-TRIAL-20261122.md |
 | flash-next-iq1m-strata | Qwen3.8-Flash-Next / UD-IQ1_M | Strata | 2026-11-08 | flash-next-strata | Deleted | docs/evidence/FLASH-IQ1M-RETIREMENT-20261108.md |

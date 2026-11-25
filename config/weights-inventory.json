@@ -29,7 +29,12 @@
   ],
   "min_weight_bytes": 50000000,
   "min_bytes": 500000000,
-  "router_manifest_receipts": ["kolibri-llamacpp", "inkling-strata", "hy4-flash-strata", "hy4-flash-maya"],
+  "router_manifest_receipts": [
+    "kolibri-llamacpp",
+    "inkling-strata",
+    "hy4-flash-strata",
+    "hy4-flash-maya"
+  ],
   "extra_references": [
     {
       "path": "models/strata/packs/inkling-2-mini-sq-10/tokenizer",
@@ -73,22 +78,6 @@
     }
   ],
   "kept": [
-    {
-      "path": "models/strata/packs/unsloth-ud-iq4_xs-v31",
-      "why": "Retired router entry flash-next-iq4xs-strata (Nov 24, 2026); kept until space is needed"
-    },
-    {
-      "path": "models/strata/models/unsloth-UD-IQ4_XS-v31",
-      "why": "Retired router entry flash-next-iq4xs-strata (Nov 24, 2026); kept until space is needed"
-    },
-    {
-      "path": "models/engine-tests/inkling2-mini-trial/Inkling-2-Mini-UD-Q4_K_M.gguf",
-      "why": "Retired Inkling llama.cpp weights"
-    },
-    {
-      "path": "models/engine-tests/inkling2-mini-trial/mmproj-F16.gguf",
-      "why": "Retired Inkling llama.cpp vision projector"
-    },
     {
       "path": "runtimes/gpu-unlock-native/build",
       "why": "GPU firmware blobs (gsp_*.bin) in the gpu-unlock package build; not model weights"

@@ -4,13 +4,14 @@
 
 The Q5_K_M GGUF of Kolibri 1.1 (53.4 GB, `models/engine-tests/kolibri-1.1-gguf`, SATA, hash-verified) was downloaded for a trial and now serves `kolibri-llamacpp`. Its experts are read into RAM from the memory-mapped file, so it belongs on SATA. `config/weights-inventory.json` attributes it to the router entry.
 
-## Flash-Next UD-IQ4_XS weights unused — November 24, 2026
+## Retired Flash-Next IQ4_XS and Inkling GGUF weights deleted — November 25, 2026
 
-`flash-next-iq4xs-strata` was retired. Its UD-IQ4_XS-v31 checkpoint (`models/strata/models/unsloth-UD-IQ4_XS-v31`, about 88 GB) and Strata pack (`models/strata/packs/unsloth-ud-iq4_xs-v31`, 1.4 GB), both on NVMe, are kept unused and are the largest candidates under the rule below. The MTP head and vision projector stay with `flash-next-strata`.
+Deleted at the owner's request; no enabled route, launch configuration or running process used them. Freed about 106 GB:
 
-## Inkling llama.cpp weights unused — November 24, 2026
+- NVMe: the UD-IQ4_XS-v31 checkpoint of the retired `flash-next-iq4xs-strata` (`models/strata/models/unsloth-UD-IQ4_XS-v31`, four GGUF shards, 93.67 GB) and its Strata pack (`models/strata/packs/unsloth-ud-iq4_xs-v31`, 1.50 GB). The MTP head, vision projector and IQ3_XXS pack stay with `flash-next-strata`. NVMe free space went from 110 GB to 205 GB; SATA from 536 GB to 554 GB.
+- SATA: the UD-Q4_K_M GGUF and picture projector of the retired `inkling-llamacpp` (`models/engine-tests/inkling2-mini-trial`, 17.25 GB). `inkling-strata` keeps its SQ-10 pack on NVMe.
 
-`inkling-llamacpp` was retired; its UD-Q4_K_M GGUF and picture projector (17.25 GB, `models/engine-tests/inkling2-mini-trial`, SATA) are kept and are the first candidates under the rule below. `inkling-strata` uses the SQ-10 pack on NVMe (10.5 GB).
+The two retired launch presets that named the IQ4_XS checkpoint were left in place; they cannot start without it. Their evidence and results stay in `docs/evidence/`.
 
 ## Standing rule: free space from retired weights first — November 23, 2026
 
