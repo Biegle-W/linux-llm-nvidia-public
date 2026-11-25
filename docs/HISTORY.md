@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Short tool-use test rerun on every enabled route — November 25, 2026
+
+At the owner's request all ten enabled routes ran the short tool-use test live through the router, one at a time, and the ranking now uses these runs. deepseek-maya 70.3, qwen27b-sglang 67.2, hy4-flash-strata 58.5, glm-maya 49.3, inkling-strata 47.5, kolibri-llamacpp 41.8, flash-next-strata 40.6. [SHORT-TEST-RERUN-20261124.md](evidence/SHORT-TEST-RERUN-20261124.md)
+
 ## Short tool-use test becomes the quality ranking — November 24, 2026
 
 Owner's decision: one ranking standard. Models are ranked by the short tool-use test on the same 49 items with 95% intervals; the 390-item test is archived. `hy4-flash-maya` moves from 43.3 (55-item scale) to 45.6 on the common items. [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md)

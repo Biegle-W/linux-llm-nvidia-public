@@ -6,6 +6,10 @@
 
 This test is now the quality ranking on the website and in the README; the 390-item test is archived and no longer ranks models. To keep one standard, every model is ranked on the same 49 items (40 single-turn, 9 common episodes) with score = 50 × (single-turn accuracy + episode pass rate). Larger models still run the 6 extra episodes, which are reported but not used for the ranking. Each score gets a 95% interval (normal approximation over both parts); with one run no model is separated from another. The table the website reads is [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md).
 
+## Live rerun of every route (November 24-25)
+
+At the owner's request every enabled route was rerun live through the router; the ranking now uses these runs, and the replay table below is history. Results and the comparison with the earlier scores: [SHORT-TEST-RERUN-20261124.md](evidence/SHORT-TEST-RERUN-20261124.md). One change to how it was run: `hy4-flash-maya` needs about 6.5 minutes to load, so its run used `--load-cap 600` (load time is not scored).
+
 ## When it runs
 
 Owner's rule, November 22: the test is run **only for new models and new weights**. Nothing that already has stored records is run again; the eight ranked models are scored on this test from their stored records. The 390-item test is no longer the routine test.

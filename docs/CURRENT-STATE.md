@@ -23,17 +23,17 @@ Last long-prompt speeds for `flash-next-strata` (Nov 7 on Strata 0.2.11, no cach
 
 ## Quality ranking: short tool-use test
 
-Owner's decision, November 24: models are ranked by the short tool-use test, scored on the same 49 items for every model (40 single-turn, 9 multi-turn episodes). Run once per new model or new weights; existing entries scored from stored records. One run is within about ±17 points, so no model is separated from another. [QUALITY-FAST-TEST-PLAN.md](QUALITY-FAST-TEST-PLAN.md) · [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md)
+Owner's decision, November 24: models are ranked by the short tool-use test, scored on the same 49 items for every model (40 single-turn, 9 multi-turn episodes). Every enabled route was rerun live through the router on November 24-25 at the owner's request. One run is within about ±17 points. [Rerun results](evidence/SHORT-TEST-RERUN-20261124.md) · [QUALITY-FAST-TEST-PLAN.md](QUALITY-FAST-TEST-PLAN.md) · [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md)
 
 | Rank | Model | Best route | Score (95% interval) | Other engines |
 |---:|---|---|---:|---|
-| 1 | Qwen3.8-27B AutoRound INT4 | `qwen27b-hyperqwen` | 66.0 (49.0–83.0) | SGLang 61.7 (45.6–77.8) |
-| 2 | DeepSeek-V4.1-Flash-1017 UD-IQ1_S | `deepseek-unsloth-strata` | 64.7 (47.6–81.9) | Maya 63.5 (46.2–80.7) |
-| 3 | GLM-5.3-Flash Maya-S24 | `glm-maya` | 60.4 (44.2–76.6) | none |
-| 4 | Inkling 2 Mini 26B SQ-10 | `inkling-strata` | 59.3 (41.9–76.7) | retired llama.cpp UD-Q4_K_M 40.0 (cut, 1 of 9 episodes reached) |
-| 5 | Tencent Hy4-Flash 220B-A12B SQ-96 | `hy4-flash-strata` | 57.9 (41.4–74.4) | Maya (Maya-L weights) 45.6 (33.6–57.5); run stopped by the memory-pressure guard at minute 30 |
-| 6 | Kolibri 1.1 Q5_K_M | `kolibri-llamacpp` | 41.8 (29.4–54.2) | thinking at medium (not as served) 60.0, 3 of 5 scored episodes |
-| 7 | Qwen3.8-Flash-Next IQ3_XXS | `flash-next-strata` | 40.6 (28.1–53.0) | retired UD-IQ4_XS-v31 47.4 (32.1–62.6) |
+| 1 | DeepSeek-V4.1-Flash-1017 UD-IQ1_S | `deepseek-maya` | 70.3 (53.1–87.4) | Strata 67.8 (50.4–85.2) |
+| 2 | Qwen3.8-27B AutoRound INT4 | `qwen27b-sglang` | 67.2 (50.3–84.1) | HyperQwen-vLLM 66.0 (49.0–83.0) |
+| 3 | Tencent Hy4-Flash 220B-A12B SQ-96 | `hy4-flash-strata` | 58.5 (40.8–76.1) | Maya (Maya-L weights) 48.1 (36.4–59.7) |
+| 4 | GLM-5.3-Flash Maya-S24 | `glm-maya` | 49.3 (37.8–60.8) | none |
+| 5 | Inkling 2 Mini 26B SQ-10 | `inkling-strata` | 47.5 (44.1–50.9) | retired llama.cpp UD-Q4_K_M 40.0 (2026-11-22, cut, 1 of 9 episodes reached) |
+| 6 | Kolibri 1.1 Q5_K_M | `kolibri-llamacpp` | 41.8 (29.4–54.2) | thinking at medium (not as served) 60.0 (2026-11-24, 3 of 5 scored episodes) |
+| 7 | Qwen3.8-Flash-Next IQ3_XXS | `flash-next-strata` | 40.6 (28.1–53.0) | retired UD-IQ4_XS-v31 47.4 (stored answers of 2026-11-10) |
 
 ## Archived: 390-item test (November 10–18, not the ranking)
 
@@ -52,6 +52,7 @@ Owner's decision, November 24: models are ranked by the short tool-use test, sco
 
 ## Recent changes (newest first)
 
+- **Nov 25:** Short tool-use test rerun on all ten enabled routes through the router (owner's request), all 49 items scored for each. New order by best route per model: deepseek-maya 70.3, qwen27b-sglang 67.2, hy4-flash-strata 58.5, glm-maya 49.3, inkling-strata 47.5, kolibri-llamacpp 41.8, flash-next-strata 40.6. Largest moves: GLM 60.4 to 49.3 and Inkling 59.3 to 47.5 (fewer episodes passed); DeepSeek on Maya now leads at 70.3. [SHORT-TEST-RERUN-20261124.md](evidence/SHORT-TEST-RERUN-20261124.md)
 - **Nov 24:** The short tool-use test is now the quality ranking (owner's decision); the 390-item test is archived. Every model is scored on the same 49 items, so `hy4-flash-maya` now shows 45.6 (it showed 43.3 on the 55-item larger-model scale). [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md)
 - **Nov 24:** `kolibri-llamacpp` added at the owner's request: Kolibri 1.1 Q5_K_M on the llama.cpp pull-request build from the trial, same settings, engine pinned until the merge. Router checks pass: tool call and follow-up, gBench 6/6, owned unload. The web-client prompt reads at about 520 tok/s because llama-server splits it at checkpoint boundaries (plain prompts 1,316 tok/s); generation 43 tok/s on longer answers. [KOLIBRI-1.1-ROUTER-ENTRY-20261124.md](evidence/KOLIBRI-1.1-ROUTER-ENTRY-20261124.md)
 - **Nov 24:** Kolibri 1.1 Q5_K_M trialled on a separate llama.cpp build from pull request 32891 (no router entry). Both cards, experts of 10 layers on the GPUs and the rest in RAM, 131,072 context: prompt reading 1,030-1,230 tok/s, generation 44 tok/s short and 11 tok/s at 111K (CPU-bound sparse-attention masks), recall correct to 119K, tool calls and follow-ups pass. Short tool-use test 41.8 thinking off, 60.0 at medium; it rarely makes parallel calls. [KOLIBRI-1.1-TRIAL-20261124.md](evidence/KOLIBRI-1.1-TRIAL-20261124.md)
