@@ -6,7 +6,7 @@ Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that nam
 
 ## Shared models and benchmarks with the AMD server — November 26, 2026
 
-The owner asked for both servers to run the same models and benchmarks (different weights are fine). `benchmarks/shared/` now holds the shared model set, the benchmark definitions (short tool-use ranking, engine-update check with the six gBench cases, speed report fields) and a read-only checker, byte-identical in both repos. This server's frozen short-test item list was copied read-only from the harness into it; the AMD server, which had drawn 55 other items, now uses it. Seven models match; `hy4-flash-maya` (here) and `ripple-65b-vllm` (AMD) wait on the owner. Nothing ran on the GPUs.
+The owner asked for both servers to run the same models and benchmarks (different weights are fine). `benchmarks/shared/` now holds the shared model set, the benchmark definitions (short tool-use ranking, engine-update check with the six gBench cases, speed report fields) and a read-only checker, byte-identical in both repos. This server's frozen short-test item list was copied read-only from the harness into it; the AMD server, which had drawn 55 other items, now uses it. Seven models match; `hy4-flash-maya` (here) and `ripple-65b-vllm` (AMD) stay as server-specific extra routes. Nothing ran on the GPUs.
 
 ## Retired IQ4_XS and Inkling GGUF weights deleted — November 25, 2026
 
