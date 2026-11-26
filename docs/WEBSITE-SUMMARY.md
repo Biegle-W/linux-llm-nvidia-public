@@ -78,6 +78,25 @@ Score = 50 × (single-turn accuracy on 40 items + pass rate on the 9 common mult
 
 One row per model, best route shown; the other route of the same model is in the other-engines column. One run is about ±17 points per model at 95%, so read the order as a rough guide. Between runs a route moved by up to 12 points, almost all of it in the 9 episodes. The 390-item results below are archived and no longer rank models. AMD results use other items and are not comparable.
 
+## Mix quality test (not the ranking)
+
+| Route | Tier | Overall | Knowledge | Maths | Code | Instructions | Reasoning | Tools | Wall (min) | Limit (min) | Date | Source |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| flash-next-strata | small | 97.2 | 5/6 | 6/6 | 5/5 | 7/7 | 6/6 | 6/6 | 3:35 | 15 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+| hy4-flash-strata | large | 94.8 | 6/6 | 6/6 | 5/5 | 6/7 | 5/6 | 6/6 | 9:05 | 30 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+| deepseek-unsloth-strata | large | 94.4 | 6/6 | 6/6 | 5/5 | 7/7 | 4/6 | 6/6 | 9:51 | 30 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+| hy4-flash-maya | large | 94.4 | 5/6 | 6/6 | 5/5 | 7/7 | 5/6 | 6/6 | 17:59 | 30 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+| deepseek-maya | large | 91.7 | 5/6 | 6/6 | 5/5 | 7/7 | 4/6 | 6/6 | 10:55 | 30 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+| inkling-strata | small | 89.7 | 5/6 | 6/6 | 5/5 | 5/7 | 5/6 | 6/6 | 1:25 | 15 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+| qwen27b-sglang | small | 88.3 | 5/6 | 6/6 | 4/5 | 7/7 | 5/6 | 5/6 | 4:54 | 15 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+| kolibri-llamacpp | small | 86.1 | 5/6 | 6/6 | 5/5 | 7/7 | 2/6 | 6/6 | 4:48 | 15 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+| glm-maya | large | 86.0 | 5/6 | 5/6 | 4/5 | 6/7 | 5/6 | 6/6 | 4:34 | 30 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+| qwen27b-hyperqwen | small | 85.6 | 5/6 | 6/6 | 4/5 | 7/7 | 4/6 | 5/6 | 6:17 | 15 | 2026-11-26 | docs/evidence/MIX-TEST-LIVE-20261126.md |
+
+A broad short test asked for by the owner and built by the council: 36 items, the same for every route (6 knowledge and 6 maths from MMLU-Pro, 5 easy LiveCodeBench, 7 IFEval, 6 BIG-Bench Hard, 6 BFCL single-turn tool calls), with a 15-minute limit for smaller models and 30 minutes for larger ones. Overall = mean of the six category accuracies. All ten enabled routes ran live through the router on 2026-11-26, one at a time; every route finished inside its limit and scored all 36 items.
+
+This test does **not** rank the models yet: no pair of routes is separated (smallest paired p = 0.125 before adjustment; the 95% interval is about ±23 points), because 24 of the 36 items were right on all ten routes. The order also differs from the ranking test (Flash-Next is first here and last on the short tool-use test). The ranking stays on the short tool-use test above. Harder items would be needed to rank with it. Design: docs/QUALITY-MIX-TEST-PLAN.md.
+
 ## Archived: 390-item test (not the ranking)
 
 | Rank | Model | Quant | Engine | Score (macro %) | 95% interval | MMLU-Pro | AIME 2025 | LiveCodeBench | BFCL single | BFCL multi | Other engines/quants (with scores) | Tie note | Date |
