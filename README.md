@@ -39,6 +39,8 @@ Weights, drives and sizes per entry are in [docs/CURRENT-STATE.md](docs/CURRENT-
 | 6 | Kolibri 1.1 Q5_K_M | `kolibri-llamacpp` | 41.8 (29.4–54.2) | 29/40 | 1/9 | thinking at medium (not as served) 60.0 (2026-11-24, 3 of 5 scored episodes) |
 | 7 | Qwen3.8-Flash-Next IQ3_XXS | `flash-next-strata` | 40.6 (28.1–53.0) | 28/40 | 1/9 | retired UD-IQ4_XS-v31 47.4 (stored answers of 2026-11-10) |
 
+**Mix quality test, not the ranking** (November 26; all ten routes live). 36 items for every model across knowledge, maths, code, following instructions, reasoning and tool calls, in 15 minutes for smaller models and 30 for larger. Every route finished inside its limit and scored 85.6-97.2 (Flash-Next 97.2, Hy4 on Strata 94.8, DeepSeek on Strata and Hy4 on Maya 94.4, DeepSeek on Maya 91.7, Inkling 89.7, Qwen 27B on SGLang 88.3, Kolibri 86.1, GLM 86.0, Qwen 27B on HyperQwen 85.6), but no pair is separated: 24 of the 36 items were right on every route, so the form is too easy to rank these models. [Results](docs/evidence/MIX-TEST-LIVE-20261126.md) · [How it works](docs/QUALITY-MIX-TEST-PLAN.md)
+
 **390-item quality test, archived (not the ranking)** (November 10-18; MMLU-Pro, AIME 2025, LiveCodeBench, BFCL single- and multi-turn; thinking off as served). Macro score: DeepSeek on Strata 73.0%, DeepSeek on Maya 72.4%, Qwen 27B on SGLang 68.1% and on HyperQwen 68.0%, Flash-Next UD-IQ4_XS 65.5% (entry retired November 24), Flash-Next IQ3_XXS 62.0%, GLM 57.2%. Entries added later have the short test only; the Inkling 2 Mini trial outside the router scored 60.0% with thinking on. [Full results](docs/evidence/QUALITY-BENCHMARK-20261111.md)
 
 **Checks on every engine update**, one entry at a time:
