@@ -52,6 +52,7 @@ Owner's decision, November 24: models are ranked by the short tool-use test, sco
 
 ## Recent changes (newest first)
 
+- **Nov 26:** models and benchmarks aligned with the AMD server (owner: same models and benchmarks on both; different weights are fine). New [`benchmarks/shared/`](../benchmarks/shared/README.md), byte-identical in both repos: the shared model set (7 models on both; `hy4-flash-maya` runs only here, owner decision pending), the benchmark definitions and `check_shared.py`. The short tool-use item list from `~/quality-eval-build/quality/fast/manifest.json` is committed there and the AMD server now uses it. Nothing changed on this server and nothing was run on the GPUs. [QUALITY-FAST-TEST-PLAN.md](QUALITY-FAST-TEST-PLAN.md)
 - **Nov 25:** Retired weights deleted at the owner's request: the `flash-next-iq4xs-strata` UD-IQ4_XS checkpoint and pack (95.2 GB, NVMe) and the `inkling-llamacpp` GGUF and projector (17.25 GB, SATA). NVMe now has 205 GB free, SATA 554 GB. No enabled route changed. [STORAGE-POLICY.md](STORAGE-POLICY.md)
 - **Nov 25:** Short tool-use test rerun on all ten enabled routes through the router (owner's request), all 49 items scored for each. New order by best route per model: deepseek-maya 70.3, qwen27b-sglang 67.2, hy4-flash-strata 58.5, glm-maya 49.3, inkling-strata 47.5, kolibri-llamacpp 41.8, flash-next-strata 40.6. Largest moves: GLM 60.4 to 49.3 and Inkling 59.3 to 47.5 (fewer episodes passed); DeepSeek on Maya now leads at 70.3. [SHORT-TEST-RERUN-20261124.md](evidence/SHORT-TEST-RERUN-20261124.md)
 - **Nov 24:** The short tool-use test is now the quality ranking (owner's decision); the 390-item test is archived. Every model is scored on the same 49 items, so `hy4-flash-maya` now shows 45.6 (it showed 43.3 on the 55-item larger-model scale). [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md)
@@ -102,6 +103,8 @@ Entries before November 15 are in [HISTORY.md](HISTORY.md).
 - **Quality benchmark gaps:** none of the eight ranked entries was run with thinking on (only the Inkling 2 Mini trial, which cannot turn it off); samples are screening-size. From November 22 new models get only the short tool-use test, which does not measure knowledge, maths or coding, and has not yet been run live. [QUALITY-FAST-TEST-PLAN.md](QUALITY-FAST-TEST-PLAN.md)
 - **`data/`** holds many private trial and evidence directories (all gitignored). Pruning them needs the owner's OK.
 - Possible follow-up from Nov 7 research: the DeepSeek entries still use the automatic layer split and might gain from the same hand-set split sweep that helped Flash-Next.
+
+- **Shared models with the AMD server:** `hy4-flash-maya` has no AMD match (AMD tried Hy4-Flash on Maya-M and kept only the Strata route). Retiring it here or adding a Maya route on AMD is the owner's call. AMD's `ripple-65b-vllm` has no match here (its 35 GB of VRAM weights do not fit 22 GB). [benchmarks/shared/models.json](../benchmarks/shared/models.json)
 
 ## Idle state
 

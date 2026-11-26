@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Shared models and benchmarks with the AMD server — November 26, 2026
+
+The owner asked for both servers to run the same models and benchmarks (different weights are fine). `benchmarks/shared/` now holds the shared model set, the benchmark definitions (short tool-use ranking, engine-update check with the six gBench cases, speed report fields) and a read-only checker, byte-identical in both repos. This server's frozen short-test item list was copied read-only from the harness into it; the AMD server, which had drawn 55 other items, now uses it. Seven models match; `hy4-flash-maya` (here) and `ripple-65b-vllm` (AMD) wait on the owner. Nothing ran on the GPUs.
+
 ## Retired IQ4_XS and Inkling GGUF weights deleted — November 25, 2026
 
 At the owner's request the unused weights of the two routes retired on November 24 were deleted: the Flash-Next UD-IQ4_XS-v31 checkpoint and Strata pack (95.2 GB, NVMe) and the Inkling 2 Mini UD-Q4_K_M GGUF and projector (17.25 GB, SATA). No enabled route used them. [STORAGE-POLICY.md](STORAGE-POLICY.md)
