@@ -1,5 +1,12 @@
 # NVIDIA daily engine updates
 
+## 2026-11-26 (afternoon): ComfyUI 0.46.0
+
+At the owner's request. Upstream review, before and after: [ENGINE-UPDATES-20261126-COMFYUI-046.md](evidence/ENGINE-UPDATES-20261126-COMFYUI-046.md).
+
+- comfyui: **promoted**; `v0.46.0` (`a277b5bf213e`), with frontend 1.59.6, workflow templates 0.11.111 and embedded docs 0.5.17 (six packages per environment; PyTorch unchanged). Seven image and video checks pass at the same speed (MiniMax first request +2.0 s on one run) and both page checks pass; all three image models and the Wan entry give byte-identical output. The LTX Mesh and Raylight clips already vary between two runs on 0.45.0, so their differences are not from 0.46.0. No launcher change. Watch: upstream issue 17922 (browser-page queue hang with MiniMax H3 on frontend 1.59.6, one report) was not tried here. Tags `v0.46.1`-`v0.46.3` (no GitHub releases; mostly cloud nodes and templates) were not installed.
+- strata, maya, hyperqwen, sglang: **unchanged** since the morning install (read-only check at 13:47). raylight, mesh, gguf: **pinned-current**. The Kolibri llama.cpp pull request head is unchanged.
+
 ## 2026-11-26: Strata 0.2.22 and Maya 1.1.81
 
 Started November 25; the install waited for the owner's reboot into kernel 7.0.0-44 (an unattended Ubuntu update), so the GPU unlock check could read VERIFIED. Upstream review, before and after: [ENGINE-UPDATES-20261126-STRATA-0222.md](evidence/ENGINE-UPDATES-20261126-STRATA-0222.md), [ENGINE-UPDATES-20261126-MAYA-1181.md](evidence/ENGINE-UPDATES-20261126-MAYA-1181.md).

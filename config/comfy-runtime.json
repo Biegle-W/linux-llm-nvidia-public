@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "source": "https://github.com/Comfy-Org/ComfyUI",
-  "commit": "989d93d0d968e704c589ce0146bb18c77f6b50cc",
+  "commit": "a277b5bf213e8a44fa34817b7770b54f86ef4cea",
   "runtime": "runtimes/ComfyUI",
   "python": "runtimes/env-comfy/bin/python",
   "checkpoint_directory": "models/comfy-images",
@@ -116,7 +116,7 @@
       "licence": "MiniMax-H3-Image Community License Agreement (territory and hosted-service limits; see evidence)"
     }
   ],
-  "version": "0.45.0",
+  "version": "0.46.0",
   "torch": "2.13.0+cu130",
   "python_version": "3.13.17",
   "guard_policy": {

@@ -152,6 +152,7 @@ Each file records one piece of work and is not updated afterwards, so later work
 - [FLASH-NEXT-IQ4XS-RETIRED-20261124.md](evidence/FLASH-NEXT-IQ4XS-RETIRED-20261124.md): Flash-Next UD-IQ4_XS router entry retired, IQ3_XXS kept — November 24, 2026
 - [INKLING2-MINI-STRATA-ENTRY-20261124.md](evidence/INKLING2-MINI-STRATA-ENTRY-20261124.md): Inkling 2 Mini on Strata, both cards, 128K, replaces the llama.cpp entry — November 24, 2026
 - [GBENCH-TEMPLATE-CHECK-20261123.md](evidence/GBENCH-TEMPLATE-CHECK-20261123.md): gBench chat-template check added to engine updates; baseline 6/6 on all entries — November 23, 2026
+- [ENGINE-UPDATES-20261126-COMFYUI-046.md](evidence/ENGINE-UPDATES-20261126-COMFYUI-046.md): ComfyUI 0.46.0 in both trees (no model or sampler code changed; web page, template and docs packages updated); images and Wan clips byte-identical — November 26, 2026
 - [ENGINE-UPDATES-20261126-MAYA-1181.md](evidence/ENGINE-UPDATES-20261126-MAYA-1181.md): Maya 1.1.81 for all three Maya entries; both patches unchanged; Hy4 generation lower on one run (warning) — November 26, 2026
 - [ENGINE-UPDATES-20261126-STRATA-0222.md](evidence/ENGINE-UPDATES-20261126-STRATA-0222.md): Strata 0.2.22 (control and Inkling engine 0.1.69; Qwen engine kept at 0.1.65, Hy4 engine unchanged) after a kernel reboot — November 26, 2026
 - [ENGINE-UPDATES-20261124-MAYA-1178.md](evidence/ENGINE-UPDATES-20261124-MAYA-1178.md): Maya 1.1.78 for all three Maya entries; qualification patch regenerated; Hy4 start slower — November 24, 2026

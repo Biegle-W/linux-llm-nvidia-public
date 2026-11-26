@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## ComfyUI 0.46.0 installed — November 26, 2026
+
+At the owner's request ComfyUI moved from 0.45.0 to 0.46.0 in both the image and video trees after a review of the upstream diff (no model, sampler or quantization code the entries use changed; the bundled web page, template and docs packages moved). Seven image and video checks pass at the same speed with byte-identical images and Wan clips; a repeat run on 0.45.0 showed the LTX and Raylight clips vary between runs on the old version too, which answers the LTX question from the 0.45.0 install. [evidence](evidence/ENGINE-UPDATES-20261126-COMFYUI-046.md).
+
 ## Mix quality test built and run live — November 26, 2026
 
 At the owner's request the council built a broad short test (36 items in six categories, 15 and 30 minute limits) and it ran live on all ten routes. All finished inside their limits; scores 85.6-97.2 with no pair separated, because 24 of the 36 items are right on every route. The reasoning scorer was amended after the first run to accept a right letter followed by its option text, or the option text alone (8 answers rescored). The ranking stays on the short tool-use test. [QUALITY-MIX-TEST-PLAN.md](QUALITY-MIX-TEST-PLAN.md) · [results](evidence/MIX-TEST-LIVE-20261126.md)
