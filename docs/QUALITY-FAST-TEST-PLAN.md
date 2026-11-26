@@ -10,6 +10,10 @@ This test is now the quality ranking on the website and in the README; the 390-i
 
 At the owner's request every enabled route was rerun live through the router; the ranking now uses these runs, and the replay table below is history. Results and the comparison with the earlier scores: [SHORT-TEST-RERUN-20261124.md](evidence/SHORT-TEST-RERUN-20261124.md). One change to how it was run: `hy4-flash-maya` needs about 6.5 minutes to load, so its run used `--load-cap 600` (load time is not scored).
 
+## Shared with the AMD server (November 26)
+
+Owner, November 26: both servers run the same models and benchmarks. The frozen item list `fast/manifest.json` (version `fast-1`, sha256 field `b29b71cd…5e69f9`) is now also committed in [`benchmarks/shared/tooluse-short-manifest.json`](../benchmarks/shared/README.md), byte-identical in both repos; the AMD runner takes its 55 items from there. AMD had drawn other items until then (none of its 55 matched), so AMD scores from before November 26 are not comparable with these. Nothing changed in the harness here. `python3 benchmarks/shared/check_shared.py --server nvidia` checks that the harness manifest still matches the shared list.
+
 ## When it runs
 
 Owner's rule, November 22: the test is run **only for new models and new weights**. Nothing that already has stored records is run again; the eight ranked models are scored on this test from their stored records. The 390-item test is no longer the routine test.

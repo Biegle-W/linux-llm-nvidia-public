@@ -12,6 +12,14 @@ At the owner's request the council built a broad short test (36 items in six cat
 
 Started November 25 and finished after the owner rebooted into kernel 7.0.0-44, which an unattended Ubuntu update had installed. Strata control 0.1.69 and `strata-inkling` 0.1.69 promoted at the same speed; `flash-next-strata` stays on Qwen engine 0.1.65 (0.1.69 generated 13-17% slower on two runs). Maya 1.1.81 promoted for all three entries; `hy4-flash-maya` generated 13.4 against 16.1 tok/s on one run (warning). gBench 6/6 on every gated run. [Strata](evidence/ENGINE-UPDATES-20261126-STRATA-0222.md) · [Maya](evidence/ENGINE-UPDATES-20261126-MAYA-1181.md)
 
+## Shared API model names with the AMD server — November 26, 2026
+
+The owner asked for the router names seen through the API to match the AMD server. `network/router.py` now reads `api_names` from `benchmarks/shared/models.json`: `/v1/models` lists the shared names with the registry id in `route`, requests take either name, and the response carries the name the client sent. The registry ids are unchanged everywhere else. Nothing ran on the GPUs.
+
+## Shared models and benchmarks with the AMD server — November 26, 2026
+
+The owner asked for both servers to run the same models and benchmarks (different weights are fine). `benchmarks/shared/` now holds the shared model set, the benchmark definitions (short tool-use ranking, engine-update check with the six gBench cases, speed report fields) and a read-only checker, byte-identical in both repos. This server's frozen short-test item list was copied read-only from the harness into it; the AMD server, which had drawn 55 other items, now uses it. Seven models match; `hy4-flash-maya` (here) and `ripple-65b-vllm` (AMD) stay as server-specific extra routes. Nothing ran on the GPUs.
+
 ## Retired IQ4_XS and Inkling GGUF weights deleted — November 25, 2026
 
 At the owner's request the unused weights of the two routes retired on November 24 were deleted: the Flash-Next UD-IQ4_XS-v31 checkpoint and Strata pack (95.2 GB, NVMe) and the Inkling 2 Mini UD-Q4_K_M GGUF and projector (17.25 GB, SATA). No enabled route used them. [STORAGE-POLICY.md](STORAGE-POLICY.md)

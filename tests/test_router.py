@@ -102,8 +102,9 @@ class RouterTest(unittest.TestCase):
         status,data=self.request('/v1/models');self.assertEqual(status,200)
         models=json.loads(data)['data']
         expected=set(router.profiles()) | set(router.WEB_SEARCH_ALIASES)
-        self.assertEqual({m['id'] for m in models},expected)
+        self.assertEqual({m['route'] for m in models},expected)
         self.assertEqual(len(models),len(expected))
+        models=[dict(m,id=m['route']) for m in models]
         hy4 = next(m for m in models if m['id'] == 'hy4-flash-strata')
         self.assertEqual((hy4['engine'], hy4['context_window'], hy4['input']), ('Strata', 131072, ['text', 'image']))
         for identifier, engine, context in [('hy4-flash-maya', 'Maya', 131072)]:
@@ -127,7 +128,7 @@ class RouterTest(unittest.TestCase):
         status, raw = self.request('/v1/models/qwen27b-hyperqwen-search')
         self.assertEqual(status, 200)
         value = json.loads(raw)
-        self.assertEqual(value['id'], 'qwen27b-hyperqwen')
+        self.assertEqual((value['id'], value['route']), ('qwen3.8-27b-vllm', 'qwen27b-hyperqwen'))
         self.assertFalse(value.get('web_search', False))
         self.assertEqual(value['context_window'], router.profiles()['qwen27b-hyperqwen']['allocated_context'])
 
@@ -174,6 +175,25 @@ class RouterTest(unittest.TestCase):
         self.assertEqual(self.request('/v1/chat/completions',raw='{}',headers={'Transfer-Encoding':'chunked'})[0],400)
         self.assertEqual(self.request('/v1/chat/completions',raw='[]')[0],400)
         self.assertEqual(self.request('/v1/chat/completions',raw='bad')[0],400)
+    def test_shared_api_names_listed_and_old_ids_still_accepted(self):
+        shared=json.loads(router.SHARED_MODELS.read_text())
+        status,raw=self.request('/v1/models');self.assertEqual(status,200)
+        listed={m['id']:m['route'] for m in json.loads(raw)['data']}
+        for public,servers in shared['api_names'].items():
+            self.assertEqual(listed[public],servers['nvidia'])
+        for extra in shared['extra']:
+            if extra['server']=='nvidia':self.assertEqual(listed[extra['api_name']],extra['routes'][0])
+        self.assertEqual(len(listed),len(router.profiles()))
+        for model,route in [('qwen3.8-27b-vllm','qwen27b-hyperqwen'),('qwen27b-hyperqwen','qwen27b-hyperqwen'),('glm-5.3-flash-maya','glm-maya')]:
+            with self.subTest(model=model):
+                status,data=self.request('/v1/chat/completions',{'model':model,'messages':[]})
+                self.assertEqual(status,200);self.assertEqual(json.loads(data)['model'],model)
+                self.assertEqual(self.server.workers.active,route)
+                status,raw=self.request('/v1/models/'+model);self.assertEqual(json.loads(raw)['route'],route)
+        status,data=self.request('/v1/chat/completions',{'model':'qwen3.8-27b-sglang','messages':[],'stream':True})
+        events=[json.loads(l[5:]) for l in data.split(b'\n') if l.startswith(b'data:') and l[5:].strip()!=b'[DONE]']
+        self.assertTrue(events and all(e.get('model','qwen3.8-27b-sglang')=='qwen3.8-27b-sglang' for e in events))
+        self.assertEqual(self.server.workers.active,'qwen27b-sglang')
     def test_nonstream_alias(self):
         status,data=self.request('/v1/chat/completions',{'model':'qwen27b-hyperqwen','messages':[]})
         self.assertEqual(status,200);self.assertEqual(json.loads(data)['model'],'qwen27b-hyperqwen')

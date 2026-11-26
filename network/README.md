@@ -13,7 +13,7 @@ Reference for the network side of the server. What is live right now (models, ve
 
 ## Using the API
 
-Base URL `http://127.0.0.1:10100/v1` (or the server's Tailscale address) with `Authorization: Bearer <key>`; the key is `data/local-api-key` and is never printed, committed or exported. `/v1/models` is the authoritative list; the model id picks model, quantization and engine together.
+Base URL `http://127.0.0.1:10100/v1` (or the server's Tailscale address) with `Authorization: Bearer <key>`; the key is `data/local-api-key` and is never printed, committed or exported. `/v1/models` is the authoritative list; the model id picks model, quantization and engine together. Since November 26 the ids it lists are the names shared with the AMD server (`api_names` in `benchmarks/shared/models.json`). The registry id is in each entry's `route` field and is still accepted in requests.
 
 - The text-only entry `hy4-flash-maya` exposes 131,072 tokens and runs with its soft memory cap at its hard limit (owner-approved).
 - Chat Completions with streaming and tool calls; dense engines also expose legacy Completions.

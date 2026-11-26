@@ -554,6 +554,7 @@ FILES = (
     'tests/test_host_ram_reserve.py',
     'docs/evidence/QWEN-STRATA-LCZ-20261028.md', 'docs/evidence/benchmark-results/20261028-qwen-strata-lcz.json',
     'docs/evidence/REDUCED-RAM-20261028.md', 'docs/evidence/benchmark-results/20261028-reduced-ram.json',
+    'benchmarks/shared/README.md', 'benchmarks/shared/models.json', 'benchmarks/shared/benchmarks.json', 'benchmarks/shared/tooluse-short-manifest.json', 'benchmarks/shared/check_shared.py', 'tests/test_shared_benchmarks.py',
     'README.md', 'AGENTS.md', 'docs/CURRENT-STATE.md', 'docs/WEBSITE-SUMMARY.md', 'tests/test_website_summary.py', 'docs/evidence/AMD-PARITY-HANDOFF-20261027.md', 'docs/BENCHMARK-HISTORY.md', 'docs/evidence/AMD-NVIDIA-GAP-AUDIT-20261027.md', '.gitignore', '.gitattributes', 'docs/evidence/MIGRATION-HANDOFF.md', 'docs/REPOSITORY-MAP.md', 'docs/LOCAL-SETUP.md',
     'docs/evidence/VALIDATION-20261026.md', 'docs/evidence/BENCHMARK-20261026.md',
     'scripts/build_native_llama.sh',
