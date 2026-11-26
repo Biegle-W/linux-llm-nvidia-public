@@ -4,6 +4,10 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
+## Shared API model names with the AMD server — November 26, 2026
+
+The owner asked for the router names seen through the API to match the AMD server. `network/router.py` now reads `api_names` from `benchmarks/shared/models.json`: `/v1/models` lists the shared names with the registry id in `route`, requests take either name, and the response carries the name the client sent. The registry ids are unchanged everywhere else. Nothing ran on the GPUs.
+
 ## Shared models and benchmarks with the AMD server — November 26, 2026
 
 The owner asked for both servers to run the same models and benchmarks (different weights are fine). `benchmarks/shared/` now holds the shared model set, the benchmark definitions (short tool-use ranking, engine-update check with the six gBench cases, speed report fields) and a read-only checker, byte-identical in both repos. This server's frozen short-test item list was copied read-only from the harness into it; the AMD server, which had drawn 55 other items, now uses it. Seven models match; `hy4-flash-maya` (here) and `ripple-65b-vllm` (AMD) stay as server-specific extra routes. Nothing ran on the GPUs.

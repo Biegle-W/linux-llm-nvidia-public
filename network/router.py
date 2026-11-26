@@ -20,6 +20,23 @@ MAX_BODY = 32 * 1024 * 1024
 # Old saved selections remain usable, but never opt a request into search.
 LEGACY_MODEL_ALIASES = {'qwen27b-hyperqwen-search': 'qwen27b-hyperqwen'}
 WEB_SEARCH_ALIASES = {}
+SHARED_MODELS = ROOT / 'benchmarks/shared/models.json'
+
+
+def shared_api_names():
+    """Shared API name -> this server's route (owner, November 26: the same names on both servers).
+
+    Read on each call like the registry. Internal route ids stay accepted, so old selections keep working.
+    """
+    try:
+        names = json.loads(SHARED_MODELS.read_text()).get('api_names', {})
+    except (OSError, ValueError):
+        return {}
+    return {public: servers['nvidia'] for public, servers in names.items() if servers.get('nvidia')}
+
+
+def resolve_model(alias):
+    return LEGACY_MODEL_ALIASES.get(alias) or shared_api_names().get(alias) or WEB_SEARCH_ALIASES.get(alias, alias)
 
 
 def request_model(data, path):
@@ -27,7 +44,7 @@ def request_model(data, path):
     alias = data.get('model')
     if not isinstance(alias, str):
         raise RouterError('Choose an ID from GET /v1/models.', 'model_not_found', 404)
-    name = LEGACY_MODEL_ALIASES.get(alias, WEB_SEARCH_ALIASES.get(alias, alias))
+    name = resolve_model(alias)
     if name not in profiles():
         raise RouterError('Choose an ID from GET /v1/models.', 'model_not_found', 404)
     if alias in WEB_SEARCH_ALIASES and path != '/router/select':
@@ -136,7 +153,11 @@ class Handler(BaseHTTPRequestHandler):
                          'max_model_len': p['allocated_context'], 'auto_start': True,
                          'loaded': ready and w.active == p['id'] and w.loading is None}
                 for p in profiles().values()}
+        public = {route: name for name, route in shared_api_names().items() if route in catalog}
+        catalog = {public.get(route, route): dict(entry, id=public.get(route, route), route=route)
+                   for route, entry in catalog.items()}
         for alias, name in WEB_SEARCH_ALIASES.items():
+            name = public.get(name, name)
             catalog[alias] = dict(catalog[name], id=alias,
                                   name=catalog[name]['name'] + ' + Web Search (free)',
                                   web_search=True, api='responses')
@@ -159,7 +180,8 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, {'object': 'list', 'data': list(models.values())})
         if path.startswith('/v1/models/'):
             identifier = unquote(path[len('/v1/models/'):])
-            model = models.get(LEGACY_MODEL_ALIASES.get(identifier, identifier))
+            route = resolve_model(identifier)
+            model = models.get(identifier) or next((m for m in models.values() if m['route'] == route), None)
             return self.reply(200, model) if model else self.error(404, 'Unknown model.', 'model_not_found')
         self.error(404, 'Unknown endpoint.', 'not_found')
 
