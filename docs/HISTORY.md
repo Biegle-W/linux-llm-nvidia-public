@@ -4,10 +4,6 @@ This is the dated work log that used to fill `AGENTS.md`, `README.md` and `docs/
 
 Dated docs moved to `docs/evidence/` on November 8, 2026. Older entries that name a file as `docs/<TOPIC>-<date>.md` mean `docs/evidence/<same name>`.
 
-## Mix quality test built and run live — November 26, 2026
-
-At the owner's request the council built a broad short test (36 items in six categories, 15 and 30 minute limits) and it ran live on all ten routes. All finished inside their limits; scores 85.6-97.2 with no pair separated, because 24 of the 36 items are right on every route. The reasoning scorer was amended after the first run to accept a right letter followed by its option text, or the option text alone (8 answers rescored). The ranking stays on the short tool-use test. [QUALITY-MIX-TEST-PLAN.md](QUALITY-MIX-TEST-PLAN.md) · [results](evidence/MIX-TEST-LIVE-20261126.md)
-
 ## Strata 0.2.22 and Maya 1.1.81 installed by hand — November 26, 2026
 
 Started November 25 and finished after the owner rebooted into kernel 7.0.0-44, which an unattended Ubuntu update had installed. Strata control 0.1.69 and `strata-inkling` 0.1.69 promoted at the same speed; `flash-next-strata` stays on Qwen engine 0.1.65 (0.1.69 generated 13-17% slower on two runs). Maya 1.1.81 promoted for all three entries; `hy4-flash-maya` generated 13.4 against 16.1 tok/s on one run (warning). gBench 6/6 on every gated run. [Strata](evidence/ENGINE-UPDATES-20261126-STRATA-0222.md) · [Maya](evidence/ENGINE-UPDATES-20261126-MAYA-1181.md)
