@@ -1,5 +1,14 @@
 # NVIDIA daily engine updates
 
+## 2026-11-26: Strata 0.2.22 and Maya 1.1.81
+
+Started November 25; the install waited for the owner's reboot into kernel 7.0.0-44 (an unattended Ubuntu update), so the GPU unlock check could read VERIFIED. Upstream review, before and after: [ENGINE-UPDATES-20261126-STRATA-0222.md](evidence/ENGINE-UPDATES-20261126-STRATA-0222.md), [ENGINE-UPDATES-20261126-MAYA-1181.md](evidence/ENGINE-UPDATES-20261126-MAYA-1181.md).
+
+- strata: **promoted**; `b28ca95e3e68` (v0.2.22, control 0.1.69). `inkling-strata` on `strata-inkling` 0.1.69, `hy4-flash-strata` (same Hy4 engine 0.1.67) and `deepseek-unsloth-strata` (frozen engine) run at the same speed. `flash-next-strata` keeps Qwen engine 0.1.65: engine 0.1.69 generated 56.1 and 58.2 tok/s against 67.2 on two runs (warning only; the entry keeps 0.1.65 as for every Qwen engine since 0.1.66, and 0.1.65 under the new control gives 67.2 twice). gBench 6/6 on every gated run.
+- maya: **promoted**; `4a0ce6e86e18` (1.1.81). `glm-maya` and `deepseek-maya` pass at the same speed. Warning: `hy4-flash-maya` generation 13.4 against 16.1 tok/s and first token 121.8 against 109.3 s on one run, just below its earlier low of 13.5. Both local patches applied unchanged. gBench 6/6 on every run.
+- Warnings: the kernel was updated by unattended upgrades, which blocks GPU work until a reboot; Strata's parked-conversation cache now sizes itself by free RAM.
+- hyperqwen, sglang: **unchanged**. raylight, mesh, gguf: **pinned-current**.
+
 ## 2026-11-24: Maya 1.1.78 (push held for the owner)
 
 Upstream review, before and after: [ENGINE-UPDATES-20261124-MAYA-1178.md](evidence/ENGINE-UPDATES-20261124-MAYA-1178.md).

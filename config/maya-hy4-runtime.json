@@ -1,12 +1,12 @@
 {
   "schema": 1,
   "profile": "hy4-flash-maya",
-  "source_commit": "1016876a387e332fc5bf8bb82030fca7dc2821b2",
+  "source_commit": "4a0ce6e86e1896309b8114914ce178bc69492e84",
   "binary": {
     "path": "runtimes/maya-hy4-v1174/maya-hy4",
-    "sha256": "72a8a843f79cea6b04c9a09367f64a6ea88dfefcd1023a08b39d2bc7917c625e"
+    "sha256": "a4dbc26ff7d6582bb39eec36c7efba3165bdecad79f5bbdae96d9a817b597daf"
   },
-  "mode": "Maya 1.1.78 normal build, text only (binary kept at the maya-hy4-v1174 path)",
+  "mode": "Maya 1.1.81 normal build, text only (binary kept at the maya-hy4-v1174 path)",
   "evidence": "docs/evidence/HY4-FLASH-MAYA-L-TRIAL-20261122.md",
   "status": "Short daily DSH qualification required; see daily ledger",
   "CUDA_toolkit": "13.0.88; matching CUDA13 runtime/cuBLAS",

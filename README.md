@@ -14,14 +14,14 @@ Speeds are from the latest short check through the router: one real tool call fr
 |---|---|---|---:|---:|---:|---:|
 | `qwen27b-hyperqwen` | Qwen3.8 27B, AutoRound INT4 | HyperQwen (vLLM 0.33.0) | 86,016 | 2,092 | 2.8 | 62.6 |
 | `qwen27b-sglang` | same weights | SGLang | 57,344 | 2,130 | 2.9 | 60.1 |
-| `flash-next-strata` | Qwen3.8 Flash Next 125B-A6B, IQ3_XXS (default Flash-Next) | Strata 0.2.21 + MTP | 131,072 | 1,270 | 4.5 | 69.0 |
-| `inkling-strata` | Inkling 2 Mini 26B, Strata SQ-10, both cards | Strata 0.2.21 (`strata-inkling`) | 131,072 | 2,129 | 3.4 | 66.9 |
+| `flash-next-strata` | Qwen3.8 Flash Next 125B-A6B, IQ3_XXS (default Flash-Next) | Strata 0.2.22 (Qwen engine 0.1.65) + MTP | 131,072 | 1,272 | 4.5 | 67.2 |
+| `inkling-strata` | Inkling 2 Mini 26B, Strata SQ-10, both cards | Strata 0.2.22 (`strata-inkling`) | 131,072 | 2,133 | 3.4 | 67.0 |
 | `kolibri-llamacpp` | Aleph Alpha Kolibri 1.1 75B-A3.4B, Q5_K_M, both cards with most experts in RAM | llama.cpp (pull request 32891 build) | 131,072 | 511-542 (1,316 on a plain prompt) | 10.8-11.4 | 36.2-36.5 (43 on longer answers) |
-| `glm-maya` | GLM-5.3 Flash 320B-A18B, Maya-S24 | Maya 1.1.78 | 65,536 | 541 | 10.2 | 14.2 |
-| `deepseek-maya` | DeepSeek V4.1 Flash, Unsloth UD-IQ1_S | Maya 1.1.78 | 32,768 | 180-211 | 29-33 | 7.7-9.0 |
+| `glm-maya` | GLM-5.3 Flash 320B-A18B, Maya-S24 | Maya 1.1.81 | 65,536 | 543 | 10.2 | 13.8 |
+| `deepseek-maya` | DeepSeek V4.1 Flash, Unsloth UD-IQ1_S | Maya 1.1.81 | 32,768 | 180-211 | 29-33 | 7.7-9.0 |
 | `deepseek-unsloth-strata` | same weights | Strata 0.2.13 (frozen: later Strata dropped DeepSeek) | 32,768 | 87 (cold; 28 with prompt reuse) | 65.6 (6.0) | 12.0 |
-| `hy4-flash-strata` | Tencent Hy4-Flash 220B-A12B, SQ-96 | Strata 0.2.21 (Hy4 engine) | 131,072 | 213 | 26.4 | 23.7 |
-| `hy4-flash-maya` | Tencent Hy4-Flash, Maya-L, both cards | Maya 1.1.78 (Hy4 engine) | 131,072 | 26 | 209 | 15.6 |
+| `hy4-flash-strata` | Tencent Hy4-Flash 220B-A12B, SQ-96 | Strata 0.2.22 (Hy4 engine 0.1.67) | 131,072 | 213 | 26.4 | 27.9 |
+| `hy4-flash-maya` | Tencent Hy4-Flash, Maya-L, both cards | Maya 1.1.81 (Hy4 engine) | 131,072 | 46 | 122 | 13.4 |
 
 Weights, drives and sizes per entry are in [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md); the registry itself is [config/maintained-profiles.json](config/maintained-profiles.json).
 

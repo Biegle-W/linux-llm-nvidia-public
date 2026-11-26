@@ -39,17 +39,17 @@
     "evidence": "docs/evidence/ENGINE-UPDATES-20261122B-MAYA-1174-STRATA-0219-LLAMACPP-B12631.md"
   },
   "maya": {
-    "source_commit": "1016876a387e332fc5bf8bb82030fca7dc2821b2",
-    "qualified_on": "2026-11-24T11:10:00",
+    "source_commit": "4a0ce6e86e1896309b8114914ce178bc69492e84",
+    "qualified_on": "2026-11-26T02:11:00",
     "method": "hands-on short DSH and gBench template check",
-    "note": "Maya 1.1.78; glm-maya, deepseek-maya pass at the same speed; hy4-flash-maya failed its first-start unload and passed on the re-run (slower start: prompt-route measurement on every start). Qualification patch regenerated as v1178; file-cache patch v1173 applied unchanged.",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261124-MAYA-1178.md"
+    "note": "Maya 1.1.81; glm-maya and deepseek-maya pass at the same speed; hy4-flash-maya passes with generation 13.4 against 16.1 tok/s on one run (warning). Both local patches (file-cache v1173, qualification v1178) applied unchanged.",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261126-MAYA-1181.md"
   },
   "strata": {
-    "source_commit": "d46f5f268f8ed797e83a5c63a69bffbd7a581cf6",
-    "qualified_on": "2026-11-24T10:00:00",
+    "source_commit": "b28ca95e3e6847f2d5e317994f253b66716deeaa",
+    "qualified_on": "2026-11-26T01:48:00",
     "method": "hands-on short DSH and gBench template check",
-    "note": "Strata v0.2.21: control 0.1.67 for all Strata entries; inkling-strata on strata-inkling 0.1.67, hy4-flash-strata on strata-hy4 0.1.67. flash-next-strata keeps Qwen engine 0.1.65 (v0.2.19 package) because engines 0.1.66 and 0.1.67 slowed this profile. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59).",
-    "evidence": "docs/evidence/ENGINE-UPDATES-20261124-STRATA-0221.md"
+    "note": "Strata v0.2.22: control 0.1.69 for all Strata entries; inkling-strata on strata-inkling 0.1.69; hy4-flash-strata keeps strata-hy4 0.1.67 (the release ships the same engine). flash-next-strata keeps Qwen engine 0.1.65 (v0.2.19 package) because engines 0.1.66, 0.1.67 and 0.1.69 (13-17% on two runs) slowed this profile. deepseek-unsloth-strata stays on v0.2.13 (d2f0964, dsv41 0.1.59).",
+    "evidence": "docs/evidence/ENGINE-UPDATES-20261126-STRATA-0222.md"
   }
 }
