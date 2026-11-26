@@ -107,6 +107,7 @@ Entries before November 15 are in [HISTORY.md](HISTORY.md).
 - **`data/`** holds many private trial and evidence directories (all gitignored). Pruning them needs the owner's OK.
 - Possible follow-up from Nov 7 research: the DeepSeek entries still use the automatic layer split and might gain from the same hand-set split sweep that helped Flash-Next.
 
+
 ## Idle state
 
 Router idle, no worker loaded, both GPUs at 1 MiB, no `data/GPU-LOCK`, GPU unlock VERIFIED.
