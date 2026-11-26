@@ -1,4 +1,4 @@
-# Current state — November 24, 2026
+# Current state — November 26, 2026
 
 Snapshot of what is live. Replace facts here when they change; dated detail goes in evidence docs and [HISTORY.md](HISTORY.md).
 
@@ -8,14 +8,14 @@ Snapshot of what is live. Replace facts here when they change; dated detail goes
 |---|---|---|---:|---|
 | `qwen27b-hyperqwen` | Qwen3.8-27B AutoRound INT4 (fast heads, INT8 embedding) | HyperQwen-vLLM (vLLM 0.33.0) | 86,016 | `models/engine-tests/qwen38-27b-hyperqwen-fast`, SATA, 16 GB (shared with SGLang) |
 | `qwen27b-sglang` | same checkpoint | SGLang | 57,344 | same as above |
-| `flash-next-strata` | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | Strata 0.2.21 (control 0.1.67, Qwen engine 0.1.65) + MTP; layers 0-28 on the 3080, 29-47 + head on the 3080 Ti, stage-trimmed | 131,072 | `models/strata/models/IQ3_XXS`, NVMe, 76 GB |
-| `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.78 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
-| `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.78 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
+| `flash-next-strata` | Qwen3.8-Flash-Next GSQ-RCO IQ3_XXS | Strata 0.2.22 (control 0.1.69, Qwen engine 0.1.65) + MTP; layers 0-28 on the 3080, 29-47 + head on the 3080 Ti, stage-trimmed | 131,072 | `models/strata/models/IQ3_XXS`, NVMe, 76 GB |
+| `glm-maya` | GLM-5.3-Flash Maya-S24 | Maya 1.1.81 | 65,536 | `models/maya/Maya-S24`, NVMe, 98 GB |
+| `deepseek-maya` | DeepSeek-V4.1-Flash-1017 UD-IQ1_S (Unsloth Dynamic3.1) | Maya 1.1.81 | 32,768 | `models/unsloth/deepseek-v41-1017-dynamic31-8a6ec9cf/UD-IQ1_S`, NVMe shards 1-4 (122 GB) + SATA shard 5 (symlinked), 233 GB total (shared) |
 | `deepseek-unsloth-strata` | same checkpoint | Strata 0.2.13 (engine 0.1.59, DSV4.1 build); frozen, later Strata versions do not run DeepSeek | 32,768 | same as above |
-| `inkling-strata` | Inkling 2 Mini 26B SQ-10 | Strata 0.2.21 (control 0.1.67, `strata-inkling` 0.1.67), both cards with automatic layer split | 131,072 | `models/strata/models/inkling-2-mini`, NVMe, 10.5 GB |
+| `inkling-strata` | Inkling 2 Mini 26B SQ-10 | Strata 0.2.22 (control 0.1.69, `strata-inkling` 0.1.69), both cards with automatic layer split | 131,072 | `models/strata/models/inkling-2-mini`, NVMe, 10.5 GB |
 | `kolibri-llamacpp` | Aleph Alpha Kolibri 1.1 75B-A3.4B Q5_K_M | llama.cpp pull request 32891 build (`5f4d2228`, pinned); experts of layers 2-6 on the 3080 Ti and 45-49 on the 3080, the rest in RAM; thinking off by default | 131,072 | `models/engine-tests/kolibri-1.1-gguf`, SATA, 53.4 GB |
-| `hy4-flash-strata` | Tencent Hy4-Flash 220B-A12B SQ-96 | Strata 0.2.21 (control 0.1.67), separate Hy4 engine 0.1.67 | 131,072 | `models/strata/models/hy4-flash`, NVMe, 158.10 GB |
-| `hy4-flash-maya` | Tencent Hy4-Flash 220B-A12B Maya-L | Maya 1.1.78, separate Hy4 engine on both cards | 131,072 | `models/maya-hy4/hy4-flash-maya-l`, SATA SSD, 152.87 GB served (162.5 GB installed) |
+| `hy4-flash-strata` | Tencent Hy4-Flash 220B-A12B SQ-96 | Strata 0.2.22 (control 0.1.69), separate Hy4 engine 0.1.67 | 131,072 | `models/strata/models/hy4-flash`, NVMe, 158.10 GB |
+| `hy4-flash-maya` | Tencent Hy4-Flash 220B-A12B Maya-L | Maya 1.1.81, separate Hy4 engine on both cards | 131,072 | `models/maya-hy4/hy4-flash-maya-l`, SATA SSD, 152.87 GB served (162.5 GB installed) |
 
 Every entry runs under 87.77 GiB soft / 89.77 GiB hard worker RAM with 2 GiB host reserve, except `hy4-flash-maya`, whose soft cap equals its 89.77 GiB hard limit (owner-approved). ComfyUI image (Qwen Turbo, FLUX3 Klein, MiniMax H3 Image) and video (Wan 2.2 5B, LTX 2.3 Mesh) entries run from desktop launchers; see [COMFY-VIDEO-HD-ENTRIES-20261105.md](evidence/COMFY-VIDEO-HD-ENTRIES-20261105.md).
 
@@ -52,6 +52,7 @@ Owner's decision, November 24: models are ranked by the short tool-use test, sco
 
 ## Recent changes (newest first)
 
+- **Nov 26:** Strata 0.2.22 and Maya 1.1.81 installed by hand after the owner rebooted into kernel 7.0.0-44 (an unattended Ubuntu update had left the GPU unlock check pending). Control 0.1.69 and `strata-inkling` 0.1.69 promoted at the same speed; `flash-next-strata` stays on Qwen engine 0.1.65 because 0.1.69 generates 13-17% slower on two runs. All three Maya entries pass; `hy4-flash-maya` generated 13.4 against 16.1 tok/s on one run (warning, just below its earlier low of 13.5). [Strata](evidence/ENGINE-UPDATES-20261126-STRATA-0222.md) · [Maya](evidence/ENGINE-UPDATES-20261126-MAYA-1181.md)
 - **Nov 25:** Retired weights deleted at the owner's request: the `flash-next-iq4xs-strata` UD-IQ4_XS checkpoint and pack (95.2 GB, NVMe) and the `inkling-llamacpp` GGUF and projector (17.25 GB, SATA). NVMe now has 205 GB free, SATA 554 GB. No enabled route changed. [STORAGE-POLICY.md](STORAGE-POLICY.md)
 - **Nov 25:** Short tool-use test rerun on all ten enabled routes through the router (owner's request), all 49 items scored for each. New order by best route per model: deepseek-maya 70.3, qwen27b-sglang 67.2, hy4-flash-strata 58.5, glm-maya 49.3, inkling-strata 47.5, kolibri-llamacpp 41.8, flash-next-strata 40.6. Largest moves: GLM 60.4 to 49.3 and Inkling 59.3 to 47.5 (fewer episodes passed); DeepSeek on Maya now leads at 70.3. [SHORT-TEST-RERUN-20261124.md](evidence/SHORT-TEST-RERUN-20261124.md)
 - **Nov 24:** The short tool-use test is now the quality ranking (owner's decision); the 390-item test is archived. Every model is scored on the same 49 items, so `hy4-flash-maya` now shows 45.6 (it showed 43.3 on the 55-item larger-model scale). [WEBSITE-SUMMARY.md](WEBSITE-SUMMARY.md)

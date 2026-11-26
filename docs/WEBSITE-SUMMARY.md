@@ -1,6 +1,6 @@
 # NVIDIA LLM server results
 
-Last updated: 2026-11-25
+Last updated: 2026-11-26
 
 This file supplies the NVIDIA tables on the biegle.ca test-results page. Models are ranked by the short tool-use test (owner's decision, 2026-11-24); the 390-item test is archived. It is updated in the same commit as any change to the router or results. The AMD repository reports results on different test items, so the two sets are not comparable.
 
@@ -10,18 +10,18 @@ This file supplies the NVIDIA tables on the biegle.ca test-results page. Models 
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | qwen27b-hyperqwen | Qwen3.8-27B | AutoRound-INT4-fast-heads-INT8-embedding | HyperQwen-vLLM | vLLM 0.33.0 (pin 3d6c9543292e) | 86016 | 15.792 | SATA | VRAM only |
 | qwen27b-sglang | Qwen3.8-27B | AutoRound-INT4-fast-heads-INT8-embedding | SGLang | d61ded5b9e2d | 57344 | 15.792 | SATA | VRAM only |
-| flash-next-strata | Qwen3.8-Flash-Next | IQ3_XXS | Strata | 0.2.21 (control 0.1.67, Qwen 0.1.65) | 131072 | 75.840 | NVMe | streamed from SSD |
-| glm-maya | GLM-5.3-Flash | Maya-S24 | Maya | 1.1.78 | 65536 | 94.702 | NVMe | streamed from SSD |
-| deepseek-maya | DeepSeek-V4.1-Flash-1017 | UD-IQ1_S (Unsloth Dynamic3.1) | Maya | 1.1.78 | 32768 | 232.97960842 | NVMe + SATA | streamed from SSD |
-| deepseek-unsloth-strata | DeepSeek-V4.1-Flash-1017 | UD-IQ1_S (Unsloth Dynamic3.1) | Strata | 0.2.13 (DSV4.1 0.1.59, control 0.1.67) | 32768 | 232.97960842 | NVMe + SATA | streamed from SSD |
-| inkling-strata | Inkling 2 Mini 26B | SQ-10 | Strata | 0.2.21 (control 0.1.67, Inkling 0.1.67) | 131072 | 10.4715264 | NVMe | VRAM only |
+| flash-next-strata | Qwen3.8-Flash-Next | IQ3_XXS | Strata | 0.2.22 (control 0.1.69, Qwen 0.1.65) | 131072 | 75.840 | NVMe | streamed from SSD |
+| glm-maya | GLM-5.3-Flash | Maya-S24 | Maya | 1.1.81 | 65536 | 94.702 | NVMe | streamed from SSD |
+| deepseek-maya | DeepSeek-V4.1-Flash-1017 | UD-IQ1_S (Unsloth Dynamic3.1) | Maya | 1.1.81 | 32768 | 232.97960842 | NVMe + SATA | streamed from SSD |
+| deepseek-unsloth-strata | DeepSeek-V4.1-Flash-1017 | UD-IQ1_S (Unsloth Dynamic3.1) | Strata | 0.2.13 (DSV4.1 0.1.59, control 0.1.69) | 32768 | 232.97960842 | NVMe + SATA | streamed from SSD |
+| inkling-strata | Inkling 2 Mini 26B | SQ-10 | Strata | 0.2.22 (control 0.1.69, Inkling 0.1.69) | 131072 | 10.4715264 | NVMe | VRAM only |
 | kolibri-llamacpp | Kolibri 1.1 | Q5_K_M | llama.cpp | PR 32891 build (5f4d2228), pinned | 131072 | 53.394217408 | SATA | partly in system memory |
-| hy4-flash-strata | Tencent Hy4-Flash 220B-A12B | SQ-96 | Strata | 0.2.21 (control 0.1.67, Hy4 0.1.67) | 131072 | 158.096740352 | NVMe | partly in system memory |
-| hy4-flash-maya | Tencent Hy4-Flash 220B-A12B | Maya-L | Maya | 1.1.78 | 131072 | 152.87284608 | SATA | streamed from SSD |
+| hy4-flash-strata | Tencent Hy4-Flash 220B-A12B | SQ-96 | Strata | 0.2.22 (control 0.1.69, Hy4 0.1.67) | 131072 | 158.096740352 | NVMe | partly in system memory |
+| hy4-flash-maya | Tencent Hy4-Flash 220B-A12B | Maya-L | Maya | 1.1.81 | 131072 | 152.87284608 | SATA | streamed from SSD |
 
 Weight sizes are decimal GB of served checkpoint files. The two dense Qwen routes share one checkpoint, as do the two DeepSeek routes. Hy4 on Strata uses the 3080 Ti with all experts in RAM and reads its Engram table from NVMe. Hy4 on Maya maps experts into the file cache, caches a fraction on both cards and reads table rows from SATA. Kolibri keeps the experts of 10 of its 48 MoE layers on the two cards and the rest in RAM, memory-mapped from SATA.
 
-Maya 1.1.78 is serving. Its promotion was held for the owner's review of the `hy4-flash-maya` first start (see docs/evidence/ENGINE-UPDATES-20261124-MAYA-1178.md).
+Maya 1.1.81 and Strata 0.2.22 (control 0.1.69) are serving since November 26; `flash-next-strata` keeps Qwen engine 0.1.65 (see docs/evidence/ENGINE-UPDATES-20261126-STRATA-0222.md and docs/evidence/ENGINE-UPDATES-20261126-MAYA-1181.md).
 
 Sources include config/maintained-profiles.json, config/daily-update-versions.json, config/sglang-runtime.json, docs/CURRENT-STATE.md, docs/DAILY-ENGINE-UPDATES.md, docs/evidence/QUALITY-BENCHMARK-20261111.md and the Hy4 trial records below.
 
@@ -33,14 +33,14 @@ One short DSH web-client tool call on a roughly 5.6K–7K-token prompt, followed
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | qwen27b-hyperqwen | 2094.6 | 2.80 | 62.7 | not recorded | 2026-11-09 | vLLM 0.33.0 (80cf059) | docs/evidence/ENGINE-UPDATES-20261109-HYPERQWEN-80cf059.md (80cf059) | First load after rebuild. Later pin moved without a rebuild or speed check. |
 | qwen27b-sglang | 2219.46 | 2.785 | 60.135 | 6095 | 2026-11-05 | d61ded5b9e2d | docs/evidence/ALL-ENTRY-BENCHMARKS-20261105.md (d61ded5b9e2d) | Zero native cached tokens. |
-| flash-next-strata | 1269.4 | 4.55 | 69.0 | not recorded | 2026-11-24 | 0.2.21 (control 0.1.67, Qwen 0.1.65) | docs/evidence/ENGINE-UPDATES-20261124-STRATA-0221.md (d46f5f268f8e) | First of two checks on the retained Qwen engine. |
-| glm-maya | 541.2 | 10.25 | 14.2 | not recorded | 2026-11-24 | 1.1.78 | docs/evidence/ENGINE-UPDATES-20261124-MAYA-1178.md (1016876a387e) | Single run. |
-| deepseek-maya | 179.7 | 32.98 | 8.2 | not recorded | 2026-11-24 | 1.1.78 | docs/evidence/ENGINE-UPDATES-20261124-MAYA-1178.md (1016876a387e) | Single run. |
-| deepseek-unsloth-strata | 28.3 | 5.98 | 12.3 | not recorded | 2026-11-24 | 0.2.13 (DSV4.1 0.1.59, control 0.1.67) | docs/evidence/ENGINE-UPDATES-20261124-STRATA-0221.md (d46f5f268f8e) | Prompt reuse. Only reused-prompt check on current control. |
-| inkling-strata | 2129.3 | 3.44 | 66.9 | not recorded | 2026-11-24 | 0.2.21 (control 0.1.67, Inkling 0.1.67) | docs/evidence/ENGINE-UPDATES-20261124-STRATA-0221.md (d46f5f268f8e) | Single run on Inkling eada4591cef1. |
+| flash-next-strata | 1271.8 | 4.54 | 67.2 | not recorded | 2026-11-26 | 0.2.22 (control 0.1.69, Qwen 0.1.65) | docs/evidence/ENGINE-UPDATES-20261126-STRATA-0222.md (b28ca95e3e68) | Recheck on the retained Qwen engine; both runs gave 67.2. Qwen engine 0.1.69 gave 56.1 and was not kept. |
+| glm-maya | 543.0 | 10.21 | 13.8 | not recorded | 2026-11-26 | 1.1.81 | docs/evidence/ENGINE-UPDATES-20261126-MAYA-1181.md (4a0ce6e86e18) | Single run. |
+| deepseek-maya | 189.8 | 31.28 | 8.1 | not recorded | 2026-11-26 | 1.1.81 | docs/evidence/ENGINE-UPDATES-20261126-MAYA-1181.md (4a0ce6e86e18) | Single run. |
+| deepseek-unsloth-strata | 28.3 | 6.18 | 12.2 | not recorded | 2026-11-26 | 0.2.13 (DSV4.1 0.1.59, control 0.1.69) | docs/evidence/ENGINE-UPDATES-20261126-STRATA-0222.md (b28ca95e3e68) | Prompt reuse. |
+| inkling-strata | 2132.7 | 3.43 | 67.0 | not recorded | 2026-11-26 | 0.2.22 (control 0.1.69, Inkling 0.1.69) | docs/evidence/ENGINE-UPDATES-20261126-STRATA-0222.md (b28ca95e3e68) | Single run on Inkling a5bfe0369bfb. |
 | kolibri-llamacpp | 541.9 | 10.82 | 36.2 | 5707 | 2026-11-24 | PR 32891 build (5f4d2228) | docs/evidence/KOLIBRI-1.1-ROUTER-ENTRY-20261124.md | First of two passing checks. The web-client prompt runs in five batches at checkpoint boundaries; a plain 6.1K-token prompt reads at 1,316 tok/s. |
-| hy4-flash-strata | 213.3 | 26.41 | 23.7 | not recorded | 2026-11-24 | 0.2.21 (control 0.1.67, Hy4 0.1.67) | docs/evidence/ENGINE-UPDATES-20261124-STRATA-0221.md (d46f5f268f8e) | Single run on Hy4 4da72cca05cc. |
-| hy4-flash-maya | 26.4 | 209.5 | 15.6 | not recorded | 2026-11-24 | 1.1.78 | docs/evidence/ENGINE-UPDATES-20261124-MAYA-1178.md (1016876a387e) | Passing repeat. Prompt-route calibration took 322–435 s per start. First start failed owned unload. |
+| hy4-flash-strata | 212.9 | 26.43 | 27.9 | not recorded | 2026-11-26 | 0.2.22 (control 0.1.69, Hy4 0.1.67) | docs/evidence/ENGINE-UPDATES-20261126-STRATA-0222.md (b28ca95e3e68) | Single run on Hy4 4da72cca05cc. |
+| hy4-flash-maya | 45.6 | 121.8 | 13.4 | not recorded | 2026-11-26 | 1.1.81 | docs/evidence/ENGINE-UPDATES-20261126-MAYA-1181.md (4a0ce6e86e18) | Single run; first start passed its owned unload. Generation 16.1 on 1.1.78 the day before (warning). |
 
 The SGLang token count comes from docs/evidence/validation-results/20261105-engine-refresh.json. On the frozen DeepSeek engine with earlier control, the first load after reboot measured 84.2 tok/s prefill, 67.81 s to first token and 11.7 tok/s decode on 2026-11-15 (docs/evidence/ENGINE-UPDATES-20261115-MAYA-1165-STRATA-0214.md).
 
